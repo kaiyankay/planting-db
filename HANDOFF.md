@@ -1,6 +1,6 @@
 # Planting Intelligence DB — Handoff for coding agent
 
-State as of 2026-10-30 (T1–T3 done; T5 extracted for all 3 plants, 129 claims awaiting Kay's unified review (D5); T6 prototype; T7 views 1 and 4; `brain/` playable cosmos built overnight 2026-10-30 → 31 (v1) and redesigned as v2 the same day around explore / grow / reveal — methods M22–M24, see `brain/README.md`; T4 still blocked on the survey export). Read this, then `principles.md`, then `schema.json`, then `methods.md`. Everything else is data.
+State as of 2026-10-30 (T1–T3 done; T5 extracted for all 3 plants, 129 claims awaiting Kay's unified review (D5); T6 prototype; T7 views 1 and 4; `brain/` playable cosmos built overnight 2026-10-30 → 31 (v1) redesigned as v2 (explore / grow / reveal, methods M22–M24) and again as v3 (a visualisation of the database system from a graph projection of the files, methods M25, `brain/MAPPING.md`), live at https://kaiyankay.github.io/planting-db/brain/; T4 still blocked on the survey export). Read this, then `principles.md`, then `schema.json`, then `methods.md`. Everything else is data.
 
 ## 1. What this is
 
@@ -45,7 +45,7 @@ planting-db/
 ├── eval/                       T6 test queries + results
 ├── data/inat/                  iNaturalist aggregate pulls + licence texts
 ├── viz/                        built HTML views (T7)
-├── brain/                      Neural Cosmos v2 — living knowledge environment (index.html, js/knowledge.js, js/lens.js, README, WALKTHROUGH, screenshots/v2); v1 archived in brain/v1/
+├── brain/                      Knowledge Brain v3 — the database as a system (index.html, js/projection.js, js/app3.js, MAPPING.md, README, WALKTHROUGH, screenshots/v3); v2 in brain/v2/, v1 in brain/v1/
 ├── research/brain-research.md  mechanism log for the demo
 ├── PROPOSALS.md                schema proposals not applied: disputed rule, grounding
 └── report-2026-10-31.md        overnight report

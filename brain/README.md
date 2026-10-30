@@ -1,68 +1,63 @@
-# brain/ — Neural Cosmos v2
+# brain/ — Knowledge Brain v3
 
-**Live:** <https://kaiyankay.github.io/planting-db/brain/> (v1 for comparison: <https://kaiyankay.github.io/planting-db/brain/v1/>). Served by GitHub Pages straight from this repository, so the page reads the same `plants/*.json`, `sources.json` and `schema.json` as the local run.
+**Live:** <https://kaiyankay.github.io/planting-db/brain/> · v2 at `/brain/v2/` · v1 at `/brain/v1/` · all served by GitHub Pages straight from this repository.
 
-A living knowledge environment over the Planting Intelligence claim store. Three plants, each carrying six domains of knowledge; a domain unfolds into its fields; a field opens as an evidence *lens* laid out by what its values are. Everything drawn is a record in `plants/*.json`, `sources.json`, `relations.json` or `schema.json`, or something you typed this session. Nothing is written back.
-
-v1 (October 30, first build) is kept unchanged at `v1/` for comparison — open `/brain/v1/`. Its own notes are `v1/README-v1.md` and `v1/WALKTHROUGH-v1.md`.
+v3 visualises the **database as a system**, not a few plant records: what the survey and principles decided, the rules and methods that follow, the schema whose fields cross the plants to hold every claim, the sources those claims come from, and the construction steps that turned one into the other. Everything drawn is generated at load from the repository files by a graph projection layer (`js/projection.js`, documented in [`MAPPING.md`](MAPPING.md)). Nothing is written back; the validator is untouched.
 
 ## Run
-
-No build, no node. Serve the **planting-db root** (the page reads `../plants/*.json` etc.) and open `/brain/`:
 
 ```bash
 cd planting-db && python3 -m http.server 8766
 ```
 
-then <http://localhost:8766/brain/>. In the Claude desktop app the `brain` entry in `.claude/launch.json` does the same. Opening `index.html` from the file system does not work (ES modules and `fetch` need http). Everything is vendored (`vendor/3d-force-graph.min.js` 1.80.1 with three r186 inside; `vendor/three/` 0.186.0 ESM + `UnrealBloomPass`), so it runs offline. The console warns "Multiple instances of Three.js" — expected.
+then <http://localhost:8766/brain/>. Serve the planting-db root: the page reads `../schema.json`, `../plants/*.json`, `../sources.json`, `../relations.json`, `../synonyms.json`, `../intent_map.json`, `../eval/queries.json` **and** `../methods.md`, `../principles.md`, `../HANDOFF.md`, `../README.md`. No build, no node; three.js and 3d-force-graph are vendored.
 
-Files: `index.html` (layout, styles, import map) · `js/data.js` (loader; which plants exist comes from `synonyms.json in_db`) · `js/knowledge.js` (domains, context parsing, field status, suggestions, AI-use index) · `js/lens.js` (the five stage builders) · `js/retrieve.js` (port of `tools/retrieve.py`, unchanged from v1) · `js/model.js` (colours and value summaries, kept from v1) · `js/app.js` (cosmos, camera, view state, panels, Grow, Ask) · `screenshots/v2/` (13 real captures, 2026-10-30).
+Files: `index.html` · `js/data.js` (JSON loader + `loadDocs()` for the Markdown) · `js/projection.js` (the graph) · `js/app3.js` (scene, views, panels, Grow, Ask) · `js/knowledge.js` (context parsing and value comparison, from v2) · `js/retrieve.js` (port of `tools/retrieve.py`) · `js/model.js` (colours, value summaries) · `MAPPING.md` · `screenshots/v3/` (14 captures, 2026-10-30).
 
-## Why v2
+## What you see
 
-v1 drew the storage tree — plant → field → claim → source — as spheres, so every click descended one level and read the next layer of records. v2 organises the space by three processes instead:
+A single space read top to bottom like a section through the system:
 
-- **Explore** — three information scales. The cosmos shows plants × knowledge domains (M22) with coverage, verification and tension in the glyph itself. A domain unfolds into its fields, each with a status word (M24). A field opens as a lens built for its value type: numeric ranges on a shared ruler with one *lane* per stated growing condition or cultivar (M23); vocabulary lists as a source × value spectrum; everything else as a note stack. A source can be the centre instead: one source across the three plants and six domains.
-- **Grow** — an observation becomes a candidate that enters the lens of its field in the lane its stated condition puts it in, with a "what changed" list: which domain and field it joined, whether it opened a new condition lane or shares one, how it relates to every existing reading (`agrees`, `overlaps across conditions`, `below, under a different condition`…), whether it is the first Vancouver-scale reading, and that it is never citable. Candidates stay in this browser's `localStorage` (`brain.candidates.v1`, shared with v1).
-- **Reveal** — any reading shows source → claim → context & applicability (cultivar / condition / region parsed from the context string) → status and confidence → related evidence with relation words → **AI use**: whether the retrieval preview cites it in the 8 test queries (computed live by running the ported retriever over `eval/queries.json`). "Ask" lights the plants and domains a question activates and opens any cited claim in its lens. The banner still says RETRIEVAL PREVIEW — NOT A FULL AI TRACE.
-
-## Reading the cosmos
-
-| element | drawn from | encoding |
+| layer | drawn from | what the glyph says |
 |---|---|---|
-| plant (warm sphere, halo) | `entity` | label = scientific name · sourced / verified counts |
-| domain glyph | the schema fields of one domain (M22) | **arc length** = share of fields with a sourced claim · **inner glow** = share of those claims verified · **colour** = source type supplying most claims · **amber arc** = a field whose values vary with stated conditions · **red arc** = a field whose values differ under the same stated condition · magenta dot = a candidate lives here |
-| spoke | plant → domain | faint; carries particles while a question is lit |
-| curved plant–plant line | `relations.json` | colour = source type · bright = verified · dashed grey = model placeholder |
-| field glyph (domain unfolded) | one field | size = sourced claims · glow = verified share · dashed ring = gap · amber / red arcs as above · status word under the name |
-| ruler lens | numeric field | one bar per reading from min to max on a shared axis; a point for single values; `≤` bars for upper bounds; p10–p90 with a white median tick for City of Vancouver distributions; lanes headed by the stated condition (amber), cultivar (violet) or "condition not stated" |
-| spectrum lens | list field | columns = vocabulary values in KPU order, rows = sources; a lit cell where the source lists that value; footer counts per value |
-| note stack | object / text fields | one card per reading |
-| source lens | one source | columns = plants, rows = domains, dots = fields it speaks to |
-| reading state | `status` | solid = verified · hollow = unverified · dashed = retired placeholder (hidden by default, toggle in the panel) · magenta = candidate |
+| **Foundations** | survey questions cited in `schema.json` (`survey`, `design_basis`) and the Markdown; HANDOFF decisions table; `principles.md` §1–§10 | tiles; focus one to see the structures and rules that cite it |
+| **Rules & methods** | `schema.json rules` R1–R10; `methods.md` M1–M24 (dashed = to confirm, ✓ = confirmed) | focus a rule to see the data it governs, by a named predicate |
+| **Schema × plants** | field tiers and fields (rows, with KPU vocabulary chips) × plant entities (columns); every plant × field is a **cell** | cell fill = a sourced claim exists, coloured by the dominant source type; **solid portion** = share verified; dashed outline = gap (brighter when a source is planned); red dot = values differ under the same stated condition; amber dot = values vary with conditions; magenta square = a candidate |
+| relation arcs | `relations.json` between plant headers | bright = verified, dashed grey = model placeholder |
+| **Sources** | `sources.json`, grouped practitioner / municipal / database / literature / model, local → global | solid = contributes claims; hollow = listed, planned, nothing yet; tier letter in the label |
+| **Construction** (right) | seven steps with live counts from claim fields; T1–T7 from HANDOFF; tools from the README tree | done / partial / blocked / runs outside the browser |
 
-Colour key: practitioner `#ffa94d` · database `#5ad1ff` · municipal `#6ff2b0` · literature `#b48cff` · model `#6d7384` · candidate `#ff5fb4`. Labels are HTML projected onto the scene, so they stay crisp and clickable; the trail at the top shows where you are and takes you back; "Continue" in the panel lists next steps derived from the data (a condition split → the exposure field; cultivar lanes → the Vancouver measurements; the same field on another plant; a source to follow; a gap you could fill).
+Connections are drawn only when something is focused, coloured by type and styled by basis: **structural** (grey), **provenance** (cyan), **rule** (violet), **knowledge** (amber), **evolution** (magenta); solid = recorded in a file, dashed = derived by a named projection rule, dotted = candidate. The panel lists every connection with its evidence (file, field or predicate). In the System view one real provenance thread at a time lights up: source → cell → tier → rule, captioned.
 
-## The first case: *Gaultheria shallon* → mature height
+Four readings are kept apart and never merged into one “completion”: **coverage** (cells with a sourced claim), **validation** (schema conformance by `tools/validate.py`, run outside the browser, not claimed live), **verification** (`status: verified`, deferred by D5) and **construction** (T1–T7).
 
-Cosmos → *Gaultheria shallon* → Size & growth → `mature height`. The lens shows three lanes: **condition not stated** (E-Flora BC to 1.5 m occasionally 3, USDA PLANTS 1.8 m, RHS 1–1.5 m), **full sun, poor soil** (Oregon State ≤ 0.6 m) and **shade, good soil** (Oregon State 1.2–3 m). The panel sentence says the same in words and separates the two things going on: across lanes the values follow the stated condition (not a contradiction); within the "no condition" lane RHS and USDA do not overlap (a disagreement for a reviewer). Click Oregon State's ≤ 0.6 m: its row stays lit, the rest fade, and the panel shows the source, the raw context, status `unverified · awaits a reviewer (D5)`, and relation words to each sibling. "Continue" offers the `exposure` field (4 sources, where USDA's lone "Full sun" cell is the outlier on the ordinal vocabulary), the same question for *Vaccinium ovatum*, and following Oregon State through the store.
+## Entry points
 
-Nothing about this is hard-coded for Salal: the same lanes appear for *Acer palmatum* `mature height` (species / 'Bloodgood' / 'Osakazuki', where Great Plant Picks' 6.1 m point sits against RHS's 2.5–4 m bar) and for `local mature size` (City of Vancouver distributions per cultivar, with the established-tree subset as a second bar).
+Rail on the left: **System** (everything) · **Schema** (tiers, fields, which plants and claims each holds) · **Plants** (entities, cells, relations) · **Sources** (who contributes, licence tier, what is planned) · **Rules** (R1–R10, methods) · **Foundations** (survey → decisions → principles) · **Construction** (steps, tasks, tools) · **Grow** · **Ask**. Click any tile, label or cell to focus it; the trail at the top shows where you are; Esc or “Up” goes back; background click goes up.
 
-## Grow and Ask with the lens
+Examples that work today: **R1** → 37 cells where several sources are kept side by side, plus the survey question c3 and method M15 that cite it. **Survey c1** → the gate fields it motivated, with the schema annotation quoted. **Oregon State** → 36 provenance links: 23 claims and the fields it was planned to fill. **Gaultheria shallon · mature height** → five sourced claims from four sources, the retired placeholder, the sources below and R1 / R3 / R10 above. **Extraction** → the four routes claims took, read from `recorded_by`, and the tools behind them.
 
-"Add observation" → *salal in my North Van garden stays under 60 cm in full sun* → basis "observed on site", location "North Vancouver". The candidate enters `mature height` as a magenta ≤ 0.6 m bar in a new **full sun** lane (no source had stated "full sun" alone; Oregon State's lane is "full sun, poor soil"). The "What changed" block lists the lane, the relation to each reading (`overlaps across conditions` E-Flora and Oregon State's full-sun value, `below, under a different condition` the rest), that it is the first Vancouver-scale reading on the field, and that it is flagged, completeness L2, never citable. "Ask with it" runs *how tall does salal get in full sun*: the candidate is recalled, listed as unverified user input, and never cited (Δ line).
+## Grow and Ask
 
-"Ask" runs `js/retrieve.js` (names → gates → BM25 recall → R5 order → R6 attribution; L0 practitioner claims withheld). In the cosmos the activated plants and domains stay bright and the rest recede; clicking an answer opens the claim in its lens with the cited readings lit. The eight query buttons are still proxy wordings until T4.
+**Grow** turns a typed observation into a *candidate* claim inside the cell its plant and field name. "What changed" states the cell it joined, whether the cell was a gap, how it compares with each existing reading (`agrees`, `overlaps across conditions`, `below, under a different condition`…), whether its stated condition is new, and that it is unverified, not citable and never written to the db. Candidates live in this browser's `localStorage` (`brain.candidates.v1`, shared with v1/v2); "Reset session" removes them.
 
-## What was kept, replaced, not done
+**Ask** runs the ported retriever and lights what a question activates: the plants that pass the gates, the cells and sources of the ranked claims, and the rules doing the work (R7 gates, R5 order, R6 attribution, R2 withheld). The banner says RETRIEVAL PREVIEW — NOT A FULL AI TRACE; no model composes an answer. Candidates are recalled and listed, never cited.
 
-**Kept from v1**: the db loader and read-only rule; the retriever port (unchanged); candidate detection, `practitioner_meta` completeness, localStorage; 3d-force-graph as renderer and controls; `UnrealBloomPass`; FogExp2; the camera fly (now `cameraPosition` to fitted points); source-type colours; the banner.
+## v2 → v3: what changed
 
-**Replaced**: the storage-tree node model (`model.js buildModel`) → `knowledge.js` (domains, lanes, status flags); force layout → deterministic positions (plants on a triangle, domains on a tilted ring), no drift; sphere-per-claim → lenses built per value type as three.js stages inside the same scene; canvas sprite labels → projected HTML labels; side-panel-per-node → panels that write a sentence about the evidence first; nothing → trail, "Continue" suggestions, AI-use index, "What changed".
+- **Object of the visualisation**: v2 explored knowledge from three plant clusters; v3 shows the database system, with the plants as three columns of one matrix.
+- **Data model**: v2 built a plant → domain → field → lens model (`knowledge.js`); v3 adds `projection.js`, a typed graph of 426 nodes and ~1,340 links generated from JSON *and* the Markdown files (methods, decisions, principles, tasks), each link carrying its basis.
+- **New content**: rules, methods, decisions, survey questions, construction steps, tools and vocabularies are now objects you can focus; rule → data, survey → structure and claim → step connections exist (recorded or derived by six documented rules).
+- **Status**: coverage, validation, verification and construction progress are separate readings; verified share is drawn inside each cell rather than as a glow.
+- **Interaction**: entry rail + trail + focus-and-dim instead of fly-through; progressive disclosure by mode (System shows layer titles, plants, tiers, rule ids and source groups only).
+- **Kept from v2**: context parsing and value comparison (`knowledge.js`, M23–M24), retriever port, candidate detection and storage, projected HTML labels, bloom, 3d-force-graph as renderer. v2's evidence lenses (ruler by condition, spectrum) are not in v3; open v2 for them.
+- **Removed**: the six knowledge domains (M22) as the organising unit; the plant clusters.
 
-**Not done / limits**: lenses are 2-D stages placed in the 3-D space (readability won over volumetric layout); the condition parser is a word list on the context string, so an unusual context may land in "condition not stated" — the raw context is always shown; the candidate field detector is still a keyword table (override in the form); the spectrum's "differ" rule follows PROPOSALS (a) and only applies to the five ordinal vocabularies; particles on relation arcs are not drawn (own curved lines); no label collision handling beyond lane spacing, so long source names can touch the plant glow when a drawer is open; no touch tuning; the "source network" of T7 is the source lens, not a separate mode; test queries are proxy text until T4.
+## Not done / limits
 
-## Mechanisms borrowed (see `../research/brain-research.md`)
-
-click-to-focus → fitted `cameraPosition` on each view change; expandable-nodes → the stage key per view (a domain unfolds, a field opens; nothing is pre-expanded); bloom-effect → `UnrealBloomPass` at 0.45 / 0.4 / 0.4 on `postProcessingComposer()`; dynamic → `graphData` re-set + `nodeThreeObject` rebuild when a candidate arrives; README API → own node and link objects, `linkDirectionalParticles` on activated spokes.
+- Lenses for reading values by condition (v2) are not integrated; a cell focus lists its claims in the panel.
+- Validation is reported as an offline step; the browser does not re-run the validator.
+- The decisions table has 19 rows; only 6 carry ids (D1, D2, D5–D8). Unnumbered rows are shown as “decision” tiles — the rows exist, the ids do not.
+- Rule → data links are derived predicates, one per rule, and so are the claim → step links from `recorded_by`; both are labelled derived and can be wrong where the text is unusual.
+- Label collision is handled by mode and stagger, not by a layout algorithm; long names can still touch at narrow widths.
+- No verification history exists in the repository, so none is shown.

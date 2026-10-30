@@ -28,6 +28,14 @@ export async function loadDb() {
   return { schema, sources, sourcesFile, synonyms, intent, relations, queries, plants, plantIds: ids };
 }
 
+// Markdown documents that hold rules of the project outside the JSON (methods, principles, handoff, readme).
+// Read as text; brain/js/projection.js parses them into a read-only projection.
+export async function loadDocs() {
+  const get = async p => { const r = await fetch(`${ROOT}/${p}`, { cache: 'no-store' }); return r.ok ? r.text() : ''; };
+  const [methods, principles, handoff, readme, proposals] = await Promise.all([get('methods.md'), get('principles.md'), get('HANDOFF.md'), get('README.md'), get('PROPOSALS.md')]);
+  return { methods, principles, handoff, readme, proposals };
+}
+
 // field → tier name, from schema.field_tiers
 export function fieldTiers(schema) {
   const out = {};

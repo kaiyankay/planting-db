@@ -2,7 +2,7 @@
 
 ARCH 540 Assignment 2 · UBC MLA · schema 0.2.0 · 2026-10-29
 
-**Knowledge brain demo (live):** <https://kaiyankay.github.io/planting-db/brain/> · code and notes in `brain/`
+**Knowledge Brain (live):** <https://kaiyankay.github.io/planting-db/brain/> — v3, the database as a system · [v2](https://kaiyankay.github.io/planting-db/brain/v2/) · [v1](https://kaiyankay.github.io/planting-db/brain/v1/) · code and notes in `brain/`
 
 ```
 planting-db/
