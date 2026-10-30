@@ -1,5 +1,7 @@
 # brain/ — Neural Cosmos v2
 
+**Live:** <https://kaiyankay.github.io/planting-db/brain/> (v1 for comparison: <https://kaiyankay.github.io/planting-db/brain/v1/>). Served by GitHub Pages straight from this repository, so the page reads the same `plants/*.json`, `sources.json` and `schema.json` as the local run.
+
 A living knowledge environment over the Planting Intelligence claim store. Three plants, each carrying six domains of knowledge; a domain unfolds into its fields; a field opens as an evidence *lens* laid out by what its values are. Everything drawn is a record in `plants/*.json`, `sources.json`, `relations.json` or `schema.json`, or something you typed this session. Nothing is written back.
 
 v1 (October 30, first build) is kept unchanged at `v1/` for comparison — open `/brain/v1/`. Its own notes are `v1/README-v1.md` and `v1/WALKTHROUGH-v1.md`.
