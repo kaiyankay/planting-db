@@ -1,0 +1,19 @@
+# OS / editor
+.DS_Store
+Thumbs.db
+
+# Python
+__pycache__/
+*.pyc
+
+# Secrets — never commit
+.env
+.env.*
+!.env.example
+
+# Raw survey exports (T4 input) carry respondent emails; only the README is tracked
+inputs/survey/*
+!inputs/survey/README.md
+
+# Local scratch
+*.log

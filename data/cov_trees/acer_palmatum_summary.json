@@ -1,0 +1,413 @@
+{
+  "genus": "ACER",
+  "species": "PALMATUM",
+  "n_records": 1848,
+  "snapshot": {
+    "data_processed": "2026-10-26T13:50:45+00:00",
+    "modified": "2026-10-26T13:50:45+00:00",
+    "records_count": 184217,
+    "licence": "Open Government Licence - Vancouver",
+    "licence_id": "OGL-Vancouver",
+    "fetched_at": "2026-10-30T05:33:49+00:00"
+  },
+  "fields_present": [
+    "asset_id",
+    "address",
+    "common_name",
+    "genus_name",
+    "species_name",
+    "cultivar_name",
+    "height_m",
+    "diameter_cm",
+    "local_area",
+    "geom",
+    "geo_point_2d"
+  ],
+  "date_planted_available": false,
+  "height_m": {
+    "n": 1848,
+    "min": 2.0,
+    "p10": 4.6,
+    "p25": 4.6,
+    "median": 7.6,
+    "mean": 7.5,
+    "p75": 7.6,
+    "p90": 10.7,
+    "p95": 13.7,
+    "max": 29.0
+  },
+  "diameter_cm": {
+    "n": 1848,
+    "min": 0.0,
+    "p10": 7.6,
+    "p25": 8.38,
+    "median": 17.8,
+    "mean": 22.83,
+    "p75": 32.0,
+    "p90": 45.7,
+    "p95": 55.9,
+    "max": 160.0
+  },
+  "height_m_where_diameter_ge_20cm": {
+    "n": 896,
+    "min": 4.0,
+    "p10": 7.0,
+    "p25": 7.6,
+    "median": 7.6,
+    "mean": 9.24,
+    "p75": 10.7,
+    "p90": 13.7,
+    "p95": 13.7,
+    "max": 22.9
+  },
+  "cultivars": {
+    "NONE": 1103,
+    "OSAKAZUKI": 407,
+    "BLOODGOOD": 88,
+    "KOTO NO ITO": 65,
+    "ATROPURPUREUM": 43,
+    "HARVEST ORANGE": 25,
+    "DISSECTUM": 22,
+    "DISSECTUM ATROPURPUREUM": 16,
+    "TAIJA": 16,
+    "SHOJO": 14,
+    "SHISHIGASHIRA": 5,
+    "VIRIDIS": 5,
+    "BURGUNDY LACE": 3,
+    "WOLFF EMPEROR1": 2,
+    "CRIMSON QUEEN": 2,
+    "AKA-SHIGITATSU-SAWA": 2,
+    "ACONITIFOLIUM": 2,
+    "RUSLYN IN THE PINK": 1,
+    "VAR. DISSECTUM CRIMSON QUEEN": 1,
+    "TROMPENBURG": 1,
+    "NISHIKI-GAWA": 1,
+    "SONKOOTGRE GOING GREEN": 1,
+    "DISSECTUM JERRE SCHWARTZ": 1,
+    "KAGIRI-NISHIKI": 1,
+    "SHIGITATSU-SAWA": 1,
+    "AUREUM": 1,
+    "NURESAGI": 1,
+    "NISHKI-MOMJI": 1,
+    "SEIRYU": 1,
+    "AZUMA-MARASAKI": 1,
+    "BUTTERFLY": 1,
+    "RED PYGMY": 1,
+    "EMPEROR 1": 1,
+    "SANGO-KAKU": 1,
+    "ENKAN": 1,
+    "AOYAGI": 1,
+    "HESSEI": 1,
+    "TWOMBLYS RED SENTINEL": 1,
+    "HOGYOKU": 1,
+    "NOMURA NISHIKI": 1,
+    "AKA-SHIME-NO-UCHI": 1,
+    "OMURAYAMA": 1,
+    "WATERFALL (DISSECTUM GROUP)": 1,
+    "KI-HACHIJO": 1,
+    "SHERWOOD FLAME": 1
+  },
+  "cultivar_stats": {
+    "NONE": {
+      "n": 1103,
+      "height_m": {
+        "n": 1103,
+        "min": 3.0,
+        "p10": 4.6,
+        "p25": 7.6,
+        "median": 7.6,
+        "mean": 8.47,
+        "p75": 10.7,
+        "p90": 13.7,
+        "p95": 13.7,
+        "max": 22.9
+      },
+      "diameter_cm": {
+        "n": 1103,
+        "min": 0.0,
+        "p10": 7.6,
+        "p25": 15.2,
+        "median": 25.4,
+        "mean": 29.02,
+        "p75": 40.6,
+        "p90": 50.8,
+        "p95": 61.0,
+        "max": 88.9
+      }
+    },
+    "OSAKAZUKI": {
+      "n": 407,
+      "height_m": {
+        "n": 407,
+        "min": 3.0,
+        "p10": 4.6,
+        "p25": 4.6,
+        "median": 4.6,
+        "mean": 6.22,
+        "p75": 7.6,
+        "p90": 7.6,
+        "p95": 7.6,
+        "max": 19.0
+      },
+      "diameter_cm": {
+        "n": 407,
+        "min": 5.1,
+        "p10": 7.6,
+        "p25": 7.6,
+        "median": 11.4,
+        "mean": 14.03,
+        "p75": 17.8,
+        "p90": 25.0,
+        "p95": 27.9,
+        "max": 160.0
+      }
+    },
+    "BLOODGOOD": {
+      "n": 88,
+      "height_m": {
+        "n": 88,
+        "min": 3.0,
+        "p10": 4.6,
+        "p25": 4.6,
+        "median": 4.6,
+        "mean": 5.1,
+        "p75": 4.6,
+        "p90": 7.6,
+        "p95": 7.6,
+        "max": 10.7
+      },
+      "diameter_cm": {
+        "n": 88,
+        "min": 7.6,
+        "p10": 7.6,
+        "p25": 7.6,
+        "median": 7.6,
+        "mean": 9.26,
+        "p75": 8.45,
+        "p90": 15.2,
+        "p95": 15.2,
+        "max": 26.0
+      }
+    },
+    "KOTO NO ITO": {
+      "n": 65,
+      "height_m": {
+        "n": 65,
+        "min": 4.6,
+        "p10": 4.6,
+        "p25": 4.6,
+        "median": 4.6,
+        "mean": 5.3,
+        "p75": 4.6,
+        "p90": 4.6,
+        "p95": 6.52,
+        "max": 29.0
+      },
+      "diameter_cm": {
+        "n": 65,
+        "min": 7.6,
+        "p10": 7.6,
+        "p25": 7.6,
+        "median": 7.6,
+        "mean": 10.95,
+        "p75": 9.5,
+        "p90": 12.7,
+        "p95": 27.72,
+        "max": 78.7
+      }
+    },
+    "ATROPURPUREUM": {
+      "n": 43,
+      "height_m": {
+        "n": 43,
+        "min": 2.0,
+        "p10": 4.6,
+        "p25": 4.6,
+        "median": 7.6,
+        "mean": 6.93,
+        "p75": 7.6,
+        "p90": 10.16,
+        "p95": 10.7,
+        "max": 10.7
+      },
+      "diameter_cm": {
+        "n": 43,
+        "min": 7.6,
+        "p10": 7.6,
+        "p25": 11.45,
+        "median": 17.8,
+        "mean": 20.32,
+        "p75": 25.4,
+        "p90": 33.0,
+        "p95": 35.41,
+        "max": 61.0
+      }
+    },
+    "HARVEST ORANGE": {
+      "n": 25,
+      "height_m": {
+        "n": 25,
+        "min": 4.6,
+        "p10": 4.6,
+        "p25": 4.6,
+        "median": 4.6,
+        "mean": 4.6,
+        "p75": 4.6,
+        "p90": 4.6,
+        "p95": 4.6,
+        "max": 4.6
+      },
+      "diameter_cm": {
+        "n": 25,
+        "min": 7.6,
+        "p10": 7.6,
+        "p25": 7.6,
+        "median": 7.6,
+        "mean": 7.6,
+        "p75": 7.6,
+        "p90": 7.6,
+        "p95": 7.6,
+        "max": 7.6
+      }
+    },
+    "DISSECTUM": {
+      "n": 22,
+      "height_m": {
+        "n": 22,
+        "min": 4.6,
+        "p10": 4.6,
+        "p25": 4.6,
+        "median": 4.6,
+        "mean": 6.39,
+        "p75": 7.6,
+        "p90": 10.39,
+        "p95": 10.7,
+        "max": 13.7
+      },
+      "diameter_cm": {
+        "n": 22,
+        "min": 7.6,
+        "p10": 10.45,
+        "p25": 13.32,
+        "median": 16.5,
+        "mean": 18.52,
+        "p75": 20.3,
+        "p90": 20.3,
+        "p95": 38.44,
+        "max": 45.7
+      }
+    },
+    "DISSECTUM ATROPURPUREUM": {
+      "n": 16,
+      "height_m": {
+        "n": 16,
+        "min": 4.6,
+        "p10": 4.6,
+        "p25": 4.6,
+        "median": 4.6,
+        "mean": 5.54,
+        "p75": 7.6,
+        "p90": 7.6,
+        "p95": 7.6,
+        "max": 7.6
+      },
+      "diameter_cm": {
+        "n": 16,
+        "min": 10.2,
+        "p10": 12.7,
+        "p25": 15.2,
+        "median": 16.5,
+        "mean": 17.29,
+        "p75": 20.3,
+        "p90": 21.6,
+        "p95": 22.9,
+        "max": 22.9
+      }
+    },
+    "TAIJA": {
+      "n": 16,
+      "height_m": {
+        "n": 16,
+        "min": 4.6,
+        "p10": 4.6,
+        "p25": 4.6,
+        "median": 6.1,
+        "mean": 6.1,
+        "p75": 7.6,
+        "p90": 7.6,
+        "p95": 7.6,
+        "max": 7.6
+      },
+      "diameter_cm": {
+        "n": 16,
+        "min": 5.1,
+        "p10": 6.35,
+        "p25": 7.6,
+        "median": 7.6,
+        "mean": 9.68,
+        "p75": 10.82,
+        "p90": 17.8,
+        "p95": 17.8,
+        "max": 17.8
+      }
+    },
+    "SHOJO": {
+      "n": 14,
+      "height_m": {
+        "n": 14,
+        "min": 4.6,
+        "p10": 7.6,
+        "p25": 7.6,
+        "median": 7.6,
+        "mean": 7.39,
+        "p75": 7.6,
+        "p90": 7.6,
+        "p95": 7.6,
+        "max": 7.6
+      },
+      "diameter_cm": {
+        "n": 14,
+        "min": 7.6,
+        "p10": 7.6,
+        "p25": 8.55,
+        "median": 15.35,
+        "mean": 17.26,
+        "p75": 22.5,
+        "p90": 25.82,
+        "p95": 32.02,
+        "max": 43.2
+      }
+    }
+  },
+  "local_area": {
+    "Riley Park": 247,
+    "Kitsilano": 216,
+    "Renfrew-Collingwood": 176,
+    "Kensington-Cedar Cottage": 133,
+    "(blank)": 128,
+    "Sunset": 101,
+    "Hastings-Sunrise": 76,
+    "Downtown": 74,
+    "Shaughnessy": 73,
+    "West Point Grey": 67,
+    "Grandview-Woodland": 60,
+    "Mount Pleasant": 59,
+    "Kerrisdale": 59,
+    "Marpole": 55,
+    "Arbutus Ridge": 51,
+    "Dunbar-Southlands": 48,
+    "Killarney": 46,
+    "Fairview": 46,
+    "Oakridge": 37,
+    "Victoria-Fraserview": 34,
+    "West End": 29,
+    "Strathcona": 18,
+    "South Cambie": 15
+  },
+  "notes": [
+    "height_m and diameter_cm are as recorded at last inventory update; measurement date per tree is not published in this snapshot.",
+    "The snapshot has no date_planted field, so time_to_intended_size cannot be derived from CoV data alone.",
+    "cultivar_name 'NONE' means not recorded, not necessarily the straight species.",
+    "height_m is banded, not measured: ~97% of values sit on 4.6/7.6/10.7/13.7/16.8 m, i.e. 15/25/35/45/55 ft class midpoints. Treat as a height class; quote p90 as 'mostly <= 10.7 m class' rather than a precise figure."
+  ]
+}

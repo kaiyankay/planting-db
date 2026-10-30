@@ -1,0 +1,689 @@
+{
+  "snapshot_data_processed": "2026-10-26T13:50:45+00:00",
+  "genus": [
+    {
+      "genus_name": "ACER",
+      "n": 41969
+    },
+    {
+      "genus_name": "PRUNUS",
+      "n": 29867
+    },
+    {
+      "genus_name": "QUERCUS",
+      "n": 8955
+    },
+    {
+      "genus_name": "FRAXINUS",
+      "n": 7964
+    },
+    {
+      "genus_name": "TILIA",
+      "n": 6765
+    },
+    {
+      "genus_name": "CARPINUS",
+      "n": 6710
+    },
+    {
+      "genus_name": "THUJA",
+      "n": 6204
+    },
+    {
+      "genus_name": "FAGUS",
+      "n": 6175
+    },
+    {
+      "genus_name": "MAGNOLIA",
+      "n": 4621
+    },
+    {
+      "genus_name": "MALUS",
+      "n": 4347
+    },
+    {
+      "genus_name": "CRATAEGUS",
+      "n": 3946
+    },
+    {
+      "genus_name": "ULMUS",
+      "n": 3633
+    },
+    {
+      "genus_name": "PARROTIA",
+      "n": 3002
+    },
+    {
+      "genus_name": "CORNUS",
+      "n": 2927
+    },
+    {
+      "genus_name": "AESCULUS",
+      "n": 2882
+    },
+    {
+      "genus_name": "PSEUDOTSUGA",
+      "n": 2705
+    },
+    {
+      "genus_name": "CERCIDIPHYLLUM",
+      "n": 2650
+    },
+    {
+      "genus_name": "PLATANUS",
+      "n": 2351
+    },
+    {
+      "genus_name": "PINUS",
+      "n": 2141
+    },
+    {
+      "genus_name": "GLEDITSIA",
+      "n": 2137
+    },
+    {
+      "genus_name": "PYRUS",
+      "n": 1920
+    },
+    {
+      "genus_name": "SORBUS",
+      "n": 1861
+    },
+    {
+      "genus_name": "LIQUIDAMBAR",
+      "n": 1841
+    },
+    {
+      "genus_name": "BETULA",
+      "n": 1760
+    },
+    {
+      "genus_name": "STYRAX",
+      "n": 1760
+    },
+    {
+      "genus_name": "NYSSA",
+      "n": 1734
+    },
+    {
+      "genus_name": "POPULUS",
+      "n": 1717
+    },
+    {
+      "genus_name": "SYRINGA",
+      "n": 1345
+    },
+    {
+      "genus_name": "PICEA",
+      "n": 1327
+    },
+    {
+      "genus_name": "LIRIODENDRON",
+      "n": 1189
+    },
+    {
+      "genus_name": "CHAMAECYPARIS",
+      "n": 1162
+    },
+    {
+      "genus_name": "ROBINIA",
+      "n": 911
+    },
+    {
+      "genus_name": "PLANTING",
+      "n": 880
+    },
+    {
+      "genus_name": "SEQUOIADENDRON",
+      "n": 844
+    },
+    {
+      "genus_name": "ZELKOVA",
+      "n": 694
+    },
+    {
+      "genus_name": "CEDRUS",
+      "n": 648
+    },
+    {
+      "genus_name": "CERCIS",
+      "n": 625
+    },
+    {
+      "genus_name": "CATALPA",
+      "n": 603
+    },
+    {
+      "genus_name": "ALNUS",
+      "n": 594
+    },
+    {
+      "genus_name": "GINKGO",
+      "n": 569
+    },
+    {
+      "genus_name": "STUMP",
+      "n": 569
+    },
+    {
+      "genus_name": "METASEQUOIA",
+      "n": 562
+    },
+    {
+      "genus_name": "SALIX",
+      "n": 522
+    },
+    {
+      "genus_name": "AMELANCHIER",
+      "n": 465
+    },
+    {
+      "genus_name": "TSUGA",
+      "n": 445
+    },
+    {
+      "genus_name": "ILEX",
+      "n": 372
+    },
+    {
+      "genus_name": "CELTIS",
+      "n": 363
+    },
+    {
+      "genus_name": "STEWARTIA",
+      "n": 349
+    },
+    {
+      "genus_name": "ABIES",
+      "n": 344
+    },
+    {
+      "genus_name": "CALLITROPSIS",
+      "n": 276
+    },
+    {
+      "genus_name": "JUGLANS",
+      "n": 275
+    },
+    {
+      "genus_name": "GYMNOCLADUS",
+      "n": 264
+    },
+    {
+      "genus_name": "TAXUS",
+      "n": 239
+    },
+    {
+      "genus_name": "CORYLUS",
+      "n": 231
+    },
+    {
+      "genus_name": "DAVIDIA",
+      "n": 220
+    },
+    {
+      "genus_name": "KOELREUTERIA",
+      "n": 176
+    },
+    {
+      "genus_name": "LABURNUM",
+      "n": 166
+    },
+    {
+      "genus_name": "TAXODIUM",
+      "n": 166
+    },
+    {
+      "genus_name": "HIBISCUS",
+      "n": 145
+    },
+    {
+      "genus_name": "TRACHYCARPUS",
+      "n": 144
+    },
+    {
+      "genus_name": "UNIDENTIFIED",
+      "n": 142
+    },
+    {
+      "genus_name": "OSTRYA",
+      "n": 140
+    },
+    {
+      "genus_name": "JUNIPERUS",
+      "n": 113
+    },
+    {
+      "genus_name": "CALOCEDRUS",
+      "n": 105
+    },
+    {
+      "genus_name": "CLADRASTIS",
+      "n": 99
+    },
+    {
+      "genus_name": "CASTANEA",
+      "n": 98
+    },
+    {
+      "genus_name": "LARIX",
+      "n": 93
+    },
+    {
+      "genus_name": "ARBUTUS",
+      "n": 71
+    },
+    {
+      "genus_name": null,
+      "n": 64
+    },
+    {
+      "genus_name": "PAULOWNIA",
+      "n": 59
+    },
+    {
+      "genus_name": "MAACKIA",
+      "n": 58
+    },
+    {
+      "genus_name": "CUPRESSUS",
+      "n": 57
+    },
+    {
+      "genus_name": "SEQUOIA",
+      "n": 56
+    },
+    {
+      "genus_name": "CRYPTOMERIA",
+      "n": 50
+    },
+    {
+      "genus_name": "PTEROCARYA",
+      "n": 43
+    },
+    {
+      "genus_name": "MORUS",
+      "n": 39
+    },
+    {
+      "genus_name": "ARAUCARIA",
+      "n": 37
+    },
+    {
+      "genus_name": "COTONEASTER",
+      "n": 37
+    },
+    {
+      "genus_name": "RHUS",
+      "n": 36
+    },
+    {
+      "genus_name": "FICUS",
+      "n": 35
+    },
+    {
+      "genus_name": "AILANTHUS",
+      "n": 30
+    },
+    {
+      "genus_name": "RHODODENDRON",
+      "n": 28
+    },
+    {
+      "genus_name": "RHAMNUS",
+      "n": 26
+    },
+    {
+      "genus_name": "HEPTACODIUM",
+      "n": 24
+    },
+    {
+      "genus_name": "MESPILUS",
+      "n": 22
+    },
+    {
+      "genus_name": "CUNNINGHAMIA",
+      "n": 20
+    },
+    {
+      "genus_name": "EUCOMMIA",
+      "n": 20
+    },
+    {
+      "genus_name": "ALBIZIA",
+      "n": 19
+    },
+    {
+      "genus_name": "SCIADOPITYS",
+      "n": 18
+    },
+    {
+      "genus_name": "SOPHORA",
+      "n": 16
+    },
+    {
+      "genus_name": "VIBURNUM",
+      "n": 16
+    },
+    {
+      "genus_name": "CARYA",
+      "n": 15
+    },
+    {
+      "genus_name": "NOTHOFAGUS",
+      "n": 15
+    },
+    {
+      "genus_name": "ARALIA",
+      "n": 14
+    },
+    {
+      "genus_name": "OXYDENDRUM",
+      "n": 14
+    },
+    {
+      "genus_name": "STYPHNOLOBIUM",
+      "n": 13
+    },
+    {
+      "genus_name": "EUONYMUS",
+      "n": 12
+    },
+    {
+      "genus_name": "LAURUS",
+      "n": 12
+    },
+    {
+      "genus_name": "PHELLODENDRON",
+      "n": 12
+    },
+    {
+      "genus_name": "PHOTINIA",
+      "n": 11
+    },
+    {
+      "genus_name": "BERBERIS",
+      "n": 10
+    },
+    {
+      "genus_name": "CHITALPA",
+      "n": 10
+    },
+    {
+      "genus_name": "COTINUS",
+      "n": 10
+    },
+    {
+      "genus_name": "LAGERSTROEMIA",
+      "n": 9
+    },
+    {
+      "genus_name": "CLERODENDRUM",
+      "n": 8
+    },
+    {
+      "genus_name": "EUCALYPTUS",
+      "n": 8
+    },
+    {
+      "genus_name": "BROUSSONETIA",
+      "n": 7
+    },
+    {
+      "genus_name": "HAMAMELIS",
+      "n": 7
+    },
+    {
+      "genus_name": "ELAEAGNUS",
+      "n": 6
+    },
+    {
+      "genus_name": "CAMELLIA",
+      "n": 5
+    },
+    {
+      "genus_name": "PIERIS",
+      "n": 5
+    },
+    {
+      "genus_name": "SCANDOSORBUS",
+      "n": 5
+    },
+    {
+      "genus_name": "THUJOPSIS",
+      "n": 5
+    },
+    {
+      "genus_name": "AZARA",
+      "n": 4
+    },
+    {
+      "genus_name": "CEANOTHUS",
+      "n": 4
+    },
+    {
+      "genus_name": "CYDONIA",
+      "n": 4
+    },
+    {
+      "genus_name": "PHILADELPHUS",
+      "n": 4
+    },
+    {
+      "genus_name": "PTEROSTYRAX",
+      "n": 4
+    },
+    {
+      "genus_name": "TROCHODENDRON",
+      "n": 4
+    },
+    {
+      "genus_name": "AUCUBA",
+      "n": 3
+    },
+    {
+      "genus_name": "CASTANOPSIS",
+      "n": 3
+    },
+    {
+      "genus_name": "CUPRESSOCYPARIS   X",
+      "n": 3
+    },
+    {
+      "genus_name": "HIPPOPHAE",
+      "n": 3
+    },
+    {
+      "genus_name": "MAYTENUS",
+      "n": 3
+    },
+    {
+      "genus_name": "NOTHOLITHOCARPUS",
+      "n": 3
+    },
+    {
+      "genus_name": "BAMBOO",
+      "n": 2
+    },
+    {
+      "genus_name": "CARRIEREA",
+      "n": 2
+    },
+    {
+      "genus_name": "DECAISNEA",
+      "n": 2
+    },
+    {
+      "genus_name": "DIOSPYROS",
+      "n": 2
+    },
+    {
+      "genus_name": "EMMENOPTERYS",
+      "n": 2
+    },
+    {
+      "genus_name": "EUCRYPHIA",
+      "n": 2
+    },
+    {
+      "genus_name": "FRANKLINIA",
+      "n": 2
+    },
+    {
+      "genus_name": "MACLURA",
+      "n": 2
+    },
+    {
+      "genus_name": "MAHONIA",
+      "n": 2
+    },
+    {
+      "genus_name": "OEMLERIA",
+      "n": 2
+    },
+    {
+      "genus_name": "OSMANTHUS",
+      "n": 2
+    },
+    {
+      "genus_name": "PARROTIOPSIS",
+      "n": 2
+    },
+    {
+      "genus_name": "PTELEA",
+      "n": 2
+    },
+    {
+      "genus_name": "SAMBUCUS",
+      "n": 2
+    },
+    {
+      "genus_name": "SASSAFRAS",
+      "n": 2
+    },
+    {
+      "genus_name": "TAIWANIA",
+      "n": 2
+    },
+    {
+      "genus_name": "WEIGELA",
+      "n": 2
+    },
+    {
+      "genus_name": "ACTINODAPHNE",
+      "n": 1
+    },
+    {
+      "genus_name": "APHANANTHE",
+      "n": 1
+    },
+    {
+      "genus_name": "ARONIA",
+      "n": 1
+    },
+    {
+      "genus_name": "ASIMINA",
+      "n": 1
+    },
+    {
+      "genus_name": "ATHROTAXIS",
+      "n": 1
+    },
+    {
+      "genus_name": "AUSTROCEDRUS",
+      "n": 1
+    },
+    {
+      "genus_name": "CARAGANA",
+      "n": 1
+    },
+    {
+      "genus_name": "CHIONANTHUS",
+      "n": 1
+    },
+    {
+      "genus_name": "GLYPTOSTROBUS",
+      "n": 1
+    },
+    {
+      "genus_name": "HALESIA",
+      "n": 1
+    },
+    {
+      "genus_name": "IDESIA",
+      "n": 1
+    },
+    {
+      "genus_name": "KALOPANAX",
+      "n": 1
+    },
+    {
+      "genus_name": "LABURNOCYTISUS",
+      "n": 1
+    },
+    {
+      "genus_name": "MACHILUS",
+      "n": 1
+    },
+    {
+      "genus_name": "MELLIODENDRON",
+      "n": 1
+    },
+    {
+      "genus_name": "MICHELIA",
+      "n": 1
+    },
+    {
+      "genus_name": "MYOPORUM",
+      "n": 1
+    },
+    {
+      "genus_name": "PHYLLOSTACHYS",
+      "n": 1
+    },
+    {
+      "genus_name": "PLATYCLADUS",
+      "n": 1
+    },
+    {
+      "genus_name": "POURTHIAEA",
+      "n": 1
+    },
+    {
+      "genus_name": "PSEUDOLARIX",
+      "n": 1
+    },
+    {
+      "genus_name": "SORBARIA",
+      "n": 1
+    },
+    {
+      "genus_name": "SORBOPYRUS",
+      "n": 1
+    },
+    {
+      "genus_name": "STAPHYLEA",
+      "n": 1
+    },
+    {
+      "genus_name": "TETRACENTRON",
+      "n": 1
+    },
+    {
+      "genus_name": "TETRADIUM",
+      "n": 1
+    },
+    {
+      "genus_name": "UMBELLULARIA",
+      "n": 1
+    },
+    {
+      "genus_name": "WOLLEMIA",
+      "n": 1
+    },
+    {
+      "genus_name": "ZANTHOXYLUM",
+      "n": 1
+    }
+  ]
+}

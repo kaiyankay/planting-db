@@ -1,0 +1,26 @@
+{
+  "dataset_id": "public-trees",
+  "title": "Public trees",
+  "publisher": "City of Vancouver",
+  "licence": "Open Government Licence - Vancouver",
+  "licence_url": "https://opendata.vancouver.ca/pages/licence/",
+  "licence_id": "OGL-Vancouver",
+  "data_processed": "2026-10-26T13:50:45+00:00",
+  "modified": "2026-10-26T13:50:45+00:00",
+  "records_count": 184217,
+  "fields": [
+    "asset_id",
+    "address",
+    "common_name",
+    "genus_name",
+    "species_name",
+    "cultivar_name",
+    "height_m",
+    "diameter_cm",
+    "local_area",
+    "geom",
+    "geo_point_2d"
+  ],
+  "api": "https://opendata.vancouver.ca/api/explore/v2.1/catalog/datasets/public-trees",
+  "fetched_at": "2026-10-30T05:33:49+00:00"
+}

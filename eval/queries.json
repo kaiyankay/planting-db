@@ -1,0 +1,13 @@
+{
+  "note": "T6 test set = survey e2 (six 'one search you would actually type') + c4 (two 'one thing you could not find'). The verbatim strings live in the survey export (inputs/survey/, not on this machine on 2026-10-29); these are RECONSTRUCTED from the intent_map.json mappings and must be replaced by the verbatim text when T4 runs. status: proxy.",
+  "queries": [
+    {"id": "e2-r01", "status": "proxy", "query": "low maintenance plant with seasonal interest", "from_intent_map": ["low maintenance", "seasonal interest"]},
+    {"id": "e2-r02", "status": "proxy", "query": "plants for a house garden in Vancouver", "from_intent_map": ["house garden"]},
+    {"id": "e2-r03", "status": "proxy", "query": "native pollinator friendly plants", "from_intent_map": ["native", "pollinator friendly"]},
+    {"id": "e2-r04", "status": "verbatim-ish", "query": "Don't know", "from_intent_map": ["unmapped: 'Don’t know'"], "note": "respondent could not imagine a search; expected result: no hits, graceful empty answer"},
+    {"id": "e2-r05", "status": "proxy", "query": "hardy ground cover for my area", "from_intent_map": ["hardy", "ground cover", "my area"]},
+    {"id": "e2-r06", "status": "proxy", "query": "shade-tolerant evergreen perennial for a north-facing roof garden, accessible", "from_intent_map": ["shade-tolerant", "evergreen", "perennial", "roof garden", "accessible"]},
+    {"id": "c4-r01", "status": "proxy", "query": "is Japanese maple toxic to pets", "from_intent_map": ["toxic to pets"], "name": "Japanese maple"},
+    {"id": "c4-r03", "status": "verbatim-ish", "query": "long day or short day plant", "from_intent_map": ["unmapped: photoperiod"], "note": "field exists, no source yet — expected: honest 'no claim' answer"}
+  ]
+}

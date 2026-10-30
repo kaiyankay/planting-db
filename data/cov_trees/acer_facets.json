@@ -1,0 +1,1095 @@
+{
+  "genus": "ACER",
+  "snapshot_data_processed": "2026-10-26T13:50:45+00:00",
+  "species": [
+    {
+      "species_name": "PLATANOIDES",
+      "n": 12726
+    },
+    {
+      "species_name": "RUBRUM",
+      "n": 9736
+    },
+    {
+      "species_name": "FREEMANII   X",
+      "n": 4461
+    },
+    {
+      "species_name": "CAMPESTRE",
+      "n": 3737
+    },
+    {
+      "species_name": "PSEUDOPLATANUS",
+      "n": 2166
+    },
+    {
+      "species_name": "TRUNCATUM",
+      "n": 2053
+    },
+    {
+      "species_name": "PALMATUM",
+      "n": 1848
+    },
+    {
+      "species_name": "MACROPHYLLUM",
+      "n": 1213
+    },
+    {
+      "species_name": "GRISEUM",
+      "n": 829
+    },
+    {
+      "species_name": "SPECIES",
+      "n": 627
+    },
+    {
+      "species_name": "CIRCINATUM",
+      "n": 470
+    },
+    {
+      "species_name": "SACCHARINUM",
+      "n": 465
+    },
+    {
+      "species_name": "CAPPADOCICUM",
+      "n": 448
+    },
+    {
+      "species_name": "GINNALA",
+      "n": 278
+    },
+    {
+      "species_name": "SACCHARUM",
+      "n": 192
+    },
+    {
+      "species_name": "NEGUNDO",
+      "n": 176
+    },
+    {
+      "species_name": "MIYABEI",
+      "n": 136
+    },
+    {
+      "species_name": "TATARICUM",
+      "n": 69
+    },
+    {
+      "species_name": "NIGRUM",
+      "n": 66
+    },
+    {
+      "species_name": "DAVIDII",
+      "n": 57
+    },
+    {
+      "species_name": "PENSYLVANICUM",
+      "n": 46
+    },
+    {
+      "species_name": "CAPILLIPES",
+      "n": 25
+    },
+    {
+      "species_name": "GLABRUM",
+      "n": 25
+    },
+    {
+      "species_name": "JAPONICUM",
+      "n": 18
+    },
+    {
+      "species_name": "CISSIFOLIUM",
+      "n": 17
+    },
+    {
+      "species_name": "TEGMENTOSUM",
+      "n": 14
+    },
+    {
+      "species_name": "PSEUDOSIEBOLDIANUM",
+      "n": 9
+    },
+    {
+      "species_name": "ARGUTUM",
+      "n": 7
+    },
+    {
+      "species_name": "BUERGERIANUM",
+      "n": 7
+    },
+    {
+      "species_name": "BARBATUM",
+      "n": 5
+    },
+    {
+      "species_name": "MORRISONENSE",
+      "n": 5
+    },
+    {
+      "species_name": "SHIRASAWANUM",
+      "n": 5
+    },
+    {
+      "species_name": "HENRYI",
+      "n": 4
+    },
+    {
+      "species_name": "MAXIMOWICZIANUM",
+      "n": 4
+    },
+    {
+      "species_name": "ALBOPURPURASCENS",
+      "n": 2
+    },
+    {
+      "species_name": "LONGIPES",
+      "n": 2
+    },
+    {
+      "species_name": "MAXIMOWICZII",
+      "n": 2
+    },
+    {
+      "species_name": "SPICATUM",
+      "n": 2
+    },
+    {
+      "species_name": "STACHYOPHYLLUM",
+      "n": 2
+    },
+    {
+      "species_name": "VELUTINUM",
+      "n": 2
+    },
+    {
+      "species_name": "BARBINERVE",
+      "n": 1
+    },
+    {
+      "species_name": "CERIFERUM",
+      "n": 1
+    },
+    {
+      "species_name": "FORRESTII",
+      "n": 1
+    },
+    {
+      "species_name": "MANDSHURICUM",
+      "n": 1
+    },
+    {
+      "species_name": "MONSPESSULANUM",
+      "n": 1
+    },
+    {
+      "species_name": "MORIFOLIUM",
+      "n": 1
+    },
+    {
+      "species_name": "NIPPONICUM",
+      "n": 1
+    },
+    {
+      "species_name": "OPALUS",
+      "n": 1
+    },
+    {
+      "species_name": "PECTINATUM",
+      "n": 1
+    },
+    {
+      "species_name": "PYCNANTHUM",
+      "n": 1
+    },
+    {
+      "species_name": "SIEBOLDIANUM",
+      "n": 1
+    },
+    {
+      "species_name": "TRIFLORUM",
+      "n": 1
+    },
+    {
+      "species_name": "TSINGLINGENSE",
+      "n": 1
+    }
+  ],
+  "species_cultivar": [
+    {
+      "species_name": "PLATANOIDES",
+      "cultivar_name": "NONE",
+      "n": 6182
+    },
+    {
+      "species_name": "RUBRUM",
+      "cultivar_name": "NONE",
+      "n": 3839
+    },
+    {
+      "species_name": "RUBRUM",
+      "cultivar_name": "BOWHALL",
+      "n": 2501
+    },
+    {
+      "species_name": "CAMPESTRE",
+      "cultivar_name": "NONE",
+      "n": 2314
+    },
+    {
+      "species_name": "FREEMANII   X",
+      "cultivar_name": "ARMSTRONG",
+      "n": 2049
+    },
+    {
+      "species_name": "PSEUDOPLATANUS",
+      "cultivar_name": "NONE",
+      "n": 1867
+    },
+    {
+      "species_name": "PLATANOIDES",
+      "cultivar_name": "COLUMNARE",
+      "n": 1773
+    },
+    {
+      "species_name": "TRUNCATUM",
+      "cultivar_name": "PACIFIC SUNSET",
+      "n": 1739
+    },
+    {
+      "species_name": "PLATANOIDES",
+      "cultivar_name": "GLOBOSUM",
+      "n": 1356
+    },
+    {
+      "species_name": "MACROPHYLLUM",
+      "cultivar_name": "NONE",
+      "n": 1212
+    },
+    {
+      "species_name": "FREEMANII   X",
+      "cultivar_name": "AUTUMN BLAZE",
+      "n": 1164
+    },
+    {
+      "species_name": "PALMATUM",
+      "cultivar_name": "NONE",
+      "n": 1103
+    },
+    {
+      "species_name": "CAMPESTRE",
+      "cultivar_name": "QUEEN ELIZABETH",
+      "n": 970
+    },
+    {
+      "species_name": "GRISEUM",
+      "cultivar_name": "NONE",
+      "n": 829
+    },
+    {
+      "species_name": "PLATANOIDES",
+      "cultivar_name": "EMERALD QUEEN",
+      "n": 789
+    },
+    {
+      "species_name": "RUBRUM",
+      "cultivar_name": "OCTOBER GLORY",
+      "n": 784
+    },
+    {
+      "species_name": "RUBRUM",
+      "cultivar_name": "AUTUMN FLAME",
+      "n": 750
+    },
+    {
+      "species_name": "RUBRUM",
+      "cultivar_name": "RED SUNSET",
+      "n": 747
+    },
+    {
+      "species_name": "FREEMANII   X",
+      "cultivar_name": "SCARLET SENTINEL",
+      "n": 705
+    },
+    {
+      "species_name": "PLATANOIDES",
+      "cultivar_name": "PRINCETON GOLD",
+      "n": 701
+    },
+    {
+      "species_name": "SPECIES",
+      "cultivar_name": "NONE",
+      "n": 627
+    },
+    {
+      "species_name": "FREEMANII   X",
+      "cultivar_name": "MORGAN",
+      "n": 525
+    },
+    {
+      "species_name": "CIRCINATUM",
+      "cultivar_name": "NONE",
+      "n": 470
+    },
+    {
+      "species_name": "SACCHARINUM",
+      "cultivar_name": "NONE",
+      "n": 447
+    },
+    {
+      "species_name": "RUBRUM",
+      "cultivar_name": "KARPICK",
+      "n": 440
+    },
+    {
+      "species_name": "PALMATUM",
+      "cultivar_name": "OSAKAZUKI",
+      "n": 407
+    },
+    {
+      "species_name": "PLATANOIDES",
+      "cultivar_name": "DRUMMONDII",
+      "n": 367
+    },
+    {
+      "species_name": "PLATANOIDES",
+      "cultivar_name": "SCHWEDLERI",
+      "n": 361
+    },
+    {
+      "species_name": "PLATANOIDES",
+      "cultivar_name": "CRIMSON KING",
+      "n": 341
+    },
+    {
+      "species_name": "GINNALA",
+      "cultivar_name": "NONE",
+      "n": 271
+    },
+    {
+      "species_name": "RUBRUM",
+      "cultivar_name": "NORTHWOOD",
+      "n": 253
+    },
+    {
+      "species_name": "CAMPESTRE",
+      "cultivar_name": "RED SHINE",
+      "n": 220
+    },
+    {
+      "species_name": "CAPPADOCICUM",
+      "cultivar_name": "RUBRUM",
+      "n": 217
+    },
+    {
+      "species_name": "CAPPADOCICUM",
+      "cultivar_name": "NONE",
+      "n": 213
+    },
+    {
+      "species_name": "PLATANOIDES",
+      "cultivar_name": "SUPERFORM",
+      "n": 208
+    },
+    {
+      "species_name": "RUBRUM",
+      "cultivar_name": "BRANDYWINE",
+      "n": 203
+    },
+    {
+      "species_name": "PLATANOIDES",
+      "cultivar_name": "DEBORAH",
+      "n": 197
+    },
+    {
+      "species_name": "SACCHARUM",
+      "cultivar_name": "NONE",
+      "n": 190
+    },
+    {
+      "species_name": "TRUNCATUM",
+      "cultivar_name": "NORWEGIAN SUNSET",
+      "n": 188
+    },
+    {
+      "species_name": "RUBRUM",
+      "cultivar_name": "FRANK JR",
+      "n": 183
+    },
+    {
+      "species_name": "CAMPESTRE",
+      "cultivar_name": "PANACEK",
+      "n": 173
+    },
+    {
+      "species_name": "NEGUNDO",
+      "cultivar_name": "NONE",
+      "n": 172
+    },
+    {
+      "species_name": "PSEUDOPLATANUS",
+      "cultivar_name": "ATROPURPUREA",
+      "n": 171
+    },
+    {
+      "species_name": "PSEUDOPLATANUS",
+      "cultivar_name": "LEOPOLDII",
+      "n": 123
+    },
+    {
+      "species_name": "MIYABEI",
+      "cultivar_name": "RUGGED RIDGE",
+      "n": 118
+    },
+    {
+      "species_name": "PLATANOIDES",
+      "cultivar_name": "FAIRVIEW",
+      "n": 89
+    },
+    {
+      "species_name": "PALMATUM",
+      "cultivar_name": "BLOODGOOD",
+      "n": 88
+    },
+    {
+      "species_name": "PALMATUM",
+      "cultivar_name": "KOTO NO ITO",
+      "n": 65
+    },
+    {
+      "species_name": "TRUNCATUM",
+      "cultivar_name": "CRIMSON SUNSET",
+      "n": 63
+    },
+    {
+      "species_name": "TATARICUM",
+      "cultivar_name": "NONE",
+      "n": 61
+    },
+    {
+      "species_name": "PLATANOIDES",
+      "cultivar_name": "CRIMSON SENTRY",
+      "n": 60
+    },
+    {
+      "species_name": "DAVIDII",
+      "cultivar_name": "NONE",
+      "n": 57
+    },
+    {
+      "species_name": "NIGRUM",
+      "cultivar_name": "GREEN COLUMN",
+      "n": 57
+    },
+    {
+      "species_name": "PLATANOIDES",
+      "cultivar_name": "ROYAL RED",
+      "n": 51
+    },
+    {
+      "species_name": "PLATANOIDES",
+      "cultivar_name": "CRIMSON SUNSET",
+      "n": 48
+    },
+    {
+      "species_name": "PENSYLVANICUM",
+      "cultivar_name": "NONE",
+      "n": 46
+    },
+    {
+      "species_name": "PLATANOIDES",
+      "cultivar_name": "CONZAM",
+      "n": 44
+    },
+    {
+      "species_name": "PLATANOIDES",
+      "cultivar_name": "GREEN MOUNTAIN",
+      "n": 44
+    },
+    {
+      "species_name": "PALMATUM",
+      "cultivar_name": "ATROPURPUREUM",
+      "n": 43
+    },
+    {
+      "species_name": "CAMPESTRE",
+      "cultivar_name": "EVELYN",
+      "n": 40
+    },
+    {
+      "species_name": "TRUNCATUM",
+      "cultivar_name": "NONE",
+      "n": 37
+    },
+    {
+      "species_name": "PLATANOIDES",
+      "cultivar_name": "ELWOODII",
+      "n": 27
+    },
+    {
+      "species_name": "TRUNCATUM",
+      "cultivar_name": "URBAN SUNSET",
+      "n": 26
+    },
+    {
+      "species_name": "CAPILLIPES",
+      "cultivar_name": "NONE",
+      "n": 25
+    },
+    {
+      "species_name": "GLABRUM",
+      "cultivar_name": "NONE",
+      "n": 25
+    },
+    {
+      "species_name": "PALMATUM",
+      "cultivar_name": "HARVEST ORANGE",
+      "n": 25
+    },
+    {
+      "species_name": "RUBRUM",
+      "cultivar_name": "COLUMNARE",
+      "n": 23
+    },
+    {
+      "species_name": "PALMATUM",
+      "cultivar_name": "DISSECTUM",
+      "n": 22
+    },
+    {
+      "species_name": "CAMPESTRE",
+      "cultivar_name": "STREETSIDE",
+      "n": 20
+    },
+    {
+      "species_name": "PLATANOIDES",
+      "cultivar_name": "EMERALD LUSTRE",
+      "n": 19
+    },
+    {
+      "species_name": "CAPPADOCICUM",
+      "cultivar_name": "AUREUM",
+      "n": 18
+    },
+    {
+      "species_name": "FREEMANII   X",
+      "cultivar_name": "NONE",
+      "n": 18
+    },
+    {
+      "species_name": "PLATANOIDES",
+      "cultivar_name": "CLEVELAND",
+      "n": 18
+    },
+    {
+      "species_name": "CISSIFOLIUM",
+      "cultivar_name": "NONE",
+      "n": 17
+    },
+    {
+      "species_name": "JAPONICUM",
+      "cultivar_name": "NONE",
+      "n": 16
+    },
+    {
+      "species_name": "PALMATUM",
+      "cultivar_name": "DISSECTUM ATROPURPUREUM",
+      "n": 16
+    },
+    {
+      "species_name": "PALMATUM",
+      "cultivar_name": "TAIJA",
+      "n": 16
+    },
+    {
+      "species_name": "PALMATUM",
+      "cultivar_name": "SHOJO",
+      "n": 14
+    },
+    {
+      "species_name": "SACCHARINUM",
+      "cultivar_name": "LACINIATUM",
+      "n": 14
+    },
+    {
+      "species_name": "MIYABEI",
+      "cultivar_name": "MORTON",
+      "n": 12
+    },
+    {
+      "species_name": "PLATANOIDES",
+      "cultivar_name": "ATROPURPUREA",
+      "n": 12
+    },
+    {
+      "species_name": "TEGMENTOSUM",
+      "cultivar_name": "WHITE TIGRESS",
+      "n": 12
+    },
+    {
+      "species_name": "PLATANOIDES",
+      "cultivar_name": "QUEEN ELIZABETH",
+      "n": 10
+    },
+    {
+      "species_name": "NIGRUM",
+      "cultivar_name": "NONE",
+      "n": 9
+    },
+    {
+      "species_name": "PLATANOIDES",
+      "cultivar_name": "ALMIRA",
+      "n": 9
+    },
+    {
+      "species_name": "PLATANOIDES",
+      "cultivar_name": "EASY STREET",
+      "n": 9
+    },
+    {
+      "species_name": "PSEUDOSIEBOLDIANUM",
+      "cultivar_name": "NONE",
+      "n": 9
+    },
+    {
+      "species_name": "ARGUTUM",
+      "cultivar_name": "NONE",
+      "n": 7
+    },
+    {
+      "species_name": "GINNALA",
+      "cultivar_name": "FLAME",
+      "n": 7
+    },
+    {
+      "species_name": "RUBRUM",
+      "cultivar_name": "CELEBRATION",
+      "n": 7
+    },
+    {
+      "species_name": "BUERGERIANUM",
+      "cultivar_name": "NONE",
+      "n": 6
+    },
+    {
+      "species_name": "MIYABEI",
+      "cultivar_name": "NONE",
+      "n": 6
+    },
+    {
+      "species_name": "PLATANOIDES",
+      "cultivar_name": "GREENLACE",
+      "n": 6
+    },
+    {
+      "species_name": "TATARICUM",
+      "cultivar_name": "HOT WINGS",
+      "n": 6
+    },
+    {
+      "species_name": "BARBATUM",
+      "cultivar_name": "NONE",
+      "n": 5
+    },
+    {
+      "species_name": "MORRISONENSE",
+      "cultivar_name": "NONE",
+      "n": 5
+    },
+    {
+      "species_name": "PALMATUM",
+      "cultivar_name": "SHISHIGASHIRA",
+      "n": 5
+    },
+    {
+      "species_name": "PALMATUM",
+      "cultivar_name": "VIRIDIS",
+      "n": 5
+    },
+    {
+      "species_name": "RUBRUM",
+      "cultivar_name": "SUN VALLEY",
+      "n": 5
+    },
+    {
+      "species_name": "HENRYI",
+      "cultivar_name": "NONE",
+      "n": 4
+    },
+    {
+      "species_name": "MAXIMOWICZIANUM",
+      "cultivar_name": "NONE",
+      "n": 4
+    },
+    {
+      "species_name": "SHIRASAWANUM",
+      "cultivar_name": "AUREUM",
+      "n": 4
+    },
+    {
+      "species_name": "NEGUNDO",
+      "cultivar_name": "FLAMINGO",
+      "n": 3
+    },
+    {
+      "species_name": "PALMATUM",
+      "cultivar_name": "BURGUNDY LACE",
+      "n": 3
+    },
+    {
+      "species_name": "ALBOPURPURASCENS",
+      "cultivar_name": "NONE",
+      "n": 2
+    },
+    {
+      "species_name": "JAPONICUM",
+      "cultivar_name": "ACONITIFOLIUM",
+      "n": 2
+    },
+    {
+      "species_name": "LONGIPES",
+      "cultivar_name": "NONE",
+      "n": 2
+    },
+    {
+      "species_name": "MAXIMOWICZII",
+      "cultivar_name": "NONE",
+      "n": 2
+    },
+    {
+      "species_name": "PALMATUM",
+      "cultivar_name": "ACONITIFOLIUM",
+      "n": 2
+    },
+    {
+      "species_name": "PALMATUM",
+      "cultivar_name": "AKA-SHIGITATSU-SAWA",
+      "n": 2
+    },
+    {
+      "species_name": "PALMATUM",
+      "cultivar_name": "CRIMSON QUEEN",
+      "n": 2
+    },
+    {
+      "species_name": "PALMATUM",
+      "cultivar_name": "WOLFF EMPEROR1",
+      "n": 2
+    },
+    {
+      "species_name": "PLATANOIDES",
+      "cultivar_name": "FAASSEN'S BLACK",
+      "n": 2
+    },
+    {
+      "species_name": "PLATANOIDES",
+      "cultivar_name": "PARKWAY",
+      "n": 2
+    },
+    {
+      "species_name": "PSEUDOPLATANUS",
+      "cultivar_name": "PURPUREUM",
+      "n": 2
+    },
+    {
+      "species_name": "SACCHARINUM",
+      "cultivar_name": "SILVER QUEEN",
+      "n": 2
+    },
+    {
+      "species_name": "SACCHARINUM",
+      "cultivar_name": "WIERI",
+      "n": 2
+    },
+    {
+      "species_name": "SACCHARUM",
+      "cultivar_name": "LEGACY",
+      "n": 2
+    },
+    {
+      "species_name": "SPICATUM",
+      "cultivar_name": "NONE",
+      "n": 2
+    },
+    {
+      "species_name": "STACHYOPHYLLUM",
+      "cultivar_name": "BETULIFOLIUM",
+      "n": 2
+    },
+    {
+      "species_name": "VELUTINUM",
+      "cultivar_name": "NONE",
+      "n": 2
+    },
+    {
+      "species_name": "BARBINERVE",
+      "cultivar_name": "NONE",
+      "n": 1
+    },
+    {
+      "species_name": "BUERGERIANUM",
+      "cultivar_name": "MIYASAMA",
+      "n": 1
+    },
+    {
+      "species_name": "CERIFERUM",
+      "cultivar_name": "NONE",
+      "n": 1
+    },
+    {
+      "species_name": "FORRESTII",
+      "cultivar_name": "NONE",
+      "n": 1
+    },
+    {
+      "species_name": "MACROPHYLLUM",
+      "cultivar_name": "KIMBALLIAE",
+      "n": 1
+    },
+    {
+      "species_name": "MANDSHURICUM",
+      "cultivar_name": "NONE",
+      "n": 1
+    },
+    {
+      "species_name": "MONSPESSULANUM",
+      "cultivar_name": "NONE",
+      "n": 1
+    },
+    {
+      "species_name": "MORIFOLIUM",
+      "cultivar_name": "NONE",
+      "n": 1
+    },
+    {
+      "species_name": "NEGUNDO",
+      "cultivar_name": "VARIEGATUM",
+      "n": 1
+    },
+    {
+      "species_name": "NIPPONICUM",
+      "cultivar_name": "NONE",
+      "n": 1
+    },
+    {
+      "species_name": "OPALUS",
+      "cultivar_name": "OBTUSATUM",
+      "n": 1
+    },
+    {
+      "species_name": "PALMATUM",
+      "cultivar_name": "AKA-SHIME-NO-UCHI",
+      "n": 1
+    },
+    {
+      "species_name": "PALMATUM",
+      "cultivar_name": "AOYAGI",
+      "n": 1
+    },
+    {
+      "species_name": "PALMATUM",
+      "cultivar_name": "AUREUM",
+      "n": 1
+    },
+    {
+      "species_name": "PALMATUM",
+      "cultivar_name": "AZUMA-MARASAKI",
+      "n": 1
+    },
+    {
+      "species_name": "PALMATUM",
+      "cultivar_name": "BUTTERFLY",
+      "n": 1
+    },
+    {
+      "species_name": "PALMATUM",
+      "cultivar_name": "DISSECTUM JERRE SCHWARTZ",
+      "n": 1
+    },
+    {
+      "species_name": "PALMATUM",
+      "cultivar_name": "EMPEROR 1",
+      "n": 1
+    },
+    {
+      "species_name": "PALMATUM",
+      "cultivar_name": "ENKAN",
+      "n": 1
+    },
+    {
+      "species_name": "PALMATUM",
+      "cultivar_name": "HESSEI",
+      "n": 1
+    },
+    {
+      "species_name": "PALMATUM",
+      "cultivar_name": "HOGYOKU",
+      "n": 1
+    },
+    {
+      "species_name": "PALMATUM",
+      "cultivar_name": "KAGIRI-NISHIKI",
+      "n": 1
+    },
+    {
+      "species_name": "PALMATUM",
+      "cultivar_name": "KI-HACHIJO",
+      "n": 1
+    },
+    {
+      "species_name": "PALMATUM",
+      "cultivar_name": "NISHIKI-GAWA",
+      "n": 1
+    },
+    {
+      "species_name": "PALMATUM",
+      "cultivar_name": "NISHKI-MOMJI",
+      "n": 1
+    },
+    {
+      "species_name": "PALMATUM",
+      "cultivar_name": "NOMURA NISHIKI",
+      "n": 1
+    },
+    {
+      "species_name": "PALMATUM",
+      "cultivar_name": "NURESAGI",
+      "n": 1
+    },
+    {
+      "species_name": "PALMATUM",
+      "cultivar_name": "OMURAYAMA",
+      "n": 1
+    },
+    {
+      "species_name": "PALMATUM",
+      "cultivar_name": "RED PYGMY",
+      "n": 1
+    },
+    {
+      "species_name": "PALMATUM",
+      "cultivar_name": "RUSLYN IN THE PINK",
+      "n": 1
+    },
+    {
+      "species_name": "PALMATUM",
+      "cultivar_name": "SANGO-KAKU",
+      "n": 1
+    },
+    {
+      "species_name": "PALMATUM",
+      "cultivar_name": "SEIRYU",
+      "n": 1
+    },
+    {
+      "species_name": "PALMATUM",
+      "cultivar_name": "SHERWOOD FLAME",
+      "n": 1
+    },
+    {
+      "species_name": "PALMATUM",
+      "cultivar_name": "SHIGITATSU-SAWA",
+      "n": 1
+    },
+    {
+      "species_name": "PALMATUM",
+      "cultivar_name": "SONKOOTGRE GOING GREEN",
+      "n": 1
+    },
+    {
+      "species_name": "PALMATUM",
+      "cultivar_name": "TROMPENBURG",
+      "n": 1
+    },
+    {
+      "species_name": "PALMATUM",
+      "cultivar_name": "TWOMBLYS RED SENTINEL",
+      "n": 1
+    },
+    {
+      "species_name": "PALMATUM",
+      "cultivar_name": "VAR. DISSECTUM CRIMSON QUEEN",
+      "n": 1
+    },
+    {
+      "species_name": "PALMATUM",
+      "cultivar_name": "WATERFALL (DISSECTUM GROUP)",
+      "n": 1
+    },
+    {
+      "species_name": "PECTINATUM",
+      "cultivar_name": "NONE",
+      "n": 1
+    },
+    {
+      "species_name": "PLATANOIDES",
+      "cultivar_name": "DISSECTUM",
+      "n": 1
+    },
+    {
+      "species_name": "PSEUDOPLATANUS",
+      "cultivar_name": "ERYTHROCARPUM",
+      "n": 1
+    },
+    {
+      "species_name": "PSEUDOPLATANUS",
+      "cultivar_name": "NEGENIA",
+      "n": 1
+    },
+    {
+      "species_name": "PSEUDOPLATANUS",
+      "cultivar_name": "PRINZ HANDJERY",
+      "n": 1
+    },
+    {
+      "species_name": "PYCNANTHUM",
+      "cultivar_name": "NONE",
+      "n": 1
+    },
+    {
+      "species_name": "RUBRUM",
+      "cultivar_name": "SCANLON",
+      "n": 1
+    },
+    {
+      "species_name": "SHIRASAWANUM",
+      "cultivar_name": "MOONRISE",
+      "n": 1
+    },
+    {
+      "species_name": "SIEBOLDIANUM",
+      "cultivar_name": "NONE",
+      "n": 1
+    },
+    {
+      "species_name": "TATARICUM",
+      "cultivar_name": "GARANN HOT WINGS",
+      "n": 1
+    },
+    {
+      "species_name": "TATARICUM",
+      "cultivar_name": "GINNALA",
+      "n": 1
+    },
+    {
+      "species_name": "TEGMENTOSUM",
+      "cultivar_name": "JOE WITT",
+      "n": 1
+    },
+    {
+      "species_name": "TEGMENTOSUM",
+      "cultivar_name": "NONE",
+      "n": 1
+    },
+    {
+      "species_name": "TRIFLORUM",
+      "cultivar_name": "NONE",
+      "n": 1
+    },
+    {
+      "species_name": "TSINGLINGENSE",
+      "cultivar_name": "NONE",
+      "n": 1
+    }
+  ]
+}

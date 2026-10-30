@@ -1,0 +1,170 @@
+{
+  "updated": "2026-10-29",
+  "note": "Pairwise facts live here, not inside plant files. Same claim rules apply (source, context, confidence, status). Model placeholders are retired when a sourced relation covers the same pair and type (R10/M10); the rest keep verify_against and list the sourced claims that bear on them (supporting_claims).",
+  "relations": [
+    {
+      "id": "rel:vaccinium-ovatum:gaultheria-shallon:01",
+      "plant_a": "vaccinium-ovatum",
+      "plant_b": "gaultheria-shallon",
+      "relation_type": "co_listed",
+      "direction": "mutual",
+      "text": "A practising designer listed Vaccinium ovatum and Gaultheria shallon together in a five-plant list for Metro Vancouver, both as evergreen natives.",
+      "source_id": "survey-r03",
+      "source_type": "practitioner",
+      "context": "survey d1, same respondent list (with Gaillardia aristata, Eriophyllum lanatum, Campanula rotundifolia)",
+      "confidence": 0.5,
+      "status": "verified",
+      "recorded_at": "2026-10-30",
+      "practitioner_meta": {
+        "basis": null,
+        "completeness": "L0",
+        "citable": false,
+        "observer_background": "MLA student and practising landscape designer; studio, professional and personal-garden experience"
+      },
+      "note": "co-listing is weak evidence of compatibility — it records that a designer thinks of them together, nothing more"
+    },
+    {
+      "id": "rel:vaccinium-ovatum:gaultheria-shallon:m1",
+      "plant_a": "vaccinium-ovatum",
+      "plant_b": "gaultheria-shallon",
+      "relation_type": "companion",
+      "direction": "mutual",
+      "text": "Vaccinium ovatum and Gaultheria shallon co-occur naturally in coastal PNW conifer understory and are commonly planted together as an evergreen native shrub layer (model placeholder, unverified).",
+      "source_id": "model",
+      "source_type": "model",
+      "context": "PNW coastal forest understory",
+      "confidence": 0.45,
+      "status": "retired",
+      "recorded_at": "2026-10-30",
+      "verify_against": [
+        "pojar",
+        "gpp",
+        "growgreen"
+      ],
+      "retired_by": "rel:vaccinium-ovatum:gaultheria-shallon:02",
+      "retired_at": "2026-10-29"
+    },
+    {
+      "id": "rel:vaccinium-ovatum:gaultheria-shallon:02",
+      "plant_a": "vaccinium-ovatum",
+      "plant_b": "gaultheria-shallon",
+      "relation_type": "companion",
+      "direction": "mutual",
+      "text": "E-Flora BC places both Vaccinium ovatum and Gaultheria shallon in coastal lowland to montane forest of the Coastal Western Hemlock zone — the same habitat classes, so they co-occur naturally in the Vancouver region.",
+      "source_id": "eflora",
+      "source_type": "database",
+      "context": "derived: overlapping habitat classes on the two atlas pages (forest, lowland, montane, coastal; modal zone CWH); the source does not state the association itself",
+      "confidence": 0.5,
+      "status": "unverified",
+      "recorded_at": "2026-10-29",
+      "recorded_by": "claude (T5, derived)",
+      "derived_from": [
+        "vaccinium-ovatum:vancouver_context:eflora01",
+        "gaultheria-shallon:vancouver_context:eflora01"
+      ],
+      "source_url": [
+        "https://linnet.geog.ubc.ca/Atlas/Atlas.aspx?sciname=Vaccinium%20ovatum",
+        "https://linnet.geog.ubc.ca/Atlas/Atlas.aspx?sciname=Gaultheria%20shallon"
+      ],
+      "citation": "In Klinkenberg, Brian. (Editor) 2020. E-Flora BC: Electronic Atlas of the Plants of British Columbia [eflora.bc.ca]. Lab for Advanced Spatial Analysis, Department of Geography, University of British Columbia, Vancouver. [Accessed: 2026-10-29]",
+      "accessed": "2026-10-29",
+      "note": "habitat co-occurrence, not a planting-design recommendation; the model placeholder m1 says the same from general knowledge and is retired by this claim"
+    },
+    {
+      "id": "rel:gaultheria-shallon:vaccinium-ovatum:m2",
+      "plant_a": "gaultheria-shallon",
+      "plant_b": "vaccinium-ovatum",
+      "relation_type": "competes",
+      "direction": "a_to_b",
+      "text": "Once established, Gaultheria shallon can spread into and under Vaccinium ovatum; the huckleberry usually holds its own because it is taller, but smaller plantings can be overrun (model placeholder, unverified).",
+      "source_id": "model",
+      "source_type": "model",
+      "context": "designed plantings, shade",
+      "confidence": 0.35,
+      "status": "unverified",
+      "recorded_at": "2026-10-30",
+      "verify_against": [
+        "practitioner",
+        "pojar"
+      ],
+      "note": "most valuable relation to confirm with a practitioner. Sourced claims now establish the mechanism (suckering/rhizomatous, forms thickets — RHS, OSU, USDA) but no source states the effect on huckleberry specifically.",
+      "supporting_claims": [
+        "gaultheria-shallon:behaviour_with_others:rhs01",
+        "gaultheria-shallon:behaviour_with_others:osu01",
+        "gaultheria-shallon:behaviour_with_others:usda01",
+        "gaultheria-shallon:growth_rate:usdaplants01"
+      ]
+    },
+    {
+      "id": "rel:acer-palmatum:gaultheria-shallon:m1",
+      "plant_a": "acer-palmatum",
+      "plant_b": "gaultheria-shallon",
+      "relation_type": "layered_under",
+      "direction": "b_to_a",
+      "text": "Gaultheria shallon is often used as an evergreen groundcover beneath Acer palmatum; both accept filtered shade and acidic soil (model placeholder, unverified).",
+      "source_id": "model",
+      "source_type": "model",
+      "context": "designed gardens, PNW",
+      "confidence": 0.4,
+      "status": "unverified",
+      "recorded_at": "2026-10-30",
+      "verify_against": [
+        "gpp",
+        "practitioner"
+      ],
+      "supporting_claims": [
+        "acer-palmatum:landscape_use:mobot01",
+        "gaultheria-shallon:exposure:rhs01",
+        "gaultheria-shallon:exposure:eflora01",
+        "acer-palmatum:soil_type:mobot01",
+        "gaultheria-shallon:soil_type:osu01"
+      ],
+      "note": "mechanism supported piecewise (MOBOT: maple as sun-dappled understory/woodland-margin tree; RHS/E-Flora: salal in shade; both on acidic soil) but no source describes the pairing — stays a placeholder"
+    },
+    {
+      "id": "rel:acer-palmatum:vaccinium-ovatum:m1",
+      "plant_a": "acer-palmatum",
+      "plant_b": "vaccinium-ovatum",
+      "relation_type": "layered_under",
+      "direction": "b_to_a",
+      "text": "Vaccinium ovatum can form the shrub layer under a small Acer palmatum canopy; the maple's shallow roots and the huckleberry's slow establishment both argue for planting the shrub first (model placeholder, unverified).",
+      "source_id": "model",
+      "source_type": "model",
+      "context": "designed gardens, PNW",
+      "confidence": 0.35,
+      "status": "unverified",
+      "recorded_at": "2026-10-30",
+      "verify_against": [
+        "gpp",
+        "practitioner"
+      ],
+      "supporting_claims": [
+        "acer-palmatum:landscape_use:mobot01",
+        "vaccinium-ovatum:exposure:gpp01",
+        "vaccinium-ovatum:growth_rate:usdaplants01",
+        "vaccinium-ovatum:time_to_intended_size:rhs01"
+      ],
+      "note": "huckleberry's slow establishment now sourced (USDA slow; RHS 10–20 yr); shade tolerance sourced (GPP); the pairing itself is not — stays a placeholder"
+    }
+  ],
+  "outside_db": [
+    {
+      "plant": "gaultheria-shallon",
+      "companions_named": [
+        "Rhododendron",
+        "ferns"
+      ],
+      "source_id": "osu",
+      "source_url": "https://landscapeplants.oregonstate.edu/plants/gaultheria-shallon",
+      "note": "named companions are not in the db; recorded here so they are not lost. Polystichum munitum (survey candidate) would make this a relation."
+    },
+    {
+      "plant": "vaccinium-ovatum",
+      "companions_named": [
+        "rhododendrons (large-leaved contrast)"
+      ],
+      "source_id": "gpp",
+      "source_url": "https://www.greatplantpicks.org/plantlists/view/1611"
+    }
+  ]
+}

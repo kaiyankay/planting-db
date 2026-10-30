@@ -1,0 +1,194 @@
+{
+  "updated": "2026-10-29",
+  "note": "Keyword route for retrieval. Every name a user or respondent might type → canonical plant id. Includes all 17 survey candidates so later additions resolve to the same ids. Entries with in_db=false are candidates only.",
+  "entries": [
+    {
+      "id": "acer-palmatum",
+      "in_db": true,
+      "scientific": "Acer palmatum",
+      "names": [
+        "Japanese maple",
+        "Japanese Maple",
+        "鸡爪槭",
+        "日本枫",
+        "jap maple"
+      ]
+    },
+    {
+      "id": "vaccinium-ovatum",
+      "in_db": true,
+      "scientific": "Vaccinium ovatum",
+      "names": [
+        "Evergreen huckleberry",
+        "California huckleberry",
+        "常绿越橘",
+        "huckleberry (evergreen)",
+        "Box huckleberry",
+        "Shot huckleberry",
+        "Californian huckleberry"
+      ]
+    },
+    {
+      "id": "gaultheria-shallon",
+      "in_db": true,
+      "scientific": "Gaultheria shallon",
+      "names": [
+        "Salal",
+        "莎伦",
+        "北美白珠树",
+        "shallon",
+        "lemon leaf",
+        "lemon leaves"
+      ]
+    },
+    {
+      "id": "cornus-nuttallii",
+      "in_db": false,
+      "scientific": "Cornus nuttallii",
+      "names": [
+        "Pacific dogwood",
+        "Western flowering dogwood",
+        "太平洋山茱萸",
+        "BC dogwood"
+      ]
+    },
+    {
+      "id": "rhododendron-groenlandicum",
+      "in_db": false,
+      "scientific": "Rhododendron groenlandicum",
+      "synonyms_scientific": [
+        "Ledum groenlandicum"
+      ],
+      "names": [
+        "Labrador tea",
+        "拉布拉多茶",
+        "拉布拉多tee"
+      ],
+      "note": "respondent typed '拉布拉多tee'"
+    },
+    {
+      "id": "rubus-spectabilis",
+      "in_db": false,
+      "scientific": "Rubus spectabilis",
+      "names": [
+        "Salmonberry",
+        "Salmon berry",
+        "鲑莓"
+      ]
+    },
+    {
+      "id": "rosa-nutkana",
+      "in_db": false,
+      "scientific": "Rosa nutkana",
+      "names": [
+        "Nootka rose",
+        "努特卡玫瑰"
+      ]
+    },
+    {
+      "id": "gleditsia-triacanthos",
+      "in_db": false,
+      "scientific": "Gleditsia triacanthos",
+      "names": [
+        "Honey locust",
+        "Honey locust tree",
+        "皂荚",
+        "美国皂荚"
+      ]
+    },
+    {
+      "id": "cercidiphyllum-japonicum",
+      "in_db": false,
+      "scientific": "Cercidiphyllum japonicum",
+      "names": [
+        "Katsura",
+        "Katsura tree",
+        "连香树"
+      ]
+    },
+    {
+      "id": "arctostaphylos-uva-ursi",
+      "in_db": false,
+      "scientific": "Arctostaphylos uva-ursi",
+      "names": [
+        "Kinnikinnick",
+        "Kinnikinnicks",
+        "Bearberry",
+        "熊果"
+      ]
+    },
+    {
+      "id": "polystichum-munitum",
+      "in_db": false,
+      "scientific": "Polystichum munitum",
+      "names": [
+        "Western sword fern",
+        "Western Sword Fern",
+        "Sword fern",
+        "西部剑蕨"
+      ],
+      "note": "respondent typed role 'shrub'; KPU type is Fern"
+    },
+    {
+      "id": "malus-fusca",
+      "in_db": false,
+      "scientific": "Malus fusca",
+      "names": [
+        "Pacific crabapple",
+        "Western crabapple",
+        "太平洋海棠"
+      ]
+    },
+    {
+      "id": "achillea-millefolium",
+      "in_db": false,
+      "scientific": "Achillea millefolium",
+      "names": [
+        "Yarrow",
+        "Common yarrow",
+        "蓍草",
+        "西洋蓍草"
+      ]
+    },
+    {
+      "id": "trifolium-repens",
+      "in_db": false,
+      "scientific": "Trifolium repens",
+      "names": [
+        "White clover",
+        "白三叶",
+        "白车轴草"
+      ]
+    },
+    {
+      "id": "gaillardia-aristata",
+      "in_db": false,
+      "scientific": "Gaillardia aristata",
+      "names": [
+        "Blanketflower",
+        "Blanket flower",
+        "天人菊"
+      ]
+    },
+    {
+      "id": "eriophyllum-lanatum",
+      "in_db": false,
+      "scientific": "Eriophyllum lanatum",
+      "names": [
+        "Woolly sunflower",
+        "Oregon sunshine",
+        "绵毛菊"
+      ]
+    },
+    {
+      "id": "campanula-rotundifolia",
+      "in_db": false,
+      "scientific": "Campanula rotundifolia",
+      "names": [
+        "Harebell",
+        "Bluebell of Scotland",
+        "圆叶风铃草"
+      ]
+    }
+  ]
+}
