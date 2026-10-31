@@ -32,6 +32,27 @@ CLAIMS = [c for p in PLANTS.values() for c in p["claims"]]
 SRC_PRIORITY = {s: i for i, s in enumerate(SCHEMA["claim"]["fields"]["source_type"]["priority_order"])}
 GEO = {"vancouver": 0, "bc": 1, "pnw": 2, "north_america": 3, "global": 4}
 VANCOUVER_USDA = 8          # Vancouver ≈ USDA 8 / Canadian 8a–8b (schema vocab note)
+try:
+    ONT = {n["id"]: n for n in L("ontology.json")["nodes"]}
+except FileNotFoundError:
+    ONT = {}
+_LABEL2IDS = {}
+for _n in ONT.values():
+    _LABEL2IDS.setdefault(_n["label"].lower(), []).append(_n["id"])
+    for _a in _n.get("aliases", []): _LABEL2IDS.setdefault(_a.lower(), []).append(_n["id"])
+_FACETS_OF = {}
+try:
+    for _facet, _fields in L("ontology.json")["facet_fields"].items():
+        for _f in _fields: _FACETS_OF.setdefault(_f.split(".")[0], []).append(_facet)
+except FileNotFoundError:
+    pass
+def to_concept(x, field=None):
+    """intent_map values are KPU labels; claims (0.4.0) hold ontology ids — compare on ids, preferring the field's facets"""
+    if isinstance(x, str) and x in ONT: return x
+    if not isinstance(x, str): return x
+    ids = _LABEL2IDS.get(x.lower(), [])
+    pref = [i for i in ids if ONT[i]["facet"] in _FACETS_OF.get(field or "", [])]
+    return (pref or ids or [x])[0]
 STOP = set("a an the of for in on to and or with is are be my our your this that it its as at by from i we you plant plants".split())
 
 # ------------------------------------------------------------------ tokens / BM25
@@ -102,8 +123,8 @@ def gate_check(plant_id, term):
             if isinstance(v, dict) and v.get("unit") == "RHS" and v.get("rating") in ("H4", "H5", "H6", "H7"): return "pass"
             if v in (want.get("includes") if isinstance(want, dict) else []): return "pass"
             continue
-        wants = want if isinstance(want, list) else [want]
-        vals = v if isinstance(v, list) else [v]
+        wants = [to_concept(w, base) for w in (want if isinstance(want, list) else [want])]
+        vals = [to_concept(x, base) for x in (v if isinstance(v, list) else [v])] + list(c.get("concepts") or [])
         if any(w in vals for w in wants): return "pass"
     # enum[] fields list what a source chose to mention: absence is not contradiction (M16a)
     fdef = next((t["fields"][base] for t in SCHEMA["field_tiers"].values() if base in t.get("fields", {})), {})

@@ -10,13 +10,14 @@ async function getJson(path) {
 }
 
 export async function loadDb() {
-  const [schema, sourcesFile, synonyms, intent, relations, queries] = await Promise.all([
+  const [schema, sourcesFile, synonyms, intent, relations, queries, ontology] = await Promise.all([
     getJson('schema.json'),
     getJson('sources.json'),
     getJson('synonyms.json'),
     getJson('intent_map.json'),
     getJson('relations.json'),
     getJson('eval/queries.json'),
+    getJson('ontology.json').catch(() => null),
   ]);
   // which plants exist is read from synonyms.json (in_db: true), not hard-coded
   const ids = synonyms.entries.filter(e => e.in_db).map(e => e.id);
@@ -25,7 +26,7 @@ export async function loadDb() {
   for (const p of plantFiles) plants[p.entity.id] = p;
   const sources = {};
   for (const s of sourcesFile.sources) sources[s.id] = s;
-  return { schema, sources, sourcesFile, synonyms, intent, relations, queries, plants, plantIds: ids };
+  return { schema, sources, sourcesFile, synonyms, intent, relations, queries, plants, plantIds: ids, ontology };
 }
 
 // Markdown documents that hold rules of the project outside the JSON (methods, principles, handoff, readme).

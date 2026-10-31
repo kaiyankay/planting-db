@@ -22,7 +22,8 @@ export async function loadDb() {
   const ids = synonyms.entries.filter(e => e.in_db).map(e => e.id);
   const plantFiles = await Promise.all(ids.map(id => getJson(`plants/${id}.json`)));
   const plants = {};
-  for (const p of plantFiles) plants[p.entity.id] = p;
+  for (const p of plantFiles) { for (const c of p.claims) if (c.value_label !== undefined) c.value = c.value_label;   // archived demo: show labels, not 0.4.0 ontology ids
+    plants[p.entity.id] = p; }
   const sources = {};
   for (const s of sourcesFile.sources) sources[s.id] = s;
   return { schema, sources, sourcesFile, synonyms, intent, relations, queries, plants, plantIds: ids };

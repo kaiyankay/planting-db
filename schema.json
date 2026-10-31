@@ -1,8 +1,8 @@
 {
-  "$schema_version": "0.3.0",
+  "$schema_version": "0.4.0",
   "name": "Planting Intelligence — Local Planting Knowledge Database",
   "scope": "City of Vancouver / Metro Vancouver, BC (Canadian hardiness zone 8a–8b)",
-  "updated": "2026-10-30",
+  "updated": "2026-10-31",
   "design_basis": {
     "field_tiers": "ARCH 540 user survey c1 (must-pass vs compared) and c2 (could not find / did not trust), n=6, 2026-10-30",
     "practitioner_metadata": "survey f1 (details needed before trusting someone's note)",
@@ -450,7 +450,7 @@
       },
       "value": {
         "type": "any",
-        "note": "typed per field definition; ranges as {min, max, unit}"
+        "note": "typed per field definition; ranges as {min, max, unit}. From 0.4.0 categorical list / scalar values are ontology ids (ontology.json); the original label stays in value_label. Object-shaped values keep their shape and expose concepts in `concepts`."
       },
       "value_kind": {
         "type": "enum",
@@ -553,6 +553,37 @@
         "type": "string",
         "ref": "claim.id",
         "note": "set by merge_claims when a verified non-model claim lands on a field that only had model placeholders"
+      },
+      "value_label": {
+        "type": "any",
+        "note": "0.4.0: the original categorical label(s) before mapping to ontology ids; display uses this"
+      },
+      "concepts": {
+        "type": "string[]",
+        "ref": "ontology.json nodes[].id",
+        "note": "0.4.0: every concept this claim links the plant to — the categorical ids, the ordinal classes a range spans (quantitative claims keep their numbers; classes are graph hooks), colours / evergreen / fruit read from object values"
+      },
+      "conditions": {
+        "type": "object[]",
+        "shape": {
+          "facet": "string",
+          "concept_id": "ontology id"
+        },
+        "note": "0.4.0: growing conditions stated in `context` (exposure, soil); the original context string is kept"
+      },
+      "place": {
+        "type": "string",
+        "ref": "ontology.json place:*",
+        "note": "0.4.0: from the claim's own context when more specific, else the source's geo_specificity"
+      },
+      "time": {
+        "type": "string[]",
+        "ref": "ontology.json month:* season:* age:*",
+        "note": "0.4.0: phenology months, age bands, season observed"
+      },
+      "cultivar": {
+        "type": "string|null",
+        "note": "0.4.0: lifted from context `cultivar:'…'`; `(unrecorded)` for inventory records without a label"
       }
     }
   },
@@ -958,5 +989,10 @@
       "Wilt"
     ],
     "resistances_open": true
+  },
+  "ontology": {
+    "file": "ontology.json",
+    "version": "0.1.0",
+    "note": "concept nodes; claims are the edges that connect a plant to a concept with provenance (brief 2026-10-31)"
   }
 }

@@ -14,6 +14,7 @@ Checks (claims)
   - field exists in a field tier
   - value_kind in enum and allowed for that field (field.value_kinds)
   - categorical values are in the field's vocab / values (list or scalar; object shapes checked per key)
+  - schema 0.4.0: list / scalar categorical values are ontology ids (value_label keeps the label); concepts / conditions / place / time exist in ontology.json
   - quantitative ranges have min <= max and a unit
   - source_id exists in sources.json and source_type matches the source's type
   - practitioner claims carry practitioner_meta; completeness matches basis/location; L0 never citable
@@ -40,9 +41,19 @@ def load_json(path):
         return json.load(f)
 
 
+ONTOLOGY = None
+def load_ontology(root=ROOT):
+    global ONTOLOGY
+    if ONTOLOGY is None:
+        path = os.path.join(root, "ontology.json")
+        ONTOLOGY = {n["id"]: n for n in load_json(path)["nodes"]} if os.path.exists(path) else {}
+    return ONTOLOGY
+
+
 def load_db(root=ROOT):
     schema = load_json(os.path.join(root, "schema.json"))
     sources = load_json(os.path.join(root, "sources.json"))
+    load_ontology(root)
     return schema, {s["id"]: s for s in sources["sources"]}
 
 
@@ -93,6 +104,9 @@ def expected_completeness(meta):
     return "L3" if extras >= 2 else "L2"
 
 
+claim_labels = {}
+
+
 def check_categorical(cid, field, fdef, value, schema, rep):
     vocab = allowed_values(fdef, schema)
     if isinstance(value, bool):
@@ -123,6 +137,19 @@ def check_categorical(cid, field, fdef, value, schema, rep):
         rep.warn(cid, f"{field}: categorical but field has no vocab to check against")
         return
     vals = value if isinstance(value, list) else [value]
+    ont = load_ontology()
+    if ont and schema.get("ontology"):
+        # schema 0.4.0: list / scalar categorical values are ontology ids; the label lives in value_label
+        not_ids = [v for v in vals if v not in ont]
+        if not_ids:
+            rep.err(cid, f"{field}: {not_ids} not ontology ids (ontology.json); labels belong in value_label")
+            return
+        labels = claim_labels.get(cid)
+        if labels is not None:
+            lv = labels if isinstance(labels, list) else [labels]
+            vals = lv                     # vocab check continues on the original labels
+        else:
+            vals = [ont[v]["label"] for v in vals]
     bad = [v for v in vals if v not in vocab]
     if bad and schema["vocab"].get(f"{fdef.get('vocab')}_open") is True:
         rep.note(cid, f"{field}: {bad} outside the open starter list (allowed, M11)")
@@ -157,6 +184,25 @@ def check_quantitative(cid, field, value, rep):
             rep.err(cid, f"{field}: quantitative object holds no numbers")
         if "unit" not in value and any(k in value for k in ("median", "p90", "max", "mean", "n")):
             rep.warn(cid, f"{field}: distribution without unit")
+
+
+def check_ontology_fields(cid, c, schema, rep):
+    """schema 0.4.0: concepts / conditions / place / time point at ontology nodes"""
+    ont = load_ontology()
+    if not ont or not schema.get("ontology"):
+        return
+    for k in ("concepts", "conditions", "place", "time", "cultivar"):
+        if k not in c:
+            rep.err(cid, f"missing 0.4.0 field '{k}' (run tools/migrate_0_4.py)")
+    for x in c.get("concepts") or []:
+        if x not in ont: rep.err(cid, f"concepts: {x!r} not in ontology")
+    for x in c.get("conditions") or []:
+        if not isinstance(x, dict) or x.get("concept_id") not in ont: rep.err(cid, f"conditions: {x!r} not an ontology condition")
+        elif ont[x["concept_id"]]["facet"] != x.get("facet"): rep.err(cid, f"conditions: facet {x.get('facet')!r} does not match {x['concept_id']}")
+    pl = c.get("place")
+    if pl is not None and (pl not in ont or ont[pl]["dimension"] != "place"): rep.err(cid, f"place: {pl!r} not a place concept")
+    for x in c.get("time") or []:
+        if x not in ont or ont[x]["dimension"] != "time": rep.err(cid, f"time: {x!r} not a time concept")
 
 
 # ---------------------------------------------------------------- validators
@@ -205,9 +251,11 @@ def validate_claims(claims, plant_id, schema, sources, rep, known_ids=None):
             if vk not in fdef.get("value_kinds", list(vk_values)):
                 rep.err(cid, f"value_kind {vk} not allowed for {field} ({fdef.get('value_kinds')})")
             if vk == "categorical":
+                if "value_label" in c: claim_labels[cid] = c["value_label"]
                 check_categorical(cid, field, fdef, c.get("value"), schema, rep)
             elif vk == "quantitative":
                 check_quantitative(cid, field, c.get("value"), rep)
+        check_ontology_fields(cid, c, schema, rep)
 
         if not isinstance(c.get("text"), str) or not c.get("text", "").strip():
             rep.err(cid, "text is empty")

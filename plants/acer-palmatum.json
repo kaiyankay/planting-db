@@ -65,7 +65,12 @@
         "completeness": "L0",
         "citable": false,
         "note": "d1 'why' answers carry no basis — stored as selection reasons, not cited as observations"
-      }
+      },
+      "concepts": [],
+      "conditions": [],
+      "place": "place:vancouver",
+      "time": [],
+      "cultivar": null
     },
     {
       "id": "acer-palmatum:seasonal_interest:02",
@@ -94,7 +99,14 @@
         "plant_age_years": null,
         "completeness": "L0",
         "citable": false
-      }
+      },
+      "concepts": [
+        "interest:fall_colour"
+      ],
+      "conditions": [],
+      "place": "place:vancouver",
+      "time": [],
+      "cultivar": null
     },
     {
       "id": "acer-palmatum:hardiness_zone:m1",
@@ -121,7 +133,17 @@
         "gpp"
       ],
       "retired_by": "acer-palmatum:hardiness_zone:rhs01",
-      "retired_at": "2026-10-29"
+      "retired_at": "2026-10-29",
+      "concepts": [
+        "hardiness_usda:z5",
+        "hardiness_usda:z6",
+        "hardiness_usda:z7",
+        "hardiness_usda:z8"
+      ],
+      "conditions": [],
+      "place": "place:global",
+      "time": [],
+      "cultivar": null
     },
     {
       "id": "acer-palmatum:mature_height:m1",
@@ -150,7 +172,16 @@
       ],
       "note": "expect genuine disagreement between sources — keep each as its own claim with cultivar in context",
       "retired_by": "acer-palmatum:mature_height:rhs01",
-      "retired_at": "2026-10-29"
+      "retired_at": "2026-10-29",
+      "concepts": [
+        "height_class:3-5m",
+        "height_class:5-7m",
+        "height_class:7-10m"
+      ],
+      "conditions": [],
+      "place": "place:global",
+      "time": [],
+      "cultivar": null
     },
     {
       "id": "acer-palmatum:exposure:m1",
@@ -158,8 +189,8 @@
       "field": "exposure",
       "value_kind": "categorical",
       "value": [
-        "Part sun/part shade",
-        "Filtered shade"
+        "exposure:part_sun_part_shade",
+        "exposure:filtered_shade"
       ],
       "text": "Acer palmatum is usually recommended for part sun or filtered shade, with afternoon shade in hot sites (model placeholder, unverified).",
       "source_id": "model",
@@ -176,7 +207,19 @@
         "mobot"
       ],
       "retired_by": "acer-palmatum:exposure:rhs01",
-      "retired_at": "2026-10-29"
+      "retired_at": "2026-10-29",
+      "value_label": [
+        "Part sun/part shade",
+        "Filtered shade"
+      ],
+      "concepts": [
+        "exposure:part_sun_part_shade",
+        "exposure:filtered_shade"
+      ],
+      "conditions": [],
+      "place": "place:global",
+      "time": [],
+      "cultivar": null
     },
     {
       "id": "acer-palmatum:mature_height:rhs01",
@@ -198,7 +241,16 @@
       "recorded_by": "claude (T5 assisted extraction, structured values only)",
       "claim_kind": "attribute",
       "accessed": "2026-10-29",
-      "source_url": "https://www.rhs.org.uk/plants/225/acer-palmatum/details"
+      "source_url": "https://www.rhs.org.uk/plants/225/acer-palmatum/details",
+      "concepts": [
+        "height_class:3-5m",
+        "height_class:5-7m",
+        "height_class:7-10m"
+      ],
+      "conditions": [],
+      "place": "place:uk",
+      "time": [],
+      "cultivar": null
     },
     {
       "id": "acer-palmatum:mature_spread:rhs01",
@@ -220,7 +272,16 @@
       "recorded_by": "claude (T5 assisted extraction, structured values only)",
       "claim_kind": "attribute",
       "accessed": "2026-10-29",
-      "source_url": "https://www.rhs.org.uk/plants/225/acer-palmatum/details"
+      "source_url": "https://www.rhs.org.uk/plants/225/acer-palmatum/details",
+      "concepts": [
+        "spread_class:4-5m",
+        "spread_class:5-7m",
+        "spread_class:7-10m"
+      ],
+      "conditions": [],
+      "place": "place:uk",
+      "time": [],
+      "cultivar": null
     },
     {
       "id": "acer-palmatum:time_to_intended_size:rhs01",
@@ -244,7 +305,12 @@
       "claim_kind": "attribute",
       "accessed": "2026-10-29",
       "source_url": "https://www.rhs.org.uk/plants/225/acer-palmatum/details",
-      "note": "the one source with an explicit time-to-size figure (survey c2 gap)"
+      "note": "the one source with an explicit time-to-size figure (survey c2 gap)",
+      "concepts": [],
+      "conditions": [],
+      "place": "place:uk",
+      "time": [],
+      "cultivar": null
     },
     {
       "id": "acer-palmatum:hardiness_zone:rhs01",
@@ -268,16 +334,23 @@
       "claim_kind": "attribute",
       "accessed": "2026-10-29",
       "source_url": "https://www.rhs.org.uk/plants/225/acer-palmatum/details",
-      "note": "RHS H-scale, not a Canadian or USDA zone; °C band is the RHS definition of H6, not from the plant page"
+      "note": "RHS H-scale, not a Canadian or USDA zone; °C band is the RHS definition of H6, not from the plant page",
+      "concepts": [
+        "hardiness_rhs:H6"
+      ],
+      "conditions": [],
+      "place": "place:uk",
+      "time": [],
+      "cultivar": null
     },
     {
       "id": "acer-palmatum:exposure:rhs01",
       "plant": "acer-palmatum",
       "field": "exposure",
       "value": [
-        "Full sun",
-        "Part sun/part shade",
-        "Sheltered"
+        "exposure:full_sun",
+        "exposure:part_sun_part_shade",
+        "exposure:sheltered"
       ],
       "value_kind": "categorical",
       "text": "RHS: full sun or partial shade, sheltered position (west-, east- or south-facing).",
@@ -290,14 +363,28 @@
       "recorded_by": "claude (T5 assisted extraction, structured values only)",
       "claim_kind": "attribute",
       "accessed": "2026-10-29",
-      "source_url": "https://www.rhs.org.uk/plants/225/acer-palmatum/details"
+      "source_url": "https://www.rhs.org.uk/plants/225/acer-palmatum/details",
+      "value_label": [
+        "Full sun",
+        "Part sun/part shade",
+        "Sheltered"
+      ],
+      "concepts": [
+        "exposure:sheltered",
+        "exposure:full_sun",
+        "exposure:part_sun_part_shade"
+      ],
+      "conditions": [],
+      "place": "place:uk",
+      "time": [],
+      "cultivar": null
     },
     {
       "id": "acer-palmatum:soil_type:rhs01",
       "plant": "acer-palmatum",
       "field": "soil_type",
       "value": [
-        "Well-drained"
+        "soil:well_drained"
       ],
       "value_kind": "categorical",
       "text": "RHS: moist but well-drained soil; chalk, clay, loam or sand; acid or neutral pH.",
@@ -311,13 +398,23 @@
       "claim_kind": "attribute",
       "accessed": "2026-10-29",
       "source_url": "https://www.rhs.org.uk/plants/225/acer-palmatum/details",
-      "note": "RHS soil classes (chalk/clay/loam/sand) have no KPU equivalent — only 'Well-drained' mapped; pH 'acid or neutral' not mapped to 'Acidic' because neutral is included"
+      "note": "RHS soil classes (chalk/clay/loam/sand) have no KPU equivalent — only 'Well-drained' mapped; pH 'acid or neutral' not mapped to 'Acidic' because neutral is included",
+      "value_label": [
+        "Well-drained"
+      ],
+      "concepts": [
+        "soil:well_drained"
+      ],
+      "conditions": [],
+      "place": "place:uk",
+      "time": [],
+      "cultivar": null
     },
     {
       "id": "acer-palmatum:water_drainage:rhs01",
       "plant": "acer-palmatum",
       "field": "water_drainage",
-      "value": "moist",
+      "value": "water:moist",
       "value_kind": "categorical",
       "text": "RHS: moist but well-drained.",
       "source_id": "rhs",
@@ -330,7 +427,15 @@
       "claim_kind": "attribute",
       "accessed": "2026-10-29",
       "source_url": "https://www.rhs.org.uk/plants/225/acer-palmatum/details",
-      "note": "mapping 'moist but well-drained' → moist; 'average' would also be defensible"
+      "note": "mapping 'moist but well-drained' → moist; 'average' would also be defensible",
+      "value_label": "moist",
+      "concepts": [
+        "water:moist"
+      ],
+      "conditions": [],
+      "place": "place:uk",
+      "time": [],
+      "cultivar": null
     },
     {
       "id": "acer-palmatum:seasonal_interest:rhs01",
@@ -354,19 +459,28 @@
       "recorded_by": "claude (T5 assisted extraction, structured values only)",
       "claim_kind": "attribute",
       "accessed": "2026-10-29",
-      "source_url": "https://www.rhs.org.uk/plants/225/acer-palmatum/details"
+      "source_url": "https://www.rhs.org.uk/plants/225/acer-palmatum/details",
+      "concepts": [
+        "colour:red",
+        "evergreen:no",
+        "interest:fall_colour"
+      ],
+      "conditions": [],
+      "place": "place:uk",
+      "time": [],
+      "cultivar": null
     },
     {
       "id": "acer-palmatum:pest_susceptibility:rhs01",
       "plant": "acer-palmatum",
       "field": "pest_susceptibility",
       "value": [
-        "Galls",
-        "Aphids",
-        "Caterpillar or cutworm",
-        "Scale insects",
-        "Wilt",
-        "Leaf scorch"
+        "pest:galls",
+        "pest:aphids",
+        "pest:caterpillar_or_cutworm",
+        "pest:scale_insects",
+        "pest:wilt",
+        "pest:leaf_scorch"
       ],
       "value_kind": "categorical",
       "text": "RHS lists acer gall mite, aphids, caterpillars and horse chestnut scale as pests; verticillium wilt, leaf scorch and honey fungus as diseases.",
@@ -380,7 +494,27 @@
       "claim_kind": "attribute",
       "accessed": "2026-10-29",
       "source_url": "https://www.rhs.org.uk/plants/225/acer-palmatum/details",
-      "note": "honey fungus has no KPU pseudo-value; not mapped"
+      "note": "honey fungus has no KPU pseudo-value; not mapped",
+      "value_label": [
+        "Galls",
+        "Aphids",
+        "Caterpillar or cutworm",
+        "Scale insects",
+        "Wilt",
+        "Leaf scorch"
+      ],
+      "concepts": [
+        "pest:aphids",
+        "pest:caterpillar_or_cutworm",
+        "pest:galls",
+        "pest:leaf_scorch",
+        "pest:scale_insects",
+        "pest:wilt"
+      ],
+      "conditions": [],
+      "place": "place:uk",
+      "time": [],
+      "cultivar": null
     },
     {
       "id": "acer-palmatum:mature_height:rhs02",
@@ -402,7 +536,15 @@
       "recorded_by": "claude (T5 assisted extraction, structured values only)",
       "claim_kind": "attribute",
       "accessed": "2026-10-29",
-      "source_url": "https://www.rhs.org.uk/plants/91703/acer-palmatum-%C5%8Dsakazuki-a/details"
+      "source_url": "https://www.rhs.org.uk/plants/91703/acer-palmatum-%C5%8Dsakazuki-a/details",
+      "concepts": [
+        "height_class:2-3m",
+        "height_class:3-5m"
+      ],
+      "conditions": [],
+      "place": "place:uk",
+      "time": [],
+      "cultivar": "Osakazuki"
     },
     {
       "id": "acer-palmatum:mature_spread:rhs02",
@@ -424,7 +566,16 @@
       "recorded_by": "claude (T5 assisted extraction, structured values only)",
       "claim_kind": "attribute",
       "accessed": "2026-10-29",
-      "source_url": "https://www.rhs.org.uk/plants/91703/acer-palmatum-%C5%8Dsakazuki-a/details"
+      "source_url": "https://www.rhs.org.uk/plants/91703/acer-palmatum-%C5%8Dsakazuki-a/details",
+      "concepts": [
+        "spread_class:2-3m",
+        "spread_class:3-4m",
+        "spread_class:4-5m"
+      ],
+      "conditions": [],
+      "place": "place:uk",
+      "time": [],
+      "cultivar": "Osakazuki"
     },
     {
       "id": "acer-palmatum:seasonal_interest:rhs02",
@@ -453,7 +604,17 @@
       "claim_kind": "attribute",
       "accessed": "2026-10-29",
       "source_url": "https://www.rhs.org.uk/plants/90785/acer-palmatum-bloodgood-a/details",
-      "note": "schema 0.3.0: foliage_colour added (deep red-purple all season → Dark-red, Purple); autumn colour red"
+      "note": "schema 0.3.0: foliage_colour added (deep red-purple all season → Dark-red, Purple); autumn colour red",
+      "concepts": [
+        "colour:dark_red",
+        "colour:purple",
+        "evergreen:no",
+        "interest:fall_colour"
+      ],
+      "conditions": [],
+      "place": "place:global",
+      "time": [],
+      "cultivar": "Bloodgood"
     },
     {
       "id": "acer-palmatum:hardiness_zone:mobot01",
@@ -476,7 +637,17 @@
       "claim_kind": "attribute",
       "accessed": "2026-10-29",
       "source_url": "https://www.missouribotanicalgarden.org/PlantFinder/PlantFinderDetails.aspx?taxonid=275408",
-      "citation": "Acer palmatum, Missouri Botanical Garden Plant Finder, https://www.missouribotanicalgarden.org/PlantFinder/PlantFinderDetails.aspx?taxonid=275408, Accessed October 29, 2026"
+      "citation": "Acer palmatum, Missouri Botanical Garden Plant Finder, https://www.missouribotanicalgarden.org/PlantFinder/PlantFinderDetails.aspx?taxonid=275408, Accessed October 29, 2026",
+      "concepts": [
+        "hardiness_usda:z5",
+        "hardiness_usda:z6",
+        "hardiness_usda:z7",
+        "hardiness_usda:z8"
+      ],
+      "conditions": [],
+      "place": "place:st_louis",
+      "time": [],
+      "cultivar": null
     },
     {
       "id": "acer-palmatum:mature_height:mobot01",
@@ -500,7 +671,16 @@
       "claim_kind": "attribute",
       "accessed": "2026-10-29",
       "source_url": "https://www.missouribotanicalgarden.org/PlantFinder/PlantFinderDetails.aspx?taxonid=275408",
-      "citation": "Acer palmatum, Missouri Botanical Garden Plant Finder, https://www.missouribotanicalgarden.org/PlantFinder/PlantFinderDetails.aspx?taxonid=275408, Accessed October 29, 2026"
+      "citation": "Acer palmatum, Missouri Botanical Garden Plant Finder, https://www.missouribotanicalgarden.org/PlantFinder/PlantFinderDetails.aspx?taxonid=275408, Accessed October 29, 2026",
+      "concepts": [
+        "height_class:3-5m",
+        "height_class:5-7m",
+        "height_class:7-10m"
+      ],
+      "conditions": [],
+      "place": "place:st_louis",
+      "time": [],
+      "cultivar": null
     },
     {
       "id": "acer-palmatum:mature_spread:mobot01",
@@ -524,13 +704,23 @@
       "claim_kind": "attribute",
       "accessed": "2026-10-29",
       "source_url": "https://www.missouribotanicalgarden.org/PlantFinder/PlantFinderDetails.aspx?taxonid=275408",
-      "citation": "Acer palmatum, Missouri Botanical Garden Plant Finder, https://www.missouribotanicalgarden.org/PlantFinder/PlantFinderDetails.aspx?taxonid=275408, Accessed October 29, 2026"
+      "citation": "Acer palmatum, Missouri Botanical Garden Plant Finder, https://www.missouribotanicalgarden.org/PlantFinder/PlantFinderDetails.aspx?taxonid=275408, Accessed October 29, 2026",
+      "concepts": [
+        "spread_class:3-4m",
+        "spread_class:4-5m",
+        "spread_class:5-7m",
+        "spread_class:7-10m"
+      ],
+      "conditions": [],
+      "place": "place:st_louis",
+      "time": [],
+      "cultivar": null
     },
     {
       "id": "acer-palmatum:water_drainage:mobot01",
       "plant": "acer-palmatum",
       "field": "water_drainage",
-      "value": "average",
+      "value": "water:average",
       "value_kind": "categorical",
       "text": "Missouri Botanical Garden rates water needs as medium.",
       "source_id": "mobot",
@@ -543,13 +733,21 @@
       "claim_kind": "attribute",
       "accessed": "2026-10-29",
       "source_url": "https://www.missouribotanicalgarden.org/PlantFinder/PlantFinderDetails.aspx?taxonid=275408",
-      "citation": "Acer palmatum, Missouri Botanical Garden Plant Finder, https://www.missouribotanicalgarden.org/PlantFinder/PlantFinderDetails.aspx?taxonid=275408, Accessed October 29, 2026"
+      "citation": "Acer palmatum, Missouri Botanical Garden Plant Finder, https://www.missouribotanicalgarden.org/PlantFinder/PlantFinderDetails.aspx?taxonid=275408, Accessed October 29, 2026",
+      "value_label": "average",
+      "concepts": [
+        "water:average"
+      ],
+      "conditions": [],
+      "place": "place:st_louis",
+      "time": [],
+      "cultivar": null
     },
     {
       "id": "acer-palmatum:maintenance_level:mobot01",
       "plant": "acer-palmatum",
       "field": "maintenance_level",
-      "value": "low",
+      "value": "maintenance:low",
       "value_kind": "categorical",
       "text": "Missouri Botanical Garden rates maintenance as low; pruning best kept to a minimum.",
       "source_id": "mobot",
@@ -562,16 +760,24 @@
       "claim_kind": "attribute",
       "accessed": "2026-10-29",
       "source_url": "https://www.missouribotanicalgarden.org/PlantFinder/PlantFinderDetails.aspx?taxonid=275408",
-      "citation": "Acer palmatum, Missouri Botanical Garden Plant Finder, https://www.missouribotanicalgarden.org/PlantFinder/PlantFinderDetails.aspx?taxonid=275408, Accessed October 29, 2026"
+      "citation": "Acer palmatum, Missouri Botanical Garden Plant Finder, https://www.missouribotanicalgarden.org/PlantFinder/PlantFinderDetails.aspx?taxonid=275408, Accessed October 29, 2026",
+      "value_label": "low",
+      "concepts": [
+        "maintenance:low"
+      ],
+      "conditions": [],
+      "place": "place:st_louis",
+      "time": [],
+      "cultivar": null
     },
     {
       "id": "acer-palmatum:exposure:mobot01",
       "plant": "acer-palmatum",
       "field": "exposure",
       "value": [
-        "Full sun",
-        "Part sun/part shade",
-        "Sheltered"
+        "exposure:full_sun",
+        "exposure:part_sun_part_shade",
+        "exposure:sheltered"
       ],
       "value_kind": "categorical",
       "text": "Missouri Botanical Garden: full sun to part shade, afternoon shade in hot regions, sited away from strong winds.",
@@ -585,16 +791,30 @@
       "claim_kind": "attribute",
       "accessed": "2026-10-29",
       "source_url": "https://www.missouribotanicalgarden.org/PlantFinder/PlantFinderDetails.aspx?taxonid=275408",
-      "citation": "Acer palmatum, Missouri Botanical Garden Plant Finder, https://www.missouribotanicalgarden.org/PlantFinder/PlantFinderDetails.aspx?taxonid=275408, Accessed October 29, 2026"
+      "citation": "Acer palmatum, Missouri Botanical Garden Plant Finder, https://www.missouribotanicalgarden.org/PlantFinder/PlantFinderDetails.aspx?taxonid=275408, Accessed October 29, 2026",
+      "value_label": [
+        "Full sun",
+        "Part sun/part shade",
+        "Sheltered"
+      ],
+      "concepts": [
+        "exposure:sheltered",
+        "exposure:full_sun",
+        "exposure:part_sun_part_shade"
+      ],
+      "conditions": [],
+      "place": "place:st_louis",
+      "time": [],
+      "cultivar": null
     },
     {
       "id": "acer-palmatum:soil_type:mobot01",
       "plant": "acer-palmatum",
       "field": "soil_type",
       "value": [
-        "Acidic",
-        "Humus rich",
-        "Well-drained"
+        "soil:acidic",
+        "soil:humus_rich",
+        "soil:well_drained"
       ],
       "value_kind": "categorical",
       "text": "Missouri Botanical Garden: moist, organically rich, slightly acidic, well-drained soil; grows well in sandy loam.",
@@ -608,7 +828,21 @@
       "claim_kind": "attribute",
       "accessed": "2026-10-29",
       "source_url": "https://www.missouribotanicalgarden.org/PlantFinder/PlantFinderDetails.aspx?taxonid=275408",
-      "citation": "Acer palmatum, Missouri Botanical Garden Plant Finder, https://www.missouribotanicalgarden.org/PlantFinder/PlantFinderDetails.aspx?taxonid=275408, Accessed October 29, 2026"
+      "citation": "Acer palmatum, Missouri Botanical Garden Plant Finder, https://www.missouribotanicalgarden.org/PlantFinder/PlantFinderDetails.aspx?taxonid=275408, Accessed October 29, 2026",
+      "value_label": [
+        "Acidic",
+        "Humus rich",
+        "Well-drained"
+      ],
+      "concepts": [
+        "soil:acidic",
+        "soil:humus_rich",
+        "soil:well_drained"
+      ],
+      "conditions": [],
+      "place": "place:st_louis",
+      "time": [],
+      "cultivar": null
     },
     {
       "id": "acer-palmatum:seasonal_interest:mobot01",
@@ -640,18 +874,30 @@
       "accessed": "2026-10-29",
       "source_url": "https://www.missouribotanicalgarden.org/PlantFinder/PlantFinderDetails.aspx?taxonid=275408",
       "note": "'reddish-purple' mapped to Purple",
-      "citation": "Acer palmatum, Missouri Botanical Garden Plant Finder, https://www.missouribotanicalgarden.org/PlantFinder/PlantFinderDetails.aspx?taxonid=275408, Accessed October 29, 2026"
+      "citation": "Acer palmatum, Missouri Botanical Garden Plant Finder, https://www.missouribotanicalgarden.org/PlantFinder/PlantFinderDetails.aspx?taxonid=275408, Accessed October 29, 2026",
+      "concepts": [
+        "colour:green",
+        "colour:purple",
+        "evergreen:no",
+        "interest:fall_colour"
+      ],
+      "conditions": [],
+      "place": "place:st_louis",
+      "time": [
+        "month:4"
+      ],
+      "cultivar": null
     },
     {
       "id": "acer-palmatum:landscape_use:mobot01",
       "plant": "acer-palmatum",
       "field": "landscape_use",
       "value": [
-        "Specimen plant",
-        "Group or mass planting",
-        "Woodland margin",
-        "Screening",
-        "Accent plant"
+        "use:specimen_plant",
+        "use:group_or_mass_planting",
+        "use:woodland_margin",
+        "use:screening",
+        "use:accent_plant"
       ],
       "value_kind": "categorical",
       "text": "Missouri Botanical Garden uses: specimen or accent, groups, sun-dappled understory, woodland garden margins, screen, bonsai.",
@@ -665,22 +911,40 @@
       "claim_kind": "attribute",
       "accessed": "2026-10-29",
       "source_url": "https://www.missouribotanicalgarden.org/PlantFinder/PlantFinderDetails.aspx?taxonid=275408",
-      "citation": "Acer palmatum, Missouri Botanical Garden Plant Finder, https://www.missouribotanicalgarden.org/PlantFinder/PlantFinderDetails.aspx?taxonid=275408, Accessed October 29, 2026"
+      "citation": "Acer palmatum, Missouri Botanical Garden Plant Finder, https://www.missouribotanicalgarden.org/PlantFinder/PlantFinderDetails.aspx?taxonid=275408, Accessed October 29, 2026",
+      "value_label": [
+        "Specimen plant",
+        "Group or mass planting",
+        "Woodland margin",
+        "Screening",
+        "Accent plant"
+      ],
+      "concepts": [
+        "use:accent_plant",
+        "use:group_or_mass_planting",
+        "use:screening",
+        "use:specimen_plant",
+        "use:woodland_margin"
+      ],
+      "conditions": [],
+      "place": "place:st_louis",
+      "time": [],
+      "cultivar": null
     },
     {
       "id": "acer-palmatum:pest_susceptibility:mobot01",
       "plant": "acer-palmatum",
       "field": "pest_susceptibility",
       "value": [
-        "Aphids",
-        "Scale insects",
-        "Mites",
-        "Canker or sap rot",
-        "Fungal leaf spot",
-        "Wilt",
-        "Anthracnose",
-        "Root rot",
-        "Leaf scorch"
+        "pest:aphids",
+        "pest:scale_insects",
+        "pest:mites",
+        "pest:canker_or_sap_rot",
+        "pest:fungal_leaf_spot",
+        "pest:wilt",
+        "pest:anthracnose",
+        "pest:root_rot",
+        "pest:leaf_scorch"
       ],
       "value_kind": "categorical",
       "text": "Missouri Botanical Garden lists aphids, scale, borers, bagworms, root weevils and mites; stem canker, leaf spots, fusarium, verticillium wilt, botrytis, anthracnose and root rots; late-frost damage and chlorosis on high-pH soils.",
@@ -695,7 +959,33 @@
       "accessed": "2026-10-29",
       "source_url": "https://www.missouribotanicalgarden.org/PlantFinder/PlantFinderDetails.aspx?taxonid=275408",
       "note": "borers, bagworms, root weevils, botrytis and frost damage have no KPU pseudo-value",
-      "citation": "Acer palmatum, Missouri Botanical Garden Plant Finder, https://www.missouribotanicalgarden.org/PlantFinder/PlantFinderDetails.aspx?taxonid=275408, Accessed October 29, 2026"
+      "citation": "Acer palmatum, Missouri Botanical Garden Plant Finder, https://www.missouribotanicalgarden.org/PlantFinder/PlantFinderDetails.aspx?taxonid=275408, Accessed October 29, 2026",
+      "value_label": [
+        "Aphids",
+        "Scale insects",
+        "Mites",
+        "Canker or sap rot",
+        "Fungal leaf spot",
+        "Wilt",
+        "Anthracnose",
+        "Root rot",
+        "Leaf scorch"
+      ],
+      "concepts": [
+        "pest:anthracnose",
+        "pest:aphids",
+        "pest:canker_or_sap_rot",
+        "pest:fungal_leaf_spot",
+        "pest:leaf_scorch",
+        "pest:mites",
+        "pest:root_rot",
+        "pest:scale_insects",
+        "pest:wilt"
+      ],
+      "conditions": [],
+      "place": "place:st_louis",
+      "time": [],
+      "cultivar": null
     },
     {
       "id": "acer-palmatum:mature_height:gpp01",
@@ -717,7 +1007,14 @@
       "recorded_by": "claude (T5 assisted extraction, structured values only)",
       "claim_kind": "attribute",
       "accessed": "2026-10-29",
-      "source_url": "https://www.greatplantpicks.org/plantlists/view/43"
+      "source_url": "https://www.greatplantpicks.org/plantlists/view/43",
+      "concepts": [
+        "height_class:5-7m"
+      ],
+      "conditions": [],
+      "place": "place:pnw",
+      "time": [],
+      "cultivar": "Osakazuki"
     },
     {
       "id": "acer-palmatum:mature_spread:gpp01",
@@ -739,7 +1036,14 @@
       "recorded_by": "claude (T5 assisted extraction, structured values only)",
       "claim_kind": "attribute",
       "accessed": "2026-10-29",
-      "source_url": "https://www.greatplantpicks.org/plantlists/view/43"
+      "source_url": "https://www.greatplantpicks.org/plantlists/view/43",
+      "concepts": [
+        "spread_class:5-7m"
+      ],
+      "conditions": [],
+      "place": "place:pnw",
+      "time": [],
+      "cultivar": "Osakazuki"
     },
     {
       "id": "acer-palmatum:time_to_intended_size:gpp01",
@@ -763,7 +1067,14 @@
       "claim_kind": "attribute",
       "accessed": "2026-10-29",
       "source_url": "https://www.greatplantpicks.org/plantlists/view/43",
-      "note": "10-year size is a direct answer to survey c2 'time to reach intended size'"
+      "note": "10-year size is a direct answer to survey c2 'time to reach intended size'",
+      "concepts": [
+        "age:establishing"
+      ],
+      "conditions": [],
+      "place": "place:pnw",
+      "time": [],
+      "cultivar": "Osakazuki"
     },
     {
       "id": "acer-palmatum:hardiness_zone:gpp01",
@@ -785,16 +1096,25 @@
       "recorded_by": "claude (T5 assisted extraction, structured values only)",
       "claim_kind": "attribute",
       "accessed": "2026-10-29",
-      "source_url": "https://www.greatplantpicks.org/plantlists/view/43"
+      "source_url": "https://www.greatplantpicks.org/plantlists/view/43",
+      "concepts": [
+        "hardiness_usda:z6",
+        "hardiness_usda:z7",
+        "hardiness_usda:z8"
+      ],
+      "conditions": [],
+      "place": "place:pnw",
+      "time": [],
+      "cultivar": "Osakazuki"
     },
     {
       "id": "acer-palmatum:exposure:gpp01",
       "plant": "acer-palmatum",
       "field": "exposure",
       "value": [
-        "Full sun",
-        "Part sun/part shade",
-        "Filtered shade"
+        "exposure:full_sun",
+        "exposure:part_sun_part_shade",
+        "exposure:filtered_shade"
       ],
       "value_kind": "categorical",
       "text": "Great Plant Picks: full sun or light to open shade; best autumn colour in full sun to open shade.",
@@ -807,13 +1127,27 @@
       "recorded_by": "claude (T5 assisted extraction, structured values only)",
       "claim_kind": "attribute",
       "accessed": "2026-10-29",
-      "source_url": "https://www.greatplantpicks.org/plantlists/view/43"
+      "source_url": "https://www.greatplantpicks.org/plantlists/view/43",
+      "value_label": [
+        "Full sun",
+        "Part sun/part shade",
+        "Filtered shade"
+      ],
+      "concepts": [
+        "exposure:full_sun",
+        "exposure:part_sun_part_shade",
+        "exposure:filtered_shade"
+      ],
+      "conditions": [],
+      "place": "place:pnw",
+      "time": [],
+      "cultivar": "Osakazuki"
     },
     {
       "id": "acer-palmatum:water_drainage:gpp01",
       "plant": "acer-palmatum",
       "field": "water_drainage",
-      "value": "average",
+      "value": "water:average",
       "value_kind": "categorical",
       "text": "Great Plant Picks: regular watering, especially in dry weather.",
       "source_id": "gpp",
@@ -826,13 +1160,21 @@
       "claim_kind": "attribute",
       "accessed": "2026-10-29",
       "source_url": "https://www.greatplantpicks.org/plantlists/view/43",
-      "note": "'regular watering' mapped to average"
+      "note": "'regular watering' mapped to average",
+      "value_label": "average",
+      "concepts": [
+        "water:average"
+      ],
+      "conditions": [],
+      "place": "place:pnw",
+      "time": [],
+      "cultivar": "Osakazuki"
     },
     {
       "id": "acer-palmatum:growth_rate:gpp01",
       "plant": "acer-palmatum",
       "field": "growth_rate",
-      "value": "fast",
+      "value": "growth_rate:fast",
       "value_kind": "categorical",
       "text": "Great Plant Picks: quick growing and vigorous in youth, still only a small to medium tree.",
       "source_id": "gpp",
@@ -845,15 +1187,25 @@
       "claim_kind": "attribute",
       "accessed": "2026-10-29",
       "source_url": "https://www.greatplantpicks.org/plantlists/view/43",
-      "note": "GPP says fast in youth; RHS cultivar profile implies slow (10–20 yr to 2.5–4 m) — keep both"
+      "note": "GPP says fast in youth; RHS cultivar profile implies slow (10–20 yr to 2.5–4 m) — keep both",
+      "value_label": "fast",
+      "concepts": [
+        "growth_rate:fast"
+      ],
+      "conditions": [],
+      "place": "place:pnw",
+      "time": [
+        "age:young"
+      ],
+      "cultivar": "Osakazuki"
     },
     {
       "id": "acer-palmatum:soil_type:gpp01",
       "plant": "acer-palmatum",
       "field": "soil_type",
       "value": [
-        "Humus rich",
-        "Well-drained"
+        "soil:humus_rich",
+        "soil:well_drained"
       ],
       "value_kind": "categorical",
       "text": "Great Plant Picks: best in rich well-drained soil, also does well in sandy soils and clay.",
@@ -866,7 +1218,19 @@
       "recorded_by": "claude (T5 assisted extraction, structured values only)",
       "claim_kind": "attribute",
       "accessed": "2026-10-29",
-      "source_url": "https://www.greatplantpicks.org/plantlists/view/43"
+      "source_url": "https://www.greatplantpicks.org/plantlists/view/43",
+      "value_label": [
+        "Humus rich",
+        "Well-drained"
+      ],
+      "concepts": [
+        "soil:humus_rich",
+        "soil:well_drained"
+      ],
+      "conditions": [],
+      "place": "place:pnw",
+      "time": [],
+      "cultivar": "Osakazuki"
     },
     {
       "id": "acer-palmatum:seasonal_interest:gpp01",
@@ -890,14 +1254,23 @@
       "recorded_by": "claude (T5 assisted extraction, structured values only)",
       "claim_kind": "attribute",
       "accessed": "2026-10-29",
-      "source_url": "https://www.greatplantpicks.org/plantlists/view/43"
+      "source_url": "https://www.greatplantpicks.org/plantlists/view/43",
+      "concepts": [
+        "colour:green",
+        "evergreen:no",
+        "interest:fall_colour"
+      ],
+      "conditions": [],
+      "place": "place:pnw",
+      "time": [],
+      "cultivar": "Osakazuki"
     },
     {
       "id": "acer-palmatum:resistances:gpp01",
       "plant": "acer-palmatum",
       "field": "resistances",
       "value": [
-        "leaf scorch"
+        "stress:leaf_scorch"
       ],
       "value_kind": "categorical",
       "text": "Great Plant Picks: 'Osakazuki' is very resistant to summer leaf-tip scorch.",
@@ -913,7 +1286,17 @@
       "source_url": "https://www.greatplantpicks.org/plantlists/view/43",
       "note": "migrated 2026-10-29 from pest_susceptibility:gpp01 (schema 0.3.0, D7): resistances are recorded positively, never as a negated susceptibility",
       "migrated_from": "acer-palmatum:pest_susceptibility:gpp01",
-      "migrated_at": "2026-10-29"
+      "migrated_at": "2026-10-29",
+      "value_label": [
+        "leaf scorch"
+      ],
+      "concepts": [
+        "stress:leaf_scorch"
+      ],
+      "conditions": [],
+      "place": "place:pnw",
+      "time": [],
+      "cultivar": "Osakazuki"
     },
     {
       "id": "acer-palmatum:mature_height:osu01",
@@ -936,7 +1319,16 @@
       "recorded_by": "claude (T5 assisted extraction, structured values only)",
       "claim_kind": "attribute",
       "accessed": "2026-10-29",
-      "source_url": "https://landscapeplants.oregonstate.edu/plants/acer-palmatum"
+      "source_url": "https://landscapeplants.oregonstate.edu/plants/acer-palmatum",
+      "concepts": [
+        "height_class:3-5m",
+        "height_class:5-7m",
+        "height_class:7-10m"
+      ],
+      "conditions": [],
+      "place": "place:willamette_valley",
+      "time": [],
+      "cultivar": null
     },
     {
       "id": "acer-palmatum:hardiness_zone:osu01",
@@ -957,16 +1349,29 @@
       "recorded_by": "claude (T5 assisted extraction, structured values only)",
       "claim_kind": "attribute",
       "accessed": "2026-10-29",
-      "source_url": "https://landscapeplants.oregonstate.edu/plants/acer-palmatum"
+      "source_url": "https://landscapeplants.oregonstate.edu/plants/acer-palmatum",
+      "concepts": [
+        "hardiness_usda:z5",
+        "hardiness_usda:z6",
+        "hardiness_usda:z7",
+        "hardiness_usda:z8",
+        "hardiness_usda:z9",
+        "hardiness_usda:z10",
+        "hardiness_usda:z11"
+      ],
+      "conditions": [],
+      "place": "place:willamette_valley",
+      "time": [],
+      "cultivar": null
     },
     {
       "id": "acer-palmatum:exposure:osu01",
       "plant": "acer-palmatum",
       "field": "exposure",
       "value": [
-        "Full sun",
-        "Part sun/part shade",
-        "Sheltered"
+        "exposure:full_sun",
+        "exposure:part_sun_part_shade",
+        "exposure:sheltered"
       ],
       "value_kind": "categorical",
       "text": "Oregon State University: sun to part shade; needs wind protection.",
@@ -979,14 +1384,28 @@
       "recorded_by": "claude (T5 assisted extraction, structured values only)",
       "claim_kind": "attribute",
       "accessed": "2026-10-29",
-      "source_url": "https://landscapeplants.oregonstate.edu/plants/acer-palmatum"
+      "source_url": "https://landscapeplants.oregonstate.edu/plants/acer-palmatum",
+      "value_label": [
+        "Full sun",
+        "Part sun/part shade",
+        "Sheltered"
+      ],
+      "concepts": [
+        "exposure:sheltered",
+        "exposure:full_sun",
+        "exposure:part_sun_part_shade"
+      ],
+      "conditions": [],
+      "place": "place:willamette_valley",
+      "time": [],
+      "cultivar": null
     },
     {
       "id": "acer-palmatum:soil_type:osu01",
       "plant": "acer-palmatum",
       "field": "soil_type",
       "value": [
-        "Well-drained"
+        "soil:well_drained"
       ],
       "value_kind": "categorical",
       "text": "Oregon State University: well-drained soil.",
@@ -999,7 +1418,17 @@
       "recorded_by": "claude (T5 assisted extraction, structured values only)",
       "claim_kind": "attribute",
       "accessed": "2026-10-29",
-      "source_url": "https://landscapeplants.oregonstate.edu/plants/acer-palmatum"
+      "source_url": "https://landscapeplants.oregonstate.edu/plants/acer-palmatum",
+      "value_label": [
+        "Well-drained"
+      ],
+      "concepts": [
+        "soil:well_drained"
+      ],
+      "conditions": [],
+      "place": "place:willamette_valley",
+      "time": [],
+      "cultivar": null
     },
     {
       "id": "acer-palmatum:seasonal_interest:osu01",
@@ -1024,7 +1453,17 @@
       "recorded_by": "claude (T5 assisted extraction, structured values only)",
       "claim_kind": "attribute",
       "accessed": "2026-10-29",
-      "source_url": "https://landscapeplants.oregonstate.edu/plants/acer-palmatum"
+      "source_url": "https://landscapeplants.oregonstate.edu/plants/acer-palmatum",
+      "concepts": [
+        "colour:purple",
+        "colour:red",
+        "evergreen:no",
+        "interest:fall_colour"
+      ],
+      "conditions": [],
+      "place": "place:willamette_valley",
+      "time": [],
+      "cultivar": null
     },
     {
       "id": "acer-palmatum:long_term_performance:osu01",
@@ -1045,13 +1484,18 @@
       "claim_kind": "attribute",
       "accessed": "2026-10-29",
       "source_url": "https://landscapeplants.oregonstate.edu/plants/acer-palmatum",
-      "note": "relevant to Vancouver summer drought; grafted named cultivars are what nurseries sell"
+      "note": "relevant to Vancouver summer drought; grafted named cultivars are what nurseries sell",
+      "concepts": [],
+      "conditions": [],
+      "place": "place:willamette_valley",
+      "time": [],
+      "cultivar": null
     },
     {
       "id": "acer-palmatum:invasive_status:iscbc01",
       "plant": "acer-palmatum",
       "field": "invasive_status",
-      "value": "not_listed",
+      "value": "invasive:not_listed",
       "value_kind": "categorical",
       "text": "Acer palmatum is not among the 68 plant profiles on the Invasive Species Council of BC 'Find an Invasive Species' list (checked 2026-10-29); no Acer species is listed.",
       "source_id": "iscbc",
@@ -1064,7 +1508,15 @@
       "claim_kind": "attribute",
       "accessed": "2026-10-29",
       "source_url": "https://bcinvasives.ca/take-action/identify/",
-      "note": "BC Weed Control Act schedules and the Field Guide to Noxious Weeds were not checked page by page"
+      "note": "BC Weed Control Act schedules and the Field Guide to Noxious Weeds were not checked page by page",
+      "value_label": "not_listed",
+      "concepts": [
+        "invasive:not_listed"
+      ],
+      "conditions": [],
+      "place": "place:bc",
+      "time": [],
+      "cultivar": null
     },
     {
       "id": "acer-palmatum:toxicity:aspca01",
@@ -1087,7 +1539,14 @@
       "source_url": "https://www.aspca.org/pet-care/animal-poison-control/toxic-and-non-toxic-plants",
       "note": "absence from a non-exhaustive list, not a non-toxic rating — survey c4 gap confirmed. Licence: ASPCA terms prohibit storing their material; this claim stores none of it. Kay decides whether to keep.",
       "retired_at": "2026-10-29",
-      "retired_reason": "D1 2026-10-29: ASPCA terms prohibit storing material and automated access; source demoted to tier C (link only). Claim kept as history; toxicity field left empty until a tier-B source is recorded."
+      "retired_reason": "D1 2026-10-29: ASPCA terms prohibit storing material and automated access; source demoted to tier C (link only). Claim kept as history; toxicity field left empty until a tier-B source is recorded.",
+      "concepts": [
+        "toxicity:unknown"
+      ],
+      "conditions": [],
+      "place": "place:global",
+      "time": [],
+      "cultivar": null
     },
     {
       "id": "acer-palmatum:time_to_intended_size:rhs02",
@@ -1110,7 +1569,12 @@
       "recorded_by": "claude (T5 assisted extraction, structured values only)",
       "claim_kind": "attribute",
       "accessed": "2026-10-29",
-      "source_url": "https://www.rhs.org.uk/plants/91703/acer-palmatum-%C5%8Dsakazuki-a/details"
+      "source_url": "https://www.rhs.org.uk/plants/91703/acer-palmatum-%C5%8Dsakazuki-a/details",
+      "concepts": [],
+      "conditions": [],
+      "place": "place:uk",
+      "time": [],
+      "cultivar": "Osakazuki"
     },
     {
       "id": "acer-palmatum:mature_height:rhs03",
@@ -1132,7 +1596,15 @@
       "recorded_by": "claude (T5 assisted extraction, structured values only)",
       "claim_kind": "attribute",
       "accessed": "2026-10-29",
-      "source_url": "https://www.rhs.org.uk/plants/90785/acer-palmatum-bloodgood-a/details"
+      "source_url": "https://www.rhs.org.uk/plants/90785/acer-palmatum-bloodgood-a/details",
+      "concepts": [
+        "height_class:2-3m",
+        "height_class:3-5m"
+      ],
+      "conditions": [],
+      "place": "place:uk",
+      "time": [],
+      "cultivar": "Bloodgood"
     },
     {
       "id": "acer-palmatum:mature_spread:rhs03",
@@ -1154,7 +1626,16 @@
       "recorded_by": "claude (T5 assisted extraction, structured values only)",
       "claim_kind": "attribute",
       "accessed": "2026-10-29",
-      "source_url": "https://www.rhs.org.uk/plants/90785/acer-palmatum-bloodgood-a/details"
+      "source_url": "https://www.rhs.org.uk/plants/90785/acer-palmatum-bloodgood-a/details",
+      "concepts": [
+        "spread_class:2-3m",
+        "spread_class:3-4m",
+        "spread_class:4-5m"
+      ],
+      "conditions": [],
+      "place": "place:uk",
+      "time": [],
+      "cultivar": "Bloodgood"
     },
     {
       "id": "acer-palmatum:time_to_intended_size:rhs03",
@@ -1177,7 +1658,12 @@
       "recorded_by": "claude (T5 assisted extraction, structured values only)",
       "claim_kind": "attribute",
       "accessed": "2026-10-29",
-      "source_url": "https://www.rhs.org.uk/plants/90785/acer-palmatum-bloodgood-a/details"
+      "source_url": "https://www.rhs.org.uk/plants/90785/acer-palmatum-bloodgood-a/details",
+      "concepts": [],
+      "conditions": [],
+      "place": "place:uk",
+      "time": [],
+      "cultivar": "Bloodgood"
     },
     {
       "id": "acer-palmatum:in_vancouver_street_tree_list:cov01",
@@ -1195,7 +1681,12 @@
       "recorded_by": "cov_trees_to_claims.py",
       "claim_kind": "attribute",
       "accessed": "2026-10-30",
-      "source_snapshot": "2026-10-26"
+      "source_snapshot": "2026-10-26",
+      "concepts": [],
+      "conditions": [],
+      "place": "place:city_of_vancouver",
+      "time": [],
+      "cultivar": null
     },
     {
       "id": "acer-palmatum:vancouver_context:cov01",
@@ -1217,7 +1708,12 @@
       "recorded_by": "cov_trees_to_claims.py",
       "claim_kind": "attribute",
       "accessed": "2026-10-30",
-      "source_snapshot": "2026-10-26"
+      "source_snapshot": "2026-10-26",
+      "concepts": [],
+      "conditions": [],
+      "place": "place:city_of_vancouver",
+      "time": [],
+      "cultivar": null
     },
     {
       "id": "acer-palmatum:vancouver_context:cov02",
@@ -1284,7 +1780,12 @@
       "claim_kind": "attribute",
       "accessed": "2026-10-30",
       "source_snapshot": "2026-10-26",
-      "note": "labels as recorded by Parks staff; 'NONE' means not recorded, not the straight species. Labels with n >= 50 have their own size claims (context cultivar:'Name'): 'Osakazuki' (407), 'Bloodgood' (88), 'Koto No Ito' (65)."
+      "note": "labels as recorded by Parks staff; 'NONE' means not recorded, not the straight species. Labels with n >= 50 have their own size claims (context cultivar:'Name'): 'Osakazuki' (407), 'Bloodgood' (88), 'Koto No Ito' (65).",
+      "concepts": [],
+      "conditions": [],
+      "place": "place:city_of_vancouver",
+      "time": [],
+      "cultivar": null
     },
     {
       "id": "acer-palmatum:vancouver_context:cov03",
@@ -1328,7 +1829,12 @@
       "recorded_by": "cov_trees_to_claims.py",
       "claim_kind": "attribute",
       "accessed": "2026-10-30",
-      "source_snapshot": "2026-10-26"
+      "source_snapshot": "2026-10-26",
+      "concepts": [],
+      "conditions": [],
+      "place": "place:city_of_vancouver",
+      "time": [],
+      "cultivar": null
     },
     {
       "id": "acer-palmatum:local_mature_size:cov01",
@@ -1362,7 +1868,17 @@
       "claim_kind": "attribute",
       "accessed": "2026-10-30",
       "source_snapshot": "2026-10-26",
-      "note": "98% of records sit on the class grid; treat as a class, not a figure. No planting dates in this snapshot, so ages are unknown. max is a single record and may be mis-keyed. Cultivar labels below the n >= 50 threshold are included here and not reported separately: 'Atropurpureum' (43), 'Harvest Orange' (25), 'Dissectum' (22), 'Dissectum Atropurpureum' (16), 'Taija' (16), 'Shojo' (14), 'Shishigashira' (5), 'Viridis' (5), 'Burgundy Lace' (3), 'Wolff Emperor1' (2), 'Crimson Queen' (2), 'Aka-Shigitatsu-Sawa' (2), 'Aconitifolium' (2), 'Ruslyn In The Pink' (1), 'Var. Dissectum Crimson Queen' (1), 'Trompenburg' (1), 'Nishiki-Gawa' (1), 'Sonkootgre Going Green' (1), 'Dissectum Jerre Schwartz' (1), 'Kagiri-Nishiki' (1), 'Shigitatsu-Sawa' (1), 'Aureum' (1), 'Nuresagi' (1), 'Nishki-Momji' (1), 'Seiryu' (1), 'Azuma-Marasaki' (1), 'Butterfly' (1), 'Red Pygmy' (1), 'Emperor 1' (1), 'Sango-Kaku' (1), 'Enkan' (1), 'Aoyagi' (1), 'Hessei' (1), 'Twomblys Red Sentinel' (1), 'Hogyoku' (1), 'Nomura Nishiki' (1), 'Aka-Shime-No-Uchi' (1), 'Omurayama' (1), 'Waterfall (Dissectum Group)' (1), 'Ki-Hachijo' (1), 'Sherwood Flame' (1)."
+      "note": "98% of records sit on the class grid; treat as a class, not a figure. No planting dates in this snapshot, so ages are unknown. max is a single record and may be mis-keyed. Cultivar labels below the n >= 50 threshold are included here and not reported separately: 'Atropurpureum' (43), 'Harvest Orange' (25), 'Dissectum' (22), 'Dissectum Atropurpureum' (16), 'Taija' (16), 'Shojo' (14), 'Shishigashira' (5), 'Viridis' (5), 'Burgundy Lace' (3), 'Wolff Emperor1' (2), 'Crimson Queen' (2), 'Aka-Shigitatsu-Sawa' (2), 'Aconitifolium' (2), 'Ruslyn In The Pink' (1), 'Var. Dissectum Crimson Queen' (1), 'Trompenburg' (1), 'Nishiki-Gawa' (1), 'Sonkootgre Going Green' (1), 'Dissectum Jerre Schwartz' (1), 'Kagiri-Nishiki' (1), 'Shigitatsu-Sawa' (1), 'Aureum' (1), 'Nuresagi' (1), 'Nishki-Momji' (1), 'Seiryu' (1), 'Azuma-Marasaki' (1), 'Butterfly' (1), 'Red Pygmy' (1), 'Emperor 1' (1), 'Sango-Kaku' (1), 'Enkan' (1), 'Aoyagi' (1), 'Hessei' (1), 'Twomblys Red Sentinel' (1), 'Hogyoku' (1), 'Nomura Nishiki' (1), 'Aka-Shime-No-Uchi' (1), 'Omurayama' (1), 'Waterfall (Dissectum Group)' (1), 'Ki-Hachijo' (1), 'Sherwood Flame' (1).",
+      "concepts": [
+        "height_class:3-5m",
+        "height_class:5-7m",
+        "height_class:7-10m",
+        "height_class:10-15m"
+      ],
+      "conditions": [],
+      "place": "place:city_of_vancouver",
+      "time": [],
+      "cultivar": null
     },
     {
       "id": "acer-palmatum:local_mature_size:cov02",
@@ -1390,7 +1906,17 @@
       "claim_kind": "attribute",
       "accessed": "2026-10-30",
       "source_snapshot": "2026-10-26",
-      "note": "proxy, not a measurement of age: confidence below age-cohort claims. Closest this source gets to 'real mature size under local conditions' (survey c2). Cultivar labels below the n >= 50 threshold are included here and not reported separately: 'Atropurpureum' (43), 'Harvest Orange' (25), 'Dissectum' (22), 'Dissectum Atropurpureum' (16), 'Taija' (16), 'Shojo' (14), 'Shishigashira' (5), 'Viridis' (5), 'Burgundy Lace' (3), 'Wolff Emperor1' (2), 'Crimson Queen' (2), 'Aka-Shigitatsu-Sawa' (2), 'Aconitifolium' (2), 'Ruslyn In The Pink' (1), 'Var. Dissectum Crimson Queen' (1), 'Trompenburg' (1), 'Nishiki-Gawa' (1), 'Sonkootgre Going Green' (1), 'Dissectum Jerre Schwartz' (1), 'Kagiri-Nishiki' (1), 'Shigitatsu-Sawa' (1), 'Aureum' (1), 'Nuresagi' (1), 'Nishki-Momji' (1), 'Seiryu' (1), 'Azuma-Marasaki' (1), 'Butterfly' (1), 'Red Pygmy' (1), 'Emperor 1' (1), 'Sango-Kaku' (1), 'Enkan' (1), 'Aoyagi' (1), 'Hessei' (1), 'Twomblys Red Sentinel' (1), 'Hogyoku' (1), 'Nomura Nishiki' (1), 'Aka-Shime-No-Uchi' (1), 'Omurayama' (1), 'Waterfall (Dissectum Group)' (1), 'Ki-Hachijo' (1), 'Sherwood Flame' (1)."
+      "note": "proxy, not a measurement of age: confidence below age-cohort claims. Closest this source gets to 'real mature size under local conditions' (survey c2). Cultivar labels below the n >= 50 threshold are included here and not reported separately: 'Atropurpureum' (43), 'Harvest Orange' (25), 'Dissectum' (22), 'Dissectum Atropurpureum' (16), 'Taija' (16), 'Shojo' (14), 'Shishigashira' (5), 'Viridis' (5), 'Burgundy Lace' (3), 'Wolff Emperor1' (2), 'Crimson Queen' (2), 'Aka-Shigitatsu-Sawa' (2), 'Aconitifolium' (2), 'Ruslyn In The Pink' (1), 'Var. Dissectum Crimson Queen' (1), 'Trompenburg' (1), 'Nishiki-Gawa' (1), 'Sonkootgre Going Green' (1), 'Dissectum Jerre Schwartz' (1), 'Kagiri-Nishiki' (1), 'Shigitatsu-Sawa' (1), 'Aureum' (1), 'Nuresagi' (1), 'Nishki-Momji' (1), 'Seiryu' (1), 'Azuma-Marasaki' (1), 'Butterfly' (1), 'Red Pygmy' (1), 'Emperor 1' (1), 'Sango-Kaku' (1), 'Enkan' (1), 'Aoyagi' (1), 'Hessei' (1), 'Twomblys Red Sentinel' (1), 'Hogyoku' (1), 'Nomura Nishiki' (1), 'Aka-Shime-No-Uchi' (1), 'Omurayama' (1), 'Waterfall (Dissectum Group)' (1), 'Ki-Hachijo' (1), 'Sherwood Flame' (1).",
+      "concepts": [
+        "height_class:7-10m",
+        "height_class:10-15m"
+      ],
+      "conditions": [],
+      "place": "place:city_of_vancouver",
+      "time": [
+        "age:established"
+      ],
+      "cultivar": null
     },
     {
       "id": "acer-palmatum:local_mature_size:cov03",
@@ -1415,7 +1941,12 @@
       "claim_kind": "attribute",
       "accessed": "2026-10-30",
       "source_snapshot": "2026-10-26",
-      "note": "max is a single record and may be mis-keyed. Cultivar labels below the n >= 50 threshold are included here and not reported separately: 'Atropurpureum' (43), 'Harvest Orange' (25), 'Dissectum' (22), 'Dissectum Atropurpureum' (16), 'Taija' (16), 'Shojo' (14), 'Shishigashira' (5), 'Viridis' (5), 'Burgundy Lace' (3), 'Wolff Emperor1' (2), 'Crimson Queen' (2), 'Aka-Shigitatsu-Sawa' (2), 'Aconitifolium' (2), 'Ruslyn In The Pink' (1), 'Var. Dissectum Crimson Queen' (1), 'Trompenburg' (1), 'Nishiki-Gawa' (1), 'Sonkootgre Going Green' (1), 'Dissectum Jerre Schwartz' (1), 'Kagiri-Nishiki' (1), 'Shigitatsu-Sawa' (1), 'Aureum' (1), 'Nuresagi' (1), 'Nishki-Momji' (1), 'Seiryu' (1), 'Azuma-Marasaki' (1), 'Butterfly' (1), 'Red Pygmy' (1), 'Emperor 1' (1), 'Sango-Kaku' (1), 'Enkan' (1), 'Aoyagi' (1), 'Hessei' (1), 'Twomblys Red Sentinel' (1), 'Hogyoku' (1), 'Nomura Nishiki' (1), 'Aka-Shime-No-Uchi' (1), 'Omurayama' (1), 'Waterfall (Dissectum Group)' (1), 'Ki-Hachijo' (1), 'Sherwood Flame' (1)."
+      "note": "max is a single record and may be mis-keyed. Cultivar labels below the n >= 50 threshold are included here and not reported separately: 'Atropurpureum' (43), 'Harvest Orange' (25), 'Dissectum' (22), 'Dissectum Atropurpureum' (16), 'Taija' (16), 'Shojo' (14), 'Shishigashira' (5), 'Viridis' (5), 'Burgundy Lace' (3), 'Wolff Emperor1' (2), 'Crimson Queen' (2), 'Aka-Shigitatsu-Sawa' (2), 'Aconitifolium' (2), 'Ruslyn In The Pink' (1), 'Var. Dissectum Crimson Queen' (1), 'Trompenburg' (1), 'Nishiki-Gawa' (1), 'Sonkootgre Going Green' (1), 'Dissectum Jerre Schwartz' (1), 'Kagiri-Nishiki' (1), 'Shigitatsu-Sawa' (1), 'Aureum' (1), 'Nuresagi' (1), 'Nishki-Momji' (1), 'Seiryu' (1), 'Azuma-Marasaki' (1), 'Butterfly' (1), 'Red Pygmy' (1), 'Emperor 1' (1), 'Sango-Kaku' (1), 'Enkan' (1), 'Aoyagi' (1), 'Hessei' (1), 'Twomblys Red Sentinel' (1), 'Hogyoku' (1), 'Nomura Nishiki' (1), 'Aka-Shime-No-Uchi' (1), 'Omurayama' (1), 'Waterfall (Dissectum Group)' (1), 'Ki-Hachijo' (1), 'Sherwood Flame' (1).",
+      "concepts": [],
+      "conditions": [],
+      "place": "place:city_of_vancouver",
+      "time": [],
+      "cultivar": null
     },
     {
       "id": "acer-palmatum:local_mature_size:cov04",
@@ -1449,7 +1980,16 @@
       "claim_kind": "attribute",
       "accessed": "2026-10-30",
       "source_snapshot": "2026-10-26",
-      "note": "98% of records sit on the class grid; treat as a class, not a figure. No planting dates in this snapshot, so ages are unknown. max is a single record and may be mis-keyed."
+      "note": "98% of records sit on the class grid; treat as a class, not a figure. No planting dates in this snapshot, so ages are unknown. max is a single record and may be mis-keyed.",
+      "concepts": [
+        "height_class:3-5m",
+        "height_class:5-7m",
+        "height_class:7-10m"
+      ],
+      "conditions": [],
+      "place": "place:city_of_vancouver",
+      "time": [],
+      "cultivar": "Osakazuki"
     },
     {
       "id": "acer-palmatum:local_mature_size:cov05",
@@ -1477,7 +2017,17 @@
       "claim_kind": "attribute",
       "accessed": "2026-10-30",
       "source_snapshot": "2026-10-26",
-      "note": "proxy, not a measurement of age: confidence below age-cohort claims. Closest this source gets to 'real mature size under local conditions' (survey c2)."
+      "note": "proxy, not a measurement of age: confidence below age-cohort claims. Closest this source gets to 'real mature size under local conditions' (survey c2).",
+      "concepts": [
+        "height_class:7-10m",
+        "height_class:10-15m"
+      ],
+      "conditions": [],
+      "place": "place:city_of_vancouver",
+      "time": [
+        "age:established"
+      ],
+      "cultivar": "Osakazuki"
     },
     {
       "id": "acer-palmatum:local_mature_size:cov06",
@@ -1502,7 +2052,12 @@
       "claim_kind": "attribute",
       "accessed": "2026-10-30",
       "source_snapshot": "2026-10-26",
-      "note": "max is a single record and may be mis-keyed."
+      "note": "max is a single record and may be mis-keyed.",
+      "concepts": [],
+      "conditions": [],
+      "place": "place:city_of_vancouver",
+      "time": [],
+      "cultivar": "Osakazuki"
     },
     {
       "id": "acer-palmatum:local_mature_size:cov07",
@@ -1536,7 +2091,16 @@
       "claim_kind": "attribute",
       "accessed": "2026-10-30",
       "source_snapshot": "2026-10-26",
-      "note": "99% of records sit on the class grid; treat as a class, not a figure. No planting dates in this snapshot, so ages are unknown. max is a single record and may be mis-keyed. Only 3 trees reach the established threshold (DBH >= 20 cm), below the n >= 20 needed for a separate established-proxy claim."
+      "note": "99% of records sit on the class grid; treat as a class, not a figure. No planting dates in this snapshot, so ages are unknown. max is a single record and may be mis-keyed. Only 3 trees reach the established threshold (DBH >= 20 cm), below the n >= 20 needed for a separate established-proxy claim.",
+      "concepts": [
+        "height_class:3-5m",
+        "height_class:5-7m",
+        "height_class:7-10m"
+      ],
+      "conditions": [],
+      "place": "place:city_of_vancouver",
+      "time": [],
+      "cultivar": "Bloodgood"
     },
     {
       "id": "acer-palmatum:local_mature_size:cov08",
@@ -1561,7 +2125,12 @@
       "claim_kind": "attribute",
       "accessed": "2026-10-30",
       "source_snapshot": "2026-10-26",
-      "note": "max is a single record and may be mis-keyed."
+      "note": "max is a single record and may be mis-keyed.",
+      "concepts": [],
+      "conditions": [],
+      "place": "place:city_of_vancouver",
+      "time": [],
+      "cultivar": "Bloodgood"
     },
     {
       "id": "acer-palmatum:local_mature_size:cov09",
@@ -1595,7 +2164,14 @@
       "claim_kind": "attribute",
       "accessed": "2026-10-30",
       "source_snapshot": "2026-10-26",
-      "note": "95% of records sit on the class grid; treat as a class, not a figure. No planting dates in this snapshot, so ages are unknown. max is a single record and may be mis-keyed. Only 5 trees reach the established threshold (DBH >= 20 cm), below the n >= 20 needed for a separate established-proxy claim."
+      "note": "95% of records sit on the class grid; treat as a class, not a figure. No planting dates in this snapshot, so ages are unknown. max is a single record and may be mis-keyed. Only 5 trees reach the established threshold (DBH >= 20 cm), below the n >= 20 needed for a separate established-proxy claim.",
+      "concepts": [
+        "height_class:3-5m"
+      ],
+      "conditions": [],
+      "place": "place:city_of_vancouver",
+      "time": [],
+      "cultivar": "Koto No Ito"
     },
     {
       "id": "acer-palmatum:local_mature_size:cov10",
@@ -1620,7 +2196,12 @@
       "claim_kind": "attribute",
       "accessed": "2026-10-30",
       "source_snapshot": "2026-10-26",
-      "note": "max is a single record and may be mis-keyed."
+      "note": "max is a single record and may be mis-keyed.",
+      "concepts": [],
+      "conditions": [],
+      "place": "place:city_of_vancouver",
+      "time": [],
+      "cultivar": "Koto No Ito"
     },
     {
       "id": "acer-palmatum:local_mature_size:cov11",
@@ -1654,7 +2235,17 @@
       "claim_kind": "attribute",
       "accessed": "2026-10-30",
       "source_snapshot": "2026-10-26",
-      "note": "98% of records sit on the class grid; treat as a class, not a figure. No planting dates in this snapshot, so ages are unknown. max is a single record and may be mis-keyed. 'Unrecorded' means no label in the inventory, not the straight species; never merged into a cultivar group. interpretation (not data): the unrecorded class is larger and thicker than the labelled groups, consistent with older plantings that pre-date cultivar labelling; its 10.7 m established-class median is high for this species and may include mislabelled maples."
+      "note": "98% of records sit on the class grid; treat as a class, not a figure. No planting dates in this snapshot, so ages are unknown. max is a single record and may be mis-keyed. 'Unrecorded' means no label in the inventory, not the straight species; never merged into a cultivar group. interpretation (not data): the unrecorded class is larger and thicker than the labelled groups, consistent with older plantings that pre-date cultivar labelling; its 10.7 m established-class median is high for this species and may include mislabelled maples.",
+      "concepts": [
+        "height_class:3-5m",
+        "height_class:5-7m",
+        "height_class:7-10m",
+        "height_class:10-15m"
+      ],
+      "conditions": [],
+      "place": "place:city_of_vancouver",
+      "time": [],
+      "cultivar": "(unrecorded)"
     },
     {
       "id": "acer-palmatum:local_mature_size:cov12",
@@ -1682,7 +2273,16 @@
       "claim_kind": "attribute",
       "accessed": "2026-10-30",
       "source_snapshot": "2026-10-26",
-      "note": "proxy, not a measurement of age: confidence below age-cohort claims. Closest this source gets to 'real mature size under local conditions' (survey c2). 'Unrecorded' means no label in the inventory, not the straight species; never merged into a cultivar group. interpretation (not data): the unrecorded class is larger and thicker than the labelled groups, consistent with older plantings that pre-date cultivar labelling; its 10.7 m established-class median is high for this species and may include mislabelled maples."
+      "note": "proxy, not a measurement of age: confidence below age-cohort claims. Closest this source gets to 'real mature size under local conditions' (survey c2). 'Unrecorded' means no label in the inventory, not the straight species; never merged into a cultivar group. interpretation (not data): the unrecorded class is larger and thicker than the labelled groups, consistent with older plantings that pre-date cultivar labelling; its 10.7 m established-class median is high for this species and may include mislabelled maples.",
+      "concepts": [
+        "height_class:10-15m"
+      ],
+      "conditions": [],
+      "place": "place:city_of_vancouver",
+      "time": [
+        "age:established"
+      ],
+      "cultivar": "(unrecorded)"
     },
     {
       "id": "acer-palmatum:local_mature_size:cov13",
@@ -1707,15 +2307,20 @@
       "claim_kind": "attribute",
       "accessed": "2026-10-30",
       "source_snapshot": "2026-10-26",
-      "note": "max is a single record and may be mis-keyed. 'Unrecorded' means no label in the inventory, not the straight species; never merged into a cultivar group. interpretation (not data): the unrecorded class is larger and thicker than the labelled groups, consistent with older plantings that pre-date cultivar labelling; its 10.7 m established-class median is high for this species and may include mislabelled maples."
+      "note": "max is a single record and may be mis-keyed. 'Unrecorded' means no label in the inventory, not the straight species; never merged into a cultivar group. interpretation (not data): the unrecorded class is larger and thicker than the labelled groups, consistent with older plantings that pre-date cultivar labelling; its 10.7 m established-class median is high for this species and may include mislabelled maples.",
+      "concepts": [],
+      "conditions": [],
+      "place": "place:city_of_vancouver",
+      "time": [],
+      "cultivar": "(unrecorded)"
     },
     {
       "id": "acer-palmatum:resistances:mobot01",
       "plant": "acer-palmatum",
       "field": "resistances",
       "value": [
-        "rabbit",
-        "black walnut"
+        "browsing:rabbit",
+        "stress:black_walnut"
       ],
       "value_kind": "categorical",
       "text": "Missouri Botanical Garden lists Acer palmatum as tolerating rabbits and black walnut.",
@@ -1730,7 +2335,19 @@
       "accessed": "2026-10-29",
       "source_url": "https://www.missouribotanicalgarden.org/PlantFinder/PlantFinderDetails.aspx?taxonid=275408",
       "citation": "Acer palmatum, Missouri Botanical Garden Plant Finder, https://www.missouribotanicalgarden.org/PlantFinder/PlantFinderDetails.aspx?taxonid=275408, Accessed October 29, 2026",
-      "note": "added 2026-10-29 after D7 created the resistances field; from the 'Tolerate' line of the profile"
+      "note": "added 2026-10-29 after D7 created the resistances field; from the 'Tolerate' line of the profile",
+      "value_label": [
+        "rabbit",
+        "black walnut"
+      ],
+      "concepts": [
+        "browsing:rabbit",
+        "stress:black_walnut"
+      ],
+      "conditions": [],
+      "place": "place:st_louis",
+      "time": [],
+      "cultivar": null
     },
     {
       "id": "acer-palmatum:vancouver_context:inat01",
@@ -1758,7 +2375,12 @@
       "accessed": "2026-10-30",
       "source_url": "https://www.inaturalist.org/observations?place_id=27530&taxon_id=63512&verifiable=true&license=cc0,cc-by,cc-by-nc",
       "attribution": "iNaturalist community observations, CC0/CC-BY/CC-BY-NC, via api.inaturalist.org",
-      "note": "presence evidence; observation counts reflect observer effort as much as abundance"
+      "note": "presence evidence; observation counts reflect observer effort as much as abundance",
+      "concepts": [],
+      "conditions": [],
+      "place": "place:vancouver",
+      "time": [],
+      "cultivar": null
     }
   ],
   "custom": [],

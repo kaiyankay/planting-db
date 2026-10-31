@@ -1,0 +1,2800 @@
+{
+ "generated": "2026-10-31",
+ "rules": {
+  "hubs": "concept linked to ≥ 2 plants by live sourced claims",
+  "variation": "same plant + facet, two claims with different stated conditions (or cultivar equal) and non-overlapping values",
+  "disagreement": "same plant + facet + same conditions (or none stated), different sources, non-overlapping values; ordinal facets only for categorical values",
+  "gaps": "(a) plant with no live claim on a gate facet; (b) plant–concept link with one source; (c) two plants sharing ≥ 5 concepts with no live relation",
+  "single_voice": "concept whose links all come from one source type"
+ },
+ "plants": {
+  "plant:acer-palmatum": {
+   "concepts": 58,
+   "facets": 20,
+   "gate_facets_covered": 7,
+   "gate_facets_total": 8,
+   "claims": 49,
+   "verified_edges": 21,
+   "disagreements": 5,
+   "variations": 0,
+   "gate_gaps": [
+    "ecology"
+   ],
+   "text": "Acer palmatum is linked to 58 concepts across 20 facets from 49 claims; sources disagree on height class, spread class, water; missing gate facets: ecology."
+  },
+  "plant:gaultheria-shallon": {
+   "concepts": 53,
+   "facets": 19,
+   "gate_facets_covered": 7,
+   "gate_facets_total": 8,
+   "claims": 35,
+   "verified_edges": 2,
+   "disagreements": 3,
+   "variations": 1,
+   "gate_gaps": [
+    "maintenance"
+   ],
+   "text": "Gaultheria shallon is linked to 53 concepts across 19 facets from 35 claims; sources disagree on exposure, water; height class depends on conditions; missing gate facets: maintenance."
+  },
+  "plant:vaccinium-ovatum": {
+   "concepts": 55,
+   "facets": 22,
+   "gate_facets_covered": 7,
+   "gate_facets_total": 8,
+   "claims": 41,
+   "verified_edges": 4,
+   "disagreements": 6,
+   "variations": 0,
+   "gate_gaps": [
+    "ecology"
+   ],
+   "text": "Vaccinium ovatum is linked to 55 concepts across 22 facets from 41 claims; sources disagree on exposure, height class, water; missing gate facets: ecology."
+  }
+ },
+ "hubs": [
+  {
+   "concept": "height_class:3-5m",
+   "label": "3 - 5m",
+   "dimension": "trait",
+   "facet": "height_class",
+   "plants": [
+    "plant:acer-palmatum",
+    "plant:gaultheria-shallon",
+    "plant:vaccinium-ovatum"
+   ],
+   "n_edges": 12,
+   "sources": [
+    "cov_trees",
+    "eflora",
+    "mobot",
+    "osu",
+    "rhs"
+   ],
+   "text": "3 - 5m links 3 plants (Acer palmatum, Gaultheria shallon, Vaccinium ovatum) through 12 claims."
+  },
+  {
+   "concept": "exposure:part_sun_part_shade",
+   "label": "Part sun/part shade",
+   "dimension": "condition",
+   "facet": "exposure",
+   "plants": [
+    "plant:acer-palmatum",
+    "plant:gaultheria-shallon",
+    "plant:vaccinium-ovatum"
+   ],
+   "n_edges": 11,
+   "sources": [
+    "eflora",
+    "gpp",
+    "mobot",
+    "osu",
+    "rhs",
+    "survey-r03"
+   ],
+   "text": "Part sun/part shade links 3 plants (Acer palmatum, Gaultheria shallon, Vaccinium ovatum) through 11 claims — a shared condition suggests they could share a planting layer."
+  },
+  {
+   "concept": "exposure:full_sun",
+   "label": "Full sun",
+   "dimension": "condition",
+   "facet": "exposure",
+   "plants": [
+    "plant:acer-palmatum",
+    "plant:gaultheria-shallon",
+    "plant:vaccinium-ovatum"
+   ],
+   "n_edges": 10,
+   "sources": [
+    "gpp",
+    "mobot",
+    "osu",
+    "rhs",
+    "usda_plants"
+   ],
+   "text": "Full sun links 3 plants (Acer palmatum, Gaultheria shallon, Vaccinium ovatum) through 10 claims — a shared condition suggests they could share a planting layer."
+  },
+  {
+   "concept": "colour:green",
+   "label": "Green",
+   "dimension": "trait",
+   "facet": "colour",
+   "plants": [
+    "plant:acer-palmatum",
+    "plant:gaultheria-shallon",
+    "plant:vaccinium-ovatum"
+   ],
+   "n_edges": 9,
+   "sources": [
+    "gpp",
+    "mobot",
+    "osu",
+    "rhs",
+    "usda_plants"
+   ],
+   "text": "Green links 3 plants (Acer palmatum, Gaultheria shallon, Vaccinium ovatum) through 9 claims."
+  },
+  {
+   "concept": "soil:well_drained",
+   "label": "Well-drained",
+   "dimension": "condition",
+   "facet": "soil",
+   "plants": [
+    "plant:acer-palmatum",
+    "plant:gaultheria-shallon",
+    "plant:vaccinium-ovatum"
+   ],
+   "n_edges": 7,
+   "sources": [
+    "gpp",
+    "mobot",
+    "osu",
+    "rhs"
+   ],
+   "text": "Well-drained links 3 plants (Acer palmatum, Gaultheria shallon, Vaccinium ovatum) through 7 claims — a shared condition suggests they could share a planting layer."
+  },
+  {
+   "concept": "hardiness_usda:z7",
+   "label": "USDA zone 7",
+   "dimension": "condition",
+   "facet": "hardiness_usda",
+   "plants": [
+    "plant:acer-palmatum",
+    "plant:gaultheria-shallon",
+    "plant:vaccinium-ovatum"
+   ],
+   "n_edges": 6,
+   "sources": [
+    "gpp",
+    "mobot",
+    "osu"
+   ],
+   "text": "USDA zone 7 links 3 plants (Acer palmatum, Gaultheria shallon, Vaccinium ovatum) through 6 claims — a shared condition suggests they could share a planting layer."
+  },
+  {
+   "concept": "hardiness_usda:z8",
+   "label": "USDA zone 8",
+   "dimension": "condition",
+   "facet": "hardiness_usda",
+   "plants": [
+    "plant:acer-palmatum",
+    "plant:gaultheria-shallon",
+    "plant:vaccinium-ovatum"
+   ],
+   "n_edges": 6,
+   "sources": [
+    "gpp",
+    "mobot",
+    "osu"
+   ],
+   "text": "USDA zone 8 links 3 plants (Acer palmatum, Gaultheria shallon, Vaccinium ovatum) through 6 claims — a shared condition suggests they could share a planting layer."
+  },
+  {
+   "concept": "height_class:2-3m",
+   "label": "2 - 3m",
+   "dimension": "trait",
+   "facet": "height_class",
+   "plants": [
+    "plant:acer-palmatum",
+    "plant:gaultheria-shallon",
+    "plant:vaccinium-ovatum"
+   ],
+   "n_edges": 6,
+   "sources": [
+    "eflora",
+    "gpp",
+    "osu",
+    "rhs",
+    "usda_plants"
+   ],
+   "text": "2 - 3m links 3 plants (Acer palmatum, Gaultheria shallon, Vaccinium ovatum) through 6 claims."
+  },
+  {
+   "concept": "exposure:sheltered",
+   "label": "Sheltered",
+   "dimension": "condition",
+   "facet": "exposure",
+   "plants": [
+    "plant:acer-palmatum",
+    "plant:gaultheria-shallon",
+    "plant:vaccinium-ovatum"
+   ],
+   "n_edges": 5,
+   "sources": [
+    "mobot",
+    "osu",
+    "rhs"
+   ],
+   "text": "Sheltered links 3 plants (Acer palmatum, Gaultheria shallon, Vaccinium ovatum) through 5 claims — a shared condition suggests they could share a planting layer."
+  },
+  {
+   "concept": "exposure:filtered_shade",
+   "label": "Filtered shade",
+   "dimension": "condition",
+   "facet": "exposure",
+   "plants": [
+    "plant:acer-palmatum",
+    "plant:gaultheria-shallon",
+    "plant:vaccinium-ovatum"
+   ],
+   "n_edges": 4,
+   "sources": [
+    "eflora",
+    "gpp",
+    "survey-r03"
+   ],
+   "text": "Filtered shade links 3 plants (Acer palmatum, Gaultheria shallon, Vaccinium ovatum) through 4 claims — a shared condition suggests they could share a planting layer."
+  },
+  {
+   "concept": "hardiness_usda:z9",
+   "label": "USDA zone 9",
+   "dimension": "condition",
+   "facet": "hardiness_usda",
+   "plants": [
+    "plant:acer-palmatum",
+    "plant:gaultheria-shallon",
+    "plant:vaccinium-ovatum"
+   ],
+   "n_edges": 4,
+   "sources": [
+    "gpp",
+    "osu"
+   ],
+   "text": "USDA zone 9 links 3 plants (Acer palmatum, Gaultheria shallon, Vaccinium ovatum) through 4 claims — a shared condition suggests they could share a planting layer."
+  },
+  {
+   "concept": "soil:acidic",
+   "label": "Acidic",
+   "dimension": "condition",
+   "facet": "soil",
+   "plants": [
+    "plant:acer-palmatum",
+    "plant:gaultheria-shallon",
+    "plant:vaccinium-ovatum"
+   ],
+   "n_edges": 4,
+   "sources": [
+    "mobot",
+    "osu",
+    "rhs",
+    "usda_plants"
+   ],
+   "text": "Acidic links 3 plants (Acer palmatum, Gaultheria shallon, Vaccinium ovatum) through 4 claims — a shared condition suggests they could share a planting layer."
+  },
+  {
+   "concept": "water:average",
+   "label": "average",
+   "dimension": "condition",
+   "facet": "water",
+   "plants": [
+    "plant:acer-palmatum",
+    "plant:gaultheria-shallon",
+    "plant:vaccinium-ovatum"
+   ],
+   "n_edges": 4,
+   "sources": [
+    "gpp",
+    "mobot",
+    "rhs"
+   ],
+   "text": "average links 3 plants (Acer palmatum, Gaultheria shallon, Vaccinium ovatum) through 4 claims — a shared condition suggests they could share a planting layer."
+  },
+  {
+   "concept": "hardiness_usda:z10",
+   "label": "USDA zone 10",
+   "dimension": "condition",
+   "facet": "hardiness_usda",
+   "plants": [
+    "plant:acer-palmatum",
+    "plant:gaultheria-shallon",
+    "plant:vaccinium-ovatum"
+   ],
+   "n_edges": 3,
+   "sources": [
+    "osu"
+   ],
+   "text": "USDA zone 10 links 3 plants (Acer palmatum, Gaultheria shallon, Vaccinium ovatum) through 3 claims — a shared condition suggests they could share a planting layer."
+  },
+  {
+   "concept": "hardiness_usda:z11",
+   "label": "USDA zone 11",
+   "dimension": "condition",
+   "facet": "hardiness_usda",
+   "plants": [
+    "plant:acer-palmatum",
+    "plant:gaultheria-shallon",
+    "plant:vaccinium-ovatum"
+   ],
+   "n_edges": 3,
+   "sources": [
+    "osu"
+   ],
+   "text": "USDA zone 11 links 3 plants (Acer palmatum, Gaultheria shallon, Vaccinium ovatum) through 3 claims — a shared condition suggests they could share a planting layer."
+  },
+  {
+   "concept": "invasive:not_listed",
+   "label": "Not listed as invasive",
+   "dimension": "status",
+   "facet": "invasive",
+   "plants": [
+    "plant:acer-palmatum",
+    "plant:gaultheria-shallon",
+    "plant:vaccinium-ovatum"
+   ],
+   "n_edges": 3,
+   "sources": [
+    "iscbc"
+   ],
+   "text": "Not listed as invasive links 3 plants (Acer palmatum, Gaultheria shallon, Vaccinium ovatum) through 3 claims."
+  },
+  {
+   "concept": "pest:root_rot",
+   "label": "Root rot",
+   "dimension": "resistance",
+   "facet": "pest",
+   "plants": [
+    "plant:acer-palmatum",
+    "plant:gaultheria-shallon",
+    "plant:vaccinium-ovatum"
+   ],
+   "n_edges": 3,
+   "sources": [
+    "mobot",
+    "rhs"
+   ],
+   "text": "Root rot links 3 plants (Acer palmatum, Gaultheria shallon, Vaccinium ovatum) through 3 claims."
+  },
+  {
+   "concept": "water:moist",
+   "label": "moist",
+   "dimension": "condition",
+   "facet": "water",
+   "plants": [
+    "plant:acer-palmatum",
+    "plant:gaultheria-shallon",
+    "plant:vaccinium-ovatum"
+   ],
+   "n_edges": 3,
+   "sources": [
+    "rhs",
+    "usda_plants"
+   ],
+   "text": "moist links 3 plants (Acer palmatum, Gaultheria shallon, Vaccinium ovatum) through 3 claims — a shared condition suggests they could share a planting layer."
+  },
+  {
+   "concept": "evergreen:yes",
+   "label": "Evergreen",
+   "dimension": "trait",
+   "facet": "evergreen",
+   "plants": [
+    "plant:gaultheria-shallon",
+    "plant:vaccinium-ovatum"
+   ],
+   "n_edges": 9,
+   "sources": [
+    "gpp",
+    "osu",
+    "rhs",
+    "survey-r03",
+    "usda_plants"
+   ],
+   "text": "Evergreen links 2 plants (Gaultheria shallon, Vaccinium ovatum) through 9 claims."
+  },
+  {
+   "concept": "height_class:1.3-2.0m",
+   "label": "1.3 - 2.0m",
+   "dimension": "trait",
+   "facet": "height_class",
+   "plants": [
+    "plant:gaultheria-shallon",
+    "plant:vaccinium-ovatum"
+   ],
+   "n_edges": 7,
+   "sources": [
+    "eflora",
+    "osu",
+    "rhs",
+    "usda_plants"
+   ],
+   "text": "1.3 - 2.0m links 2 plants (Gaultheria shallon, Vaccinium ovatum) through 7 claims."
+  },
+  {
+   "concept": "height_class:0.7-1.3m",
+   "label": "0.7 - 1.3m",
+   "dimension": "trait",
+   "facet": "height_class",
+   "plants": [
+    "plant:gaultheria-shallon",
+    "plant:vaccinium-ovatum"
+   ],
+   "n_edges": 6,
+   "sources": [
+    "eflora",
+    "osu",
+    "rhs"
+   ],
+   "text": "0.7 - 1.3m links 2 plants (Gaultheria shallon, Vaccinium ovatum) through 6 claims."
+  },
+  {
+   "concept": "colour:white",
+   "label": "White",
+   "dimension": "trait",
+   "facet": "colour",
+   "plants": [
+    "plant:gaultheria-shallon",
+    "plant:vaccinium-ovatum"
+   ],
+   "n_edges": 5,
+   "sources": [
+    "gpp",
+    "osu",
+    "rhs",
+    "usda_plants"
+   ],
+   "text": "White links 2 plants (Gaultheria shallon, Vaccinium ovatum) through 5 claims."
+  },
+  {
+   "concept": "origin:native",
+   "label": "Native",
+   "dimension": "status",
+   "facet": "origin",
+   "plants": [
+    "plant:gaultheria-shallon",
+    "plant:vaccinium-ovatum"
+   ],
+   "n_edges": 5,
+   "sources": [
+    "eflora",
+    "osu",
+    "usda_plants"
+   ],
+   "text": "Native links 2 plants (Gaultheria shallon, Vaccinium ovatum) through 5 claims."
+  },
+  {
+   "concept": "colour:pink",
+   "label": "Pink",
+   "dimension": "trait",
+   "facet": "colour",
+   "plants": [
+    "plant:gaultheria-shallon",
+    "plant:vaccinium-ovatum"
+   ],
+   "n_edges": 4,
+   "sources": [
+    "osu",
+    "rhs"
+   ],
+   "text": "Pink links 2 plants (Gaultheria shallon, Vaccinium ovatum) through 4 claims."
+  },
+  {
+   "concept": "fruit:showy",
+   "label": "Showy fruit",
+   "dimension": "trait",
+   "facet": "fruit",
+   "plants": [
+    "plant:gaultheria-shallon",
+    "plant:vaccinium-ovatum"
+   ],
+   "n_edges": 4,
+   "sources": [
+    "rhs",
+    "usda_plants"
+   ],
+   "text": "Showy fruit links 2 plants (Gaultheria shallon, Vaccinium ovatum) through 4 claims."
+  },
+  {
+   "concept": "hardiness_usda:z6",
+   "label": "USDA zone 6",
+   "dimension": "condition",
+   "facet": "hardiness_usda",
+   "plants": [
+    "plant:acer-palmatum",
+    "plant:gaultheria-shallon"
+   ],
+   "n_edges": 4,
+   "sources": [
+    "gpp",
+    "mobot",
+    "osu"
+   ],
+   "text": "USDA zone 6 links 2 plants (Acer palmatum, Gaultheria shallon) through 4 claims — a shared condition suggests they could share a planting layer."
+  },
+  {
+   "concept": "exposure:deep_shade",
+   "label": "Deep shade",
+   "dimension": "condition",
+   "facet": "exposure",
+   "plants": [
+    "plant:gaultheria-shallon",
+    "plant:vaccinium-ovatum"
+   ],
+   "n_edges": 3,
+   "sources": [
+    "eflora",
+    "gpp",
+    "rhs"
+   ],
+   "text": "Deep shade links 2 plants (Gaultheria shallon, Vaccinium ovatum) through 3 claims — a shared condition suggests they could share a planting layer."
+  },
+  {
+   "concept": "fruit:edible",
+   "label": "Edible fruit",
+   "dimension": "trait",
+   "facet": "fruit",
+   "plants": [
+    "plant:gaultheria-shallon",
+    "plant:vaccinium-ovatum"
+   ],
+   "n_edges": 3,
+   "sources": [
+    "gpp",
+    "osu"
+   ],
+   "text": "Edible fruit links 2 plants (Gaultheria shallon, Vaccinium ovatum) through 3 claims."
+  },
+  {
+   "concept": "height_class:0.4-0.7m",
+   "label": "0.4 - 0.7m",
+   "dimension": "trait",
+   "facet": "height_class",
+   "plants": [
+    "plant:gaultheria-shallon",
+    "plant:vaccinium-ovatum"
+   ],
+   "n_edges": 3,
+   "sources": [
+    "eflora",
+    "osu"
+   ],
+   "text": "0.4 - 0.7m links 2 plants (Gaultheria shallon, Vaccinium ovatum) through 3 claims."
+  },
+  {
+   "concept": "use:cut_flower_or_foliage",
+   "label": "Cut flower or foliage",
+   "dimension": "use",
+   "facet": "use",
+   "plants": [
+    "plant:gaultheria-shallon",
+    "plant:vaccinium-ovatum"
+   ],
+   "n_edges": 3,
+   "sources": [
+    "osu",
+    "rhs"
+   ],
+   "text": "Cut flower or foliage links 2 plants (Gaultheria shallon, Vaccinium ovatum) through 3 claims."
+  },
+  {
+   "concept": "age:establishing",
+   "label": "Establishing",
+   "dimension": "time",
+   "facet": "age",
+   "plants": [
+    "plant:acer-palmatum",
+    "plant:vaccinium-ovatum"
+   ],
+   "n_edges": 2,
+   "sources": [
+    "gpp"
+   ],
+   "text": "Establishing links 2 plants (Acer palmatum, Vaccinium ovatum) through 2 claims."
+  },
+  {
+   "concept": "growth_rate:fast",
+   "label": "fast",
+   "dimension": "trait",
+   "facet": "growth_rate",
+   "plants": [
+    "plant:acer-palmatum",
+    "plant:gaultheria-shallon"
+   ],
+   "n_edges": 2,
+   "sources": [
+    "gpp",
+    "usda_plants"
+   ],
+   "text": "fast links 2 plants (Acer palmatum, Gaultheria shallon) through 2 claims."
+  },
+  {
+   "concept": "maintenance:low",
+   "label": "low",
+   "dimension": "trait",
+   "facet": "maintenance",
+   "plants": [
+    "plant:acer-palmatum",
+    "plant:vaccinium-ovatum"
+   ],
+   "n_edges": 2,
+   "sources": [
+    "gpp",
+    "mobot"
+   ],
+   "text": "low links 2 plants (Acer palmatum, Vaccinium ovatum) through 2 claims."
+  },
+  {
+   "concept": "origin:native_bc_west_of_cascades",
+   "label": "Native to BC west of the Cascades",
+   "dimension": "status",
+   "facet": "origin",
+   "plants": [
+    "plant:gaultheria-shallon",
+    "plant:vaccinium-ovatum"
+   ],
+   "n_edges": 2,
+   "sources": [
+    "entity"
+   ],
+   "text": "Native to BC west of the Cascades links 2 plants (Gaultheria shallon, Vaccinium ovatum) through 2 claims."
+  },
+  {
+   "concept": "plant_type:broadleaf_evergreen",
+   "label": "Broadleaf evergreen",
+   "dimension": "trait",
+   "facet": "plant_type",
+   "plants": [
+    "plant:gaultheria-shallon",
+    "plant:vaccinium-ovatum"
+   ],
+   "n_edges": 2,
+   "sources": [
+    "entity"
+   ],
+   "text": "Broadleaf evergreen links 2 plants (Gaultheria shallon, Vaccinium ovatum) through 2 claims."
+  },
+  {
+   "concept": "spread_class:1.0-1.5m",
+   "label": "1.0 - 1.5m",
+   "dimension": "trait",
+   "facet": "spread_class",
+   "plants": [
+    "plant:gaultheria-shallon",
+    "plant:vaccinium-ovatum"
+   ],
+   "n_edges": 2,
+   "sources": [
+    "rhs"
+   ],
+   "text": "1.0 - 1.5m links 2 plants (Gaultheria shallon, Vaccinium ovatum) through 2 claims."
+  },
+  {
+   "concept": "toxicity:unknown",
+   "label": "unknown",
+   "dimension": "trait",
+   "facet": "toxicity",
+   "plants": [
+    "plant:gaultheria-shallon",
+    "plant:vaccinium-ovatum"
+   ],
+   "n_edges": 2,
+   "sources": [
+    "usda_plants"
+   ],
+   "text": "unknown links 2 plants (Gaultheria shallon, Vaccinium ovatum) through 2 claims."
+  },
+  {
+   "concept": "use:container_planting",
+   "label": "Container planting",
+   "dimension": "use",
+   "facet": "use",
+   "plants": [
+    "plant:gaultheria-shallon",
+    "plant:vaccinium-ovatum"
+   ],
+   "n_edges": 2,
+   "sources": [
+    "rhs"
+   ],
+   "text": "Container planting links 2 plants (Gaultheria shallon, Vaccinium ovatum) through 2 claims."
+  },
+  {
+   "concept": "use:group_or_mass_planting",
+   "label": "Group or mass planting",
+   "dimension": "use",
+   "facet": "use",
+   "plants": [
+    "plant:acer-palmatum",
+    "plant:vaccinium-ovatum"
+   ],
+   "n_edges": 2,
+   "sources": [
+    "gpp",
+    "mobot"
+   ],
+   "text": "Group or mass planting links 2 plants (Acer palmatum, Vaccinium ovatum) through 2 claims."
+  },
+  {
+   "concept": "use:mixed_shrub_border",
+   "label": "Mixed shrub border",
+   "dimension": "use",
+   "facet": "use",
+   "plants": [
+    "plant:gaultheria-shallon",
+    "plant:vaccinium-ovatum"
+   ],
+   "n_edges": 2,
+   "sources": [
+    "rhs"
+   ],
+   "text": "Mixed shrub border links 2 plants (Gaultheria shallon, Vaccinium ovatum) through 2 claims."
+  },
+  {
+   "concept": "use:screening",
+   "label": "Screening",
+   "dimension": "use",
+   "facet": "use",
+   "plants": [
+    "plant:acer-palmatum",
+    "plant:vaccinium-ovatum"
+   ],
+   "n_edges": 2,
+   "sources": [
+    "gpp",
+    "mobot"
+   ],
+   "text": "Screening links 2 plants (Acer palmatum, Vaccinium ovatum) through 2 claims."
+  },
+  {
+   "concept": "use:sheared_hedge",
+   "label": "Sheared hedge",
+   "dimension": "use",
+   "facet": "use",
+   "plants": [
+    "plant:gaultheria-shallon",
+    "plant:vaccinium-ovatum"
+   ],
+   "n_edges": 2,
+   "sources": [
+    "gpp",
+    "usda_plants"
+   ],
+   "text": "Sheared hedge links 2 plants (Gaultheria shallon, Vaccinium ovatum) through 2 claims."
+  },
+  {
+   "concept": "use:small_garden_space",
+   "label": "Small garden/space",
+   "dimension": "use",
+   "facet": "use",
+   "plants": [
+    "plant:gaultheria-shallon",
+    "plant:vaccinium-ovatum"
+   ],
+   "n_edges": 2,
+   "sources": [
+    "rhs"
+   ],
+   "text": "Small garden/space links 2 plants (Gaultheria shallon, Vaccinium ovatum) through 2 claims."
+  },
+  {
+   "concept": "use:urban_agriculture",
+   "label": "Urban agriculture",
+   "dimension": "use",
+   "facet": "use",
+   "plants": [
+    "plant:gaultheria-shallon",
+    "plant:vaccinium-ovatum"
+   ],
+   "n_edges": 2,
+   "sources": [
+    "rhs"
+   ],
+   "text": "Urban agriculture links 2 plants (Gaultheria shallon, Vaccinium ovatum) through 2 claims."
+  }
+ ],
+ "variation": [
+  {
+   "plant": "plant:gaultheria-shallon",
+   "facet": "height_class",
+   "claims": [
+    "gaultheria-shallon:mature_height:osu01",
+    "gaultheria-shallon:mature_height:osu02"
+   ],
+   "text": "Gaultheria shallon height class depends on conditions: Oregon State gives ≤ 0.6 m under full sun, rocky or gravelly or dry, Oregon State gives 1.2–3 m under shade, humus rich.",
+   "pairs": 1
+  }
+ ],
+ "disagreement": [
+  {
+   "plant": "plant:acer-palmatum",
+   "facet": "height_class",
+   "claims": [
+    "acer-palmatum:local_mature_size:cov05",
+    "acer-palmatum:mature_height:gpp01"
+   ],
+   "sources": [
+    "cov_trees",
+    "gpp"
+   ],
+   "conditions": [
+    "cv:Osakazuki"
+   ],
+   "text": "Sources disagree on Acer palmatum height class (Osakazuki): City of Vancouver trees says median 7.6 m, Great Plant Picks says 6.1 m, both no condition stated."
+  },
+  {
+   "plant": "plant:acer-palmatum",
+   "facet": "height_class",
+   "claims": [
+    "acer-palmatum:local_mature_size:cov05",
+    "acer-palmatum:mature_height:rhs02"
+   ],
+   "sources": [
+    "cov_trees",
+    "rhs"
+   ],
+   "conditions": [
+    "cv:Osakazuki"
+   ],
+   "text": "Sources disagree on Acer palmatum height class (Osakazuki): City of Vancouver trees says median 7.6 m, RHS says 2.5–4 m, both no condition stated."
+  },
+  {
+   "plant": "plant:acer-palmatum",
+   "facet": "height_class",
+   "claims": [
+    "acer-palmatum:mature_height:gpp01",
+    "acer-palmatum:mature_height:rhs02"
+   ],
+   "sources": [
+    "gpp",
+    "rhs"
+   ],
+   "conditions": [
+    "cv:Osakazuki"
+   ],
+   "text": "Sources disagree on Acer palmatum height class (Osakazuki): Great Plant Picks says 6.1 m, RHS says 2.5–4 m, both no condition stated."
+  },
+  {
+   "plant": "plant:acer-palmatum",
+   "facet": "spread_class",
+   "claims": [
+    "acer-palmatum:mature_spread:gpp01",
+    "acer-palmatum:mature_spread:rhs02"
+   ],
+   "sources": [
+    "gpp",
+    "rhs"
+   ],
+   "conditions": [
+    "cv:Osakazuki"
+   ],
+   "text": "Sources disagree on Acer palmatum spread class (Osakazuki): Great Plant Picks says 6.1 m, RHS says 2.5–4 m, both no condition stated."
+  },
+  {
+   "plant": "plant:acer-palmatum",
+   "facet": "water",
+   "claims": [
+    "acer-palmatum:water_drainage:mobot01",
+    "acer-palmatum:water_drainage:rhs01"
+   ],
+   "sources": [
+    "mobot",
+    "rhs"
+   ],
+   "conditions": [],
+   "text": "Sources disagree on Acer palmatum water: Missouri BG says average, RHS says moist, both with no condition stated."
+  },
+  {
+   "plant": "plant:gaultheria-shallon",
+   "facet": "exposure",
+   "claims": [
+    "gaultheria-shallon:exposure:eflora01",
+    "gaultheria-shallon:exposure:usdaplants01"
+   ],
+   "sources": [
+    "eflora",
+    "usda_plants"
+   ],
+   "conditions": [],
+   "text": "Sources disagree on Gaultheria shallon exposure: E-Flora BC says Filtered shade, Deep shade, Part sun/part shade, USDA PLANTS says Full sun, both with no condition stated."
+  },
+  {
+   "plant": "plant:gaultheria-shallon",
+   "facet": "exposure",
+   "claims": [
+    "gaultheria-shallon:exposure:rhs01",
+    "gaultheria-shallon:exposure:usdaplants01"
+   ],
+   "sources": [
+    "rhs",
+    "usda_plants"
+   ],
+   "conditions": [],
+   "text": "Sources disagree on Gaultheria shallon exposure: RHS says Deep shade, Part sun/part shade, Sheltered, USDA PLANTS says Full sun, both with no condition stated."
+  },
+  {
+   "plant": "plant:gaultheria-shallon",
+   "facet": "water",
+   "claims": [
+    "gaultheria-shallon:water_drainage:rhs01",
+    "gaultheria-shallon:water_drainage:usdaplants01"
+   ],
+   "sources": [
+    "rhs",
+    "usda_plants"
+   ],
+   "conditions": [],
+   "text": "Sources disagree on Gaultheria shallon water: RHS says average, USDA PLANTS says moist, both with no condition stated."
+  },
+  {
+   "plant": "plant:vaccinium-ovatum",
+   "facet": "exposure",
+   "claims": [
+    "vaccinium-ovatum:exposure:01",
+    "vaccinium-ovatum:exposure:usdaplants01"
+   ],
+   "sources": [
+    "survey-r03",
+    "usda_plants"
+   ],
+   "conditions": [],
+   "text": "Sources disagree on Vaccinium ovatum exposure: survey respondent 03 says Part sun/part shade, Filtered shade, USDA PLANTS says Full sun, both with no condition stated."
+  },
+  {
+   "plant": "plant:vaccinium-ovatum",
+   "facet": "height_class",
+   "claims": [
+    "vaccinium-ovatum:mature_height:gpp01",
+    "vaccinium-ovatum:mature_height:osu01"
+   ],
+   "sources": [
+    "gpp",
+    "osu"
+   ],
+   "conditions": [],
+   "text": "Sources disagree on Vaccinium ovatum height class: Great Plant Picks says 2.44 m, Oregon State says 0.9–1.5 m, both with no condition stated."
+  },
+  {
+   "plant": "plant:vaccinium-ovatum",
+   "facet": "height_class",
+   "claims": [
+    "vaccinium-ovatum:mature_height:gpp01",
+    "vaccinium-ovatum:mature_height:rhs01"
+   ],
+   "sources": [
+    "gpp",
+    "rhs"
+   ],
+   "conditions": [],
+   "text": "Sources disagree on Vaccinium ovatum height class: Great Plant Picks says 2.44 m, RHS says 1–1.5 m, both with no condition stated."
+  },
+  {
+   "plant": "plant:vaccinium-ovatum",
+   "facet": "height_class",
+   "claims": [
+    "vaccinium-ovatum:mature_height:osu01",
+    "vaccinium-ovatum:mature_height:usdaplants01"
+   ],
+   "sources": [
+    "osu",
+    "usda_plants"
+   ],
+   "conditions": [],
+   "text": "Sources disagree on Vaccinium ovatum height class: Oregon State says 0.9–1.5 m, USDA PLANTS says 2.4 m, both with no condition stated."
+  },
+  {
+   "plant": "plant:vaccinium-ovatum",
+   "facet": "height_class",
+   "claims": [
+    "vaccinium-ovatum:mature_height:rhs01",
+    "vaccinium-ovatum:mature_height:usdaplants01"
+   ],
+   "sources": [
+    "rhs",
+    "usda_plants"
+   ],
+   "conditions": [],
+   "text": "Sources disagree on Vaccinium ovatum height class: RHS says 1–1.5 m, USDA PLANTS says 2.4 m, both with no condition stated."
+  },
+  {
+   "plant": "plant:vaccinium-ovatum",
+   "facet": "water",
+   "claims": [
+    "vaccinium-ovatum:water_drainage:gpp01",
+    "vaccinium-ovatum:water_drainage:rhs01"
+   ],
+   "sources": [
+    "gpp",
+    "rhs"
+   ],
+   "conditions": [],
+   "text": "Sources disagree on Vaccinium ovatum water: Great Plant Picks says average, RHS says moist, both with no condition stated."
+  }
+ ],
+ "gaps": [
+  {
+   "kind": "gate_facet_missing",
+   "plant": "plant:acer-palmatum",
+   "facet": "ecology",
+   "text": "Acer palmatum has no sourced claim on the gate facet ‘ecology’ — the AI cannot gate on it."
+  },
+  {
+   "kind": "gate_facet_missing",
+   "plant": "plant:gaultheria-shallon",
+   "facet": "maintenance",
+   "text": "Gaultheria shallon has no sourced claim on the gate facet ‘maintenance’ — the AI cannot gate on it."
+  },
+  {
+   "kind": "gate_facet_missing",
+   "plant": "plant:vaccinium-ovatum",
+   "facet": "ecology",
+   "text": "Vaccinium ovatum has no sourced claim on the gate facet ‘ecology’ — the AI cannot gate on it."
+  },
+  {
+   "kind": "single_source_links",
+   "count": 98,
+   "items": [
+    {
+     "plant": "plant:gaultheria-shallon",
+     "concept": "height_class:3-5m",
+     "source": "osu",
+     "claims": [
+      "gaultheria-shallon:mature_height:osu02"
+     ]
+    },
+    {
+     "plant": "plant:vaccinium-ovatum",
+     "concept": "height_class:3-5m",
+     "source": "eflora",
+     "claims": [
+      "vaccinium-ovatum:mature_height:eflora01"
+     ]
+    },
+    {
+     "plant": "plant:acer-palmatum",
+     "concept": "hardiness_rhs:H6",
+     "source": "rhs",
+     "claims": [
+      "acer-palmatum:hardiness_zone:rhs01"
+     ]
+    },
+    {
+     "plant": "plant:gaultheria-shallon",
+     "concept": "exposure:sheltered",
+     "source": "rhs",
+     "claims": [
+      "gaultheria-shallon:exposure:rhs01"
+     ]
+    },
+    {
+     "plant": "plant:vaccinium-ovatum",
+     "concept": "exposure:sheltered",
+     "source": "rhs",
+     "claims": [
+      "vaccinium-ovatum:exposure:rhs01"
+     ]
+    },
+    {
+     "plant": "plant:gaultheria-shallon",
+     "concept": "soil:well_drained",
+     "source": "rhs",
+     "claims": [
+      "gaultheria-shallon:soil_type:rhs01"
+     ]
+    },
+    {
+     "plant": "plant:acer-palmatum",
+     "concept": "water:moist",
+     "source": "rhs",
+     "claims": [
+      "acer-palmatum:water_drainage:rhs01"
+     ]
+    },
+    {
+     "plant": "plant:gaultheria-shallon",
+     "concept": "water:moist",
+     "source": "usda_plants",
+     "claims": [
+      "gaultheria-shallon:water_drainage:usdaplants01"
+     ]
+    },
+    {
+     "plant": "plant:vaccinium-ovatum",
+     "concept": "water:moist",
+     "source": "rhs",
+     "claims": [
+      "vaccinium-ovatum:water_drainage:rhs01"
+     ]
+    },
+    {
+     "plant": "plant:acer-palmatum",
+     "concept": "pest:caterpillar_or_cutworm",
+     "source": "rhs",
+     "claims": [
+      "acer-palmatum:pest_susceptibility:rhs01"
+     ]
+    },
+    {
+     "plant": "plant:acer-palmatum",
+     "concept": "pest:galls",
+     "source": "rhs",
+     "claims": [
+      "acer-palmatum:pest_susceptibility:rhs01"
+     ]
+    },
+    {
+     "plant": "plant:acer-palmatum",
+     "concept": "height_class:2-3m",
+     "source": "rhs",
+     "claims": [
+      "acer-palmatum:mature_height:rhs02",
+      "acer-palmatum:mature_height:rhs03"
+     ]
+    },
+    {
+     "plant": "plant:gaultheria-shallon",
+     "concept": "height_class:2-3m",
+     "source": "osu",
+     "claims": [
+      "gaultheria-shallon:mature_height:osu02"
+     ]
+    },
+    {
+     "plant": "plant:acer-palmatum",
+     "concept": "spread_class:2-3m",
+     "source": "rhs",
+     "claims": [
+      "acer-palmatum:mature_spread:rhs02",
+      "acer-palmatum:mature_spread:rhs03"
+     ]
+    },
+    {
+     "plant": "plant:acer-palmatum",
+     "concept": "colour:dark_red",
+     "source": "rhs",
+     "claims": [
+      "acer-palmatum:seasonal_interest:rhs02"
+     ]
+    },
+    {
+     "plant": "plant:gaultheria-shallon",
+     "concept": "hardiness_usda:z6",
+     "source": "osu",
+     "claims": [
+      "gaultheria-shallon:hardiness_zone:osu01"
+     ]
+    },
+    {
+     "plant": "plant:gaultheria-shallon",
+     "concept": "hardiness_usda:z7",
+     "source": "osu",
+     "claims": [
+      "gaultheria-shallon:hardiness_zone:osu01"
+     ]
+    },
+    {
+     "plant": "plant:gaultheria-shallon",
+     "concept": "hardiness_usda:z8",
+     "source": "osu",
+     "claims": [
+      "gaultheria-shallon:hardiness_zone:osu01"
+     ]
+    },
+    {
+     "plant": "plant:gaultheria-shallon",
+     "concept": "water:average",
+     "source": "rhs",
+     "claims": [
+      "gaultheria-shallon:water_drainage:rhs01"
+     ]
+    },
+    {
+     "plant": "plant:vaccinium-ovatum",
+     "concept": "water:average",
+     "source": "gpp",
+     "claims": [
+      "vaccinium-ovatum:water_drainage:gpp01"
+     ]
+    },
+    {
+     "plant": "plant:acer-palmatum",
+     "concept": "maintenance:low",
+     "source": "mobot",
+     "claims": [
+      "acer-palmatum:maintenance_level:mobot01"
+     ]
+    },
+    {
+     "plant": "plant:vaccinium-ovatum",
+     "concept": "maintenance:low",
+     "source": "gpp",
+     "claims": [
+      "vaccinium-ovatum:maintenance_level:gpp01"
+     ]
+    },
+    {
+     "plant": "plant:acer-palmatum",
+     "concept": "soil:acidic",
+     "source": "mobot",
+     "claims": [
+      "acer-palmatum:soil_type:mobot01"
+     ]
+    },
+    {
+     "plant": "plant:vaccinium-ovatum",
+     "concept": "soil:acidic",
+     "source": "rhs",
+     "claims": [
+      "vaccinium-ovatum:soil_type:rhs01"
+     ]
+    },
+    {
+     "plant": "plant:acer-palmatum",
+     "concept": "use:accent_plant",
+     "source": "mobot",
+     "claims": [
+      "acer-palmatum:landscape_use:mobot01"
+     ]
+    },
+    {
+     "plant": "plant:acer-palmatum",
+     "concept": "use:group_or_mass_planting",
+     "source": "mobot",
+     "claims": [
+      "acer-palmatum:landscape_use:mobot01"
+     ]
+    },
+    {
+     "plant": "plant:vaccinium-ovatum",
+     "concept": "use:group_or_mass_planting",
+     "source": "gpp",
+     "claims": [
+      "vaccinium-ovatum:landscape_use:gpp01"
+     ]
+    },
+    {
+     "plant": "plant:acer-palmatum",
+     "concept": "use:screening",
+     "source": "mobot",
+     "claims": [
+      "acer-palmatum:landscape_use:mobot01"
+     ]
+    },
+    {
+     "plant": "plant:vaccinium-ovatum",
+     "concept": "use:screening",
+     "source": "gpp",
+     "claims": [
+      "vaccinium-ovatum:landscape_use:gpp01"
+     ]
+    },
+    {
+     "plant": "plant:acer-palmatum",
+     "concept": "use:specimen_plant",
+     "source": "mobot",
+     "claims": [
+      "acer-palmatum:landscape_use:mobot01"
+     ]
+    },
+    {
+     "plant": "plant:acer-palmatum",
+     "concept": "use:woodland_margin",
+     "source": "mobot",
+     "claims": [
+      "acer-palmatum:landscape_use:mobot01"
+     ]
+    },
+    {
+     "plant": "plant:acer-palmatum",
+     "concept": "pest:anthracnose",
+     "source": "mobot",
+     "claims": [
+      "acer-palmatum:pest_susceptibility:mobot01"
+     ]
+    },
+    {
+     "plant": "plant:acer-palmatum",
+     "concept": "pest:canker_or_sap_rot",
+     "source": "mobot",
+     "claims": [
+      "acer-palmatum:pest_susceptibility:mobot01"
+     ]
+    },
+    {
+     "plant": "plant:acer-palmatum",
+     "concept": "pest:fungal_leaf_spot",
+     "source": "mobot",
+     "claims": [
+      "acer-palmatum:pest_susceptibility:mobot01"
+     ]
+    },
+    {
+     "plant": "plant:acer-palmatum",
+     "concept": "pest:mites",
+     "source": "mobot",
+     "claims": [
+      "acer-palmatum:pest_susceptibility:mobot01"
+     ]
+    },
+    {
+     "plant": "plant:acer-palmatum",
+     "concept": "pest:root_rot",
+     "source": "mobot",
+     "claims": [
+      "acer-palmatum:pest_susceptibility:mobot01"
+     ]
+    },
+    {
+     "plant": "plant:gaultheria-shallon",
+     "concept": "pest:root_rot",
+     "source": "rhs",
+     "claims": [
+      "gaultheria-shallon:pest_susceptibility:rhs01"
+     ]
+    },
+    {
+     "plant": "plant:vaccinium-ovatum",
+     "concept": "pest:root_rot",
+     "source": "rhs",
+     "claims": [
+      "vaccinium-ovatum:pest_susceptibility:rhs01"
+     ]
+    },
+    {
+     "plant": "plant:acer-palmatum",
+     "concept": "age:establishing",
+     "source": "gpp",
+     "claims": [
+      "acer-palmatum:time_to_intended_size:gpp01"
+     ]
+    },
+    {
+     "plant": "plant:vaccinium-ovatum",
+     "concept": "age:establishing",
+     "source": "gpp",
+     "claims": [
+      "vaccinium-ovatum:time_to_intended_size:gpp01"
+     ]
+    },
+    {
+     "plant": "plant:acer-palmatum",
+     "concept": "exposure:filtered_shade",
+     "source": "gpp",
+     "claims": [
+      "acer-palmatum:exposure:gpp01"
+     ]
+    },
+    {
+     "plant": "plant:gaultheria-shallon",
+     "concept": "exposure:filtered_shade",
+     "source": "eflora",
+     "claims": [
+      "gaultheria-shallon:exposure:eflora01"
+     ]
+    },
+    {
+     "plant": "plant:acer-palmatum",
+     "concept": "growth_rate:fast",
+     "source": "gpp",
+     "claims": [
+      "acer-palmatum:growth_rate:gpp01"
+     ]
+    },
+    {
+     "plant": "plant:gaultheria-shallon",
+     "concept": "growth_rate:fast",
+     "source": "usda_plants",
+     "claims": [
+      "gaultheria-shallon:growth_rate:usdaplants01"
+     ]
+    },
+    {
+     "plant": "plant:acer-palmatum",
+     "concept": "stress:leaf_scorch",
+     "source": "gpp",
+     "claims": [
+      "acer-palmatum:resistances:gpp01"
+     ]
+    },
+    {
+     "plant": "plant:acer-palmatum",
+     "concept": "hardiness_usda:z9",
+     "source": "osu",
+     "claims": [
+      "acer-palmatum:hardiness_zone:osu01"
+     ]
+    },
+    {
+     "plant": "plant:gaultheria-shallon",
+     "concept": "hardiness_usda:z9",
+     "source": "osu",
+     "claims": [
+      "gaultheria-shallon:hardiness_zone:osu01"
+     ]
+    },
+    {
+     "plant": "plant:acer-palmatum",
+     "concept": "hardiness_usda:z10",
+     "source": "osu",
+     "claims": [
+      "acer-palmatum:hardiness_zone:osu01"
+     ]
+    },
+    {
+     "plant": "plant:gaultheria-shallon",
+     "concept": "hardiness_usda:z10",
+     "source": "osu",
+     "claims": [
+      "gaultheria-shallon:hardiness_zone:osu01"
+     ]
+    },
+    {
+     "plant": "plant:vaccinium-ovatum",
+     "concept": "hardiness_usda:z10",
+     "source": "osu",
+     "claims": [
+      "vaccinium-ovatum:hardiness_zone:osu01"
+     ]
+    },
+    {
+     "plant": "plant:acer-palmatum",
+     "concept": "hardiness_usda:z11",
+     "source": "osu",
+     "claims": [
+      "acer-palmatum:hardiness_zone:osu01"
+     ]
+    },
+    {
+     "plant": "plant:gaultheria-shallon",
+     "concept": "hardiness_usda:z11",
+     "source": "osu",
+     "claims": [
+      "gaultheria-shallon:hardiness_zone:osu01"
+     ]
+    },
+    {
+     "plant": "plant:vaccinium-ovatum",
+     "concept": "hardiness_usda:z11",
+     "source": "osu",
+     "claims": [
+      "vaccinium-ovatum:hardiness_zone:osu01"
+     ]
+    },
+    {
+     "plant": "plant:acer-palmatum",
+     "concept": "invasive:not_listed",
+     "source": "iscbc",
+     "claims": [
+      "acer-palmatum:invasive_status:iscbc01"
+     ]
+    },
+    {
+     "plant": "plant:gaultheria-shallon",
+     "concept": "invasive:not_listed",
+     "source": "iscbc",
+     "claims": [
+      "gaultheria-shallon:invasive_status:iscbc01"
+     ]
+    },
+    {
+     "plant": "plant:vaccinium-ovatum",
+     "concept": "invasive:not_listed",
+     "source": "iscbc",
+     "claims": [
+      "vaccinium-ovatum:invasive_status:iscbc01"
+     ]
+    },
+    {
+     "plant": "plant:acer-palmatum",
+     "concept": "height_class:10-15m",
+     "source": "cov_trees",
+     "claims": [
+      "acer-palmatum:local_mature_size:cov01",
+      "acer-palmatum:local_mature_size:cov02",
+      "acer-palmatum:local_mature_size:cov05",
+      "acer-palmatum:local_mature_size:cov11",
+      "acer-palmatum:local_mature_size:cov12"
+     ]
+    },
+    {
+     "plant": "plant:acer-palmatum",
+     "concept": "browsing:rabbit",
+     "source": "mobot",
+     "claims": [
+      "acer-palmatum:resistances:mobot01"
+     ]
+    },
+    {
+     "plant": "plant:acer-palmatum",
+     "concept": "stress:black_walnut",
+     "source": "mobot",
+     "claims": [
+      "acer-palmatum:resistances:mobot01"
+     ]
+    },
+    {
+     "plant": "plant:gaultheria-shallon",
+     "concept": "use:ground_cover",
+     "source": "survey-r03",
+     "claims": [
+      "gaultheria-shallon:landscape_use:01"
+     ]
+    },
+    {
+     "plant": "plant:gaultheria-shallon",
+     "concept": "spread_class:0.3-0.6m",
+     "source": "rhs",
+     "claims": [
+      "gaultheria-shallon:mature_spread:rhs01"
+     ]
+    },
+    {
+     "plant": "plant:gaultheria-shallon",
+     "concept": "spread_class:0.6-1.0m",
+     "source": "rhs",
+     "claims": [
+      "gaultheria-shallon:mature_spread:rhs01"
+     ]
+    },
+    {
+     "plant": "plant:gaultheria-shallon",
+     "concept": "spread_class:1.0-1.5m",
+     "source": "rhs",
+     "claims": [
+      "gaultheria-shallon:mature_spread:rhs01"
+     ]
+    },
+    {
+     "plant": "plant:vaccinium-ovatum",
+     "concept": "spread_class:1.0-1.5m",
+     "source": "rhs",
+     "claims": [
+      "vaccinium-ovatum:mature_spread:rhs01"
+     ]
+    },
+    {
+     "plant": "plant:gaultheria-shallon",
+     "concept": "hardiness_rhs:H5",
+     "source": "rhs",
+     "claims": [
+      "gaultheria-shallon:hardiness_zone:rhs01"
+     ]
+    },
+    {
+     "plant": "plant:vaccinium-ovatum",
+     "concept": "exposure:deep_shade",
+     "source": "gpp",
+     "claims": [
+      "vaccinium-ovatum:exposure:gpp01"
+     ]
+    },
+    {
+     "plant": "plant:gaultheria-shallon",
+     "concept": "habit:spreading",
+     "source": "rhs",
+     "claims": [
+      "gaultheria-shallon:habit:rhs01"
+     ]
+    },
+    {
+     "plant": "plant:gaultheria-shallon",
+     "concept": "pest:pest",
+     "source": "rhs",
+     "claims": [
+      "gaultheria-shallon:resistances:rhs01"
+     ]
+    },
+    {
+     "plant": "plant:gaultheria-shallon",
+     "concept": "use:container_planting",
+     "source": "rhs",
+     "claims": [
+      "gaultheria-shallon:landscape_use:rhs01"
+     ]
+    },
+    {
+     "plant": "plant:vaccinium-ovatum",
+     "concept": "use:container_planting",
+     "source": "rhs",
+     "claims": [
+      "vaccinium-ovatum:landscape_use:rhs01"
+     ]
+    },
+    {
+     "plant": "plant:vaccinium-ovatum",
+     "concept": "use:cut_flower_or_foliage",
+     "source": "osu",
+     "claims": [
+      "vaccinium-ovatum:landscape_use:osu01"
+     ]
+    },
+    {
+     "plant": "plant:gaultheria-shallon",
+     "concept": "use:erosion_control",
+     "source": "rhs",
+     "claims": [
+      "gaultheria-shallon:landscape_use:rhs01"
+     ]
+    },
+    {
+     "plant": "plant:gaultheria-shallon",
+     "concept": "use:mixed_shrub_border",
+     "source": "rhs",
+     "claims": [
+      "gaultheria-shallon:landscape_use:rhs01"
+     ]
+    },
+    {
+     "plant": "plant:vaccinium-ovatum",
+     "concept": "use:mixed_shrub_border",
+     "source": "rhs",
+     "claims": [
+      "vaccinium-ovatum:landscape_use:rhs01"
+     ]
+    },
+    {
+     "plant": "plant:gaultheria-shallon",
+     "concept": "use:rock_garden",
+     "source": "rhs",
+     "claims": [
+      "gaultheria-shallon:landscape_use:rhs01"
+     ]
+    },
+    {
+     "plant": "plant:gaultheria-shallon",
+     "concept": "use:small_garden_space",
+     "source": "rhs",
+     "claims": [
+      "gaultheria-shallon:landscape_use:rhs01"
+     ]
+    },
+    {
+     "plant": "plant:vaccinium-ovatum",
+     "concept": "use:small_garden_space",
+     "source": "rhs",
+     "claims": [
+      "vaccinium-ovatum:landscape_use:rhs01"
+     ]
+    },
+    {
+     "plant": "plant:gaultheria-shallon",
+     "concept": "use:urban_agriculture",
+     "source": "rhs",
+     "claims": [
+      "gaultheria-shallon:landscape_use:rhs01"
+     ]
+    },
+    {
+     "plant": "plant:vaccinium-ovatum",
+     "concept": "use:urban_agriculture",
+     "source": "rhs",
+     "claims": [
+      "vaccinium-ovatum:landscape_use:rhs01"
+     ]
+    },
+    {
+     "plant": "plant:vaccinium-ovatum",
+     "concept": "height_class:0.4-0.7m",
+     "source": "eflora",
+     "claims": [
+      "vaccinium-ovatum:mature_height:eflora01"
+     ]
+    },
+    {
+     "plant": "plant:gaultheria-shallon",
+     "concept": "fruit:edible",
+     "source": "osu",
+     "claims": [
+      "gaultheria-shallon:seasonal_interest:osu01"
+     ]
+    },
+    {
+     "plant": "plant:gaultheria-shallon",
+     "concept": "habit:dense",
+     "source": "osu",
+     "claims": [
+      "gaultheria-shallon:habit:osu01"
+     ]
+    },
+    {
+     "plant": "plant:gaultheria-shallon",
+     "concept": "ecology:bird_food",
+     "source": "osu",
+     "claims": [
+      "gaultheria-shallon:ecological_value:osu01"
+     ]
+    },
+    {
+     "plant": "plant:gaultheria-shallon",
+     "concept": "toxicity:unknown",
+     "source": "usda_plants",
+     "claims": [
+      "gaultheria-shallon:toxicity:usdaplants01"
+     ]
+    },
+    {
+     "plant": "plant:vaccinium-ovatum",
+     "concept": "toxicity:unknown",
+     "source": "usda_plants",
+     "claims": [
+      "vaccinium-ovatum:toxicity:usdaplants01"
+     ]
+    },
+    {
+     "plant": "plant:gaultheria-shallon",
+     "concept": "use:sheared_hedge",
+     "source": "usda_plants",
+     "claims": [
+      "gaultheria-shallon:landscape_use:usdaplants01"
+     ]
+    },
+    {
+     "plant": "plant:vaccinium-ovatum",
+     "concept": "use:sheared_hedge",
+     "source": "gpp",
+     "claims": [
+      "vaccinium-ovatum:landscape_use:gpp01"
+     ]
+    },
+    {
+     "plant": "plant:vaccinium-ovatum",
+     "concept": "use:hedge_row",
+     "source": "survey-r03",
+     "claims": [
+      "vaccinium-ovatum:landscape_use:01"
+     ]
+    },
+    {
+     "plant": "plant:vaccinium-ovatum",
+     "concept": "hardiness_rhs:H4",
+     "source": "rhs",
+     "claims": [
+      "vaccinium-ovatum:hardiness_zone:rhs01"
+     ]
+    },
+    {
+     "plant": "plant:vaccinium-ovatum",
+     "concept": "pest:abiotic_disorder",
+     "source": "rhs",
+     "claims": [
+      "vaccinium-ovatum:pest_susceptibility:rhs01"
+     ]
+    },
+    {
+     "plant": "plant:vaccinium-ovatum",
+     "concept": "pest:beetles_or_weevils",
+     "source": "rhs",
+     "claims": [
+      "vaccinium-ovatum:pest_susceptibility:rhs01"
+     ]
+    },
+    {
+     "plant": "plant:vaccinium-ovatum",
+     "concept": "pest:mildew",
+     "source": "rhs",
+     "claims": [
+      "vaccinium-ovatum:pest_susceptibility:rhs01"
+     ]
+    },
+    {
+     "plant": "plant:vaccinium-ovatum",
+     "concept": "habit:upright",
+     "source": "osu",
+     "claims": [
+      "vaccinium-ovatum:habit:osu01"
+     ]
+    },
+    {
+     "plant": "plant:vaccinium-ovatum",
+     "concept": "colour:bronze",
+     "source": "gpp",
+     "claims": [
+      "vaccinium-ovatum:seasonal_interest:gpp01"
+     ]
+    },
+    {
+     "plant": "plant:vaccinium-ovatum",
+     "concept": "texture:fine",
+     "source": "gpp",
+     "claims": [
+      "vaccinium-ovatum:texture:gpp01"
+     ]
+    },
+    {
+     "plant": "plant:vaccinium-ovatum",
+     "concept": "use:native_planting",
+     "source": "gpp",
+     "claims": [
+      "vaccinium-ovatum:landscape_use:gpp01"
+     ]
+    },
+    {
+     "plant": "plant:vaccinium-ovatum",
+     "concept": "age:established",
+     "source": "usda_plants",
+     "claims": [
+      "vaccinium-ovatum:time_to_intended_size:usdaplants01"
+     ]
+    },
+    {
+     "plant": "plant:vaccinium-ovatum",
+     "concept": "growth_rate:slow",
+     "source": "usda_plants",
+     "claims": [
+      "vaccinium-ovatum:growth_rate:usdaplants01"
+     ]
+    }
+   ],
+   "text": "98 plant–concept links rest on a single source."
+  },
+  {
+   "kind": "shared_concepts_no_relation",
+   "plants": [
+    "plant:acer-palmatum",
+    "plant:gaultheria-shallon"
+   ],
+   "shared": [
+    "colour:green",
+    "exposure:filtered_shade",
+    "exposure:full_sun",
+    "exposure:part_sun_part_shade",
+    "exposure:sheltered",
+    "growth_rate:fast",
+    "hardiness_usda:z10",
+    "hardiness_usda:z11",
+    "hardiness_usda:z6",
+    "hardiness_usda:z7",
+    "hardiness_usda:z8",
+    "hardiness_usda:z9",
+    "height_class:2-3m",
+    "height_class:3-5m",
+    "invasive:not_listed",
+    "pest:root_rot",
+    "soil:acidic",
+    "soil:well_drained",
+    "water:average",
+    "water:moist"
+   ],
+   "text": "Acer palmatum and Gaultheria shallon share 20 concepts but no sourced relation links them — shared conditions do not by themselves prove they combine."
+  },
+  {
+   "kind": "shared_concepts_no_relation",
+   "plants": [
+    "plant:acer-palmatum",
+    "plant:vaccinium-ovatum"
+   ],
+   "shared": [
+    "age:establishing",
+    "colour:green",
+    "exposure:filtered_shade",
+    "exposure:full_sun",
+    "exposure:part_sun_part_shade",
+    "exposure:sheltered",
+    "hardiness_usda:z10",
+    "hardiness_usda:z11",
+    "hardiness_usda:z7",
+    "hardiness_usda:z8",
+    "hardiness_usda:z9",
+    "height_class:2-3m",
+    "height_class:3-5m",
+    "invasive:not_listed",
+    "maintenance:low",
+    "pest:root_rot",
+    "soil:acidic",
+    "soil:well_drained",
+    "use:group_or_mass_planting",
+    "use:screening",
+    "water:average",
+    "water:moist"
+   ],
+   "text": "Acer palmatum and Vaccinium ovatum share 22 concepts but no sourced relation links them — shared conditions do not by themselves prove they combine."
+  }
+ ],
+ "single_voice": [
+  {
+   "concept": "spread_class:4-5m",
+   "label": "4 - 5m",
+   "source_type": "database",
+   "plants": [
+    "plant:acer-palmatum"
+   ],
+   "text": "Everything linking plants to ‘4 - 5m’ comes from database sources only."
+  },
+  {
+   "concept": "spread_class:5-7m",
+   "label": "5 - 7m",
+   "source_type": "database",
+   "plants": [
+    "plant:acer-palmatum"
+   ],
+   "text": "Everything linking plants to ‘5 - 7m’ comes from database sources only."
+  },
+  {
+   "concept": "spread_class:7-10m",
+   "label": "7 - 10m",
+   "source_type": "database",
+   "plants": [
+    "plant:acer-palmatum"
+   ],
+   "text": "Everything linking plants to ‘7 - 10m’ comes from database sources only."
+  },
+  {
+   "concept": "hardiness_rhs:H6",
+   "label": "RHS H6",
+   "source_type": "database",
+   "plants": [
+    "plant:acer-palmatum"
+   ],
+   "text": "Everything linking plants to ‘RHS H6’ comes from database sources only."
+  },
+  {
+   "concept": "exposure:sheltered",
+   "label": "Sheltered",
+   "source_type": "database",
+   "plants": [
+    "plant:acer-palmatum",
+    "plant:gaultheria-shallon",
+    "plant:vaccinium-ovatum"
+   ],
+   "text": "Everything linking plants to ‘Sheltered’ comes from database sources only."
+  },
+  {
+   "concept": "exposure:full_sun",
+   "label": "Full sun",
+   "source_type": "database",
+   "plants": [
+    "plant:acer-palmatum",
+    "plant:gaultheria-shallon",
+    "plant:vaccinium-ovatum"
+   ],
+   "text": "Everything linking plants to ‘Full sun’ comes from database sources only."
+  },
+  {
+   "concept": "soil:well_drained",
+   "label": "Well-drained",
+   "source_type": "database",
+   "plants": [
+    "plant:acer-palmatum",
+    "plant:gaultheria-shallon",
+    "plant:vaccinium-ovatum"
+   ],
+   "text": "Everything linking plants to ‘Well-drained’ comes from database sources only."
+  },
+  {
+   "concept": "water:moist",
+   "label": "moist",
+   "source_type": "database",
+   "plants": [
+    "plant:acer-palmatum",
+    "plant:gaultheria-shallon",
+    "plant:vaccinium-ovatum"
+   ],
+   "text": "Everything linking plants to ‘moist’ comes from database sources only."
+  },
+  {
+   "concept": "colour:red",
+   "label": "Red",
+   "source_type": "database",
+   "plants": [
+    "plant:acer-palmatum"
+   ],
+   "text": "Everything linking plants to ‘Red’ comes from database sources only."
+  },
+  {
+   "concept": "evergreen:no",
+   "label": "Deciduous",
+   "source_type": "database",
+   "plants": [
+    "plant:acer-palmatum"
+   ],
+   "text": "Everything linking plants to ‘Deciduous’ comes from database sources only."
+  },
+  {
+   "concept": "pest:aphids",
+   "label": "Aphids",
+   "source_type": "database",
+   "plants": [
+    "plant:acer-palmatum"
+   ],
+   "text": "Everything linking plants to ‘Aphids’ comes from database sources only."
+  },
+  {
+   "concept": "pest:caterpillar_or_cutworm",
+   "label": "Caterpillar or cutworm",
+   "source_type": "database",
+   "plants": [
+    "plant:acer-palmatum"
+   ],
+   "text": "Everything linking plants to ‘Caterpillar or cutworm’ comes from database sources only."
+  },
+  {
+   "concept": "pest:galls",
+   "label": "Galls",
+   "source_type": "database",
+   "plants": [
+    "plant:acer-palmatum"
+   ],
+   "text": "Everything linking plants to ‘Galls’ comes from database sources only."
+  },
+  {
+   "concept": "pest:leaf_scorch",
+   "label": "Leaf scorch",
+   "source_type": "database",
+   "plants": [
+    "plant:acer-palmatum"
+   ],
+   "text": "Everything linking plants to ‘Leaf scorch’ comes from database sources only."
+  },
+  {
+   "concept": "pest:scale_insects",
+   "label": "Scale insects",
+   "source_type": "database",
+   "plants": [
+    "plant:acer-palmatum"
+   ],
+   "text": "Everything linking plants to ‘Scale insects’ comes from database sources only."
+  },
+  {
+   "concept": "pest:wilt",
+   "label": "Wilt",
+   "source_type": "database",
+   "plants": [
+    "plant:acer-palmatum"
+   ],
+   "text": "Everything linking plants to ‘Wilt’ comes from database sources only."
+  },
+  {
+   "concept": "height_class:2-3m",
+   "label": "2 - 3m",
+   "source_type": "database",
+   "plants": [
+    "plant:acer-palmatum",
+    "plant:gaultheria-shallon",
+    "plant:vaccinium-ovatum"
+   ],
+   "text": "Everything linking plants to ‘2 - 3m’ comes from database sources only."
+  },
+  {
+   "concept": "spread_class:2-3m",
+   "label": "2 - 3m",
+   "source_type": "database",
+   "plants": [
+    "plant:acer-palmatum"
+   ],
+   "text": "Everything linking plants to ‘2 - 3m’ comes from database sources only."
+  },
+  {
+   "concept": "spread_class:3-4m",
+   "label": "3 - 4m",
+   "source_type": "database",
+   "plants": [
+    "plant:acer-palmatum"
+   ],
+   "text": "Everything linking plants to ‘3 - 4m’ comes from database sources only."
+  },
+  {
+   "concept": "colour:dark_red",
+   "label": "Dark-red",
+   "source_type": "database",
+   "plants": [
+    "plant:acer-palmatum"
+   ],
+   "text": "Everything linking plants to ‘Dark-red’ comes from database sources only."
+  },
+  {
+   "concept": "colour:purple",
+   "label": "Purple",
+   "source_type": "database",
+   "plants": [
+    "plant:acer-palmatum"
+   ],
+   "text": "Everything linking plants to ‘Purple’ comes from database sources only."
+  },
+  {
+   "concept": "hardiness_usda:z5",
+   "label": "USDA zone 5",
+   "source_type": "database",
+   "plants": [
+    "plant:acer-palmatum"
+   ],
+   "text": "Everything linking plants to ‘USDA zone 5’ comes from database sources only."
+  },
+  {
+   "concept": "hardiness_usda:z6",
+   "label": "USDA zone 6",
+   "source_type": "database",
+   "plants": [
+    "plant:acer-palmatum",
+    "plant:gaultheria-shallon"
+   ],
+   "text": "Everything linking plants to ‘USDA zone 6’ comes from database sources only."
+  },
+  {
+   "concept": "hardiness_usda:z7",
+   "label": "USDA zone 7",
+   "source_type": "database",
+   "plants": [
+    "plant:acer-palmatum",
+    "plant:gaultheria-shallon",
+    "plant:vaccinium-ovatum"
+   ],
+   "text": "Everything linking plants to ‘USDA zone 7’ comes from database sources only."
+  },
+  {
+   "concept": "hardiness_usda:z8",
+   "label": "USDA zone 8",
+   "source_type": "database",
+   "plants": [
+    "plant:acer-palmatum",
+    "plant:gaultheria-shallon",
+    "plant:vaccinium-ovatum"
+   ],
+   "text": "Everything linking plants to ‘USDA zone 8’ comes from database sources only."
+  },
+  {
+   "concept": "water:average",
+   "label": "average",
+   "source_type": "database",
+   "plants": [
+    "plant:acer-palmatum",
+    "plant:gaultheria-shallon",
+    "plant:vaccinium-ovatum"
+   ],
+   "text": "Everything linking plants to ‘average’ comes from database sources only."
+  },
+  {
+   "concept": "maintenance:low",
+   "label": "low",
+   "source_type": "database",
+   "plants": [
+    "plant:acer-palmatum",
+    "plant:vaccinium-ovatum"
+   ],
+   "text": "Everything linking plants to ‘low’ comes from database sources only."
+  },
+  {
+   "concept": "soil:acidic",
+   "label": "Acidic",
+   "source_type": "database",
+   "plants": [
+    "plant:acer-palmatum",
+    "plant:gaultheria-shallon",
+    "plant:vaccinium-ovatum"
+   ],
+   "text": "Everything linking plants to ‘Acidic’ comes from database sources only."
+  },
+  {
+   "concept": "soil:humus_rich",
+   "label": "Humus rich",
+   "source_type": "database",
+   "plants": [
+    "plant:acer-palmatum"
+   ],
+   "text": "Everything linking plants to ‘Humus rich’ comes from database sources only."
+  },
+  {
+   "concept": "colour:green",
+   "label": "Green",
+   "source_type": "database",
+   "plants": [
+    "plant:acer-palmatum",
+    "plant:gaultheria-shallon",
+    "plant:vaccinium-ovatum"
+   ],
+   "text": "Everything linking plants to ‘Green’ comes from database sources only."
+  },
+  {
+   "concept": "use:accent_plant",
+   "label": "Accent plant",
+   "source_type": "database",
+   "plants": [
+    "plant:acer-palmatum"
+   ],
+   "text": "Everything linking plants to ‘Accent plant’ comes from database sources only."
+  },
+  {
+   "concept": "use:group_or_mass_planting",
+   "label": "Group or mass planting",
+   "source_type": "database",
+   "plants": [
+    "plant:acer-palmatum",
+    "plant:vaccinium-ovatum"
+   ],
+   "text": "Everything linking plants to ‘Group or mass planting’ comes from database sources only."
+  },
+  {
+   "concept": "use:screening",
+   "label": "Screening",
+   "source_type": "database",
+   "plants": [
+    "plant:acer-palmatum",
+    "plant:vaccinium-ovatum"
+   ],
+   "text": "Everything linking plants to ‘Screening’ comes from database sources only."
+  },
+  {
+   "concept": "use:specimen_plant",
+   "label": "Specimen plant",
+   "source_type": "database",
+   "plants": [
+    "plant:acer-palmatum"
+   ],
+   "text": "Everything linking plants to ‘Specimen plant’ comes from database sources only."
+  },
+  {
+   "concept": "use:woodland_margin",
+   "label": "Woodland margin",
+   "source_type": "database",
+   "plants": [
+    "plant:acer-palmatum"
+   ],
+   "text": "Everything linking plants to ‘Woodland margin’ comes from database sources only."
+  },
+  {
+   "concept": "pest:anthracnose",
+   "label": "Anthracnose",
+   "source_type": "database",
+   "plants": [
+    "plant:acer-palmatum"
+   ],
+   "text": "Everything linking plants to ‘Anthracnose’ comes from database sources only."
+  },
+  {
+   "concept": "pest:canker_or_sap_rot",
+   "label": "Canker or sap rot",
+   "source_type": "database",
+   "plants": [
+    "plant:acer-palmatum"
+   ],
+   "text": "Everything linking plants to ‘Canker or sap rot’ comes from database sources only."
+  },
+  {
+   "concept": "pest:fungal_leaf_spot",
+   "label": "Fungal leaf spot",
+   "source_type": "database",
+   "plants": [
+    "plant:acer-palmatum"
+   ],
+   "text": "Everything linking plants to ‘Fungal leaf spot’ comes from database sources only."
+  },
+  {
+   "concept": "pest:mites",
+   "label": "Mites",
+   "source_type": "database",
+   "plants": [
+    "plant:acer-palmatum"
+   ],
+   "text": "Everything linking plants to ‘Mites’ comes from database sources only."
+  },
+  {
+   "concept": "pest:root_rot",
+   "label": "Root rot",
+   "source_type": "database",
+   "plants": [
+    "plant:acer-palmatum",
+    "plant:gaultheria-shallon",
+    "plant:vaccinium-ovatum"
+   ],
+   "text": "Everything linking plants to ‘Root rot’ comes from database sources only."
+  },
+  {
+   "concept": "age:establishing",
+   "label": "Establishing",
+   "source_type": "database",
+   "plants": [
+    "plant:acer-palmatum",
+    "plant:vaccinium-ovatum"
+   ],
+   "text": "Everything linking plants to ‘Establishing’ comes from database sources only."
+  },
+  {
+   "concept": "growth_rate:fast",
+   "label": "fast",
+   "source_type": "database",
+   "plants": [
+    "plant:acer-palmatum",
+    "plant:gaultheria-shallon"
+   ],
+   "text": "Everything linking plants to ‘fast’ comes from database sources only."
+  },
+  {
+   "concept": "stress:leaf_scorch",
+   "label": "leaf scorch",
+   "source_type": "database",
+   "plants": [
+    "plant:acer-palmatum"
+   ],
+   "text": "Everything linking plants to ‘leaf scorch’ comes from database sources only."
+  },
+  {
+   "concept": "hardiness_usda:z9",
+   "label": "USDA zone 9",
+   "source_type": "database",
+   "plants": [
+    "plant:acer-palmatum",
+    "plant:gaultheria-shallon",
+    "plant:vaccinium-ovatum"
+   ],
+   "text": "Everything linking plants to ‘USDA zone 9’ comes from database sources only."
+  },
+  {
+   "concept": "hardiness_usda:z10",
+   "label": "USDA zone 10",
+   "source_type": "database",
+   "plants": [
+    "plant:acer-palmatum",
+    "plant:gaultheria-shallon",
+    "plant:vaccinium-ovatum"
+   ],
+   "text": "Everything linking plants to ‘USDA zone 10’ comes from database sources only."
+  },
+  {
+   "concept": "hardiness_usda:z11",
+   "label": "USDA zone 11",
+   "source_type": "database",
+   "plants": [
+    "plant:acer-palmatum",
+    "plant:gaultheria-shallon",
+    "plant:vaccinium-ovatum"
+   ],
+   "text": "Everything linking plants to ‘USDA zone 11’ comes from database sources only."
+  },
+  {
+   "concept": "invasive:not_listed",
+   "label": "Not listed as invasive",
+   "source_type": "municipal",
+   "plants": [
+    "plant:acer-palmatum",
+    "plant:gaultheria-shallon",
+    "plant:vaccinium-ovatum"
+   ],
+   "text": "Everything linking plants to ‘Not listed as invasive’ comes from municipal sources only."
+  },
+  {
+   "concept": "height_class:10-15m",
+   "label": "10 - 15m",
+   "source_type": "municipal",
+   "plants": [
+    "plant:acer-palmatum"
+   ],
+   "text": "Everything linking plants to ‘10 - 15m’ comes from municipal sources only."
+  },
+  {
+   "concept": "browsing:rabbit",
+   "label": "rabbit",
+   "source_type": "database",
+   "plants": [
+    "plant:acer-palmatum"
+   ],
+   "text": "Everything linking plants to ‘rabbit’ comes from database sources only."
+  },
+  {
+   "concept": "stress:black_walnut",
+   "label": "black walnut",
+   "source_type": "database",
+   "plants": [
+    "plant:acer-palmatum"
+   ],
+   "text": "Everything linking plants to ‘black walnut’ comes from database sources only."
+  },
+  {
+   "concept": "use:ground_cover",
+   "label": "Ground cover",
+   "source_type": "practitioner",
+   "plants": [
+    "plant:gaultheria-shallon"
+   ],
+   "text": "Everything linking plants to ‘Ground cover’ comes from practitioner sources only."
+  },
+  {
+   "concept": "height_class:0.7-1.3m",
+   "label": "0.7 - 1.3m",
+   "source_type": "database",
+   "plants": [
+    "plant:gaultheria-shallon",
+    "plant:vaccinium-ovatum"
+   ],
+   "text": "Everything linking plants to ‘0.7 - 1.3m’ comes from database sources only."
+  },
+  {
+   "concept": "height_class:1.3-2.0m",
+   "label": "1.3 - 2.0m",
+   "source_type": "database",
+   "plants": [
+    "plant:gaultheria-shallon",
+    "plant:vaccinium-ovatum"
+   ],
+   "text": "Everything linking plants to ‘1.3 - 2.0m’ comes from database sources only."
+  },
+  {
+   "concept": "spread_class:0.3-0.6m",
+   "label": "0.3 - 0.6m",
+   "source_type": "database",
+   "plants": [
+    "plant:gaultheria-shallon"
+   ],
+   "text": "Everything linking plants to ‘0.3 - 0.6m’ comes from database sources only."
+  },
+  {
+   "concept": "spread_class:0.6-1.0m",
+   "label": "0.6 - 1.0m",
+   "source_type": "database",
+   "plants": [
+    "plant:gaultheria-shallon"
+   ],
+   "text": "Everything linking plants to ‘0.6 - 1.0m’ comes from database sources only."
+  },
+  {
+   "concept": "spread_class:1.0-1.5m",
+   "label": "1.0 - 1.5m",
+   "source_type": "database",
+   "plants": [
+    "plant:gaultheria-shallon",
+    "plant:vaccinium-ovatum"
+   ],
+   "text": "Everything linking plants to ‘1.0 - 1.5m’ comes from database sources only."
+  },
+  {
+   "concept": "hardiness_rhs:H5",
+   "label": "RHS H5",
+   "source_type": "database",
+   "plants": [
+    "plant:gaultheria-shallon"
+   ],
+   "text": "Everything linking plants to ‘RHS H5’ comes from database sources only."
+  },
+  {
+   "concept": "exposure:deep_shade",
+   "label": "Deep shade",
+   "source_type": "database",
+   "plants": [
+    "plant:gaultheria-shallon",
+    "plant:vaccinium-ovatum"
+   ],
+   "text": "Everything linking plants to ‘Deep shade’ comes from database sources only."
+  },
+  {
+   "concept": "colour:pink",
+   "label": "Pink",
+   "source_type": "database",
+   "plants": [
+    "plant:gaultheria-shallon",
+    "plant:vaccinium-ovatum"
+   ],
+   "text": "Everything linking plants to ‘Pink’ comes from database sources only."
+  },
+  {
+   "concept": "colour:white",
+   "label": "White",
+   "source_type": "database",
+   "plants": [
+    "plant:gaultheria-shallon",
+    "plant:vaccinium-ovatum"
+   ],
+   "text": "Everything linking plants to ‘White’ comes from database sources only."
+  },
+  {
+   "concept": "fruit:showy",
+   "label": "Showy fruit",
+   "source_type": "database",
+   "plants": [
+    "plant:gaultheria-shallon",
+    "plant:vaccinium-ovatum"
+   ],
+   "text": "Everything linking plants to ‘Showy fruit’ comes from database sources only."
+  },
+  {
+   "concept": "habit:spreading",
+   "label": "Spreading",
+   "source_type": "database",
+   "plants": [
+    "plant:gaultheria-shallon"
+   ],
+   "text": "Everything linking plants to ‘Spreading’ comes from database sources only."
+  },
+  {
+   "concept": "pest:pest",
+   "label": "pest",
+   "source_type": "database",
+   "plants": [
+    "plant:gaultheria-shallon"
+   ],
+   "text": "Everything linking plants to ‘pest’ comes from database sources only."
+  },
+  {
+   "concept": "use:container_planting",
+   "label": "Container planting",
+   "source_type": "database",
+   "plants": [
+    "plant:gaultheria-shallon",
+    "plant:vaccinium-ovatum"
+   ],
+   "text": "Everything linking plants to ‘Container planting’ comes from database sources only."
+  },
+  {
+   "concept": "use:cut_flower_or_foliage",
+   "label": "Cut flower or foliage",
+   "source_type": "database",
+   "plants": [
+    "plant:gaultheria-shallon",
+    "plant:vaccinium-ovatum"
+   ],
+   "text": "Everything linking plants to ‘Cut flower or foliage’ comes from database sources only."
+  },
+  {
+   "concept": "use:erosion_control",
+   "label": "Erosion control",
+   "source_type": "database",
+   "plants": [
+    "plant:gaultheria-shallon"
+   ],
+   "text": "Everything linking plants to ‘Erosion control’ comes from database sources only."
+  },
+  {
+   "concept": "use:mixed_shrub_border",
+   "label": "Mixed shrub border",
+   "source_type": "database",
+   "plants": [
+    "plant:gaultheria-shallon",
+    "plant:vaccinium-ovatum"
+   ],
+   "text": "Everything linking plants to ‘Mixed shrub border’ comes from database sources only."
+  },
+  {
+   "concept": "use:rock_garden",
+   "label": "Rock garden",
+   "source_type": "database",
+   "plants": [
+    "plant:gaultheria-shallon"
+   ],
+   "text": "Everything linking plants to ‘Rock garden’ comes from database sources only."
+  },
+  {
+   "concept": "use:small_garden_space",
+   "label": "Small garden/space",
+   "source_type": "database",
+   "plants": [
+    "plant:gaultheria-shallon",
+    "plant:vaccinium-ovatum"
+   ],
+   "text": "Everything linking plants to ‘Small garden/space’ comes from database sources only."
+  },
+  {
+   "concept": "use:urban_agriculture",
+   "label": "Urban agriculture",
+   "source_type": "database",
+   "plants": [
+    "plant:gaultheria-shallon",
+    "plant:vaccinium-ovatum"
+   ],
+   "text": "Everything linking plants to ‘Urban agriculture’ comes from database sources only."
+  },
+  {
+   "concept": "height_class:lt_0.1m",
+   "label": "< 0.1m",
+   "source_type": "database",
+   "plants": [
+    "plant:gaultheria-shallon"
+   ],
+   "text": "Everything linking plants to ‘< 0.1m’ comes from database sources only."
+  },
+  {
+   "concept": "height_class:0.1-0.2m",
+   "label": "0.1 - 0.2m",
+   "source_type": "database",
+   "plants": [
+    "plant:gaultheria-shallon"
+   ],
+   "text": "Everything linking plants to ‘0.1 - 0.2m’ comes from database sources only."
+  },
+  {
+   "concept": "height_class:0.2-0.4m",
+   "label": "0.2 - 0.4m",
+   "source_type": "database",
+   "plants": [
+    "plant:gaultheria-shallon"
+   ],
+   "text": "Everything linking plants to ‘0.2 - 0.4m’ comes from database sources only."
+  },
+  {
+   "concept": "height_class:0.4-0.7m",
+   "label": "0.4 - 0.7m",
+   "source_type": "database",
+   "plants": [
+    "plant:gaultheria-shallon",
+    "plant:vaccinium-ovatum"
+   ],
+   "text": "Everything linking plants to ‘0.4 - 0.7m’ comes from database sources only."
+  },
+  {
+   "concept": "fruit:edible",
+   "label": "Edible fruit",
+   "source_type": "database",
+   "plants": [
+    "plant:gaultheria-shallon",
+    "plant:vaccinium-ovatum"
+   ],
+   "text": "Everything linking plants to ‘Edible fruit’ comes from database sources only."
+  },
+  {
+   "concept": "habit:dense",
+   "label": "Dense",
+   "source_type": "database",
+   "plants": [
+    "plant:gaultheria-shallon"
+   ],
+   "text": "Everything linking plants to ‘Dense’ comes from database sources only."
+  },
+  {
+   "concept": "origin:native",
+   "label": "Native",
+   "source_type": "database",
+   "plants": [
+    "plant:gaultheria-shallon",
+    "plant:vaccinium-ovatum"
+   ],
+   "text": "Everything linking plants to ‘Native’ comes from database sources only."
+  },
+  {
+   "concept": "ecology:bird_food",
+   "label": "bird food",
+   "source_type": "database",
+   "plants": [
+    "plant:gaultheria-shallon"
+   ],
+   "text": "Everything linking plants to ‘bird food’ comes from database sources only."
+  },
+  {
+   "concept": "toxicity:unknown",
+   "label": "unknown",
+   "source_type": "database",
+   "plants": [
+    "plant:gaultheria-shallon",
+    "plant:vaccinium-ovatum"
+   ],
+   "text": "Everything linking plants to ‘unknown’ comes from database sources only."
+  },
+  {
+   "concept": "use:sheared_hedge",
+   "label": "Sheared hedge",
+   "source_type": "database",
+   "plants": [
+    "plant:gaultheria-shallon",
+    "plant:vaccinium-ovatum"
+   ],
+   "text": "Everything linking plants to ‘Sheared hedge’ comes from database sources only."
+  },
+  {
+   "concept": "use:hedge_row",
+   "label": "Hedge row",
+   "source_type": "practitioner",
+   "plants": [
+    "plant:vaccinium-ovatum"
+   ],
+   "text": "Everything linking plants to ‘Hedge row’ comes from practitioner sources only."
+  },
+  {
+   "concept": "spread_class:1.5-2.0m",
+   "label": "1.5 - 2.0m",
+   "source_type": "database",
+   "plants": [
+    "plant:vaccinium-ovatum"
+   ],
+   "text": "Everything linking plants to ‘1.5 - 2.0m’ comes from database sources only."
+  },
+  {
+   "concept": "hardiness_rhs:H4",
+   "label": "RHS H4",
+   "source_type": "database",
+   "plants": [
+    "plant:vaccinium-ovatum"
+   ],
+   "text": "Everything linking plants to ‘RHS H4’ comes from database sources only."
+  },
+  {
+   "concept": "pest:abiotic_disorder",
+   "label": "Abiotic disorder",
+   "source_type": "database",
+   "plants": [
+    "plant:vaccinium-ovatum"
+   ],
+   "text": "Everything linking plants to ‘Abiotic disorder’ comes from database sources only."
+  },
+  {
+   "concept": "pest:beetles_or_weevils",
+   "label": "Beetles or weevils",
+   "source_type": "database",
+   "plants": [
+    "plant:vaccinium-ovatum"
+   ],
+   "text": "Everything linking plants to ‘Beetles or weevils’ comes from database sources only."
+  },
+  {
+   "concept": "pest:mildew",
+   "label": "Mildew",
+   "source_type": "database",
+   "plants": [
+    "plant:vaccinium-ovatum"
+   ],
+   "text": "Everything linking plants to ‘Mildew’ comes from database sources only."
+  },
+  {
+   "concept": "habit:upright",
+   "label": "Upright",
+   "source_type": "database",
+   "plants": [
+    "plant:vaccinium-ovatum"
+   ],
+   "text": "Everything linking plants to ‘Upright’ comes from database sources only."
+  },
+  {
+   "concept": "stress:drought",
+   "label": "drought",
+   "source_type": "database",
+   "plants": [
+    "plant:vaccinium-ovatum"
+   ],
+   "text": "Everything linking plants to ‘drought’ comes from database sources only."
+  },
+  {
+   "concept": "colour:bronze",
+   "label": "Bronze",
+   "source_type": "database",
+   "plants": [
+    "plant:vaccinium-ovatum"
+   ],
+   "text": "Everything linking plants to ‘Bronze’ comes from database sources only."
+  },
+  {
+   "concept": "texture:fine",
+   "label": "Fine",
+   "source_type": "database",
+   "plants": [
+    "plant:vaccinium-ovatum"
+   ],
+   "text": "Everything linking plants to ‘Fine’ comes from database sources only."
+  },
+  {
+   "concept": "use:native_planting",
+   "label": "Native planting",
+   "source_type": "database",
+   "plants": [
+    "plant:vaccinium-ovatum"
+   ],
+   "text": "Everything linking plants to ‘Native planting’ comes from database sources only."
+  },
+  {
+   "concept": "age:established",
+   "label": "Established",
+   "source_type": "database",
+   "plants": [
+    "plant:vaccinium-ovatum"
+   ],
+   "text": "Everything linking plants to ‘Established’ comes from database sources only."
+  },
+  {
+   "concept": "growth_rate:slow",
+   "label": "slow",
+   "source_type": "database",
+   "plants": [
+    "plant:vaccinium-ovatum"
+   ],
+   "text": "Everything linking plants to ‘slow’ comes from database sources only."
+  }
+ ],
+ "counts": {
+  "hubs": 44,
+  "variation": 1,
+  "disagreement": 14,
+  "gaps_gate": 3,
+  "gaps_single_source": 98,
+  "gaps_no_relation": 2,
+  "single_voice": 93
+ }
+}

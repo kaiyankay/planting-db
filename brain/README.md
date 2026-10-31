@@ -1,63 +1,71 @@
-# brain/ — Knowledge Brain v3
+# brain/ — Knowledge Brain v4
 
-**Live:** <https://kaiyankay.github.io/planting-db/brain/> · v2 at `/brain/v2/` · v1 at `/brain/v1/` · all served by GitHub Pages straight from this repository.
+**Live:** <https://kaiyankay.github.io/planting-db/brain/> · archived for comparison: `/brain/v3/` (the database as a system), `/brain/v2/` (plant clusters and evidence lenses), `/brain/v1/`.
 
-v3 visualises the **database as a system**, not a few plant records: what the survey and principles decided, the rules and methods that follow, the schema whose fields cross the plants to hold every claim, the sources those claims come from, and the construction steps that turned one into the other. Everything drawn is generated at load from the repository files by a graph projection layer (`js/projection.js`, documented in [`MAPPING.md`](MAPPING.md)). Nothing is written back; the validator is untouched.
+v4 is a **concept-centred knowledge graph**. Concepts are the nodes (306, from `ontology.json`: conditions, traits, uses, time, place, status, resistance); plants are one node type among several; **claims are the edges** that connect a plant to a concept with provenance (source, status, conditions, place, cultivar, numbers). Entry is by condition, use, place, time or source; plants are where a walk ends. The same concept ids drive the retrieval preview's gates, so brain and AI read one graph.
 
 ## Run
 
 ```bash
-cd planting-db && python3 -m http.server 8766
+cd planting-db && python3 -m http.server 8766          # serve the planting-db root
 ```
 
-then <http://localhost:8766/brain/>. Serve the planting-db root: the page reads `../schema.json`, `../plants/*.json`, `../sources.json`, `../relations.json`, `../synonyms.json`, `../intent_map.json`, `../eval/queries.json` **and** `../methods.md`, `../principles.md`, `../HANDOFF.md`, `../README.md`. No build, no node; three.js and 3d-force-graph are vendored.
+then <http://localhost:8766/brain/>. The page reads `brain/data/graph.json` and `diagnosis.json` (built by `python3 -I tools/build_graph.py` after any change to claims or ontology), `ontology.json`, and the db files for the retrieval preview. No node, no build; three.js and 3d-force-graph are vendored.
 
-Files: `index.html` · `js/data.js` (JSON loader + `loadDocs()` for the Markdown) · `js/projection.js` (the graph) · `js/app3.js` (scene, views, panels, Grow, Ask) · `js/knowledge.js` (context parsing and value comparison, from v2) · `js/retrieve.js` (port of `tools/retrieve.py`) · `js/model.js` (colours, value summaries) · `MAPPING.md` · `screenshots/v3/` (14 captures, 2026-10-30).
+Files: `index.html` · `js/app4.js` (views, panels, Grow, Ask) · `js/graph.js` (loader, indexes, candidate edges, alias matching) · `js/diagnosis.js` (the diagnosis rules, same as `tools/build_graph.py`) · `js/retrieve.js` (port of `tools/retrieve.py`, now resolving KPU labels to concept ids) · `js/data.js` · `js/model.js` · `screenshots/v4/` (11 captures, 2026-10-31).
 
-## What you see
+## Opening view: the diagnosis, not the graph
 
-A single space read top to bottom like a section through the system:
+The panel opens with one computed sentence per plant (how many concepts and facets it links, where sources disagree, what depends on conditions, which gate facets are missing), the hub concepts (linked to two or more plants), and four counts you can open: **depends on conditions**, **sources disagree**, **gaps**, **single voice**. Everything is computed from the files; nothing is hand-written.
 
-| layer | drawn from | what the glyph says |
+## The space (why 2D)
+
+A force layout in two dimensions, rendered in the same dark, glowing space as before (3d-force-graph with `numDimensions(2)`, pan and zoom only). Two dimensions because the thing to read is *which concepts sit between which plants*; depth adds nothing to that and makes labels unreadable. The glow stays because this is still a brain, not a diagram.
+
+| element | drawn from | encoding |
 |---|---|---|
-| **Foundations** | survey questions cited in `schema.json` (`survey`, `design_basis`) and the Markdown; HANDOFF decisions table; `principles.md` §1–§10 | tiles; focus one to see the structures and rules that cite it |
-| **Rules & methods** | `schema.json rules` R1–R10; `methods.md` M1–M24 (dashed = to confirm, ✓ = confirmed) | focus a rule to see the data it governs, by a named predicate |
-| **Schema × plants** | field tiers and fields (rows, with KPU vocabulary chips) × plant entities (columns); every plant × field is a **cell** | cell fill = a sourced claim exists, coloured by the dominant source type; **solid portion** = share verified; dashed outline = gap (brighter when a source is planned); red dot = values differ under the same stated condition; amber dot = values vary with conditions; magenta square = a candidate |
-| relation arcs | `relations.json` between plant headers | bright = verified, dashed grey = model placeholder |
-| **Sources** | `sources.json`, grouped practitioner / municipal / database / literature / model, local → global | solid = contributes claims; hollow = listed, planned, nothing yet; tier letter in the label |
-| **Construction** (right) | seven steps with live counts from claim fields; T1–T7 from HANDOFF; tools from the README tree | done / partial / blocked / runs outside the browser |
+| plant | `plants/*.json entity` | warm node with halo; italic label |
+| concept | `ontology.json` | small node coloured by dimension (conditions blue, uses green, place orange, time yellow, traits violet, status mint, resistance pink), sized by the number of plants it links; labelled when it links ≥ 3 plants, or ≥ 2 when zoomed, or when focused |
+| unused vocabulary | concepts no claim links yet | faint ring at the edge, grouped by dimension (“60 concepts · 18 in use”) — the knowledge base is bigger than the knowledge in it |
+| claim edge | one line per plant → concept pair, aggregating that pair's claims | colour = dominant source type; brightness rises with verified share and claim count; dashed magenta = candidate only |
+| group link | `parent` in the ontology (Shade ⊃ filtered, deep) | faint dashed; a group inherits its children's links |
+| cultivar | `cultivar` lifted from context | small node tied to its plant |
+| source | `sources.json` | square at the bottom, coloured by type; hollow when it contributes no claim yet |
+| place / time | edge attributes | a place or time concept is linked to the plants whose claims were made there / then |
 
-Connections are drawn only when something is focused, coloured by type and styled by basis: **structural** (grey), **provenance** (cyan), **rule** (violet), **knowledge** (amber), **evolution** (magenta); solid = recorded in a file, dashed = derived by a named projection rule, dotted = candidate. The panel lists every connection with its evidence (file, field or predicate). In the System view one real provenance thread at a time lights up: source → cell → tier → rule, captioned.
+Focusing anything dims the rest to 8 %; the trail at the top says where you are; Esc or “Up” goes back.
 
-Four readings are kept apart and never merged into one “completion”: **coverage** (cells with a sourced claim), **validation** (schema conformance by `tools/validate.py`, run outside the browser, not claimed live), **verification** (`status: verified`, deferred by D5) and **construction** (T1–T7).
+## Entry points and moves
 
-## Entry points
+- **Dimension** (rail): facets and concepts of that dimension, with how many plants each links; unused ones greyed. The graph lights the dimension.
+- **Concept**: definition (plain language), aliases (the words people typed in the survey), plants linked with every claim as evidence (value, source, status, conditions, place, cultivar; “via Deep shade” when inherited through a group), co-occurring concepts, siblings in the facet. “+ intersect with this” adds it to the active set.
+- **Intersection**: up to three concepts; the panel shows the plants that satisfy all with evidence per concept, and the plants that fall away with what they lack. Evergreen ∩ Hedge or screen → *Gaultheria* and *Vaccinium* (both: survey co-listing and USDA / GPP hedge uses); *Acer* falls away on evergreen.
+- **Plant**: its diagnosis sentence, “where the evidence pulls apart” (variations and disagreements, clickable), its concepts by dimension (verified ones outlined green, candidates magenta), relations.
+- **Variation view**: for a plant × facet with variation, the values lie along the condition axis (sun → shade, then unstated) with source, status and place on each row. **Disagreement view**: the two claims faced against each other, then every claim on the facet.
+- **Sources**: by type; a source shows the concepts it links per plant.
 
-Rail on the left: **System** (everything) · **Schema** (tiers, fields, which plants and claims each holds) · **Plants** (entities, cells, relations) · **Sources** (who contributes, licence tier, what is planned) · **Rules** (R1–R10, methods) · **Foundations** (survey → decisions → principles) · **Construction** (steps, tasks, tools) · **Grow** · **Ask**. Click any tile, label or cell to focus it; the trail at the top shows where you are; Esc or “Up” goes back; background click goes up.
+## Grow
 
-Examples that work today: **R1** → 37 cells where several sources are kept side by side, plus the survey question c3 and method M15 that cite it. **Survey c1** → the gate fields it motivated, with the schema annotation quoted. **Oregon State** → 36 provenance links: 23 claims and the fields it was planned to fill. **Gaultheria shallon · mature height** → five sourced claims from four sources, the retired placeholder, the sources below and R1 / R3 / R10 above. **Extraction** → the four routes claims took, read from `recorded_by`, and the tools behind them.
+An observation is parsed into plant + concepts + conditions + place + time (aliases from the ontology; numbers into KPU classes). It becomes candidate edges (dashed magenta), the diagnosis recomputes in the browser, and “What changed” states it in sentences: which edges were gained, whether a hub appeared, whether a variation gained a Vancouver data point, whether a disagreement gained a voice, whether a gate-facet gap is filled by a candidate (the AI still cannot gate on it). Session-only (`localStorage` `brain.candidates.v4`), always labelled candidate, never citable.
 
-## Grow and Ask
+## Ask
 
-**Grow** turns a typed observation into a *candidate* claim inside the cell its plant and field name. "What changed" states the cell it joined, whether the cell was a gap, how it compares with each existing reading (`agrees`, `overlaps across conditions`, `below, under a different condition`…), whether its stated condition is new, and that it is unverified, not citable and never written to the db. Candidates live in this browser's `localStorage` (`brain.candidates.v1`, shared with v1/v2); "Reset session" removes them.
+A question activates concept nodes first, by alias (the same words the intent map holds), then the retriever runs (names → gates R7 → BM25 → R5 order → R6 attribution) and the edges it selects light up with their sources; L0 claims are withheld (R2), candidates are recalled but never cited. The banner stays: RETRIEVAL PREVIEW — NOT A FULL AI TRACE.
 
-**Ask** runs the ported retriever and lights what a question activates: the plants that pass the gates, the cells and sources of the ranked claims, and the rules doing the work (R7 gates, R5 order, R6 attribution, R2 withheld). The banner says RETRIEVAL PREVIEW — NOT A FULL AI TRACE; no model composes an answer. Candidates are recalled and listed, never cited.
+## v3 → v4
 
-## v2 → v3: what changed
-
-- **Object of the visualisation**: v2 explored knowledge from three plant clusters; v3 shows the database system, with the plants as three columns of one matrix.
-- **Data model**: v2 built a plant → domain → field → lens model (`knowledge.js`); v3 adds `projection.js`, a typed graph of 426 nodes and ~1,340 links generated from JSON *and* the Markdown files (methods, decisions, principles, tasks), each link carrying its basis.
-- **New content**: rules, methods, decisions, survey questions, construction steps, tools and vocabularies are now objects you can focus; rule → data, survey → structure and claim → step connections exist (recorded or derived by six documented rules).
-- **Status**: coverage, validation, verification and construction progress are separate readings; verified share is drawn inside each cell rather than as a glow.
-- **Interaction**: entry rail + trail + focus-and-dim instead of fly-through; progressive disclosure by mode (System shows layer titles, plants, tiers, rule ids and source groups only).
-- **Kept from v2**: context parsing and value comparison (`knowledge.js`, M23–M24), retriever port, candidate detection and storage, projected HTML labels, bloom, 3d-force-graph as renderer. v2's evidence lenses (ruler by condition, spectrum) are not in v3; open v2 for them.
-- **Removed**: the six knowledge domains (M22) as the organising unit; the plant clusters.
+- **Object**: v3 drew the database system (schema × plants matrix, rules, sources, construction). v4 draws the knowledge: concepts and the plants they connect. The system view stays available at `/brain/v3/`.
+- **Data**: a new ontology (`ontology.json`, M26) and schema 0.4.0 (`tools/migrate_0_4.py`, M27): categorical values are concept ids, ranges span classes, context becomes `conditions`, every claim has `place`, `time`, `cultivar`. The migration is a script with a report (0 unmapped); the validator checks ids; retrieval gates are unchanged (eval 8/8 identical to 10-29).
+- **Diagnosis** (M28) replaces v2's `values differ`: variation vs disagreement are separate, defined rules; hubs, gaps and single voice are new.
+- **Interaction**: entry by dimension instead of by plant; intersection; variation along a condition axis; group inheritance.
+- **Kept**: candidate form and session storage, retrieval port, panel markup, dark aesthetic, projected HTML labels.
 
 ## Not done / limits
 
-- Lenses for reading values by condition (v2) are not integrated; a cell focus lists its claims in the panel.
-- Validation is reported as an offline step; the browser does not re-run the validator.
-- The decisions table has 19 rows; only 6 carry ids (D1, D2, D5–D8). Unnumbered rows are shown as “decision” tiles — the rows exist, the ids do not.
-- Rule → data links are derived predicates, one per rule, and so are the claim → step links from `recorded_by`; both are labelled derived and can be wrong where the text is unusual.
-- Label collision is handled by mode and stagger, not by a layout algorithm; long names can still touch at narrow widths.
-- No verification history exists in the repository, so none is shown.
+- The brief expected Evergreen ∩ Hedge → only *Vaccinium*; the data gives two plants (USDA lists salal as a sheared hedge). Shown as the data says.
+- `use:hedge`, the exposure groups and `origin:native` are groups added for this ontology (source noted on each node); everything else is KPU verbatim or a schema enum.
+- The ontology has 306 nodes, above the brief's 150–250, because the full KPU use and pest lists are kept.
+- Disagreement on `water` flags adjacent ordinal values (average vs moist); the rule is documented and may be too strict.
+- Label collisions are handled by a greedy nudge, not a layout algorithm; the centre of the home view is dense where many hubs link all three plants.
+- Place and time are edge attributes, so they do not take part in the Python hub/variation rules; the brain treats them as inherited links for exploration.
+- Candidate concepts come from an alias match and a keyword table; unusual sentences land as a bare note.

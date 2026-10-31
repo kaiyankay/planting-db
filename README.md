@@ -1,8 +1,8 @@
 # Planting Intelligence — Local Planting Knowledge Database (prototype v0.1)
 
-ARCH 540 Assignment 2 · UBC MLA · schema 0.2.0 · 2026-10-29
+ARCH 540 Assignment 2 · UBC MLA · schema 0.4.0 (concept ids, ontology.json) · 2026-10-31
 
-**Knowledge Brain (live):** <https://kaiyankay.github.io/planting-db/brain/> — v3, the database as a system · [v2](https://kaiyankay.github.io/planting-db/brain/v2/) · [v1](https://kaiyankay.github.io/planting-db/brain/v1/) · code and notes in `brain/`
+**Knowledge Brain (live):** <https://kaiyankay.github.io/planting-db/brain/> — v4, a concept-centred knowledge graph · [v3](https://kaiyankay.github.io/planting-db/brain/v3/) · [v2](https://kaiyankay.github.io/planting-db/brain/v2/) · [v1](https://kaiyankay.github.io/planting-db/brain/v1/) · code and notes in `brain/`
 
 ```
 planting-db/
@@ -20,7 +20,11 @@ planting-db/
 │   ├── acer-palmatum.json
 │   ├── vaccinium-ovatum.json
 │   └── gaultheria-shallon.json
+├── ontology.json      concept nodes (306) with definitions and aliases — tools/build_ontology.py
 ├── tools/
+│   ├── build_ontology.py        schema vocab + intents -> ontology.json
+│   ├── migrate_0_4.py           claims -> concept ids, concepts, conditions, place, time (reports/migration-0.4.md)
+│   ├── build_graph.py           graph.json + diagnosis.json for brain/
 │   ├── validate.py              schema validator (T3) — run before committing any plant file
 │   ├── merge_claims.py          append claims, retire model placeholders, regenerate this table (T2)
 │   ├── cov_trees_fetch.py       City of Vancouver public-trees API -> data/cov_trees/ (T1)

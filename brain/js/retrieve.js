@@ -15,6 +15,13 @@ export function toks(s) {
 
 export function makeRetriever(db, getCandidates = () => []) {
   const { schema, sources, synonyms, intent, plants } = db;
+  const ONT = new Map(((db.ontology || {}).nodes || []).map(n => [n.id, n]));
+  const LABEL2IDS = new Map(); const FACETS_OF = {};
+  for (const n of ONT.values()) { for (const l of [n.label, ...(n.aliases || [])]) { const k = l.toLowerCase(); if (!LABEL2IDS.has(k)) LABEL2IDS.set(k, []); LABEL2IDS.get(k).push(n.id); } }
+  for (const [facet, fields] of Object.entries((db.ontology || {}).facet_fields || {})) for (const f of fields) (FACETS_OF[f.split('.')[0]] = FACETS_OF[f.split('.')[0]] || []).push(facet);
+  // intent_map values are KPU labels; claims (0.4.0) hold ontology ids — compare on ids, preferring the field's facets
+  const toConcept = (x, field) => { if (typeof x !== 'string') return x; if (ONT.has(x)) return x; const ids = LABEL2IDS.get(x.toLowerCase()) || []; const pref = ids.filter(i => (FACETS_OF[field] || []).includes(ONT.get(i).facet)); return (pref[0] || ids[0] || x); };
+  const LABEL2ID = { get: k => (LABEL2IDS.get(k) || [])[0] };
   const SRC_PRIORITY = {};
   schema.claim.fields.source_type.priority_order.forEach((s, i) => { SRC_PRIORITY[s] = i; });
   const SYN_NAMES = {};
@@ -97,8 +104,8 @@ export function makeRetriever(db, getCandidates = () => []) {
         if (want && typeof want === 'object' && !Array.isArray(want) && (want.includes || []).includes(v)) return 'pass';
         continue;
       }
-      const wants = Array.isArray(want) ? want : [want];
-      const vals = Array.isArray(v) ? v : [v];
+      const wants = (Array.isArray(want) ? want : [want]).map(w => toConcept(w, base));
+      const vals = [...(Array.isArray(v) ? v : [v]).map(x => toConcept(x, base)), ...(c.concepts || [])];
       if (wants.some(w => vals.includes(w))) return 'pass';
     }
     if (fieldType(base).endsWith('[]') || sub) return 'unknown';   // M16a
@@ -172,5 +179,5 @@ export function makeRetriever(db, getCandidates = () => []) {
     };
   }
 
-  return { run, attribute, why, rankKey, live, nameHits, intents, SRC_PRIORITY, GEO };
+  return { run, attribute, why, rankKey, live, nameHits, intents, SRC_PRIORITY, GEO, toConcept, LABEL2ID, LABEL2IDS };
 }
