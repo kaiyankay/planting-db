@@ -1,6 +1,6 @@
 # Planting Intelligence DB — Handoff for coding agent
 
-State as of 2026-10-30 (T1–T3 done; T5 extracted for all 3 plants, 129 claims awaiting Kay's unified review (D5); T6 prototype; T7 views 1 and 4; `brain/` playable cosmos built overnight 2026-10-30 → 31 (v1) redesigned as v2 (explore / grow / reveal, methods M22–M24) again as v3 (the database system, methods M25) and as v4 (2026-10-31: concepts are the nodes — `ontology.json`, schema 0.4.0 migration M27, graph + diagnosis build M28) and v4.1 (2026-10-31: growth-form classification layer M29, architecture-first home), live at https://kaiyankay.github.io/planting-db/brain/; T4 still blocked on the survey export). Read this, then `principles.md`, then `schema.json`, then `methods.md`. Everything else is data.
+State as of 2026-10-30 (T1–T3 done; T5 extracted for all 3 plants, 129 claims awaiting Kay's unified review (D5); T6 prototype; T7 views 1 and 4; `brain/` playable cosmos built overnight 2026-10-30 → 31 (v1) redesigned as v2 (explore / grow / reveal, methods M22–M24) again as v3 (the database system, methods M25) and as v4 (2026-10-31: concepts are the nodes — `ontology.json`, schema 0.4.0 migration M27, graph + diagnosis build M28) and v4.1 (2026-10-31: growth-form classification layer M29, regions + bundled ribbons) and v5 (2026-10-31: 3D neural network, signal activation, growth, M30), live at https://kaiyankay.github.io/planting-db/brain/; T4 still blocked on the survey export). Read this, then `principles.md`, then `schema.json`, then `methods.md`. Everything else is data.
 
 ## 1. What this is
 
@@ -47,7 +47,7 @@ planting-db/
 ├── viz/                        built HTML views (T7)
 ├── ontology.json               concept nodes (306): condition · trait · use · time · place · status · resistance — built by tools/build_ontology.py
 ├── reports/migration-0.4.md    what the 0.4.0 migration mapped, spanned and left
-├── brain/                      Knowledge Brain v4.1 — classification → concepts → plants → evidence (index.html, js/app4.js, js/graph.js, js/diagnosis.js, data/graph.json + diagnosis.json from tools/build_graph.py); v3, v2, v1 archived in brain/v3 v2 v1
+├── brain/                      Neural Brain v5 — the store as one 3D network (js/app5.js); v4–v1 archived in brain/v4 v3 v2 v1 (index.html, js/app4.js, js/graph.js, js/diagnosis.js, data/graph.json + diagnosis.json from tools/build_graph.py); v3, v2, v1 archived in brain/v3 v2 v1
 ├── research/brain-research.md  mechanism log for the demo
 ├── PROPOSALS.md                schema proposals not applied: disputed rule, grounding
 └── report-2026-10-31.md        overnight report

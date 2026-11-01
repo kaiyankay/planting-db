@@ -1,14 +1,8 @@
-# brain/ — Knowledge Brain v4.1
+# brain/ — Neural Brain v5
 
-**Live:** <https://kaiyankay.github.io/planting-db/brain/> · archived for comparison: `/brain/v3/` (the database as a system), `/brain/v2/` (plant clusters and evidence lenses), `/brain/v1/`.
+**Live:** <https://kaiyankay.github.io/planting-db/brain/> · archived for comparison: `/brain/v4/` (regions and bundled claim ribbons, 2D), `/brain/v3/` (the database as a system), `/brain/v2/` (plant clusters and evidence lenses), `/brain/v1/`.
 
-v4 is a **concept-centred knowledge graph**. Concepts are the nodes (312, from `ontology.json`: a growth-form classification, then conditions, traits, uses, time, place, status, resistance); plants are one node type among several; **claims are the edges** that connect a plant to a concept with provenance (source, status, conditions, place, cultivar, numbers). The same concept ids drive the retrieval preview's gates, so brain and AI read one graph.
-
-**v4.1** (2026-10-31) reads that graph as a *system in layers*: **01 Classification** (growth form: Tree · Shrub · Graminoid · Herbaceous perennial · Fern · Vine or climber) → **02 Knowledge dimensions** (conditions, uses, place, time, traits, status, resistance) → **03 Plants** → **04 Evidence** (the claim under every link: source, status, stated conditions, place). The home view shows that architecture; the graph expands layer by layer; the Diagnosis became an analysis view on the rail.
-
-## Classification (M29)
-
-A plant's growth form is **read from its sources**, never inferred from the KPU type "Broadleaf evergreen" (a leaf habit — it stays a trait). Votes come from the KPU type where it names a form (Tree - deciduous, Fern, Bamboo …), from form words in the text of claims on habit, form, height, spread, growth rate, uses, behaviour and local context, and from the survey respondent's typed role. A word that occurs only in a landscape-use or Vancouver-context claim is *weak* (RHS "mixed shrub border" is company, not morphology). **Supported** needs one strong non-survey source and two sources in all; otherwise **to confirm**. Today: *Acer palmatum* tree (supported), *Gaultheria shallon* shrub (supported), *Vaccinium ovatum* shrub (**to confirm**: RHS use mention + survey). The four empty classes are drawn on purpose: the system is bigger than the three plants in it.
+v5 shows the **same store** (brain/data/graph.json + diagnosis.json from `tools/build_graph.py`, `ontology.json`, the plant files, the retrieval port and rules R1–R10) as **one living network** instead of a chart. Nothing in the database, the survey logic, the retrieval rules or the evidence trail changed; only the way it is seen and touched.
 
 ## Run
 
@@ -16,77 +10,52 @@ A plant's growth form is **read from its sources**, never inferred from the KPU 
 cd planting-db && python3 -m http.server 8766          # serve the planting-db root
 ```
 
-then <http://localhost:8766/brain/>. The page reads `brain/data/graph.json` and `diagnosis.json` (built by `python3 -I tools/build_graph.py` after any change to claims or ontology), `ontology.json`, and the db files for the retrieval preview. No node, no build; three.js and 3d-force-graph are vendored.
+then <http://localhost:8766/brain/>. Files: `index.html` · `js/app5.js` (scene, activation, growth, cards) · `js/graph.js` · `js/diagnosis.js` · `js/retrieve.js` · `js/data.js` · `js/model.js` · `screenshots/v5/`.
 
-Files: `index.html` · `js/app4.js` (views, panels, Grow, Ask) · `js/graph.js` (loader, indexes, candidate edges, alias matching) · `js/diagnosis.js` (the diagnosis rules, same as `tools/build_graph.py`) · `js/retrieve.js` (port of `tools/retrieve.py`, now resolving KPU labels to concept ids) · `js/data.js` · `js/model.js` · `screenshots/v41/` (10 captures of v4.1, 2026-10-31) · `screenshots/v4/` (11 captures of v4).
+## What is drawn (M30)
 
-## Opening view: the architecture
-
-Home draws the knowledge as **seven regions and three plants**. Each knowledge dimension gathers its concepts into one soft-edged glow (a cluster force toward the dimension's anchor, a radial-gradient sprite behind the cluster, one large label with “23 in use · 18 shared”); inside a region only the five best-connected concepts carry a label, the rest are dots until you zoom or open the region. The growth forms are gold hubs at the centre with the three plants around them. Every claim is still an edge, but the edges are **bundled**: all claims from one plant into one region share a stem to a gate point and fan out only inside the region, so a plant shows seven ribbons instead of fifty lines. Nothing is pinned; the layout is a force layout with a cluster force and a soft radial order (`layerForce`, `linkPositionUpdate` in `app4.js`). The panel reads the same system in four numbered layers: the classes and which plants sit in each (with the "to confirm" tag), the dimensions with how many concepts are in use, the plants with their form and edge count, and a note on evidence. Click a growth form to open its plants and the concepts they all share (grouped by dimension); click a dimension to open its facets; click a concept to continue. The trail at the top numbers the walk with each step's role (*01 Classification · Shrub › 02 Plant trait · Evergreen › 03 Environmental condition · Shade › 04 Evidence & context · Metro Vancouver*), up to four steps, a growth form allowed as the first.
-
-## Diagnosis: an analysis view
-
-The panel opens with one computed sentence per plant (how many concepts and facets it links, where sources disagree, what depends on conditions, which gate facets are missing), the hub concepts (linked to two or more plants), and four counts you can open: **depends on conditions**, **sources disagree**, **gaps**, **single voice**. Everything is computed from the files; nothing is hand-written.
-
-## The space (why 2D)
-
-A force layout in two dimensions, rendered in the same dark, glowing space as before (3d-force-graph with `numDimensions(2)`, pan and zoom only). Two dimensions because the thing to read is *which concepts sit between which plants*; depth adds nothing to that and makes labels unreadable. The glow stays because this is still a brain, not a diagram.
-
-| element | drawn from | encoding |
+| element | drawn from | how |
 |---|---|---|
-| plant | `plants/*.json entity` | warm node with halo; italic label |
-| concept | `ontology.json` | small node coloured by dimension (conditions blue, uses green, place orange, time yellow, traits violet, status mint, resistance pink), sized by the number of plants it links; labelled when it links ≥ 3 plants, or ≥ 2 when zoomed, or when focused |
-| unused vocabulary | concepts no claim links yet | faint ring at the edge, grouped by dimension (“60 concepts · 18 in use”) — the knowledge base is bigger than the knowledge in it |
-| claim edge | one line per plant → concept pair, aggregating that pair's claims | colour = dominant source type; brightness rises with verified share and claim count; dashed magenta = candidate only |
-| group link | `parent` in the ontology (Shade ⊃ filtered, deep) | faint dashed; a group inherits its children's links |
-| cultivar | `cultivar` lifted from context | small node tied to its plant |
-| source | `sources.json` | square at the bottom, coloured by type; hollow when it contributes no claim yet |
-| place / time | edge attributes | a place or time concept is linked to the plants whose claims were made there / then |
+| neuron | every concept of `ontology.json` (312) | a soft additive glow; in-use concepts bright and sized by the plants they link (hubs larger); dormant vocabulary small and dim, placed further out in its cluster |
+| plant | `plants/*.json entity` | the largest somas, near the centre, with a white core |
+| growth form | `growth_form` facet | gold somas at the centre (Classification); empty classes small and dim |
+| source | `sources.json` + survey respondents | square-ringed glow in the Evidence cluster |
+| fibre | plant → concept claim links | a curved branch: all claims from one plant into one cluster share a stem toward that cluster, then twig out to each concept (the same bundling v4 used, now in 3D); growth-form, parent, cultivar and source → plant links are thinner fibres |
+| synapse | one per claim (590) | a bouton riding its fibre: **white = verified**, **cluster colour = unverified sourced**, **magenta = candidate** |
+| cluster | Classification (centre) · Conditions · Traits · Uses · Evidence & place · Time · Status · Resistance | each has an anchor on a sphere; every node has a home near its anchor and the force layout only relaxes it; a faint particle field (neuropil) sits around every cluster and along the paths |
 
-Focusing anything dims the rest to 8 %; the trail at the top says where you are; Esc or “Up” goes back.
+The scene is 3D with orbit, slow auto-rotation until you touch it, fog for depth and bloom for the glow. Labels are kept to plants, growth forms in use and cluster names; concept and source labels appear only while they are lit.
 
-## Entry points and moves
+## Activation
 
-- **Dimension** (rail): facets and concepts of that dimension, with how many plants each links; unused ones greyed. The graph lights the dimension.
-- **Concept**: four layers in the brief's order — **01 Knowledge concept** (definition, aliases, “+ add to the walk”), **02 Related plants** (per plant: claims, direct vs inherited through a group such as Filtered / Deep shade → Shade, verified, how many from the Vancouver scale and where the rest come from), **03 Supporting claims** (value, source, status, conditions, place with ✓ local, cultivar), **04 Sources & conditions** (the sources behind them with type, geo and licence tier; the conditions stated on these claims). Then co-occurring concepts and siblings in the facet.
-- **Growth form**: the plants in the class with the evidence sentence and status, then the concepts all of them share, by dimension — the entry the brief asks for (Classification → shared concepts → plants → evidence).
-- **Walk (intersection)**: up to four steps, a growth form allowed as the first; the panel shows the plants that satisfy all with evidence per concept, and the plants that fall away with what they lack. Evergreen ∩ Hedge or screen → *Gaultheria* and *Vaccinium* (both: survey co-listing and USDA / GPP hedge uses); *Acer* falls away on evergreen.
-- **Plant**: its diagnosis sentence, “where the evidence pulls apart” (variations and disagreements, clickable), its concepts by dimension (verified ones outlined green, candidates magenta), relations.
-- **Variation view**: for a plant × facet with variation, the values lie along the condition axis (sun → shade, then unstated) with source, status and place on each row. **Disagreement view**: the two claims faced against each other, then every claim on the facet.
-- **Sources**: by type; a source shows the concepts it links per plant.
+A click or a question does not filter the graph; it **sends a signal**. The seed neurons light first; the signal then travels hop by hop along real links (one hop per ≈ 0.5 s, with a small jitter per fibre), lighting each fibre as a bright window moving from one end to the other and each synapse as the window passes. Everything else dims to a tenth. The rules per seed:
 
-## Grow
+- **concept** → its children, for a group such as Shade → the plants its claims reach → their growth form and the sources of those claims;
+- **plant** → every concept, source, cultivar and growth form it links → the parents of those concepts;
+- **growth form** → its plants → only the concepts all of them share, and their sources;
+- **source** → its plants → only the concepts that source claims;
+- **cluster** (bottom-left chips or the floating cluster name) → every in-use neuron of the cluster → the plants;
+- **question** (top-right): wave 1 the concepts named by alias; wave 2 the plants that pass the gates (R7); wave 3 the evidence the retriever ranks (R5), fibre by fibre; wave 4 its sources. L0 claims are withheld (R2) and candidates are recalled but never cited.
 
-An observation is parsed into plant + concepts + conditions + place + time (aliases from the ontology; numbers into KPU classes). It becomes candidate edges (dashed magenta), the diagnosis recomputes in the browser, and “What changed” states it in sentences: which edges were gained, whether a hub appeared, whether a variation gained a Vancouver data point, whether a disagreement gained a voice, whether a gate-facet gap is filled by a candidate (the AI still cannot gate on it). Session-only (`localStorage` `brain.candidates.v4`), always labelled candidate, never citable.
+The state line under the title counts what is lit; Esc or the background clears it and the rotation resumes.
 
-## Ask
+## Growth
 
-A question activates concept nodes first, by alias (the same words the intent map holds), grouped by dimension in the panel; then the retriever runs (names → gates R7 → BM25 → R5 order → R6 attribution) and only the plants, concepts, edges and sources it selects stay drawn — the answer along the same layers; L0 claims are withheld (R2), candidates are recalled but never cited. The banner stays: RETRIEVAL PREVIEW — NOT A FULL AI TRACE.
+“+ Observation” opens the only form. The sentence is parsed into plant, field, concepts, conditions, place and time (the same parser as v4); the candidate claim becomes **new fibres that grow out of the plant** over about a second, their magenta synapses appear as the fibre reaches them, and the plant then fires along them so the new path is seen. The card says *what grew*: which synapses, whether a hub appeared, whether a variation gained a Vancouver data point, whether a disagreement gained a voice, and the status line (candidate, completeness, never citable, this browser only — `localStorage` key `brain.candidates.v5`). Candidate, unverified and verified are told apart by colour on every synapse and fibre.
 
-## v4 → v4.1
+## Interaction
 
-- **Classification layer**: `growth_form` facet in the ontology (dimension `classification`), classification edges with evidence and status from `tools/build_graph.py` (M29). `schema.json` untouched; migration re-run, 0 unmapped; graph regenerated.
-- **Home**: the architecture in four layers instead of the diagnosis; Diagnosis on the rail as an analysis view.
-- **Layered expansion**: each view draws only the layer opened (growth forms always drawn, muted when not in focus); the camera re-fits while the layout settles and stops as soon as you pan or zoom.
-- **Layout**: a first cut drew growth forms, plants and dimensions as three fixed columns (read as a diagram, not a knowledge graph); a second drew everything as one free constellation (read as a hairball). The third, kept, is regions + bundled edges + a label budget: clarity comes from fewer visible things and grouped lines, not from where nodes are pinned.
-- **Concept panel** in the order Knowledge concept → Related plants → Supporting claims → Sources & conditions; the trail names each step's role.
-- **Kept**: Grow and Ask logic, the retrieval port, v1–v3 archives.
+By default the network is the whole screen: a title line, the Ask input, the “+ Observation” button, the cluster chips and a one-line legend. Nothing else until you click. A click opens one compact card (bottom-right) with a sentence first and the evidence behind a fold: for a concept the definition, the plants it reaches with *direct vs inherited*, *verified* and *from the Vancouver scale* counts, then the claims with their sources and stated conditions; for a plant its growth form and status, its diagnosis sentence, the variations and disagreements, and its concepts by cluster; for a fibre the claims that make it; for a source its plants and concepts. Chips and rows in the card are clickable and send the next signal.
 
-## v3 → v4
+## v4 → v5
 
-- **Object**: v3 drew the database system (schema × plants matrix, rules, sources, construction). v4 draws the knowledge: concepts and the plants they connect. The system view stays available at `/brain/v3/`.
-- **Data**: a new ontology (`ontology.json`, M26) and schema 0.4.0 (`tools/migrate_0_4.py`, M27): categorical values are concept ids, ranges span classes, context becomes `conditions`, every claim has `place`, `time`, `cultivar`. The migration is a script with a report (0 unmapped); the validator checks ids; retrieval gates are unchanged (eval 8/8 identical to 10-29).
-- **Diagnosis** (M28) replaces v2's `values differ`: variation vs disagreement are separate, defined rules; hubs, gaps and single voice are new.
-- **Interaction**: entry by dimension instead of by plant; intersection; variation along a condition axis; group inheritance.
-- **Kept**: candidate form and session storage, retrieval port, panel markup, dark aesthetic, projected HTML labels.
+- Kept: data files, the ontology and the classification layer (M29), `graph.js`, `diagnosis.js`, `retrieve.js`, the candidate parser and the “what changed” sentences, the four acceptance walks of the salal scene (they run as signals now).
+- New: 3D scene, cluster anchors with a home force, branch-shaped fibres, synapses per claim, neuropil, signal propagation, growth animation, the card-only interface.
+- Gone from the default view: the rail, the persistent panel, the diagnosis counts (still in each plant's card), the 2D regions.
 
-## Not done / limits
+## Limits
 
-- The brief expected Evergreen ∩ Hedge → only *Vaccinium*; the data gives two plants (USDA lists salal as a sheared hedge). Shown as the data says.
-- `use:hedge`, the exposure groups and `origin:native` are groups added for this ontology (source noted on each node); everything else is KPU verbatim or a schema enum.
-- The ontology has 312 nodes, above the brief's 150–250, because the full KPU use and pest lists are kept.
-- *Vaccinium ovatum*'s growth form rests on a use mention and the survey, so it is “to confirm” until a morphological source (E-Flora or Pojar & MacKinnon habit text) is added as a claim.
-- Disagreement on `water` flags adjacent ordinal values (average vs moist); the rule is documented and may be too strict.
-- Label collisions are handled by a greedy nudge, not a layout algorithm; the centre of the home view is dense where many hubs link all three plants.
-- Place and time are edge attributes, so they do not take part in the Python hub/variation rules; the brain treats them as inherited links for exploration.
-- Candidate concepts come from an alias match and a keyword table; unusual sentences land as a bare note.
+- Bloom and additive glow make a lit plant very bright; readability is tuned at 1280 × 820 and may need the camera pulled back on small screens.
+- Labels during a wide activation (a plant lights 60 concepts) are capped: only hubs and the seed keep names when more than 28 neurons are lit.
+- The signal walks the links the store has; where a claim has no concept (a bare candidate note) nothing lights, by design.
+- No label-layout algorithm beyond a vertical nudge.
