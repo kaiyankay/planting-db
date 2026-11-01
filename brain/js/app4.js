@@ -59,21 +59,19 @@ function buildGraph() {
   const ring = {}; for (const c of G.concepts) if (!linked.has(c.id)) (ring[c.dimension] = ring[c.dimension] || []).push(c);
   const dims = KNOWLEDGE_DIMS; let start = 0; const total = Object.values(ring).reduce((a, v) => a + v.length, 0) + dims.length * 3; S.ringArcs = {};
   for (const d of dims) { const items = ring[d] || []; const span = (items.length + 3) / total * Math.PI * 2; const a0 = start; start += span; S.ringArcs[d] = [a0, a0 + span]; items.forEach((c, i) => { const a = a0 + (i + 1.5) / (items.length + 3) * span; nodes.push({ id: c.id, kind: 'concept', n: c, used: false, fx: Math.cos(a) * 300, fy: Math.sin(a) * 300 }); }); }
-  // growth forms: a fixed column on the left; knowledge-dimension category nodes: a fixed arc on the right
+  // growth forms are hubs near the centre of the force layout (no fixed positions: the layer force below keeps the layers readable)
   const gfs = G.concepts.filter(c => c.facet === 'growth_form').sort((a, b) => (a.order ?? 9) - (b.order ?? 9));
-  gfs.forEach((c, i) => nodes.push({ id: c.id, kind: 'concept', n: c, used: true, gf: true, fx: -200, fy: 115 - i * 46 }));
-  KNOWLEDGE_DIMS.forEach((d, i) => { nodes.push({ id: `cat:${d}`, kind: 'cat', dim: d, fx: 235, fy: 180 - i * 60 }); });
+  gfs.forEach((c, i) => { const a = i / gfs.length * Math.PI * 2; nodes.push({ id: c.id, kind: 'concept', n: c, used: true, gf: true, x: Math.cos(a) * 60, y: Math.sin(a) * 60 }); });
   for (const c of G.concepts) if (linked.has(c.id) && c.facet !== 'growth_form') nodes.push({ id: c.id, kind: 'concept', n: c, used: true });
   for (const c of G.concepts) if (linked.has(c.id) && c.parent && linked.has(c.parent)) links.push({ id: `parent:${c.id}`, kind: 'parent', source: c.id, target: c.parent });
   for (const cv of G.graph.nodes.filter(n => n.type === 'cultivar')) { nodes.push({ id: cv.id, kind: 'cultivar', n: cv }); links.push({ id: cv.id, kind: 'cv', source: cv.id, target: cv.plant }); }
-  const srcs = G.graph.nodes.filter(n => (n.type === 'source' || n.type === 'practitioner') && !n.parent); srcs.forEach((s, i) => nodes.push({ id: s.id, kind: 'source', n: s, fx: -((srcs.length - 1) / 2 - i) * 34, fy: -400 }));
-  if (S.candEdges.length) nodes.push({ id: 'source:candidate', kind: 'source', n: { id: 'source:candidate', label: 'you (candidate)', source_type: 'candidate' }, fx: (srcs.length / 2 + 1) * 34, fy: -400 });
+  const srcs = G.graph.nodes.filter(n => (n.type === 'source' || n.type === 'practitioner') && !n.parent); srcs.forEach((s, i) => { const a = Math.PI + (i + 0.5) / srcs.length * Math.PI; nodes.push({ id: s.id, kind: 'source', n: s, x: Math.cos(a) * 380, y: Math.sin(a) * 380 }); });
+  if (S.candEdges.length) nodes.push({ id: 'source:candidate', kind: 'source', n: { id: 'source:candidate', label: 'you (candidate)', source_type: 'candidate' }, x: 0, y: -380 });
   for (const e of allEdges()) {
     if (!isEvidence(e)) continue;
     const targets = []; if (e.target) targets.push(e.target); if (e.place) targets.push(e.place); for (const t of e.time || []) targets.push(t);
     for (const t of new Set(targets)) { const key = `${e.plant}→${t}`; if (!linkMap.has(key)) { const l = { id: key, kind: e.type === 'classification' ? 'gf' : 'pc', source: e.plant, target: t, edges: [] }; linkMap.set(key, l); links.push(l); } linkMap.get(key).edges.push(e); }
   }
-  for (const p of G.plants) for (const d of KNOWLEDGE_DIMS) { const n = new Set(plantEdges(p.id).flatMap(e => [e.target, e.place, ...(e.time || [])].filter(x => x && G.O.get(x)?.dimension === d))).size; if (n) links.push({ id: `cat:${p.id}:${d}`, kind: 'cat', source: p.id, target: `cat:${d}`, n }); }
   const relPairs = new Map();
   for (const e of G.graph.edges.filter(x => x.type === 'relation')) { const key = [e.source, e.target].sort().join('|'); if (!relPairs.has(key)) { const l = { id: `rel:${key}`, kind: 'rel', source: e.source, target: e.target, rels: [] }; relPairs.set(key, l); links.push(l); } relPairs.get(key).rels.push(e); }
   const prev = new Map(S.allNodes.map(n => [n.id, n]));
@@ -82,14 +80,39 @@ function buildGraph() {
   applyVisible();
   rebuildLabels();
 }
+// the layers of the system as a soft radial order, not fixed positions: growth forms at the centre, plants around them,
+// concepts outward (hubs linking all plants sit inside, single-plant concepts at the edge), sources at the rim; each
+// knowledge dimension is drawn toward its own sector so colour regions form. Everything still moves with the force layout.
+const SECTOR = {}; KNOWLEDGE_DIMS.forEach((d, i) => { SECTOR[d] = Math.PI / 2 - i / KNOWLEDGE_DIMS.length * Math.PI * 2; });
+function layerRadius(n) {
+  if (n.kind === 'concept' && n.gf) return linkedPlants(n.id).size ? 30 : 95;
+  if (n.kind === 'plant') return 125;
+  if (n.kind === 'cultivar') return 160;
+  if (n.kind === 'concept') { if (!n.used) return null; const k = linkedPlants(n.id).size; return k >= 3 ? 170 : k === 2 ? 240 : 305; }
+  if (n.kind === 'source') return 310;
+  return null;
+}
+function layerForce() {
+  let nodes = [];
+  const f = alpha => {
+    const K = S.layerK || 0; if (!K) return;
+    for (const n of nodes) {
+      if (n.fx !== undefined) continue; const r = layerRadius(n); if (r == null) continue;
+      const x = n.x || 0, y = n.y || 0; const d = Math.max(1, Math.hypot(x, y)); const k = (r - d) / d * alpha * (n.kind === 'plant' || n.gf ? 0.7 : n.kind === 'source' ? 1.4 : 0.35) * K; n.vx += x * k; n.vy += y * k;
+      if (n.kind === 'concept' && n.used && !n.gf) { const a = SECTOR[n.n.dimension]; if (a !== undefined) { n.vx += (Math.cos(a) * r - x) * alpha * 0.06 * K; n.vy += (Math.sin(a) * r - y) * alpha * 0.06 * K; } }
+    }
+  };
+  f.initialize = ns => { nodes = ns; }; return f;
+}
 function applyVisible() {
   const vis = S.visible; const nodes = vis ? S.allNodes.filter(n => vis.has(n.id)) : S.allNodes.filter(n => n.kind !== 'cat');
   const ids = new Set(nodes.map(n => n.id)); const links = S.allLinks.filter(l => ids.has(l.source.id || l.source) && ids.has(l.target.id || l.target));
   S.nodes = nodes; S.links = links;
   S.Graph.graphData({ nodes, links });
   const focused = !!vis && nodes.length < 90;   // a layer or a walk: fewer nodes, so give them room
-  const link = S.Graph.d3Force('link'); if (link) link.distance(l => l.kind === 'pc' ? (focused ? 95 : 34) : l.kind === 'rel' ? 150 : l.kind === 'parent' ? (focused ? 40 : 18) : l.kind === 'gf' ? 90 : l.kind === 'cat' ? 120 : 14).strength(l => l.kind === 'pc' ? (focused ? 0.3 : 0.5) : l.kind === 'rel' ? 0.05 : l.kind === 'parent' ? 0.7 : l.kind === 'gf' ? 0.25 : l.kind === 'cat' ? 0.08 : 1);
-  const charge = S.Graph.d3Force('charge'); if (charge) charge.strength(n => n.kind === 'plant' ? -900 : n.kind === 'concept' ? (n.used ? (focused ? -320 : -70) : -5) : n.kind === 'source' ? -10 : n.kind === 'cat' ? -200 : -30).distanceMax(420);
+  S.layerK = focused ? 0.4 : 1; S.focused = focused;
+  const link = S.Graph.d3Force('link'); if (link) link.distance(l => l.kind === 'pc' ? (focused ? 95 : 48) : l.kind === 'rel' ? 150 : l.kind === 'parent' ? (focused ? 40 : 18) : l.kind === 'gf' ? 90 : l.kind === 'cat' ? 120 : 14).strength(l => l.kind === 'pc' ? (focused ? 0.3 : 0.12) : l.kind === 'rel' ? 0.05 : l.kind === 'parent' ? 0.7 : l.kind === 'gf' ? 0.25 : l.kind === 'cat' ? 0.08 : 1);
+  const charge = S.Graph.d3Force('charge'); if (charge) charge.strength(n => n.kind === 'plant' ? -900 : n.kind === 'concept' ? (n.used ? (focused ? -320 : -90) : -5) : n.kind === 'source' ? -10 : n.kind === 'cat' ? -200 : -30).distanceMax(420);
 }
 
 // ------------------------------------------------------------------ host
@@ -103,6 +126,7 @@ function initHost() {
     .onLinkClick(l => { S.swallow = true; if (l.kind === 'pc' || l.kind === 'gf') go({ mode: 'link', plant: l.source.id || l.source, concept: l.target.id || l.target }); else if (l.kind === 'rel') go({ mode: 'relations', id: l.source.id || l.source }); else if (l.kind === 'cat') go({ mode: 'dim', dim: l.target.dim || String(l.target.id || l.target).split(':')[1] }); })
     .onBackgroundClick(() => { if (S.swallow) { S.swallow = false; return; } up(); });
   Graph.controls().enableRotate = false;
+  Graph.d3Force('layer', layerForce());
   Graph.onEngineStop(() => { if (performance.now() - (S.goAt || 0) < 8000 && !S.userMoved) moveCamera(700); });   // re-fit once the layout has settled, unless the user has moved on
   Graph.controls().addEventListener('start', () => { S.userMoved = true; });
   Graph.scene().fog = new THREE.FogExp2(0x02030a, 0.0009);
@@ -163,7 +187,7 @@ function frame() {
     const r = n.kind === 'plant' ? 8 : n.kind === 'concept' ? conceptRadius(n) + 0.5 : n.kind === 'cat' ? 10 : 4;
     _v.set(n.x, (n.y || 0) - r - 1.5 - L.dy, 0); _v.project(cam);
     const f = dimFactor(n.id); let show = true;
-    if (n.kind === 'concept' && !n.gf) { const k = linkedPlants(n.id).size; show = S.lit ? S.lit.has(n.id) : (S.visible ? true : (k >= 3 || (k >= 2 && zoom < 520) || zoom < 330)); }
+    if (n.kind === 'concept' && !n.gf) { const k = linkedPlants(n.id).size; show = S.lit ? S.lit.has(n.id) : (S.focused ? true : (k >= 3 || (k >= 2 && zoom < 620) || zoom < 380)); }
     if (n.kind === 'source') show = S.lit ? S.lit.has(n.id) : (zoom < 520 || S.view.mode === 'sources');
     if (S.lit && !S.lit.has(n.id) && !L.fixed && !n.gf) show = false;   // the classification layer stays readable, muted
     if (!show || _v.z > 1) { L.el.classList.add('hidden'); continue; }
@@ -195,7 +219,6 @@ document.addEventListener('pointermove', e => { if (tip.style.display !== 'none'
 
 // ------------------------------------------------------------------ views: visibility is the layer the user has opened; lit is the focus inside it
 const gfIds = () => S.G.concepts.filter(c => c.facet === 'growth_form').map(c => c.id);
-const catIds = () => KNOWLEDGE_DIMS.map(d => `cat:${d}`);
 function sharedConcepts(plants, perDim = 6) {
   const out = {}; if (!plants.length) return out;
   const counts = new Map(); for (const p of plants) for (const e of plantEdges(p)) for (const t of [e.target, e.place, ...(e.time || [])].filter(Boolean)) { if (!counts.has(t)) counts.set(t, new Set()); counts.get(t).add(p); }
@@ -208,9 +231,9 @@ function go(view, silent = false) {
   S.view = view; S.litLinks = null; S.goAt = performance.now(); const G = S.G;
   let vis = null, lit = null;
   const withGf = ps => ps.flatMap(p => [p, growthFormOf(p)].filter(Boolean));
-  if (view.mode === 'home') { vis = new Set([...G.plants.map(p => p.id), ...gfIds(), ...catIds()]); }
+  if (view.mode === 'home') { vis = new Set(S.allNodes.filter(n => n.kind === 'plant' || n.kind === 'source' || n.kind === 'cultivar' || (n.kind === 'concept' && n.used)).map(n => n.id)); }
   else if (view.mode === 'diagnosis' || view.mode === 'list') { vis = null; }
-  else if (view.mode === 'gf') { const ps = [...linkedPlants(view.id)]; const shared = sharedConcepts(ps); vis = new Set([view.id, ...gfIds(), ...withGf(ps), ...catIds(), ...Object.values(shared).flat()]); lit = new Set([view.id, ...ps, ...Object.values(shared).flat()]); S.active = [view.id, ...S.active.filter(c => G.O.get(c)?.facet !== 'growth_form')]; }
+  else if (view.mode === 'gf') { const ps = [...linkedPlants(view.id)]; const shared = sharedConcepts(ps); vis = new Set([view.id, ...gfIds(), ...withGf(ps), ...Object.values(shared).flat()]); lit = new Set([view.id, ...ps, ...Object.values(shared).flat()]); S.active = [view.id, ...S.active.filter(c => G.O.get(c)?.facet !== 'growth_form')]; }
   else if (view.mode === 'dim') { const cs = S.allNodes.filter(n => n.kind === 'concept' && n.n.dimension === view.dim && (n.used || view.dim === 'classification')).map(n => n.id); const ps = new Set(); for (const c of cs) for (const p of linkedPlants(c)) ps.add(p); vis = new Set([...cs, ...withGf([...ps])]); lit = new Set([...cs, ...ps]); }
   else if (view.mode === 'sources') { vis = new Set([...S.allNodes.filter(n => n.kind === 'source' || n.kind === 'plant').map(n => n.id), ...gfIds()]); lit = new Set(S.allNodes.filter(n => n.kind === 'source' || n.kind === 'plant').map(n => n.id)); }
   else if (view.mode === 'plants') { vis = new Set([...G.plants.map(p => p.id), ...gfIds(), ...S.allNodes.filter(n => n.kind === 'cultivar').map(n => n.id)]); lit = new Set([...G.plants.map(p => p.id), ...gfIds()]); }
@@ -221,7 +244,6 @@ function go(view, silent = false) {
   else if (view.mode === 'variation' || view.mode === 'disagreement') { const set = new Set([view.plant]); for (const e of plantEdges(view.plant)) if (e.facet === view.facet) set.add(e.target); vis = new Set([...set, growthFormOf(view.plant)].filter(Boolean)); lit = set; }
   else if (view.mode === 'link') { vis = new Set([view.plant, view.concept, growthFormOf(view.plant)].filter(Boolean)); lit = new Set([view.plant, view.concept]); }
   else if (view.mode === 'relations') { vis = new Set([...G.plants.map(p => p.id), ...gfIds()]); lit = new Set(G.plants.map(p => p.id)); }
-  for (const n of S.allNodes) if (n.kind === 'plant') { if (view.mode === 'home') n.fx = 15; else delete n.fx; }   // home reads as three columns: growth forms · plants · dimensions
   S.visible = vis; S.lit = lit; S.userMoved = false; applyVisible(); applyDim(); renderTrail(); renderPanel(); moveCamera(1100); scheduleFits();
   document.querySelectorAll('#rail button[data-view]').forEach(b => b.classList.toggle('on', b.dataset.view === (view.mode === 'dim' ? view.dim : (view.mode === 'gf' || view.mode === 'set' || view.mode === 'concept') ? '' : view.mode)));
 }
@@ -255,7 +277,7 @@ function moveCamera(ms) {
   const v = S.view;
   if (v.mode === 'diagnosis' || v.mode === 'list') { fitNodes(new Set(S.nodes.filter(n => n.kind !== 'source' && !(n.kind === 'concept' && !n.used)).map(n => n.id)), ms, 60); return; }
   if (v.mode === 'sources') { fitNodes(new Set(S.nodes.filter(n => n.kind === 'source' || n.kind === 'plant').map(n => n.id)), ms, 40); return; }
-  const ids = S.visible ? new Set(S.visible) : null; fitNodes(ids, ms, v.mode === 'home' ? 70 : 44);
+  const ids = S.visible ? new Set(S.visible) : null; fitNodes(ids, ms, v.mode === 'home' ? 24 : 44);
 }
 
 // ------------------------------------------------------------------ trail (the walk) & panel

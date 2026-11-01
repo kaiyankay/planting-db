@@ -22,7 +22,7 @@ Files: `index.html` · `js/app4.js` (views, panels, Grow, Ask) · `js/graph.js` 
 
 ## Opening view: the architecture
 
-Home draws three fixed columns — growth forms on the left, plants in the middle, the seven knowledge dimensions on the right — and the panel reads the system in four numbered layers: the classes and which plants sit in each (with the "to confirm" tag), the dimensions with how many concepts are in use, the plants with their form and edge count, and a note on evidence. Click a growth form to open its plants and the concepts they all share (grouped by dimension); click a dimension to open its facets; click a concept to continue. The trail at the top numbers the walk with each step's role (*01 Classification · Shrub › 02 Plant trait · Evergreen › 03 Environmental condition · Shade › 04 Evidence & context · Metro Vancouver*), up to four steps, a growth form allowed as the first.
+Home draws the whole knowledge graph as one force-directed constellation (nothing is pinned; the look follows Obsidian-style graph views rather than a diagram): the growth forms are gold hubs at the centre, the plants orbit them, concepts spread outward — hubs that link every plant sit inside, single-plant concepts at the edge — and each dimension drifts toward its own sector so colour regions form; the sources sit at the rim. The order is a *soft radial force* (`layerForce` in `app4.js`), so the structure is readable without being drawn as rows. The panel reads the same system in four numbered layers: the classes and which plants sit in each (with the "to confirm" tag), the dimensions with how many concepts are in use, the plants with their form and edge count, and a note on evidence. Click a growth form to open its plants and the concepts they all share (grouped by dimension); click a dimension to open its facets; click a concept to continue. The trail at the top numbers the walk with each step's role (*01 Classification · Shrub › 02 Plant trait · Evergreen › 03 Environmental condition · Shade › 04 Evidence & context · Metro Vancouver*), up to four steps, a growth form allowed as the first.
 
 ## Diagnosis: an analysis view
 
@@ -68,6 +68,7 @@ A question activates concept nodes first, by alias (the same words the intent ma
 - **Classification layer**: `growth_form` facet in the ontology (dimension `classification`), classification edges with evidence and status from `tools/build_graph.py` (M29). `schema.json` untouched; migration re-run, 0 unmapped; graph regenerated.
 - **Home**: the architecture in four layers instead of the diagnosis; Diagnosis on the rail as an analysis view.
 - **Layered expansion**: each view draws only the layer opened (growth forms always drawn, muted when not in focus); the camera re-fits while the layout settles and stops as soon as you pan or zoom.
+- **Layout**: a first cut drew growth forms, plants and dimensions as three fixed columns; Kay read it as a diagram, not a knowledge graph, so the home went back to a free force layout with a soft radial order per layer and sector pull per dimension (the structure is in the forces, not in pinned coordinates).
 - **Concept panel** in the order Knowledge concept → Related plants → Supporting claims → Sources & conditions; the trail names each step's role.
 - **Kept**: Grow and Ask logic, the retrieval port, v1–v3 archives.
 
