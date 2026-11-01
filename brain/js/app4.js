@@ -84,12 +84,14 @@ function buildGraph() {
 // concepts outward (hubs linking all plants sit inside, single-plant concepts at the edge), sources at the rim; each
 // knowledge dimension is drawn toward its own sector so colour regions form. Everything still moves with the force layout.
 const SECTOR = {}; KNOWLEDGE_DIMS.forEach((d, i) => { SECTOR[d] = Math.PI / 2 - i / KNOWLEDGE_DIMS.length * Math.PI * 2; });
+const REGION_R = 265;   // where each dimension's region sits around the centre
+const anchorOf = d => ({ x: Math.cos(SECTOR[d]) * REGION_R, y: Math.sin(SECTOR[d]) * REGION_R });
 function layerRadius(n) {
-  if (n.kind === 'concept' && n.gf) return linkedPlants(n.id).size ? 30 : 95;
-  if (n.kind === 'plant') return 125;
+  if (n.kind === 'concept' && n.gf) return linkedPlants(n.id).size ? 30 : (S.bundle ? 62 : 95);
+  if (n.kind === 'plant') return S.bundle ? 115 : 125;
   if (n.kind === 'cultivar') return 160;
   if (n.kind === 'concept') { if (!n.used) return null; const k = linkedPlants(n.id).size; return k >= 3 ? 170 : k === 2 ? 240 : 305; }
-  if (n.kind === 'source') return 310;
+  if (n.kind === 'source') return S.bundle ? 400 : 310;
   return null;
 }
 function layerForce() {
@@ -97,8 +99,12 @@ function layerForce() {
   const f = alpha => {
     const K = S.layerK || 0; if (!K) return;
     for (const n of nodes) {
-      if (n.fx !== undefined) continue; const r = layerRadius(n); if (r == null) continue;
-      const x = n.x || 0, y = n.y || 0; const d = Math.max(1, Math.hypot(x, y)); const k = (r - d) / d * alpha * (n.kind === 'plant' || n.gf ? 0.7 : n.kind === 'source' ? 1.4 : 0.35) * K; n.vx += x * k; n.vy += y * k;
+      if (n.fx !== undefined) continue; const x = n.x || 0, y = n.y || 0;
+      if (S.bundle && n.kind === 'concept' && n.used && !n.gf) {   // regions: every concept of a dimension gathers at that dimension's anchor; links pull the hubs inward
+        const A = anchorOf(n.n.dimension); if (!A) continue; n.vx += (A.x - x) * alpha * 0.55; n.vy += (A.y - y) * alpha * 0.55; continue;
+      }
+      const r = layerRadius(n); if (r == null) continue;
+      const d = Math.max(1, Math.hypot(x, y)); const k = (r - d) / d * alpha * (n.kind === 'plant' || n.gf ? 0.7 : n.kind === 'source' ? 1.4 : 0.35) * K; n.vx += x * k; n.vy += y * k;
       if (n.kind === 'concept' && n.used && !n.gf) { const a = SECTOR[n.n.dimension]; if (a !== undefined) { n.vx += (Math.cos(a) * r - x) * alpha * 0.06 * K; n.vy += (Math.sin(a) * r - y) * alpha * 0.06 * K; } }
     }
   };
@@ -111,8 +117,10 @@ function applyVisible() {
   S.Graph.graphData({ nodes, links });
   const focused = !!vis && nodes.length < 90;   // a layer or a walk: fewer nodes, so give them room
   S.layerK = focused ? 0.4 : 1; S.focused = focused;
-  const link = S.Graph.d3Force('link'); if (link) link.distance(l => l.kind === 'pc' ? (focused ? 95 : 48) : l.kind === 'rel' ? 150 : l.kind === 'parent' ? (focused ? 40 : 18) : l.kind === 'gf' ? 90 : l.kind === 'cat' ? 120 : 14).strength(l => l.kind === 'pc' ? (focused ? 0.3 : 0.12) : l.kind === 'rel' ? 0.05 : l.kind === 'parent' ? 0.7 : l.kind === 'gf' ? 0.25 : l.kind === 'cat' ? 0.08 : 1);
-  const charge = S.Graph.d3Force('charge'); if (charge) charge.strength(n => n.kind === 'plant' ? -900 : n.kind === 'concept' ? (n.used ? (focused ? -320 : -90) : -5) : n.kind === 'source' ? -10 : n.kind === 'cat' ? -200 : -30).distanceMax(420);
+  // in the region view only the five best-connected concepts of each dimension carry a label; the rest are dots until you zoom or open the region
+  S.topLabels = new Set(); for (const d of KNOWLEDGE_DIMS) nodes.filter(n => n.kind === 'concept' && n.used && !n.gf && n.n.dimension === d).map(n => [n, liveEdgesFor(n.id).length]).sort((a, b) => b[1] - a[1]).slice(0, S.view?.mode === 'dim' ? 12 : 5).forEach(([n]) => S.topLabels.add(n.id));
+  const link = S.Graph.d3Force('link'); if (link) link.distance(l => l.kind === 'pc' ? (focused ? 95 : 48) : l.kind === 'rel' ? 150 : l.kind === 'parent' ? (focused ? 40 : 18) : l.kind === 'gf' ? 90 : l.kind === 'cat' ? 120 : 14).strength(l => l.kind === 'pc' ? (focused ? 0.3 : S.bundle ? 0.02 : 0.12) : l.kind === 'rel' ? 0.05 : l.kind === 'parent' ? 0.7 : l.kind === 'gf' ? 0.25 : l.kind === 'cat' ? 0.08 : 1);
+  const charge = S.Graph.d3Force('charge'); if (charge) charge.strength(n => n.kind === 'plant' ? -900 : n.kind === 'concept' ? (n.used ? (focused ? -320 : S.bundle ? -28 : -90) : -5) : n.kind === 'source' ? -10 : n.kind === 'cat' ? -200 : -30).distanceMax(420);
 }
 
 // ------------------------------------------------------------------ host
@@ -127,6 +135,10 @@ function initHost() {
     .onBackgroundClick(() => { if (S.swallow) { S.swallow = false; return; } up(); });
   Graph.controls().enableRotate = false;
   Graph.d3Force('layer', layerForce());
+  // one soft region per knowledge dimension: a radial-gradient sprite behind its concepts and one large label
+  const tex = (() => { const c = document.createElement('canvas'); c.width = c.height = 128; const g = c.getContext('2d'); const grd = g.createRadialGradient(64, 64, 0, 64, 64, 64); grd.addColorStop(0, 'rgba(255,255,255,0.55)'); grd.addColorStop(0.55, 'rgba(255,255,255,0.18)'); grd.addColorStop(1, 'rgba(255,255,255,0)'); g.fillStyle = grd; g.fillRect(0, 0, 128, 128); return new THREE.CanvasTexture(c); })();
+  S.regions = {};
+  for (const d of KNOWLEDGE_DIMS) { const sp = new THREE.Sprite(new THREE.SpriteMaterial({ map: tex, color: new THREE.Color(DIM[d].colour), transparent: true, opacity: 0.22, depthWrite: false })); sp.visible = false; sp.renderOrder = -1; Graph.scene().add(sp); const el = document.createElement('div'); el.className = 'lbl region'; el.style.color = DIM[d].colour; el.innerHTML = `${esc(DIM[d].label)}<small></small>`; el.addEventListener('click', e => { e.stopPropagation(); go({ mode: 'dim', dim: d }); }); $('#labels').appendChild(el); S.regions[d] = { sprite: sp, el, x: 0, y: 0, r: 0, n: 0 }; }
   Graph.onEngineStop(() => { if (performance.now() - (S.goAt || 0) < 8000 && !S.userMoved) moveCamera(700); });   // re-fit once the layout has settled, unless the user has moved on
   Graph.controls().addEventListener('start', () => { S.userMoved = true; });
   Graph.scene().fog = new THREE.FogExp2(0x02030a, 0.0009);
@@ -160,8 +172,16 @@ function linkStyle(l) {
   const top = Object.entries(t).sort((a, b) => b[1] - a[1])[0][0]; const ver = es.filter(e => e.status === 'verified').length / es.length;
   return { col: cand ? TYPE_COLOUR.candidate : (top === 'entity' ? TYPE_COLOUR.plant : TYPE_COLOUR[top] || '#888'), a: cand ? 0.7 : 0.16 + 0.5 * ver + 0.08 * Math.min(es.length, 3), dash: cand };
 }
-function linkObject(l) { const st = linkStyle(l); const geo = new THREE.BufferGeometry(); geo.setAttribute('position', new THREE.BufferAttribute(new Float32Array(6), 3)); const mat = st.dash ? new THREE.LineDashedMaterial({ color: new THREE.Color(st.col), transparent: true, opacity: st.a, dashSize: 2, gapSize: 1.6 }) : new THREE.LineBasicMaterial({ color: new THREE.Color(st.col), transparent: true, opacity: st.a }); const line = new THREE.Line(geo, mat); l.__obj = { line, mat, base: st.a }; return line; }
-function linkPositionUpdate(obj, { start, end }, l) { const o = l.__obj; if (!o) return false; const p = o.line.geometry.attributes.position; p.setXYZ(0, start.x, start.y, start.z || 0); p.setXYZ(1, end.x, end.y, end.z || 0); p.needsUpdate = true; if (o.mat.isLineDashedMaterial) o.line.computeLineDistances(); return true; }
+const CURVE_N = 14;
+function linkObject(l) { const st = linkStyle(l); const geo = new THREE.BufferGeometry(); geo.setAttribute('position', new THREE.BufferAttribute(new Float32Array(CURVE_N * 3), 3)); const mat = st.dash ? new THREE.LineDashedMaterial({ color: new THREE.Color(st.col), transparent: true, opacity: st.a, dashSize: 2, gapSize: 1.6 }) : new THREE.LineBasicMaterial({ color: new THREE.Color(st.col), transparent: true, opacity: st.a }); const line = new THREE.Line(geo, mat); l.__obj = { line, mat, base: st.a }; return line; }
+function linkPositionUpdate(obj, { start, end }, l) {
+  const o = l.__obj; if (!o) return false; const p = o.line.geometry.attributes.position;
+  let C = null;   // bundling: plant → concept curves bend through the concept's region centre, so a plant's claims read as a few ribbons
+  if (S.bundle && l.kind === 'pc') { const t = l.target; const d = t && t.n && t.n.dimension; const R = d && S.regions && S.regions[d]; if (R && R.n >= 2) C = { x: R.x + (start.x - R.x) * 0.42, y: R.y + (start.y - R.y) * 0.42 }; }   // the gate: every claim from this plant into this region shares the path plant → gate
+  const G = 6;   // points on the shared stem, the rest fan out from the gate to the concept
+  for (let i = 0; i < CURVE_N; i++) { let x, y; if (C) { if (i < G) { const t = i / G; x = start.x + (C.x - start.x) * t; y = start.y + (C.y - start.y) * t; } else { const t = (i - G) / (CURVE_N - 1 - G); const u = 1 - t; const M = { x: C.x + (C.x - start.x) * 0.25, y: C.y + (C.y - start.y) * 0.25 }; x = u * u * C.x + 2 * u * t * M.x + t * t * end.x; y = u * u * C.y + 2 * u * t * M.y + t * t * end.y; } } else { const t = i / (CURVE_N - 1); x = start.x + (end.x - start.x) * t; y = start.y + (end.y - start.y) * t; } p.setXYZ(i, x, y, 0); }
+  p.needsUpdate = true; if (o.mat.isLineDashedMaterial) o.line.computeLineDistances(); return true;
+}
 
 // ------------------------------------------------------------------ labels (HTML, projected)
 function rebuildLabels() {
@@ -180,6 +200,14 @@ const _v = new THREE.Vector3();
 function frame() {
   const cam = S.Graph.camera(); const w = window.innerWidth, h = window.innerHeight; const zoom = cam.position.z;
   const visIds = S.visible || new Set(S.nodes.map(n => n.id));
+  if (S.regions) for (const [d, R] of Object.entries(S.regions)) {
+    const ns = S.bundle ? S.nodes.filter(n => n.kind === 'concept' && n.used && !n.gf && n.n.dimension === d && Number.isFinite(n.x)) : [];
+    R.n = ns.length; if (ns.length < 2) { R.sprite.visible = false; R.el.classList.add('hidden'); continue; }
+    let cx = 0, cy = 0; for (const n of ns) { cx += n.x; cy += n.y; } cx /= ns.length; cy /= ns.length; let rr = 0; for (const n of ns) rr = Math.max(rr, Math.hypot(n.x - cx, n.y - cy)); rr = Math.max(34, rr + 16);
+    R.x = cx; R.y = cy; R.r = rr; R.sprite.position.set(cx, cy, -2); R.sprite.scale.set(rr * 2.3, rr * 2.3, 1); R.sprite.visible = true; R.sprite.material.opacity = S.lit ? 0.08 : 0.22;
+    _v.set(cx, cy + rr + 4, 0); _v.project(cam); R.el.classList.remove('hidden'); R.el.style.left = `${(_v.x + 1) / 2 * w}px`; R.el.style.top = `${(1 - _v.y) / 2 * h - 30}px`;
+    const used = ns.length, hubs = ns.filter(n => linkedPlants(n.id).size >= 2).length; R.el.querySelector('small').textContent = `${used} in use · ${hubs} shared`;
+  }
   for (const L of S.labels) {
     const n = L.n;
     if (L.fixed) { if (S.visible) { L.el.classList.add('hidden'); continue; } }
@@ -187,8 +215,9 @@ function frame() {
     const r = n.kind === 'plant' ? 8 : n.kind === 'concept' ? conceptRadius(n) + 0.5 : n.kind === 'cat' ? 10 : 4;
     _v.set(n.x, (n.y || 0) - r - 1.5 - L.dy, 0); _v.project(cam);
     const f = dimFactor(n.id); let show = true;
-    if (n.kind === 'concept' && !n.gf) { const k = linkedPlants(n.id).size; show = S.lit ? S.lit.has(n.id) : (S.focused ? true : (k >= 3 || (k >= 2 && zoom < 620) || zoom < 380)); }
+    if (n.kind === 'concept' && !n.gf) { const k = linkedPlants(n.id).size; show = S.lit ? S.lit.has(n.id) : (S.focused ? true : S.bundle ? (S.topLabels.has(n.id) || zoom < 300) : (k >= 3 || (k >= 2 && zoom < 620) || zoom < 380)); }
     if (n.kind === 'source') show = S.lit ? S.lit.has(n.id) : (zoom < 520 || S.view.mode === 'sources');
+    if (n.gf && S.bundle && !linkedPlants(n.id).size && zoom >= 300) show = false;   // empty classes stay quiet on the overview
     if (S.lit && !S.lit.has(n.id) && !L.fixed && !n.gf) show = false;   // the classification layer stays readable, muted
     if (!show || _v.z > 1) { L.el.classList.add('hidden'); continue; }
     L.el.classList.remove('hidden'); L.sx = (_v.x + 1) / 2 * w; L.sy = (1 - _v.y) / 2 * h; L.el.style.left = `${L.sx}px`; L.el.style.top = `${L.sy}px`;
@@ -201,8 +230,8 @@ function frame() {
 }
 function dimFactor(id) { if (!S.lit) return 1; return S.lit.has(id) ? 1 : 0.08; }
 function applyDim() {
-  for (const n of S.nodes) { const o = n.__obj; if (!o) continue; const f = dimFactor(n.id); for (const m of o.mats) m.opacity = m.userData.base * f; }
-  for (const l of S.links) { const o = l.__obj; if (!o) continue; const a = (l.source.id || l.source), b = (l.target.id || l.target); const f = !S.lit ? 1 : (S.lit.has(a) && S.lit.has(b) ? 1.4 : (S.litLinks && S.litLinks.has(l.id) ? 1.4 : 0.06)); o.mat.opacity = Math.min(1, o.base * f); }
+  for (const n of S.nodes) { const o = n.__obj; if (!o) continue; const f = dimFactor(n.id); for (const m of o.mats) m.opacity = m.userData.base * f; if (n.kind === 'concept' && !n.gf) { const k = linkedPlants(n.id).size; o.group.scale.setScalar(S.bundle && k < 2 ? 0.5 : 1); } }
+  for (const l of S.links) { const o = l.__obj; if (!o) continue; const a = (l.source.id || l.source), b = (l.target.id || l.target); const f = !S.lit ? 1 : (S.lit.has(a) && S.lit.has(b) ? 1.4 : (S.litLinks && S.litLinks.has(l.id) ? 1.4 : 0.06)); o.mat.opacity = Math.min(1, o.base * f * (S.bundle && l.kind === 'pc' ? 0.55 : 1)); }
 }
 
 // ------------------------------------------------------------------ tooltip
@@ -231,7 +260,7 @@ function go(view, silent = false) {
   S.view = view; S.litLinks = null; S.goAt = performance.now(); const G = S.G;
   let vis = null, lit = null;
   const withGf = ps => ps.flatMap(p => [p, growthFormOf(p)].filter(Boolean));
-  if (view.mode === 'home') { vis = new Set(S.allNodes.filter(n => n.kind === 'plant' || n.kind === 'source' || n.kind === 'cultivar' || (n.kind === 'concept' && n.used)).map(n => n.id)); }
+  if (view.mode === 'home') { vis = new Set(S.allNodes.filter(n => n.kind === 'plant' || (n.kind === 'concept' && n.used)).map(n => n.id)); }
   else if (view.mode === 'diagnosis' || view.mode === 'list') { vis = null; }
   else if (view.mode === 'gf') { const ps = [...linkedPlants(view.id)]; const shared = sharedConcepts(ps); vis = new Set([view.id, ...gfIds(), ...withGf(ps), ...Object.values(shared).flat()]); lit = new Set([view.id, ...ps, ...Object.values(shared).flat()]); S.active = [view.id, ...S.active.filter(c => G.O.get(c)?.facet !== 'growth_form')]; }
   else if (view.mode === 'dim') { const cs = S.allNodes.filter(n => n.kind === 'concept' && n.n.dimension === view.dim && (n.used || view.dim === 'classification')).map(n => n.id); const ps = new Set(); for (const c of cs) for (const p of linkedPlants(c)) ps.add(p); vis = new Set([...cs, ...withGf([...ps])]); lit = new Set([...cs, ...ps]); }
@@ -244,6 +273,7 @@ function go(view, silent = false) {
   else if (view.mode === 'variation' || view.mode === 'disagreement') { const set = new Set([view.plant]); for (const e of plantEdges(view.plant)) if (e.facet === view.facet) set.add(e.target); vis = new Set([...set, growthFormOf(view.plant)].filter(Boolean)); lit = set; }
   else if (view.mode === 'link') { vis = new Set([view.plant, view.concept, growthFormOf(view.plant)].filter(Boolean)); lit = new Set([view.plant, view.concept]); }
   else if (view.mode === 'relations') { vis = new Set([...G.plants.map(p => p.id), ...gfIds()]); lit = new Set(G.plants.map(p => p.id)); }
+  S.bundle = ['home', 'diagnosis', 'list', 'dim'].includes(view.mode);
   S.visible = vis; S.lit = lit; S.userMoved = false; applyVisible(); applyDim(); renderTrail(); renderPanel(); moveCamera(1100); scheduleFits();
   document.querySelectorAll('#rail button[data-view]').forEach(b => b.classList.toggle('on', b.dataset.view === (view.mode === 'dim' ? view.dim : (view.mode === 'gf' || view.mode === 'set' || view.mode === 'concept') ? '' : view.mode)));
 }
@@ -277,7 +307,7 @@ function moveCamera(ms) {
   const v = S.view;
   if (v.mode === 'diagnosis' || v.mode === 'list') { fitNodes(new Set(S.nodes.filter(n => n.kind !== 'source' && !(n.kind === 'concept' && !n.used)).map(n => n.id)), ms, 60); return; }
   if (v.mode === 'sources') { fitNodes(new Set(S.nodes.filter(n => n.kind === 'source' || n.kind === 'plant').map(n => n.id)), ms, 40); return; }
-  const ids = S.visible ? new Set(S.visible) : null; fitNodes(ids, ms, v.mode === 'home' ? 24 : 44);
+  const ids = S.visible ? new Set(S.visible) : null; fitNodes(ids, ms, v.mode === 'home' ? 96 : 44);
 }
 
 // ------------------------------------------------------------------ trail (the walk) & panel
@@ -483,7 +513,7 @@ function runQuery(q) {
   const found = conceptsInText(G, q); const concepts = [...found.keys()].filter(id => G.O.has(id));
   const byDim = {}; for (const c of concepts) (byDim[G.O.get(c).dimension] = byDim[G.O.get(c).dimension] || []).push(c);
   const conceptChips = ENTRY.filter(d => byDim[d]).map(d => `<div class="muted small" style="margin-top:6px">${dimDot(d)} ${esc(DIM[d].label)}</div><div class="chips">${byDim[d].map(c => `<span class="chip" data-id="${esc(c)}" style="--c:${DIM[d].colour}">${esc(G.label(c))} <small>${esc(found.get(c))}</small></span>`).join('')}</div>`).join('');
-  S.history.push(S.view); S.view = { mode: 'ask' }; S.goAt = performance.now(); S.visible = new Set([...concepts, ...G.plants.map(p => p.id), ...gfIds()]); S.lit = new Set(concepts); S.litLinks = new Set(); S.userMoved = false; applyVisible(); applyDim(); renderTrail(); scheduleFits(); document.querySelectorAll('#rail button[data-view]').forEach(b => b.classList.remove('on'));
+  S.history.push(S.view); S.view = { mode: 'ask' }; S.bundle = false; S.goAt = performance.now(); S.visible = new Set([...concepts, ...G.plants.map(p => p.id), ...gfIds()]); S.lit = new Set(concepts); S.litLinks = new Set(); S.userMoved = false; applyVisible(); applyDim(); renderTrail(); scheduleFits(); document.querySelectorAll('#rail button[data-view]').forEach(b => b.classList.remove('on'));
   $('#ask-label').classList.add('on');
   S.askPanel = `<h2>What a question activates</h2><div class="kicker">retrieval preview · not a full AI trace · “${esc(q)}”</div><div class="layer"><h3><span class="step">01</span> Concepts named by the question</h3>${conceptChips || '<p class="muted">no concept matched by alias</p>'}</div><p class="muted">Step 2 — the retriever runs (names → gates → BM25 → R5 order)…</p>`; renderPanel();
   moveCamera(700);
