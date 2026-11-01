@@ -31,7 +31,7 @@ GATE_FIELDS = list(SCHEMA["field_tiers"]["gate"]["fields"].keys())
 FIELD_FACETS = defaultdict(list)
 for facet, fields in ONT["facet_fields"].items():
     for fld in fields: FIELD_FACETS[fld.split(".")[0]].append(facet)
-GATE_FACETS = sorted({fc for fld in GATE_FIELDS for fc in FIELD_FACETS.get(fld, [])} - {"hardiness", "hardiness_rhs"} | {"hardiness_usda"})  # hardiness: any scale counts, see gap (a)
+GATE_FACETS = sorted(({fc for fld in GATE_FIELDS for fc in FIELD_FACETS.get(fld, [])} - {"hardiness", "hardiness_rhs", "growth_form"}) | {"hardiness_usda"})  # hardiness: any scale counts, see gap (a); growth_form is an organising layer, not a gate
 ORDINAL_FACETS = {"exposure", "water", "maintenance", "invasive", "growth_rate", "height_class", "spread_class", "hardiness", "hardiness_usda", "hardiness_rhs", "toxicity", "evergreen"}
 
 live = lambda c: c.get("status") != "retired" and c.get("source_type") != "model"
@@ -99,6 +99,39 @@ for pid, p in PLANTS.items():
         cid = next((n["id"] for n in ONT["nodes"] if n["facet"] == facet and (n["label"] == val or n["id"] == f"{facet}:{val}")), None)
         if cid:
             edges.append({"id": f"entity:{pid}:{key}", "type": "entity", "source": f"plant:{pid}", "plant": f"plant:{pid}", "target": cid, "facet": facet, "field": f"entity.{key}", "relation": "is", "source_id": "entity", "source_type": "entity", "status": "entity", "live": True, "value_label": val, "text": f"{e['scientific_name']} is recorded as {NODES[cid]['label']} in its entity record.", "conditions": [], "place": None, "time": [], "cultivar": None, "numbers": None, "claim_id": None})
+# growth form (M29): never inferred from 'Broadleaf evergreen'. Rule: (1) a KPU plant type that names a life form counts as one
+# piece of evidence; (2) live sourced claim texts (habit, height, growth rate, use, context fields) that say tree / shrub / grass /
+# fern / climber count one per source; (3) a survey respondent's typed role counts as practitioner evidence. The form with most
+# distinct sources wins; one source -> status 'to confirm', two or more -> 'supported'. Evidence ids travel with the edge.
+KPU_FORM = {"Tree - deciduous": "tree", "Shrub - deciduous": "shrub", "Poales (grass-like)": "graminoid", "Bamboo": "graminoid", "Herbaceous perennial": "herbaceous_perennial", "Fern": "fern", "Vine - deciduous": "vine", "Vine or climber": "vine", "Conifer": "tree"}
+FORM_WORDS = [("tree", r"\b(?:small |medium |large )?trees?\b"), ("shrub", r"\b(?:sub-?)?shrubs?\b"), ("graminoid", r"\b(?:grass|grasses|sedges?|rushes?|bamboo)\b"), ("fern", r"\bferns?\b"), ("vine", r"\b(?:vine|climber|liana)s?\b"), ("herbaceous_perennial", r"\bherbaceous perennial\b")]
+FORM_FIELDS = {"habit", "form", "mature_height", "mature_spread", "growth_rate", "landscape_use", "behaviour_with_others", "long_term_performance", "vancouver_context", "texture"}
+growth_forms = {}
+for pid, p in PLANTS.items():
+    e = p["entity"]; votes = defaultdict(dict)   # form -> source -> evidence
+    kf = KPU_FORM.get(e.get("kpu_plant_type"))
+    if kf: votes[kf]["kpu (entity.kpu_plant_type)"] = f"kpu_plant_type = {e['kpu_plant_type']}"
+    weak = set()
+    for c in p["claims"]:
+        if not live(c) or c["field"] not in FORM_FIELDS: continue
+        text = f"{c.get('text') or ''} {c.get('note') or ''}"
+        for form, rx in FORM_WORDS:
+            if re.search(rx, text, re.I):
+                votes[form].setdefault(c["source_id"], c["id"])
+                if c["field"] in ("landscape_use", "vancouver_context"): weak.add((form, c["source_id"]))
+    for role in e.get("respondent_roles") or []:
+        if role in ("tree", "shrub", "graminoid", "fern", "vine"): votes[role].setdefault("survey (entity.respondent_roles)", f"respondent typed '{role}'")
+    if not votes: continue
+    form, ev = max(votes.items(), key=lambda kv: (len(kv[1]), kv[0]))
+    strong = [sid for sid in ev if (form, sid) not in weak and not sid.startswith("survey")]
+    status = "supported" if len(strong) >= 1 and len(ev) >= 2 else "to confirm"   # needs one strong database/KPU statement plus a second voice
+    others = {f: list(v.keys()) for f, v in votes.items() if f != form}
+    growth_forms[pid] = {"form": form, "status": status, "evidence": ev, "weak": sorted(sid for f, sid in weak if f == form), "other_mentions": others}
+    cid = f"growth_form:{form}"
+    if cid in NODES:
+        edges.append({"id": f"class:{pid}", "type": "classification", "source": f"plant:{pid}", "plant": f"plant:{pid}", "target": cid, "facet": "growth_form", "field": "growth_form", "relation": "is", "source_id": "classification", "source_type": "classification", "status": status, "live": True, "evidence": ev, "weak": sorted(sid for f, sid in weak if f == form), "other_mentions": others, "value_label": NODES[cid]["label"], "text": f"{e['scientific_name']} is read as a {NODES[cid]['label'].lower()} from {len(ev)} source{'s' if len(ev) != 1 else ''}: {', '.join(ev.keys())}.", "conditions": [], "place": None, "time": [], "cultivar": None, "numbers": None, "claim_id": None})
+        for n in nodes:
+            if n["id"] == f"plant:{pid}": n["growth_form"] = cid; n["growth_form_status"] = status
 for r in REL["relations"]:
     if r["plant_a"] in PLANTS and r["plant_b"] in PLANTS:
         edges.append({"id": f"rel:{r['id']}", "type": "relation", "source": f"plant:{r['plant_a']}", "target": f"plant:{r['plant_b']}", "relation": r.get("relation_type"), "direction": r.get("direction"), "status": r.get("status"), "source_id": r.get("source_id"), "source_type": r.get("source_type"), "confidence": r.get("confidence"), "text": r.get("text"), "context": r.get("context"), "supporting_claims": r.get("supporting_claims") or [], "derived_from": r.get("derived_from") or [], "live": r.get("status") != "retired" and r.get("source_type") != "model"})
@@ -238,11 +271,12 @@ diagnosis = {"generated": TODAY, "rules": {"hubs": "concept linked to ≥ 2 plan
 
 graph = {"generated": TODAY, "ontology_version": ONT["$ontology_version"], "schema_version": SCHEMA["$schema_version"], "generated_by": "tools/build_graph.py",
          "counts": {"nodes": len(nodes), "concepts": sum(1 for n in nodes if n["type"] == "concept"), "plants": len(PLANTS), "cultivars": sum(len(v) for v in cultivars.values()), "sources": sum(1 for n in nodes if n["type"] in ("source", "practitioner")), "edges": len(edges), "claim_edges": sum(1 for e in edges if e["type"] == "claim"), "live_claim_edges": len(E), "relation_edges": sum(1 for e in edges if e["type"] == "relation")},
-         "gate_facets": GATE_FACETS, "nodes": nodes, "edges": edges}
+         "gate_facets": GATE_FACETS, "growth_forms": growth_forms, "nodes": nodes, "edges": edges}
 os.makedirs(os.path.join(ROOT, "brain", "data"), exist_ok=True)
 with open(os.path.join(ROOT, "brain", "data", "graph.json"), "w", encoding="utf-8") as f: json.dump(graph, f, ensure_ascii=False, indent=1)
 with open(os.path.join(ROOT, "brain", "data", "diagnosis.json"), "w", encoding="utf-8") as f: json.dump(diagnosis, f, ensure_ascii=False, indent=1)
 print(f"graph.json: {graph['counts']}")
+for pid, g in growth_forms.items(): print(f"  growth form: {pid} -> {g['form']} ({g['status']}; {', '.join(g['evidence'].keys())})")
 print(f"diagnosis.json: {diagnosis['counts']}")
 for v in variation: print("  variation:", v["text"])
 for d in disagreement: print("  disagreement:", d["text"])

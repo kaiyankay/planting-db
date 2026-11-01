@@ -103,6 +103,16 @@ for i, (h, d) in enumerate(RHS_H.items(), 1):
     node("hardiness_rhs", "condition", f"RHS {h}", f"Royal Horticultural Society hardiness rating {h}: {d}; H4 and above cover Vancouver's winter lows.", order=i, source="RHS", id=f"hardiness_rhs:{h}")
 node("wind", "condition", "Exposed", "Open to strong or cold wind with no shelter from buildings or other plants.", aliases=["windy site", "exposed site"], source="RHS wording")
 
+# ============================================================ classification: growth form (an organising layer above the KPU plant type, which mixes life form and leaf habit)
+GF = [("tree", "Tree", "A woody plant usually with a single trunk, reaching well above head height at maturity.", ["trees", "small tree", "medium tree"]),
+      ("shrub", "Shrub", "A woody plant branching from or near the ground, usually under 5 m; includes sub-shrubs and woody ground covers.", ["shrubs", "sub-shrub", "subshrub", "bush", "woody ground cover"]),
+      ("graminoid", "Graminoid", "Grasses, sedges and rushes: narrow-leaved plants of the order Poales, including bamboo.", ["grass", "grasses", "sedge", "rush", "bamboo", "grass-like"]),
+      ("herbaceous_perennial", "Herbaceous perennial", "A non-woody plant that dies back and returns each year.", ["perennial herb", "forb"]),
+      ("fern", "Fern", "A spore-bearing plant with fronds, no flowers.", ["ferns"]),
+      ("vine", "Vine or climber", "A plant that climbs or scrambles on a support rather than standing alone.", ["climber", "vine", "liana"])]
+for i, (k, lab, d, al) in enumerate(GF, 1):
+    node("growth_form", "classification", lab, d, aliases=al, order=i, source="ontology (organising layer, M29); words taken from source descriptions", id=f"growth_form:{k}")
+
 # ============================================================ trait
 node("evergreen", "trait", "Evergreen", "Keeps its leaves through winter, so it reads the same all year.", aliases=["year-round", "stays green", "常绿"], source="schema seasonal_interest.evergreen; intent_map 'evergreen'", id="evergreen:yes")
 node("evergreen", "trait", "Deciduous", "Drops its leaves in autumn and stands bare in winter.", aliases=["loses leaves", "落叶"], source="schema seasonal_interest.evergreen=false", id="evergreen:no")
@@ -198,6 +208,7 @@ for p in V["kpu_pest"]:
 
 # ============================================================ facet → claim field map (what feeds each facet) and dimension list
 FACET_FIELDS = {
+    "growth_form": ["entity.kpu_plant_type", "habit", "mature_height", "growth_rate", "landscape_use", "entity.respondent_roles"],
     "exposure": ["exposure"], "soil": ["soil_type"], "water": ["water_drainage"], "hardiness": ["hardiness_zone"], "hardiness_usda": ["hardiness_zone"], "hardiness_rhs": ["hardiness_zone"], "wind": ["exposure"],
     "evergreen": ["seasonal_interest.evergreen"], "height_class": ["mature_height", "local_mature_size", "time_to_intended_size"], "spread_class": ["mature_spread", "time_to_intended_size"], "growth_rate": ["growth_rate"],
     "colour": ["seasonal_interest.flower_colour", "seasonal_interest.foliage_colour"], "texture": ["texture"], "form": ["form"], "habit": ["habit"], "plant_type": ["entity.kpu_plant_type"],
@@ -208,7 +219,7 @@ FACET_FIELDS = {
     "origin": ["entity.origin_status", "ecological_value"], "invasive": ["invasive_status"],
     "stress": ["resistances", "pest_susceptibility"], "browsing": ["resistances"], "pest": ["resistances", "pest_susceptibility"],
 }
-DIMENSIONS = {"condition": ["exposure", "soil", "water", "hardiness", "hardiness_usda", "hardiness_rhs", "wind"], "trait": ["evergreen", "height_class", "spread_class", "growth_rate", "colour", "texture", "form", "habit", "plant_type", "interest", "fruit", "maintenance", "toxicity", "photoperiod"], "use": ["use", "ecology"], "time": ["season", "month", "age"], "place": ["place"], "status": ["origin", "invasive"], "resistance": ["stress", "browsing", "pest"]}
+DIMENSIONS = {"classification": ["growth_form"], "condition": ["exposure", "soil", "water", "hardiness", "hardiness_usda", "hardiness_rhs", "wind"], "trait": ["evergreen", "height_class", "spread_class", "growth_rate", "colour", "texture", "form", "habit", "plant_type", "interest", "fruit", "maintenance", "toxicity", "photoperiod"], "use": ["use", "ecology"], "time": ["season", "month", "age"], "place": ["place"], "status": ["origin", "invasive"], "resistance": ["stress", "browsing", "pest"]}
 
 out = {
     "$ontology_version": "0.1.0", "updated": TODAY, "generated_by": "tools/build_ontology.py",

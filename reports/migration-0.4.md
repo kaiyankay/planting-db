@@ -1,6 +1,6 @@
 # Migration to schema 0.4.0 — 2026-10-31
 
-Script: `tools/migrate_0_4.py`. Ontology: `ontology.json` v0.1.0 (306 nodes). Claims processed: 165 across 3 plants. Nothing deleted; every original value kept (`value_label`, `context`).
+Script: `tools/migrate_0_4.py`. Ontology: `ontology.json` v0.1.0 (312 nodes). Claims processed: 165 across 3 plants. Nothing deleted; every original value kept (`value_label`, `context`).
 
 ## Per field
 

@@ -4,6 +4,9 @@
  "generated_by": "tools/build_ontology.py",
  "note": "Concept nodes of the Planting Intelligence knowledge base. Ids are facet:slug. KPU labels verbatim. Definitions written for this file (methods M26, to confirm); terms from other vocabularies name their source in source_of_term. Rebuild with python3 -I tools/build_ontology.py.",
  "dimensions": {
+  "classification": [
+   "growth_form"
+  ],
   "condition": [
    "exposure",
    "soil",
@@ -52,6 +55,14 @@
   ]
  },
  "facet_fields": {
+  "growth_form": [
+   "entity.kpu_plant_type",
+   "habit",
+   "mature_height",
+   "growth_rate",
+   "landscape_use",
+   "entity.respondent_roles"
+  ],
   "exposure": [
    "exposure"
   ],
@@ -817,6 +828,92 @@
     "windy site"
    ],
    "source_of_term": "RHS wording"
+  },
+  {
+   "id": "growth_form:tree",
+   "dimension": "classification",
+   "facet": "growth_form",
+   "label": "Tree",
+   "definition": "A woody plant usually with a single trunk, reaching well above head height at maturity.",
+   "aliases": [
+    "medium tree",
+    "small tree",
+    "trees"
+   ],
+   "source_of_term": "ontology (organising layer, M29); words taken from source descriptions",
+   "order": 1
+  },
+  {
+   "id": "growth_form:shrub",
+   "dimension": "classification",
+   "facet": "growth_form",
+   "label": "Shrub",
+   "definition": "A woody plant branching from or near the ground, usually under 5 m; includes sub-shrubs and woody ground covers.",
+   "aliases": [
+    "bush",
+    "shrubs",
+    "sub-shrub",
+    "subshrub",
+    "woody ground cover"
+   ],
+   "source_of_term": "ontology (organising layer, M29); words taken from source descriptions",
+   "order": 2
+  },
+  {
+   "id": "growth_form:graminoid",
+   "dimension": "classification",
+   "facet": "growth_form",
+   "label": "Graminoid",
+   "definition": "Grasses, sedges and rushes: narrow-leaved plants of the order Poales, including bamboo.",
+   "aliases": [
+    "bamboo",
+    "grass",
+    "grass-like",
+    "grasses",
+    "rush",
+    "sedge"
+   ],
+   "source_of_term": "ontology (organising layer, M29); words taken from source descriptions",
+   "order": 3
+  },
+  {
+   "id": "growth_form:herbaceous_perennial",
+   "dimension": "classification",
+   "facet": "growth_form",
+   "label": "Herbaceous perennial",
+   "definition": "A non-woody plant that dies back and returns each year.",
+   "aliases": [
+    "forb",
+    "perennial herb"
+   ],
+   "source_of_term": "ontology (organising layer, M29); words taken from source descriptions",
+   "order": 4
+  },
+  {
+   "id": "growth_form:fern",
+   "dimension": "classification",
+   "facet": "growth_form",
+   "label": "Fern",
+   "definition": "A spore-bearing plant with fronds, no flowers.",
+   "aliases": [
+    "ferns"
+   ],
+   "source_of_term": "ontology (organising layer, M29); words taken from source descriptions",
+   "order": 5
+  },
+  {
+   "id": "growth_form:vine",
+   "dimension": "classification",
+   "facet": "growth_form",
+   "label": "Vine or climber",
+   "definition": "A plant that climbs or scrambles on a support rather than standing alone.",
+   "aliases": [
+    "climber",
+    "liana",
+    "vine"
+   ],
+   "source_of_term": "ontology (organising layer, M29); words taken from source descriptions",
+   "order": 6
   },
   {
    "id": "evergreen:yes",

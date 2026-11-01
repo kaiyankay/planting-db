@@ -2,7 +2,7 @@
 
 ARCH 540 Assignment 2 · UBC MLA · schema 0.4.0 (concept ids, ontology.json) · 2026-10-31
 
-**Knowledge Brain (live):** <https://kaiyankay.github.io/planting-db/brain/> — v4, a concept-centred knowledge graph · [v3](https://kaiyankay.github.io/planting-db/brain/v3/) · [v2](https://kaiyankay.github.io/planting-db/brain/v2/) · [v1](https://kaiyankay.github.io/planting-db/brain/v1/) · code and notes in `brain/`
+**Knowledge Brain (live):** <https://kaiyankay.github.io/planting-db/brain/> — v4.1, a concept-centred knowledge graph read from a growth-form classification · [v3](https://kaiyankay.github.io/planting-db/brain/v3/) · [v2](https://kaiyankay.github.io/planting-db/brain/v2/) · [v1](https://kaiyankay.github.io/planting-db/brain/v1/) · code and notes in `brain/`
 
 ```
 planting-db/

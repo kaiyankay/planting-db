@@ -4,12 +4,12 @@
  "schema_version": "0.4.0",
  "generated_by": "tools/build_graph.py",
  "counts": {
-  "nodes": 335,
-  "concepts": 306,
+  "nodes": 341,
+  "concepts": 312,
   "plants": 3,
   "cultivars": 4,
   "sources": 22,
-  "edges": 403,
+  "edges": 406,
   "claim_edges": 356,
   "live_claim_edges": 298,
   "relation_edges": 6
@@ -24,6 +24,49 @@
   "spread_class",
   "water"
  ],
+ "growth_forms": {
+  "acer-palmatum": {
+   "form": "tree",
+   "status": "supported",
+   "evidence": {
+    "kpu (entity.kpu_plant_type)": "kpu_plant_type = Tree - deciduous",
+    "gpp": "acer-palmatum:growth_rate:gpp01",
+    "cov_trees": "acer-palmatum:vancouver_context:cov01",
+    "survey (entity.respondent_roles)": "respondent typed 'tree'"
+   },
+   "weak": [
+    "cov_trees"
+   ],
+   "other_mentions": {}
+  },
+  "gaultheria-shallon": {
+   "form": "shrub",
+   "status": "supported",
+   "evidence": {
+    "osu": "gaultheria-shallon:habit:osu01",
+    "eflora": "gaultheria-shallon:mature_height:eflora01",
+    "survey (entity.respondent_roles)": "respondent typed 'shrub'"
+   },
+   "weak": [],
+   "other_mentions": {
+    "fern": [
+     "osu"
+    ]
+   }
+  },
+  "vaccinium-ovatum": {
+   "form": "shrub",
+   "status": "to confirm",
+   "evidence": {
+    "rhs": "vaccinium-ovatum:landscape_use:rhs01",
+    "survey (entity.respondent_roles)": "respondent typed 'shrub'"
+   },
+   "weak": [
+    "rhs"
+   ],
+   "other_mentions": {}
+  }
+ },
  "nodes": [
   {
    "id": "exposure:sun",
@@ -790,6 +833,104 @@
    "parent": null,
    "order": null,
    "source_of_term": "RHS wording"
+  },
+  {
+   "id": "growth_form:tree",
+   "type": "concept",
+   "label": "Tree",
+   "dimension": "classification",
+   "facet": "growth_form",
+   "definition": "A woody plant usually with a single trunk, reaching well above head height at maturity.",
+   "aliases": [
+    "medium tree",
+    "small tree",
+    "trees"
+   ],
+   "parent": null,
+   "order": 1,
+   "source_of_term": "ontology (organising layer, M29); words taken from source descriptions"
+  },
+  {
+   "id": "growth_form:shrub",
+   "type": "concept",
+   "label": "Shrub",
+   "dimension": "classification",
+   "facet": "growth_form",
+   "definition": "A woody plant branching from or near the ground, usually under 5 m; includes sub-shrubs and woody ground covers.",
+   "aliases": [
+    "bush",
+    "shrubs",
+    "sub-shrub",
+    "subshrub",
+    "woody ground cover"
+   ],
+   "parent": null,
+   "order": 2,
+   "source_of_term": "ontology (organising layer, M29); words taken from source descriptions"
+  },
+  {
+   "id": "growth_form:graminoid",
+   "type": "concept",
+   "label": "Graminoid",
+   "dimension": "classification",
+   "facet": "growth_form",
+   "definition": "Grasses, sedges and rushes: narrow-leaved plants of the order Poales, including bamboo.",
+   "aliases": [
+    "bamboo",
+    "grass",
+    "grass-like",
+    "grasses",
+    "rush",
+    "sedge"
+   ],
+   "parent": null,
+   "order": 3,
+   "source_of_term": "ontology (organising layer, M29); words taken from source descriptions"
+  },
+  {
+   "id": "growth_form:herbaceous_perennial",
+   "type": "concept",
+   "label": "Herbaceous perennial",
+   "dimension": "classification",
+   "facet": "growth_form",
+   "definition": "A non-woody plant that dies back and returns each year.",
+   "aliases": [
+    "forb",
+    "perennial herb"
+   ],
+   "parent": null,
+   "order": 4,
+   "source_of_term": "ontology (organising layer, M29); words taken from source descriptions"
+  },
+  {
+   "id": "growth_form:fern",
+   "type": "concept",
+   "label": "Fern",
+   "dimension": "classification",
+   "facet": "growth_form",
+   "definition": "A spore-bearing plant with fronds, no flowers.",
+   "aliases": [
+    "ferns"
+   ],
+   "parent": null,
+   "order": 5,
+   "source_of_term": "ontology (organising layer, M29); words taken from source descriptions"
+  },
+  {
+   "id": "growth_form:vine",
+   "type": "concept",
+   "label": "Vine or climber",
+   "dimension": "classification",
+   "facet": "growth_form",
+   "definition": "A plant that climbs or scrambles on a support rather than standing alone.",
+   "aliases": [
+    "climber",
+    "liana",
+    "vine"
+   ],
+   "parent": null,
+   "order": 6,
+   "source_of_term": "ontology (organising layer, M29); words taken from source descriptions"
   },
   {
    "id": "evergreen:yes",
@@ -4078,7 +4219,9 @@
    "plant_type": "Tree - deciduous",
    "origin_status": "non_native",
    "family": "Sapindaceae",
-   "file": "plants/acer-palmatum.json"
+   "file": "plants/acer-palmatum.json",
+   "growth_form": "growth_form:tree",
+   "growth_form_status": "supported"
   },
   {
    "id": "plant:gaultheria-shallon",
@@ -4092,7 +4235,9 @@
    "plant_type": "Broadleaf evergreen",
    "origin_status": "native_bc_west_of_cascades",
    "family": "Ericaceae",
-   "file": "plants/gaultheria-shallon.json"
+   "file": "plants/gaultheria-shallon.json",
+   "growth_form": "growth_form:shrub",
+   "growth_form_status": "supported"
   },
   {
    "id": "plant:vaccinium-ovatum",
@@ -4108,7 +4253,9 @@
    "plant_type": "Broadleaf evergreen",
    "origin_status": "native_bc_west_of_cascades",
    "family": "Ericaceae",
-   "file": "plants/vaccinium-ovatum.json"
+   "file": "plants/vaccinium-ovatum.json",
+   "growth_form": "growth_form:shrub",
+   "growth_form_status": "to confirm"
   },
   {
    "id": "cultivar:acer-palmatum:(unrecorded)",
@@ -16033,6 +16180,101 @@
    "live": true,
    "value_label": "native_bc_west_of_cascades",
    "text": "Vaccinium ovatum is recorded as Native to BC west of the Cascades in its entity record.",
+   "conditions": [],
+   "place": null,
+   "time": [],
+   "cultivar": null,
+   "numbers": null,
+   "claim_id": null
+  },
+  {
+   "id": "class:acer-palmatum",
+   "type": "classification",
+   "source": "plant:acer-palmatum",
+   "plant": "plant:acer-palmatum",
+   "target": "growth_form:tree",
+   "facet": "growth_form",
+   "field": "growth_form",
+   "relation": "is",
+   "source_id": "classification",
+   "source_type": "classification",
+   "status": "supported",
+   "live": true,
+   "evidence": {
+    "kpu (entity.kpu_plant_type)": "kpu_plant_type = Tree - deciduous",
+    "gpp": "acer-palmatum:growth_rate:gpp01",
+    "cov_trees": "acer-palmatum:vancouver_context:cov01",
+    "survey (entity.respondent_roles)": "respondent typed 'tree'"
+   },
+   "weak": [
+    "cov_trees"
+   ],
+   "other_mentions": {},
+   "value_label": "Tree",
+   "text": "Acer palmatum is read as a tree from 4 sources: kpu (entity.kpu_plant_type), gpp, cov_trees, survey (entity.respondent_roles).",
+   "conditions": [],
+   "place": null,
+   "time": [],
+   "cultivar": null,
+   "numbers": null,
+   "claim_id": null
+  },
+  {
+   "id": "class:gaultheria-shallon",
+   "type": "classification",
+   "source": "plant:gaultheria-shallon",
+   "plant": "plant:gaultheria-shallon",
+   "target": "growth_form:shrub",
+   "facet": "growth_form",
+   "field": "growth_form",
+   "relation": "is",
+   "source_id": "classification",
+   "source_type": "classification",
+   "status": "supported",
+   "live": true,
+   "evidence": {
+    "osu": "gaultheria-shallon:habit:osu01",
+    "eflora": "gaultheria-shallon:mature_height:eflora01",
+    "survey (entity.respondent_roles)": "respondent typed 'shrub'"
+   },
+   "weak": [],
+   "other_mentions": {
+    "fern": [
+     "osu"
+    ]
+   },
+   "value_label": "Shrub",
+   "text": "Gaultheria shallon is read as a shrub from 3 sources: osu, eflora, survey (entity.respondent_roles).",
+   "conditions": [],
+   "place": null,
+   "time": [],
+   "cultivar": null,
+   "numbers": null,
+   "claim_id": null
+  },
+  {
+   "id": "class:vaccinium-ovatum",
+   "type": "classification",
+   "source": "plant:vaccinium-ovatum",
+   "plant": "plant:vaccinium-ovatum",
+   "target": "growth_form:shrub",
+   "facet": "growth_form",
+   "field": "growth_form",
+   "relation": "is",
+   "source_id": "classification",
+   "source_type": "classification",
+   "status": "to confirm",
+   "live": true,
+   "evidence": {
+    "rhs": "vaccinium-ovatum:landscape_use:rhs01",
+    "survey (entity.respondent_roles)": "respondent typed 'shrub'"
+   },
+   "weak": [
+    "rhs"
+   ],
+   "other_mentions": {},
+   "value_label": "Shrub",
+   "text": "Vaccinium ovatum is read as a shrub from 2 sources: rhs, survey (entity.respondent_roles).",
    "conditions": [],
    "place": null,
    "time": [],
