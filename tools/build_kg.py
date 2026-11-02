@@ -36,9 +36,10 @@ Standard library only. Nothing in plants/, relations.json or ontology.json is wr
 """
 import json, os
 from collections import defaultdict
+from itertools import combinations
 from datetime import date
 
-ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+ROOT = os.environ.get("PLANTING_DB_ROOT") or os.path.dirname(os.path.dirname(os.path.abspath(__file__)))   # a test root may be given (tools/scale_test.py)
 J = lambda p: json.load(open(os.path.join(ROOT, p), encoding="utf-8"))
 ONT, GRAPH, DIAG, REL, SRC, SCHEMA = J("ontology.json"), J("brain/data/graph.json"), J("brain/data/diagnosis.json"), J("relations.json"), J("sources.json"), J("schema.json")
 O = {n["id"]: n for n in ONT["nodes"]}
@@ -234,6 +235,36 @@ gaps = {"gate_facet_missing": [g for g in DIAG["gaps"] if g["kind"] == "gate_fac
         "relations_to_confirm": [r["id"] for r in ONT["relations"] if r.get("to_confirm")], "model_placeholders": [e["id"] for e in edges if e["type"] == "relation" and e["kg_status"] == "candidate"]}
 conflicts = {"disagreement": DIAG["disagreement"], "variation": DIAG["variation"], "design_use_vs_traits": [{"plant": e["plant"], "concept": e["target"], "text": e["text"]} for e in design_edges if e["kg_status"] == "derived" and e["verdict"] == "contradicted by traits"]}
 
+# ---------------------------------------------------------------- knowledge areas (ontology-defined) · per-plant summary · plant pairs
+AREAS = ONT["xyz"].get("knowledge_areas", {})
+AREA_OF_CAT = {c: a for a, d in AREAS.items() for c in d["categories"]}
+area_of = lambda cid: AREA_OF_CAT.get((O.get(cid) or {}).get("category")) or ("classification" if (O.get(cid) or {}).get("dimension") in ("taxonomy", "classification") else "evidence" if (O.get(cid) or {}).get("facet") in ("place", "age") else None)
+for n in nodes:
+    if n["type"] == "concept": n["area"] = area_of(n["id"]); n["plants"] = sorted(targets_live.get(n["id"], set()) | {p for d in descendants(n["id"]) for p in targets_live.get(d, set())})
+knowledge_edges = [e for e in edges if e.get("live") and e.get("target") and (e["type"] in ("claim", "entity", "classification", "height_band", "layer", "taxonomy") or (e["type"] == "design" and e["kg_status"] in ("derived", "candidate")))]
+plant_areas = {}
+for pid in plant_ids:
+    mine = [e for e in knowledge_edges if (e.get("plant") or e["source"]) == pid]
+    summary = {}
+    for e in mine:
+        a = area_of(e["target"]) or "evidence"; d = summary.setdefault(a, {"concepts": set(), "edges": 0, "verified": 0, "derived": 0, "candidate": 0})
+        d["concepts"].add(e["target"]); d["edges"] += 1; d["verified"] += e.get("verification") == "verified"; d["derived"] += e.get("kg_status") == "derived"; d["candidate"] += e.get("kg_status") == "candidate"
+    srcs = {e["source_id"] for e in mine if e.get("source_id") and e["type"] in ("claim",)}; places = {e["place"] for e in mine if e.get("place")}
+    summary["evidence"] = {"concepts": places, "edges": len(srcs), "verified": 0, "derived": 0, "candidate": 0, "sources": sorted(srcs)}
+    rels = [e for e in edges if e["type"] == "relation" and pid in (e["source"], e["target"])]
+    summary["relations"] = {"concepts": {e["target"] if e["source"] == pid else e["source"] for e in rels}, "edges": len(rels), "verified": sum(1 for e in rels if e.get("verification") == "verified"), "derived": sum(1 for e in rels if e["kg_status"] == "derived"), "candidate": sum(1 for e in rels if e["kg_status"] == "candidate")}
+    plant_areas[pid] = {a: {**d, "concepts": sorted(d["concepts"])} for a, d in summary.items()}
+plant_pairs = []
+for a, b in combinations(plant_ids, 2):
+    ta = {e["target"]: e for e in knowledge_edges if (e.get("plant") or e["source"]) == a}; tb = {e["target"]: e for e in knowledge_edges if (e.get("plant") or e["source"]) == b}
+    shared = sorted(set(ta) & set(tb)); by_area = defaultdict(list)
+    for c in shared: by_area[area_of(c) or "evidence"].append(c)
+    direct = [{"id": e["id"], "rel": e["rel"], "kg_status": e["kg_status"], "verification": e.get("verification"), "direction": e.get("direction"), "source_id": e.get("source_id"), "text": e.get("text")} for e in edges if e["type"] == "relation" and {e["source"], e["target"]} == {a, b}]
+    sourced = [d for d in direct if d["kg_status"] != "candidate"]
+    txt = f"{plant_label(a)} and {plant_label(b)} share {len(shared)} knowledge nodes" + (f" ({', '.join(f'{len(v)} {AREAS.get(k, {}).get('label', k).lower()}' for k, v in sorted(by_area.items(), key=lambda kv: -len(kv[1])))})" if shared else "") + "; " + (f"{len(sourced)} sourced relation{'s' if len(sourced) != 1 else ''} link them ({', '.join(d['rel'] for d in sourced)})" if sourced else "no sourced relation links them") + (f"; {len(direct) - len(sourced)} model placeholder{'s' if len(direct) - len(sourced) != 1 else ''} await evidence" if len(direct) > len(sourced) else "") + " — shared attributes are not a planting recommendation."
+    plant_pairs.append({"plants": [a, b], "shared": shared, "shared_by_area": dict(by_area), "n_shared": len(shared), "direct_relations": direct, "n_sourced_relations": len(sourced), "text": txt})
+plant_pairs.sort(key=lambda p: (-p["n_sourced_relations"], -p["n_shared"]))
+
 # ---------------------------------------------------------------- claim index for the evidence trace
 claims = {}
 for pid, p in PLANTS.items():
@@ -246,8 +277,9 @@ counts = {"nodes": len(nodes), "edges": len(edges), "concepts": sum(1 for n in n
 kg = {"generated": TODAY, "generated_by": "tools/build_kg.py", "ontology_version": ONT["$ontology_version"], "schema_version": SCHEMA["$schema_version"], "counts": counts, "xyz": ONT["xyz"], "dimensions": ONT["dimensions"], "gate_facets": GRAPH["gate_facets"], "growth_forms": GRAPH["growth_forms"],
       "rules": {"KG-R1": "a KPU landscape-use label that names a design concept maps to it (ontology maps_to); a plant with a sourced claim on that use is derived suited to the concept, with the claim as evidence", "KG-R2": "a quantitative height claim places the plant in every height band its range intersects; conditions, cultivar and place travel with the edge", "KG-R3": "a vertical layer corresponds to the height bands its plants occupy (to confirm)", "KG-R5": "a plant occupies a vertical layer when its growth form typically forms that layer and a height band the layer corresponds to is reached by one of its height claims; conditions travel with the edge", "KG-R4": "requires_trait relations checked against the plant's live edges: met / unmet (single-valued facet with non-matching claims) / unknown (no claim); all required met → candidate, never promoted; any unmet → contradicted; else evidence missing", "M29": "growth form read from the sources, never inferred from 'Broadleaf evergreen'"},
       "relation_vocabulary": {"part_of": "hierarchy: concept → facet → category → axis", "narrower_than": "concept → group concept", "in_genus / in_family": "taxonomy from the entity record", "is_growth_form": "classification (M29)", "grows_in": "plant → environmental condition (claim)", "has_morphology": "plant → height / spread / form / habit / texture / colour (claim)", "has_temporal_trait": "plant → growth rate / phenology / seasonality / leaf retention (claim)", "has_ecological_value": "plant → ecology / origin / invasive / toxicity / maintenance (claim)", "resists / susceptible_to": "plant → stress, browsing, pest (claim)", "used_for": "plant → KPU landscape use (claim)", "classified_as / has_origin": "entity record", "in_height_band": "plant → Robinson height band (KG-R2)", "occupies_layer": "plant → vertical layer (KG-R5)", "requires_trait / maps_to / typically_formed_by / corresponds_to": "concept → concept (literature)", "suited_for": "plant → design concept (KG-R1 derived · KG-R4 candidate / unknown)", "companion / co_listed / competes / layered_under / …": "plant → plant (relations.json)"},
-      "nodes": nodes, "edges": edges, "claims": claims, "gaps": gaps, "conflicts": conflicts}
+      "knowledge_areas": AREAS, "plant_areas": plant_areas, "plant_pairs": plant_pairs, "nodes": nodes, "edges": edges, "claims": claims, "gaps": gaps, "conflicts": conflicts}
 with open(os.path.join(ROOT, "brain", "data", "kg.json"), "w", encoding="utf-8") as f: json.dump(kg, f, ensure_ascii=False, indent=1)
 print(f"kg.json: {counts}")
+for pp in plant_pairs: print("  pair:", pp["text"])
 for e in design_edges: print(f"  design [{e['kg_status']:9}] {e['text']}")
 print(f"  gaps: {len(gaps['design_unknown'])} design unknown · {len(gaps['design_contradicted'])} contradicted · {len(gaps['design_concepts_without_plants'])} design concepts without plants · {len(gaps['relations_to_confirm'])} relations to confirm · {gaps['single_source_links']} single-source links")

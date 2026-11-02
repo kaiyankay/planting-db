@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Planting Intelligence · Neural Knowledge Brain</title>
+<title>Planting Intelligence · Knowledge Network</title>
 <link rel="icon" href="data:,">
 <style>
   :root {
@@ -25,8 +25,8 @@
 
   /* one label per visible sphere */
   #labels { position: fixed; inset: 0; pointer-events: none; overflow: hidden; }
-  .lbl { position: absolute; transform: translate(-50%, 0); white-space: nowrap; color: var(--ink); font-size: 11.5px; line-height: 1.2; pointer-events: auto; cursor: pointer; text-shadow: 0 0 6px rgba(4,6,15,1), 0 0 2px rgba(4,6,15,1), 0 1px 2px rgba(4,6,15,1); text-align: center; transition: opacity .3s; }
-  .lbl.hidden { opacity: 0 !important; pointer-events: none; } .lbl.far { opacity: .55; font-size: 10.5px; } .lbl.sel { color: #fff; font-weight: 600; }
+  .lbl { position: absolute; left: 0; top: 0; will-change: transform; white-space: nowrap; color: var(--ink); font-size: 11.5px; line-height: 1.2; pointer-events: auto; cursor: pointer; text-shadow: 0 1px 3px rgba(4,6,15,1), 0 0 2px rgba(4,6,15,.9); text-align: center; }
+  .lbl.hidden { display: none; } .lbl.far { opacity: .55; font-size: 10.5px; } .lbl.sel { color: #fff; font-weight: 600; }
   .lbl small { display: inline; font-size: 9.5px; color: var(--ink-dim); font-family: var(--mono); margin-left: 5px; }
   .lbl.plant { font-size: 14px; color: #f4ead0; font-style: italic; } .lbl.plant small { font-style: normal; font-family: var(--sans); display: block; margin: 0; }
   .lbl.axis { font-size: 13.5px; letter-spacing: .14em; text-transform: uppercase; font-weight: 600; } .lbl.axis small { display: block; margin: 1px 0 0; text-transform: none; letter-spacing: 0; }
@@ -88,7 +88,7 @@
 <div id="labels"></div>
 <div id="hud">
   <header id="brand">
-    <h1>Neural Knowledge Brain <small>XYZ ontology · <a href="../">v5</a> · <a href="https://github.com/kaiyankay/planting-db" target="_blank" rel="noopener">source</a> · <a href="./README.md" target="_blank">notes</a></small></h1>
+    <h1>Planting Knowledge Network <small>plant-centred · <a href="../">v5</a> · <a href="https://github.com/kaiyankay/planting-db" target="_blank" rel="noopener">source</a> · <a href="./README.md" target="_blank">notes</a></small></h1>
     <div id="stats">loading…</div>
     <nav id="crumb"></nav>
     <div id="state"></div>

@@ -2,7 +2,7 @@
 
 ARCH 540 Assignment 2 · UBC MLA · schema 0.4.0 (concept ids, ontology.json) · 2026-10-31
 
-**Neural Knowledge Brain — ontology preview (live, 2026-11-02):** <https://kaiyankay.github.io/planting-db/brain/ontology-preview/> — the XYZ ontology and the semantic graph (`brain/data/kg.json`) as one 3D neural network: regions X · Y · Z, evidence trace on every fibre, the four exploration paths, gaps & conflicts, growth · notes in `brain/ontology-preview/README.md`, report in `reports/kg-architecture-2026-11-02.md`
+**Planting Knowledge Network (live, 2026-11-02):** <https://kaiyankay.github.io/planting-db/brain/ontology-preview/> — the semantic graph (`brain/data/kg.json`) as a plant-centred 3D network of spheres and lines: growth forms → plants → knowledge areas → shared knowledge nodes and direct relations, evidence trace on every line, graph retrieval, candidate growth; data-driven, so new plants appear after `tools/pipeline.py` · notes in `brain/ontology-preview/README.md`, report in `reports/kg-architecture-2026-11-02.md`
 
 **Knowledge Brain v5 (live):** <https://kaiyankay.github.io/planting-db/brain/> — the store as one 3D neural network (signals along real links) · [v4](https://kaiyankay.github.io/planting-db/brain/v4/) · [v3](https://kaiyankay.github.io/planting-db/brain/v3/) · [v2](https://kaiyankay.github.io/planting-db/brain/v2/) · [v1](https://kaiyankay.github.io/planting-db/brain/v1/) · code and notes in `brain/`
 
@@ -54,7 +54,8 @@ planting-db/
 
 ```bash
 python3 -I tools/validate.py
-python3 -I tools/build_ontology.py && python3 -I tools/build_graph.py && python3 -I tools/build_kg.py   # rebuild the graphs after any data change
+python3 -I tools/pipeline.py          # rebuild everything after any data change: ontology → graph → kg → validate
+python3 -I tools/scale_test.py        # synthetic plants through the same pipeline (Tests B/C) -> eval/scale-test-<date>.md
 python3 -I tools/kg_query.py --ask "evergreen screen for a shady North Vancouver garden"
 python3 -I tools/cov_trees_fetch.py --genus ACER --species PALMATUM
 python3 -I tools/cov_trees_to_claims.py acer-palmatum ACER PALMATUM --merge

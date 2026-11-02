@@ -30,7 +30,7 @@ Checks (ontology 0.2.0, kg.json): node fields, parents, relation types / endpoin
 import json, os, re, sys
 from datetime import date
 
-ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+ROOT = os.environ.get("PLANTING_DB_ROOT") or os.path.dirname(os.path.dirname(os.path.abspath(__file__)))   # a test root may be given (tools/scale_test.py)
 PLANTS_DIR = os.path.join(ROOT, "plants")
 
 ID_RE = re.compile(r"^([a-z0-9-]+):([a-z_]+):([a-z]*\d+)$")

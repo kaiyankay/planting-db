@@ -2,15 +2,15 @@
 // same traversals as tools/kg_query.py: recognition → traversal over typed edges → claims & evidence → waves the scene can
 // light hop by hop. No keyword similarity, no hard-coded results. Candidate edges from the Grow form are appended to
 // KG.edges (type 'candidate') and take part in traversal and in the requirement check, always labelled candidate.
-const ROOT = '../..';
+// the database root: this repository by default; `?db=<path>` points the interface at another root with the same layout
+// (tools/scale_test.py writes such roots under tests/scale/out/), so nothing about the plants is known to the interface
+const ROOT = new URLSearchParams(location.search).get('db') || '../..';
 async function getJson(p) { const r = await fetch(p, { cache: 'no-store' }); if (!r.ok) throw new Error(`${p}: HTTP ${r.status}`); return r.json(); }
 
 export async function loadAll() {
   const [kg, ontology, diagnosis, schema, sourcesFile, synonyms, intent, queries] = await Promise.all([
-    getJson('../data/kg.json'), getJson(`${ROOT}/ontology.json`), getJson('../data/diagnosis.json'), getJson(`${ROOT}/schema.json`), getJson(`${ROOT}/sources.json`), getJson(`${ROOT}/synonyms.json`), getJson(`${ROOT}/intent_map.json`), getJson(`${ROOT}/eval/queries.json`)]);
-  const ids = synonyms.entries.filter(e => e.in_db).map(e => e.id);
-  const plantFiles = await Promise.all(ids.map(id => getJson(`${ROOT}/plants/${id}.json`)));
-  const plants = {}; for (const p of plantFiles) plants[p.entity.id] = p;
+    getJson(`${ROOT}/brain/data/kg.json`), getJson(`${ROOT}/ontology.json`), getJson(`${ROOT}/brain/data/diagnosis.json`), getJson(`${ROOT}/schema.json`), getJson(`${ROOT}/sources.json`), getJson(`${ROOT}/synonyms.json`), getJson(`${ROOT}/intent_map.json`), getJson(`${ROOT}/eval/queries.json`)]);
+  const plants = {};   // the plant files are not fetched: every claim the interface needs is in kg.json's claim index (one request, however many plants)
   const sources = {}; for (const s of sourcesFile.sources) sources[s.id] = s;
   return makeKG({ kg, ontology, diagnosis, schema, sources, synonyms, intent, queries, plants });
 }
@@ -79,14 +79,17 @@ export function makeKG(db) {
   }
 
   // ---- the four prototype paths: each returns narrative data + waves [{step, nodes, edges}] for the scene
-  function pathA(gf = 'growth_form:shrub') {
+  const firstGrowthForm = () => (kg.nodes.find(n => n.facet === 'growth_form' && n.used) || {}).id || 'growth_form:shrub';
+  const firstPlant = () => (plants[0] || {}).id;
+  const firstDesign = (pref) => (N.has(pref) ? pref : (kg.nodes.find(n => n.dimension === 'design' && n.facet !== 'height_band') || {}).id);
+  function pathA(gf) { gf = gf || firstGrowthForm();
     const cls = edgesTo(gf, null, ['classification']); const ps = cls.map(e => e.source); const waves = [{ step: 'growth form', nodes: [gf], edges: [] }, { step: 'plants', nodes: ps, edges: cls }];
     const attrs = {}; const w3 = { step: 'attributes', nodes: [], edges: [] }; const w4 = { step: 'evidence', nodes: [], edges: [] };
     for (const p of ps) { attrs[p] = {}; for (const e of plantClaimEdges(p)) { const cat = N.get(e.target)?.category || 'cross:place'; (attrs[p][cat] = attrs[p][cat] || []).push(e); w3.edges.push(e); if (!w3.nodes.includes(e.target)) w3.nodes.push(e.target); const s = `source:${e.source_id}`; if (N.has(s) && !w4.nodes.includes(s)) w4.nodes.push(s); } }
     waves.push(w3, w4);
     return { path: 'A', title: `Classification: ${label(gf)}`, seed: gf, hierarchy: hierarchyPath(gf).reverse(), classification: cls, attributes: attrs, evidence: Object.fromEntries(ps.map(p => [p, claimsOf(Object.values(attrs[p]).flat())])), waves };
   }
-  function pathB(z = 'spatial:screen') {
+  function pathB(z) { z = firstDesign(z || 'spatial:screen');
     const reqs = edgesFrom(z, ['requires_trait']); const design = edgesTo(z, null, ['design']).slice().sort((a, b) => ({ derived: 0, candidate: 1, unknown: 2 }[a.kg_status] - { derived: 0, candidate: 1, unknown: 2 }[b.kg_status])); const uses = edgesTo(z, ['maps_to']);
     const traitNodes = [...new Set(reqs.flatMap(r => r.alternatives || [r.target]))];
     const waves = [{ step: 'design concept', nodes: [z], edges: [] }, { step: 'required traits', nodes: [...traitNodes, ...uses.map(u => u.source)], edges: [...reqs, ...uses] }];
@@ -101,7 +104,7 @@ export function makeKG(db) {
     waves.push(w3, w4);
     return { path: 'B', title: `Design knowledge: ${label(z)}`, seed: z, node: N.get(z), hierarchy: hierarchyPath(z).reverse(), requirements: reqs, uses, plants: plantsOut, waves };
   }
-  function pathC(pid = 'plant:gaultheria-shallon', facet = 'height_class') {
+  function pathC(pid, facet = 'height_class') { pid = pid || (db.diagnosis.variation[0] || {}).plant || firstPlant();
     const es = plantClaimEdges(pid, facet); const cs = claimsOf(es); const groups = new Map();
     for (const c of cs) { const k = `${c.cultivar || 'species'}|${conds(c)}`; if (!groups.has(k)) groups.set(k, { cultivar: c.cultivar || 'species', conditions: conds(c), claims: [] }); groups.get(k).claims.push(c); }
     const condNodes = [...new Set(cs.flatMap(c => (c.conditions || []).map(x => x.concept_id)))]; const srcs = [...new Set(cs.map(c => `source:${c.source_id}`))].filter(s => N.has(s)); const places = [...new Set(cs.map(c => c.place).filter(Boolean))];
@@ -109,7 +112,7 @@ export function makeKG(db) {
     const diag = db.diagnosis.disagreement.filter(d => d.plant === pid && d.facet === facet), vari = db.diagnosis.variation.filter(v => v.plant === pid && v.facet === facet);
     return { path: 'C', title: `Knowledge variation: ${label(pid)} · ${facet.replace(/_/g, ' ')}`, seed: pid, facet, claims: cs, groups: [...groups.values()], variation: vari, disagreement: diag, reading: vari.length ? 'values differ with stated conditions' : diag.length ? 'sources disagree under the same (unstated) conditions' : 'no variation or disagreement detected', waves };
   }
-  function pathD(z = 'spatial:scrim') {
+  function pathD(z) { z = firstDesign(z || 'spatial:scrim');
     const b = pathB(z); const missing = [];
     for (const p of b.plants) for (const c of p.checks) if (c.result !== 'met') missing.push({ plant: p.plant, requirement: c.alternatives.map(label).join(' or '), strength: c.strength, result: c.result, why: c.result === 'unknown' ? 'no sourced claim on this facet' : 'sourced claims exist on the facet but none matches' });
     const noPlant = !b.plants.some(p => ['derived', 'candidate'].includes(p.kg_status)); const toConfirm = b.requirements.filter(r => r.to_confirm);
@@ -144,5 +147,6 @@ export function makeKG(db) {
   function addCandidateEdges(es, claim) { db.candidateClaims = db.candidateClaims || {}; db.candidateClaims[claim.id] = claim; for (const e of es) { const cat = N.get(e.target)?.category; edges.push({ ...e, rel: { 'cat:environment': 'grows_in', 'cat:morphology': 'has_morphology', 'cat:temporal': 'has_temporal_trait', 'cat:ecological': 'has_ecological_value', 'cat:landscape_use': 'used_for' }[cat] || 'has_trait', kg_status: 'candidate', verification: 'candidate', basis: { claims: [claim.id], source: 'candidate' } }); } reindex(); }
   function removeCandidates() { for (let i = edges.length - 1; i >= 0; i--) if (edges[i].type === 'candidate') edges.splice(i, 1); db.candidateClaims = {}; reindex(); }
 
-  return { db, kg, N, O, CLAIMS, edges, OUT, IN, plants, label, srcLabel, recognise, rankKey, cmp, attribute, conds, citable, claimOf, liveClaim, edgesFrom, edgesTo, descendants, hierarchyPath, isEvidence, plantClaimEdges, plantEvidenceEdges, claimsOf, checkRequirements, pathA, pathB, pathC, pathD, ask, contextBlock, addCandidateEdges, removeCandidates, reindex, PLACE_VAN, SINGLE_FACETS };
+  const areas = kg.knowledge_areas || {}; const areaOfConcept = cid => N.get(cid)?.area || null; const plantAreas = pid => kg.plant_areas?.[pid] || {}; const pairsOf = pid => (kg.plant_pairs || []).filter(p => p.plants.includes(pid));
+  return { db, kg, N, O, CLAIMS, edges, OUT, IN, plants, label, areas, areaOfConcept, plantAreas, pairsOf, firstGrowthForm, firstPlant, srcLabel, recognise, rankKey, cmp, attribute, conds, citable, claimOf, liveClaim, edgesFrom, edgesTo, descendants, hierarchyPath, isEvidence, plantClaimEdges, plantEvidenceEdges, claimsOf, checkRequirements, pathA, pathB, pathC, pathD, ask, contextBlock, addCandidateEdges, removeCandidates, reindex, PLACE_VAN, SINGLE_FACETS };
 }

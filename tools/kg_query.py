@@ -20,7 +20,7 @@ import json, os, re, sys
 from collections import defaultdict
 from datetime import date
 
-ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+ROOT = os.environ.get("PLANTING_DB_ROOT") or os.path.dirname(os.path.dirname(os.path.abspath(__file__)))   # a test root may be given (tools/scale_test.py)
 J = lambda p: json.load(open(os.path.join(ROOT, p), encoding="utf-8"))
 KG, SYN, SCHEMA, SRCF = J("brain/data/kg.json"), J("synonyms.json"), J("schema.json"), J("sources.json")
 SOURCES = {s["id"]: s for s in SRCF["sources"]}

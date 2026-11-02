@@ -150,7 +150,9 @@ Three routes over the claim store: (1) structured filter on gate fields; (2) sem
 3. Layering / relations: the 3 plants vertically, relation edges typed.
 4. Coverage matrix: fields × plants, cell = number of independent sources (shows what knowledge is easy vs scarce).
 
-### T8 — XYZ ontology, semantic graph, graph retrieval, Neural Knowledge Brain — DONE 2026-11-02 (brief 'Knowledge Graph Reconstruction')
+### T8 — XYZ ontology, semantic graph, graph retrieval, Knowledge Network interface — DONE 2026-11-02 (briefs 'Knowledge Graph Reconstruction', 'Visual Simplification', 'Scalable Knowledge Network')
+
+**Adding a plant:** write `plants/<id>.json` (claims with ontology ids, 0.4.0 fields), add its sources to `sources.json` and its names to `synonyms.json` (`in_db: true`), then `python3 -I tools/pipeline.py` (build_ontology → build_graph → build_kg → validate). The interface at `brain/ontology-preview/` reads `brain/data/kg.json` and nothing else about the plants: growth form (M29), taxonomy, knowledge areas (ontology `knowledge_areas`), shared knowledge with every other plant and direct relations appear without touching a line of interface code. `tools/scale_test.py` proves this with synthetic plants (Tests B and C, `eval/scale-test-<date>.md`, roots under `tests/scale/out/`, gitignored). Methods M34.
 
 Pipeline: `tools/build_ontology.py` → `tools/build_graph.py` → `tools/build_kg.py` → `tools/validate.py` (now also checks ontology relations and kg.json); `tools/kg_query.py --all` writes the four exploration paths. Everything to confirm is listed in `reports/kg-architecture-2026-11-02.md` §Knowledge gaps: 22 literature relations at page level, the *Scrim* term, the height-band bounds, the KG-R4 single-valued facet list, and the habit-claim gap behind *Vaccinium ovatum* ↔ Screen. The original v5 is untouched at `brain/`; `graph.json` keeps its v5 scope.
 

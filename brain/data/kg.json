@@ -38,6 +38,71 @@
   }
  },
  "xyz": {
+  "knowledge_areas": {
+   "classification": {
+    "label": "Classification",
+    "categories": [
+     "cat:taxonomy",
+     "cat:growth_form_cat"
+    ],
+    "order": 1,
+    "definition": "What the plant is: family, genus, growth form, KPU plant type."
+   },
+   "environment": {
+    "label": "Environmental Conditions",
+    "categories": [
+     "cat:environment"
+    ],
+    "order": 2,
+    "definition": "Light, soil, water, hardiness and shelter the plant needs or tolerates."
+   },
+   "morphology_growth": {
+    "label": "Morphology & Growth",
+    "categories": [
+     "cat:morphology",
+     "cat:temporal"
+    ],
+    "order": 3,
+    "definition": "Size, form, habit, texture, colour, growth rate, phenology and leaf retention."
+   },
+   "ecology": {
+    "label": "Ecological Performance",
+    "categories": [
+     "cat:ecological"
+    ],
+    "order": 4,
+    "definition": "Habitat and ecological value, origin and invasive status, resistance, maintenance and risk."
+   },
+   "design": {
+    "label": "Planting Design Functions",
+    "categories": [
+     "cat:landscape_use",
+     "cat:vertical_structure",
+     "cat:space_making",
+     "cat:composition",
+     "cat:planting_role"
+    ],
+    "order": 5,
+    "definition": "Documented landscape uses and the design concepts they map to; derived layers and height bands; rule-checked design links."
+   },
+   "relations": {
+    "label": "Plant-to-Plant Relationships",
+    "categories": [],
+    "order": 6,
+    "definition": "Direct relations recorded in relations.json (companion, co-listed, competes, layered under …) and the knowledge nodes two plants share — shared attributes are never read as a planting recommendation."
+   },
+   "evidence": {
+    "label": "Evidence & Sources",
+    "categories": [
+     "cross:place",
+     "cross:time",
+     "cross:evidence",
+     "cross:media"
+    ],
+    "order": 7,
+    "definition": "The sources and respondents behind the plant's claims, and the places and times they hold for."
+   }
+  },
   "axes": {
    "axis:x": {
     "label": "Plant Identity & Classification",
@@ -231,6 +296,833 @@
   "suited_for": "plant → design concept (KG-R1 derived · KG-R4 candidate / unknown)",
   "companion / co_listed / competes / layered_under / …": "plant → plant (relations.json)"
  },
+ "knowledge_areas": {
+  "classification": {
+   "label": "Classification",
+   "categories": [
+    "cat:taxonomy",
+    "cat:growth_form_cat"
+   ],
+   "order": 1,
+   "definition": "What the plant is: family, genus, growth form, KPU plant type."
+  },
+  "environment": {
+   "label": "Environmental Conditions",
+   "categories": [
+    "cat:environment"
+   ],
+   "order": 2,
+   "definition": "Light, soil, water, hardiness and shelter the plant needs or tolerates."
+  },
+  "morphology_growth": {
+   "label": "Morphology & Growth",
+   "categories": [
+    "cat:morphology",
+    "cat:temporal"
+   ],
+   "order": 3,
+   "definition": "Size, form, habit, texture, colour, growth rate, phenology and leaf retention."
+  },
+  "ecology": {
+   "label": "Ecological Performance",
+   "categories": [
+    "cat:ecological"
+   ],
+   "order": 4,
+   "definition": "Habitat and ecological value, origin and invasive status, resistance, maintenance and risk."
+  },
+  "design": {
+   "label": "Planting Design Functions",
+   "categories": [
+    "cat:landscape_use",
+    "cat:vertical_structure",
+    "cat:space_making",
+    "cat:composition",
+    "cat:planting_role"
+   ],
+   "order": 5,
+   "definition": "Documented landscape uses and the design concepts they map to; derived layers and height bands; rule-checked design links."
+  },
+  "relations": {
+   "label": "Plant-to-Plant Relationships",
+   "categories": [],
+   "order": 6,
+   "definition": "Direct relations recorded in relations.json (companion, co-listed, competes, layered under …) and the knowledge nodes two plants share — shared attributes are never read as a planting recommendation."
+  },
+  "evidence": {
+   "label": "Evidence & Sources",
+   "categories": [
+    "cross:place",
+    "cross:time",
+    "cross:evidence",
+    "cross:media"
+   ],
+   "order": 7,
+   "definition": "The sources and respondents behind the plant's claims, and the places and times they hold for."
+  }
+ },
+ "plant_areas": {
+  "plant:acer-palmatum": {
+   "morphology_growth": {
+    "concepts": [
+     "colour:dark_red",
+     "colour:green",
+     "colour:purple",
+     "colour:red",
+     "evergreen:no",
+     "growth_rate:fast",
+     "height_class:10-15m",
+     "height_class:2-3m",
+     "height_class:3-5m",
+     "height_class:5-7m",
+     "height_class:7-10m",
+     "interest:fall_colour",
+     "spread_class:2-3m",
+     "spread_class:3-4m",
+     "spread_class:4-5m",
+     "spread_class:5-7m",
+     "spread_class:7-10m"
+    ],
+    "edges": 68,
+    "verified": 21,
+    "derived": 0,
+    "candidate": 0
+   },
+   "environment": {
+    "concepts": [
+     "exposure:filtered_shade",
+     "exposure:full_sun",
+     "exposure:part_sun_part_shade",
+     "exposure:sheltered",
+     "hardiness_rhs:H6",
+     "hardiness_usda:z10",
+     "hardiness_usda:z11",
+     "hardiness_usda:z5",
+     "hardiness_usda:z6",
+     "hardiness_usda:z7",
+     "hardiness_usda:z8",
+     "hardiness_usda:z9",
+     "soil:acidic",
+     "soil:humus_rich",
+     "soil:well_drained",
+     "water:average",
+     "water:moist"
+    ],
+    "edges": 37,
+    "verified": 0,
+    "derived": 0,
+    "candidate": 0
+   },
+   "ecology": {
+    "concepts": [
+     "browsing:rabbit",
+     "invasive:not_listed",
+     "maintenance:low",
+     "origin:non_native",
+     "pest:anthracnose",
+     "pest:aphids",
+     "pest:canker_or_sap_rot",
+     "pest:caterpillar_or_cutworm",
+     "pest:fungal_leaf_spot",
+     "pest:galls",
+     "pest:leaf_scorch",
+     "pest:mites",
+     "pest:root_rot",
+     "pest:scale_insects",
+     "pest:wilt",
+     "stress:black_walnut",
+     "stress:leaf_scorch"
+    ],
+    "edges": 21,
+    "verified": 0,
+    "derived": 0,
+    "candidate": 0
+   },
+   "design": {
+    "concepts": [
+     "composition:group",
+     "composition:layering",
+     "height_band:above_eye",
+     "height_band:tree",
+     "layer:canopy",
+     "layer:understorey",
+     "role:accent",
+     "role:filler",
+     "role:seasonal",
+     "role:structural",
+     "spatial:ceiling",
+     "spatial:screen",
+     "use:accent_plant",
+     "use:group_or_mass_planting",
+     "use:screening",
+     "use:specimen_plant",
+     "use:woodland_margin"
+    ],
+    "edges": 39,
+    "verified": 13,
+    "derived": 29,
+    "candidate": 5
+   },
+   "evidence": {
+    "concepts": [
+     "place:bc",
+     "place:city_of_vancouver",
+     "place:global",
+     "place:pnw",
+     "place:st_louis",
+     "place:uk",
+     "place:vancouver",
+     "place:willamette_valley"
+    ],
+    "edges": 7,
+    "verified": 0,
+    "derived": 0,
+    "candidate": 0,
+    "sources": [
+     "cov_trees",
+     "gpp",
+     "iscbc",
+     "mobot",
+     "osu",
+     "rhs",
+     "survey-r04"
+    ]
+   },
+   "classification": {
+    "concepts": [
+     "genus:acer",
+     "growth_form:tree",
+     "plant_type:tree_deciduous"
+    ],
+    "edges": 3,
+    "verified": 0,
+    "derived": 1,
+    "candidate": 0
+   },
+   "relations": {
+    "concepts": [
+     "plant:gaultheria-shallon",
+     "plant:vaccinium-ovatum"
+    ],
+    "edges": 2,
+    "verified": 0,
+    "derived": 0,
+    "candidate": 2
+   }
+  },
+  "plant:gaultheria-shallon": {
+   "design": {
+    "concepts": [
+     "composition:layering",
+     "composition:matrix",
+     "height_band:above_eye",
+     "height_band:ground_level",
+     "height_band:low",
+     "height_band:medium",
+     "layer:ground",
+     "layer:shrub",
+     "role:filler",
+     "role:ground_cover",
+     "role:seasonal",
+     "role:structural",
+     "spatial:barrier",
+     "spatial:screen",
+     "use:container_planting",
+     "use:cut_flower_or_foliage",
+     "use:erosion_control",
+     "use:ground_cover",
+     "use:mixed_shrub_border",
+     "use:rock_garden",
+     "use:sheared_hedge",
+     "use:small_garden_space",
+     "use:urban_agriculture"
+    ],
+    "edges": 31,
+    "verified": 3,
+    "derived": 16,
+    "candidate": 5
+   },
+   "morphology_growth": {
+    "concepts": [
+     "colour:green",
+     "colour:pink",
+     "colour:white",
+     "evergreen:yes",
+     "fruit:edible",
+     "fruit:showy",
+     "growth_rate:fast",
+     "habit:dense",
+     "habit:spreading",
+     "height_class:0.1-0.2m",
+     "height_class:0.2-0.4m",
+     "height_class:0.4-0.7m",
+     "height_class:0.7-1.3m",
+     "height_class:1.3-2.0m",
+     "height_class:2-3m",
+     "height_class:3-5m",
+     "height_class:lt_0.1m",
+     "spread_class:0.3-0.6m",
+     "spread_class:0.6-1.0m",
+     "spread_class:1.0-1.5m"
+    ],
+    "edges": 38,
+    "verified": 1,
+    "derived": 0,
+    "candidate": 0
+   },
+   "environment": {
+    "concepts": [
+     "exposure:deep_shade",
+     "exposure:filtered_shade",
+     "exposure:full_sun",
+     "exposure:part_sun_part_shade",
+     "exposure:sheltered",
+     "hardiness_rhs:H5",
+     "hardiness_usda:z10",
+     "hardiness_usda:z11",
+     "hardiness_usda:z6",
+     "hardiness_usda:z7",
+     "hardiness_usda:z8",
+     "hardiness_usda:z9",
+     "soil:acidic",
+     "soil:well_drained",
+     "water:average",
+     "water:moist"
+    ],
+    "edges": 21,
+    "verified": 0,
+    "derived": 0,
+    "candidate": 0
+   },
+   "ecology": {
+    "concepts": [
+     "ecology:bird_food",
+     "invasive:not_listed",
+     "origin:native",
+     "origin:native_bc_west_of_cascades",
+     "pest:pest",
+     "pest:root_rot",
+     "toxicity:unknown"
+    ],
+    "edges": 9,
+    "verified": 0,
+    "derived": 0,
+    "candidate": 0
+   },
+   "classification": {
+    "concepts": [
+     "genus:gaultheria",
+     "growth_form:shrub",
+     "plant_type:broadleaf_evergreen"
+    ],
+    "edges": 3,
+    "verified": 0,
+    "derived": 1,
+    "candidate": 0
+   },
+   "evidence": {
+    "concepts": [
+     "place:bc",
+     "place:north_america",
+     "place:uk",
+     "place:vancouver",
+     "place:willamette_valley"
+    ],
+    "edges": 6,
+    "verified": 0,
+    "derived": 0,
+    "candidate": 0,
+    "sources": [
+     "eflora",
+     "iscbc",
+     "osu",
+     "rhs",
+     "survey-r03",
+     "usda_plants"
+    ]
+   },
+   "relations": {
+    "concepts": [
+     "plant:acer-palmatum",
+     "plant:vaccinium-ovatum"
+    ],
+    "edges": 5,
+    "verified": 1,
+    "derived": 1,
+    "candidate": 3
+   }
+  },
+  "plant:vaccinium-ovatum": {
+   "design": {
+    "concepts": [
+     "composition:group",
+     "composition:layering",
+     "height_band:above_eye",
+     "height_band:medium",
+     "layer:shrub",
+     "role:seasonal",
+     "role:structural",
+     "spatial:barrier",
+     "spatial:screen",
+     "use:container_planting",
+     "use:cut_flower_or_foliage",
+     "use:group_or_mass_planting",
+     "use:hedge_row",
+     "use:mixed_shrub_border",
+     "use:native_planting",
+     "use:screening",
+     "use:sheared_hedge",
+     "use:small_garden_space",
+     "use:urban_agriculture"
+    ],
+    "edges": 23,
+    "verified": 3,
+    "derived": 10,
+    "candidate": 3
+   },
+   "morphology_growth": {
+    "concepts": [
+     "colour:bronze",
+     "colour:green",
+     "colour:pink",
+     "colour:white",
+     "evergreen:yes",
+     "fruit:edible",
+     "fruit:showy",
+     "growth_rate:slow",
+     "habit:upright",
+     "height_class:0.4-0.7m",
+     "height_class:0.7-1.3m",
+     "height_class:1.3-2.0m",
+     "height_class:2-3m",
+     "height_class:3-5m",
+     "spread_class:1.0-1.5m",
+     "spread_class:1.5-2.0m",
+     "texture:fine"
+    ],
+    "edges": 35,
+    "verified": 1,
+    "derived": 0,
+    "candidate": 0
+   },
+   "environment": {
+    "concepts": [
+     "exposure:deep_shade",
+     "exposure:filtered_shade",
+     "exposure:full_sun",
+     "exposure:part_sun_part_shade",
+     "exposure:sheltered",
+     "hardiness_rhs:H4",
+     "hardiness_usda:z10",
+     "hardiness_usda:z11",
+     "hardiness_usda:z7",
+     "hardiness_usda:z8",
+     "hardiness_usda:z9",
+     "soil:acidic",
+     "soil:well_drained",
+     "water:average",
+     "water:moist"
+    ],
+    "edges": 26,
+    "verified": 2,
+    "derived": 0,
+    "candidate": 0
+   },
+   "ecology": {
+    "concepts": [
+     "invasive:not_listed",
+     "maintenance:low",
+     "origin:native",
+     "origin:native_bc_west_of_cascades",
+     "pest:abiotic_disorder",
+     "pest:beetles_or_weevils",
+     "pest:mildew",
+     "pest:root_rot",
+     "stress:drought",
+     "toxicity:unknown"
+    ],
+    "edges": 12,
+    "verified": 0,
+    "derived": 0,
+    "candidate": 0
+   },
+   "evidence": {
+    "concepts": [
+     "place:bc",
+     "place:north_america",
+     "place:pnw",
+     "place:uk",
+     "place:vancouver",
+     "place:willamette_valley"
+    ],
+    "edges": 7,
+    "verified": 0,
+    "derived": 0,
+    "candidate": 0,
+    "sources": [
+     "eflora",
+     "gpp",
+     "iscbc",
+     "osu",
+     "rhs",
+     "survey-r03",
+     "usda_plants"
+    ]
+   },
+   "classification": {
+    "concepts": [
+     "genus:vaccinium",
+     "growth_form:shrub",
+     "plant_type:broadleaf_evergreen"
+    ],
+    "edges": 3,
+    "verified": 0,
+    "derived": 1,
+    "candidate": 0
+   },
+   "relations": {
+    "concepts": [
+     "plant:acer-palmatum",
+     "plant:gaultheria-shallon"
+    ],
+    "edges": 5,
+    "verified": 1,
+    "derived": 1,
+    "candidate": 3
+   }
+  }
+ },
+ "plant_pairs": [
+  {
+   "plants": [
+    "plant:gaultheria-shallon",
+    "plant:vaccinium-ovatum"
+   ],
+   "shared": [
+    "colour:green",
+    "colour:pink",
+    "colour:white",
+    "composition:layering",
+    "evergreen:yes",
+    "exposure:deep_shade",
+    "exposure:filtered_shade",
+    "exposure:full_sun",
+    "exposure:part_sun_part_shade",
+    "exposure:sheltered",
+    "fruit:edible",
+    "fruit:showy",
+    "growth_form:shrub",
+    "hardiness_usda:z10",
+    "hardiness_usda:z11",
+    "hardiness_usda:z7",
+    "hardiness_usda:z8",
+    "hardiness_usda:z9",
+    "height_band:above_eye",
+    "height_band:medium",
+    "height_class:0.4-0.7m",
+    "height_class:0.7-1.3m",
+    "height_class:1.3-2.0m",
+    "height_class:2-3m",
+    "height_class:3-5m",
+    "invasive:not_listed",
+    "layer:shrub",
+    "origin:native",
+    "origin:native_bc_west_of_cascades",
+    "pest:root_rot",
+    "plant_type:broadleaf_evergreen",
+    "role:seasonal",
+    "role:structural",
+    "soil:acidic",
+    "soil:well_drained",
+    "spatial:barrier",
+    "spatial:screen",
+    "spread_class:1.0-1.5m",
+    "toxicity:unknown",
+    "use:container_planting",
+    "use:cut_flower_or_foliage",
+    "use:mixed_shrub_border",
+    "use:sheared_hedge",
+    "use:small_garden_space",
+    "use:urban_agriculture",
+    "water:average",
+    "water:moist"
+   ],
+   "shared_by_area": {
+    "morphology_growth": [
+     "colour:green",
+     "colour:pink",
+     "colour:white",
+     "evergreen:yes",
+     "fruit:edible",
+     "fruit:showy",
+     "height_class:0.4-0.7m",
+     "height_class:0.7-1.3m",
+     "height_class:1.3-2.0m",
+     "height_class:2-3m",
+     "height_class:3-5m",
+     "spread_class:1.0-1.5m"
+    ],
+    "design": [
+     "composition:layering",
+     "height_band:above_eye",
+     "height_band:medium",
+     "layer:shrub",
+     "role:seasonal",
+     "role:structural",
+     "spatial:barrier",
+     "spatial:screen",
+     "use:container_planting",
+     "use:cut_flower_or_foliage",
+     "use:mixed_shrub_border",
+     "use:sheared_hedge",
+     "use:small_garden_space",
+     "use:urban_agriculture"
+    ],
+    "environment": [
+     "exposure:deep_shade",
+     "exposure:filtered_shade",
+     "exposure:full_sun",
+     "exposure:part_sun_part_shade",
+     "exposure:sheltered",
+     "hardiness_usda:z10",
+     "hardiness_usda:z11",
+     "hardiness_usda:z7",
+     "hardiness_usda:z8",
+     "hardiness_usda:z9",
+     "soil:acidic",
+     "soil:well_drained",
+     "water:average",
+     "water:moist"
+    ],
+    "classification": [
+     "growth_form:shrub",
+     "plant_type:broadleaf_evergreen"
+    ],
+    "ecology": [
+     "invasive:not_listed",
+     "origin:native",
+     "origin:native_bc_west_of_cascades",
+     "pest:root_rot",
+     "toxicity:unknown"
+    ]
+   },
+   "n_shared": 47,
+   "direct_relations": [
+    {
+     "id": "rel:rel:vaccinium-ovatum:gaultheria-shallon:01",
+     "rel": "co_listed",
+     "kg_status": "documented",
+     "verification": "verified",
+     "direction": "mutual",
+     "source_id": "survey-r03",
+     "text": "A practising designer listed Vaccinium ovatum and Gaultheria shallon together in a five-plant list for Metro Vancouver, both as evergreen natives."
+    },
+    {
+     "id": "rel:rel:vaccinium-ovatum:gaultheria-shallon:m1",
+     "rel": "companion",
+     "kg_status": "candidate",
+     "verification": "retired",
+     "direction": "mutual",
+     "source_id": "model",
+     "text": "Vaccinium ovatum and Gaultheria shallon co-occur naturally in coastal PNW conifer understory and are commonly planted together as an evergreen native shrub layer (model placeholder, unverified)."
+    },
+    {
+     "id": "rel:rel:vaccinium-ovatum:gaultheria-shallon:02",
+     "rel": "companion",
+     "kg_status": "derived",
+     "verification": "unverified",
+     "direction": "mutual",
+     "source_id": "eflora",
+     "text": "E-Flora BC places both Vaccinium ovatum and Gaultheria shallon in coastal lowland to montane forest of the Coastal Western Hemlock zone — the same habitat classes, so they co-occur naturally in the Vancouver region."
+    },
+    {
+     "id": "rel:rel:gaultheria-shallon:vaccinium-ovatum:m2",
+     "rel": "competes",
+     "kg_status": "candidate",
+     "verification": "unverified",
+     "direction": "a_to_b",
+     "source_id": "model",
+     "text": "Once established, Gaultheria shallon can spread into and under Vaccinium ovatum; the huckleberry usually holds its own because it is taller, but smaller plantings can be overrun (model placeholder, unverified)."
+    }
+   ],
+   "n_sourced_relations": 2,
+   "text": "Gaultheria shallon and Vaccinium ovatum share 47 knowledge nodes (14 planting design functions, 14 environmental conditions, 12 morphology & growth, 5 ecological performance, 2 classification); 2 sourced relations link them (co_listed, companion); 2 model placeholders await evidence — shared attributes are not a planting recommendation."
+  },
+  {
+   "plants": [
+    "plant:acer-palmatum",
+    "plant:vaccinium-ovatum"
+   ],
+   "shared": [
+    "age:establishing",
+    "colour:green",
+    "composition:group",
+    "composition:layering",
+    "exposure:filtered_shade",
+    "exposure:full_sun",
+    "exposure:part_sun_part_shade",
+    "exposure:sheltered",
+    "hardiness_usda:z10",
+    "hardiness_usda:z11",
+    "hardiness_usda:z7",
+    "hardiness_usda:z8",
+    "hardiness_usda:z9",
+    "height_band:above_eye",
+    "height_class:2-3m",
+    "height_class:3-5m",
+    "invasive:not_listed",
+    "maintenance:low",
+    "pest:root_rot",
+    "role:seasonal",
+    "role:structural",
+    "soil:acidic",
+    "soil:well_drained",
+    "spatial:screen",
+    "use:group_or_mass_planting",
+    "use:screening",
+    "water:average",
+    "water:moist"
+   ],
+   "shared_by_area": {
+    "evidence": [
+     "age:establishing"
+    ],
+    "morphology_growth": [
+     "colour:green",
+     "height_class:2-3m",
+     "height_class:3-5m"
+    ],
+    "design": [
+     "composition:group",
+     "composition:layering",
+     "height_band:above_eye",
+     "role:seasonal",
+     "role:structural",
+     "spatial:screen",
+     "use:group_or_mass_planting",
+     "use:screening"
+    ],
+    "environment": [
+     "exposure:filtered_shade",
+     "exposure:full_sun",
+     "exposure:part_sun_part_shade",
+     "exposure:sheltered",
+     "hardiness_usda:z10",
+     "hardiness_usda:z11",
+     "hardiness_usda:z7",
+     "hardiness_usda:z8",
+     "hardiness_usda:z9",
+     "soil:acidic",
+     "soil:well_drained",
+     "water:average",
+     "water:moist"
+    ],
+    "ecology": [
+     "invasive:not_listed",
+     "maintenance:low",
+     "pest:root_rot"
+    ]
+   },
+   "n_shared": 28,
+   "direct_relations": [
+    {
+     "id": "rel:rel:acer-palmatum:vaccinium-ovatum:m1",
+     "rel": "layered_under",
+     "kg_status": "candidate",
+     "verification": "unverified",
+     "direction": "b_to_a",
+     "source_id": "model",
+     "text": "Vaccinium ovatum can form the shrub layer under a small Acer palmatum canopy; the maple's shallow roots and the huckleberry's slow establishment both argue for planting the shrub first (model placeholder, unverified)."
+    }
+   ],
+   "n_sourced_relations": 0,
+   "text": "Acer palmatum and Vaccinium ovatum share 28 knowledge nodes (13 environmental conditions, 8 planting design functions, 3 morphology & growth, 3 ecological performance, 1 evidence & sources); no sourced relation links them; 1 model placeholder await evidence — shared attributes are not a planting recommendation."
+  },
+  {
+   "plants": [
+    "plant:acer-palmatum",
+    "plant:gaultheria-shallon"
+   ],
+   "shared": [
+    "colour:green",
+    "composition:layering",
+    "exposure:filtered_shade",
+    "exposure:full_sun",
+    "exposure:part_sun_part_shade",
+    "exposure:sheltered",
+    "growth_rate:fast",
+    "hardiness_usda:z10",
+    "hardiness_usda:z11",
+    "hardiness_usda:z6",
+    "hardiness_usda:z7",
+    "hardiness_usda:z8",
+    "hardiness_usda:z9",
+    "height_band:above_eye",
+    "height_class:2-3m",
+    "height_class:3-5m",
+    "invasive:not_listed",
+    "pest:root_rot",
+    "role:filler",
+    "role:seasonal",
+    "role:structural",
+    "soil:acidic",
+    "soil:well_drained",
+    "spatial:screen",
+    "water:average",
+    "water:moist"
+   ],
+   "shared_by_area": {
+    "morphology_growth": [
+     "colour:green",
+     "growth_rate:fast",
+     "height_class:2-3m",
+     "height_class:3-5m"
+    ],
+    "design": [
+     "composition:layering",
+     "height_band:above_eye",
+     "role:filler",
+     "role:seasonal",
+     "role:structural",
+     "spatial:screen"
+    ],
+    "environment": [
+     "exposure:filtered_shade",
+     "exposure:full_sun",
+     "exposure:part_sun_part_shade",
+     "exposure:sheltered",
+     "hardiness_usda:z10",
+     "hardiness_usda:z11",
+     "hardiness_usda:z6",
+     "hardiness_usda:z7",
+     "hardiness_usda:z8",
+     "hardiness_usda:z9",
+     "soil:acidic",
+     "soil:well_drained",
+     "water:average",
+     "water:moist"
+    ],
+    "ecology": [
+     "invasive:not_listed",
+     "pest:root_rot"
+    ]
+   },
+   "n_shared": 26,
+   "direct_relations": [
+    {
+     "id": "rel:rel:acer-palmatum:gaultheria-shallon:m1",
+     "rel": "layered_under",
+     "kg_status": "candidate",
+     "verification": "unverified",
+     "direction": "b_to_a",
+     "source_id": "model",
+     "text": "Gaultheria shallon is often used as an evergreen groundcover beneath Acer palmatum; both accept filtered shade and acidic soil (model placeholder, unverified)."
+    }
+   ],
+   "n_sourced_relations": 0,
+   "text": "Acer palmatum and Gaultheria shallon share 26 knowledge nodes (14 environmental conditions, 6 planting design functions, 4 morphology & growth, 2 ecological performance); no sourced relation links them; 1 model placeholder await evidence — shared attributes are not a planting recommendation."
+  }
+ ],
  "nodes": [
   {
    "id": "exposure:sun",
@@ -252,7 +1144,13 @@
    "category": "cat:environment",
    "hierarchy_parent": "facet:exposure",
    "used": true,
-   "n_plants": 3
+   "n_plants": 3,
+   "area": "environment",
+   "plants": [
+    "plant:acer-palmatum",
+    "plant:gaultheria-shallon",
+    "plant:vaccinium-ovatum"
+   ]
   },
   {
    "id": "exposure:shade",
@@ -278,7 +1176,13 @@
    "category": "cat:environment",
    "hierarchy_parent": "facet:exposure",
    "used": true,
-   "n_plants": 3
+   "n_plants": 3,
+   "area": "environment",
+   "plants": [
+    "plant:acer-palmatum",
+    "plant:gaultheria-shallon",
+    "plant:vaccinium-ovatum"
+   ]
   },
   {
    "id": "exposure:part_shade",
@@ -300,7 +1204,13 @@
    "category": "cat:environment",
    "hierarchy_parent": "facet:exposure",
    "used": true,
-   "n_plants": 3
+   "n_plants": 3,
+   "area": "environment",
+   "plants": [
+    "plant:acer-palmatum",
+    "plant:gaultheria-shallon",
+    "plant:vaccinium-ovatum"
+   ]
   },
   {
    "id": "exposure:full_sun",
@@ -322,7 +1232,13 @@
    "category": "cat:environment",
    "hierarchy_parent": "exposure:sun",
    "used": true,
-   "n_plants": 3
+   "n_plants": 3,
+   "area": "environment",
+   "plants": [
+    "plant:acer-palmatum",
+    "plant:gaultheria-shallon",
+    "plant:vaccinium-ovatum"
+   ]
   },
   {
    "id": "exposure:full_sun_only_if_soil_kept_moist",
@@ -340,7 +1256,9 @@
    "category": "cat:environment",
    "hierarchy_parent": "exposure:sun",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "environment",
+   "plants": []
   },
   {
    "id": "exposure:part_sun_part_shade",
@@ -363,7 +1281,13 @@
    "category": "cat:environment",
    "hierarchy_parent": "exposure:part_shade",
    "used": true,
-   "n_plants": 3
+   "n_plants": 3,
+   "area": "environment",
+   "plants": [
+    "plant:acer-palmatum",
+    "plant:gaultheria-shallon",
+    "plant:vaccinium-ovatum"
+   ]
   },
   {
    "id": "exposure:filtered_shade",
@@ -385,7 +1309,13 @@
    "category": "cat:environment",
    "hierarchy_parent": "exposure:shade",
    "used": true,
-   "n_plants": 3
+   "n_plants": 3,
+   "area": "environment",
+   "plants": [
+    "plant:acer-palmatum",
+    "plant:gaultheria-shallon",
+    "plant:vaccinium-ovatum"
+   ]
   },
   {
    "id": "exposure:deep_shade",
@@ -408,7 +1338,12 @@
    "category": "cat:environment",
    "hierarchy_parent": "exposure:shade",
    "used": true,
-   "n_plants": 2
+   "n_plants": 2,
+   "area": "environment",
+   "plants": [
+    "plant:gaultheria-shallon",
+    "plant:vaccinium-ovatum"
+   ]
   },
   {
    "id": "exposure:sheltered",
@@ -429,7 +1364,13 @@
    "category": "cat:environment",
    "hierarchy_parent": "facet:exposure",
    "used": true,
-   "n_plants": 3
+   "n_plants": 3,
+   "area": "environment",
+   "plants": [
+    "plant:acer-palmatum",
+    "plant:gaultheria-shallon",
+    "plant:vaccinium-ovatum"
+   ]
   },
   {
    "id": "soil:acidic",
@@ -451,7 +1392,13 @@
    "category": "cat:environment",
    "hierarchy_parent": "facet:soil",
    "used": true,
-   "n_plants": 3
+   "n_plants": 3,
+   "area": "environment",
+   "plants": [
+    "plant:acer-palmatum",
+    "plant:gaultheria-shallon",
+    "plant:vaccinium-ovatum"
+   ]
   },
   {
    "id": "soil:alkaline",
@@ -473,7 +1420,9 @@
    "category": "cat:environment",
    "hierarchy_parent": "facet:soil",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "environment",
+   "plants": []
   },
   {
    "id": "soil:bog",
@@ -494,7 +1443,9 @@
    "category": "cat:environment",
    "hierarchy_parent": "facet:soil",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "environment",
+   "plants": []
   },
   {
    "id": "soil:humus_rich",
@@ -518,7 +1469,11 @@
    "category": "cat:environment",
    "hierarchy_parent": "facet:soil",
    "used": true,
-   "n_plants": 1
+   "n_plants": 1,
+   "area": "environment",
+   "plants": [
+    "plant:acer-palmatum"
+   ]
   },
   {
    "id": "soil:rocky_or_gravelly_or_dry",
@@ -543,7 +1498,9 @@
    "category": "cat:environment",
    "hierarchy_parent": "facet:soil",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "environment",
+   "plants": []
   },
   {
    "id": "soil:well_drained",
@@ -564,7 +1521,13 @@
    "category": "cat:environment",
    "hierarchy_parent": "facet:soil",
    "used": true,
-   "n_plants": 3
+   "n_plants": 3,
+   "area": "environment",
+   "plants": [
+    "plant:acer-palmatum",
+    "plant:gaultheria-shallon",
+    "plant:vaccinium-ovatum"
+   ]
   },
   {
    "id": "water:dry",
@@ -586,7 +1549,9 @@
    "category": "cat:environment",
    "hierarchy_parent": "facet:water",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "environment",
+   "plants": []
   },
   {
    "id": "water:average",
@@ -607,7 +1572,13 @@
    "category": "cat:environment",
    "hierarchy_parent": "facet:water",
    "used": true,
-   "n_plants": 3
+   "n_plants": 3,
+   "area": "environment",
+   "plants": [
+    "plant:acer-palmatum",
+    "plant:gaultheria-shallon",
+    "plant:vaccinium-ovatum"
+   ]
   },
   {
    "id": "water:moist",
@@ -628,7 +1599,13 @@
    "category": "cat:environment",
    "hierarchy_parent": "facet:water",
    "used": true,
-   "n_plants": 3
+   "n_plants": 3,
+   "area": "environment",
+   "plants": [
+    "plant:acer-palmatum",
+    "plant:gaultheria-shallon",
+    "plant:vaccinium-ovatum"
+   ]
   },
   {
    "id": "water:wet",
@@ -650,7 +1627,9 @@
    "category": "cat:environment",
    "hierarchy_parent": "facet:water",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "environment",
+   "plants": []
   },
   {
    "id": "water:wide_range",
@@ -671,7 +1650,9 @@
    "category": "cat:environment",
    "hierarchy_parent": "facet:water",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "environment",
+   "plants": []
   },
   {
    "id": "hardiness:zone_1",
@@ -691,7 +1672,9 @@
    "category": "cat:environment",
    "hierarchy_parent": "facet:hardiness",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "environment",
+   "plants": []
   },
   {
    "id": "hardiness:zone_2",
@@ -711,7 +1694,9 @@
    "category": "cat:environment",
    "hierarchy_parent": "facet:hardiness",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "environment",
+   "plants": []
   },
   {
    "id": "hardiness:zone_3",
@@ -731,7 +1716,9 @@
    "category": "cat:environment",
    "hierarchy_parent": "facet:hardiness",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "environment",
+   "plants": []
   },
   {
    "id": "hardiness:zone_4",
@@ -751,7 +1738,9 @@
    "category": "cat:environment",
    "hierarchy_parent": "facet:hardiness",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "environment",
+   "plants": []
   },
   {
    "id": "hardiness:zone_5",
@@ -771,7 +1760,9 @@
    "category": "cat:environment",
    "hierarchy_parent": "facet:hardiness",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "environment",
+   "plants": []
   },
   {
    "id": "hardiness:zone_6",
@@ -791,7 +1782,9 @@
    "category": "cat:environment",
    "hierarchy_parent": "facet:hardiness",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "environment",
+   "plants": []
   },
   {
    "id": "hardiness:zone_7",
@@ -811,7 +1804,9 @@
    "category": "cat:environment",
    "hierarchy_parent": "facet:hardiness",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "environment",
+   "plants": []
   },
   {
    "id": "hardiness:zone_8a",
@@ -831,7 +1826,9 @@
    "category": "cat:environment",
    "hierarchy_parent": "facet:hardiness",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "environment",
+   "plants": []
   },
   {
    "id": "hardiness:zone_8b",
@@ -851,7 +1848,9 @@
    "category": "cat:environment",
    "hierarchy_parent": "facet:hardiness",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "environment",
+   "plants": []
   },
   {
    "id": "hardiness:zone_9",
@@ -871,7 +1870,9 @@
    "category": "cat:environment",
    "hierarchy_parent": "facet:hardiness",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "environment",
+   "plants": []
   },
   {
    "id": "hardiness:zone_10",
@@ -891,7 +1892,9 @@
    "category": "cat:environment",
    "hierarchy_parent": "facet:hardiness",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "environment",
+   "plants": []
   },
   {
    "id": "hardiness:zone_11",
@@ -911,7 +1914,9 @@
    "category": "cat:environment",
    "hierarchy_parent": "facet:hardiness",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "environment",
+   "plants": []
   },
   {
    "id": "hardiness_usda:z1",
@@ -931,7 +1936,9 @@
    "category": "cat:environment",
    "hierarchy_parent": "facet:hardiness_usda",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "environment",
+   "plants": []
   },
   {
    "id": "hardiness_usda:z2",
@@ -951,7 +1958,9 @@
    "category": "cat:environment",
    "hierarchy_parent": "facet:hardiness_usda",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "environment",
+   "plants": []
   },
   {
    "id": "hardiness_usda:z3",
@@ -971,7 +1980,9 @@
    "category": "cat:environment",
    "hierarchy_parent": "facet:hardiness_usda",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "environment",
+   "plants": []
   },
   {
    "id": "hardiness_usda:z4",
@@ -991,7 +2002,9 @@
    "category": "cat:environment",
    "hierarchy_parent": "facet:hardiness_usda",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "environment",
+   "plants": []
   },
   {
    "id": "hardiness_usda:z5",
@@ -1011,7 +2024,11 @@
    "category": "cat:environment",
    "hierarchy_parent": "facet:hardiness_usda",
    "used": true,
-   "n_plants": 1
+   "n_plants": 1,
+   "area": "environment",
+   "plants": [
+    "plant:acer-palmatum"
+   ]
   },
   {
    "id": "hardiness_usda:z6",
@@ -1031,7 +2048,12 @@
    "category": "cat:environment",
    "hierarchy_parent": "facet:hardiness_usda",
    "used": true,
-   "n_plants": 2
+   "n_plants": 2,
+   "area": "environment",
+   "plants": [
+    "plant:acer-palmatum",
+    "plant:gaultheria-shallon"
+   ]
   },
   {
    "id": "hardiness_usda:z7",
@@ -1051,7 +2073,13 @@
    "category": "cat:environment",
    "hierarchy_parent": "facet:hardiness_usda",
    "used": true,
-   "n_plants": 3
+   "n_plants": 3,
+   "area": "environment",
+   "plants": [
+    "plant:acer-palmatum",
+    "plant:gaultheria-shallon",
+    "plant:vaccinium-ovatum"
+   ]
   },
   {
    "id": "hardiness_usda:z8",
@@ -1071,7 +2099,13 @@
    "category": "cat:environment",
    "hierarchy_parent": "facet:hardiness_usda",
    "used": true,
-   "n_plants": 3
+   "n_plants": 3,
+   "area": "environment",
+   "plants": [
+    "plant:acer-palmatum",
+    "plant:gaultheria-shallon",
+    "plant:vaccinium-ovatum"
+   ]
   },
   {
    "id": "hardiness_usda:z9",
@@ -1091,7 +2125,13 @@
    "category": "cat:environment",
    "hierarchy_parent": "facet:hardiness_usda",
    "used": true,
-   "n_plants": 3
+   "n_plants": 3,
+   "area": "environment",
+   "plants": [
+    "plant:acer-palmatum",
+    "plant:gaultheria-shallon",
+    "plant:vaccinium-ovatum"
+   ]
   },
   {
    "id": "hardiness_usda:z10",
@@ -1111,7 +2151,13 @@
    "category": "cat:environment",
    "hierarchy_parent": "facet:hardiness_usda",
    "used": true,
-   "n_plants": 3
+   "n_plants": 3,
+   "area": "environment",
+   "plants": [
+    "plant:acer-palmatum",
+    "plant:gaultheria-shallon",
+    "plant:vaccinium-ovatum"
+   ]
   },
   {
    "id": "hardiness_usda:z11",
@@ -1131,7 +2177,13 @@
    "category": "cat:environment",
    "hierarchy_parent": "facet:hardiness_usda",
    "used": true,
-   "n_plants": 3
+   "n_plants": 3,
+   "area": "environment",
+   "plants": [
+    "plant:acer-palmatum",
+    "plant:gaultheria-shallon",
+    "plant:vaccinium-ovatum"
+   ]
   },
   {
    "id": "hardiness_rhs:H1a",
@@ -1149,7 +2201,9 @@
    "category": "cat:environment",
    "hierarchy_parent": "facet:hardiness_rhs",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "environment",
+   "plants": []
   },
   {
    "id": "hardiness_rhs:H1b",
@@ -1167,7 +2221,9 @@
    "category": "cat:environment",
    "hierarchy_parent": "facet:hardiness_rhs",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "environment",
+   "plants": []
   },
   {
    "id": "hardiness_rhs:H1c",
@@ -1185,7 +2241,9 @@
    "category": "cat:environment",
    "hierarchy_parent": "facet:hardiness_rhs",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "environment",
+   "plants": []
   },
   {
    "id": "hardiness_rhs:H2",
@@ -1203,7 +2261,9 @@
    "category": "cat:environment",
    "hierarchy_parent": "facet:hardiness_rhs",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "environment",
+   "plants": []
   },
   {
    "id": "hardiness_rhs:H3",
@@ -1221,7 +2281,9 @@
    "category": "cat:environment",
    "hierarchy_parent": "facet:hardiness_rhs",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "environment",
+   "plants": []
   },
   {
    "id": "hardiness_rhs:H4",
@@ -1239,7 +2301,11 @@
    "category": "cat:environment",
    "hierarchy_parent": "facet:hardiness_rhs",
    "used": true,
-   "n_plants": 1
+   "n_plants": 1,
+   "area": "environment",
+   "plants": [
+    "plant:vaccinium-ovatum"
+   ]
   },
   {
    "id": "hardiness_rhs:H5",
@@ -1257,7 +2323,11 @@
    "category": "cat:environment",
    "hierarchy_parent": "facet:hardiness_rhs",
    "used": true,
-   "n_plants": 1
+   "n_plants": 1,
+   "area": "environment",
+   "plants": [
+    "plant:gaultheria-shallon"
+   ]
   },
   {
    "id": "hardiness_rhs:H6",
@@ -1275,7 +2345,11 @@
    "category": "cat:environment",
    "hierarchy_parent": "facet:hardiness_rhs",
    "used": true,
-   "n_plants": 1
+   "n_plants": 1,
+   "area": "environment",
+   "plants": [
+    "plant:acer-palmatum"
+   ]
   },
   {
    "id": "hardiness_rhs:H7",
@@ -1293,7 +2367,9 @@
    "category": "cat:environment",
    "hierarchy_parent": "facet:hardiness_rhs",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "environment",
+   "plants": []
   },
   {
    "id": "wind:exposed",
@@ -1314,7 +2390,9 @@
    "category": "cat:environment",
    "hierarchy_parent": "facet:wind",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "environment",
+   "plants": []
   },
   {
    "id": "growth_form:tree",
@@ -1336,7 +2414,11 @@
    "category": "cat:growth_form_cat",
    "hierarchy_parent": "facet:growth_form",
    "used": true,
-   "n_plants": 1
+   "n_plants": 1,
+   "area": "classification",
+   "plants": [
+    "plant:acer-palmatum"
+   ]
   },
   {
    "id": "growth_form:shrub",
@@ -1360,7 +2442,12 @@
    "category": "cat:growth_form_cat",
    "hierarchy_parent": "facet:growth_form",
    "used": true,
-   "n_plants": 2
+   "n_plants": 2,
+   "area": "classification",
+   "plants": [
+    "plant:gaultheria-shallon",
+    "plant:vaccinium-ovatum"
+   ]
   },
   {
    "id": "growth_form:graminoid",
@@ -1385,7 +2472,9 @@
    "category": "cat:growth_form_cat",
    "hierarchy_parent": "facet:growth_form",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "classification",
+   "plants": []
   },
   {
    "id": "growth_form:herbaceous_perennial",
@@ -1406,7 +2495,9 @@
    "category": "cat:growth_form_cat",
    "hierarchy_parent": "facet:growth_form",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "classification",
+   "plants": []
   },
   {
    "id": "growth_form:fern",
@@ -1426,7 +2517,9 @@
    "category": "cat:growth_form_cat",
    "hierarchy_parent": "facet:growth_form",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "classification",
+   "plants": []
   },
   {
    "id": "growth_form:vine",
@@ -1448,7 +2541,9 @@
    "category": "cat:growth_form_cat",
    "hierarchy_parent": "facet:growth_form",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "classification",
+   "plants": []
   },
   {
    "id": "evergreen:yes",
@@ -1470,7 +2565,12 @@
    "category": "cat:temporal",
    "hierarchy_parent": "facet:evergreen",
    "used": true,
-   "n_plants": 2
+   "n_plants": 2,
+   "area": "morphology_growth",
+   "plants": [
+    "plant:gaultheria-shallon",
+    "plant:vaccinium-ovatum"
+   ]
   },
   {
    "id": "evergreen:no",
@@ -1491,7 +2591,11 @@
    "category": "cat:temporal",
    "hierarchy_parent": "facet:evergreen",
    "used": true,
-   "n_plants": 1
+   "n_plants": 1,
+   "area": "morphology_growth",
+   "plants": [
+    "plant:acer-palmatum"
+   ]
   },
   {
    "id": "evergreen:semi",
@@ -1509,7 +2613,9 @@
    "category": "cat:temporal",
    "hierarchy_parent": "facet:evergreen",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "morphology_growth",
+   "plants": []
   },
   {
    "id": "height_class:lt_0.1m",
@@ -1527,7 +2633,11 @@
    "category": "cat:morphology",
    "hierarchy_parent": "facet:height_class",
    "used": true,
-   "n_plants": 1
+   "n_plants": 1,
+   "area": "morphology_growth",
+   "plants": [
+    "plant:gaultheria-shallon"
+   ]
   },
   {
    "id": "height_class:0.1-0.2m",
@@ -1545,7 +2655,11 @@
    "category": "cat:morphology",
    "hierarchy_parent": "facet:height_class",
    "used": true,
-   "n_plants": 1
+   "n_plants": 1,
+   "area": "morphology_growth",
+   "plants": [
+    "plant:gaultheria-shallon"
+   ]
   },
   {
    "id": "height_class:0.2-0.4m",
@@ -1563,7 +2677,11 @@
    "category": "cat:morphology",
    "hierarchy_parent": "facet:height_class",
    "used": true,
-   "n_plants": 1
+   "n_plants": 1,
+   "area": "morphology_growth",
+   "plants": [
+    "plant:gaultheria-shallon"
+   ]
   },
   {
    "id": "height_class:0.4-0.7m",
@@ -1581,7 +2699,12 @@
    "category": "cat:morphology",
    "hierarchy_parent": "facet:height_class",
    "used": true,
-   "n_plants": 2
+   "n_plants": 2,
+   "area": "morphology_growth",
+   "plants": [
+    "plant:gaultheria-shallon",
+    "plant:vaccinium-ovatum"
+   ]
   },
   {
    "id": "height_class:0.7-1.3m",
@@ -1599,7 +2722,12 @@
    "category": "cat:morphology",
    "hierarchy_parent": "facet:height_class",
    "used": true,
-   "n_plants": 2
+   "n_plants": 2,
+   "area": "morphology_growth",
+   "plants": [
+    "plant:gaultheria-shallon",
+    "plant:vaccinium-ovatum"
+   ]
   },
   {
    "id": "height_class:1.3-2.0m",
@@ -1617,7 +2745,12 @@
    "category": "cat:morphology",
    "hierarchy_parent": "facet:height_class",
    "used": true,
-   "n_plants": 2
+   "n_plants": 2,
+   "area": "morphology_growth",
+   "plants": [
+    "plant:gaultheria-shallon",
+    "plant:vaccinium-ovatum"
+   ]
   },
   {
    "id": "height_class:2-3m",
@@ -1635,7 +2768,13 @@
    "category": "cat:morphology",
    "hierarchy_parent": "facet:height_class",
    "used": true,
-   "n_plants": 3
+   "n_plants": 3,
+   "area": "morphology_growth",
+   "plants": [
+    "plant:acer-palmatum",
+    "plant:gaultheria-shallon",
+    "plant:vaccinium-ovatum"
+   ]
   },
   {
    "id": "height_class:3-5m",
@@ -1653,7 +2792,13 @@
    "category": "cat:morphology",
    "hierarchy_parent": "facet:height_class",
    "used": true,
-   "n_plants": 3
+   "n_plants": 3,
+   "area": "morphology_growth",
+   "plants": [
+    "plant:acer-palmatum",
+    "plant:gaultheria-shallon",
+    "plant:vaccinium-ovatum"
+   ]
   },
   {
    "id": "height_class:5-7m",
@@ -1671,7 +2816,11 @@
    "category": "cat:morphology",
    "hierarchy_parent": "facet:height_class",
    "used": true,
-   "n_plants": 1
+   "n_plants": 1,
+   "area": "morphology_growth",
+   "plants": [
+    "plant:acer-palmatum"
+   ]
   },
   {
    "id": "height_class:7-10m",
@@ -1689,7 +2838,11 @@
    "category": "cat:morphology",
    "hierarchy_parent": "facet:height_class",
    "used": true,
-   "n_plants": 1
+   "n_plants": 1,
+   "area": "morphology_growth",
+   "plants": [
+    "plant:acer-palmatum"
+   ]
   },
   {
    "id": "height_class:10-15m",
@@ -1707,7 +2860,11 @@
    "category": "cat:morphology",
    "hierarchy_parent": "facet:height_class",
    "used": true,
-   "n_plants": 1
+   "n_plants": 1,
+   "area": "morphology_growth",
+   "plants": [
+    "plant:acer-palmatum"
+   ]
   },
   {
    "id": "height_class:15-22m",
@@ -1725,7 +2882,9 @@
    "category": "cat:morphology",
    "hierarchy_parent": "facet:height_class",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "morphology_growth",
+   "plants": []
   },
   {
    "id": "height_class:22-30m",
@@ -1743,7 +2902,9 @@
    "category": "cat:morphology",
    "hierarchy_parent": "facet:height_class",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "morphology_growth",
+   "plants": []
   },
   {
    "id": "height_class:gt_30m",
@@ -1761,7 +2922,9 @@
    "category": "cat:morphology",
    "hierarchy_parent": "facet:height_class",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "morphology_growth",
+   "plants": []
   },
   {
    "id": "spread_class:lt_0.1m",
@@ -1779,7 +2942,9 @@
    "category": "cat:morphology",
    "hierarchy_parent": "facet:spread_class",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "morphology_growth",
+   "plants": []
   },
   {
    "id": "spread_class:0.1-0.3m",
@@ -1797,7 +2962,9 @@
    "category": "cat:morphology",
    "hierarchy_parent": "facet:spread_class",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "morphology_growth",
+   "plants": []
   },
   {
    "id": "spread_class:0.3-0.6m",
@@ -1815,7 +2982,11 @@
    "category": "cat:morphology",
    "hierarchy_parent": "facet:spread_class",
    "used": true,
-   "n_plants": 1
+   "n_plants": 1,
+   "area": "morphology_growth",
+   "plants": [
+    "plant:gaultheria-shallon"
+   ]
   },
   {
    "id": "spread_class:0.6-1.0m",
@@ -1833,7 +3004,11 @@
    "category": "cat:morphology",
    "hierarchy_parent": "facet:spread_class",
    "used": true,
-   "n_plants": 1
+   "n_plants": 1,
+   "area": "morphology_growth",
+   "plants": [
+    "plant:gaultheria-shallon"
+   ]
   },
   {
    "id": "spread_class:1.0-1.5m",
@@ -1851,7 +3026,12 @@
    "category": "cat:morphology",
    "hierarchy_parent": "facet:spread_class",
    "used": true,
-   "n_plants": 2
+   "n_plants": 2,
+   "area": "morphology_growth",
+   "plants": [
+    "plant:gaultheria-shallon",
+    "plant:vaccinium-ovatum"
+   ]
   },
   {
    "id": "spread_class:1.5-2.0m",
@@ -1869,7 +3049,11 @@
    "category": "cat:morphology",
    "hierarchy_parent": "facet:spread_class",
    "used": true,
-   "n_plants": 1
+   "n_plants": 1,
+   "area": "morphology_growth",
+   "plants": [
+    "plant:vaccinium-ovatum"
+   ]
   },
   {
    "id": "spread_class:2-3m",
@@ -1887,7 +3071,11 @@
    "category": "cat:morphology",
    "hierarchy_parent": "facet:spread_class",
    "used": true,
-   "n_plants": 1
+   "n_plants": 1,
+   "area": "morphology_growth",
+   "plants": [
+    "plant:acer-palmatum"
+   ]
   },
   {
    "id": "spread_class:3-4m",
@@ -1905,7 +3093,11 @@
    "category": "cat:morphology",
    "hierarchy_parent": "facet:spread_class",
    "used": true,
-   "n_plants": 1
+   "n_plants": 1,
+   "area": "morphology_growth",
+   "plants": [
+    "plant:acer-palmatum"
+   ]
   },
   {
    "id": "spread_class:4-5m",
@@ -1923,7 +3115,11 @@
    "category": "cat:morphology",
    "hierarchy_parent": "facet:spread_class",
    "used": true,
-   "n_plants": 1
+   "n_plants": 1,
+   "area": "morphology_growth",
+   "plants": [
+    "plant:acer-palmatum"
+   ]
   },
   {
    "id": "spread_class:5-7m",
@@ -1941,7 +3137,11 @@
    "category": "cat:morphology",
    "hierarchy_parent": "facet:spread_class",
    "used": true,
-   "n_plants": 1
+   "n_plants": 1,
+   "area": "morphology_growth",
+   "plants": [
+    "plant:acer-palmatum"
+   ]
   },
   {
    "id": "spread_class:7-10m",
@@ -1959,7 +3159,11 @@
    "category": "cat:morphology",
    "hierarchy_parent": "facet:spread_class",
    "used": true,
-   "n_plants": 1
+   "n_plants": 1,
+   "area": "morphology_growth",
+   "plants": [
+    "plant:acer-palmatum"
+   ]
   },
   {
    "id": "spread_class:10-15m",
@@ -1977,7 +3181,9 @@
    "category": "cat:morphology",
    "hierarchy_parent": "facet:spread_class",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "morphology_growth",
+   "plants": []
   },
   {
    "id": "spread_class:15-25m",
@@ -1995,7 +3201,9 @@
    "category": "cat:morphology",
    "hierarchy_parent": "facet:spread_class",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "morphology_growth",
+   "plants": []
   },
   {
    "id": "spread_class:gt_25m",
@@ -2013,7 +3221,9 @@
    "category": "cat:morphology",
    "hierarchy_parent": "facet:spread_class",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "morphology_growth",
+   "plants": []
   },
   {
    "id": "growth_rate:slow",
@@ -2033,7 +3243,11 @@
    "category": "cat:temporal",
    "hierarchy_parent": "facet:growth_rate",
    "used": true,
-   "n_plants": 1
+   "n_plants": 1,
+   "area": "morphology_growth",
+   "plants": [
+    "plant:vaccinium-ovatum"
+   ]
   },
   {
    "id": "growth_rate:moderate",
@@ -2053,7 +3267,9 @@
    "category": "cat:temporal",
    "hierarchy_parent": "facet:growth_rate",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "morphology_growth",
+   "plants": []
   },
   {
    "id": "growth_rate:fast",
@@ -2075,7 +3291,12 @@
    "category": "cat:temporal",
    "hierarchy_parent": "facet:growth_rate",
    "used": true,
-   "n_plants": 2
+   "n_plants": 2,
+   "area": "morphology_growth",
+   "plants": [
+    "plant:acer-palmatum",
+    "plant:gaultheria-shallon"
+   ]
   },
   {
    "id": "colour:white",
@@ -2093,7 +3314,12 @@
    "category": "cat:morphology",
    "hierarchy_parent": "facet:colour",
    "used": true,
-   "n_plants": 2
+   "n_plants": 2,
+   "area": "morphology_growth",
+   "plants": [
+    "plant:gaultheria-shallon",
+    "plant:vaccinium-ovatum"
+   ]
   },
   {
    "id": "colour:orange",
@@ -2111,7 +3337,9 @@
    "category": "cat:morphology",
    "hierarchy_parent": "facet:colour",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "morphology_growth",
+   "plants": []
   },
   {
    "id": "colour:yellow",
@@ -2129,7 +3357,9 @@
    "category": "cat:morphology",
    "hierarchy_parent": "facet:colour",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "morphology_growth",
+   "plants": []
   },
   {
    "id": "colour:green_yellow",
@@ -2147,7 +3377,9 @@
    "category": "cat:morphology",
    "hierarchy_parent": "facet:colour",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "morphology_growth",
+   "plants": []
   },
   {
    "id": "colour:green",
@@ -2165,7 +3397,13 @@
    "category": "cat:morphology",
    "hierarchy_parent": "facet:colour",
    "used": true,
-   "n_plants": 3
+   "n_plants": 3,
+   "area": "morphology_growth",
+   "plants": [
+    "plant:acer-palmatum",
+    "plant:gaultheria-shallon",
+    "plant:vaccinium-ovatum"
+   ]
   },
   {
    "id": "colour:blue",
@@ -2183,7 +3421,9 @@
    "category": "cat:morphology",
    "hierarchy_parent": "facet:colour",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "morphology_growth",
+   "plants": []
   },
   {
    "id": "colour:violet",
@@ -2201,7 +3441,9 @@
    "category": "cat:morphology",
    "hierarchy_parent": "facet:colour",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "morphology_growth",
+   "plants": []
   },
   {
    "id": "colour:purple",
@@ -2219,7 +3461,11 @@
    "category": "cat:morphology",
    "hierarchy_parent": "facet:colour",
    "used": true,
-   "n_plants": 1
+   "n_plants": 1,
+   "area": "morphology_growth",
+   "plants": [
+    "plant:acer-palmatum"
+   ]
   },
   {
    "id": "colour:pink",
@@ -2237,7 +3483,12 @@
    "category": "cat:morphology",
    "hierarchy_parent": "facet:colour",
    "used": true,
-   "n_plants": 2
+   "n_plants": 2,
+   "area": "morphology_growth",
+   "plants": [
+    "plant:gaultheria-shallon",
+    "plant:vaccinium-ovatum"
+   ]
   },
   {
    "id": "colour:magenta",
@@ -2255,7 +3506,9 @@
    "category": "cat:morphology",
    "hierarchy_parent": "facet:colour",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "morphology_growth",
+   "plants": []
   },
   {
    "id": "colour:red",
@@ -2273,7 +3526,11 @@
    "category": "cat:morphology",
    "hierarchy_parent": "facet:colour",
    "used": true,
-   "n_plants": 1
+   "n_plants": 1,
+   "area": "morphology_growth",
+   "plants": [
+    "plant:acer-palmatum"
+   ]
   },
   {
    "id": "colour:dark_red",
@@ -2291,7 +3548,11 @@
    "category": "cat:morphology",
    "hierarchy_parent": "facet:colour",
    "used": true,
-   "n_plants": 1
+   "n_plants": 1,
+   "area": "morphology_growth",
+   "plants": [
+    "plant:acer-palmatum"
+   ]
   },
   {
    "id": "colour:brown",
@@ -2309,7 +3570,9 @@
    "category": "cat:morphology",
    "hierarchy_parent": "facet:colour",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "morphology_growth",
+   "plants": []
   },
   {
    "id": "colour:bronze",
@@ -2327,7 +3590,11 @@
    "category": "cat:morphology",
    "hierarchy_parent": "facet:colour",
    "used": true,
-   "n_plants": 1
+   "n_plants": 1,
+   "area": "morphology_growth",
+   "plants": [
+    "plant:vaccinium-ovatum"
+   ]
   },
   {
    "id": "colour:silver",
@@ -2345,7 +3612,9 @@
    "category": "cat:morphology",
    "hierarchy_parent": "facet:colour",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "morphology_growth",
+   "plants": []
   },
   {
    "id": "colour:black",
@@ -2363,7 +3632,9 @@
    "category": "cat:morphology",
    "hierarchy_parent": "facet:colour",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "morphology_growth",
+   "plants": []
   },
   {
    "id": "texture:fine",
@@ -2381,7 +3652,11 @@
    "category": "cat:morphology",
    "hierarchy_parent": "facet:texture",
    "used": true,
-   "n_plants": 1
+   "n_plants": 1,
+   "area": "morphology_growth",
+   "plants": [
+    "plant:vaccinium-ovatum"
+   ]
   },
   {
    "id": "texture:medium_fine",
@@ -2399,7 +3674,9 @@
    "category": "cat:morphology",
    "hierarchy_parent": "facet:texture",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "morphology_growth",
+   "plants": []
   },
   {
    "id": "texture:medium",
@@ -2417,7 +3694,9 @@
    "category": "cat:morphology",
    "hierarchy_parent": "facet:texture",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "morphology_growth",
+   "plants": []
   },
   {
    "id": "texture:medium_coarse",
@@ -2435,7 +3714,9 @@
    "category": "cat:morphology",
    "hierarchy_parent": "facet:texture",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "morphology_growth",
+   "plants": []
   },
   {
    "id": "texture:coarse",
@@ -2453,7 +3734,9 @@
    "category": "cat:morphology",
    "hierarchy_parent": "facet:texture",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "morphology_growth",
+   "plants": []
   },
   {
    "id": "texture:very_coarse",
@@ -2471,7 +3754,9 @@
    "category": "cat:morphology",
    "hierarchy_parent": "facet:texture",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "morphology_growth",
+   "plants": []
   },
   {
    "id": "form:climbing",
@@ -2489,7 +3774,9 @@
    "category": "cat:morphology",
    "hierarchy_parent": "facet:form",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "morphology_growth",
+   "plants": []
   },
   {
    "id": "form:columnar",
@@ -2507,7 +3794,9 @@
    "category": "cat:morphology",
    "hierarchy_parent": "facet:form",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "morphology_growth",
+   "plants": []
   },
   {
    "id": "form:creeping_mat_like",
@@ -2525,7 +3814,9 @@
    "category": "cat:morphology",
    "hierarchy_parent": "facet:form",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "morphology_growth",
+   "plants": []
   },
   {
    "id": "form:irregular",
@@ -2543,7 +3834,9 @@
    "category": "cat:morphology",
    "hierarchy_parent": "facet:form",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "morphology_growth",
+   "plants": []
   },
   {
    "id": "form:mounded",
@@ -2561,7 +3854,9 @@
    "category": "cat:morphology",
    "hierarchy_parent": "facet:form",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "morphology_growth",
+   "plants": []
   },
   {
    "id": "form:oval_horizontal",
@@ -2579,7 +3874,9 @@
    "category": "cat:morphology",
    "hierarchy_parent": "facet:form",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "morphology_growth",
+   "plants": []
   },
   {
    "id": "form:oval_vertical",
@@ -2597,7 +3894,9 @@
    "category": "cat:morphology",
    "hierarchy_parent": "facet:form",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "morphology_growth",
+   "plants": []
   },
   {
    "id": "form:pyramidal_narrowly",
@@ -2615,7 +3914,9 @@
    "category": "cat:morphology",
    "hierarchy_parent": "facet:form",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "morphology_growth",
+   "plants": []
   },
   {
    "id": "form:pyramidal_widely",
@@ -2633,7 +3934,9 @@
    "category": "cat:morphology",
    "hierarchy_parent": "facet:form",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "morphology_growth",
+   "plants": []
   },
   {
    "id": "form:round",
@@ -2651,7 +3954,9 @@
    "category": "cat:morphology",
    "hierarchy_parent": "facet:form",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "morphology_growth",
+   "plants": []
   },
   {
    "id": "form:vase",
@@ -2669,7 +3974,9 @@
    "category": "cat:morphology",
    "hierarchy_parent": "facet:form",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "morphology_growth",
+   "plants": []
   },
   {
    "id": "form:weeping",
@@ -2687,7 +3994,9 @@
    "category": "cat:morphology",
    "hierarchy_parent": "facet:form",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "morphology_growth",
+   "plants": []
   },
   {
    "id": "habit:arching",
@@ -2705,7 +4014,9 @@
    "category": "cat:morphology",
    "hierarchy_parent": "facet:habit",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "morphology_growth",
+   "plants": []
   },
   {
    "id": "habit:dense",
@@ -2723,7 +4034,11 @@
    "category": "cat:morphology",
    "hierarchy_parent": "facet:habit",
    "used": true,
-   "n_plants": 1
+   "n_plants": 1,
+   "area": "morphology_growth",
+   "plants": [
+    "plant:gaultheria-shallon"
+   ]
   },
   {
    "id": "habit:epiphytic",
@@ -2741,7 +4056,9 @@
    "category": "cat:morphology",
    "hierarchy_parent": "facet:habit",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "morphology_growth",
+   "plants": []
   },
   {
    "id": "habit:fastigiate",
@@ -2759,7 +4076,9 @@
    "category": "cat:morphology",
    "hierarchy_parent": "facet:habit",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "morphology_growth",
+   "plants": []
   },
   {
    "id": "habit:horizontal",
@@ -2777,7 +4096,9 @@
    "category": "cat:morphology",
    "hierarchy_parent": "facet:habit",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "morphology_growth",
+   "plants": []
   },
   {
    "id": "habit:irregular",
@@ -2795,7 +4116,9 @@
    "category": "cat:morphology",
    "hierarchy_parent": "facet:habit",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "morphology_growth",
+   "plants": []
   },
   {
    "id": "habit:open",
@@ -2813,7 +4136,9 @@
    "category": "cat:morphology",
    "hierarchy_parent": "facet:habit",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "morphology_growth",
+   "plants": []
   },
   {
    "id": "habit:pendulous",
@@ -2831,7 +4156,9 @@
    "category": "cat:morphology",
    "hierarchy_parent": "facet:habit",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "morphology_growth",
+   "plants": []
   },
   {
    "id": "habit:spreading",
@@ -2849,7 +4176,11 @@
    "category": "cat:morphology",
    "hierarchy_parent": "facet:habit",
    "used": true,
-   "n_plants": 1
+   "n_plants": 1,
+   "area": "morphology_growth",
+   "plants": [
+    "plant:gaultheria-shallon"
+   ]
   },
   {
    "id": "habit:stiffly_upright",
@@ -2867,7 +4198,9 @@
    "category": "cat:morphology",
    "hierarchy_parent": "facet:habit",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "morphology_growth",
+   "plants": []
   },
   {
    "id": "habit:twiggy",
@@ -2885,7 +4218,9 @@
    "category": "cat:morphology",
    "hierarchy_parent": "facet:habit",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "morphology_growth",
+   "plants": []
   },
   {
    "id": "habit:upright",
@@ -2903,7 +4238,11 @@
    "category": "cat:morphology",
    "hierarchy_parent": "facet:habit",
    "used": true,
-   "n_plants": 1
+   "n_plants": 1,
+   "area": "morphology_growth",
+   "plants": [
+    "plant:vaccinium-ovatum"
+   ]
   },
   {
    "id": "plant_type:annual_true",
@@ -2921,7 +4260,9 @@
    "category": "cat:growth_form_cat",
    "hierarchy_parent": "facet:plant_type",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "classification",
+   "plants": []
   },
   {
    "id": "plant_type:annual_grown_as",
@@ -2939,7 +4280,9 @@
    "category": "cat:growth_form_cat",
    "hierarchy_parent": "facet:plant_type",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "classification",
+   "plants": []
   },
   {
    "id": "plant_type:aquatic_plant",
@@ -2957,7 +4300,9 @@
    "category": "cat:growth_form_cat",
    "hierarchy_parent": "facet:plant_type",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "classification",
+   "plants": []
   },
   {
    "id": "plant_type:bamboo",
@@ -2975,7 +4320,9 @@
    "category": "cat:growth_form_cat",
    "hierarchy_parent": "facet:plant_type",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "classification",
+   "plants": []
   },
   {
    "id": "plant_type:biennial",
@@ -2993,7 +4340,9 @@
    "category": "cat:growth_form_cat",
    "hierarchy_parent": "facet:plant_type",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "classification",
+   "plants": []
   },
   {
    "id": "plant_type:broadleaf_evergreen",
@@ -3014,7 +4363,12 @@
    "category": "cat:growth_form_cat",
    "hierarchy_parent": "facet:plant_type",
    "used": true,
-   "n_plants": 2
+   "n_plants": 2,
+   "area": "classification",
+   "plants": [
+    "plant:gaultheria-shallon",
+    "plant:vaccinium-ovatum"
+   ]
   },
   {
    "id": "plant_type:conifer",
@@ -3035,7 +4389,9 @@
    "category": "cat:growth_form_cat",
    "hierarchy_parent": "facet:plant_type",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "classification",
+   "plants": []
   },
   {
    "id": "plant_type:fern",
@@ -3056,7 +4412,9 @@
    "category": "cat:growth_form_cat",
    "hierarchy_parent": "facet:plant_type",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "classification",
+   "plants": []
   },
   {
    "id": "plant_type:ground_cover",
@@ -3074,7 +4432,9 @@
    "category": "cat:growth_form_cat",
    "hierarchy_parent": "facet:plant_type",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "classification",
+   "plants": []
   },
   {
    "id": "plant_type:herbaceous_perennial",
@@ -3095,7 +4455,9 @@
    "category": "cat:growth_form_cat",
    "hierarchy_parent": "facet:plant_type",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "classification",
+   "plants": []
   },
   {
    "id": "plant_type:invasive_plant",
@@ -3113,7 +4475,9 @@
    "category": "cat:growth_form_cat",
    "hierarchy_parent": "facet:plant_type",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "classification",
+   "plants": []
   },
   {
    "id": "plant_type:poales_grass_like",
@@ -3131,7 +4495,9 @@
    "category": "cat:growth_form_cat",
    "hierarchy_parent": "facet:plant_type",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "classification",
+   "plants": []
   },
   {
    "id": "plant_type:semi_evergreen",
@@ -3149,7 +4515,9 @@
    "category": "cat:growth_form_cat",
    "hierarchy_parent": "facet:plant_type",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "classification",
+   "plants": []
   },
   {
    "id": "plant_type:shrub_deciduous",
@@ -3170,7 +4538,9 @@
    "category": "cat:growth_form_cat",
    "hierarchy_parent": "facet:plant_type",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "classification",
+   "plants": []
   },
   {
    "id": "plant_type:succulent_or_cacti",
@@ -3188,7 +4558,9 @@
    "category": "cat:growth_form_cat",
    "hierarchy_parent": "facet:plant_type",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "classification",
+   "plants": []
   },
   {
    "id": "plant_type:tree_deciduous",
@@ -3209,7 +4581,11 @@
    "category": "cat:growth_form_cat",
    "hierarchy_parent": "facet:plant_type",
    "used": true,
-   "n_plants": 1
+   "n_plants": 1,
+   "area": "classification",
+   "plants": [
+    "plant:acer-palmatum"
+   ]
   },
   {
    "id": "plant_type:vine_deciduous",
@@ -3227,7 +4603,9 @@
    "category": "cat:growth_form_cat",
    "hierarchy_parent": "facet:plant_type",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "classification",
+   "plants": []
   },
   {
    "id": "plant_type:vine_or_climber",
@@ -3245,7 +4623,9 @@
    "category": "cat:growth_form_cat",
    "hierarchy_parent": "facet:plant_type",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "classification",
+   "plants": []
   },
   {
    "id": "plant_type:weed_horticultural",
@@ -3263,7 +4643,9 @@
    "category": "cat:growth_form_cat",
    "hierarchy_parent": "facet:plant_type",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "classification",
+   "plants": []
   },
   {
    "id": "interest:fall_colour",
@@ -3285,7 +4667,11 @@
    "category": "cat:temporal",
    "hierarchy_parent": "facet:interest",
    "used": true,
-   "n_plants": 1
+   "n_plants": 1,
+   "area": "morphology_growth",
+   "plants": [
+    "plant:acer-palmatum"
+   ]
   },
   {
    "id": "interest:winter_interest",
@@ -3303,7 +4689,9 @@
    "category": "cat:temporal",
    "hierarchy_parent": "facet:interest",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "morphology_growth",
+   "plants": []
   },
   {
    "id": "interest:seasonal_interest",
@@ -3328,7 +4716,9 @@
    "category": "cat:temporal",
    "hierarchy_parent": "facet:interest",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "morphology_growth",
+   "plants": []
   },
   {
    "id": "fruit:edible",
@@ -3351,7 +4741,12 @@
    "category": "cat:temporal",
    "hierarchy_parent": "facet:fruit",
    "used": true,
-   "n_plants": 2
+   "n_plants": 2,
+   "area": "morphology_growth",
+   "plants": [
+    "plant:gaultheria-shallon",
+    "plant:vaccinium-ovatum"
+   ]
   },
   {
    "id": "fruit:showy",
@@ -3372,7 +4767,12 @@
    "category": "cat:temporal",
    "hierarchy_parent": "facet:fruit",
    "used": true,
-   "n_plants": 2
+   "n_plants": 2,
+   "area": "morphology_growth",
+   "plants": [
+    "plant:gaultheria-shallon",
+    "plant:vaccinium-ovatum"
+   ]
   },
   {
    "id": "maintenance:low",
@@ -3396,7 +4796,12 @@
    "category": "cat:ecological",
    "hierarchy_parent": "facet:maintenance",
    "used": true,
-   "n_plants": 2
+   "n_plants": 2,
+   "area": "ecology",
+   "plants": [
+    "plant:acer-palmatum",
+    "plant:vaccinium-ovatum"
+   ]
   },
   {
    "id": "maintenance:medium",
@@ -3414,7 +4819,9 @@
    "category": "cat:ecological",
    "hierarchy_parent": "facet:maintenance",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "ecology",
+   "plants": []
   },
   {
    "id": "maintenance:high",
@@ -3435,7 +4842,9 @@
    "category": "cat:ecological",
    "hierarchy_parent": "facet:maintenance",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "ecology",
+   "plants": []
   },
   {
    "id": "toxicity:none",
@@ -3459,7 +4868,9 @@
    "category": "cat:ecological",
    "hierarchy_parent": "facet:toxicity",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "ecology",
+   "plants": []
   },
   {
    "id": "toxicity:mild",
@@ -3477,7 +4888,9 @@
    "category": "cat:ecological",
    "hierarchy_parent": "facet:toxicity",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "ecology",
+   "plants": []
   },
   {
    "id": "toxicity:moderate",
@@ -3498,7 +4911,9 @@
    "category": "cat:ecological",
    "hierarchy_parent": "facet:toxicity",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "ecology",
+   "plants": []
   },
   {
    "id": "toxicity:severe",
@@ -3519,7 +4934,9 @@
    "category": "cat:ecological",
    "hierarchy_parent": "facet:toxicity",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "ecology",
+   "plants": []
   },
   {
    "id": "toxicity:unknown",
@@ -3537,7 +4954,12 @@
    "category": "cat:ecological",
    "hierarchy_parent": "facet:toxicity",
    "used": true,
-   "n_plants": 2
+   "n_plants": 2,
+   "area": "ecology",
+   "plants": [
+    "plant:gaultheria-shallon",
+    "plant:vaccinium-ovatum"
+   ]
   },
   {
    "id": "photoperiod:long_day",
@@ -3555,7 +4977,9 @@
    "category": "cat:temporal",
    "hierarchy_parent": "facet:photoperiod",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "morphology_growth",
+   "plants": []
   },
   {
    "id": "photoperiod:short_day",
@@ -3573,7 +4997,9 @@
    "category": "cat:temporal",
    "hierarchy_parent": "facet:photoperiod",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "morphology_growth",
+   "plants": []
   },
   {
    "id": "photoperiod:day_neutral",
@@ -3591,7 +5017,9 @@
    "category": "cat:temporal",
    "hierarchy_parent": "facet:photoperiod",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "morphology_growth",
+   "plants": []
   },
   {
    "id": "use:hedge",
@@ -3614,7 +5042,13 @@
    "category": "cat:landscape_use",
    "hierarchy_parent": "facet:use",
    "used": true,
-   "n_plants": 3
+   "n_plants": 3,
+   "area": "design",
+   "plants": [
+    "plant:acer-palmatum",
+    "plant:gaultheria-shallon",
+    "plant:vaccinium-ovatum"
+   ]
   },
   {
    "id": "use:accent_plant",
@@ -3632,7 +5066,11 @@
    "category": "cat:landscape_use",
    "hierarchy_parent": "facet:use",
    "used": true,
-   "n_plants": 1
+   "n_plants": 1,
+   "area": "design",
+   "plants": [
+    "plant:acer-palmatum"
+   ]
   },
   {
    "id": "use:alpine",
@@ -3650,7 +5088,9 @@
    "category": "cat:landscape_use",
    "hierarchy_parent": "facet:use",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "design",
+   "plants": []
   },
   {
    "id": "use:aquatic_ponds",
@@ -3668,7 +5108,9 @@
    "category": "cat:landscape_use",
    "hierarchy_parent": "facet:use",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "design",
+   "plants": []
   },
   {
    "id": "use:arbors_or_trellis",
@@ -3686,7 +5128,9 @@
    "category": "cat:landscape_use",
    "hierarchy_parent": "facet:use",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "design",
+   "plants": []
   },
   {
    "id": "use:attract_beneficial_insects",
@@ -3706,7 +5150,9 @@
    "category": "cat:landscape_use",
    "hierarchy_parent": "facet:use",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "design",
+   "plants": []
   },
   {
    "id": "use:attract_birds",
@@ -3726,7 +5172,9 @@
    "category": "cat:landscape_use",
    "hierarchy_parent": "facet:use",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "design",
+   "plants": []
   },
   {
    "id": "use:attract_butterflies",
@@ -3746,7 +5194,9 @@
    "category": "cat:landscape_use",
    "hierarchy_parent": "facet:use",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "design",
+   "plants": []
   },
   {
    "id": "use:bedding_plant",
@@ -3764,7 +5214,9 @@
    "category": "cat:landscape_use",
    "hierarchy_parent": "facet:use",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "design",
+   "plants": []
   },
   {
    "id": "use:container_planting",
@@ -3786,7 +5238,12 @@
    "category": "cat:landscape_use",
    "hierarchy_parent": "facet:use",
    "used": true,
-   "n_plants": 2
+   "n_plants": 2,
+   "area": "design",
+   "plants": [
+    "plant:gaultheria-shallon",
+    "plant:vaccinium-ovatum"
+   ]
   },
   {
    "id": "use:cut_flower_or_foliage",
@@ -3804,7 +5261,12 @@
    "category": "cat:landscape_use",
    "hierarchy_parent": "facet:use",
    "used": true,
-   "n_plants": 2
+   "n_plants": 2,
+   "area": "design",
+   "plants": [
+    "plant:gaultheria-shallon",
+    "plant:vaccinium-ovatum"
+   ]
   },
   {
    "id": "use:dried_flower_or_fruit",
@@ -3822,7 +5284,9 @@
    "category": "cat:landscape_use",
    "hierarchy_parent": "facet:use",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "design",
+   "plants": []
   },
   {
    "id": "use:erosion_control",
@@ -3840,7 +5304,11 @@
    "category": "cat:landscape_use",
    "hierarchy_parent": "facet:use",
    "used": true,
-   "n_plants": 1
+   "n_plants": 1,
+   "area": "design",
+   "plants": [
+    "plant:gaultheria-shallon"
+   ]
   },
   {
    "id": "use:espalier",
@@ -3858,7 +5326,9 @@
    "category": "cat:landscape_use",
    "hierarchy_parent": "facet:use",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "design",
+   "plants": []
   },
   {
    "id": "use:fall_interest",
@@ -3876,7 +5346,9 @@
    "category": "cat:landscape_use",
    "hierarchy_parent": "facet:use",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "design",
+   "plants": []
   },
   {
    "id": "use:filler",
@@ -3894,7 +5366,9 @@
    "category": "cat:landscape_use",
    "hierarchy_parent": "facet:use",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "design",
+   "plants": []
   },
   {
    "id": "use:floristry",
@@ -3912,7 +5386,9 @@
    "category": "cat:landscape_use",
    "hierarchy_parent": "facet:use",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "design",
+   "plants": []
   },
   {
    "id": "use:forestry",
@@ -3930,7 +5406,9 @@
    "category": "cat:landscape_use",
    "hierarchy_parent": "facet:use",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "design",
+   "plants": []
   },
   {
    "id": "use:fragrance",
@@ -3948,7 +5426,9 @@
    "category": "cat:landscape_use",
    "hierarchy_parent": "facet:use",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "design",
+   "plants": []
   },
   {
    "id": "use:golf_green",
@@ -3966,7 +5446,9 @@
    "category": "cat:landscape_use",
    "hierarchy_parent": "facet:use",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "design",
+   "plants": []
   },
   {
    "id": "use:green_roof_technology",
@@ -3990,7 +5472,9 @@
    "category": "cat:landscape_use",
    "hierarchy_parent": "facet:use",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "design",
+   "plants": []
   },
   {
    "id": "use:green_walls",
@@ -4008,7 +5492,9 @@
    "category": "cat:landscape_use",
    "hierarchy_parent": "facet:use",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "design",
+   "plants": []
   },
   {
    "id": "use:ground_cover",
@@ -4030,7 +5516,11 @@
    "category": "cat:landscape_use",
    "hierarchy_parent": "facet:use",
    "used": true,
-   "n_plants": 1
+   "n_plants": 1,
+   "area": "design",
+   "plants": [
+    "plant:gaultheria-shallon"
+   ]
   },
   {
    "id": "use:group_or_mass_planting",
@@ -4048,7 +5538,12 @@
    "category": "cat:landscape_use",
    "hierarchy_parent": "facet:use",
    "used": true,
-   "n_plants": 2
+   "n_plants": 2,
+   "area": "design",
+   "plants": [
+    "plant:acer-palmatum",
+    "plant:vaccinium-ovatum"
+   ]
   },
   {
    "id": "use:hanging_basket",
@@ -4066,7 +5561,9 @@
    "category": "cat:landscape_use",
    "hierarchy_parent": "facet:use",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "design",
+   "plants": []
   },
   {
    "id": "use:hedge_row",
@@ -4087,7 +5584,11 @@
    "category": "cat:landscape_use",
    "hierarchy_parent": "use:hedge",
    "used": true,
-   "n_plants": 1
+   "n_plants": 1,
+   "area": "design",
+   "plants": [
+    "plant:vaccinium-ovatum"
+   ]
   },
   {
    "id": "use:herb",
@@ -4105,7 +5606,9 @@
    "category": "cat:landscape_use",
    "hierarchy_parent": "facet:use",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "design",
+   "plants": []
   },
   {
    "id": "use:indoor_plant",
@@ -4123,7 +5626,9 @@
    "category": "cat:landscape_use",
    "hierarchy_parent": "facet:use",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "design",
+   "plants": []
   },
   {
    "id": "use:lawn_sports_field",
@@ -4141,7 +5646,9 @@
    "category": "cat:landscape_use",
    "hierarchy_parent": "facet:use",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "design",
+   "plants": []
   },
   {
    "id": "use:medicinal_plant",
@@ -4159,7 +5666,9 @@
    "category": "cat:landscape_use",
    "hierarchy_parent": "facet:use",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "design",
+   "plants": []
   },
   {
    "id": "use:mixed_shrub_border",
@@ -4177,7 +5686,12 @@
    "category": "cat:landscape_use",
    "hierarchy_parent": "facet:use",
    "used": true,
-   "n_plants": 2
+   "n_plants": 2,
+   "area": "design",
+   "plants": [
+    "plant:gaultheria-shallon",
+    "plant:vaccinium-ovatum"
+   ]
   },
   {
    "id": "use:native_planting",
@@ -4197,7 +5711,11 @@
    "category": "cat:landscape_use",
    "hierarchy_parent": "facet:use",
    "used": true,
-   "n_plants": 1
+   "n_plants": 1,
+   "area": "design",
+   "plants": [
+    "plant:vaccinium-ovatum"
+   ]
   },
   {
    "id": "use:perennial_border",
@@ -4215,7 +5733,9 @@
    "category": "cat:landscape_use",
    "hierarchy_parent": "facet:use",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "design",
+   "plants": []
   },
   {
    "id": "use:reclamation",
@@ -4233,7 +5753,9 @@
    "category": "cat:landscape_use",
    "hierarchy_parent": "facet:use",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "design",
+   "plants": []
   },
   {
    "id": "use:rock_garden",
@@ -4251,7 +5773,11 @@
    "category": "cat:landscape_use",
    "hierarchy_parent": "facet:use",
    "used": true,
-   "n_plants": 1
+   "n_plants": 1,
+   "area": "design",
+   "plants": [
+    "plant:gaultheria-shallon"
+   ]
   },
   {
    "id": "use:screening",
@@ -4273,7 +5799,12 @@
    "category": "cat:landscape_use",
    "hierarchy_parent": "use:hedge",
    "used": true,
-   "n_plants": 2
+   "n_plants": 2,
+   "area": "design",
+   "plants": [
+    "plant:acer-palmatum",
+    "plant:vaccinium-ovatum"
+   ]
   },
   {
    "id": "use:security_barrier",
@@ -4291,7 +5822,9 @@
    "category": "cat:landscape_use",
    "hierarchy_parent": "facet:use",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "design",
+   "plants": []
   },
   {
    "id": "use:shade_tree",
@@ -4309,7 +5842,9 @@
    "category": "cat:landscape_use",
    "hierarchy_parent": "facet:use",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "design",
+   "plants": []
   },
   {
    "id": "use:sheared_hedge",
@@ -4331,7 +5866,12 @@
    "category": "cat:landscape_use",
    "hierarchy_parent": "use:hedge",
    "used": true,
-   "n_plants": 2
+   "n_plants": 2,
+   "area": "design",
+   "plants": [
+    "plant:gaultheria-shallon",
+    "plant:vaccinium-ovatum"
+   ]
   },
   {
    "id": "use:small_garden_space",
@@ -4355,7 +5895,12 @@
    "category": "cat:landscape_use",
    "hierarchy_parent": "facet:use",
    "used": true,
-   "n_plants": 2
+   "n_plants": 2,
+   "area": "design",
+   "plants": [
+    "plant:gaultheria-shallon",
+    "plant:vaccinium-ovatum"
+   ]
   },
   {
    "id": "use:specimen_plant",
@@ -4373,7 +5918,11 @@
    "category": "cat:landscape_use",
    "hierarchy_parent": "facet:use",
    "used": true,
-   "n_plants": 1
+   "n_plants": 1,
+   "area": "design",
+   "plants": [
+    "plant:acer-palmatum"
+   ]
   },
   {
    "id": "use:spring_interest",
@@ -4391,7 +5940,9 @@
    "category": "cat:landscape_use",
    "hierarchy_parent": "facet:use",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "design",
+   "plants": []
   },
   {
    "id": "use:street_boulevard_tree",
@@ -4412,7 +5963,9 @@
    "category": "cat:landscape_use",
    "hierarchy_parent": "facet:use",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "design",
+   "plants": []
   },
   {
    "id": "use:summer_interest",
@@ -4430,7 +5983,9 @@
    "category": "cat:landscape_use",
    "hierarchy_parent": "facet:use",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "design",
+   "plants": []
   },
   {
    "id": "use:tall_background",
@@ -4448,7 +6003,9 @@
    "category": "cat:landscape_use",
    "hierarchy_parent": "facet:use",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "design",
+   "plants": []
   },
   {
    "id": "use:topiary",
@@ -4466,7 +6023,9 @@
    "category": "cat:landscape_use",
    "hierarchy_parent": "facet:use",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "design",
+   "plants": []
   },
   {
    "id": "use:urban_agriculture",
@@ -4487,7 +6046,12 @@
    "category": "cat:landscape_use",
    "hierarchy_parent": "facet:use",
    "used": true,
-   "n_plants": 2
+   "n_plants": 2,
+   "area": "design",
+   "plants": [
+    "plant:gaultheria-shallon",
+    "plant:vaccinium-ovatum"
+   ]
   },
   {
    "id": "use:waterside_planting",
@@ -4505,7 +6069,9 @@
    "category": "cat:landscape_use",
    "hierarchy_parent": "facet:use",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "design",
+   "plants": []
   },
   {
    "id": "use:wetland_bogs",
@@ -4523,7 +6089,9 @@
    "category": "cat:landscape_use",
    "hierarchy_parent": "facet:use",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "design",
+   "plants": []
   },
   {
    "id": "use:wild_flower_garden",
@@ -4541,7 +6109,9 @@
    "category": "cat:landscape_use",
    "hierarchy_parent": "facet:use",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "design",
+   "plants": []
   },
   {
    "id": "use:wildlife_food",
@@ -4559,7 +6129,9 @@
    "category": "cat:landscape_use",
    "hierarchy_parent": "facet:use",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "design",
+   "plants": []
   },
   {
    "id": "use:wind_break",
@@ -4577,7 +6149,9 @@
    "category": "cat:landscape_use",
    "hierarchy_parent": "facet:use",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "design",
+   "plants": []
   },
   {
    "id": "use:winter_interest",
@@ -4595,7 +6169,9 @@
    "category": "cat:landscape_use",
    "hierarchy_parent": "facet:use",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "design",
+   "plants": []
   },
   {
    "id": "use:woodland_margin",
@@ -4613,7 +6189,11 @@
    "category": "cat:landscape_use",
    "hierarchy_parent": "facet:use",
    "used": true,
-   "n_plants": 1
+   "n_plants": 1,
+   "area": "design",
+   "plants": [
+    "plant:acer-palmatum"
+   ]
   },
   {
    "id": "ecology:pollinator",
@@ -4636,7 +6216,9 @@
    "category": "cat:ecological",
    "hierarchy_parent": "facet:ecology",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "ecology",
+   "plants": []
   },
   {
    "id": "ecology:bird_food",
@@ -4656,7 +6238,11 @@
    "category": "cat:ecological",
    "hierarchy_parent": "facet:ecology",
    "used": true,
-   "n_plants": 1
+   "n_plants": 1,
+   "area": "ecology",
+   "plants": [
+    "plant:gaultheria-shallon"
+   ]
   },
   {
    "id": "ecology:wildlife_cover",
@@ -4677,7 +6263,9 @@
    "category": "cat:ecological",
    "hierarchy_parent": "facet:ecology",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "ecology",
+   "plants": []
   },
   {
    "id": "ecology:nitrogen_fixer",
@@ -4697,7 +6285,9 @@
    "category": "cat:ecological",
    "hierarchy_parent": "facet:ecology",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "ecology",
+   "plants": []
   },
   {
    "id": "ecology:erosion_control",
@@ -4717,7 +6307,9 @@
    "category": "cat:ecological",
    "hierarchy_parent": "facet:ecology",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "ecology",
+   "plants": []
   },
   {
    "id": "ecology:habitat_structure",
@@ -4740,7 +6332,9 @@
    "category": "cat:ecological",
    "hierarchy_parent": "facet:ecology",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "ecology",
+   "plants": []
   },
   {
    "id": "season:spring",
@@ -4760,7 +6354,9 @@
    "category": "cat:temporal",
    "hierarchy_parent": "facet:season",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "morphology_growth",
+   "plants": []
   },
   {
    "id": "season:summer",
@@ -4778,7 +6374,9 @@
    "category": "cat:temporal",
    "hierarchy_parent": "facet:season",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "morphology_growth",
+   "plants": []
   },
   {
    "id": "season:autumn",
@@ -4798,7 +6396,9 @@
    "category": "cat:temporal",
    "hierarchy_parent": "facet:season",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "morphology_growth",
+   "plants": []
   },
   {
    "id": "season:winter",
@@ -4818,7 +6418,9 @@
    "category": "cat:temporal",
    "hierarchy_parent": "facet:season",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "morphology_growth",
+   "plants": []
   },
   {
    "id": "month:1",
@@ -4836,7 +6438,9 @@
    "category": "cat:temporal",
    "hierarchy_parent": "season:winter",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "morphology_growth",
+   "plants": []
   },
   {
    "id": "month:2",
@@ -4854,7 +6458,9 @@
    "category": "cat:temporal",
    "hierarchy_parent": "season:winter",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "morphology_growth",
+   "plants": []
   },
   {
    "id": "month:3",
@@ -4872,7 +6478,9 @@
    "category": "cat:temporal",
    "hierarchy_parent": "season:spring",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "morphology_growth",
+   "plants": []
   },
   {
    "id": "month:4",
@@ -4890,7 +6498,9 @@
    "category": "cat:temporal",
    "hierarchy_parent": "season:spring",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "morphology_growth",
+   "plants": []
   },
   {
    "id": "month:5",
@@ -4908,7 +6518,9 @@
    "category": "cat:temporal",
    "hierarchy_parent": "season:spring",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "morphology_growth",
+   "plants": []
   },
   {
    "id": "month:6",
@@ -4926,7 +6538,9 @@
    "category": "cat:temporal",
    "hierarchy_parent": "season:summer",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "morphology_growth",
+   "plants": []
   },
   {
    "id": "month:7",
@@ -4944,7 +6558,9 @@
    "category": "cat:temporal",
    "hierarchy_parent": "season:summer",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "morphology_growth",
+   "plants": []
   },
   {
    "id": "month:8",
@@ -4962,7 +6578,9 @@
    "category": "cat:temporal",
    "hierarchy_parent": "season:summer",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "morphology_growth",
+   "plants": []
   },
   {
    "id": "month:9",
@@ -4980,7 +6598,9 @@
    "category": "cat:temporal",
    "hierarchy_parent": "season:autumn",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "morphology_growth",
+   "plants": []
   },
   {
    "id": "month:10",
@@ -4998,7 +6618,9 @@
    "category": "cat:temporal",
    "hierarchy_parent": "season:autumn",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "morphology_growth",
+   "plants": []
   },
   {
    "id": "month:11",
@@ -5016,7 +6638,9 @@
    "category": "cat:temporal",
    "hierarchy_parent": "season:autumn",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "morphology_growth",
+   "plants": []
   },
   {
    "id": "month:12",
@@ -5034,7 +6658,9 @@
    "category": "cat:temporal",
    "hierarchy_parent": "season:winter",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "morphology_growth",
+   "plants": []
   },
   {
    "id": "age:young",
@@ -5056,7 +6682,9 @@
    "category": "cross:time",
    "hierarchy_parent": "facet:age",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "evidence",
+   "plants": []
   },
   {
    "id": "age:establishing",
@@ -5077,7 +6705,12 @@
    "category": "cross:time",
    "hierarchy_parent": "facet:age",
    "used": true,
-   "n_plants": 2
+   "n_plants": 2,
+   "area": "evidence",
+   "plants": [
+    "plant:acer-palmatum",
+    "plant:vaccinium-ovatum"
+   ]
   },
   {
    "id": "age:established",
@@ -5099,7 +6732,11 @@
    "category": "cross:time",
    "hierarchy_parent": "facet:age",
    "used": true,
-   "n_plants": 1
+   "n_plants": 1,
+   "area": "evidence",
+   "plants": [
+    "plant:vaccinium-ovatum"
+   ]
   },
   {
    "id": "age:mature",
@@ -5121,7 +6758,9 @@
    "category": "cross:time",
    "hierarchy_parent": "facet:age",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "evidence",
+   "plants": []
   },
   {
    "id": "place:global",
@@ -5139,7 +6778,9 @@
    "category": "cross:place",
    "hierarchy_parent": "facet:place",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "evidence",
+   "plants": []
   },
   {
    "id": "place:uk",
@@ -5160,7 +6801,9 @@
    "category": "cross:place",
    "hierarchy_parent": "place:global",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "evidence",
+   "plants": []
   },
   {
    "id": "place:north_america",
@@ -5182,7 +6825,9 @@
    "category": "cross:place",
    "hierarchy_parent": "place:global",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "evidence",
+   "plants": []
   },
   {
    "id": "place:st_louis",
@@ -5203,7 +6848,9 @@
    "category": "cross:place",
    "hierarchy_parent": "place:north_america",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "evidence",
+   "plants": []
   },
   {
    "id": "place:pnw",
@@ -5225,7 +6872,9 @@
    "category": "cross:place",
    "hierarchy_parent": "place:north_america",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "evidence",
+   "plants": []
   },
   {
    "id": "place:willamette_valley",
@@ -5246,7 +6895,9 @@
    "category": "cross:place",
    "hierarchy_parent": "place:pnw",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "evidence",
+   "plants": []
   },
   {
    "id": "place:bc",
@@ -5267,7 +6918,9 @@
    "category": "cross:place",
    "hierarchy_parent": "place:pnw",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "evidence",
+   "plants": []
   },
   {
    "id": "place:vancouver",
@@ -5293,7 +6946,9 @@
    "category": "cross:place",
    "hierarchy_parent": "place:bc",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "evidence",
+   "plants": []
   },
   {
    "id": "place:city_of_vancouver",
@@ -5314,7 +6969,9 @@
    "category": "cross:place",
    "hierarchy_parent": "place:vancouver",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "evidence",
+   "plants": []
   },
   {
    "id": "place:north_vancouver",
@@ -5335,7 +6992,9 @@
    "category": "cross:place",
    "hierarchy_parent": "place:vancouver",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "evidence",
+   "plants": []
   },
   {
    "id": "origin:native",
@@ -5357,7 +7016,12 @@
    "category": "cat:ecological",
    "hierarchy_parent": "facet:origin",
    "used": true,
-   "n_plants": 2
+   "n_plants": 2,
+   "area": "ecology",
+   "plants": [
+    "plant:gaultheria-shallon",
+    "plant:vaccinium-ovatum"
+   ]
   },
   {
    "id": "origin:native_bc_west_of_cascades",
@@ -5379,7 +7043,12 @@
    "category": "cat:ecological",
    "hierarchy_parent": "origin:native",
    "used": true,
-   "n_plants": 2
+   "n_plants": 2,
+   "area": "ecology",
+   "plants": [
+    "plant:gaultheria-shallon",
+    "plant:vaccinium-ovatum"
+   ]
   },
   {
    "id": "origin:native_north_america",
@@ -5399,7 +7068,9 @@
    "category": "cat:ecological",
    "hierarchy_parent": "origin:native",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "ecology",
+   "plants": []
   },
   {
    "id": "origin:non_native",
@@ -5420,7 +7091,11 @@
    "category": "cat:ecological",
    "hierarchy_parent": "facet:origin",
    "used": true,
-   "n_plants": 1
+   "n_plants": 1,
+   "area": "ecology",
+   "plants": [
+    "plant:acer-palmatum"
+   ]
   },
   {
    "id": "origin:invasive_bc",
@@ -5440,7 +7115,9 @@
    "category": "cat:ecological",
    "hierarchy_parent": "facet:origin",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "ecology",
+   "plants": []
   },
   {
    "id": "invasive:not_listed",
@@ -5458,7 +7135,13 @@
    "category": "cat:ecological",
    "hierarchy_parent": "facet:invasive",
    "used": true,
-   "n_plants": 3
+   "n_plants": 3,
+   "area": "ecology",
+   "plants": [
+    "plant:acer-palmatum",
+    "plant:gaultheria-shallon",
+    "plant:vaccinium-ovatum"
+   ]
   },
   {
    "id": "invasive:watch",
@@ -5476,7 +7159,9 @@
    "category": "cat:ecological",
    "hierarchy_parent": "facet:invasive",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "ecology",
+   "plants": []
   },
   {
    "id": "invasive:regulated_bc",
@@ -5494,7 +7179,9 @@
    "category": "cat:ecological",
    "hierarchy_parent": "facet:invasive",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "ecology",
+   "plants": []
   },
   {
    "id": "invasive:prohibited_bc",
@@ -5512,7 +7199,9 @@
    "category": "cat:ecological",
    "hierarchy_parent": "facet:invasive",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "ecology",
+   "plants": []
   },
   {
    "id": "stress:drought",
@@ -5533,7 +7222,11 @@
    "category": "cat:ecological",
    "hierarchy_parent": "facet:stress",
    "used": true,
-   "n_plants": 1
+   "n_plants": 1,
+   "area": "ecology",
+   "plants": [
+    "plant:vaccinium-ovatum"
+   ]
   },
   {
    "id": "stress:salt",
@@ -5554,7 +7247,9 @@
    "category": "cat:ecological",
    "hierarchy_parent": "facet:stress",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "ecology",
+   "plants": []
   },
   {
    "id": "stress:wind",
@@ -5574,7 +7269,9 @@
    "category": "cat:ecological",
    "hierarchy_parent": "facet:stress",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "ecology",
+   "plants": []
   },
   {
    "id": "stress:winter_wet",
@@ -5595,7 +7292,9 @@
    "category": "cat:ecological",
    "hierarchy_parent": "facet:stress",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "ecology",
+   "plants": []
   },
   {
    "id": "stress:urban_pollution",
@@ -5616,7 +7315,9 @@
    "category": "cat:ecological",
    "hierarchy_parent": "facet:stress",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "ecology",
+   "plants": []
   },
   {
    "id": "stress:leaf_scorch",
@@ -5637,7 +7338,11 @@
    "category": "cat:ecological",
    "hierarchy_parent": "facet:stress",
    "used": true,
-   "n_plants": 1
+   "n_plants": 1,
+   "area": "ecology",
+   "plants": [
+    "plant:acer-palmatum"
+   ]
   },
   {
    "id": "stress:black_walnut",
@@ -5658,7 +7363,11 @@
    "category": "cat:ecological",
    "hierarchy_parent": "facet:stress",
    "used": true,
-   "n_plants": 1
+   "n_plants": 1,
+   "area": "ecology",
+   "plants": [
+    "plant:acer-palmatum"
+   ]
   },
   {
    "id": "browsing:deer",
@@ -5679,7 +7388,9 @@
    "category": "cat:ecological",
    "hierarchy_parent": "facet:browsing",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "ecology",
+   "plants": []
   },
   {
    "id": "browsing:rabbit",
@@ -5699,7 +7410,11 @@
    "category": "cat:ecological",
    "hierarchy_parent": "facet:browsing",
    "used": true,
-   "n_plants": 1
+   "n_plants": 1,
+   "area": "ecology",
+   "plants": [
+    "plant:acer-palmatum"
+   ]
   },
   {
    "id": "pest:pest",
@@ -5719,7 +7434,11 @@
    "category": "cat:ecological",
    "hierarchy_parent": "facet:pest",
    "used": true,
-   "n_plants": 1
+   "n_plants": 1,
+   "area": "ecology",
+   "plants": [
+    "plant:gaultheria-shallon"
+   ]
   },
   {
    "id": "pest:disease",
@@ -5739,7 +7458,9 @@
    "category": "cat:ecological",
    "hierarchy_parent": "facet:pest",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "ecology",
+   "plants": []
   },
   {
    "id": "pest:abiotic_disorder",
@@ -5757,7 +7478,11 @@
    "category": "cat:ecological",
    "hierarchy_parent": "facet:pest",
    "used": true,
-   "n_plants": 1
+   "n_plants": 1,
+   "area": "ecology",
+   "plants": [
+    "plant:vaccinium-ovatum"
+   ]
   },
   {
    "id": "pest:adelgids",
@@ -5775,7 +7500,9 @@
    "category": "cat:ecological",
    "hierarchy_parent": "facet:pest",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "ecology",
+   "plants": []
   },
   {
    "id": "pest:anthracnose",
@@ -5793,7 +7520,11 @@
    "category": "cat:ecological",
    "hierarchy_parent": "facet:pest",
    "used": true,
-   "n_plants": 1
+   "n_plants": 1,
+   "area": "ecology",
+   "plants": [
+    "plant:acer-palmatum"
+   ]
   },
   {
    "id": "pest:aphids",
@@ -5811,7 +7542,11 @@
    "category": "cat:ecological",
    "hierarchy_parent": "facet:pest",
    "used": true,
-   "n_plants": 1
+   "n_plants": 1,
+   "area": "ecology",
+   "plants": [
+    "plant:acer-palmatum"
+   ]
   },
   {
    "id": "pest:bacterial_leaf_spot",
@@ -5829,7 +7564,9 @@
    "category": "cat:ecological",
    "hierarchy_parent": "facet:pest",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "ecology",
+   "plants": []
   },
   {
    "id": "pest:beetles_or_weevils",
@@ -5847,7 +7584,11 @@
    "category": "cat:ecological",
    "hierarchy_parent": "facet:pest",
    "used": true,
-   "n_plants": 1
+   "n_plants": 1,
+   "area": "ecology",
+   "plants": [
+    "plant:vaccinium-ovatum"
+   ]
   },
   {
    "id": "pest:blight_or_needle_cast",
@@ -5865,7 +7606,9 @@
    "category": "cat:ecological",
    "hierarchy_parent": "facet:pest",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "ecology",
+   "plants": []
   },
   {
    "id": "pest:canker_or_sap_rot",
@@ -5883,7 +7626,11 @@
    "category": "cat:ecological",
    "hierarchy_parent": "facet:pest",
    "used": true,
-   "n_plants": 1
+   "n_plants": 1,
+   "area": "ecology",
+   "plants": [
+    "plant:acer-palmatum"
+   ]
   },
   {
    "id": "pest:caterpillar_or_cutworm",
@@ -5901,7 +7648,11 @@
    "category": "cat:ecological",
    "hierarchy_parent": "facet:pest",
    "used": true,
-   "n_plants": 1
+   "n_plants": 1,
+   "area": "ecology",
+   "plants": [
+    "plant:acer-palmatum"
+   ]
   },
   {
    "id": "pest:crown_rot",
@@ -5919,7 +7670,9 @@
    "category": "cat:ecological",
    "hierarchy_parent": "facet:pest",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "ecology",
+   "plants": []
   },
   {
    "id": "pest:dieback",
@@ -5937,7 +7690,9 @@
    "category": "cat:ecological",
    "hierarchy_parent": "facet:pest",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "ecology",
+   "plants": []
   },
   {
    "id": "pest:fungal_leaf_spot",
@@ -5955,7 +7710,11 @@
    "category": "cat:ecological",
    "hierarchy_parent": "facet:pest",
    "used": true,
-   "n_plants": 1
+   "n_plants": 1,
+   "area": "ecology",
+   "plants": [
+    "plant:acer-palmatum"
+   ]
   },
   {
    "id": "pest:galls",
@@ -5973,7 +7732,11 @@
    "category": "cat:ecological",
    "hierarchy_parent": "facet:pest",
    "used": true,
-   "n_plants": 1
+   "n_plants": 1,
+   "area": "ecology",
+   "plants": [
+    "plant:acer-palmatum"
+   ]
   },
   {
    "id": "pest:leaf_miner_insect",
@@ -5991,7 +7754,9 @@
    "category": "cat:ecological",
    "hierarchy_parent": "facet:pest",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "ecology",
+   "plants": []
   },
   {
    "id": "pest:leaf_scorch",
@@ -6009,7 +7774,11 @@
    "category": "cat:ecological",
    "hierarchy_parent": "facet:pest",
    "used": true,
-   "n_plants": 1
+   "n_plants": 1,
+   "area": "ecology",
+   "plants": [
+    "plant:acer-palmatum"
+   ]
   },
   {
    "id": "pest:mealybugs",
@@ -6027,7 +7796,9 @@
    "category": "cat:ecological",
    "hierarchy_parent": "facet:pest",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "ecology",
+   "plants": []
   },
   {
    "id": "pest:mildew",
@@ -6045,7 +7816,11 @@
    "category": "cat:ecological",
    "hierarchy_parent": "facet:pest",
    "used": true,
-   "n_plants": 1
+   "n_plants": 1,
+   "area": "ecology",
+   "plants": [
+    "plant:vaccinium-ovatum"
+   ]
   },
   {
    "id": "pest:mites",
@@ -6063,7 +7838,11 @@
    "category": "cat:ecological",
    "hierarchy_parent": "facet:pest",
    "used": true,
-   "n_plants": 1
+   "n_plants": 1,
+   "area": "ecology",
+   "plants": [
+    "plant:acer-palmatum"
+   ]
   },
   {
    "id": "pest:mold",
@@ -6081,7 +7860,9 @@
    "category": "cat:ecological",
    "hierarchy_parent": "facet:pest",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "ecology",
+   "plants": []
   },
   {
    "id": "pest:nematodes",
@@ -6099,7 +7880,9 @@
    "category": "cat:ecological",
    "hierarchy_parent": "facet:pest",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "ecology",
+   "plants": []
   },
   {
    "id": "pest:root_rot",
@@ -6117,7 +7900,13 @@
    "category": "cat:ecological",
    "hierarchy_parent": "facet:pest",
    "used": true,
-   "n_plants": 3
+   "n_plants": 3,
+   "area": "ecology",
+   "plants": [
+    "plant:acer-palmatum",
+    "plant:gaultheria-shallon",
+    "plant:vaccinium-ovatum"
+   ]
   },
   {
    "id": "pest:rust",
@@ -6135,7 +7924,9 @@
    "category": "cat:ecological",
    "hierarchy_parent": "facet:pest",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "ecology",
+   "plants": []
   },
   {
    "id": "pest:scale_insects",
@@ -6153,7 +7944,11 @@
    "category": "cat:ecological",
    "hierarchy_parent": "facet:pest",
    "used": true,
-   "n_plants": 1
+   "n_plants": 1,
+   "area": "ecology",
+   "plants": [
+    "plant:acer-palmatum"
+   ]
   },
   {
    "id": "pest:slugs_or_snails",
@@ -6171,7 +7966,9 @@
    "category": "cat:ecological",
    "hierarchy_parent": "facet:pest",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "ecology",
+   "plants": []
   },
   {
    "id": "pest:thrips",
@@ -6189,7 +7986,9 @@
    "category": "cat:ecological",
    "hierarchy_parent": "facet:pest",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "ecology",
+   "plants": []
   },
   {
    "id": "pest:virus",
@@ -6207,7 +8006,9 @@
    "category": "cat:ecological",
    "hierarchy_parent": "facet:pest",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "ecology",
+   "plants": []
   },
   {
    "id": "pest:whitefly",
@@ -6225,7 +8026,9 @@
    "category": "cat:ecological",
    "hierarchy_parent": "facet:pest",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "ecology",
+   "plants": []
   },
   {
    "id": "pest:wilt",
@@ -6243,7 +8046,11 @@
    "category": "cat:ecological",
    "hierarchy_parent": "facet:pest",
    "used": true,
-   "n_plants": 1
+   "n_plants": 1,
+   "area": "ecology",
+   "plants": [
+    "plant:acer-palmatum"
+   ]
   },
   {
    "id": "plant:acer-palmatum",
@@ -7686,7 +9493,9 @@
    "category": "cat:taxonomy",
    "hierarchy_parent": "facet:taxon_family",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "classification",
+   "plants": []
   },
   {
    "id": "family:sapindaceae",
@@ -7704,7 +9513,9 @@
    "category": "cat:taxonomy",
    "hierarchy_parent": "facet:taxon_family",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "classification",
+   "plants": []
   },
   {
    "id": "genus:acer",
@@ -7722,7 +9533,9 @@
    "category": "cat:taxonomy",
    "hierarchy_parent": "family:sapindaceae",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "classification",
+   "plants": []
   },
   {
    "id": "genus:gaultheria",
@@ -7740,7 +9553,9 @@
    "category": "cat:taxonomy",
    "hierarchy_parent": "family:ericaceae",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "classification",
+   "plants": []
   },
   {
    "id": "genus:vaccinium",
@@ -7758,7 +9573,9 @@
    "category": "cat:taxonomy",
    "hierarchy_parent": "family:ericaceae",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "classification",
+   "plants": []
   },
   {
    "id": "layer:canopy",
@@ -7781,7 +9598,11 @@
    "category": "cat:vertical_structure",
    "hierarchy_parent": "facet:layer",
    "used": true,
-   "n_plants": 1
+   "n_plants": 1,
+   "area": "design",
+   "plants": [
+    "plant:acer-palmatum"
+   ]
   },
   {
    "id": "layer:understorey",
@@ -7804,7 +9625,11 @@
    "category": "cat:vertical_structure",
    "hierarchy_parent": "facet:layer",
    "used": true,
-   "n_plants": 1
+   "n_plants": 1,
+   "area": "design",
+   "plants": [
+    "plant:acer-palmatum"
+   ]
   },
   {
    "id": "layer:shrub",
@@ -7826,7 +9651,12 @@
    "category": "cat:vertical_structure",
    "hierarchy_parent": "facet:layer",
    "used": true,
-   "n_plants": 2
+   "n_plants": 2,
+   "area": "design",
+   "plants": [
+    "plant:gaultheria-shallon",
+    "plant:vaccinium-ovatum"
+   ]
   },
   {
    "id": "layer:ground",
@@ -7849,7 +9679,11 @@
    "category": "cat:vertical_structure",
    "hierarchy_parent": "facet:layer",
    "used": true,
-   "n_plants": 1
+   "n_plants": 1,
+   "area": "design",
+   "plants": [
+    "plant:gaultheria-shallon"
+   ]
   },
   {
    "id": "height_band:ground_level",
@@ -7869,7 +9703,11 @@
    "min_m": 0,
    "max_m": 0.15,
    "used": true,
-   "n_plants": 1
+   "n_plants": 1,
+   "area": "design",
+   "plants": [
+    "plant:gaultheria-shallon"
+   ]
   },
   {
    "id": "height_band:low",
@@ -7889,7 +9727,11 @@
    "min_m": 0.15,
    "max_m": 0.5,
    "used": true,
-   "n_plants": 1
+   "n_plants": 1,
+   "area": "design",
+   "plants": [
+    "plant:gaultheria-shallon"
+   ]
   },
   {
    "id": "height_band:medium",
@@ -7909,7 +9751,12 @@
    "min_m": 0.5,
    "max_m": 1.6,
    "used": true,
-   "n_plants": 2
+   "n_plants": 2,
+   "area": "design",
+   "plants": [
+    "plant:gaultheria-shallon",
+    "plant:vaccinium-ovatum"
+   ]
   },
   {
    "id": "height_band:above_eye",
@@ -7929,7 +9776,13 @@
    "min_m": 1.6,
    "max_m": 6,
    "used": true,
-   "n_plants": 3
+   "n_plants": 3,
+   "area": "design",
+   "plants": [
+    "plant:acer-palmatum",
+    "plant:gaultheria-shallon",
+    "plant:vaccinium-ovatum"
+   ]
   },
   {
    "id": "height_band:tree",
@@ -7948,7 +9801,11 @@
    "hierarchy_parent": "facet:height_band",
    "min_m": 4,
    "used": true,
-   "n_plants": 1
+   "n_plants": 1,
+   "area": "design",
+   "plants": [
+    "plant:acer-palmatum"
+   ]
   },
   {
    "id": "spatial:screen",
@@ -7971,7 +9828,13 @@
    "category": "cat:space_making",
    "hierarchy_parent": "facet:spatial",
    "used": true,
-   "n_plants": 3
+   "n_plants": 3,
+   "area": "design",
+   "plants": [
+    "plant:acer-palmatum",
+    "plant:gaultheria-shallon",
+    "plant:vaccinium-ovatum"
+   ]
   },
   {
    "id": "spatial:scrim",
@@ -7995,7 +9858,9 @@
    "hierarchy_parent": "facet:spatial",
    "to_confirm": true,
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "design",
+   "plants": []
   },
   {
    "id": "spatial:barrier",
@@ -8017,7 +9882,12 @@
    "category": "cat:space_making",
    "hierarchy_parent": "facet:spatial",
    "used": true,
-   "n_plants": 2
+   "n_plants": 2,
+   "area": "design",
+   "plants": [
+    "plant:gaultheria-shallon",
+    "plant:vaccinium-ovatum"
+   ]
   },
   {
    "id": "spatial:ceiling",
@@ -8039,7 +9909,11 @@
    "category": "cat:space_making",
    "hierarchy_parent": "facet:spatial",
    "used": true,
-   "n_plants": 1
+   "n_plants": 1,
+   "area": "design",
+   "plants": [
+    "plant:acer-palmatum"
+   ]
   },
   {
    "id": "composition:matrix",
@@ -8060,7 +9934,11 @@
    "category": "cat:composition",
    "hierarchy_parent": "facet:composition",
    "used": true,
-   "n_plants": 1
+   "n_plants": 1,
+   "area": "design",
+   "plants": [
+    "plant:gaultheria-shallon"
+   ]
   },
   {
    "id": "composition:drift",
@@ -8081,7 +9959,9 @@
    "category": "cat:composition",
    "hierarchy_parent": "facet:composition",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "design",
+   "plants": []
   },
   {
    "id": "composition:group",
@@ -8105,7 +9985,12 @@
    "category": "cat:composition",
    "hierarchy_parent": "facet:composition",
    "used": true,
-   "n_plants": 2
+   "n_plants": 2,
+   "area": "design",
+   "plants": [
+    "plant:acer-palmatum",
+    "plant:vaccinium-ovatum"
+   ]
   },
   {
    "id": "composition:scatter",
@@ -8126,7 +10011,9 @@
    "category": "cat:composition",
    "hierarchy_parent": "facet:composition",
    "used": false,
-   "n_plants": 0
+   "n_plants": 0,
+   "area": "design",
+   "plants": []
   },
   {
    "id": "composition:layering",
@@ -8149,7 +10036,13 @@
    "category": "cat:composition",
    "hierarchy_parent": "facet:composition",
    "used": true,
-   "n_plants": 3
+   "n_plants": 3,
+   "area": "design",
+   "plants": [
+    "plant:acer-palmatum",
+    "plant:gaultheria-shallon",
+    "plant:vaccinium-ovatum"
+   ]
   },
   {
    "id": "role:structural",
@@ -8172,7 +10065,13 @@
    "category": "cat:planting_role",
    "hierarchy_parent": "facet:role",
    "used": true,
-   "n_plants": 3
+   "n_plants": 3,
+   "area": "design",
+   "plants": [
+    "plant:acer-palmatum",
+    "plant:gaultheria-shallon",
+    "plant:vaccinium-ovatum"
+   ]
   },
   {
    "id": "role:seasonal",
@@ -8194,7 +10093,13 @@
    "category": "cat:planting_role",
    "hierarchy_parent": "facet:role",
    "used": true,
-   "n_plants": 3
+   "n_plants": 3,
+   "area": "design",
+   "plants": [
+    "plant:acer-palmatum",
+    "plant:gaultheria-shallon",
+    "plant:vaccinium-ovatum"
+   ]
   },
   {
    "id": "role:ground_cover",
@@ -8216,7 +10121,11 @@
    "category": "cat:planting_role",
    "hierarchy_parent": "facet:role",
    "used": true,
-   "n_plants": 1
+   "n_plants": 1,
+   "area": "design",
+   "plants": [
+    "plant:gaultheria-shallon"
+   ]
   },
   {
    "id": "role:filler",
@@ -8238,7 +10147,12 @@
    "category": "cat:planting_role",
    "hierarchy_parent": "facet:role",
    "used": true,
-   "n_plants": 2
+   "n_plants": 2,
+   "area": "design",
+   "plants": [
+    "plant:acer-palmatum",
+    "plant:gaultheria-shallon"
+   ]
   },
   {
    "id": "role:accent",
@@ -8262,7 +10176,11 @@
    "category": "cat:planting_role",
    "hierarchy_parent": "facet:role",
    "used": true,
-   "n_plants": 1
+   "n_plants": 1,
+   "area": "design",
+   "plants": [
+    "plant:acer-palmatum"
+   ]
   }
  ],
  "edges": [

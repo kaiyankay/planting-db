@@ -1,54 +1,53 @@
-# brain/ontology-preview — Neural Knowledge Brain (XYZ ontology)
+# brain/ontology-preview — Planting Knowledge Network
 
 **Live:** <https://kaiyankay.github.io/planting-db/brain/ontology-preview/> · v5 stays at <https://kaiyankay.github.io/planting-db/brain/> unchanged.
 
-Briefs 2026-11-02 ("Knowledge Graph Reconstruction", then "Visual Simplification & Redesign"). The claim store drawn as a **minimal 3D neural network**: spheres, thin lines, a label on every visible node, and **progressive disclosure** — the network opens one level at a time from the three knowledge axes. The structure is the ontology (`ontology.json` 0.2.0, XYZ), the lines are the semantic graph (`brain/data/kg.json`, built by `tools/build_kg.py`), every path and answer is a traversal run by `js/kg.js` (the browser port of `tools/kg_query.py`). Nothing is hard-coded; unexplored knowledge is hidden, not removed.
+Briefs 2026-11-02 ("Knowledge Graph Reconstruction" → "Visual Simplification" → "Scalable Knowledge Network Revision"). A **plant-centred, relationship-driven, data-driven** interface over the semantic graph `brain/data/kg.json`: a simple 3D network of spheres and thin lines that opens from the plants and shows how they connect through shared knowledge and through recorded relations. Nothing about the plants, the growth forms or the knowledge areas is written in the interface; it is all read from kg.json, which `tools/build_kg.py` builds from the claims, the entity records, `relations.json` and the ontology.
 
 ## Run
 
 ```bash
 cd planting-db && python3 -m http.server 8766          # serve the planting-db root (launch.json entry "brain")
+python3 -I tools/pipeline.py                            # rebuild after any data change: ontology → graph → kg → validate
 ```
 
-then <http://localhost:8766/brain/ontology-preview/>. Rebuild the data after any change to plants, ontology or relations:
+then <http://localhost:8766/brain/ontology-preview/>. Another database root with the same layout: `?db=../../tests/scale/out/db-100` (roots written by `tools/scale_test.py`).
 
-```bash
-python3 -I tools/build_ontology.py && python3 -I tools/build_graph.py && python3 -I tools/build_kg.py && python3 -I tools/validate.py
-```
+Files: `index.html` · `js/app6.js` (registry, force layout, spheres and lines, disclosure, cards, paths, ask, growth) · `js/kg.js` (loader + graph engine, the browser port of `tools/kg_query.py`) · shared `../js/graph.js`, `../js/diagnosis.js`, `../js/model.js` · screenshots in `../screenshots/ontology-preview/`.
 
-Files: `index.html` · `js/app6.js` (registry, layout, spheres and lines, disclosure, activation, cards, paths, ask, growth) · `js/kg.js` (loader + graph engine) · shared `../js/graph.js`, `../js/diagnosis.js`, `../js/model.js` · screenshots in `../screenshots/ontology-preview/` (`v6.0/` holds the first, denser drawing).
+## How the network opens (methods M34)
 
-## What you see (methods M33a)
-
-| level | shown | how to open the next |
+| click | shows | from |
 |---|---|---|
-| 0 · overview | the three axes **X · Identity & Classification**, **Y · Traits & Performance**, **Z · Planting Design Knowledge** with their categories in use, the three plants at the centre, the Evidence region below — 18 spheres | click a category |
-| 1 · category | its facets in use (e.g. Environmental Conditions → Light, Soil, Water, Hardiness …) | click a facet |
-| 2 · facet | its concepts in use, with group children (Shade → Filtered shade, Deep shade); dormant vocabulary stays hidden (listed in the card) | click a concept |
-| 3 · concept | the plants its claims reach (one line per plant, white when a claim is verified), and every **cross-dimensional relation** it takes part in: a Y trait opens the Z concepts that require it; a Z concept opens its required traits (Y), the KPU uses that name it, the plants derived / candidate for it; a growth form opens the layers it forms. Revealed nodes bring their facet and category with them, so the hierarchy stays readable | click a line |
-| line | the **evidence trace**: relation type, status (documented · derived · candidate · unknown), the claims that make it with attribution, verification, stated conditions and place, the rule or literature source; for a design link the full requirement check. The sources behind the claims appear in the Evidence region | |
-| plant | genus, growth form, cultivars, vertical layers and design links; its trait concepts are chips in the card, one click each | |
+| **overview** | the growth forms (Tree, Shrub, Graminoid, Herbaceous perennial, Fern, Vine — dormant ones small, "no plant yet") and the plants read as each form | `growth_form` concepts; classification edges (M29) |
+| **growth form** | its plants, lit | classification edges |
+| **plant** | one ring per non-empty **knowledge area**: Classification · Environmental Conditions · Morphology & Growth · Ecological Performance · Planting Design Functions · Plant-to-Plant Relationships · Evidence & Sources (a ring is a grouping of the plant's edges, not knowledge) | `ontology.json knowledge_areas`, `kg.json plant_areas` |
+| **area ring** | the knowledge nodes behind it, grouped by facet in the card; the plant's claim lines leave from the open ring (white when a claim is verified, area colour when unverified, lavender derived, amber candidate) | claim / entity / classification / height-band / layer / design edges |
+| **knowledge node** | every plant linked to it (an **indirect connection**: two plants reach the same node), its group children and the concept relations it takes part in (a trait → the design concepts that require it; a design concept → its required traits, the KPU uses that name it, the plants derived or candidate for it) | plant lists on concept nodes; `requires_trait` · `maps_to` · `typically_formed_by` · `corresponds_to` |
+| **Plant-to-Plant ring** | the other plants with a direct relation; the card lists every other plant with the number of shared knowledge nodes by area and its direct relations with status | `kg.json plant_pairs`, `relations.json` |
+| **pair card → an area** | the shared knowledge nodes of that area, lit between the two plants | `plant_pairs.shared_by_area` |
+| **line** | the evidence trace: relation type, status (documented · derived · candidate · unknown), the claims with attribution, verification, stated conditions, place and source link, the rule or literature source; for a design link the full requirement check. The sources behind the claims appear in the network | kg.json edges and claim index |
 
-Colours: X gold · Y blue · Z green · plants cream · evidence orange. Lines: hierarchy grey · claims in the region colour (white when verified) · derived lavender · candidate amber · observation magenta. Status words are on every card.
+Shared attributes are an indirect connection, never a planting recommendation: the card says so, and only `relations.json` makes a direct line between plants (model placeholders drawn amber as candidates, only while a plant is open).
 
 ## Interaction
 
-- **Click a sphere** to open it; click it again to close what it opened. The signal runs once from the sphere along the lines just revealed, then rests.
-- **← Back / Esc** restores the previous state; **Overview** returns to level 0; clicking the background only deselects. The breadcrumb under the title names where you are.
-- **Paths A–D** (bottom-left) reveal a traversal wave by wave: A `growth_form:shrub` → plants → attributes → evidence; B `spatial:screen` → required traits → plants → conditions; C salal → height claims → conditions → sources; D `spatial:scrim` → required knowledge → evidence → missing. Cards offer "run as path B / D" and "how the claims vary (path C)" for other seeds.
-- **Ask** (top-right): graph retrieval — recognise plants and concepts by alias, traverse, claims in R5 order with R6 attribution, L0 withheld; the nodes it reaches are revealed and lit; the context block an LLM would receive is behind a fold.
-- **+ Observation**: a sentence becomes a candidate claim (plant, field chosen in the form, concepts, conditions, place); a magenta line grows from the plant; the requirement check re-runs with it and says "met by your candidate only" — the link **stays candidate**. Session only, `localStorage` key `brain.candidates.v6`; nothing is written to the database.
+- Click a sphere to open it; click it again to close what it opened. The signal runs once along the links just revealed, then rests; the rest of the network dims while something is in focus.
+- **← Back / Esc** restores the previous state (60 steps); **Overview** returns to the growth forms; the background only deselects. The trail under the title shows the last clicks.
+- **Ask**: graph retrieval — recognise plants and knowledge nodes by alias, traverse, claims in R5 order with R6 attribution, L0 withheld; reveals and lights what it reaches; the LLM context block is behind a fold.
+- **Paths A–D**: the prototype explorations (seeds chosen from the data: first growth form in use, Screen, the first plant with a condition-dependent variation, Scrim), revealed wave by wave.
+- **+ Observation**: a sentence becomes a candidate claim; a magenta line grows from the plant; the design requirement check re-runs with it and says "met by your candidate only" — the link stays candidate. Session only, nothing written.
 
-## Why a line exists (and why some do not)
+## Scalability (Tests B and C, `eval/scale-test-<date>.md`)
 
-- A plant is linked to a trait, condition or use only by a claim. Group concepts inherit their children's claims and say so.
-- A plant is linked to a design concept only by rule KG-R1 (a sourced KPU use that names the concept) or KG-R4 (every required trait met by a claim). Shrubs are not linked to Screen for being shrubs; shared habitat does not make companions (`relations.json` holds the plant–plant relations; its model placeholders are drawn, as candidates, only while a plant is open).
-- Height bands and layers come from the plant's own height claims (KG-R2) and growth form (KG-R5); the claim's conditions travel with the line.
-- The literature relations name their book and chapter; page-level wording is **to confirm** (22 relations). *Scrim* is from the brief and flagged.
+- Layout is force-directed from the drawn links only; positions persist across clicks; the simulation cools and stops.
+- The overview holds growth forms + plants (100 plants = 106 spheres). Labels: always on growth forms, plants (until more than 60, then only the focused ones), open rings and hubs; everything outside the focus set dims.
+- `kg.js` fetches `kg.json` (and the ontology, schema, sources, synonyms, intent map) once — no per-plant requests.
+- `tools/scale_test.py` writes roots with 1, 10, 50 and 100 **synthetic** plants (obviously synthetic names and sources, never in `plants/`), runs the unchanged pipeline on them and reports counts, timings, growth-form detection, pairs and gaps. With `?db=` the interface opens such a root as it would the real one.
+- Known cost: `plant_pairs` is quadratic (5,253 pairs at 103 plants, 17.5 MB); beyond ~100 plants write it sparsely (pairs with ≥ k shared nodes or a direct relation) or as its own file.
 
 ## Limits
 
-- Three plants: Z is sparse by construction; Scrim, Drift and Scatter are reached by no plant and say so.
-- *Vaccinium ovatum* ↔ Screen reads "contradicted" because its one habit claim says *Upright* while GPP's use text says it "shears into a dense formal hedge" — a gap the brain shows rather than hides.
-- Labels nudge apart vertically only; a facet with many concepts (Landscape Use, 17) is dense at close range.
-- No force simulation: positions are rings around the parent, so a deep exploration can place a Y concept and a Z concept far apart with a long line between them — the line is the relation.
+- Three real plants: the Planting Design Functions area is thin by construction; concepts no plant reaches stay hidden until a plant reaches them.
+- *Vaccinium ovatum* ↔ Screen reads "contradicted by traits" (its one habit claim says Upright; GPP's "dense formal hedge" sits in a use claim) — shown, not hidden.
+- Labels nudge apart vertically only; an open area with many nodes (Planting Design Functions, 23 for salal) is dense until the camera comes closer.

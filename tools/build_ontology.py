@@ -13,7 +13,7 @@ Standard library only. Nothing else is written.
 import json, os, re
 from datetime import date
 
-ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+ROOT = os.environ.get("PLANTING_DB_ROOT") or os.path.dirname(os.path.dirname(os.path.abspath(__file__)))   # a test root may be given (tools/scale_test.py)
 SCHEMA = json.load(open(os.path.join(ROOT, "schema.json"), encoding="utf-8"))
 INTENT = json.load(open(os.path.join(ROOT, "intent_map.json"), encoding="utf-8"))
 V = SCHEMA["vocab"]
@@ -375,7 +375,16 @@ for n in NODES:
     else: n["hierarchy_parent"] = None
 DIMENSIONS["taxonomy"] = ["taxon_family", "taxon_genus"]; DIMENSIONS["design"] = ["layer", "height_band", "spatial", "composition", "role"]; DIMENSIONS["architecture"] = ["axis", "category", "facet"]
 FACET_FIELDS.update({"taxon_family": ["entity.family"], "taxon_genus": ["entity.scientific_name"], "layer": ["landscape_use (via maps_to)", "mature_height (via height bands)"], "height_band": ["mature_height", "local_mature_size"], "spatial": ["landscape_use (via maps_to)"], "composition": ["landscape_use (via maps_to)"], "role": ["landscape_use (via maps_to)"]})
-XYZ = {"axes": {f"axis:{a}": {"label": v[0], "categories": [f"cat:{c}" for c in v[2]]} for a, v in AXES.items()}, "cross_layers": [f"cross:{c}" for c in CROSS], "relation_types": {"requires_trait": "design concept → trait it needs from a plant (strength required | preferred; alternatives: any one suffices); literature-sourced", "maps_to": "KPU landscape use → design concept it names (rule KG-R1)", "typically_formed_by": "vertical layer → growth form that forms it", "corresponds_to": "vertical layer → height band (rule KG-R3)"}, "status_vocabulary": {"documented": "stated in the named source or claim", "derived": "produced by a named rule from documented statements", "candidate": "inferred or observed, not asserted by any source; never promoted automatically", "unknown": "required by a concept but no evidence either way"}}
+KNOWLEDGE_AREAS = {   # what the interface shows around a plant (brief 2026-11-02 "Scalable Knowledge Network"): area -> categories; the rest is read from the graph
+    "classification": {"label": "Classification", "categories": ["cat:taxonomy", "cat:growth_form_cat"], "order": 1, "definition": "What the plant is: family, genus, growth form, KPU plant type."},
+    "environment": {"label": "Environmental Conditions", "categories": ["cat:environment"], "order": 2, "definition": "Light, soil, water, hardiness and shelter the plant needs or tolerates."},
+    "morphology_growth": {"label": "Morphology & Growth", "categories": ["cat:morphology", "cat:temporal"], "order": 3, "definition": "Size, form, habit, texture, colour, growth rate, phenology and leaf retention."},
+    "ecology": {"label": "Ecological Performance", "categories": ["cat:ecological"], "order": 4, "definition": "Habitat and ecological value, origin and invasive status, resistance, maintenance and risk."},
+    "design": {"label": "Planting Design Functions", "categories": ["cat:landscape_use", "cat:vertical_structure", "cat:space_making", "cat:composition", "cat:planting_role"], "order": 5, "definition": "Documented landscape uses and the design concepts they map to; derived layers and height bands; rule-checked design links."},
+    "relations": {"label": "Plant-to-Plant Relationships", "categories": [], "order": 6, "definition": "Direct relations recorded in relations.json (companion, co-listed, competes, layered under …) and the knowledge nodes two plants share — shared attributes are never read as a planting recommendation."},
+    "evidence": {"label": "Evidence & Sources", "categories": ["cross:place", "cross:time", "cross:evidence", "cross:media"], "order": 7, "definition": "The sources and respondents behind the plant's claims, and the places and times they hold for."},
+}
+XYZ = {"knowledge_areas": KNOWLEDGE_AREAS, "axes": {f"axis:{a}": {"label": v[0], "categories": [f"cat:{c}" for c in v[2]]} for a, v in AXES.items()}, "cross_layers": [f"cross:{c}" for c in CROSS], "relation_types": {"requires_trait": "design concept → trait it needs from a plant (strength required | preferred; alternatives: any one suffices); literature-sourced", "maps_to": "KPU landscape use → design concept it names (rule KG-R1)", "typically_formed_by": "vertical layer → growth form that forms it", "corresponds_to": "vertical layer → height band (rule KG-R3)"}, "status_vocabulary": {"documented": "stated in the named source or claim", "derived": "produced by a named rule from documented statements", "candidate": "inferred or observed, not asserted by any source; never promoted automatically", "unknown": "required by a concept but no evidence either way"}}
 
 out = {
     "$ontology_version": "0.2.0", "updated": TODAY, "generated_by": "tools/build_ontology.py",

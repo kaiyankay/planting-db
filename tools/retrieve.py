@@ -21,7 +21,7 @@ import json, math, os, re, sys
 from collections import Counter
 from datetime import date
 
-HERE = os.path.dirname(os.path.abspath(__file__)); ROOT = os.path.dirname(HERE)
+HERE = os.path.dirname(os.path.abspath(__file__)); ROOT = os.environ.get("PLANTING_DB_ROOT") or os.path.dirname(HERE)
 L = lambda n: json.load(open(os.path.join(ROOT, n), encoding="utf-8"))
 SCHEMA, SOURCES, SYN, INTENT = L("schema.json"), {s["id"]: s for s in L("sources.json")["sources"]}, L("synonyms.json"), L("intent_map.json")
 PLANTS = {}

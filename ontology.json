@@ -214,6 +214,71 @@
   ]
  },
  "xyz": {
+  "knowledge_areas": {
+   "classification": {
+    "label": "Classification",
+    "categories": [
+     "cat:taxonomy",
+     "cat:growth_form_cat"
+    ],
+    "order": 1,
+    "definition": "What the plant is: family, genus, growth form, KPU plant type."
+   },
+   "environment": {
+    "label": "Environmental Conditions",
+    "categories": [
+     "cat:environment"
+    ],
+    "order": 2,
+    "definition": "Light, soil, water, hardiness and shelter the plant needs or tolerates."
+   },
+   "morphology_growth": {
+    "label": "Morphology & Growth",
+    "categories": [
+     "cat:morphology",
+     "cat:temporal"
+    ],
+    "order": 3,
+    "definition": "Size, form, habit, texture, colour, growth rate, phenology and leaf retention."
+   },
+   "ecology": {
+    "label": "Ecological Performance",
+    "categories": [
+     "cat:ecological"
+    ],
+    "order": 4,
+    "definition": "Habitat and ecological value, origin and invasive status, resistance, maintenance and risk."
+   },
+   "design": {
+    "label": "Planting Design Functions",
+    "categories": [
+     "cat:landscape_use",
+     "cat:vertical_structure",
+     "cat:space_making",
+     "cat:composition",
+     "cat:planting_role"
+    ],
+    "order": 5,
+    "definition": "Documented landscape uses and the design concepts they map to; derived layers and height bands; rule-checked design links."
+   },
+   "relations": {
+    "label": "Plant-to-Plant Relationships",
+    "categories": [],
+    "order": 6,
+    "definition": "Direct relations recorded in relations.json (companion, co-listed, competes, layered under …) and the knowledge nodes two plants share — shared attributes are never read as a planting recommendation."
+   },
+   "evidence": {
+    "label": "Evidence & Sources",
+    "categories": [
+     "cross:place",
+     "cross:time",
+     "cross:evidence",
+     "cross:media"
+    ],
+    "order": 7,
+    "definition": "The sources and respondents behind the plant's claims, and the places and times they hold for."
+   }
+  },
   "axes": {
    "axis:x": {
     "label": "Plant Identity & Classification",
