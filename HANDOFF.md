@@ -1,6 +1,6 @@
 # Planting Intelligence DB — Handoff for coding agent
 
-State as of 2026-10-30 (T1–T3 done; T5 extracted for all 3 plants, 129 claims awaiting Kay's unified review (D5); T6 prototype; T7 views 1 and 4; `brain/` playable cosmos built overnight 2026-10-30 → 31 (v1) redesigned as v2 (explore / grow / reveal, methods M22–M24) again as v3 (the database system, methods M25) and as v4 (2026-10-31: concepts are the nodes — `ontology.json`, schema 0.4.0 migration M27, graph + diagnosis build M28) and v4.1 (2026-10-31: growth-form classification layer M29, regions + bundled ribbons) and v5 (2026-10-31: 3D neural network, signal activation, growth, M30), live at https://kaiyankay.github.io/planting-db/brain/; T4 still blocked on the survey export). Read this, then `principles.md`, then `schema.json`, then `methods.md`. Everything else is data.
+State as of 2026-10-30 (T1–T3 done; T5 extracted for all 3 plants, 129 claims awaiting Kay's unified review (D5); T6 prototype; T7 views 1 and 4; `brain/` playable cosmos built overnight 2026-10-30 → 31 (v1) redesigned as v2 (explore / grow / reveal, methods M22–M24) again as v3 (the database system, methods M25) and as v4 (2026-10-31: concepts are the nodes — `ontology.json`, schema 0.4.0 migration M27, graph + diagnosis build M28) and v4.1 (2026-10-31: growth-form classification layer M29, regions + bundled ribbons) and v5 (2026-10-31: 3D neural network, signal activation, growth, M30), live at https://kaiyankay.github.io/planting-db/brain/; **2026-11-02 (brief 'Knowledge Graph Reconstruction'): ontology 0.2.0 with the XYZ architecture and the Z design dimension (M31), the semantic graph `brain/data/kg.json` with typed, statused, evidenced relations (M32), graph retrieval `tools/kg_query.py` and the Neural Knowledge Brain at `brain/ontology-preview/` (M33), live at https://kaiyankay.github.io/planting-db/brain/ontology-preview/; report `reports/kg-architecture-2026-11-02.md`**; T4 still blocked on the survey export). Read this, then `principles.md`, then `schema.json`, then `methods.md`. Everything else is data.
 
 ## 1. What this is
 
@@ -45,7 +45,11 @@ planting-db/
 ├── eval/                       T6 test queries + results
 ├── data/inat/                  iNaturalist aggregate pulls + licence texts
 ├── viz/                        built HTML views (T7)
-├── ontology.json               concept nodes (306): condition · trait · use · time · place · status · resistance — built by tools/build_ontology.py
+├── ontology.json               0.2.0 — 398 nodes: XYZ architecture (axis / category / facet), 340 concepts incl. taxonomy and 23 design (Z) concepts with literature sources, 53 typed concept relations — tools/build_ontology.py (M31)
+├── tools/build_kg.py           claims + ontology relations -> brain/data/kg.json: typed, statused (documented · derived · candidate · unknown), evidenced edges; gaps and conflicts as data (M32)
+├── tools/kg_query.py           graph retrieval prototype: recognise -> traverse -> claims -> LLM context; paths A–D -> eval/kg-paths-<date>.md (M33)
+├── brain/ontology-preview/     Neural Knowledge Brain on the XYZ ontology and kg.json (index.html, js/app6.js, js/kg.js, README.md); screenshots in brain/screenshots/ontology-preview/
+├── reports/kg-architecture-2026-11-02.md   what changed and the knowledge gaps that remain
 ├── reports/migration-0.4.md    what the 0.4.0 migration mapped, spanned and left
 ├── brain/                      Neural Brain v5 — the store as one 3D network (js/app5.js); v4–v1 archived in brain/v4 v3 v2 v1 (index.html, js/app4.js, js/graph.js, js/diagnosis.js, data/graph.json + diagnosis.json from tools/build_graph.py); v3, v2, v1 archived in brain/v3 v2 v1
 ├── research/brain-research.md  mechanism log for the demo
@@ -145,6 +149,10 @@ Three routes over the claim store: (1) structured filter on gate fields; (2) sem
 2. Source network: plant – field – source nodes.
 3. Layering / relations: the 3 plants vertically, relation edges typed.
 4. Coverage matrix: fields × plants, cell = number of independent sources (shows what knowledge is easy vs scarce).
+
+### T8 — XYZ ontology, semantic graph, graph retrieval, Neural Knowledge Brain — DONE 2026-11-02 (brief 'Knowledge Graph Reconstruction')
+
+Pipeline: `tools/build_ontology.py` → `tools/build_graph.py` → `tools/build_kg.py` → `tools/validate.py` (now also checks ontology relations and kg.json); `tools/kg_query.py --all` writes the four exploration paths. Everything to confirm is listed in `reports/kg-architecture-2026-11-02.md` §Knowledge gaps: 22 literature relations at page level, the *Scrim* term, the height-band bounds, the KG-R4 single-valued facet list, and the habit-claim gap behind *Vaccinium ovatum* ↔ Screen. The original v5 is untouched at `brain/`; `graph.json` keeps its v5 scope.
 
 ## 6. Definition of done — per plant
 

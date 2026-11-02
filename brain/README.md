@@ -1,5 +1,7 @@
 # brain/ — Neural Brain v5
 
+> **2026-11-02:** the ontology preview — the XYZ ontology and the semantic graph (`data/kg.json`) as one neural network, with evidence trace, the four exploration paths, gaps & conflicts and growth — lives in [`ontology-preview/`](./ontology-preview/) (live: <https://kaiyankay.github.io/planting-db/brain/ontology-preview/>). v5 below is unchanged.
+
 **Live:** <https://kaiyankay.github.io/planting-db/brain/> · archived for comparison: `/brain/v4/` (regions and bundled claim ribbons, 2D), `/brain/v3/` (the database as a system), `/brain/v2/` (plant clusters and evidence lenses), `/brain/v1/`.
 
 v5 shows the **same store** (brain/data/graph.json + diagnosis.json from `tools/build_graph.py`, `ontology.json`, the plant files, the retrieval port and rules R1–R10) as **one living network** instead of a chart. Nothing in the database, the survey logic, the retrieval rules or the evidence trail changed; only the way it is seen and touched.

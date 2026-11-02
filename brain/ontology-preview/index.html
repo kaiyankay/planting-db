@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Planting Intelligence · Neural Knowledge Brain (ontology preview)</title>
+<link rel="icon" href="data:,">
+<style>
+  :root {
+    --bg: #01020a; --ink: #d3d9e8; --ink-dim: #818a9f; --ink-faint: #4d5468;
+    --glass: rgba(5, 8, 20, 0.8); --line: rgba(190, 205, 255, 0.10);
+    --practitioner: #ffa94d; --database: #5ad1ff; --municipal: #6ff2b0; --model: #6d7384; --candidate: #ff5fb4; --plant: #fff1c2;
+    --x: #f6d365; --y: #7cc4ff; --z: #6ff2b0; --e: #ff9e6b; --derived: #c9b8ff; --inferred: #ffd27a; --unknown: #ff6b6b;
+    --mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace; --sans: -apple-system, "Helvetica Neue", "Segoe UI", Roboto, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; background: var(--bg); color: var(--ink); font: 13px/1.45 var(--sans); overflow: hidden; }
+  #graph { position: fixed; inset: 0; } #graph canvas { outline: none; }
+  .scene-nav-info, .scene-tooltip { display: none !important; }
+  a { color: #9fd3ff; text-decoration: none; border-bottom: 1px dotted rgba(159,211,255,.4); } em { font-style: italic; }
+  button { font: 12px var(--sans); color: #d3d9e8; background: rgba(255,255,255,.06); border: 1px solid var(--line); border-radius: 4px; padding: 5px 10px; cursor: pointer; }
+  button:hover { background: rgba(255,255,255,.12); color: #fff; } button.primary { background: rgba(255,241,194,.14); border-color: rgba(255,241,194,.35); }
+  input, textarea, select { font: 12.5px var(--sans); color: var(--ink); background: rgba(255,255,255,.05); border: 1px solid var(--line); border-radius: 4px; padding: 6px 8px; width: 100%; }
+  textarea { min-height: 64px; resize: vertical; }
+
+  #labels { position: fixed; inset: 0; pointer-events: none; overflow: hidden; }
+  .lbl { position: absolute; transform: translate(-50%, 0); white-space: nowrap; color: var(--ink); font-size: 11.5px; line-height: 1.2; pointer-events: auto; cursor: pointer; text-shadow: 0 0 8px rgba(1,2,10,1), 0 0 2px rgba(1,2,10,1); transition: opacity .35s; text-align: center; }
+  .lbl.hidden { opacity: 0 !important; pointer-events: none; } .lbl.muted { opacity: .3; }
+  .lbl small { display: block; font-size: 10px; color: var(--ink-dim); font-family: var(--mono); }
+  .lbl.plant { font-size: 14px; color: #f4ead0; font-style: italic; } .lbl.plant small { font-style: normal; font-family: var(--sans); }
+  .lbl.axis { font-size: 13px; letter-spacing: .18em; text-transform: uppercase; font-weight: 500; opacity: .85; } .lbl.axis small { text-transform: none; letter-spacing: 0; }
+  .lbl.axis.x { color: var(--x); } .lbl.axis.y { color: var(--y); } .lbl.axis.z { color: var(--z); } .lbl.axis.e { color: var(--e); }
+  .lbl.cat { font-size: 11.5px; color: #e6ebf7; opacity: .8; letter-spacing: .04em; } .lbl.cat small { display: inline; margin-left: 4px; }
+  .lbl.facet { font-size: 10px; color: #9aa6c2; opacity: .7; }
+  .lbl.lit { color: #fff; font-size: 11px; } .lbl.lit small { color: #c8cfdf; } .lbl.lit.design { color: #d9ffe9; }
+  .lbl.source { font-size: 10.5px; color: #ffc9a8; }
+
+  #hud { position: fixed; inset: 0; pointer-events: none; } #hud > * { pointer-events: auto; }
+  #brand { position: absolute; left: 20px; top: 16px; max-width: 560px; }
+  #brand h1 { margin: 0; font-size: 15px; font-weight: 500; letter-spacing: .02em; color: #f4ead0; }
+  #brand h1 small { color: var(--ink-faint); font-weight: 400; font-size: 10.5px; letter-spacing: .14em; text-transform: uppercase; margin-left: 10px; } #brand h1 small a { color: var(--ink-dim); border: 0; }
+  #stats { font: 10.5px var(--mono); color: var(--ink-faint); margin-top: 4px; max-width: 560px; }
+  #state { font: 11px var(--sans); color: var(--ink-dim); margin-top: 8px; min-height: 16px; } #state b { color: #f4ead0; font-weight: 500; } #state .cand { color: var(--candidate); }
+
+  #askbar { position: absolute; right: 20px; top: 16px; width: 400px; display: flex; gap: 6px; align-items: center; }
+  #askbar input { background: var(--glass); backdrop-filter: blur(10px); border-color: rgba(190,205,255,.18); } #askbar button { white-space: nowrap; background: var(--glass); backdrop-filter: blur(10px); }
+  #asknote { position: absolute; right: 20px; top: 50px; font: 10px var(--mono); color: var(--ink-faint); letter-spacing: .08em; }
+
+  #regions, #paths { position: absolute; left: 20px; display: flex; gap: 6px; }
+  #regions { top: 100px; flex-direction: column; align-items: flex-start; } #paths { bottom: 18px; flex-wrap: wrap; max-width: 640px; }
+  #regions button, #paths button { font-size: 11px; padding: 4px 9px; display: inline-flex; align-items: center; gap: 6px; background: var(--glass); backdrop-filter: blur(8px); }
+  #regions button .dot { width: 7px; height: 7px; border-radius: 50%; display: inline-block; } #regions button.on, #paths button.on { background: rgba(255,255,255,.16); color: #fff; }
+  #regions button.warnb { border-color: rgba(255,107,107,.4); color: #ffb3b3; } #paths button b { font-family: var(--mono); color: var(--ink-dim); font-weight: 500; }
+  #legend { position: absolute; right: 20px; bottom: 18px; font: 10px var(--mono); color: var(--ink-faint); display: flex; gap: 10px; flex-wrap: wrap; justify-content: flex-end; max-width: 520px; }
+  #legend i { display: inline-block; width: 7px; height: 7px; border-radius: 50%; margin-right: 4px; vertical-align: middle; } #legend i.ln { width: 14px; height: 2px; border-radius: 0; }
+
+  #card { position: absolute; right: 20px; bottom: 50px; width: 400px; max-height: calc(100vh - 150px); overflow: auto; background: var(--glass); backdrop-filter: blur(14px); border: 1px solid var(--line); border-radius: 8px; padding: 12px 14px 12px; display: none; }
+  #card.open { display: block; }
+  #card h2 { margin: 0 0 2px; font-size: 15px; font-weight: 500; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; } #card h2 em { font-style: italic; }
+  #card .kicker { font: 10.5px var(--mono); color: var(--ink-dim); margin-bottom: 8px; } #card .kicker .link { color: #9fd3ff; cursor: pointer; }
+  #card .close { position: absolute; right: 10px; top: 8px; border: 0; background: transparent; color: var(--ink-faint); font-size: 14px; padding: 2px 6px; }
+  #card h3 { margin: 12px 0 5px; font-size: 10.5px; letter-spacing: .12em; text-transform: uppercase; color: var(--ink-dim); font-weight: 500; display: flex; align-items: center; gap: 8px; } #card h3 .step { font-family: var(--mono); color: var(--ink-faint); letter-spacing: 0; } #card h3.warn { color: #ff8c6b; }
+  #card p { margin: 6px 0; } #card .lead { font-size: 13px; color: #e8ecf5; } #card .muted { color: var(--ink-dim); } #card .small { font-size: 11.5px; } #card .faint { color: var(--ink-faint); }
+  #card .dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; vertical-align: middle; margin-right: 2px; }
+  #card .row { display: flex; gap: 8px; padding: 5px 6px; margin: 1px -6px; border-radius: 4px; cursor: pointer; align-items: flex-start; } #card .row:hover { background: rgba(255,255,255,.06); } #card .row.dim { opacity: .55; }
+  #card .row .st { width: 8px; height: 8px; border-radius: 50%; margin-top: 5px; flex: none; background: var(--c); } #card .row .st.unverified, #card .row .st.candidate, #card .row .st.derived { background: transparent; border: 1.5px solid var(--c); } #card .row .st.candidate { border-style: dashed; } #card .row .st.unknown { background: transparent; border: 1.5px dotted var(--c); }
+  #card .val { color: #e8ecf5; } #card .meta { font: 10.5px var(--mono); color: var(--ink-dim); } #card .meta.warn { color: #ff8c6b; }
+  #card .chips { display: flex; flex-wrap: wrap; gap: 4px; } #card .chip { font-size: 11px; padding: 2px 7px; border-radius: 10px; border: 1px solid var(--c); color: var(--ink); cursor: pointer; background: rgba(255,255,255,.03); } #card .chip:hover { background: rgba(255,255,255,.1); } #card .chip small { color: var(--ink-dim); font-family: var(--mono); margin-left: 3px; } #card .chip.dim { opacity: .45; }
+  #card .tag { font: 10px var(--mono); padding: 1px 5px; border-radius: 3px; border: 1px solid var(--line); color: var(--ink-dim); } #card .tag.candidate { color: var(--inferred); border-color: var(--inferred); } #card .tag.derived { color: var(--derived); border-color: var(--derived); } #card .tag.unknown { color: var(--unknown); border-color: var(--unknown); } #card .tag.supported, #card .tag.verified, #card .tag.documented { color: #6ff2b0; border-color: rgba(111,242,176,.4); }
+  #card details { margin-top: 6px; } #card summary { cursor: pointer; color: var(--ink-dim); font-size: 11.5px; } #card summary:hover { color: #fff; }
+  #card .link { color: #9fd3ff; cursor: pointer; } #card .warn { color: #ff8c6b; } #card .cand { color: var(--candidate); }
+  #card .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin: 6px 0; } #card label { font: 10px var(--mono); color: var(--ink-faint); display: block; margin-bottom: 2px; }
+  #card .changed { border-left: 2px solid var(--candidate); padding-left: 10px; margin-top: 10px; } #card .changed li { margin: 3px 0; font-size: 12px; }
+  #card .r { padding: 4px 0; border-bottom: 1px solid var(--line); font-size: 12px; cursor: pointer; } #card .r .why { font: 10px var(--mono); color: var(--ink-faint); }
+  #card pre { white-space: pre-wrap; font: 10.5px var(--mono); color: var(--ink-dim); background: rgba(255,255,255,.03); padding: 8px; border-radius: 4px; }
+  #card .trail { display: flex; flex-wrap: wrap; gap: 4px; margin: 6px 0 2px; } #card .trail .w { font: 10px var(--mono); color: var(--ink-dim); border: 1px solid var(--line); border-radius: 3px; padding: 1px 6px; opacity: .35; animation: lit .4s forwards; } #card .trail .w small { color: var(--ink-faint); } @keyframes lit { to { opacity: 1; color: #fff; } }
+
+  #tip { position: fixed; display: none; pointer-events: none; background: var(--glass); border: 1px solid var(--line); border-radius: 4px; padding: 4px 8px; font-size: 11.5px; max-width: 300px; z-index: 5; } #tip .meta { font: 10px var(--mono); color: var(--ink-dim); }
+  #loading { position: fixed; inset: 0; display: grid; place-items: center; color: var(--ink-dim); font-family: var(--mono); font-size: 12px; background: var(--bg); z-index: 9; } #loading.gone { display: none; } #err { color: #ff8c6b; white-space: pre-wrap; max-width: 600px; }
+  @media (max-width: 900px) { #askbar { width: 260px; } #card { width: calc(100vw - 40px); } #regions, #paths { max-width: 320px; } }
+</style>
+<script type="importmap">
+{ "imports": { "three": "../vendor/three/three.module.js", "three/addons/": "../vendor/three/examples/jsm/" } }
+</script>
+<script src="../vendor/3d-force-graph.min.js"></script>
+</head>
+<body>
+<div id="graph"></div>
+<div id="labels"></div>
+<div id="hud">
+  <header id="brand">
+    <h1>Neural Knowledge Brain <small>ontology preview · XYZ · <a href="../">v5</a> · <a href="https://github.com/kaiyankay/planting-db" target="_blank" rel="noopener">source</a> · <a href="./README.md" target="_blank">notes</a></small></h1>
+    <div id="stats">loading…</div>
+    <div id="state"></div>
+  </header>
+  <div id="askbar"><input id="ask-input" placeholder="ask the graph… e.g. evergreen screen for a shady North Vancouver garden"><button id="ask-run">Ask</button><button id="btn-grow">+ Observation</button></div>
+  <div id="asknote">graph retrieval · recognise → traverse → evidence · not a full AI answer</div>
+  <nav id="paths"></nav>
+  <nav id="regions"></nav>
+  <div id="legend"></div>
+  <aside id="card"><button class="close" id="card-close">×</button><div id="card-body"></div></aside>
+</div>
+<div id="tip"></div>
+<div id="loading"><div>growing the network from brain/data/kg.json · ontology.json · plants/*.json …<div id="err"></div></div></div>
+<script type="module" src="./js/app6.js"></script>
+</body>
+</html>

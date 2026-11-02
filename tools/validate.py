@@ -24,6 +24,8 @@ Checks (claims)
   - status / claim_kind enums, confidence 0..1, recorded_at ISO date
 Checks (entity): kpu_plant_type, origin_status in vocab.
 Checks (relations): source, type, direction, model cap, plant ids exist.
+Checks (ontology 0.2.0, kg.json): node fields, parents, relation types / endpoints / status / source; kg edge endpoints,
+  status vocabulary, cited claims, candidate design edges with every required trait met (M31–M32).
 """
 import json, os, re, sys
 from datetime import date
@@ -394,6 +396,95 @@ def validate_relations(rels, schema, sources, plant_ids):
     return rep
 
 
+# ---------------------------------------------------------------- ontology 0.2.0 + kg.json (M31–M32)
+def validate_ontology(root=ROOT):
+    """XYZ architecture: every node has id / label / definition / level / source_of_term; parents and hierarchy parents exist;
+    concept relations have a known type, existing endpoints, a status from the vocabulary and a source; design concepts cite a source."""
+    rep = Report("ontology.json")
+    path = os.path.join(root, "ontology.json")
+    if not os.path.exists(path):
+        return rep
+    ont = load_json(path)
+    ids = {n["id"]: n for n in ont["nodes"]}
+    xyz = ont.get("xyz") or {}
+    rtypes = set((xyz.get("relation_types") or {}).keys())
+    statuses = set((xyz.get("status_vocabulary") or {}).keys())
+    for n in ont["nodes"]:
+        nid = n.get("id", "<no id>")
+        for k in ("label", "definition", "level", "source_of_term"):
+            if not n.get(k):
+                rep.err(nid, f"missing {k}")
+        for k in ("parent", "hierarchy_parent", "category", "axis"):
+            if n.get(k) and n[k] not in ids:
+                rep.err(nid, f"{k} '{n[k]}' not a node")
+        if n.get("level", "concept") == "concept" and n.get("dimension") != "architecture" and not n.get("category"):
+            rep.warn(nid, "concept not placed in a category (axis or cross layer)")
+        if n.get("dimension") == "design" and not any(w in (n.get("source_of_term") or "") for w in ("Robinson", "Rainer", "Oudolf", "Mooney", "brief")):
+            rep.err(nid, "design concept without a literature source or brief reference")
+    seen = set()
+    for r in ont.get("relations", []):
+        rid = r.get("id", "<no id>")
+        if rid in seen:
+            rep.err(rid, "duplicate relation id")
+        seen.add(rid)
+        if r.get("type") not in rtypes:
+            rep.err(rid, f"relation type {r.get('type')!r} not in xyz.relation_types")
+        for k in ("from", "to"):
+            if r.get(k) not in ids:
+                rep.err(rid, f"{k} '{r.get(k)}' not a node")
+        for alt in r.get("alternatives") or []:
+            if alt not in ids:
+                rep.err(rid, f"alternative '{alt}' not a node")
+        if r.get("status") not in statuses:
+            rep.err(rid, f"status {r.get('status')!r} not in xyz.status_vocabulary")
+        if not r.get("source"):
+            rep.err(rid, "relation without source")
+        if r.get("status") == "derived" and not r.get("rule"):
+            rep.err(rid, "derived relation without a named rule")
+    return rep
+
+
+def validate_kg(root=ROOT):
+    """brain/data/kg.json: endpoints exist; kg_status in vocabulary; cited claims exist; candidate design edges have every required
+    requirement met; derived edges name a rule or source; no model placeholder is documented."""
+    rep = Report("brain/data/kg.json")
+    path = os.path.join(root, "brain", "data", "kg.json")
+    if not os.path.exists(path):
+        return rep
+    kg = load_json(path)
+    ids = {n["id"] for n in kg["nodes"]}
+    statuses = set((kg.get("xyz", {}).get("status_vocabulary") or {}).keys()) or {"documented", "derived", "candidate", "unknown"}
+    seen = set()
+    for e in kg["edges"]:
+        eid = e.get("id", "<no id>")
+        if eid in seen:
+            rep.err(eid, "duplicate edge id")
+        seen.add(eid)
+        if e.get("source") not in ids:
+            rep.err(eid, f"source '{e.get('source')}' not a node")
+        if e.get("target") is not None and e["target"] not in ids:
+            rep.err(eid, f"target '{e.get('target')}' not a node")
+        if e.get("kg_status") not in statuses:
+            rep.err(eid, f"kg_status {e.get('kg_status')!r} not in vocabulary")
+        b = e.get("basis") or {}
+        for cid in b.get("claims") or []:
+            if cid not in kg["claims"]:
+                rep.err(eid, f"basis claim '{cid}' not in claim index")
+        if e.get("kg_status") == "derived" and not (b.get("rule") or b.get("source") or e.get("rule")):
+            rep.err(eid, "derived edge without rule or source")
+        if e["type"] == "design":
+            req = [r for r in e.get("requirements", []) if r.get("strength") == "required"]
+            if e.get("kg_status") == "candidate" and req and not all(r.get("result") == "met" for r in req):
+                rep.err(eid, "candidate design edge with an unmet or unknown required trait")
+            if e.get("kg_status") == "documented":
+                rep.err(eid, "a design edge is never documented: no source states suitability directly (KG-R1 is derived)")
+        if e["type"] == "relation" and e.get("source_type") == "model" and e.get("kg_status") != "candidate":
+            rep.err(eid, "model placeholder relation must be candidate")
+        if e["type"] == "claim" and e.get("live") and e.get("verification") not in ("verified", "unverified", "disputed"):
+            rep.err(eid, f"live claim edge with verification {e.get('verification')!r}")
+    return rep
+
+
 # ---------------------------------------------------------------- cli
 def run(paths=None, quiet=False):
     schema, sources = load_db()
@@ -410,6 +501,8 @@ def run(paths=None, quiet=False):
     if not paths:
         all_ids = {load_json(f)["entity"]["id"] for f in files}
         reports.append(validate_relations(load_json(os.path.join(ROOT, "relations.json")), schema, sources, all_ids))
+        reports.append(validate_ontology())
+        reports.append(validate_kg())
 
     ok = True
     for r in reports:

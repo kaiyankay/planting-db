@@ -1,5 +1,5 @@
 {
-  "updated": "2026-10-30",
+  "updated": "2026-11-02",
   "notes": [
     "geo_specificity drives ranking (schema rule R5): vancouver > bc > pnw > north_america > global.",
     "baseline_confidence is the default confidence for a claim extracted from this source before any review.",
@@ -496,6 +496,75 @@
       "observer_background": "MLA student and practising landscape designer; studio and professional experience",
       "geo_specificity": "vancouver",
       "baseline_confidence": 0.8
+    },
+    {
+      "id": "robinson",
+      "name": "Robinson, N. — The Planting Design Handbook, 3rd ed. (Routledge, 2016)",
+      "type": "literature",
+      "url": "https://www.routledge.com/The-Planting-Design-Handbook/Robinson/p/book/9781472415493",
+      "url_verified": false,
+      "publisher": "Routledge",
+      "geo_specificity": "global",
+      "covers_fields": [
+        "landscape_use"
+      ],
+      "baseline_confidence": 0.8,
+      "licence": "copyrighted book — chapter headings cited from the published table of contents (checked 2026-11-02); no passages copied",
+      "licence_tier": "B",
+      "role_in_db": "Z dimension: spatial characteristics of plants (height bands, ch. 3), creating spaces with plants (enclosure, permeability, ch. 4), plant assemblages and canopy structures (ch. 8), accents and planting patterns (ch. 12)",
+      "accessed": "2026-11-02",
+      "note": "page-level wording of every requires_trait relation is 'to confirm' until Kay checks the chapter"
+    },
+    {
+      "id": "rainer_west",
+      "name": "Rainer, T. & West, C. — Planting in a Post-Wild World (Timber Press, 2015)",
+      "type": "literature",
+      "url": "https://www.timberpress.com/9781604695533/planting-in-a-post-wild-world/",
+      "url_verified": false,
+      "publisher": "Timber Press",
+      "geo_specificity": "north_america",
+      "covers_fields": [
+        "landscape_use"
+      ],
+      "baseline_confidence": 0.8,
+      "licence": "copyrighted book — design-layer terms cited (structural and framework, seasonal theme, ground cover, dynamic filler); no passages copied",
+      "licence_tier": "B",
+      "role_in_db": "Z dimension: planting roles as design layers of a designed plant community",
+      "accessed": "2026-11-02"
+    },
+    {
+      "id": "oudolf_kingsbury",
+      "name": "Oudolf, P. & Kingsbury, N. — Planting: A New Perspective (Timber Press, 2013)",
+      "type": "literature",
+      "url": "https://www.timberpress.com/9781604693706/planting/",
+      "url_verified": false,
+      "publisher": "Timber Press",
+      "geo_specificity": "global",
+      "covers_fields": [
+        "landscape_use"
+      ],
+      "baseline_confidence": 0.8,
+      "licence": "copyrighted book — composition terms cited (matrix, primary, scatter, drift, block); no passages copied",
+      "licence_tier": "B",
+      "role_in_db": "Z dimension: planting composition patterns",
+      "accessed": "2026-11-02"
+    },
+    {
+      "id": "mooney",
+      "name": "Mooney, P. — Planting Design: Connecting People and Place (Routledge, 2020)",
+      "type": "literature",
+      "url": "https://www.routledge.com/Planting-Design-Connecting-People-and-Place/Mooney/p/book/9781138026056",
+      "url_verified": true,
+      "publisher": "Routledge",
+      "geo_specificity": "north_america",
+      "covers_fields": [
+        "landscape_use"
+      ],
+      "baseline_confidence": 0.8,
+      "licence": "copyrighted book — chapter titles cited from the publisher page (checked 2026-11-02); no passages copied",
+      "licence_tier": "B",
+      "role_in_db": "Z dimension: space and place (ch. 5), elements of design (ch. 6) — the local (UBC) planting-design text",
+      "accessed": "2026-11-02"
     }
   ]
 }

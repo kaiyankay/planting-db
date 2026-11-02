@@ -31,7 +31,7 @@ GATE_FIELDS = list(SCHEMA["field_tiers"]["gate"]["fields"].keys())
 FIELD_FACETS = defaultdict(list)
 for facet, fields in ONT["facet_fields"].items():
     for fld in fields: FIELD_FACETS[fld.split(".")[0]].append(facet)
-GATE_FACETS = sorted(({fc for fld in GATE_FIELDS for fc in FIELD_FACETS.get(fld, [])} - {"hardiness", "hardiness_rhs", "growth_form"}) | {"hardiness_usda"})  # hardiness: any scale counts, see gap (a); growth_form is an organising layer, not a gate
+GATE_FACETS = sorted(({fc for fld in GATE_FIELDS for fc in FIELD_FACETS.get(fld, [])} - {"hardiness", "hardiness_rhs", "growth_form", "height_band"}) | {"hardiness_usda"})  # hardiness: any scale counts, see gap (a); growth_form and height_band are organising layers, not gates
 ORDINAL_FACETS = {"exposure", "water", "maintenance", "invasive", "growth_rate", "height_class", "spread_class", "hardiness", "hardiness_usda", "hardiness_rhs", "toxicity", "evergreen"}
 
 live = lambda c: c.get("status") != "retired" and c.get("source_type") != "model"
@@ -58,7 +58,9 @@ def relation_for(field):
 
 # ---------------------------------------------------------------- nodes
 nodes = []
+V5_DIMS = {"classification", "condition", "trait", "use", "time", "place", "status", "resistance"}   # graph.json stays the v5 view; kg.json (tools/build_kg.py) carries the XYZ layer
 for n in ONT["nodes"]:
+    if n.get("level", "concept") != "concept" or n["dimension"] not in V5_DIMS: continue
     nodes.append({"id": n["id"], "type": "concept", "label": n["label"], "dimension": n["dimension"], "facet": n["facet"], "definition": n["definition"], "aliases": n.get("aliases", []), "parent": n.get("parent"), "order": n.get("order"), "source_of_term": n.get("source_of_term")})
 cultivars = defaultdict(set)
 for pid, p in PLANTS.items():
@@ -76,6 +78,7 @@ for s in SRC["sources"]:
 # ---------------------------------------------------------------- edges
 edges = []
 for n in ONT["nodes"]:
+    if n.get("level", "concept") != "concept" or n["dimension"] not in V5_DIMS: continue
     if n.get("parent"): edges.append({"id": f"parent:{n['id']}", "type": "parent", "source": n["id"], "target": n["parent"]})
 for pid, cvs in cultivars.items():
     for cv in sorted(cvs): edges.append({"id": f"cultivar_of:{pid}:{cv}", "type": "cultivar_of", "source": f"cultivar:{pid}:{cv}", "target": f"plant:{pid}"})

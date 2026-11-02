@@ -1,8 +1,8 @@
 {
- "$ontology_version": "0.1.0",
- "updated": "2026-10-31",
+ "$ontology_version": "0.2.0",
+ "updated": "2026-11-02",
  "generated_by": "tools/build_ontology.py",
- "note": "Concept nodes of the Planting Intelligence knowledge base. Ids are facet:slug. KPU labels verbatim. Definitions written for this file (methods M26, to confirm); terms from other vocabularies name their source in source_of_term. Rebuild with python3 -I tools/build_ontology.py.",
+ "note": "Concept nodes of the Planting Intelligence knowledge base. Ids are facet:slug. KPU labels verbatim. Definitions written for this file (methods M26, to confirm); terms from other vocabularies name their source in source_of_term. Rebuild with python3 -I tools/build_ontology.py. 0.2.0 (2026-11-02, M31): XYZ architecture — axis / category / facet nodes, taxon nodes, design (Z) concepts with literature sources, and typed concept relations in `relations`.",
  "dimensions": {
   "classification": [
    "growth_form"
@@ -52,6 +52,22 @@
    "stress",
    "browsing",
    "pest"
+  ],
+  "taxonomy": [
+   "taxon_family",
+   "taxon_genus"
+  ],
+  "design": [
+   "layer",
+   "height_band",
+   "spatial",
+   "composition",
+   "role"
+  ],
+  "architecture": [
+   "axis",
+   "category",
+   "facet"
   ]
  },
  "facet_fields": {
@@ -172,8 +188,684 @@
   "pest": [
    "resistances",
    "pest_susceptibility"
+  ],
+  "taxon_family": [
+   "entity.family"
+  ],
+  "taxon_genus": [
+   "entity.scientific_name"
+  ],
+  "layer": [
+   "landscape_use (via maps_to)",
+   "mature_height (via height bands)"
+  ],
+  "height_band": [
+   "mature_height",
+   "local_mature_size"
+  ],
+  "spatial": [
+   "landscape_use (via maps_to)"
+  ],
+  "composition": [
+   "landscape_use (via maps_to)"
+  ],
+  "role": [
+   "landscape_use (via maps_to)"
   ]
  },
+ "xyz": {
+  "axes": {
+   "axis:x": {
+    "label": "Plant Identity & Classification",
+    "categories": [
+     "cat:taxonomy",
+     "cat:growth_form_cat"
+    ]
+   },
+   "axis:y": {
+    "label": "Plant Traits & Performance",
+    "categories": [
+     "cat:environment",
+     "cat:morphology",
+     "cat:temporal",
+     "cat:ecological"
+    ]
+   },
+   "axis:z": {
+    "label": "Planting Design Knowledge",
+    "categories": [
+     "cat:vertical_structure",
+     "cat:space_making",
+     "cat:composition",
+     "cat:planting_role",
+     "cat:landscape_use"
+    ]
+   }
+  },
+  "cross_layers": [
+   "cross:place",
+   "cross:time",
+   "cross:evidence",
+   "cross:media"
+  ],
+  "relation_types": {
+   "requires_trait": "design concept → trait it needs from a plant (strength required | preferred; alternatives: any one suffices); literature-sourced",
+   "maps_to": "KPU landscape use → design concept it names (rule KG-R1)",
+   "typically_formed_by": "vertical layer → growth form that forms it",
+   "corresponds_to": "vertical layer → height band (rule KG-R3)"
+  },
+  "status_vocabulary": {
+   "documented": "stated in the named source or claim",
+   "derived": "produced by a named rule from documented statements",
+   "candidate": "inferred or observed, not asserted by any source; never promoted automatically",
+   "unknown": "required by a concept but no evidence either way"
+  }
+ },
+ "relations": [
+  {
+   "id": "typically_formed_by:layer:canopy>growth_form:tree",
+   "type": "typically_formed_by",
+   "from": "layer:canopy",
+   "to": "growth_form:tree",
+   "source": "Robinson, N. (2016) The Planting Design Handbook, 3rd ed., Routledge, ch. 8 (layers named by life form)",
+   "status": "documented",
+   "note": "a life form says which layer a plant can occupy, not which role it plays"
+  },
+  {
+   "id": "typically_formed_by:layer:understorey>growth_form:tree",
+   "type": "typically_formed_by",
+   "from": "layer:understorey",
+   "to": "growth_form:tree",
+   "source": "Robinson, N. (2016) The Planting Design Handbook, 3rd ed., Routledge, ch. 8 (layers named by life form)",
+   "status": "documented",
+   "note": "a life form says which layer a plant can occupy, not which role it plays"
+  },
+  {
+   "id": "typically_formed_by:layer:shrub>growth_form:shrub",
+   "type": "typically_formed_by",
+   "from": "layer:shrub",
+   "to": "growth_form:shrub",
+   "source": "Robinson, N. (2016) The Planting Design Handbook, 3rd ed., Routledge, ch. 8 (layers named by life form)",
+   "status": "documented",
+   "note": "a life form says which layer a plant can occupy, not which role it plays"
+  },
+  {
+   "id": "typically_formed_by:layer:ground>growth_form:herbaceous_perennial",
+   "type": "typically_formed_by",
+   "from": "layer:ground",
+   "to": "growth_form:herbaceous_perennial",
+   "source": "Robinson, N. (2016) The Planting Design Handbook, 3rd ed., Routledge, ch. 8 (layers named by life form)",
+   "status": "documented",
+   "note": "a life form says which layer a plant can occupy, not which role it plays"
+  },
+  {
+   "id": "typically_formed_by:layer:ground>growth_form:fern",
+   "type": "typically_formed_by",
+   "from": "layer:ground",
+   "to": "growth_form:fern",
+   "source": "Robinson, N. (2016) The Planting Design Handbook, 3rd ed., Routledge, ch. 8 (layers named by life form)",
+   "status": "documented",
+   "note": "a life form says which layer a plant can occupy, not which role it plays"
+  },
+  {
+   "id": "typically_formed_by:layer:ground>growth_form:graminoid",
+   "type": "typically_formed_by",
+   "from": "layer:ground",
+   "to": "growth_form:graminoid",
+   "source": "Robinson, N. (2016) The Planting Design Handbook, 3rd ed., Routledge, ch. 8 (layers named by life form)",
+   "status": "documented",
+   "note": "a life form says which layer a plant can occupy, not which role it plays"
+  },
+  {
+   "id": "typically_formed_by:layer:ground>growth_form:shrub",
+   "type": "typically_formed_by",
+   "from": "layer:ground",
+   "to": "growth_form:shrub",
+   "source": "Robinson, N. (2016) The Planting Design Handbook, 3rd ed., Routledge, ch. 8 (layers named by life form)",
+   "status": "documented",
+   "note": "a life form says which layer a plant can occupy, not which role it plays; woody ground covers only"
+  },
+  {
+   "id": "corresponds_to:layer:ground>height_band:ground_level",
+   "type": "corresponds_to",
+   "from": "layer:ground",
+   "to": "height_band:ground_level",
+   "source": "Robinson, N. (2016) The Planting Design Handbook, 3rd ed., Routledge, ch. 3 height bands read against ch. 8 layers",
+   "status": "derived",
+   "rule": "KG-R3: a layer corresponds to the height bands its plants occupy",
+   "to_confirm": true
+  },
+  {
+   "id": "corresponds_to:layer:ground>height_band:low",
+   "type": "corresponds_to",
+   "from": "layer:ground",
+   "to": "height_band:low",
+   "source": "Robinson, N. (2016) The Planting Design Handbook, 3rd ed., Routledge, ch. 3 height bands read against ch. 8 layers",
+   "status": "derived",
+   "rule": "KG-R3: a layer corresponds to the height bands its plants occupy",
+   "to_confirm": true
+  },
+  {
+   "id": "corresponds_to:layer:shrub>height_band:medium",
+   "type": "corresponds_to",
+   "from": "layer:shrub",
+   "to": "height_band:medium",
+   "source": "Robinson, N. (2016) The Planting Design Handbook, 3rd ed., Routledge, ch. 3 height bands read against ch. 8 layers",
+   "status": "derived",
+   "rule": "KG-R3: a layer corresponds to the height bands its plants occupy",
+   "to_confirm": true
+  },
+  {
+   "id": "corresponds_to:layer:shrub>height_band:above_eye",
+   "type": "corresponds_to",
+   "from": "layer:shrub",
+   "to": "height_band:above_eye",
+   "source": "Robinson, N. (2016) The Planting Design Handbook, 3rd ed., Routledge, ch. 3 height bands read against ch. 8 layers",
+   "status": "derived",
+   "rule": "KG-R3: a layer corresponds to the height bands its plants occupy",
+   "to_confirm": true
+  },
+  {
+   "id": "corresponds_to:layer:understorey>height_band:above_eye",
+   "type": "corresponds_to",
+   "from": "layer:understorey",
+   "to": "height_band:above_eye",
+   "source": "Robinson, N. (2016) The Planting Design Handbook, 3rd ed., Routledge, ch. 3 height bands read against ch. 8 layers",
+   "status": "derived",
+   "rule": "KG-R3: a layer corresponds to the height bands its plants occupy",
+   "to_confirm": true
+  },
+  {
+   "id": "corresponds_to:layer:understorey>height_band:tree",
+   "type": "corresponds_to",
+   "from": "layer:understorey",
+   "to": "height_band:tree",
+   "source": "Robinson, N. (2016) The Planting Design Handbook, 3rd ed., Routledge, ch. 3 height bands read against ch. 8 layers",
+   "status": "derived",
+   "rule": "KG-R3: a layer corresponds to the height bands its plants occupy",
+   "to_confirm": true
+  },
+  {
+   "id": "corresponds_to:layer:canopy>height_band:tree",
+   "type": "corresponds_to",
+   "from": "layer:canopy",
+   "to": "height_band:tree",
+   "source": "Robinson, N. (2016) The Planting Design Handbook, 3rd ed., Routledge, ch. 3 height bands read against ch. 8 layers",
+   "status": "derived",
+   "rule": "KG-R3: a layer corresponds to the height bands its plants occupy",
+   "to_confirm": true
+  },
+  {
+   "id": "requires_trait:spatial:screen>height_band:above_eye",
+   "type": "requires_trait",
+   "from": "spatial:screen",
+   "to": "height_band:above_eye",
+   "source": "Robinson, N. (2016) The Planting Design Handbook, 3rd ed., Routledge, ch. 3 'Planting Above Eye Level' (screening belongs to planting above eye level)",
+   "status": "documented",
+   "strength": "required",
+   "alternatives": [
+    "height_band:above_eye",
+    "height_band:tree"
+   ],
+   "note": "screening planting must rise above eye level",
+   "to_confirm": false
+  },
+  {
+   "id": "requires_trait:spatial:screen>habit:dense",
+   "type": "requires_trait",
+   "from": "spatial:screen",
+   "to": "habit:dense",
+   "source": "Robinson, N. (2016) The Planting Design Handbook, 3rd ed., Routledge, ch. 4 'Permeability and Transparency of Enclosure'",
+   "status": "documented",
+   "strength": "required",
+   "alternatives": [
+    "habit:dense"
+   ],
+   "note": "a screen needs dense foliage; open habits give a scrim",
+   "to_confirm": true
+  },
+  {
+   "id": "requires_trait:spatial:screen>evergreen:yes",
+   "type": "requires_trait",
+   "from": "spatial:screen",
+   "to": "evergreen:yes",
+   "source": "Robinson, N. (2016) The Planting Design Handbook, 3rd ed., Routledge, ch. 4 'Permeability and Transparency of Enclosure' (deciduous enclosure opens in winter)",
+   "status": "documented",
+   "strength": "preferred",
+   "alternatives": [
+    "evergreen:yes"
+   ],
+   "note": "for a year-round screen",
+   "to_confirm": true
+  },
+  {
+   "id": "requires_trait:spatial:scrim>height_band:above_eye",
+   "type": "requires_trait",
+   "from": "spatial:scrim",
+   "to": "height_band:above_eye",
+   "source": "brief 2026-11-02; Robinson, N. (2016) The Planting Design Handbook, 3rd ed., Routledge, ch. 3",
+   "status": "documented",
+   "strength": "required",
+   "alternatives": [
+    "height_band:above_eye",
+    "height_band:tree"
+   ],
+   "to_confirm": true
+  },
+  {
+   "id": "requires_trait:spatial:scrim>habit:open",
+   "type": "requires_trait",
+   "from": "spatial:scrim",
+   "to": "habit:open",
+   "source": "brief 2026-11-02; Robinson, N. (2016) The Planting Design Handbook, 3rd ed., Routledge, ch. 4 (transparency of enclosure)",
+   "status": "documented",
+   "strength": "required",
+   "alternatives": [
+    "habit:open",
+    "habit:twiggy",
+    "habit:arching"
+   ],
+   "note": "open or airy habit lets the view through",
+   "to_confirm": true
+  },
+  {
+   "id": "requires_trait:spatial:barrier>habit:dense",
+   "type": "requires_trait",
+   "from": "spatial:barrier",
+   "to": "habit:dense",
+   "source": "Robinson, N. (2016) The Planting Design Handbook, 3rd ed., Routledge, ch. 4 'Degree of Enclosure' (physical enclosure)",
+   "status": "documented",
+   "strength": "required",
+   "alternatives": [
+    "habit:dense"
+   ],
+   "note": "continuous dense growth stops movement",
+   "to_confirm": true
+  },
+  {
+   "id": "requires_trait:spatial:barrier>height_band:medium",
+   "type": "requires_trait",
+   "from": "spatial:barrier",
+   "to": "height_band:medium",
+   "source": "Robinson, N. (2016) The Planting Design Handbook, 3rd ed., Routledge, ch. 3 'Knee- to Eye-level Planting' (medium planting as a physical barrier)",
+   "status": "documented",
+   "strength": "required",
+   "alternatives": [
+    "height_band:medium",
+    "height_band:above_eye"
+   ],
+   "to_confirm": true
+  },
+  {
+   "id": "requires_trait:spatial:ceiling>growth_form:tree",
+   "type": "requires_trait",
+   "from": "spatial:ceiling",
+   "to": "growth_form:tree",
+   "source": "Robinson, N. (2016) The Planting Design Handbook, 3rd ed., Routledge, ch. 3 'Tree Planting'",
+   "status": "documented",
+   "strength": "required",
+   "alternatives": [
+    "growth_form:tree"
+   ],
+   "note": "only tree crowns make an overhead plane",
+   "to_confirm": false
+  },
+  {
+   "id": "requires_trait:spatial:ceiling>height_band:tree",
+   "type": "requires_trait",
+   "from": "spatial:ceiling",
+   "to": "height_band:tree",
+   "source": "Robinson, N. (2016) The Planting Design Handbook, 3rd ed., Routledge, ch. 3 'Tree Planting'",
+   "status": "documented",
+   "strength": "required",
+   "alternatives": [
+    "height_band:tree"
+   ],
+   "to_confirm": false
+  },
+  {
+   "id": "requires_trait:role:ground_cover>height_band:ground_level",
+   "type": "requires_trait",
+   "from": "role:ground_cover",
+   "to": "height_band:ground_level",
+   "source": "Rainer, T. & West, C. (2015) Planting in a Post-Wild World, Timber Press (ground cover layer); Robinson, N. (2016) The Planting Design Handbook, 3rd ed., Routledge, ch. 3 'Ground-level Planting (Carpeting Plants)'",
+   "status": "documented",
+   "strength": "required",
+   "alternatives": [
+    "height_band:ground_level",
+    "height_band:low"
+   ],
+   "to_confirm": false
+  },
+  {
+   "id": "requires_trait:role:ground_cover>habit:spreading",
+   "type": "requires_trait",
+   "from": "role:ground_cover",
+   "to": "habit:spreading",
+   "source": "Rainer, T. & West, C. (2015) Planting in a Post-Wild World, Timber Press (ground cover layer: plants that cover the soil)",
+   "status": "documented",
+   "strength": "preferred",
+   "alternatives": [
+    "habit:spreading",
+    "habit:dense",
+    "form:creeping_mat_like",
+    "form:mounded"
+   ],
+   "to_confirm": true
+  },
+  {
+   "id": "requires_trait:role:structural>growth_form:tree",
+   "type": "requires_trait",
+   "from": "role:structural",
+   "to": "growth_form:tree",
+   "source": "Rainer, T. & West, C. (2015) Planting in a Post-Wild World, Timber Press (structural and framework layer: long-lived, often woody)",
+   "status": "documented",
+   "strength": "preferred",
+   "alternatives": [
+    "growth_form:tree",
+    "growth_form:shrub"
+   ],
+   "to_confirm": true
+  },
+  {
+   "id": "requires_trait:role:structural>evergreen:yes",
+   "type": "requires_trait",
+   "from": "role:structural",
+   "to": "evergreen:yes",
+   "source": "Rainer, T. & West, C. (2015) Planting in a Post-Wild World, Timber Press (structural plants hold the picture year-round)",
+   "status": "documented",
+   "strength": "preferred",
+   "alternatives": [
+    "evergreen:yes",
+    "interest:winter_interest"
+   ],
+   "to_confirm": true
+  },
+  {
+   "id": "requires_trait:role:seasonal>interest:seasonal_interest",
+   "type": "requires_trait",
+   "from": "role:seasonal",
+   "to": "interest:seasonal_interest",
+   "source": "Rainer, T. & West, C. (2015) Planting in a Post-Wild World, Timber Press (seasonal theme layer: visually dominant in one season)",
+   "status": "documented",
+   "strength": "required",
+   "alternatives": [
+    "interest:seasonal_interest",
+    "interest:fall_colour",
+    "fruit:showy",
+    "colour:red",
+    "colour:pink",
+    "colour:white",
+    "colour:purple",
+    "colour:yellow",
+    "colour:orange",
+    "colour:blue"
+   ],
+   "note": "any sourced seasonal-interest feature counts; the facet is open",
+   "to_confirm": true
+  },
+  {
+   "id": "requires_trait:role:filler>growth_rate:fast",
+   "type": "requires_trait",
+   "from": "role:filler",
+   "to": "growth_rate:fast",
+   "source": "Rainer, T. & West, C. (2015) Planting in a Post-Wild World, Timber Press (dynamic filler layer: quick, short-lived)",
+   "status": "documented",
+   "strength": "required",
+   "alternatives": [
+    "growth_rate:fast"
+   ],
+   "to_confirm": true
+  },
+  {
+   "id": "requires_trait:role:accent>form:weeping",
+   "type": "requires_trait",
+   "from": "role:accent",
+   "to": "form:weeping",
+   "source": "Robinson, N. (2016) The Planting Design Handbook, 3rd ed., Routledge, ch. 7 'Emphasis and Accent' (contrast of form or colour)",
+   "status": "documented",
+   "strength": "preferred",
+   "alternatives": [
+    "form:weeping",
+    "form:vase",
+    "form:columnar",
+    "form:pyramidal_narrowly",
+    "interest:seasonal_interest"
+   ],
+   "to_confirm": true
+  },
+  {
+   "id": "requires_trait:composition:matrix>height_band:ground_level",
+   "type": "requires_trait",
+   "from": "composition:matrix",
+   "to": "height_band:ground_level",
+   "source": "Oudolf, P. & Kingsbury, N. (2013) Planting: A New Perspective, Timber Press (matrix plants: low, ground-covering); Robinson, N. (2016) The Planting Design Handbook, 3rd ed., Routledge, ch. 8 'Matrix Planting'",
+   "status": "documented",
+   "strength": "required",
+   "alternatives": [
+    "height_band:ground_level",
+    "height_band:low"
+   ],
+   "to_confirm": true
+  },
+  {
+   "id": "requires_trait:composition:matrix>growth_form:graminoid",
+   "type": "requires_trait",
+   "from": "composition:matrix",
+   "to": "growth_form:graminoid",
+   "source": "Oudolf, P. & Kingsbury, N. (2013) Planting: A New Perspective, Timber Press (often grasses; any ground-covering species)",
+   "status": "documented",
+   "strength": "preferred",
+   "alternatives": [
+    "growth_form:graminoid",
+    "growth_form:herbaceous_perennial",
+    "growth_form:shrub"
+   ],
+   "to_confirm": true
+  },
+  {
+   "id": "requires_trait:composition:layering>layer:canopy",
+   "type": "requires_trait",
+   "from": "composition:layering",
+   "to": "layer:canopy",
+   "source": "Robinson, N. (2016) The Planting Design Handbook, 3rd ed., Routledge, ch. 8 'Layers Within Layers'",
+   "status": "documented",
+   "strength": "required",
+   "alternatives": [
+    "layer:canopy",
+    "layer:understorey",
+    "layer:shrub",
+    "layer:ground"
+   ],
+   "note": "layering combines plants of different layers; a single plant qualifies by occupying one layer",
+   "to_confirm": true
+  },
+  {
+   "id": "maps_to:use:screening>spatial:screen",
+   "type": "maps_to",
+   "from": "use:screening",
+   "to": "spatial:screen",
+   "source": "KPU landscape-use label read as the design term it names",
+   "status": "derived",
+   "rule": "KG-R1: a KPU use label that names a design concept maps to it; a plant with a sourced claim on the use is *derived* suited to the concept, with the claim as evidence"
+  },
+  {
+   "id": "maps_to:use:sheared_hedge>spatial:screen",
+   "type": "maps_to",
+   "from": "use:sheared_hedge",
+   "to": "spatial:screen",
+   "source": "KPU landscape-use label read as the design term it names",
+   "status": "derived",
+   "rule": "KG-R1: a KPU use label that names a design concept maps to it; a plant with a sourced claim on the use is *derived* suited to the concept, with the claim as evidence",
+   "note": "hedges are linear screens and barriers; wind break is shelter, mapped to barrier (physical), not screen"
+  },
+  {
+   "id": "maps_to:use:sheared_hedge>spatial:barrier",
+   "type": "maps_to",
+   "from": "use:sheared_hedge",
+   "to": "spatial:barrier",
+   "source": "KPU landscape-use label read as the design term it names",
+   "status": "derived",
+   "rule": "KG-R1: a KPU use label that names a design concept maps to it; a plant with a sourced claim on the use is *derived* suited to the concept, with the claim as evidence",
+   "note": "hedges are linear screens and barriers; wind break is shelter, mapped to barrier (physical), not screen"
+  },
+  {
+   "id": "maps_to:use:hedge_row>spatial:screen",
+   "type": "maps_to",
+   "from": "use:hedge_row",
+   "to": "spatial:screen",
+   "source": "KPU landscape-use label read as the design term it names",
+   "status": "derived",
+   "rule": "KG-R1: a KPU use label that names a design concept maps to it; a plant with a sourced claim on the use is *derived* suited to the concept, with the claim as evidence",
+   "note": "hedges are linear screens and barriers; wind break is shelter, mapped to barrier (physical), not screen"
+  },
+  {
+   "id": "maps_to:use:hedge_row>spatial:barrier",
+   "type": "maps_to",
+   "from": "use:hedge_row",
+   "to": "spatial:barrier",
+   "source": "KPU landscape-use label read as the design term it names",
+   "status": "derived",
+   "rule": "KG-R1: a KPU use label that names a design concept maps to it; a plant with a sourced claim on the use is *derived* suited to the concept, with the claim as evidence",
+   "note": "hedges are linear screens and barriers; wind break is shelter, mapped to barrier (physical), not screen"
+  },
+  {
+   "id": "maps_to:use:security_barrier>spatial:barrier",
+   "type": "maps_to",
+   "from": "use:security_barrier",
+   "to": "spatial:barrier",
+   "source": "KPU landscape-use label read as the design term it names",
+   "status": "derived",
+   "rule": "KG-R1: a KPU use label that names a design concept maps to it; a plant with a sourced claim on the use is *derived* suited to the concept, with the claim as evidence"
+  },
+  {
+   "id": "maps_to:use:shade_tree>spatial:ceiling",
+   "type": "maps_to",
+   "from": "use:shade_tree",
+   "to": "spatial:ceiling",
+   "source": "KPU landscape-use label read as the design term it names",
+   "status": "derived",
+   "rule": "KG-R1: a KPU use label that names a design concept maps to it; a plant with a sourced claim on the use is *derived* suited to the concept, with the claim as evidence"
+  },
+  {
+   "id": "maps_to:use:shade_tree>layer:canopy",
+   "type": "maps_to",
+   "from": "use:shade_tree",
+   "to": "layer:canopy",
+   "source": "KPU landscape-use label read as the design term it names",
+   "status": "derived",
+   "rule": "KG-R1: a KPU use label that names a design concept maps to it; a plant with a sourced claim on the use is *derived* suited to the concept, with the claim as evidence"
+  },
+  {
+   "id": "maps_to:use:street_boulevard_tree>layer:canopy",
+   "type": "maps_to",
+   "from": "use:street_boulevard_tree",
+   "to": "layer:canopy",
+   "source": "KPU landscape-use label read as the design term it names",
+   "status": "derived",
+   "rule": "KG-R1: a KPU use label that names a design concept maps to it; a plant with a sourced claim on the use is *derived* suited to the concept, with the claim as evidence"
+  },
+  {
+   "id": "maps_to:use:wind_break>spatial:barrier",
+   "type": "maps_to",
+   "from": "use:wind_break",
+   "to": "spatial:barrier",
+   "source": "KPU landscape-use label read as the design term it names",
+   "status": "derived",
+   "rule": "KG-R1: a KPU use label that names a design concept maps to it; a plant with a sourced claim on the use is *derived* suited to the concept, with the claim as evidence",
+   "note": "hedges are linear screens and barriers; wind break is shelter, mapped to barrier (physical), not screen"
+  },
+  {
+   "id": "maps_to:use:ground_cover>role:ground_cover",
+   "type": "maps_to",
+   "from": "use:ground_cover",
+   "to": "role:ground_cover",
+   "source": "KPU landscape-use label read as the design term it names",
+   "status": "derived",
+   "rule": "KG-R1: a KPU use label that names a design concept maps to it; a plant with a sourced claim on the use is *derived* suited to the concept, with the claim as evidence"
+  },
+  {
+   "id": "maps_to:use:ground_cover>layer:ground",
+   "type": "maps_to",
+   "from": "use:ground_cover",
+   "to": "layer:ground",
+   "source": "KPU landscape-use label read as the design term it names",
+   "status": "derived",
+   "rule": "KG-R1: a KPU use label that names a design concept maps to it; a plant with a sourced claim on the use is *derived* suited to the concept, with the claim as evidence"
+  },
+  {
+   "id": "maps_to:use:group_or_mass_planting>composition:group",
+   "type": "maps_to",
+   "from": "use:group_or_mass_planting",
+   "to": "composition:group",
+   "source": "KPU landscape-use label read as the design term it names",
+   "status": "derived",
+   "rule": "KG-R1: a KPU use label that names a design concept maps to it; a plant with a sourced claim on the use is *derived* suited to the concept, with the claim as evidence"
+  },
+  {
+   "id": "maps_to:use:specimen_plant>role:accent",
+   "type": "maps_to",
+   "from": "use:specimen_plant",
+   "to": "role:accent",
+   "source": "KPU landscape-use label read as the design term it names",
+   "status": "derived",
+   "rule": "KG-R1: a KPU use label that names a design concept maps to it; a plant with a sourced claim on the use is *derived* suited to the concept, with the claim as evidence"
+  },
+  {
+   "id": "maps_to:use:accent_plant>role:accent",
+   "type": "maps_to",
+   "from": "use:accent_plant",
+   "to": "role:accent",
+   "source": "KPU landscape-use label read as the design term it names",
+   "status": "derived",
+   "rule": "KG-R1: a KPU use label that names a design concept maps to it; a plant with a sourced claim on the use is *derived* suited to the concept, with the claim as evidence"
+  },
+  {
+   "id": "maps_to:use:filler>role:filler",
+   "type": "maps_to",
+   "from": "use:filler",
+   "to": "role:filler",
+   "source": "KPU landscape-use label read as the design term it names",
+   "status": "derived",
+   "rule": "KG-R1: a KPU use label that names a design concept maps to it; a plant with a sourced claim on the use is *derived* suited to the concept, with the claim as evidence"
+  },
+  {
+   "id": "maps_to:use:spring_interest>role:seasonal",
+   "type": "maps_to",
+   "from": "use:spring_interest",
+   "to": "role:seasonal",
+   "source": "KPU landscape-use label read as the design term it names",
+   "status": "derived",
+   "rule": "KG-R1: a KPU use label that names a design concept maps to it; a plant with a sourced claim on the use is *derived* suited to the concept, with the claim as evidence"
+  },
+  {
+   "id": "maps_to:use:summer_interest>role:seasonal",
+   "type": "maps_to",
+   "from": "use:summer_interest",
+   "to": "role:seasonal",
+   "source": "KPU landscape-use label read as the design term it names",
+   "status": "derived",
+   "rule": "KG-R1: a KPU use label that names a design concept maps to it; a plant with a sourced claim on the use is *derived* suited to the concept, with the claim as evidence"
+  },
+  {
+   "id": "maps_to:use:fall_interest>role:seasonal",
+   "type": "maps_to",
+   "from": "use:fall_interest",
+   "to": "role:seasonal",
+   "source": "KPU landscape-use label read as the design term it names",
+   "status": "derived",
+   "rule": "KG-R1: a KPU use label that names a design concept maps to it; a plant with a sourced claim on the use is *derived* suited to the concept, with the claim as evidence"
+  },
+  {
+   "id": "maps_to:use:winter_interest>role:seasonal",
+   "type": "maps_to",
+   "from": "use:winter_interest",
+   "to": "role:seasonal",
+   "source": "KPU landscape-use label read as the design term it names",
+   "status": "derived",
+   "rule": "KG-R1: a KPU use label that names a design concept maps to it; a plant with a sourced claim on the use is *derived* suited to the concept, with the claim as evidence"
+  }
+ ],
  "nodes": [
   {
    "id": "exposure:sun",
@@ -186,7 +878,11 @@
     "open site",
     "sunny"
    ],
-   "source_of_term": "ontology (group)"
+   "source_of_term": "ontology (group)",
+   "level": "concept",
+   "category": "cat:environment",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:exposure"
   },
   {
    "id": "exposure:shade",
@@ -203,7 +899,11 @@
     "耐阴",
     "荫蔽"
    ],
-   "source_of_term": "ontology (group); intent_map 'shade-tolerant'"
+   "source_of_term": "ontology (group); intent_map 'shade-tolerant'",
+   "level": "concept",
+   "category": "cat:environment",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:exposure"
   },
   {
    "id": "exposure:part_shade",
@@ -216,7 +916,11 @@
     "semi-shade",
     "半阴"
    ],
-   "source_of_term": "ontology (group)"
+   "source_of_term": "ontology (group)",
+   "level": "concept",
+   "category": "cat:environment",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:exposure"
   },
   {
    "id": "exposure:full_sun",
@@ -231,7 +935,11 @@
    ],
    "source_of_term": "kpu",
    "parent": "exposure:sun",
-   "order": 1
+   "order": 1,
+   "level": "concept",
+   "category": "cat:environment",
+   "axis": "axis:y",
+   "hierarchy_parent": "exposure:sun"
   },
   {
    "id": "exposure:full_sun_only_if_soil_kept_moist",
@@ -242,7 +950,11 @@
    "aliases": [],
    "source_of_term": "kpu",
    "parent": "exposure:sun",
-   "order": 2
+   "order": 2,
+   "level": "concept",
+   "category": "cat:environment",
+   "axis": "axis:y",
+   "hierarchy_parent": "exposure:sun"
   },
   {
    "id": "exposure:part_sun_part_shade",
@@ -258,7 +970,11 @@
    ],
    "source_of_term": "kpu",
    "parent": "exposure:part_shade",
-   "order": 3
+   "order": 3,
+   "level": "concept",
+   "category": "cat:environment",
+   "axis": "axis:y",
+   "hierarchy_parent": "exposure:part_shade"
   },
   {
    "id": "exposure:filtered_shade",
@@ -273,7 +989,11 @@
    ],
    "source_of_term": "kpu",
    "parent": "exposure:shade",
-   "order": 4
+   "order": 4,
+   "level": "concept",
+   "category": "cat:environment",
+   "axis": "axis:y",
+   "hierarchy_parent": "exposure:shade"
   },
   {
    "id": "exposure:deep_shade",
@@ -289,7 +1009,11 @@
    ],
    "source_of_term": "kpu",
    "parent": "exposure:shade",
-   "order": 5
+   "order": 5,
+   "level": "concept",
+   "category": "cat:environment",
+   "axis": "axis:y",
+   "hierarchy_parent": "exposure:shade"
   },
   {
    "id": "exposure:sheltered",
@@ -301,7 +1025,11 @@
     "protected site",
     "wind-sheltered"
    ],
-   "source_of_term": "kpu"
+   "source_of_term": "kpu",
+   "level": "concept",
+   "category": "cat:environment",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:exposure"
   },
   {
    "id": "soil:acidic",
@@ -314,7 +1042,11 @@
     "ericaceous",
     "low pH"
    ],
-   "source_of_term": "kpu"
+   "source_of_term": "kpu",
+   "level": "concept",
+   "category": "cat:environment",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:soil"
   },
   {
    "id": "soil:alkaline",
@@ -327,7 +1059,11 @@
     "high pH",
     "limy"
    ],
-   "source_of_term": "kpu"
+   "source_of_term": "kpu",
+   "level": "concept",
+   "category": "cat:environment",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:soil"
   },
   {
    "id": "soil:bog",
@@ -339,7 +1075,11 @@
     "peat bog",
     "waterlogged peat"
    ],
-   "source_of_term": "kpu"
+   "source_of_term": "kpu",
+   "level": "concept",
+   "category": "cat:environment",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:soil"
   },
   {
    "id": "soil:humus_rich",
@@ -354,7 +1094,11 @@
     "rich soil",
     "woodland soil"
    ],
-   "source_of_term": "kpu"
+   "source_of_term": "kpu",
+   "level": "concept",
+   "category": "cat:environment",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:soil"
   },
   {
    "id": "soil:rocky_or_gravelly_or_dry",
@@ -370,7 +1114,11 @@
     "stony",
     "thin soil"
    ],
-   "source_of_term": "kpu"
+   "source_of_term": "kpu",
+   "level": "concept",
+   "category": "cat:environment",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:soil"
   },
   {
    "id": "soil:well_drained",
@@ -382,7 +1130,11 @@
     "free-draining",
     "good drainage"
    ],
-   "source_of_term": "kpu"
+   "source_of_term": "kpu",
+   "level": "concept",
+   "category": "cat:environment",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:soil"
   },
   {
    "id": "water:dry",
@@ -396,7 +1148,11 @@
     "xeric"
    ],
    "source_of_term": "schema.json water_drainage",
-   "order": 1
+   "order": 1,
+   "level": "concept",
+   "category": "cat:environment",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:water"
   },
   {
    "id": "water:average",
@@ -409,7 +1165,11 @@
     "normal moisture"
    ],
    "source_of_term": "schema.json water_drainage",
-   "order": 2
+   "order": 2,
+   "level": "concept",
+   "category": "cat:environment",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:water"
   },
   {
    "id": "water:moist",
@@ -422,7 +1182,11 @@
     "evenly moist"
    ],
    "source_of_term": "schema.json water_drainage",
-   "order": 3
+   "order": 3,
+   "level": "concept",
+   "category": "cat:environment",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:water"
   },
   {
    "id": "water:wet",
@@ -436,7 +1200,11 @@
     "waterlogged"
    ],
    "source_of_term": "schema.json water_drainage",
-   "order": 4
+   "order": 4,
+   "level": "concept",
+   "category": "cat:environment",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:water"
   },
   {
    "id": "water:wide_range",
@@ -449,7 +1217,11 @@
     "any moisture"
    ],
    "source_of_term": "schema.json water_drainage",
-   "order": 5
+   "order": 5,
+   "level": "concept",
+   "category": "cat:environment",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:water"
   },
   {
    "id": "hardiness:zone_1",
@@ -461,7 +1233,11 @@
     "Canadian zone 1"
    ],
    "source_of_term": "kpu (Canadian zones)",
-   "order": 1
+   "order": 1,
+   "level": "concept",
+   "category": "cat:environment",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:hardiness"
   },
   {
    "id": "hardiness:zone_2",
@@ -473,7 +1249,11 @@
     "Canadian zone 2"
    ],
    "source_of_term": "kpu (Canadian zones)",
-   "order": 2
+   "order": 2,
+   "level": "concept",
+   "category": "cat:environment",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:hardiness"
   },
   {
    "id": "hardiness:zone_3",
@@ -485,7 +1265,11 @@
     "Canadian zone 3"
    ],
    "source_of_term": "kpu (Canadian zones)",
-   "order": 3
+   "order": 3,
+   "level": "concept",
+   "category": "cat:environment",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:hardiness"
   },
   {
    "id": "hardiness:zone_4",
@@ -497,7 +1281,11 @@
     "Canadian zone 4"
    ],
    "source_of_term": "kpu (Canadian zones)",
-   "order": 4
+   "order": 4,
+   "level": "concept",
+   "category": "cat:environment",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:hardiness"
   },
   {
    "id": "hardiness:zone_5",
@@ -509,7 +1297,11 @@
     "Canadian zone 5"
    ],
    "source_of_term": "kpu (Canadian zones)",
-   "order": 5
+   "order": 5,
+   "level": "concept",
+   "category": "cat:environment",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:hardiness"
   },
   {
    "id": "hardiness:zone_6",
@@ -521,7 +1313,11 @@
     "Canadian zone 6"
    ],
    "source_of_term": "kpu (Canadian zones)",
-   "order": 6
+   "order": 6,
+   "level": "concept",
+   "category": "cat:environment",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:hardiness"
   },
   {
    "id": "hardiness:zone_7",
@@ -533,7 +1329,11 @@
     "Canadian zone 7"
    ],
    "source_of_term": "kpu (Canadian zones)",
-   "order": 7
+   "order": 7,
+   "level": "concept",
+   "category": "cat:environment",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:hardiness"
   },
   {
    "id": "hardiness:zone_8a",
@@ -545,7 +1345,11 @@
     "Canadian zone 8a"
    ],
    "source_of_term": "kpu (Canadian zones)",
-   "order": 8
+   "order": 8,
+   "level": "concept",
+   "category": "cat:environment",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:hardiness"
   },
   {
    "id": "hardiness:zone_8b",
@@ -557,7 +1361,11 @@
     "Canadian zone 8b"
    ],
    "source_of_term": "kpu (Canadian zones)",
-   "order": 9
+   "order": 9,
+   "level": "concept",
+   "category": "cat:environment",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:hardiness"
   },
   {
    "id": "hardiness:zone_9",
@@ -569,7 +1377,11 @@
     "Canadian zone 9"
    ],
    "source_of_term": "kpu (Canadian zones)",
-   "order": 10
+   "order": 10,
+   "level": "concept",
+   "category": "cat:environment",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:hardiness"
   },
   {
    "id": "hardiness:zone_10",
@@ -581,7 +1393,11 @@
     "Canadian zone 10"
    ],
    "source_of_term": "kpu (Canadian zones)",
-   "order": 11
+   "order": 11,
+   "level": "concept",
+   "category": "cat:environment",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:hardiness"
   },
   {
    "id": "hardiness:zone_11",
@@ -593,7 +1409,11 @@
     "Canadian zone 11"
    ],
    "source_of_term": "kpu (Canadian zones)",
-   "order": 12
+   "order": 12,
+   "level": "concept",
+   "category": "cat:environment",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:hardiness"
   },
   {
    "id": "hardiness_usda:z1",
@@ -605,7 +1425,11 @@
     "zone 1 (USDA)"
    ],
    "source_of_term": "USDA PLANTS / US sources",
-   "order": 1
+   "order": 1,
+   "level": "concept",
+   "category": "cat:environment",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:hardiness_usda"
   },
   {
    "id": "hardiness_usda:z2",
@@ -617,7 +1441,11 @@
     "zone 2 (USDA)"
    ],
    "source_of_term": "USDA PLANTS / US sources",
-   "order": 2
+   "order": 2,
+   "level": "concept",
+   "category": "cat:environment",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:hardiness_usda"
   },
   {
    "id": "hardiness_usda:z3",
@@ -629,7 +1457,11 @@
     "zone 3 (USDA)"
    ],
    "source_of_term": "USDA PLANTS / US sources",
-   "order": 3
+   "order": 3,
+   "level": "concept",
+   "category": "cat:environment",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:hardiness_usda"
   },
   {
    "id": "hardiness_usda:z4",
@@ -641,7 +1473,11 @@
     "zone 4 (USDA)"
    ],
    "source_of_term": "USDA PLANTS / US sources",
-   "order": 4
+   "order": 4,
+   "level": "concept",
+   "category": "cat:environment",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:hardiness_usda"
   },
   {
    "id": "hardiness_usda:z5",
@@ -653,7 +1489,11 @@
     "zone 5 (USDA)"
    ],
    "source_of_term": "USDA PLANTS / US sources",
-   "order": 5
+   "order": 5,
+   "level": "concept",
+   "category": "cat:environment",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:hardiness_usda"
   },
   {
    "id": "hardiness_usda:z6",
@@ -665,7 +1505,11 @@
     "zone 6 (USDA)"
    ],
    "source_of_term": "USDA PLANTS / US sources",
-   "order": 6
+   "order": 6,
+   "level": "concept",
+   "category": "cat:environment",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:hardiness_usda"
   },
   {
    "id": "hardiness_usda:z7",
@@ -677,7 +1521,11 @@
     "zone 7 (USDA)"
    ],
    "source_of_term": "USDA PLANTS / US sources",
-   "order": 7
+   "order": 7,
+   "level": "concept",
+   "category": "cat:environment",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:hardiness_usda"
   },
   {
    "id": "hardiness_usda:z8",
@@ -689,7 +1537,11 @@
     "zone 8 (USDA)"
    ],
    "source_of_term": "USDA PLANTS / US sources",
-   "order": 8
+   "order": 8,
+   "level": "concept",
+   "category": "cat:environment",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:hardiness_usda"
   },
   {
    "id": "hardiness_usda:z9",
@@ -701,7 +1553,11 @@
     "zone 9 (USDA)"
    ],
    "source_of_term": "USDA PLANTS / US sources",
-   "order": 9
+   "order": 9,
+   "level": "concept",
+   "category": "cat:environment",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:hardiness_usda"
   },
   {
    "id": "hardiness_usda:z10",
@@ -713,7 +1569,11 @@
     "zone 10 (USDA)"
    ],
    "source_of_term": "USDA PLANTS / US sources",
-   "order": 10
+   "order": 10,
+   "level": "concept",
+   "category": "cat:environment",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:hardiness_usda"
   },
   {
    "id": "hardiness_usda:z11",
@@ -725,7 +1585,11 @@
     "zone 11 (USDA)"
    ],
    "source_of_term": "USDA PLANTS / US sources",
-   "order": 11
+   "order": 11,
+   "level": "concept",
+   "category": "cat:environment",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:hardiness_usda"
   },
   {
    "id": "hardiness_rhs:H1a",
@@ -735,7 +1599,11 @@
    "definition": "Royal Horticultural Society hardiness rating H1a: heated glasshouse; H4 and above cover Vancouver's winter lows.",
    "aliases": [],
    "source_of_term": "RHS",
-   "order": 1
+   "order": 1,
+   "level": "concept",
+   "category": "cat:environment",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:hardiness_rhs"
   },
   {
    "id": "hardiness_rhs:H1b",
@@ -745,7 +1613,11 @@
    "definition": "Royal Horticultural Society hardiness rating H1b: heated glasshouse; H4 and above cover Vancouver's winter lows.",
    "aliases": [],
    "source_of_term": "RHS",
-   "order": 2
+   "order": 2,
+   "level": "concept",
+   "category": "cat:environment",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:hardiness_rhs"
   },
   {
    "id": "hardiness_rhs:H1c",
@@ -755,7 +1627,11 @@
    "definition": "Royal Horticultural Society hardiness rating H1c: heated glasshouse; H4 and above cover Vancouver's winter lows.",
    "aliases": [],
    "source_of_term": "RHS",
-   "order": 3
+   "order": 3,
+   "level": "concept",
+   "category": "cat:environment",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:hardiness_rhs"
   },
   {
    "id": "hardiness_rhs:H2",
@@ -765,7 +1641,11 @@
    "definition": "Royal Horticultural Society hardiness rating H2: tender, to 1 °C; H4 and above cover Vancouver's winter lows.",
    "aliases": [],
    "source_of_term": "RHS",
-   "order": 4
+   "order": 4,
+   "level": "concept",
+   "category": "cat:environment",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:hardiness_rhs"
   },
   {
    "id": "hardiness_rhs:H3",
@@ -775,7 +1655,11 @@
    "definition": "Royal Horticultural Society hardiness rating H3: half-hardy, to −5 °C; H4 and above cover Vancouver's winter lows.",
    "aliases": [],
    "source_of_term": "RHS",
-   "order": 5
+   "order": 5,
+   "level": "concept",
+   "category": "cat:environment",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:hardiness_rhs"
   },
   {
    "id": "hardiness_rhs:H4",
@@ -785,7 +1669,11 @@
    "definition": "Royal Horticultural Society hardiness rating H4: hardy through most UK winters, to −10 °C; H4 and above cover Vancouver's winter lows.",
    "aliases": [],
    "source_of_term": "RHS",
-   "order": 6
+   "order": 6,
+   "level": "concept",
+   "category": "cat:environment",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:hardiness_rhs"
   },
   {
    "id": "hardiness_rhs:H5",
@@ -795,7 +1683,11 @@
    "definition": "Royal Horticultural Society hardiness rating H5: hardy in cold winters, to −15 °C; H4 and above cover Vancouver's winter lows.",
    "aliases": [],
    "source_of_term": "RHS",
-   "order": 7
+   "order": 7,
+   "level": "concept",
+   "category": "cat:environment",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:hardiness_rhs"
   },
   {
    "id": "hardiness_rhs:H6",
@@ -805,7 +1697,11 @@
    "definition": "Royal Horticultural Society hardiness rating H6: very hardy, to −20 °C; H4 and above cover Vancouver's winter lows.",
    "aliases": [],
    "source_of_term": "RHS",
-   "order": 8
+   "order": 8,
+   "level": "concept",
+   "category": "cat:environment",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:hardiness_rhs"
   },
   {
    "id": "hardiness_rhs:H7",
@@ -815,7 +1711,11 @@
    "definition": "Royal Horticultural Society hardiness rating H7: hardiest, below −20 °C; H4 and above cover Vancouver's winter lows.",
    "aliases": [],
    "source_of_term": "RHS",
-   "order": 9
+   "order": 9,
+   "level": "concept",
+   "category": "cat:environment",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:hardiness_rhs"
   },
   {
    "id": "wind:exposed",
@@ -827,7 +1727,11 @@
     "exposed site",
     "windy site"
    ],
-   "source_of_term": "RHS wording"
+   "source_of_term": "RHS wording",
+   "level": "concept",
+   "category": "cat:environment",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:wind"
   },
   {
    "id": "growth_form:tree",
@@ -841,7 +1745,11 @@
     "trees"
    ],
    "source_of_term": "ontology (organising layer, M29); words taken from source descriptions",
-   "order": 1
+   "order": 1,
+   "level": "concept",
+   "category": "cat:growth_form_cat",
+   "axis": "axis:x",
+   "hierarchy_parent": "facet:growth_form"
   },
   {
    "id": "growth_form:shrub",
@@ -857,7 +1765,11 @@
     "woody ground cover"
    ],
    "source_of_term": "ontology (organising layer, M29); words taken from source descriptions",
-   "order": 2
+   "order": 2,
+   "level": "concept",
+   "category": "cat:growth_form_cat",
+   "axis": "axis:x",
+   "hierarchy_parent": "facet:growth_form"
   },
   {
    "id": "growth_form:graminoid",
@@ -874,7 +1786,11 @@
     "sedge"
    ],
    "source_of_term": "ontology (organising layer, M29); words taken from source descriptions",
-   "order": 3
+   "order": 3,
+   "level": "concept",
+   "category": "cat:growth_form_cat",
+   "axis": "axis:x",
+   "hierarchy_parent": "facet:growth_form"
   },
   {
    "id": "growth_form:herbaceous_perennial",
@@ -887,7 +1803,11 @@
     "perennial herb"
    ],
    "source_of_term": "ontology (organising layer, M29); words taken from source descriptions",
-   "order": 4
+   "order": 4,
+   "level": "concept",
+   "category": "cat:growth_form_cat",
+   "axis": "axis:x",
+   "hierarchy_parent": "facet:growth_form"
   },
   {
    "id": "growth_form:fern",
@@ -899,7 +1819,11 @@
     "ferns"
    ],
    "source_of_term": "ontology (organising layer, M29); words taken from source descriptions",
-   "order": 5
+   "order": 5,
+   "level": "concept",
+   "category": "cat:growth_form_cat",
+   "axis": "axis:x",
+   "hierarchy_parent": "facet:growth_form"
   },
   {
    "id": "growth_form:vine",
@@ -913,7 +1837,11 @@
     "vine"
    ],
    "source_of_term": "ontology (organising layer, M29); words taken from source descriptions",
-   "order": 6
+   "order": 6,
+   "level": "concept",
+   "category": "cat:growth_form_cat",
+   "axis": "axis:x",
+   "hierarchy_parent": "facet:growth_form"
   },
   {
    "id": "evergreen:yes",
@@ -926,7 +1854,11 @@
     "year-round",
     "常绿"
    ],
-   "source_of_term": "schema seasonal_interest.evergreen; intent_map 'evergreen'"
+   "source_of_term": "schema seasonal_interest.evergreen; intent_map 'evergreen'",
+   "level": "concept",
+   "category": "cat:temporal",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:evergreen"
   },
   {
    "id": "evergreen:no",
@@ -938,7 +1870,11 @@
     "loses leaves",
     "落叶"
    ],
-   "source_of_term": "schema seasonal_interest.evergreen=false"
+   "source_of_term": "schema seasonal_interest.evergreen=false",
+   "level": "concept",
+   "category": "cat:temporal",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:evergreen"
   },
   {
    "id": "evergreen:semi",
@@ -947,7 +1883,11 @@
    "label": "Semi-evergreen",
    "definition": "Keeps some leaves through a mild winter and drops them in a cold one.",
    "aliases": [],
-   "source_of_term": "kpu plant type"
+   "source_of_term": "kpu plant type",
+   "level": "concept",
+   "category": "cat:temporal",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:evergreen"
   },
   {
    "id": "height_class:lt_0.1m",
@@ -959,7 +1899,11 @@
    "source_of_term": "kpu height bins",
    "order": 1,
    "min_m": 0.0,
-   "max_m": 0.1
+   "max_m": 0.1,
+   "level": "concept",
+   "category": "cat:morphology",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:height_class"
   },
   {
    "id": "height_class:0.1-0.2m",
@@ -971,7 +1915,11 @@
    "source_of_term": "kpu height bins",
    "order": 2,
    "min_m": 0.1,
-   "max_m": 0.2
+   "max_m": 0.2,
+   "level": "concept",
+   "category": "cat:morphology",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:height_class"
   },
   {
    "id": "height_class:0.2-0.4m",
@@ -983,7 +1931,11 @@
    "source_of_term": "kpu height bins",
    "order": 3,
    "min_m": 0.2,
-   "max_m": 0.4
+   "max_m": 0.4,
+   "level": "concept",
+   "category": "cat:morphology",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:height_class"
   },
   {
    "id": "height_class:0.4-0.7m",
@@ -995,7 +1947,11 @@
    "source_of_term": "kpu height bins",
    "order": 4,
    "min_m": 0.4,
-   "max_m": 0.7
+   "max_m": 0.7,
+   "level": "concept",
+   "category": "cat:morphology",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:height_class"
   },
   {
    "id": "height_class:0.7-1.3m",
@@ -1007,7 +1963,11 @@
    "source_of_term": "kpu height bins",
    "order": 5,
    "min_m": 0.7,
-   "max_m": 1.3
+   "max_m": 1.3,
+   "level": "concept",
+   "category": "cat:morphology",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:height_class"
   },
   {
    "id": "height_class:1.3-2.0m",
@@ -1019,7 +1979,11 @@
    "source_of_term": "kpu height bins",
    "order": 6,
    "min_m": 1.3,
-   "max_m": 2.0
+   "max_m": 2.0,
+   "level": "concept",
+   "category": "cat:morphology",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:height_class"
   },
   {
    "id": "height_class:2-3m",
@@ -1031,7 +1995,11 @@
    "source_of_term": "kpu height bins",
    "order": 7,
    "min_m": 2.0,
-   "max_m": 3.0
+   "max_m": 3.0,
+   "level": "concept",
+   "category": "cat:morphology",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:height_class"
   },
   {
    "id": "height_class:3-5m",
@@ -1043,7 +2011,11 @@
    "source_of_term": "kpu height bins",
    "order": 8,
    "min_m": 3.0,
-   "max_m": 5.0
+   "max_m": 5.0,
+   "level": "concept",
+   "category": "cat:morphology",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:height_class"
   },
   {
    "id": "height_class:5-7m",
@@ -1055,7 +2027,11 @@
    "source_of_term": "kpu height bins",
    "order": 9,
    "min_m": 5.0,
-   "max_m": 7.0
+   "max_m": 7.0,
+   "level": "concept",
+   "category": "cat:morphology",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:height_class"
   },
   {
    "id": "height_class:7-10m",
@@ -1067,7 +2043,11 @@
    "source_of_term": "kpu height bins",
    "order": 10,
    "min_m": 7.0,
-   "max_m": 10.0
+   "max_m": 10.0,
+   "level": "concept",
+   "category": "cat:morphology",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:height_class"
   },
   {
    "id": "height_class:10-15m",
@@ -1079,7 +2059,11 @@
    "source_of_term": "kpu height bins",
    "order": 11,
    "min_m": 10.0,
-   "max_m": 15.0
+   "max_m": 15.0,
+   "level": "concept",
+   "category": "cat:morphology",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:height_class"
   },
   {
    "id": "height_class:15-22m",
@@ -1091,7 +2075,11 @@
    "source_of_term": "kpu height bins",
    "order": 12,
    "min_m": 15.0,
-   "max_m": 22.0
+   "max_m": 22.0,
+   "level": "concept",
+   "category": "cat:morphology",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:height_class"
   },
   {
    "id": "height_class:22-30m",
@@ -1103,7 +2091,11 @@
    "source_of_term": "kpu height bins",
    "order": 13,
    "min_m": 22.0,
-   "max_m": 30.0
+   "max_m": 30.0,
+   "level": "concept",
+   "category": "cat:morphology",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:height_class"
   },
   {
    "id": "height_class:gt_30m",
@@ -1115,7 +2107,11 @@
    "source_of_term": "kpu height bins",
    "order": 14,
    "min_m": 30.0,
-   "max_m": null
+   "max_m": null,
+   "level": "concept",
+   "category": "cat:morphology",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:height_class"
   },
   {
    "id": "spread_class:lt_0.1m",
@@ -1127,7 +2123,11 @@
    "source_of_term": "kpu spread bins",
    "order": 1,
    "min_m": 0.0,
-   "max_m": 0.1
+   "max_m": 0.1,
+   "level": "concept",
+   "category": "cat:morphology",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:spread_class"
   },
   {
    "id": "spread_class:0.1-0.3m",
@@ -1139,7 +2139,11 @@
    "source_of_term": "kpu spread bins",
    "order": 2,
    "min_m": 0.1,
-   "max_m": 0.3
+   "max_m": 0.3,
+   "level": "concept",
+   "category": "cat:morphology",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:spread_class"
   },
   {
    "id": "spread_class:0.3-0.6m",
@@ -1151,7 +2155,11 @@
    "source_of_term": "kpu spread bins",
    "order": 3,
    "min_m": 0.3,
-   "max_m": 0.6
+   "max_m": 0.6,
+   "level": "concept",
+   "category": "cat:morphology",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:spread_class"
   },
   {
    "id": "spread_class:0.6-1.0m",
@@ -1163,7 +2171,11 @@
    "source_of_term": "kpu spread bins",
    "order": 4,
    "min_m": 0.6,
-   "max_m": 1.0
+   "max_m": 1.0,
+   "level": "concept",
+   "category": "cat:morphology",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:spread_class"
   },
   {
    "id": "spread_class:1.0-1.5m",
@@ -1175,7 +2187,11 @@
    "source_of_term": "kpu spread bins",
    "order": 5,
    "min_m": 1.0,
-   "max_m": 1.5
+   "max_m": 1.5,
+   "level": "concept",
+   "category": "cat:morphology",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:spread_class"
   },
   {
    "id": "spread_class:1.5-2.0m",
@@ -1187,7 +2203,11 @@
    "source_of_term": "kpu spread bins",
    "order": 6,
    "min_m": 1.5,
-   "max_m": 2.0
+   "max_m": 2.0,
+   "level": "concept",
+   "category": "cat:morphology",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:spread_class"
   },
   {
    "id": "spread_class:2-3m",
@@ -1199,7 +2219,11 @@
    "source_of_term": "kpu spread bins",
    "order": 7,
    "min_m": 2.0,
-   "max_m": 3.0
+   "max_m": 3.0,
+   "level": "concept",
+   "category": "cat:morphology",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:spread_class"
   },
   {
    "id": "spread_class:3-4m",
@@ -1211,7 +2235,11 @@
    "source_of_term": "kpu spread bins",
    "order": 8,
    "min_m": 3.0,
-   "max_m": 4.0
+   "max_m": 4.0,
+   "level": "concept",
+   "category": "cat:morphology",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:spread_class"
   },
   {
    "id": "spread_class:4-5m",
@@ -1223,7 +2251,11 @@
    "source_of_term": "kpu spread bins",
    "order": 9,
    "min_m": 4.0,
-   "max_m": 5.0
+   "max_m": 5.0,
+   "level": "concept",
+   "category": "cat:morphology",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:spread_class"
   },
   {
    "id": "spread_class:5-7m",
@@ -1235,7 +2267,11 @@
    "source_of_term": "kpu spread bins",
    "order": 10,
    "min_m": 5.0,
-   "max_m": 7.0
+   "max_m": 7.0,
+   "level": "concept",
+   "category": "cat:morphology",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:spread_class"
   },
   {
    "id": "spread_class:7-10m",
@@ -1247,7 +2283,11 @@
    "source_of_term": "kpu spread bins",
    "order": 11,
    "min_m": 7.0,
-   "max_m": 10.0
+   "max_m": 10.0,
+   "level": "concept",
+   "category": "cat:morphology",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:spread_class"
   },
   {
    "id": "spread_class:10-15m",
@@ -1259,7 +2299,11 @@
    "source_of_term": "kpu spread bins",
    "order": 12,
    "min_m": 10.0,
-   "max_m": 15.0
+   "max_m": 15.0,
+   "level": "concept",
+   "category": "cat:morphology",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:spread_class"
   },
   {
    "id": "spread_class:15-25m",
@@ -1271,7 +2315,11 @@
    "source_of_term": "kpu spread bins",
    "order": 13,
    "min_m": 15.0,
-   "max_m": 25.0
+   "max_m": 25.0,
+   "level": "concept",
+   "category": "cat:morphology",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:spread_class"
   },
   {
    "id": "spread_class:gt_25m",
@@ -1283,7 +2331,11 @@
    "source_of_term": "kpu spread bins",
    "order": 14,
    "min_m": 25.0,
-   "max_m": null
+   "max_m": null,
+   "level": "concept",
+   "category": "cat:morphology",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:spread_class"
   },
   {
    "id": "growth_rate:slow",
@@ -1295,7 +2347,11 @@
     "slow-growing"
    ],
    "source_of_term": "schema growth_rate",
-   "order": 1
+   "order": 1,
+   "level": "concept",
+   "category": "cat:temporal",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:growth_rate"
   },
   {
    "id": "growth_rate:moderate",
@@ -1307,7 +2363,11 @@
     "medium growth"
    ],
    "source_of_term": "schema growth_rate",
-   "order": 2
+   "order": 2,
+   "level": "concept",
+   "category": "cat:temporal",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:growth_rate"
   },
   {
    "id": "growth_rate:fast",
@@ -1321,7 +2381,11 @@
     "vigorous"
    ],
    "source_of_term": "schema growth_rate",
-   "order": 3
+   "order": 3,
+   "level": "concept",
+   "category": "cat:temporal",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:growth_rate"
   },
   {
    "id": "colour:white",
@@ -1330,7 +2394,11 @@
    "label": "White",
    "definition": "White as a flower, foliage or fruit colour in the KPU colour list.",
    "aliases": [],
-   "source_of_term": "kpu colour"
+   "source_of_term": "kpu colour",
+   "level": "concept",
+   "category": "cat:morphology",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:colour"
   },
   {
    "id": "colour:orange",
@@ -1339,7 +2407,11 @@
    "label": "Orange",
    "definition": "Orange as a flower, foliage or fruit colour in the KPU colour list.",
    "aliases": [],
-   "source_of_term": "kpu colour"
+   "source_of_term": "kpu colour",
+   "level": "concept",
+   "category": "cat:morphology",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:colour"
   },
   {
    "id": "colour:yellow",
@@ -1348,7 +2420,11 @@
    "label": "Yellow",
    "definition": "Yellow as a flower, foliage or fruit colour in the KPU colour list.",
    "aliases": [],
-   "source_of_term": "kpu colour"
+   "source_of_term": "kpu colour",
+   "level": "concept",
+   "category": "cat:morphology",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:colour"
   },
   {
    "id": "colour:green_yellow",
@@ -1357,7 +2433,11 @@
    "label": "Green-yellow",
    "definition": "Green-yellow as a flower, foliage or fruit colour in the KPU colour list.",
    "aliases": [],
-   "source_of_term": "kpu colour"
+   "source_of_term": "kpu colour",
+   "level": "concept",
+   "category": "cat:morphology",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:colour"
   },
   {
    "id": "colour:green",
@@ -1366,7 +2446,11 @@
    "label": "Green",
    "definition": "Green as a flower, foliage or fruit colour in the KPU colour list.",
    "aliases": [],
-   "source_of_term": "kpu colour"
+   "source_of_term": "kpu colour",
+   "level": "concept",
+   "category": "cat:morphology",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:colour"
   },
   {
    "id": "colour:blue",
@@ -1375,7 +2459,11 @@
    "label": "Blue",
    "definition": "Blue as a flower, foliage or fruit colour in the KPU colour list.",
    "aliases": [],
-   "source_of_term": "kpu colour"
+   "source_of_term": "kpu colour",
+   "level": "concept",
+   "category": "cat:morphology",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:colour"
   },
   {
    "id": "colour:violet",
@@ -1384,7 +2472,11 @@
    "label": "Violet",
    "definition": "Violet as a flower, foliage or fruit colour in the KPU colour list.",
    "aliases": [],
-   "source_of_term": "kpu colour"
+   "source_of_term": "kpu colour",
+   "level": "concept",
+   "category": "cat:morphology",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:colour"
   },
   {
    "id": "colour:purple",
@@ -1393,7 +2485,11 @@
    "label": "Purple",
    "definition": "Purple as a flower, foliage or fruit colour in the KPU colour list.",
    "aliases": [],
-   "source_of_term": "kpu colour"
+   "source_of_term": "kpu colour",
+   "level": "concept",
+   "category": "cat:morphology",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:colour"
   },
   {
    "id": "colour:pink",
@@ -1402,7 +2498,11 @@
    "label": "Pink",
    "definition": "Pink as a flower, foliage or fruit colour in the KPU colour list.",
    "aliases": [],
-   "source_of_term": "kpu colour"
+   "source_of_term": "kpu colour",
+   "level": "concept",
+   "category": "cat:morphology",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:colour"
   },
   {
    "id": "colour:magenta",
@@ -1411,7 +2511,11 @@
    "label": "Magenta",
    "definition": "Magenta as a flower, foliage or fruit colour in the KPU colour list.",
    "aliases": [],
-   "source_of_term": "kpu colour"
+   "source_of_term": "kpu colour",
+   "level": "concept",
+   "category": "cat:morphology",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:colour"
   },
   {
    "id": "colour:red",
@@ -1420,7 +2524,11 @@
    "label": "Red",
    "definition": "Red as a flower, foliage or fruit colour in the KPU colour list.",
    "aliases": [],
-   "source_of_term": "kpu colour"
+   "source_of_term": "kpu colour",
+   "level": "concept",
+   "category": "cat:morphology",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:colour"
   },
   {
    "id": "colour:dark_red",
@@ -1429,7 +2537,11 @@
    "label": "Dark-red",
    "definition": "Dark-red as a flower, foliage or fruit colour in the KPU colour list.",
    "aliases": [],
-   "source_of_term": "kpu colour"
+   "source_of_term": "kpu colour",
+   "level": "concept",
+   "category": "cat:morphology",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:colour"
   },
   {
    "id": "colour:brown",
@@ -1438,7 +2550,11 @@
    "label": "Brown",
    "definition": "Brown as a flower, foliage or fruit colour in the KPU colour list.",
    "aliases": [],
-   "source_of_term": "kpu colour"
+   "source_of_term": "kpu colour",
+   "level": "concept",
+   "category": "cat:morphology",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:colour"
   },
   {
    "id": "colour:bronze",
@@ -1447,7 +2563,11 @@
    "label": "Bronze",
    "definition": "Bronze as a flower, foliage or fruit colour in the KPU colour list.",
    "aliases": [],
-   "source_of_term": "kpu colour"
+   "source_of_term": "kpu colour",
+   "level": "concept",
+   "category": "cat:morphology",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:colour"
   },
   {
    "id": "colour:silver",
@@ -1456,7 +2576,11 @@
    "label": "Silver",
    "definition": "Silver as a flower, foliage or fruit colour in the KPU colour list.",
    "aliases": [],
-   "source_of_term": "kpu colour"
+   "source_of_term": "kpu colour",
+   "level": "concept",
+   "category": "cat:morphology",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:colour"
   },
   {
    "id": "colour:black",
@@ -1465,7 +2589,11 @@
    "label": "Black",
    "definition": "Black as a flower, foliage or fruit colour in the KPU colour list.",
    "aliases": [],
-   "source_of_term": "kpu colour"
+   "source_of_term": "kpu colour",
+   "level": "concept",
+   "category": "cat:morphology",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:colour"
   },
   {
    "id": "texture:fine",
@@ -1475,7 +2603,11 @@
    "definition": "Visual texture 'Fine': how coarse or fine the leaves and branching read from a distance.",
    "aliases": [],
    "source_of_term": "kpu texture",
-   "order": 1
+   "order": 1,
+   "level": "concept",
+   "category": "cat:morphology",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:texture"
   },
   {
    "id": "texture:medium_fine",
@@ -1485,7 +2617,11 @@
    "definition": "Visual texture 'Medium - fine': how coarse or fine the leaves and branching read from a distance.",
    "aliases": [],
    "source_of_term": "kpu texture",
-   "order": 2
+   "order": 2,
+   "level": "concept",
+   "category": "cat:morphology",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:texture"
   },
   {
    "id": "texture:medium",
@@ -1495,7 +2631,11 @@
    "definition": "Visual texture 'Medium': how coarse or fine the leaves and branching read from a distance.",
    "aliases": [],
    "source_of_term": "kpu texture",
-   "order": 3
+   "order": 3,
+   "level": "concept",
+   "category": "cat:morphology",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:texture"
   },
   {
    "id": "texture:medium_coarse",
@@ -1505,7 +2645,11 @@
    "definition": "Visual texture 'Medium - coarse': how coarse or fine the leaves and branching read from a distance.",
    "aliases": [],
    "source_of_term": "kpu texture",
-   "order": 4
+   "order": 4,
+   "level": "concept",
+   "category": "cat:morphology",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:texture"
   },
   {
    "id": "texture:coarse",
@@ -1515,7 +2659,11 @@
    "definition": "Visual texture 'Coarse': how coarse or fine the leaves and branching read from a distance.",
    "aliases": [],
    "source_of_term": "kpu texture",
-   "order": 5
+   "order": 5,
+   "level": "concept",
+   "category": "cat:morphology",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:texture"
   },
   {
    "id": "texture:very_coarse",
@@ -1525,7 +2673,11 @@
    "definition": "Visual texture 'Very coarse': how coarse or fine the leaves and branching read from a distance.",
    "aliases": [],
    "source_of_term": "kpu texture",
-   "order": 6
+   "order": 6,
+   "level": "concept",
+   "category": "cat:morphology",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:texture"
   },
   {
    "id": "form:climbing",
@@ -1534,7 +2686,11 @@
    "label": "Climbing",
    "definition": "Overall form: Grows upward on a support rather than standing on its own.",
    "aliases": [],
-   "source_of_term": "kpu form"
+   "source_of_term": "kpu form",
+   "level": "concept",
+   "category": "cat:morphology",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:form"
   },
   {
    "id": "form:columnar",
@@ -1543,7 +2699,11 @@
    "label": "Columnar",
    "definition": "Overall form: Much taller than wide, with near-vertical sides.",
    "aliases": [],
-   "source_of_term": "kpu form"
+   "source_of_term": "kpu form",
+   "level": "concept",
+   "category": "cat:morphology",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:form"
   },
   {
    "id": "form:creeping_mat_like",
@@ -1552,7 +2712,11 @@
    "label": "Creeping / Mat-like",
    "definition": "Overall form: Spreads along the ground, staying low.",
    "aliases": [],
-   "source_of_term": "kpu form"
+   "source_of_term": "kpu form",
+   "level": "concept",
+   "category": "cat:morphology",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:form"
   },
   {
    "id": "form:irregular",
@@ -1561,7 +2725,11 @@
    "label": "Irregular",
    "definition": "Overall form: No regular outline; asymmetric or picturesque.",
    "aliases": [],
-   "source_of_term": "kpu form"
+   "source_of_term": "kpu form",
+   "level": "concept",
+   "category": "cat:morphology",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:form"
   },
   {
    "id": "form:mounded",
@@ -1570,7 +2738,11 @@
    "label": "Mounded",
    "definition": "Overall form: A low, rounded dome wider than tall.",
    "aliases": [],
-   "source_of_term": "kpu form"
+   "source_of_term": "kpu form",
+   "level": "concept",
+   "category": "cat:morphology",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:form"
   },
   {
    "id": "form:oval_horizontal",
@@ -1579,7 +2751,11 @@
    "label": "Oval - horizontal",
    "definition": "Overall form: An oval outline wider than it is tall.",
    "aliases": [],
-   "source_of_term": "kpu form"
+   "source_of_term": "kpu form",
+   "level": "concept",
+   "category": "cat:morphology",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:form"
   },
   {
    "id": "form:oval_vertical",
@@ -1588,7 +2764,11 @@
    "label": "Oval - vertical",
    "definition": "Overall form: An oval outline taller than it is wide.",
    "aliases": [],
-   "source_of_term": "kpu form"
+   "source_of_term": "kpu form",
+   "level": "concept",
+   "category": "cat:morphology",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:form"
   },
   {
    "id": "form:pyramidal_narrowly",
@@ -1597,7 +2777,11 @@
    "label": "Pyramidal - narrowly",
    "definition": "Overall form: A slim cone, narrow at the top.",
    "aliases": [],
-   "source_of_term": "kpu form"
+   "source_of_term": "kpu form",
+   "level": "concept",
+   "category": "cat:morphology",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:form"
   },
   {
    "id": "form:pyramidal_widely",
@@ -1606,7 +2790,11 @@
    "label": "Pyramidal - widely",
    "definition": "Overall form: A broad cone, wide at the base.",
    "aliases": [],
-   "source_of_term": "kpu form"
+   "source_of_term": "kpu form",
+   "level": "concept",
+   "category": "cat:morphology",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:form"
   },
   {
    "id": "form:round",
@@ -1615,7 +2803,11 @@
    "label": "Round",
    "definition": "Overall form: About as tall as wide, with a rounded crown.",
    "aliases": [],
-   "source_of_term": "kpu form"
+   "source_of_term": "kpu form",
+   "level": "concept",
+   "category": "cat:morphology",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:form"
   },
   {
    "id": "form:vase",
@@ -1624,7 +2816,11 @@
    "label": "Vase",
    "definition": "Overall form: Narrow at the base and spreading at the top.",
    "aliases": [],
-   "source_of_term": "kpu form"
+   "source_of_term": "kpu form",
+   "level": "concept",
+   "category": "cat:morphology",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:form"
   },
   {
    "id": "form:weeping",
@@ -1633,7 +2829,11 @@
    "label": "Weeping",
    "definition": "Overall form: Branches hang downward.",
    "aliases": [],
-   "source_of_term": "kpu form"
+   "source_of_term": "kpu form",
+   "level": "concept",
+   "category": "cat:morphology",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:form"
   },
   {
    "id": "habit:arching",
@@ -1642,7 +2842,11 @@
    "label": "Arching",
    "definition": "Branching habit: Branches rise then bend over in arcs.",
    "aliases": [],
-   "source_of_term": "kpu habit"
+   "source_of_term": "kpu habit",
+   "level": "concept",
+   "category": "cat:morphology",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:habit"
   },
   {
    "id": "habit:dense",
@@ -1651,7 +2855,11 @@
    "label": "Dense",
    "definition": "Branching habit: Closely branched with little open space.",
    "aliases": [],
-   "source_of_term": "kpu habit"
+   "source_of_term": "kpu habit",
+   "level": "concept",
+   "category": "cat:morphology",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:habit"
   },
   {
    "id": "habit:epiphytic",
@@ -1660,7 +2868,11 @@
    "label": "Epiphytic",
    "definition": "Branching habit: Grows on another plant without taking nourishment from it.",
    "aliases": [],
-   "source_of_term": "kpu habit"
+   "source_of_term": "kpu habit",
+   "level": "concept",
+   "category": "cat:morphology",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:habit"
   },
   {
    "id": "habit:fastigiate",
@@ -1669,7 +2881,11 @@
    "label": "Fastigiate",
    "definition": "Branching habit: Branches held close to the trunk, pointing up.",
    "aliases": [],
-   "source_of_term": "kpu habit"
+   "source_of_term": "kpu habit",
+   "level": "concept",
+   "category": "cat:morphology",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:habit"
   },
   {
    "id": "habit:horizontal",
@@ -1678,7 +2894,11 @@
    "label": "Horizontal",
    "definition": "Branching habit: Branches held level, in layers.",
    "aliases": [],
-   "source_of_term": "kpu habit"
+   "source_of_term": "kpu habit",
+   "level": "concept",
+   "category": "cat:morphology",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:habit"
   },
   {
    "id": "habit:irregular",
@@ -1687,7 +2907,11 @@
    "label": "Irregular",
    "definition": "Branching habit: No consistent branching pattern.",
    "aliases": [],
-   "source_of_term": "kpu habit"
+   "source_of_term": "kpu habit",
+   "level": "concept",
+   "category": "cat:morphology",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:habit"
   },
   {
    "id": "habit:open",
@@ -1696,7 +2920,11 @@
    "label": "Open",
    "definition": "Branching habit: Widely spaced branches you can see through.",
    "aliases": [],
-   "source_of_term": "kpu habit"
+   "source_of_term": "kpu habit",
+   "level": "concept",
+   "category": "cat:morphology",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:habit"
   },
   {
    "id": "habit:pendulous",
@@ -1705,7 +2933,11 @@
    "label": "Pendulous",
    "definition": "Branching habit: Branch tips hang down.",
    "aliases": [],
-   "source_of_term": "kpu habit"
+   "source_of_term": "kpu habit",
+   "level": "concept",
+   "category": "cat:morphology",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:habit"
   },
   {
    "id": "habit:spreading",
@@ -1714,7 +2946,11 @@
    "label": "Spreading",
    "definition": "Branching habit: Branches extend outward, wider than tall.",
    "aliases": [],
-   "source_of_term": "kpu habit"
+   "source_of_term": "kpu habit",
+   "level": "concept",
+   "category": "cat:morphology",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:habit"
   },
   {
    "id": "habit:stiffly_upright",
@@ -1723,7 +2959,11 @@
    "label": "Stiffly upright",
    "definition": "Branching habit: Rigid, vertical branches.",
    "aliases": [],
-   "source_of_term": "kpu habit"
+   "source_of_term": "kpu habit",
+   "level": "concept",
+   "category": "cat:morphology",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:habit"
   },
   {
    "id": "habit:twiggy",
@@ -1732,7 +2972,11 @@
    "label": "Twiggy",
    "definition": "Branching habit: Many fine, short branches.",
    "aliases": [],
-   "source_of_term": "kpu habit"
+   "source_of_term": "kpu habit",
+   "level": "concept",
+   "category": "cat:morphology",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:habit"
   },
   {
    "id": "habit:upright",
@@ -1741,7 +2985,11 @@
    "label": "Upright",
    "definition": "Branching habit: Grows mainly upward.",
    "aliases": [],
-   "source_of_term": "kpu habit"
+   "source_of_term": "kpu habit",
+   "level": "concept",
+   "category": "cat:morphology",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:habit"
   },
   {
    "id": "plant_type:annual_true",
@@ -1750,7 +2998,11 @@
    "label": "Annual (true)",
    "definition": "KPU plant type 'Annual (true)': Completes its life in one season.",
    "aliases": [],
-   "source_of_term": "kpu plant type"
+   "source_of_term": "kpu plant type",
+   "level": "concept",
+   "category": "cat:growth_form_cat",
+   "axis": "axis:x",
+   "hierarchy_parent": "facet:plant_type"
   },
   {
    "id": "plant_type:annual_grown_as",
@@ -1759,7 +3011,11 @@
    "label": "Annual (grown as)",
    "definition": "KPU plant type 'Annual (grown as)': A tender perennial treated as an annual here.",
    "aliases": [],
-   "source_of_term": "kpu plant type"
+   "source_of_term": "kpu plant type",
+   "level": "concept",
+   "category": "cat:growth_form_cat",
+   "axis": "axis:x",
+   "hierarchy_parent": "facet:plant_type"
   },
   {
    "id": "plant_type:aquatic_plant",
@@ -1768,7 +3024,11 @@
    "label": "Aquatic plant",
    "definition": "KPU plant type 'Aquatic plant': Lives in or on water.",
    "aliases": [],
-   "source_of_term": "kpu plant type"
+   "source_of_term": "kpu plant type",
+   "level": "concept",
+   "category": "cat:growth_form_cat",
+   "axis": "axis:x",
+   "hierarchy_parent": "facet:plant_type"
   },
   {
    "id": "plant_type:bamboo",
@@ -1777,7 +3037,11 @@
    "label": "Bamboo",
    "definition": "KPU plant type 'Bamboo': A woody grass.",
    "aliases": [],
-   "source_of_term": "kpu plant type"
+   "source_of_term": "kpu plant type",
+   "level": "concept",
+   "category": "cat:growth_form_cat",
+   "axis": "axis:x",
+   "hierarchy_parent": "facet:plant_type"
   },
   {
    "id": "plant_type:biennial",
@@ -1786,7 +3050,11 @@
    "label": "Biennial",
    "definition": "KPU plant type 'Biennial': Leaves in year one, flowers and dies in year two.",
    "aliases": [],
-   "source_of_term": "kpu plant type"
+   "source_of_term": "kpu plant type",
+   "level": "concept",
+   "category": "cat:growth_form_cat",
+   "axis": "axis:x",
+   "hierarchy_parent": "facet:plant_type"
   },
   {
    "id": "plant_type:broadleaf_evergreen",
@@ -1798,7 +3066,11 @@
     "comes back every year",
     "perennial"
    ],
-   "source_of_term": "kpu plant type"
+   "source_of_term": "kpu plant type",
+   "level": "concept",
+   "category": "cat:growth_form_cat",
+   "axis": "axis:x",
+   "hierarchy_parent": "facet:plant_type"
   },
   {
    "id": "plant_type:conifer",
@@ -1810,7 +3082,11 @@
     "comes back every year",
     "perennial"
    ],
-   "source_of_term": "kpu plant type"
+   "source_of_term": "kpu plant type",
+   "level": "concept",
+   "category": "cat:growth_form_cat",
+   "axis": "axis:x",
+   "hierarchy_parent": "facet:plant_type"
   },
   {
    "id": "plant_type:fern",
@@ -1822,7 +3098,11 @@
     "comes back every year",
     "perennial"
    ],
-   "source_of_term": "kpu plant type"
+   "source_of_term": "kpu plant type",
+   "level": "concept",
+   "category": "cat:growth_form_cat",
+   "axis": "axis:x",
+   "hierarchy_parent": "facet:plant_type"
   },
   {
    "id": "plant_type:ground_cover",
@@ -1831,7 +3111,11 @@
    "label": "Ground cover",
    "definition": "KPU plant type 'Ground cover': A low plant used to carpet the ground.",
    "aliases": [],
-   "source_of_term": "kpu plant type"
+   "source_of_term": "kpu plant type",
+   "level": "concept",
+   "category": "cat:growth_form_cat",
+   "axis": "axis:x",
+   "hierarchy_parent": "facet:plant_type"
   },
   {
    "id": "plant_type:herbaceous_perennial",
@@ -1843,7 +3127,11 @@
     "comes back every year",
     "perennial"
    ],
-   "source_of_term": "kpu plant type"
+   "source_of_term": "kpu plant type",
+   "level": "concept",
+   "category": "cat:growth_form_cat",
+   "axis": "axis:x",
+   "hierarchy_parent": "facet:plant_type"
   },
   {
    "id": "plant_type:invasive_plant",
@@ -1852,7 +3140,11 @@
    "label": "Invasive plant",
    "definition": "KPU plant type 'Invasive plant': Listed as invasive in the region.",
    "aliases": [],
-   "source_of_term": "kpu plant type"
+   "source_of_term": "kpu plant type",
+   "level": "concept",
+   "category": "cat:growth_form_cat",
+   "axis": "axis:x",
+   "hierarchy_parent": "facet:plant_type"
   },
   {
    "id": "plant_type:poales_grass_like",
@@ -1861,7 +3153,11 @@
    "label": "Poales (grass-like)",
    "definition": "KPU plant type 'Poales (grass-like)': Grasses, sedges and rushes.",
    "aliases": [],
-   "source_of_term": "kpu plant type"
+   "source_of_term": "kpu plant type",
+   "level": "concept",
+   "category": "cat:growth_form_cat",
+   "axis": "axis:x",
+   "hierarchy_parent": "facet:plant_type"
   },
   {
    "id": "plant_type:semi_evergreen",
@@ -1870,7 +3166,11 @@
    "label": "Semi-evergreen",
    "definition": "KPU plant type 'Semi-evergreen': Keeps part of its foliage through a mild winter.",
    "aliases": [],
-   "source_of_term": "kpu plant type"
+   "source_of_term": "kpu plant type",
+   "level": "concept",
+   "category": "cat:growth_form_cat",
+   "axis": "axis:x",
+   "hierarchy_parent": "facet:plant_type"
   },
   {
    "id": "plant_type:shrub_deciduous",
@@ -1882,7 +3182,11 @@
     "comes back every year",
     "perennial"
    ],
-   "source_of_term": "kpu plant type"
+   "source_of_term": "kpu plant type",
+   "level": "concept",
+   "category": "cat:growth_form_cat",
+   "axis": "axis:x",
+   "hierarchy_parent": "facet:plant_type"
   },
   {
    "id": "plant_type:succulent_or_cacti",
@@ -1891,7 +3195,11 @@
    "label": "Succulent or Cacti",
    "definition": "KPU plant type 'Succulent or Cacti': Stores water in thick leaves or stems.",
    "aliases": [],
-   "source_of_term": "kpu plant type"
+   "source_of_term": "kpu plant type",
+   "level": "concept",
+   "category": "cat:growth_form_cat",
+   "axis": "axis:x",
+   "hierarchy_parent": "facet:plant_type"
   },
   {
    "id": "plant_type:tree_deciduous",
@@ -1903,7 +3211,11 @@
     "comes back every year",
     "perennial"
    ],
-   "source_of_term": "kpu plant type"
+   "source_of_term": "kpu plant type",
+   "level": "concept",
+   "category": "cat:growth_form_cat",
+   "axis": "axis:x",
+   "hierarchy_parent": "facet:plant_type"
   },
   {
    "id": "plant_type:vine_deciduous",
@@ -1912,7 +3224,11 @@
    "label": "Vine - deciduous",
    "definition": "KPU plant type 'Vine - deciduous': A climbing plant that drops its leaves.",
    "aliases": [],
-   "source_of_term": "kpu plant type"
+   "source_of_term": "kpu plant type",
+   "level": "concept",
+   "category": "cat:growth_form_cat",
+   "axis": "axis:x",
+   "hierarchy_parent": "facet:plant_type"
   },
   {
    "id": "plant_type:vine_or_climber",
@@ -1921,7 +3237,11 @@
    "label": "Vine or climber",
    "definition": "KPU plant type 'Vine or climber': A plant that climbs or scrambles.",
    "aliases": [],
-   "source_of_term": "kpu plant type"
+   "source_of_term": "kpu plant type",
+   "level": "concept",
+   "category": "cat:growth_form_cat",
+   "axis": "axis:x",
+   "hierarchy_parent": "facet:plant_type"
   },
   {
    "id": "plant_type:weed_horticultural",
@@ -1930,7 +3250,11 @@
    "label": "Weed (horticultural)",
    "definition": "KPU plant type 'Weed (horticultural)': A plant usually unwanted in gardens.",
    "aliases": [],
-   "source_of_term": "kpu plant type"
+   "source_of_term": "kpu plant type",
+   "level": "concept",
+   "category": "cat:growth_form_cat",
+   "axis": "axis:x",
+   "hierarchy_parent": "facet:plant_type"
   },
   {
    "id": "interest:fall_colour",
@@ -1943,7 +3267,11 @@
     "autumn colour",
     "fall color"
    ],
-   "source_of_term": "schema seasonal_interest.fall_colour; intent_map 'seasonal interest'"
+   "source_of_term": "schema seasonal_interest.fall_colour; intent_map 'seasonal interest'",
+   "level": "concept",
+   "category": "cat:temporal",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:interest"
   },
   {
    "id": "interest:winter_interest",
@@ -1952,7 +3280,11 @@
    "label": "Winter interest",
    "definition": "Something to look at in winter: bark, berries, structure or evergreen leaves.",
    "aliases": [],
-   "source_of_term": "schema seasonal_interest.winter_interest; kpu use 'Winter interest'"
+   "source_of_term": "schema seasonal_interest.winter_interest; kpu use 'Winter interest'",
+   "level": "concept",
+   "category": "cat:temporal",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:interest"
   },
   {
    "id": "interest:seasonal_interest",
@@ -1968,7 +3300,11 @@
     "pretty",
     "spring interest"
    ],
-   "source_of_term": "intent_map 'seasonal interest' / 'aesthetic'"
+   "source_of_term": "intent_map 'seasonal interest' / 'aesthetic'",
+   "level": "concept",
+   "category": "cat:temporal",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:interest"
   },
   {
    "id": "fruit:edible",
@@ -1982,7 +3318,11 @@
     "food",
     "fruit you can eat"
    ],
-   "source_of_term": "claims seasonal_interest.fruit; intent_map 'edible'"
+   "source_of_term": "claims seasonal_interest.fruit; intent_map 'edible'",
+   "level": "concept",
+   "category": "cat:temporal",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:fruit"
   },
   {
    "id": "fruit:showy",
@@ -1994,7 +3334,11 @@
     "berries",
     "ornamental fruit"
    ],
-   "source_of_term": "claims seasonal_interest.fruit"
+   "source_of_term": "claims seasonal_interest.fruit",
+   "level": "concept",
+   "category": "cat:temporal",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:fruit"
   },
   {
    "id": "maintenance:low",
@@ -2010,7 +3354,11 @@
     "low maintenance"
    ],
    "source_of_term": "schema maintenance_level; intent_map 'low maintenance'",
-   "order": 1
+   "order": 1,
+   "level": "concept",
+   "category": "cat:ecological",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:maintenance"
   },
   {
    "id": "maintenance:medium",
@@ -2020,7 +3368,11 @@
    "definition": "Needs some seasonal attention: shaping, feeding or leaf clean-up.",
    "aliases": [],
    "source_of_term": "schema maintenance_level; intent_map 'low maintenance'",
-   "order": 2
+   "order": 2,
+   "level": "concept",
+   "category": "cat:ecological",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:maintenance"
   },
   {
    "id": "maintenance:high",
@@ -2033,7 +3385,11 @@
     "high maintenance"
    ],
    "source_of_term": "schema maintenance_level; intent_map 'low maintenance'",
-   "order": 3
+   "order": 3,
+   "level": "concept",
+   "category": "cat:ecological",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:maintenance"
   },
   {
    "id": "toxicity:none",
@@ -2049,7 +3405,11 @@
     "pet safe"
    ],
    "source_of_term": "schema toxicity; intent_map 'toxic to pets'",
-   "order": 1
+   "order": 1,
+   "level": "concept",
+   "category": "cat:ecological",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:toxicity"
   },
   {
    "id": "toxicity:mild",
@@ -2059,7 +3419,11 @@
    "definition": "Can cause mild stomach upset or skin irritation.",
    "aliases": [],
    "source_of_term": "schema toxicity; intent_map 'toxic to pets'",
-   "order": 2
+   "order": 2,
+   "level": "concept",
+   "category": "cat:ecological",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:toxicity"
   },
   {
    "id": "toxicity:moderate",
@@ -2072,7 +3436,11 @@
     "toxic to pets"
    ],
    "source_of_term": "schema toxicity; intent_map 'toxic to pets'",
-   "order": 3
+   "order": 3,
+   "level": "concept",
+   "category": "cat:ecological",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:toxicity"
   },
   {
    "id": "toxicity:severe",
@@ -2085,7 +3453,11 @@
     "toxic to pets"
    ],
    "source_of_term": "schema toxicity; intent_map 'toxic to pets'",
-   "order": 4
+   "order": 4,
+   "level": "concept",
+   "category": "cat:ecological",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:toxicity"
   },
   {
    "id": "toxicity:unknown",
@@ -2095,7 +3467,11 @@
    "definition": "No toxicity record was found in the sources checked.",
    "aliases": [],
    "source_of_term": "schema toxicity; intent_map 'toxic to pets'",
-   "order": 5
+   "order": 5,
+   "level": "concept",
+   "category": "cat:ecological",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:toxicity"
   },
   {
    "id": "photoperiod:long_day",
@@ -2104,7 +3480,11 @@
    "label": "long day",
    "definition": "Flowers when days are long (late spring and summer).",
    "aliases": [],
-   "source_of_term": "schema photoperiod (survey c4)"
+   "source_of_term": "schema photoperiod (survey c4)",
+   "level": "concept",
+   "category": "cat:temporal",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:photoperiod"
   },
   {
    "id": "photoperiod:short_day",
@@ -2113,7 +3493,11 @@
    "label": "short day",
    "definition": "Flowers when days are short (autumn, winter, early spring).",
    "aliases": [],
-   "source_of_term": "schema photoperiod (survey c4)"
+   "source_of_term": "schema photoperiod (survey c4)",
+   "level": "concept",
+   "category": "cat:temporal",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:photoperiod"
   },
   {
    "id": "photoperiod:day_neutral",
@@ -2122,7 +3506,11 @@
    "label": "day neutral",
    "definition": "Flowering does not depend on day length.",
    "aliases": [],
-   "source_of_term": "schema photoperiod (survey c4)"
+   "source_of_term": "schema photoperiod (survey c4)",
+   "level": "concept",
+   "category": "cat:temporal",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:photoperiod"
   },
   {
    "id": "use:hedge",
@@ -2136,7 +3524,11 @@
     "screen",
     "screening"
    ],
-   "source_of_term": "ontology (group); intent_map 'hedge'"
+   "source_of_term": "ontology (group); intent_map 'hedge'",
+   "level": "concept",
+   "category": "cat:landscape_use",
+   "axis": "axis:z",
+   "hierarchy_parent": "facet:use"
   },
   {
    "id": "use:accent_plant",
@@ -2145,7 +3537,11 @@
    "label": "Accent plant",
    "definition": "Landscape use 'Accent plant': Placed to draw the eye at a doorway, corner or bed.",
    "aliases": [],
-   "source_of_term": "kpu landscape use"
+   "source_of_term": "kpu landscape use",
+   "level": "concept",
+   "category": "cat:landscape_use",
+   "axis": "axis:z",
+   "hierarchy_parent": "facet:use"
   },
   {
    "id": "use:alpine",
@@ -2154,7 +3550,11 @@
    "label": "Alpine",
    "definition": "Landscape use 'Alpine': Suited to rock gardens and troughs with sharp drainage.",
    "aliases": [],
-   "source_of_term": "kpu landscape use"
+   "source_of_term": "kpu landscape use",
+   "level": "concept",
+   "category": "cat:landscape_use",
+   "axis": "axis:z",
+   "hierarchy_parent": "facet:use"
   },
   {
    "id": "use:aquatic_ponds",
@@ -2163,7 +3563,11 @@
    "label": "Aquatic - ponds",
    "definition": "Landscape use 'Aquatic - ponds': Grows in or beside a pond.",
    "aliases": [],
-   "source_of_term": "kpu landscape use"
+   "source_of_term": "kpu landscape use",
+   "level": "concept",
+   "category": "cat:landscape_use",
+   "axis": "axis:z",
+   "hierarchy_parent": "facet:use"
   },
   {
    "id": "use:arbors_or_trellis",
@@ -2172,7 +3576,11 @@
    "label": "Arbors or trellis",
    "definition": "Landscape use 'Arbors or trellis': Trained over an arbor or up a trellis.",
    "aliases": [],
-   "source_of_term": "kpu landscape use"
+   "source_of_term": "kpu landscape use",
+   "level": "concept",
+   "category": "cat:landscape_use",
+   "axis": "axis:z",
+   "hierarchy_parent": "facet:use"
   },
   {
    "id": "use:attract_beneficial_insects",
@@ -2183,7 +3591,11 @@
    "aliases": [
     "beneficial insects"
    ],
-   "source_of_term": "kpu landscape use ; intent_map"
+   "source_of_term": "kpu landscape use ; intent_map",
+   "level": "concept",
+   "category": "cat:landscape_use",
+   "axis": "axis:z",
+   "hierarchy_parent": "facet:use"
   },
   {
    "id": "use:attract_birds",
@@ -2194,7 +3606,11 @@
    "aliases": [
     "birds"
    ],
-   "source_of_term": "kpu landscape use ; intent_map"
+   "source_of_term": "kpu landscape use ; intent_map",
+   "level": "concept",
+   "category": "cat:landscape_use",
+   "axis": "axis:z",
+   "hierarchy_parent": "facet:use"
   },
   {
    "id": "use:attract_butterflies",
@@ -2205,7 +3621,11 @@
    "aliases": [
     "butterflies"
    ],
-   "source_of_term": "kpu landscape use ; intent_map"
+   "source_of_term": "kpu landscape use ; intent_map",
+   "level": "concept",
+   "category": "cat:landscape_use",
+   "axis": "axis:z",
+   "hierarchy_parent": "facet:use"
   },
   {
    "id": "use:bedding_plant",
@@ -2214,7 +3634,11 @@
    "label": "Bedding plant",
    "definition": "Landscape use 'Bedding plant': Set out in quantity for seasonal colour.",
    "aliases": [],
-   "source_of_term": "kpu landscape use"
+   "source_of_term": "kpu landscape use",
+   "level": "concept",
+   "category": "cat:landscape_use",
+   "axis": "axis:z",
+   "hierarchy_parent": "facet:use"
   },
   {
    "id": "use:container_planting",
@@ -2227,7 +3651,11 @@
     "planter",
     "pot"
    ],
-   "source_of_term": "kpu landscape use ; intent_map"
+   "source_of_term": "kpu landscape use ; intent_map",
+   "level": "concept",
+   "category": "cat:landscape_use",
+   "axis": "axis:z",
+   "hierarchy_parent": "facet:use"
   },
   {
    "id": "use:cut_flower_or_foliage",
@@ -2236,7 +3664,11 @@
    "label": "Cut flower or foliage",
    "definition": "Landscape use 'Cut flower or foliage': Stems cut for arrangements.",
    "aliases": [],
-   "source_of_term": "kpu landscape use"
+   "source_of_term": "kpu landscape use",
+   "level": "concept",
+   "category": "cat:landscape_use",
+   "axis": "axis:z",
+   "hierarchy_parent": "facet:use"
   },
   {
    "id": "use:dried_flower_or_fruit",
@@ -2245,7 +3677,11 @@
    "label": "Dried flower or fruit",
    "definition": "Landscape use 'Dried flower or fruit': Flowers or fruit that keep when dried.",
    "aliases": [],
-   "source_of_term": "kpu landscape use"
+   "source_of_term": "kpu landscape use",
+   "level": "concept",
+   "category": "cat:landscape_use",
+   "axis": "axis:z",
+   "hierarchy_parent": "facet:use"
   },
   {
    "id": "use:erosion_control",
@@ -2254,7 +3690,11 @@
    "label": "Erosion control",
    "definition": "Landscape use 'Erosion control': Roots hold soil on slopes and banks.",
    "aliases": [],
-   "source_of_term": "kpu landscape use"
+   "source_of_term": "kpu landscape use",
+   "level": "concept",
+   "category": "cat:landscape_use",
+   "axis": "axis:z",
+   "hierarchy_parent": "facet:use"
   },
   {
    "id": "use:espalier",
@@ -2263,7 +3703,11 @@
    "label": "Espalier",
    "definition": "Landscape use 'Espalier': Trained flat against a wall or wires.",
    "aliases": [],
-   "source_of_term": "kpu landscape use"
+   "source_of_term": "kpu landscape use",
+   "level": "concept",
+   "category": "cat:landscape_use",
+   "axis": "axis:z",
+   "hierarchy_parent": "facet:use"
   },
   {
    "id": "use:fall_interest",
@@ -2272,7 +3716,11 @@
    "label": "Fall interest",
    "definition": "Landscape use 'Fall interest': At its best in autumn.",
    "aliases": [],
-   "source_of_term": "kpu landscape use"
+   "source_of_term": "kpu landscape use",
+   "level": "concept",
+   "category": "cat:landscape_use",
+   "axis": "axis:z",
+   "hierarchy_parent": "facet:use"
   },
   {
    "id": "use:filler",
@@ -2281,7 +3729,11 @@
    "label": "Filler",
    "definition": "Landscape use 'Filler': Fills gaps between feature plants.",
    "aliases": [],
-   "source_of_term": "kpu landscape use"
+   "source_of_term": "kpu landscape use",
+   "level": "concept",
+   "category": "cat:landscape_use",
+   "axis": "axis:z",
+   "hierarchy_parent": "facet:use"
   },
   {
    "id": "use:floristry",
@@ -2290,7 +3742,11 @@
    "label": "Floristry",
    "definition": "Landscape use 'Floristry': Grown for the florist trade.",
    "aliases": [],
-   "source_of_term": "kpu landscape use"
+   "source_of_term": "kpu landscape use",
+   "level": "concept",
+   "category": "cat:landscape_use",
+   "axis": "axis:z",
+   "hierarchy_parent": "facet:use"
   },
   {
    "id": "use:forestry",
@@ -2299,7 +3755,11 @@
    "label": "Forestry",
    "definition": "Landscape use 'Forestry': Grown for timber or forest planting.",
    "aliases": [],
-   "source_of_term": "kpu landscape use"
+   "source_of_term": "kpu landscape use",
+   "level": "concept",
+   "category": "cat:landscape_use",
+   "axis": "axis:z",
+   "hierarchy_parent": "facet:use"
   },
   {
    "id": "use:fragrance",
@@ -2308,7 +3768,11 @@
    "label": "Fragrance",
    "definition": "Landscape use 'Fragrance': Scented flowers or foliage.",
    "aliases": [],
-   "source_of_term": "kpu landscape use"
+   "source_of_term": "kpu landscape use",
+   "level": "concept",
+   "category": "cat:landscape_use",
+   "axis": "axis:z",
+   "hierarchy_parent": "facet:use"
   },
   {
    "id": "use:golf_green",
@@ -2317,7 +3781,11 @@
    "label": "Golf green",
    "definition": "Landscape use 'Golf green': Turf for putting surfaces.",
    "aliases": [],
-   "source_of_term": "kpu landscape use"
+   "source_of_term": "kpu landscape use",
+   "level": "concept",
+   "category": "cat:landscape_use",
+   "axis": "axis:z",
+   "hierarchy_parent": "facet:use"
   },
   {
    "id": "use:green_roof_technology",
@@ -2332,7 +3800,11 @@
     "roof garden",
     "rooftop"
    ],
-   "source_of_term": "kpu landscape use ; intent_map"
+   "source_of_term": "kpu landscape use ; intent_map",
+   "level": "concept",
+   "category": "cat:landscape_use",
+   "axis": "axis:z",
+   "hierarchy_parent": "facet:use"
   },
   {
    "id": "use:green_walls",
@@ -2341,7 +3813,11 @@
    "label": "Green walls",
    "definition": "Landscape use 'Green walls': Grows in vertical planting systems.",
    "aliases": [],
-   "source_of_term": "kpu landscape use"
+   "source_of_term": "kpu landscape use",
+   "level": "concept",
+   "category": "cat:landscape_use",
+   "axis": "axis:z",
+   "hierarchy_parent": "facet:use"
   },
   {
    "id": "use:ground_cover",
@@ -2354,7 +3830,11 @@
     "ground-cover",
     "groundcover"
    ],
-   "source_of_term": "kpu landscape use ; intent_map"
+   "source_of_term": "kpu landscape use ; intent_map",
+   "level": "concept",
+   "category": "cat:landscape_use",
+   "axis": "axis:z",
+   "hierarchy_parent": "facet:use"
   },
   {
    "id": "use:group_or_mass_planting",
@@ -2363,7 +3843,11 @@
    "label": "Group or mass planting",
    "definition": "Landscape use 'Group or mass planting': Best planted in numbers for effect.",
    "aliases": [],
-   "source_of_term": "kpu landscape use"
+   "source_of_term": "kpu landscape use",
+   "level": "concept",
+   "category": "cat:landscape_use",
+   "axis": "axis:z",
+   "hierarchy_parent": "facet:use"
   },
   {
    "id": "use:hanging_basket",
@@ -2372,7 +3856,11 @@
    "label": "Hanging basket",
    "definition": "Landscape use 'Hanging basket': Trails from a suspended basket.",
    "aliases": [],
-   "source_of_term": "kpu landscape use"
+   "source_of_term": "kpu landscape use",
+   "level": "concept",
+   "category": "cat:landscape_use",
+   "axis": "axis:z",
+   "hierarchy_parent": "facet:use"
   },
   {
    "id": "use:hedge_row",
@@ -2385,7 +3873,11 @@
     "informal hedge"
    ],
    "source_of_term": "kpu landscape use ; intent_map",
-   "parent": "use:hedge"
+   "parent": "use:hedge",
+   "level": "concept",
+   "category": "cat:landscape_use",
+   "axis": "axis:z",
+   "hierarchy_parent": "use:hedge"
   },
   {
    "id": "use:herb",
@@ -2394,7 +3886,11 @@
    "label": "Herb",
    "definition": "Landscape use 'Herb': Used in cooking or for scent.",
    "aliases": [],
-   "source_of_term": "kpu landscape use"
+   "source_of_term": "kpu landscape use",
+   "level": "concept",
+   "category": "cat:landscape_use",
+   "axis": "axis:z",
+   "hierarchy_parent": "facet:use"
   },
   {
    "id": "use:indoor_plant",
@@ -2403,7 +3899,11 @@
    "label": "Indoor plant",
    "definition": "Landscape use 'Indoor plant': Grown inside buildings.",
    "aliases": [],
-   "source_of_term": "kpu landscape use"
+   "source_of_term": "kpu landscape use",
+   "level": "concept",
+   "category": "cat:landscape_use",
+   "axis": "axis:z",
+   "hierarchy_parent": "facet:use"
   },
   {
    "id": "use:lawn_sports_field",
@@ -2412,7 +3912,11 @@
    "label": "Lawn - sports field",
    "definition": "Landscape use 'Lawn - sports field': Turf grass for play.",
    "aliases": [],
-   "source_of_term": "kpu landscape use"
+   "source_of_term": "kpu landscape use",
+   "level": "concept",
+   "category": "cat:landscape_use",
+   "axis": "axis:z",
+   "hierarchy_parent": "facet:use"
   },
   {
    "id": "use:medicinal_plant",
@@ -2421,7 +3925,11 @@
    "label": "Medicinal plant",
    "definition": "Landscape use 'Medicinal plant': Used in traditional or modern medicine.",
    "aliases": [],
-   "source_of_term": "kpu landscape use"
+   "source_of_term": "kpu landscape use",
+   "level": "concept",
+   "category": "cat:landscape_use",
+   "axis": "axis:z",
+   "hierarchy_parent": "facet:use"
   },
   {
    "id": "use:mixed_shrub_border",
@@ -2430,7 +3938,11 @@
    "label": "Mixed shrub border",
    "definition": "Landscape use 'Mixed shrub border': One of several shrubs in a mixed bed.",
    "aliases": [],
-   "source_of_term": "kpu landscape use"
+   "source_of_term": "kpu landscape use",
+   "level": "concept",
+   "category": "cat:landscape_use",
+   "axis": "axis:z",
+   "hierarchy_parent": "facet:use"
   },
   {
    "id": "use:native_planting",
@@ -2441,7 +3953,11 @@
    "aliases": [
     "native garden"
    ],
-   "source_of_term": "kpu landscape use ; intent_map"
+   "source_of_term": "kpu landscape use ; intent_map",
+   "level": "concept",
+   "category": "cat:landscape_use",
+   "axis": "axis:z",
+   "hierarchy_parent": "facet:use"
   },
   {
    "id": "use:perennial_border",
@@ -2450,7 +3966,11 @@
    "label": "Perennial border",
    "definition": "Landscape use 'Perennial border': Grown among herbaceous perennials.",
    "aliases": [],
-   "source_of_term": "kpu landscape use"
+   "source_of_term": "kpu landscape use",
+   "level": "concept",
+   "category": "cat:landscape_use",
+   "axis": "axis:z",
+   "hierarchy_parent": "facet:use"
   },
   {
    "id": "use:reclamation",
@@ -2459,7 +3979,11 @@
    "label": "Reclamation",
    "definition": "Landscape use 'Reclamation': Re-vegetates disturbed or degraded land.",
    "aliases": [],
-   "source_of_term": "kpu landscape use"
+   "source_of_term": "kpu landscape use",
+   "level": "concept",
+   "category": "cat:landscape_use",
+   "axis": "axis:z",
+   "hierarchy_parent": "facet:use"
   },
   {
    "id": "use:rock_garden",
@@ -2468,7 +3992,11 @@
    "label": "Rock garden",
    "definition": "Landscape use 'Rock garden': Grows among rocks with sharp drainage.",
    "aliases": [],
-   "source_of_term": "kpu landscape use"
+   "source_of_term": "kpu landscape use",
+   "level": "concept",
+   "category": "cat:landscape_use",
+   "axis": "axis:z",
+   "hierarchy_parent": "facet:use"
   },
   {
    "id": "use:screening",
@@ -2482,7 +4010,11 @@
     "screen"
    ],
    "source_of_term": "kpu landscape use ; intent_map",
-   "parent": "use:hedge"
+   "parent": "use:hedge",
+   "level": "concept",
+   "category": "cat:landscape_use",
+   "axis": "axis:z",
+   "hierarchy_parent": "use:hedge"
   },
   {
    "id": "use:security_barrier",
@@ -2491,7 +4023,11 @@
    "label": "Security/barrier",
    "definition": "Landscape use 'Security/barrier': Thorny or dense enough to keep people out.",
    "aliases": [],
-   "source_of_term": "kpu landscape use"
+   "source_of_term": "kpu landscape use",
+   "level": "concept",
+   "category": "cat:landscape_use",
+   "axis": "axis:z",
+   "hierarchy_parent": "facet:use"
   },
   {
    "id": "use:shade_tree",
@@ -2500,7 +4036,11 @@
    "label": "Shade tree",
    "definition": "Landscape use 'Shade tree': A tree planted for the shade it casts.",
    "aliases": [],
-   "source_of_term": "kpu landscape use"
+   "source_of_term": "kpu landscape use",
+   "level": "concept",
+   "category": "cat:landscape_use",
+   "axis": "axis:z",
+   "hierarchy_parent": "facet:use"
   },
   {
    "id": "use:sheared_hedge",
@@ -2514,7 +4054,11 @@
     "hedge"
    ],
    "source_of_term": "kpu landscape use ; intent_map",
-   "parent": "use:hedge"
+   "parent": "use:hedge",
+   "level": "concept",
+   "category": "cat:landscape_use",
+   "axis": "axis:z",
+   "hierarchy_parent": "use:hedge"
   },
   {
    "id": "use:small_garden_space",
@@ -2529,7 +4073,11 @@
     "residential",
     "small garden"
    ],
-   "source_of_term": "kpu landscape use ; intent_map"
+   "source_of_term": "kpu landscape use ; intent_map",
+   "level": "concept",
+   "category": "cat:landscape_use",
+   "axis": "axis:z",
+   "hierarchy_parent": "facet:use"
   },
   {
    "id": "use:specimen_plant",
@@ -2538,7 +4086,11 @@
    "label": "Specimen plant",
    "definition": "Landscape use 'Specimen plant': Stands alone as a feature.",
    "aliases": [],
-   "source_of_term": "kpu landscape use"
+   "source_of_term": "kpu landscape use",
+   "level": "concept",
+   "category": "cat:landscape_use",
+   "axis": "axis:z",
+   "hierarchy_parent": "facet:use"
   },
   {
    "id": "use:spring_interest",
@@ -2547,7 +4099,11 @@
    "label": "Spring interest",
    "definition": "Landscape use 'Spring interest': At its best in spring.",
    "aliases": [],
-   "source_of_term": "kpu landscape use"
+   "source_of_term": "kpu landscape use",
+   "level": "concept",
+   "category": "cat:landscape_use",
+   "axis": "axis:z",
+   "hierarchy_parent": "facet:use"
   },
   {
    "id": "use:street_boulevard_tree",
@@ -2559,7 +4115,11 @@
     "boulevard tree",
     "street tree"
    ],
-   "source_of_term": "kpu landscape use ; intent_map"
+   "source_of_term": "kpu landscape use ; intent_map",
+   "level": "concept",
+   "category": "cat:landscape_use",
+   "axis": "axis:z",
+   "hierarchy_parent": "facet:use"
   },
   {
    "id": "use:summer_interest",
@@ -2568,7 +4128,11 @@
    "label": "Summer interest",
    "definition": "Landscape use 'Summer interest': At its best in summer.",
    "aliases": [],
-   "source_of_term": "kpu landscape use"
+   "source_of_term": "kpu landscape use",
+   "level": "concept",
+   "category": "cat:landscape_use",
+   "axis": "axis:z",
+   "hierarchy_parent": "facet:use"
   },
   {
    "id": "use:tall_background",
@@ -2577,7 +4141,11 @@
    "label": "Tall background",
    "definition": "Landscape use 'Tall background': Forms the back layer of a planting.",
    "aliases": [],
-   "source_of_term": "kpu landscape use"
+   "source_of_term": "kpu landscape use",
+   "level": "concept",
+   "category": "cat:landscape_use",
+   "axis": "axis:z",
+   "hierarchy_parent": "facet:use"
   },
   {
    "id": "use:topiary",
@@ -2586,7 +4154,11 @@
    "label": "Topiary",
    "definition": "Landscape use 'Topiary': Clipped into shapes.",
    "aliases": [],
-   "source_of_term": "kpu landscape use"
+   "source_of_term": "kpu landscape use",
+   "level": "concept",
+   "category": "cat:landscape_use",
+   "axis": "axis:z",
+   "hierarchy_parent": "facet:use"
   },
   {
    "id": "use:urban_agriculture",
@@ -2598,7 +4170,11 @@
     "community garden",
     "food garden"
    ],
-   "source_of_term": "kpu landscape use ; intent_map"
+   "source_of_term": "kpu landscape use ; intent_map",
+   "level": "concept",
+   "category": "cat:landscape_use",
+   "axis": "axis:z",
+   "hierarchy_parent": "facet:use"
   },
   {
    "id": "use:waterside_planting",
@@ -2607,7 +4183,11 @@
    "label": "Waterside planting",
    "definition": "Landscape use 'Waterside planting': Grows at a stream or lake edge.",
    "aliases": [],
-   "source_of_term": "kpu landscape use"
+   "source_of_term": "kpu landscape use",
+   "level": "concept",
+   "category": "cat:landscape_use",
+   "axis": "axis:z",
+   "hierarchy_parent": "facet:use"
   },
   {
    "id": "use:wetland_bogs",
@@ -2616,7 +4196,11 @@
    "label": "Wetland - bogs",
    "definition": "Landscape use 'Wetland - bogs': Grows in wet, peaty ground.",
    "aliases": [],
-   "source_of_term": "kpu landscape use"
+   "source_of_term": "kpu landscape use",
+   "level": "concept",
+   "category": "cat:landscape_use",
+   "axis": "axis:z",
+   "hierarchy_parent": "facet:use"
   },
   {
    "id": "use:wild_flower_garden",
@@ -2625,7 +4209,11 @@
    "label": "Wild flower garden",
    "definition": "Landscape use 'Wild flower garden': Part of a meadow or wild-flower planting.",
    "aliases": [],
-   "source_of_term": "kpu landscape use"
+   "source_of_term": "kpu landscape use",
+   "level": "concept",
+   "category": "cat:landscape_use",
+   "axis": "axis:z",
+   "hierarchy_parent": "facet:use"
   },
   {
    "id": "use:wildlife_food",
@@ -2634,7 +4222,11 @@
    "label": "Wildlife food",
    "definition": "Landscape use 'Wildlife food': Fruit, seed or foliage eaten by wildlife.",
    "aliases": [],
-   "source_of_term": "kpu landscape use"
+   "source_of_term": "kpu landscape use",
+   "level": "concept",
+   "category": "cat:landscape_use",
+   "axis": "axis:z",
+   "hierarchy_parent": "facet:use"
   },
   {
    "id": "use:wind_break",
@@ -2643,7 +4235,11 @@
    "label": "Wind break",
    "definition": "Landscape use 'Wind break': Planted in a line to reduce wind.",
    "aliases": [],
-   "source_of_term": "kpu landscape use"
+   "source_of_term": "kpu landscape use",
+   "level": "concept",
+   "category": "cat:landscape_use",
+   "axis": "axis:z",
+   "hierarchy_parent": "facet:use"
   },
   {
    "id": "use:winter_interest",
@@ -2652,7 +4248,11 @@
    "label": "Winter interest",
    "definition": "Landscape use 'Winter interest': At its best in winter.",
    "aliases": [],
-   "source_of_term": "kpu landscape use"
+   "source_of_term": "kpu landscape use",
+   "level": "concept",
+   "category": "cat:landscape_use",
+   "axis": "axis:z",
+   "hierarchy_parent": "facet:use"
   },
   {
    "id": "use:woodland_margin",
@@ -2661,7 +4261,11 @@
    "label": "Woodland margin",
    "definition": "Landscape use 'Woodland margin': Grows at the edge of trees, in part shade.",
    "aliases": [],
-   "source_of_term": "kpu landscape use"
+   "source_of_term": "kpu landscape use",
+   "level": "concept",
+   "category": "cat:landscape_use",
+   "axis": "axis:z",
+   "hierarchy_parent": "facet:use"
   },
   {
    "id": "ecology:pollinator",
@@ -2675,7 +4279,11 @@
     "pollinator friendly",
     "pollinator plants"
    ],
-   "source_of_term": "schema ecological_value; intent_map"
+   "source_of_term": "schema ecological_value; intent_map",
+   "level": "concept",
+   "category": "cat:ecological",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:ecology"
   },
   {
    "id": "ecology:bird_food",
@@ -2686,7 +4294,11 @@
    "aliases": [
     "feeds birds"
    ],
-   "source_of_term": "schema ecological_value; intent_map"
+   "source_of_term": "schema ecological_value; intent_map",
+   "level": "concept",
+   "category": "cat:ecological",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:ecology"
   },
   {
    "id": "ecology:wildlife_cover",
@@ -2698,7 +4310,11 @@
     "cover for wildlife",
     "shelter"
    ],
-   "source_of_term": "schema ecological_value; intent_map"
+   "source_of_term": "schema ecological_value; intent_map",
+   "level": "concept",
+   "category": "cat:ecological",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:ecology"
   },
   {
    "id": "ecology:nitrogen_fixer",
@@ -2709,7 +4325,11 @@
    "aliases": [
     "nitrogen fixing"
    ],
-   "source_of_term": "schema ecological_value; intent_map"
+   "source_of_term": "schema ecological_value; intent_map",
+   "level": "concept",
+   "category": "cat:ecological",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:ecology"
   },
   {
    "id": "ecology:erosion_control",
@@ -2720,7 +4340,11 @@
    "aliases": [
     "holds soil"
    ],
-   "source_of_term": "schema ecological_value; intent_map"
+   "source_of_term": "schema ecological_value; intent_map",
+   "level": "concept",
+   "category": "cat:ecological",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:ecology"
   },
   {
    "id": "ecology:habitat_structure",
@@ -2734,7 +4358,11 @@
     "high ecological function",
     "wildlife"
    ],
-   "source_of_term": "schema ecological_value; intent_map"
+   "source_of_term": "schema ecological_value; intent_map",
+   "level": "concept",
+   "category": "cat:ecological",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:ecology"
   },
   {
    "id": "season:spring",
@@ -2745,7 +4373,11 @@
    "aliases": [
     "spring interest"
    ],
-   "source_of_term": "ontology"
+   "source_of_term": "ontology",
+   "level": "concept",
+   "category": "cat:temporal",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:season"
   },
   {
    "id": "season:summer",
@@ -2754,7 +4386,11 @@
    "label": "Summer",
    "definition": "June to August: growth, fruit set and the dry season.",
    "aliases": [],
-   "source_of_term": "ontology"
+   "source_of_term": "ontology",
+   "level": "concept",
+   "category": "cat:temporal",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:season"
   },
   {
    "id": "season:autumn",
@@ -2765,7 +4401,11 @@
    "aliases": [
     "fall"
    ],
-   "source_of_term": "ontology"
+   "source_of_term": "ontology",
+   "level": "concept",
+   "category": "cat:temporal",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:season"
   },
   {
    "id": "season:winter",
@@ -2776,7 +4416,11 @@
    "aliases": [
     "winter interest"
    ],
-   "source_of_term": "ontology"
+   "source_of_term": "ontology",
+   "level": "concept",
+   "category": "cat:temporal",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:season"
   },
   {
    "id": "month:1",
@@ -2787,7 +4431,11 @@
    "aliases": [],
    "source_of_term": "claims seasonal_interest.*_months",
    "parent": "season:winter",
-   "order": 1
+   "order": 1,
+   "level": "concept",
+   "category": "cat:temporal",
+   "axis": "axis:y",
+   "hierarchy_parent": "season:winter"
   },
   {
    "id": "month:2",
@@ -2798,7 +4446,11 @@
    "aliases": [],
    "source_of_term": "claims seasonal_interest.*_months",
    "parent": "season:winter",
-   "order": 2
+   "order": 2,
+   "level": "concept",
+   "category": "cat:temporal",
+   "axis": "axis:y",
+   "hierarchy_parent": "season:winter"
   },
   {
    "id": "month:3",
@@ -2809,7 +4461,11 @@
    "aliases": [],
    "source_of_term": "claims seasonal_interest.*_months",
    "parent": "season:spring",
-   "order": 3
+   "order": 3,
+   "level": "concept",
+   "category": "cat:temporal",
+   "axis": "axis:y",
+   "hierarchy_parent": "season:spring"
   },
   {
    "id": "month:4",
@@ -2820,7 +4476,11 @@
    "aliases": [],
    "source_of_term": "claims seasonal_interest.*_months",
    "parent": "season:spring",
-   "order": 4
+   "order": 4,
+   "level": "concept",
+   "category": "cat:temporal",
+   "axis": "axis:y",
+   "hierarchy_parent": "season:spring"
   },
   {
    "id": "month:5",
@@ -2831,7 +4491,11 @@
    "aliases": [],
    "source_of_term": "claims seasonal_interest.*_months",
    "parent": "season:spring",
-   "order": 5
+   "order": 5,
+   "level": "concept",
+   "category": "cat:temporal",
+   "axis": "axis:y",
+   "hierarchy_parent": "season:spring"
   },
   {
    "id": "month:6",
@@ -2842,7 +4506,11 @@
    "aliases": [],
    "source_of_term": "claims seasonal_interest.*_months",
    "parent": "season:summer",
-   "order": 6
+   "order": 6,
+   "level": "concept",
+   "category": "cat:temporal",
+   "axis": "axis:y",
+   "hierarchy_parent": "season:summer"
   },
   {
    "id": "month:7",
@@ -2853,7 +4521,11 @@
    "aliases": [],
    "source_of_term": "claims seasonal_interest.*_months",
    "parent": "season:summer",
-   "order": 7
+   "order": 7,
+   "level": "concept",
+   "category": "cat:temporal",
+   "axis": "axis:y",
+   "hierarchy_parent": "season:summer"
   },
   {
    "id": "month:8",
@@ -2864,7 +4536,11 @@
    "aliases": [],
    "source_of_term": "claims seasonal_interest.*_months",
    "parent": "season:summer",
-   "order": 8
+   "order": 8,
+   "level": "concept",
+   "category": "cat:temporal",
+   "axis": "axis:y",
+   "hierarchy_parent": "season:summer"
   },
   {
    "id": "month:9",
@@ -2875,7 +4551,11 @@
    "aliases": [],
    "source_of_term": "claims seasonal_interest.*_months",
    "parent": "season:autumn",
-   "order": 9
+   "order": 9,
+   "level": "concept",
+   "category": "cat:temporal",
+   "axis": "axis:y",
+   "hierarchy_parent": "season:autumn"
   },
   {
    "id": "month:10",
@@ -2886,7 +4566,11 @@
    "aliases": [],
    "source_of_term": "claims seasonal_interest.*_months",
    "parent": "season:autumn",
-   "order": 10
+   "order": 10,
+   "level": "concept",
+   "category": "cat:temporal",
+   "axis": "axis:y",
+   "hierarchy_parent": "season:autumn"
   },
   {
    "id": "month:11",
@@ -2897,7 +4581,11 @@
    "aliases": [],
    "source_of_term": "claims seasonal_interest.*_months",
    "parent": "season:autumn",
-   "order": 11
+   "order": 11,
+   "level": "concept",
+   "category": "cat:temporal",
+   "axis": "axis:y",
+   "hierarchy_parent": "season:autumn"
   },
   {
    "id": "month:12",
@@ -2908,7 +4596,11 @@
    "aliases": [],
    "source_of_term": "claims seasonal_interest.*_months",
    "parent": "season:winter",
-   "order": 12
+   "order": 12,
+   "level": "concept",
+   "category": "cat:temporal",
+   "axis": "axis:y",
+   "hierarchy_parent": "season:winter"
   },
   {
    "id": "age:young",
@@ -2922,7 +4614,11 @@
     "newly planted"
    ],
    "source_of_term": "claims context / time_to_intended_size / USDA",
-   "order": 1
+   "order": 1,
+   "level": "concept",
+   "category": "cross:time",
+   "axis": null,
+   "hierarchy_parent": "facet:age"
   },
   {
    "id": "age:establishing",
@@ -2935,7 +4631,11 @@
     "after 5 years"
    ],
    "source_of_term": "claims context / time_to_intended_size / USDA",
-   "order": 2
+   "order": 2,
+   "level": "concept",
+   "category": "cross:time",
+   "axis": null,
+   "hierarchy_parent": "facet:age"
   },
   {
    "id": "age:established",
@@ -2949,7 +4649,11 @@
     "once established"
    ],
    "source_of_term": "claims context / time_to_intended_size / USDA",
-   "order": 3
+   "order": 3,
+   "level": "concept",
+   "category": "cross:time",
+   "axis": null,
+   "hierarchy_parent": "facet:age"
   },
   {
    "id": "age:mature",
@@ -2963,7 +4667,11 @@
     "old specimen"
    ],
    "source_of_term": "claims context / time_to_intended_size / USDA",
-   "order": 4
+   "order": 4,
+   "level": "concept",
+   "category": "cross:time",
+   "axis": null,
+   "hierarchy_parent": "facet:age"
   },
   {
    "id": "place:global",
@@ -2972,7 +4680,11 @@
    "label": "Global",
    "definition": "Sources or figures not tied to a region (for example RHS species profiles read as general).",
    "aliases": [],
-   "source_of_term": "sources.json geo_specificity"
+   "source_of_term": "sources.json geo_specificity",
+   "level": "concept",
+   "category": "cross:place",
+   "axis": null,
+   "hierarchy_parent": "facet:place"
   },
   {
    "id": "place:uk",
@@ -2985,7 +4697,11 @@
     "UK"
    ],
    "source_of_term": "claims context 'UK growing conditions'",
-   "parent": "place:global"
+   "parent": "place:global",
+   "level": "concept",
+   "category": "cross:place",
+   "axis": null,
+   "hierarchy_parent": "place:global"
   },
   {
    "id": "place:north_america",
@@ -2999,7 +4715,11 @@
     "United States"
    ],
    "source_of_term": "sources.json geo_specificity",
-   "parent": "place:global"
+   "parent": "place:global",
+   "level": "concept",
+   "category": "cross:place",
+   "axis": null,
+   "hierarchy_parent": "place:global"
   },
   {
    "id": "place:st_louis",
@@ -3012,7 +4732,11 @@
     "Missouri"
    ],
    "source_of_term": "claims context",
-   "parent": "place:north_america"
+   "parent": "place:north_america",
+   "level": "concept",
+   "category": "cross:place",
+   "axis": null,
+   "hierarchy_parent": "place:north_america"
   },
   {
    "id": "place:pnw",
@@ -3026,7 +4750,11 @@
     "maritime Pacific Northwest"
    ],
    "source_of_term": "sources.json geo_specificity",
-   "parent": "place:north_america"
+   "parent": "place:north_america",
+   "level": "concept",
+   "category": "cross:place",
+   "axis": null,
+   "hierarchy_parent": "place:north_america"
   },
   {
    "id": "place:willamette_valley",
@@ -3039,7 +4767,11 @@
     "Oregon"
    ],
    "source_of_term": "claims context",
-   "parent": "place:pnw"
+   "parent": "place:pnw",
+   "level": "concept",
+   "category": "cross:place",
+   "axis": null,
+   "hierarchy_parent": "place:pnw"
   },
   {
    "id": "place:bc",
@@ -3052,7 +4784,11 @@
     "western BC"
    ],
    "source_of_term": "sources.json geo_specificity",
-   "parent": "place:pnw"
+   "parent": "place:pnw",
+   "level": "concept",
+   "category": "cross:place",
+   "axis": null,
+   "hierarchy_parent": "place:pnw"
   },
   {
    "id": "place:vancouver",
@@ -3070,7 +4806,11 @@
     "温哥华"
    ],
    "source_of_term": "schema scope; sources.json; intent_map 'my area'",
-   "parent": "place:bc"
+   "parent": "place:bc",
+   "level": "concept",
+   "category": "cross:place",
+   "axis": null,
+   "hierarchy_parent": "place:bc"
   },
   {
    "id": "place:city_of_vancouver",
@@ -3083,7 +4823,11 @@
     "city"
    ],
    "source_of_term": "cov_trees",
-   "parent": "place:vancouver"
+   "parent": "place:vancouver",
+   "level": "concept",
+   "category": "cross:place",
+   "axis": null,
+   "hierarchy_parent": "place:vancouver"
   },
   {
    "id": "place:north_vancouver",
@@ -3096,7 +4840,11 @@
     "North Van"
    ],
    "source_of_term": "brief salal scene",
-   "parent": "place:vancouver"
+   "parent": "place:vancouver",
+   "level": "concept",
+   "category": "cross:place",
+   "axis": null,
+   "hierarchy_parent": "place:vancouver"
   },
   {
    "id": "origin:native",
@@ -3109,7 +4857,11 @@
     "native species",
     "原生"
    ],
-   "source_of_term": "schema ecological_value 'native'; intent_map 'native'"
+   "source_of_term": "schema ecological_value 'native'; intent_map 'native'",
+   "level": "concept",
+   "category": "cat:ecological",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:origin"
   },
   {
    "id": "origin:native_bc_west_of_cascades",
@@ -3123,7 +4875,11 @@
     "native to Vancouver"
    ],
    "source_of_term": "schema entity.origin_status",
-   "parent": "origin:native"
+   "parent": "origin:native",
+   "level": "concept",
+   "category": "cat:ecological",
+   "axis": "axis:y",
+   "hierarchy_parent": "origin:native"
   },
   {
    "id": "origin:native_north_america",
@@ -3135,7 +4891,11 @@
     "North American native"
    ],
    "source_of_term": "schema entity.origin_status",
-   "parent": "origin:native"
+   "parent": "origin:native",
+   "level": "concept",
+   "category": "cat:ecological",
+   "axis": "axis:y",
+   "hierarchy_parent": "origin:native"
   },
   {
    "id": "origin:non_native",
@@ -3147,7 +4907,11 @@
     "exotic",
     "introduced"
    ],
-   "source_of_term": "schema entity.origin_status"
+   "source_of_term": "schema entity.origin_status",
+   "level": "concept",
+   "category": "cat:ecological",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:origin"
   },
   {
    "id": "origin:invasive_bc",
@@ -3158,7 +4922,11 @@
    "aliases": [
     "invasive"
    ],
-   "source_of_term": "schema entity.origin_status"
+   "source_of_term": "schema entity.origin_status",
+   "level": "concept",
+   "category": "cat:ecological",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:origin"
   },
   {
    "id": "invasive:not_listed",
@@ -3168,7 +4936,11 @@
    "definition": "Does not appear on BC or ISCBC invasive lists.",
    "aliases": [],
    "source_of_term": "schema invasive_status (ISCBC)",
-   "order": 1
+   "order": 1,
+   "level": "concept",
+   "category": "cat:ecological",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:invasive"
   },
   {
    "id": "invasive:watch",
@@ -3178,7 +4950,11 @@
    "definition": "Flagged for monitoring; not regulated.",
    "aliases": [],
    "source_of_term": "schema invasive_status (ISCBC)",
-   "order": 2
+   "order": 2,
+   "level": "concept",
+   "category": "cat:ecological",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:invasive"
   },
   {
    "id": "invasive:regulated_bc",
@@ -3188,7 +4964,11 @@
    "definition": "Control required under BC regulation.",
    "aliases": [],
    "source_of_term": "schema invasive_status (ISCBC)",
-   "order": 3
+   "order": 3,
+   "level": "concept",
+   "category": "cat:ecological",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:invasive"
   },
   {
    "id": "invasive:prohibited_bc",
@@ -3198,7 +4978,11 @@
    "definition": "Sale or planting prohibited in BC.",
    "aliases": [],
    "source_of_term": "schema invasive_status (ISCBC)",
-   "order": 4
+   "order": 4,
+   "level": "concept",
+   "category": "cat:ecological",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:invasive"
   },
   {
    "id": "stress:drought",
@@ -3210,7 +4994,11 @@
     "drought tolerant",
     "dry tolerant"
    ],
-   "source_of_term": "schema resistances starter list (M11)"
+   "source_of_term": "schema resistances starter list (M11)",
+   "level": "concept",
+   "category": "cat:ecological",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:stress"
   },
   {
    "id": "stress:salt",
@@ -3222,7 +5010,11 @@
     "coastal salt",
     "salt spray"
    ],
-   "source_of_term": "schema resistances starter list (M11)"
+   "source_of_term": "schema resistances starter list (M11)",
+   "level": "concept",
+   "category": "cat:ecological",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:stress"
   },
   {
    "id": "stress:wind",
@@ -3233,7 +5025,11 @@
    "aliases": [
     "windy"
    ],
-   "source_of_term": "schema resistances starter list (M11)"
+   "source_of_term": "schema resistances starter list (M11)",
+   "level": "concept",
+   "category": "cat:ecological",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:stress"
   },
   {
    "id": "stress:winter_wet",
@@ -3245,7 +5041,11 @@
     "waterlogging",
     "wet winters"
    ],
-   "source_of_term": "schema resistances starter list (M11)"
+   "source_of_term": "schema resistances starter list (M11)",
+   "level": "concept",
+   "category": "cat:ecological",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:stress"
   },
   {
    "id": "stress:urban_pollution",
@@ -3257,7 +5057,11 @@
     "pollution",
     "street conditions"
    ],
-   "source_of_term": "schema resistances starter list (M11)"
+   "source_of_term": "schema resistances starter list (M11)",
+   "level": "concept",
+   "category": "cat:ecological",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:stress"
   },
   {
    "id": "stress:leaf_scorch",
@@ -3269,7 +5073,11 @@
     "scorch",
     "sunburn"
    ],
-   "source_of_term": "schema resistances starter list (M11)"
+   "source_of_term": "schema resistances starter list (M11)",
+   "level": "concept",
+   "category": "cat:ecological",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:stress"
   },
   {
    "id": "stress:black_walnut",
@@ -3281,7 +5089,11 @@
     "juglone",
     "under walnut"
    ],
-   "source_of_term": "schema resistances starter list (M11); MOBOT"
+   "source_of_term": "schema resistances starter list (M11); MOBOT",
+   "level": "concept",
+   "category": "cat:ecological",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:stress"
   },
   {
    "id": "browsing:deer",
@@ -3293,7 +5105,11 @@
     "deer resistant",
     "deer-proof"
    ],
-   "source_of_term": "schema resistances"
+   "source_of_term": "schema resistances",
+   "level": "concept",
+   "category": "cat:ecological",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:browsing"
   },
   {
    "id": "browsing:rabbit",
@@ -3304,7 +5120,11 @@
    "aliases": [
     "rabbit resistant"
    ],
-   "source_of_term": "schema resistances"
+   "source_of_term": "schema resistances",
+   "level": "concept",
+   "category": "cat:ecological",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:browsing"
   },
   {
    "id": "pest:pest",
@@ -3315,7 +5135,11 @@
    "aliases": [
     "pest resistant"
    ],
-   "source_of_term": "schema resistances"
+   "source_of_term": "schema resistances",
+   "level": "concept",
+   "category": "cat:ecological",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:pest"
   },
   {
    "id": "pest:disease",
@@ -3326,7 +5150,11 @@
    "aliases": [
     "disease resistant"
    ],
-   "source_of_term": "schema resistances"
+   "source_of_term": "schema resistances",
+   "level": "concept",
+   "category": "cat:ecological",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:pest"
   },
   {
    "id": "pest:abiotic_disorder",
@@ -3335,7 +5163,11 @@
    "label": "Abiotic disorder",
    "definition": "Pest or disease 'Abiotic disorder': Damage from non-living causes: weather, soil, chemicals.",
    "aliases": [],
-   "source_of_term": "kpu pest list"
+   "source_of_term": "kpu pest list",
+   "level": "concept",
+   "category": "cat:ecological",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:pest"
   },
   {
    "id": "pest:adelgids",
@@ -3344,7 +5176,11 @@
    "label": "Adelgids",
    "definition": "Pest or disease 'Adelgids': Small sap-sucking insects on conifers.",
    "aliases": [],
-   "source_of_term": "kpu pest list"
+   "source_of_term": "kpu pest list",
+   "level": "concept",
+   "category": "cat:ecological",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:pest"
   },
   {
    "id": "pest:anthracnose",
@@ -3353,7 +5189,11 @@
    "label": "Anthracnose",
    "definition": "Pest or disease 'Anthracnose': A fungal disease causing leaf and shoot blight, worse in wet springs.",
    "aliases": [],
-   "source_of_term": "kpu pest list"
+   "source_of_term": "kpu pest list",
+   "level": "concept",
+   "category": "cat:ecological",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:pest"
   },
   {
    "id": "pest:aphids",
@@ -3362,7 +5202,11 @@
    "label": "Aphids",
    "definition": "Pest or disease 'Aphids': Small sap-sucking insects that cluster on new growth.",
    "aliases": [],
-   "source_of_term": "kpu pest list"
+   "source_of_term": "kpu pest list",
+   "level": "concept",
+   "category": "cat:ecological",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:pest"
   },
   {
    "id": "pest:bacterial_leaf_spot",
@@ -3371,7 +5215,11 @@
    "label": "Bacterial leaf spot",
    "definition": "Pest or disease 'Bacterial leaf spot': Water-soaked spots on leaves from bacteria.",
    "aliases": [],
-   "source_of_term": "kpu pest list"
+   "source_of_term": "kpu pest list",
+   "level": "concept",
+   "category": "cat:ecological",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:pest"
   },
   {
    "id": "pest:beetles_or_weevils",
@@ -3380,7 +5228,11 @@
    "label": "Beetles or weevils",
    "definition": "Pest or disease 'Beetles or weevils': Chewing beetles; root weevils notch leaves and eat roots.",
    "aliases": [],
-   "source_of_term": "kpu pest list"
+   "source_of_term": "kpu pest list",
+   "level": "concept",
+   "category": "cat:ecological",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:pest"
   },
   {
    "id": "pest:blight_or_needle_cast",
@@ -3389,7 +5241,11 @@
    "label": "Blight or needle cast",
    "definition": "Pest or disease 'Blight or needle cast': Fungal dieback of shoots or shedding of needles.",
    "aliases": [],
-   "source_of_term": "kpu pest list"
+   "source_of_term": "kpu pest list",
+   "level": "concept",
+   "category": "cat:ecological",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:pest"
   },
   {
    "id": "pest:canker_or_sap_rot",
@@ -3398,7 +5254,11 @@
    "label": "Canker or sap rot",
    "definition": "Pest or disease 'Canker or sap rot': Dead sunken bark patches, often oozing.",
    "aliases": [],
-   "source_of_term": "kpu pest list"
+   "source_of_term": "kpu pest list",
+   "level": "concept",
+   "category": "cat:ecological",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:pest"
   },
   {
    "id": "pest:caterpillar_or_cutworm",
@@ -3407,7 +5267,11 @@
    "label": "Caterpillar or cutworm",
    "definition": "Pest or disease 'Caterpillar or cutworm': Larvae that chew leaves or cut stems.",
    "aliases": [],
-   "source_of_term": "kpu pest list"
+   "source_of_term": "kpu pest list",
+   "level": "concept",
+   "category": "cat:ecological",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:pest"
   },
   {
    "id": "pest:crown_rot",
@@ -3416,7 +5280,11 @@
    "label": "Crown rot",
    "definition": "Pest or disease 'Crown rot': Rot at the base of the plant, usually from wet soil.",
    "aliases": [],
-   "source_of_term": "kpu pest list"
+   "source_of_term": "kpu pest list",
+   "level": "concept",
+   "category": "cat:ecological",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:pest"
   },
   {
    "id": "pest:dieback",
@@ -3425,7 +5293,11 @@
    "label": "Dieback",
    "definition": "Pest or disease 'Dieback': Progressive death of shoots from the tips.",
    "aliases": [],
-   "source_of_term": "kpu pest list"
+   "source_of_term": "kpu pest list",
+   "level": "concept",
+   "category": "cat:ecological",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:pest"
   },
   {
    "id": "pest:fungal_leaf_spot",
@@ -3434,7 +5306,11 @@
    "label": "Fungal leaf spot",
    "definition": "Pest or disease 'Fungal leaf spot': Spots on leaves caused by fungi.",
    "aliases": [],
-   "source_of_term": "kpu pest list"
+   "source_of_term": "kpu pest list",
+   "level": "concept",
+   "category": "cat:ecological",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:pest"
   },
   {
    "id": "pest:galls",
@@ -3443,7 +5319,11 @@
    "label": "Galls",
    "definition": "Pest or disease 'Galls': Abnormal swellings caused by insects or mites.",
    "aliases": [],
-   "source_of_term": "kpu pest list"
+   "source_of_term": "kpu pest list",
+   "level": "concept",
+   "category": "cat:ecological",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:pest"
   },
   {
    "id": "pest:leaf_miner_insect",
@@ -3452,7 +5332,11 @@
    "label": "Leaf miner insect",
    "definition": "Pest or disease 'Leaf miner insect': Larvae that tunnel inside leaves.",
    "aliases": [],
-   "source_of_term": "kpu pest list"
+   "source_of_term": "kpu pest list",
+   "level": "concept",
+   "category": "cat:ecological",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:pest"
   },
   {
    "id": "pest:leaf_scorch",
@@ -3461,7 +5345,11 @@
    "label": "Leaf scorch",
    "definition": "Pest or disease 'Leaf scorch': Browning of leaf edges from sun, wind or drought.",
    "aliases": [],
-   "source_of_term": "kpu pest list"
+   "source_of_term": "kpu pest list",
+   "level": "concept",
+   "category": "cat:ecological",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:pest"
   },
   {
    "id": "pest:mealybugs",
@@ -3470,7 +5358,11 @@
    "label": "Mealybugs",
    "definition": "Pest or disease 'Mealybugs': Woolly white sap-sucking insects.",
    "aliases": [],
-   "source_of_term": "kpu pest list"
+   "source_of_term": "kpu pest list",
+   "level": "concept",
+   "category": "cat:ecological",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:pest"
   },
   {
    "id": "pest:mildew",
@@ -3479,7 +5371,11 @@
    "label": "Mildew",
    "definition": "Pest or disease 'Mildew': Powdery or downy fungal coating on leaves.",
    "aliases": [],
-   "source_of_term": "kpu pest list"
+   "source_of_term": "kpu pest list",
+   "level": "concept",
+   "category": "cat:ecological",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:pest"
   },
   {
    "id": "pest:mites",
@@ -3488,7 +5384,11 @@
    "label": "Mites",
    "definition": "Pest or disease 'Mites': Tiny sap-sucking arachnids causing stippled leaves.",
    "aliases": [],
-   "source_of_term": "kpu pest list"
+   "source_of_term": "kpu pest list",
+   "level": "concept",
+   "category": "cat:ecological",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:pest"
   },
   {
    "id": "pest:mold",
@@ -3497,7 +5397,11 @@
    "label": "Mold",
    "definition": "Pest or disease 'Mold': Grey or sooty fungal growth on leaves or flowers.",
    "aliases": [],
-   "source_of_term": "kpu pest list"
+   "source_of_term": "kpu pest list",
+   "level": "concept",
+   "category": "cat:ecological",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:pest"
   },
   {
    "id": "pest:nematodes",
@@ -3506,7 +5410,11 @@
    "label": "Nematodes",
    "definition": "Pest or disease 'Nematodes': Microscopic worms attacking roots.",
    "aliases": [],
-   "source_of_term": "kpu pest list"
+   "source_of_term": "kpu pest list",
+   "level": "concept",
+   "category": "cat:ecological",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:pest"
   },
   {
    "id": "pest:root_rot",
@@ -3515,7 +5423,11 @@
    "label": "Root rot",
    "definition": "Pest or disease 'Root rot': Root decay from fungi in wet soil.",
    "aliases": [],
-   "source_of_term": "kpu pest list"
+   "source_of_term": "kpu pest list",
+   "level": "concept",
+   "category": "cat:ecological",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:pest"
   },
   {
    "id": "pest:rust",
@@ -3524,7 +5436,11 @@
    "label": "Rust",
    "definition": "Pest or disease 'Rust': Orange fungal pustules on leaves.",
    "aliases": [],
-   "source_of_term": "kpu pest list"
+   "source_of_term": "kpu pest list",
+   "level": "concept",
+   "category": "cat:ecological",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:pest"
   },
   {
    "id": "pest:scale_insects",
@@ -3533,7 +5449,11 @@
    "label": "Scale insects",
    "definition": "Pest or disease 'Scale insects': Immobile sap-sucking insects under a waxy shell.",
    "aliases": [],
-   "source_of_term": "kpu pest list"
+   "source_of_term": "kpu pest list",
+   "level": "concept",
+   "category": "cat:ecological",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:pest"
   },
   {
    "id": "pest:slugs_or_snails",
@@ -3542,7 +5462,11 @@
    "label": "Slugs or snails",
    "definition": "Pest or disease 'Slugs or snails': Molluscs that chew holes in leaves.",
    "aliases": [],
-   "source_of_term": "kpu pest list"
+   "source_of_term": "kpu pest list",
+   "level": "concept",
+   "category": "cat:ecological",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:pest"
   },
   {
    "id": "pest:thrips",
@@ -3551,7 +5475,11 @@
    "label": "Thrips",
    "definition": "Pest or disease 'Thrips': Tiny insects that rasp leaves and flowers.",
    "aliases": [],
-   "source_of_term": "kpu pest list"
+   "source_of_term": "kpu pest list",
+   "level": "concept",
+   "category": "cat:ecological",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:pest"
   },
   {
    "id": "pest:virus",
@@ -3560,7 +5488,11 @@
    "label": "Virus",
    "definition": "Pest or disease 'Virus': Viral infection causing mottling or distortion.",
    "aliases": [],
-   "source_of_term": "kpu pest list"
+   "source_of_term": "kpu pest list",
+   "level": "concept",
+   "category": "cat:ecological",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:pest"
   },
   {
    "id": "pest:whitefly",
@@ -3569,7 +5501,11 @@
    "label": "Whitefly",
    "definition": "Pest or disease 'Whitefly': Small white sap-sucking flies.",
    "aliases": [],
-   "source_of_term": "kpu pest list"
+   "source_of_term": "kpu pest list",
+   "level": "concept",
+   "category": "cat:ecological",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:pest"
   },
   {
    "id": "pest:wilt",
@@ -3578,7 +5514,1428 @@
    "label": "Wilt",
    "definition": "Pest or disease 'Wilt': Vascular disease causing drooping and death of branches.",
    "aliases": [],
-   "source_of_term": "kpu pest list"
+   "source_of_term": "kpu pest list",
+   "level": "concept",
+   "category": "cat:ecological",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:pest"
+  },
+  {
+   "id": "axis:x",
+   "dimension": "architecture",
+   "facet": "axis",
+   "level": "axis",
+   "label": "Plant Identity & Classification",
+   "definition": "What a plant is: its taxonomic identity (family, genus, species, cultivar) and its growth form.",
+   "aliases": [
+    "X"
+   ],
+   "source_of_term": "ontology (XYZ architecture, brief 2026-11-02; M31)",
+   "categories": [
+    "cat:taxonomy",
+    "cat:growth_form_cat"
+   ],
+   "order": 1,
+   "hierarchy_parent": null
+  },
+  {
+   "id": "axis:y",
+   "dimension": "architecture",
+   "facet": "axis",
+   "level": "axis",
+   "label": "Plant Traits & Performance",
+   "definition": "What a plant needs, how it is built, how it behaves over time and what it does ecologically.",
+   "aliases": [
+    "Y"
+   ],
+   "source_of_term": "ontology (XYZ architecture, brief 2026-11-02; M31)",
+   "categories": [
+    "cat:environment",
+    "cat:morphology",
+    "cat:temporal",
+    "cat:ecological"
+   ],
+   "order": 2,
+   "hierarchy_parent": null
+  },
+  {
+   "id": "axis:z",
+   "dimension": "architecture",
+   "facet": "axis",
+   "level": "axis",
+   "label": "Planting Design Knowledge",
+   "definition": "How plants are used in design: the vertical structure they build, the spaces they make, the way they are composed and the roles they play.",
+   "aliases": [
+    "Z"
+   ],
+   "source_of_term": "ontology (XYZ architecture, brief 2026-11-02; M31)",
+   "categories": [
+    "cat:vertical_structure",
+    "cat:space_making",
+    "cat:composition",
+    "cat:planting_role",
+    "cat:landscape_use"
+   ],
+   "order": 3,
+   "hierarchy_parent": null
+  },
+  {
+   "id": "cat:taxonomy",
+   "dimension": "architecture",
+   "facet": "category",
+   "level": "category",
+   "label": "Taxonomy",
+   "definition": "Botanical identity: family → genus → species → cultivar. Species are the plant records; cultivars are read from claims.",
+   "aliases": [],
+   "source_of_term": "entity records (plants/*.json); names as accepted by the sources cited there",
+   "parent": "axis:x",
+   "facets": [
+    "facet:taxon_family",
+    "facet:taxon_genus"
+   ],
+   "order": 1,
+   "axis": "axis:x",
+   "hierarchy_parent": "axis:x"
+  },
+  {
+   "id": "cat:growth_form_cat",
+   "dimension": "architecture",
+   "facet": "category",
+   "level": "category",
+   "label": "Growth Form",
+   "definition": "The life form a plant is read as (tree, shrub, graminoid, herbaceous perennial, fern, vine) and the KPU plant type that records it.",
+   "aliases": [],
+   "source_of_term": "ontology (M29); KPU plant type",
+   "parent": "axis:x",
+   "facets": [
+    "facet:growth_form",
+    "facet:plant_type"
+   ],
+   "order": 2,
+   "axis": "axis:x",
+   "hierarchy_parent": "axis:x"
+  },
+  {
+   "id": "cat:environment",
+   "dimension": "architecture",
+   "facet": "category",
+   "level": "category",
+   "label": "Environmental Conditions",
+   "definition": "The site conditions a plant needs or tolerates: light, soil, water, hardiness, wind.",
+   "aliases": [],
+   "source_of_term": "KPU facets; RHS and USDA hardiness scales",
+   "parent": "axis:y",
+   "facets": [
+    "facet:exposure",
+    "facet:soil",
+    "facet:water",
+    "facet:hardiness",
+    "facet:hardiness_usda",
+    "facet:hardiness_rhs",
+    "facet:wind"
+   ],
+   "order": 3,
+   "axis": "axis:y",
+   "hierarchy_parent": "axis:y"
+  },
+  {
+   "id": "cat:morphology",
+   "dimension": "architecture",
+   "facet": "category",
+   "level": "category",
+   "label": "Morphology",
+   "definition": "How a plant is built: height, spread, form, habit, texture, colour.",
+   "aliases": [],
+   "source_of_term": "KPU facets",
+   "parent": "axis:y",
+   "facets": [
+    "facet:height_class",
+    "facet:spread_class",
+    "facet:form",
+    "facet:habit",
+    "facet:texture",
+    "facet:colour"
+   ],
+   "order": 4,
+   "axis": "axis:y",
+   "hierarchy_parent": "axis:y"
+  },
+  {
+   "id": "cat:temporal",
+   "dimension": "architecture",
+   "facet": "category",
+   "level": "category",
+   "label": "Temporal Performance",
+   "definition": "How a plant performs through time: growth rate, phenology (months), seasonality, leaf retention, photoperiod.",
+   "aliases": [],
+   "source_of_term": "schema fields; iNaturalist phenology",
+   "parent": "axis:y",
+   "facets": [
+    "facet:growth_rate",
+    "facet:month",
+    "facet:season",
+    "facet:evergreen",
+    "facet:interest",
+    "facet:fruit",
+    "facet:photoperiod"
+   ],
+   "order": 5,
+   "axis": "axis:y",
+   "hierarchy_parent": "axis:y"
+  },
+  {
+   "id": "cat:ecological",
+   "dimension": "architecture",
+   "facet": "category",
+   "level": "category",
+   "label": "Ecological Performance",
+   "definition": "Habitat and ecological value, origin and invasive status, resistance to stress, browsing, pests and disease, plus management and risk (maintenance, toxicity).",
+   "aliases": [],
+   "source_of_term": "schema gate fields; E-Flora BC, USDA PLANTS, ISC BC",
+   "parent": "axis:y",
+   "facets": [
+    "facet:ecology",
+    "facet:origin",
+    "facet:invasive",
+    "facet:stress",
+    "facet:browsing",
+    "facet:pest",
+    "facet:maintenance",
+    "facet:toxicity"
+   ],
+   "order": 6,
+   "axis": "axis:y",
+   "hierarchy_parent": "axis:y"
+  },
+  {
+   "id": "cat:vertical_structure",
+   "dimension": "architecture",
+   "facet": "category",
+   "level": "category",
+   "label": "Vertical Structure",
+   "definition": "The layers a planting is built from, top to bottom, and the height bands planting design works with.",
+   "aliases": [],
+   "source_of_term": "Robinson, N. (2016) The Planting Design Handbook, 3rd ed., Routledge ch. 3 (height bands) and ch. 8 (forest structures, canopy structures)",
+   "parent": "axis:z",
+   "facets": [
+    "facet:layer",
+    "facet:height_band"
+   ],
+   "order": 7,
+   "axis": "axis:z",
+   "hierarchy_parent": "axis:z"
+  },
+  {
+   "id": "cat:space_making",
+   "dimension": "architecture",
+   "facet": "category",
+   "level": "category",
+   "label": "Space-making",
+   "definition": "How planting encloses and shapes outdoor space: screens, scrims, barriers and ceilings; degree, permeability and transparency of enclosure.",
+   "aliases": [],
+   "source_of_term": "Robinson, N. (2016) The Planting Design Handbook, 3rd ed., Routledge ch. 4 'Creating Spaces with Plants'; Mooney, P. (2020) Planting Design: Connecting People and Place, Routledge ch. 5 'Space and Place'",
+   "parent": "axis:z",
+   "facets": [
+    "facet:spatial"
+   ],
+   "order": 8,
+   "axis": "axis:z",
+   "hierarchy_parent": "axis:z"
+  },
+  {
+   "id": "cat:composition",
+   "dimension": "architecture",
+   "facet": "category",
+   "level": "category",
+   "label": "Planting Composition",
+   "definition": "How individual plants are arranged into a planting: matrix, drift, group, scatter, layering.",
+   "aliases": [],
+   "source_of_term": "Oudolf, P. & Kingsbury, N. (2013) Planting: A New Perspective, Timber Press; Robinson, N. (2016) The Planting Design Handbook, 3rd ed., Routledge ch. 8 'Matrix Planting', ch. 12 'Planting Patterns'",
+   "parent": "axis:z",
+   "facets": [
+    "facet:composition"
+   ],
+   "order": 9,
+   "axis": "axis:z",
+   "hierarchy_parent": "axis:z"
+  },
+  {
+   "id": "cat:landscape_use",
+   "dimension": "architecture",
+   "facet": "category",
+   "level": "category",
+   "label": "Landscape Use (KPU)",
+   "definition": "The documented use vocabulary: KPU's landscape-use facet as sources apply it to plants. The bridge from claims into the design concepts (maps_to, rule KG-R1); not a design theory in itself.",
+   "aliases": [],
+   "source_of_term": "KPU landscape-use facet (plantdatabase.kpu.ca); intent_map 'hedge'",
+   "parent": "axis:z",
+   "facets": [
+    "facet:use"
+   ],
+   "order": 10,
+   "axis": "axis:z",
+   "hierarchy_parent": "axis:z"
+  },
+  {
+   "id": "cat:planting_role",
+   "dimension": "architecture",
+   "facet": "category",
+   "level": "category",
+   "label": "Planting Roles",
+   "definition": "The job a plant does in a designed plant community: structural, seasonal theme, ground cover, filler, accent.",
+   "aliases": [],
+   "source_of_term": "Rainer, T. & West, C. (2015) Planting in a Post-Wild World, Timber Press (design layers); Robinson, N. (2016) The Planting Design Handbook, 3rd ed., Routledge ch. 7 'Emphasis and Accent', ch. 12 'Accents'",
+   "parent": "axis:z",
+   "facets": [
+    "facet:role"
+   ],
+   "order": 11,
+   "axis": "axis:z",
+   "hierarchy_parent": "axis:z"
+  },
+  {
+   "id": "cross:place",
+   "dimension": "architecture",
+   "facet": "category",
+   "level": "category",
+   "label": "Place",
+   "definition": "Where a claim holds or was observed: from the Vancouver scale outward.",
+   "aliases": [],
+   "source_of_term": "ontology (XYZ architecture, brief 2026-11-02; M31)",
+   "facets": [
+    "facet:place"
+   ],
+   "cross_layer": true,
+   "order": 1,
+   "axis": null,
+   "hierarchy_parent": null
+  },
+  {
+   "id": "cross:time",
+   "dimension": "architecture",
+   "facet": "category",
+   "level": "category",
+   "label": "Time",
+   "definition": "When a claim holds: the plant's age at observation and the season or month of the record.",
+   "aliases": [],
+   "source_of_term": "ontology (XYZ architecture, brief 2026-11-02; M31)",
+   "facets": [
+    "facet:age"
+   ],
+   "cross_layer": true,
+   "order": 2,
+   "axis": null,
+   "hierarchy_parent": null
+  },
+  {
+   "id": "cross:evidence",
+   "dimension": "architecture",
+   "facet": "category",
+   "level": "category",
+   "label": "Evidence & Sources",
+   "definition": "The claims, sources, conditions and verification status behind every link.",
+   "aliases": [],
+   "source_of_term": "ontology (XYZ architecture, brief 2026-11-02; M31)",
+   "facets": [],
+   "cross_layer": true,
+   "order": 3,
+   "axis": null,
+   "hierarchy_parent": null
+  },
+  {
+   "id": "cross:media",
+   "dimension": "architecture",
+   "facet": "category",
+   "level": "category",
+   "label": "Media",
+   "definition": "Images, GIS layers, planting plans and site observations that can be attached to a claim (`media[]`, schema 0.5.0).",
+   "aliases": [],
+   "source_of_term": "ontology (XYZ architecture, brief 2026-11-02; M31)",
+   "facets": [],
+   "cross_layer": true,
+   "order": 4,
+   "axis": null,
+   "hierarchy_parent": null
+  },
+  {
+   "id": "facet:taxon_family",
+   "dimension": "architecture",
+   "facet": "facet",
+   "level": "facet",
+   "label": "Family",
+   "definition": "The botanical family a plant belongs to, as recorded in its entity record.",
+   "aliases": [],
+   "source_of_term": "ontology (facet node; labels from the brief 2026-11-02 where it names them, else the schema field)",
+   "parent": "cat:taxonomy",
+   "facet_key": "taxon_family",
+   "category": "cat:taxonomy",
+   "axis": "axis:x",
+   "hierarchy_parent": "cat:taxonomy"
+  },
+  {
+   "id": "facet:taxon_genus",
+   "dimension": "architecture",
+   "facet": "facet",
+   "level": "facet",
+   "label": "Genus",
+   "definition": "The genus, read from the scientific name.",
+   "aliases": [],
+   "source_of_term": "ontology (facet node; labels from the brief 2026-11-02 where it names them, else the schema field)",
+   "parent": "cat:taxonomy",
+   "facet_key": "taxon_genus",
+   "category": "cat:taxonomy",
+   "axis": "axis:x",
+   "hierarchy_parent": "cat:taxonomy"
+  },
+  {
+   "id": "facet:growth_form",
+   "dimension": "architecture",
+   "facet": "facet",
+   "level": "facet",
+   "label": "Growth form",
+   "definition": "Organising life-form classes read from the sources (M29), never inferred from 'Broadleaf evergreen'.",
+   "aliases": [],
+   "source_of_term": "ontology (facet node; labels from the brief 2026-11-02 where it names them, else the schema field)",
+   "parent": "cat:growth_form_cat",
+   "facet_key": "growth_form",
+   "category": "cat:growth_form_cat",
+   "axis": "axis:x",
+   "hierarchy_parent": "cat:growth_form_cat"
+  },
+  {
+   "id": "facet:plant_type",
+   "dimension": "architecture",
+   "facet": "facet",
+   "level": "facet",
+   "label": "Plant type (KPU)",
+   "definition": "KPU's plant-type facet, which mixes life form and leaf habit; kept as a trait.",
+   "aliases": [],
+   "source_of_term": "ontology (facet node; labels from the brief 2026-11-02 where it names them, else the schema field)",
+   "parent": "cat:growth_form_cat",
+   "facet_key": "plant_type",
+   "category": "cat:growth_form_cat",
+   "axis": "axis:x",
+   "hierarchy_parent": "cat:growth_form_cat"
+  },
+  {
+   "id": "facet:exposure",
+   "dimension": "architecture",
+   "facet": "facet",
+   "level": "facet",
+   "label": "Light",
+   "definition": "Light the site offers, KPU's exposure facet with three groups (sun, part shade, shade).",
+   "aliases": [],
+   "source_of_term": "ontology (facet node; labels from the brief 2026-11-02 where it names them, else the schema field)",
+   "parent": "cat:environment",
+   "facet_key": "exposure",
+   "category": "cat:environment",
+   "axis": "axis:y",
+   "hierarchy_parent": "cat:environment"
+  },
+  {
+   "id": "facet:soil",
+   "dimension": "architecture",
+   "facet": "facet",
+   "level": "facet",
+   "label": "Soil",
+   "definition": "Soil types a plant takes, KPU's soil facet.",
+   "aliases": [],
+   "source_of_term": "ontology (facet node; labels from the brief 2026-11-02 where it names them, else the schema field)",
+   "parent": "cat:environment",
+   "facet_key": "soil",
+   "category": "cat:environment",
+   "axis": "axis:y",
+   "hierarchy_parent": "cat:environment"
+  },
+  {
+   "id": "facet:water",
+   "dimension": "architecture",
+   "facet": "facet",
+   "level": "facet",
+   "label": "Water",
+   "definition": "Water and drainage regime the plant needs.",
+   "aliases": [],
+   "source_of_term": "ontology (facet node; labels from the brief 2026-11-02 where it names them, else the schema field)",
+   "parent": "cat:environment",
+   "facet_key": "water",
+   "category": "cat:environment",
+   "axis": "axis:y",
+   "hierarchy_parent": "cat:environment"
+  },
+  {
+   "id": "facet:hardiness",
+   "dimension": "architecture",
+   "facet": "facet",
+   "level": "facet",
+   "label": "Hardiness (Canadian zones)",
+   "definition": "Canadian plant hardiness zones (KPU).",
+   "aliases": [],
+   "source_of_term": "ontology (facet node; labels from the brief 2026-11-02 where it names them, else the schema field)",
+   "parent": "cat:environment",
+   "facet_key": "hardiness",
+   "category": "cat:environment",
+   "axis": "axis:y",
+   "hierarchy_parent": "cat:environment"
+  },
+  {
+   "id": "facet:hardiness_usda",
+   "dimension": "architecture",
+   "facet": "facet",
+   "level": "facet",
+   "label": "Hardiness (USDA zones)",
+   "definition": "USDA hardiness zones as given by US sources.",
+   "aliases": [],
+   "source_of_term": "ontology (facet node; labels from the brief 2026-11-02 where it names them, else the schema field)",
+   "parent": "cat:environment",
+   "facet_key": "hardiness_usda",
+   "category": "cat:environment",
+   "axis": "axis:y",
+   "hierarchy_parent": "cat:environment"
+  },
+  {
+   "id": "facet:hardiness_rhs",
+   "dimension": "architecture",
+   "facet": "facet",
+   "level": "facet",
+   "label": "Hardiness (RHS ratings)",
+   "definition": "RHS hardiness ratings H1–H7.",
+   "aliases": [],
+   "source_of_term": "ontology (facet node; labels from the brief 2026-11-02 where it names them, else the schema field)",
+   "parent": "cat:environment",
+   "facet_key": "hardiness_rhs",
+   "category": "cat:environment",
+   "axis": "axis:y",
+   "hierarchy_parent": "cat:environment"
+  },
+  {
+   "id": "facet:wind",
+   "dimension": "architecture",
+   "facet": "facet",
+   "level": "facet",
+   "label": "Wind exposure",
+   "definition": "Need for shelter from wind.",
+   "aliases": [],
+   "source_of_term": "ontology (facet node; labels from the brief 2026-11-02 where it names them, else the schema field)",
+   "parent": "cat:environment",
+   "facet_key": "wind",
+   "category": "cat:environment",
+   "axis": "axis:y",
+   "hierarchy_parent": "cat:environment"
+  },
+  {
+   "id": "facet:height_class",
+   "dimension": "architecture",
+   "facet": "facet",
+   "level": "facet",
+   "label": "Height",
+   "definition": "KPU mature-height classes; quantitative claims span the classes their range covers.",
+   "aliases": [],
+   "source_of_term": "ontology (facet node; labels from the brief 2026-11-02 where it names them, else the schema field)",
+   "parent": "cat:morphology",
+   "facet_key": "height_class",
+   "category": "cat:morphology",
+   "axis": "axis:y",
+   "hierarchy_parent": "cat:morphology"
+  },
+  {
+   "id": "facet:spread_class",
+   "dimension": "architecture",
+   "facet": "facet",
+   "level": "facet",
+   "label": "Spread",
+   "definition": "KPU mature-spread classes.",
+   "aliases": [],
+   "source_of_term": "ontology (facet node; labels from the brief 2026-11-02 where it names them, else the schema field)",
+   "parent": "cat:morphology",
+   "facet_key": "spread_class",
+   "category": "cat:morphology",
+   "axis": "axis:y",
+   "hierarchy_parent": "cat:morphology"
+  },
+  {
+   "id": "facet:form",
+   "dimension": "architecture",
+   "facet": "facet",
+   "level": "facet",
+   "label": "Form",
+   "definition": "Overall outline of the plant (KPU form facet).",
+   "aliases": [],
+   "source_of_term": "ontology (facet node; labels from the brief 2026-11-02 where it names them, else the schema field)",
+   "parent": "cat:morphology",
+   "facet_key": "form",
+   "category": "cat:morphology",
+   "axis": "axis:y",
+   "hierarchy_parent": "cat:morphology"
+  },
+  {
+   "id": "facet:habit",
+   "dimension": "architecture",
+   "facet": "facet",
+   "level": "facet",
+   "label": "Habit",
+   "definition": "Branching and growth habit (KPU habit facet).",
+   "aliases": [],
+   "source_of_term": "ontology (facet node; labels from the brief 2026-11-02 where it names them, else the schema field)",
+   "parent": "cat:morphology",
+   "facet_key": "habit",
+   "category": "cat:morphology",
+   "axis": "axis:y",
+   "hierarchy_parent": "cat:morphology"
+  },
+  {
+   "id": "facet:texture",
+   "dimension": "architecture",
+   "facet": "facet",
+   "level": "facet",
+   "label": "Texture",
+   "definition": "Visual texture, fine to very coarse (KPU).",
+   "aliases": [],
+   "source_of_term": "ontology (facet node; labels from the brief 2026-11-02 where it names them, else the schema field)",
+   "parent": "cat:morphology",
+   "facet_key": "texture",
+   "category": "cat:morphology",
+   "axis": "axis:y",
+   "hierarchy_parent": "cat:morphology"
+  },
+  {
+   "id": "facet:colour",
+   "dimension": "architecture",
+   "facet": "facet",
+   "level": "facet",
+   "label": "Colour",
+   "definition": "Flower and foliage colours (KPU colour list).",
+   "aliases": [],
+   "source_of_term": "ontology (facet node; labels from the brief 2026-11-02 where it names them, else the schema field)",
+   "parent": "cat:morphology",
+   "facet_key": "colour",
+   "category": "cat:morphology",
+   "axis": "axis:y",
+   "hierarchy_parent": "cat:morphology"
+  },
+  {
+   "id": "facet:growth_rate",
+   "dimension": "architecture",
+   "facet": "facet",
+   "level": "facet",
+   "label": "Growth rate",
+   "definition": "Slow, moderate or fast growth.",
+   "aliases": [],
+   "source_of_term": "ontology (facet node; labels from the brief 2026-11-02 where it names them, else the schema field)",
+   "parent": "cat:temporal",
+   "facet_key": "growth_rate",
+   "category": "cat:temporal",
+   "axis": "axis:y",
+   "hierarchy_parent": "cat:temporal"
+  },
+  {
+   "id": "facet:month",
+   "dimension": "architecture",
+   "facet": "facet",
+   "level": "facet",
+   "label": "Phenology (months)",
+   "definition": "Months of flowering or fruiting.",
+   "aliases": [],
+   "source_of_term": "ontology (facet node; labels from the brief 2026-11-02 where it names them, else the schema field)",
+   "parent": "cat:temporal",
+   "facet_key": "month",
+   "category": "cat:temporal",
+   "axis": "axis:y",
+   "hierarchy_parent": "cat:temporal"
+  },
+  {
+   "id": "facet:season",
+   "dimension": "architecture",
+   "facet": "facet",
+   "level": "facet",
+   "label": "Seasonality",
+   "definition": "Season of interest.",
+   "aliases": [],
+   "source_of_term": "ontology (facet node; labels from the brief 2026-11-02 where it names them, else the schema field)",
+   "parent": "cat:temporal",
+   "facet_key": "season",
+   "category": "cat:temporal",
+   "axis": "axis:y",
+   "hierarchy_parent": "cat:temporal"
+  },
+  {
+   "id": "facet:evergreen",
+   "dimension": "architecture",
+   "facet": "facet",
+   "level": "facet",
+   "label": "Leaf retention",
+   "definition": "Whether leaves are held through winter.",
+   "aliases": [],
+   "source_of_term": "ontology (facet node; labels from the brief 2026-11-02 where it names them, else the schema field)",
+   "parent": "cat:temporal",
+   "facet_key": "evergreen",
+   "category": "cat:temporal",
+   "axis": "axis:y",
+   "hierarchy_parent": "cat:temporal"
+  },
+  {
+   "id": "facet:interest",
+   "dimension": "architecture",
+   "facet": "facet",
+   "level": "facet",
+   "label": "Seasonal interest",
+   "definition": "Seasonal interest features (fall colour, winter interest).",
+   "aliases": [],
+   "source_of_term": "ontology (facet node; labels from the brief 2026-11-02 where it names them, else the schema field)",
+   "parent": "cat:temporal",
+   "facet_key": "interest",
+   "category": "cat:temporal",
+   "axis": "axis:y",
+   "hierarchy_parent": "cat:temporal"
+  },
+  {
+   "id": "facet:fruit",
+   "dimension": "architecture",
+   "facet": "facet",
+   "level": "facet",
+   "label": "Fruit",
+   "definition": "Fruit character (edible, showy).",
+   "aliases": [],
+   "source_of_term": "ontology (facet node; labels from the brief 2026-11-02 where it names them, else the schema field)",
+   "parent": "cat:temporal",
+   "facet_key": "fruit",
+   "category": "cat:temporal",
+   "axis": "axis:y",
+   "hierarchy_parent": "cat:temporal"
+  },
+  {
+   "id": "facet:photoperiod",
+   "dimension": "architecture",
+   "facet": "facet",
+   "level": "facet",
+   "label": "Photoperiod",
+   "definition": "Day-length response (survey c4; no source yet).",
+   "aliases": [],
+   "source_of_term": "ontology (facet node; labels from the brief 2026-11-02 where it names them, else the schema field)",
+   "parent": "cat:temporal",
+   "facet_key": "photoperiod",
+   "category": "cat:temporal",
+   "axis": "axis:y",
+   "hierarchy_parent": "cat:temporal"
+  },
+  {
+   "id": "facet:use",
+   "dimension": "architecture",
+   "facet": "facet",
+   "level": "facet",
+   "label": "Landscape use (KPU)",
+   "definition": "KPU landscape uses a source lists the plant for; the documented layer beneath the design concepts.",
+   "aliases": [],
+   "source_of_term": "ontology (facet node; labels from the brief 2026-11-02 where it names them, else the schema field)",
+   "parent": "cat:landscape_use",
+   "facet_key": "use",
+   "category": "cat:landscape_use",
+   "axis": "axis:z",
+   "hierarchy_parent": "cat:landscape_use"
+  },
+  {
+   "id": "facet:ecology",
+   "dimension": "architecture",
+   "facet": "facet",
+   "level": "facet",
+   "label": "Habitat & ecological value",
+   "definition": "Ecological values a plant offers: native, pollinator, bird food, cover, erosion control, habitat structure.",
+   "aliases": [],
+   "source_of_term": "ontology (facet node; labels from the brief 2026-11-02 where it names them, else the schema field)",
+   "parent": "cat:ecological",
+   "facet_key": "ecology",
+   "category": "cat:ecological",
+   "axis": "axis:y",
+   "hierarchy_parent": "cat:ecological"
+  },
+  {
+   "id": "facet:origin",
+   "dimension": "architecture",
+   "facet": "facet",
+   "level": "facet",
+   "label": "Origin status",
+   "definition": "Native or non-native status for BC.",
+   "aliases": [],
+   "source_of_term": "ontology (facet node; labels from the brief 2026-11-02 where it names them, else the schema field)",
+   "parent": "cat:ecological",
+   "facet_key": "origin",
+   "category": "cat:ecological",
+   "axis": "axis:y",
+   "hierarchy_parent": "cat:ecological"
+  },
+  {
+   "id": "facet:invasive",
+   "dimension": "architecture",
+   "facet": "facet",
+   "level": "facet",
+   "label": "Invasive status",
+   "definition": "Invasive-species listing status in BC.",
+   "aliases": [],
+   "source_of_term": "ontology (facet node; labels from the brief 2026-11-02 where it names them, else the schema field)",
+   "parent": "cat:ecological",
+   "facet_key": "invasive",
+   "category": "cat:ecological",
+   "axis": "axis:y",
+   "hierarchy_parent": "cat:ecological"
+  },
+  {
+   "id": "facet:stress",
+   "dimension": "architecture",
+   "facet": "facet",
+   "level": "facet",
+   "label": "Stress tolerance",
+   "definition": "Abiotic stresses tolerated (drought, salt, wind, winter wet…).",
+   "aliases": [],
+   "source_of_term": "ontology (facet node; labels from the brief 2026-11-02 where it names them, else the schema field)",
+   "parent": "cat:ecological",
+   "facet_key": "stress",
+   "category": "cat:ecological",
+   "axis": "axis:y",
+   "hierarchy_parent": "cat:ecological"
+  },
+  {
+   "id": "facet:browsing",
+   "dimension": "architecture",
+   "facet": "facet",
+   "level": "facet",
+   "label": "Browsing resistance",
+   "definition": "Resistance to deer and rabbit browsing.",
+   "aliases": [],
+   "source_of_term": "ontology (facet node; labels from the brief 2026-11-02 where it names them, else the schema field)",
+   "parent": "cat:ecological",
+   "facet_key": "browsing",
+   "category": "cat:ecological",
+   "axis": "axis:y",
+   "hierarchy_parent": "cat:ecological"
+  },
+  {
+   "id": "facet:pest",
+   "dimension": "architecture",
+   "facet": "facet",
+   "level": "facet",
+   "label": "Pests & diseases",
+   "definition": "Pests and diseases, as susceptibility or as resistance.",
+   "aliases": [],
+   "source_of_term": "ontology (facet node; labels from the brief 2026-11-02 where it names them, else the schema field)",
+   "parent": "cat:ecological",
+   "facet_key": "pest",
+   "category": "cat:ecological",
+   "axis": "axis:y",
+   "hierarchy_parent": "cat:ecological"
+  },
+  {
+   "id": "facet:maintenance",
+   "dimension": "architecture",
+   "facet": "facet",
+   "level": "facet",
+   "label": "Maintenance",
+   "definition": "Maintenance level required.",
+   "aliases": [],
+   "source_of_term": "ontology (facet node; labels from the brief 2026-11-02 where it names them, else the schema field)",
+   "parent": "cat:ecological",
+   "facet_key": "maintenance",
+   "category": "cat:ecological",
+   "axis": "axis:y",
+   "hierarchy_parent": "cat:ecological"
+  },
+  {
+   "id": "facet:toxicity",
+   "dimension": "architecture",
+   "facet": "facet",
+   "level": "facet",
+   "label": "Toxicity",
+   "definition": "Toxicity to pets, humans or livestock.",
+   "aliases": [],
+   "source_of_term": "ontology (facet node; labels from the brief 2026-11-02 where it names them, else the schema field)",
+   "parent": "cat:ecological",
+   "facet_key": "toxicity",
+   "category": "cat:ecological",
+   "axis": "axis:y",
+   "hierarchy_parent": "cat:ecological"
+  },
+  {
+   "id": "facet:age",
+   "dimension": "architecture",
+   "facet": "facet",
+   "level": "facet",
+   "label": "Plant age",
+   "definition": "Age bands of the plant at the time a value holds.",
+   "aliases": [],
+   "source_of_term": "ontology (facet node; labels from the brief 2026-11-02 where it names them, else the schema field)",
+   "parent": "cross:time",
+   "facet_key": "age",
+   "category": "cross:time",
+   "axis": null,
+   "hierarchy_parent": "cross:time"
+  },
+  {
+   "id": "facet:place",
+   "dimension": "architecture",
+   "facet": "facet",
+   "level": "facet",
+   "label": "Place",
+   "definition": "Geographic scale of the record.",
+   "aliases": [],
+   "source_of_term": "ontology (facet node; labels from the brief 2026-11-02 where it names them, else the schema field)",
+   "parent": "cross:place",
+   "facet_key": "place",
+   "category": "cross:place",
+   "axis": null,
+   "hierarchy_parent": "cross:place"
+  },
+  {
+   "id": "facet:layer",
+   "dimension": "architecture",
+   "facet": "facet",
+   "level": "facet",
+   "label": "Vertical layers",
+   "definition": "The vertical layers of a planting: canopy, understorey, shrub layer, ground layer.",
+   "aliases": [],
+   "source_of_term": "ontology (facet node; labels from the brief 2026-11-02 where it names them, else the schema field)",
+   "parent": "cat:vertical_structure",
+   "facet_key": "layer",
+   "category": "cat:vertical_structure",
+   "axis": "axis:z",
+   "hierarchy_parent": "cat:vertical_structure"
+  },
+  {
+   "id": "facet:height_band",
+   "dimension": "architecture",
+   "facet": "facet",
+   "level": "facet",
+   "label": "Height bands",
+   "definition": "Robinson's five planting-height bands, from carpeting plants to trees.",
+   "aliases": [],
+   "source_of_term": "ontology (facet node; labels from the brief 2026-11-02 where it names them, else the schema field)",
+   "parent": "cat:vertical_structure",
+   "facet_key": "height_band",
+   "category": "cat:vertical_structure",
+   "axis": "axis:z",
+   "hierarchy_parent": "cat:vertical_structure"
+  },
+  {
+   "id": "facet:spatial",
+   "dimension": "architecture",
+   "facet": "facet",
+   "level": "facet",
+   "label": "Spatial elements",
+   "definition": "Spatial elements planting can make: screen, scrim, barrier, ceiling.",
+   "aliases": [],
+   "source_of_term": "ontology (facet node; labels from the brief 2026-11-02 where it names them, else the schema field)",
+   "parent": "cat:space_making",
+   "facet_key": "spatial",
+   "category": "cat:space_making",
+   "axis": "axis:z",
+   "hierarchy_parent": "cat:space_making"
+  },
+  {
+   "id": "facet:composition",
+   "dimension": "architecture",
+   "facet": "facet",
+   "level": "facet",
+   "label": "Composition patterns",
+   "definition": "Patterns for arranging plants: matrix, drift, group, scatter, layering.",
+   "aliases": [],
+   "source_of_term": "ontology (facet node; labels from the brief 2026-11-02 where it names them, else the schema field)",
+   "parent": "cat:composition",
+   "facet_key": "composition",
+   "category": "cat:composition",
+   "axis": "axis:z",
+   "hierarchy_parent": "cat:composition"
+  },
+  {
+   "id": "facet:role",
+   "dimension": "architecture",
+   "facet": "facet",
+   "level": "facet",
+   "label": "Planting roles",
+   "definition": "Roles in a designed plant community: structural, seasonal theme, ground cover, filler, accent.",
+   "aliases": [],
+   "source_of_term": "ontology (facet node; labels from the brief 2026-11-02 where it names them, else the schema field)",
+   "parent": "cat:planting_role",
+   "facet_key": "role",
+   "category": "cat:planting_role",
+   "axis": "axis:z",
+   "hierarchy_parent": "cat:planting_role"
+  },
+  {
+   "id": "family:ericaceae",
+   "dimension": "taxonomy",
+   "facet": "taxon_family",
+   "label": "Ericaceae",
+   "definition": "The plant family Ericaceae, as recorded in the entity records of gaultheria-shallon, vaccinium-ovatum.",
+   "aliases": [],
+   "source_of_term": "entity.family (plants/*.json)",
+   "level": "concept",
+   "category": "cat:taxonomy",
+   "axis": "axis:x",
+   "hierarchy_parent": "facet:taxon_family"
+  },
+  {
+   "id": "family:sapindaceae",
+   "dimension": "taxonomy",
+   "facet": "taxon_family",
+   "label": "Sapindaceae",
+   "definition": "The plant family Sapindaceae, as recorded in the entity records of acer-palmatum.",
+   "aliases": [],
+   "source_of_term": "entity.family (plants/*.json)",
+   "level": "concept",
+   "category": "cat:taxonomy",
+   "axis": "axis:x",
+   "hierarchy_parent": "facet:taxon_family"
+  },
+  {
+   "id": "genus:acer",
+   "dimension": "taxonomy",
+   "facet": "taxon_genus",
+   "label": "Acer",
+   "definition": "The genus Acer, read from the scientific name; family Sapindaceae.",
+   "aliases": [],
+   "source_of_term": "entity.scientific_name (plants/*.json)",
+   "parent": "family:sapindaceae",
+   "level": "concept",
+   "category": "cat:taxonomy",
+   "axis": "axis:x",
+   "hierarchy_parent": "family:sapindaceae"
+  },
+  {
+   "id": "genus:gaultheria",
+   "dimension": "taxonomy",
+   "facet": "taxon_genus",
+   "label": "Gaultheria",
+   "definition": "The genus Gaultheria, read from the scientific name; family Ericaceae.",
+   "aliases": [],
+   "source_of_term": "entity.scientific_name (plants/*.json)",
+   "parent": "family:ericaceae",
+   "level": "concept",
+   "category": "cat:taxonomy",
+   "axis": "axis:x",
+   "hierarchy_parent": "family:ericaceae"
+  },
+  {
+   "id": "genus:vaccinium",
+   "dimension": "taxonomy",
+   "facet": "taxon_genus",
+   "label": "Vaccinium",
+   "definition": "The genus Vaccinium, read from the scientific name; family Ericaceae.",
+   "aliases": [],
+   "source_of_term": "entity.scientific_name (plants/*.json)",
+   "parent": "family:ericaceae",
+   "level": "concept",
+   "category": "cat:taxonomy",
+   "axis": "axis:x",
+   "hierarchy_parent": "family:ericaceae"
+  },
+  {
+   "id": "layer:canopy",
+   "dimension": "design",
+   "facet": "layer",
+   "label": "Canopy",
+   "definition": "The uppermost layer: tree crowns that form the roof of a planting and shade everything beneath.",
+   "aliases": [
+    "canopy layer",
+    "overstorey",
+    "overstory",
+    "tree canopy"
+   ],
+   "source_of_term": "Robinson, N. (2016) The Planting Design Handbook, 3rd ed., Routledge, ch. 8 'Forest Structures' / 'Typical Canopy Structures as Models for Design' (tree canopy)",
+   "order": 1,
+   "level": "concept",
+   "category": "cat:vertical_structure",
+   "axis": "axis:z",
+   "hierarchy_parent": "facet:layer"
+  },
+  {
+   "id": "layer:understorey",
+   "dimension": "design",
+   "facet": "layer",
+   "label": "Understory",
+   "definition": "Small trees and large shrubs that grow beneath the canopy and above the shrub layer (Robinson's low tree canopy / sub-canopy).",
+   "aliases": [
+    "low tree canopy",
+    "sub-canopy",
+    "subcanopy",
+    "understorey"
+   ],
+   "source_of_term": "Robinson, N. (2016) The Planting Design Handbook, 3rd ed., Routledge, ch. 8 (two- and three-layer canopy structures: 'low tree canopy')",
+   "order": 2,
+   "level": "concept",
+   "category": "cat:vertical_structure",
+   "axis": "axis:z",
+   "hierarchy_parent": "facet:layer"
+  },
+  {
+   "id": "layer:shrub",
+   "dimension": "design",
+   "facet": "layer",
+   "label": "Shrub layer",
+   "definition": "Woody plants branching from near the ground that fill the space between the ground layer and the trees.",
+   "aliases": [
+    "bush canopy",
+    "shrub and sapling layer",
+    "shrub stratum"
+   ],
+   "source_of_term": "Robinson, N. (2016) The Planting Design Handbook, 3rd ed., Routledge, ch. 8 ('shrub and sapling layer' in the canopy-structure types)",
+   "order": 3,
+   "level": "concept",
+   "category": "cat:vertical_structure",
+   "axis": "axis:z",
+   "hierarchy_parent": "facet:layer"
+  },
+  {
+   "id": "layer:ground",
+   "dimension": "design",
+   "facet": "layer",
+   "label": "Ground layer",
+   "definition": "The lowest layer: herbaceous, carpeting and low woody plants that cover the soil.",
+   "aliases": [
+    "field layer",
+    "ground cover layer",
+    "groundcover layer",
+    "herb layer"
+   ],
+   "source_of_term": "Robinson, N. (2016) The Planting Design Handbook, 3rd ed., Routledge, ch. 8 ('herb layer' / ground cover principle) and ch. 3 'Ground-level Planting (Carpeting Plants)'",
+   "order": 4,
+   "level": "concept",
+   "category": "cat:vertical_structure",
+   "axis": "axis:z",
+   "hierarchy_parent": "facet:layer"
+  },
+  {
+   "id": "height_band:ground_level",
+   "dimension": "design",
+   "facet": "height_band",
+   "label": "Ground-level planting (carpeting)",
+   "definition": "Carpeting plants at ground level. Bounds are approximate readings of the heading names (knee ≈ 0.5 m, eye ≈ 1.6 m) — to confirm against the chapter text.",
+   "aliases": [],
+   "source_of_term": "Robinson, N. (2016) The Planting Design Handbook, 3rd ed., Routledge, ch. 3 'Spatial Characteristics of Plants' (section headings)",
+   "order": 1,
+   "min_m": 0,
+   "max_m": 0.15,
+   "level": "concept",
+   "category": "cat:vertical_structure",
+   "axis": "axis:z",
+   "hierarchy_parent": "facet:height_band"
+  },
+  {
+   "id": "height_band:low",
+   "dimension": "design",
+   "facet": "height_band",
+   "label": "Low planting (below knee)",
+   "definition": "Shrubs and herbaceous plants below knee height. Bounds are approximate readings of the heading names (knee ≈ 0.5 m, eye ≈ 1.6 m) — to confirm against the chapter text.",
+   "aliases": [],
+   "source_of_term": "Robinson, N. (2016) The Planting Design Handbook, 3rd ed., Routledge, ch. 3 'Spatial Characteristics of Plants' (section headings)",
+   "order": 2,
+   "min_m": 0.15,
+   "max_m": 0.5,
+   "level": "concept",
+   "category": "cat:vertical_structure",
+   "axis": "axis:z",
+   "hierarchy_parent": "facet:height_band"
+  },
+  {
+   "id": "height_band:medium",
+   "dimension": "design",
+   "facet": "height_band",
+   "label": "Medium-height planting (knee to eye level)",
+   "definition": "Planting between knee and eye level: a physical barrier that still allows views over it. Bounds are approximate readings of the heading names (knee ≈ 0.5 m, eye ≈ 1.6 m) — to confirm against the chapter text.",
+   "aliases": [],
+   "source_of_term": "Robinson, N. (2016) The Planting Design Handbook, 3rd ed., Routledge, ch. 3 'Spatial Characteristics of Plants' (section headings)",
+   "order": 3,
+   "min_m": 0.5,
+   "max_m": 1.6,
+   "level": "concept",
+   "category": "cat:vertical_structure",
+   "axis": "axis:z",
+   "hierarchy_parent": "facet:height_band"
+  },
+  {
+   "id": "height_band:above_eye",
+   "dimension": "design",
+   "facet": "height_band",
+   "label": "Tall shrub planting (above eye level)",
+   "definition": "Planting above eye level: visual enclosure and screening. Bounds are approximate readings of the heading names (knee ≈ 0.5 m, eye ≈ 1.6 m) — to confirm against the chapter text.",
+   "aliases": [],
+   "source_of_term": "Robinson, N. (2016) The Planting Design Handbook, 3rd ed., Routledge, ch. 3 'Spatial Characteristics of Plants' (section headings)",
+   "order": 4,
+   "min_m": 1.6,
+   "max_m": 6,
+   "level": "concept",
+   "category": "cat:vertical_structure",
+   "axis": "axis:z",
+   "hierarchy_parent": "facet:height_band"
+  },
+  {
+   "id": "height_band:tree",
+   "dimension": "design",
+   "facet": "height_band",
+   "label": "Tree planting",
+   "definition": "Trees: canopy, ceiling and shade above head height. Bounds are approximate readings of the heading names (knee ≈ 0.5 m, eye ≈ 1.6 m) — to confirm against the chapter text.",
+   "aliases": [],
+   "source_of_term": "Robinson, N. (2016) The Planting Design Handbook, 3rd ed., Routledge, ch. 3 'Spatial Characteristics of Plants' (section headings)",
+   "order": 5,
+   "min_m": 4,
+   "level": "concept",
+   "category": "cat:vertical_structure",
+   "axis": "axis:z",
+   "hierarchy_parent": "facet:height_band"
+  },
+  {
+   "id": "spatial:screen",
+   "dimension": "design",
+   "facet": "spatial",
+   "label": "Screen",
+   "definition": "Planting that blocks a view: visual enclosure above eye level, opaque in the seasons it has to work.",
+   "aliases": [
+    "privacy planting",
+    "privacy screen",
+    "screening",
+    "visual screen"
+   ],
+   "source_of_term": "Robinson, N. (2016) The Planting Design Handbook, 3rd ed., Routledge, ch. 3 'Planting Above Eye Level (Tall Shrub Planting)' and ch. 4 'Permeability and Transparency of Enclosure'",
+   "order": 1,
+   "level": "concept",
+   "category": "cat:space_making",
+   "axis": "axis:z",
+   "hierarchy_parent": "facet:spatial"
+  },
+  {
+   "id": "spatial:scrim",
+   "dimension": "design",
+   "facet": "spatial",
+   "label": "Scrim",
+   "definition": "A partly transparent screen: planting open enough to be seen through, which filters a view rather than blocking it. Term from the brief; not found under this name in Robinson, whose nearest heading is 'Permeability and Transparency of Enclosure' — to confirm.",
+   "aliases": [
+    "filtered screen",
+    "see-through screen",
+    "semi-transparent screen",
+    "veil"
+   ],
+   "source_of_term": "brief 2026-11-02; Robinson, N. (2016) The Planting Design Handbook, 3rd ed., Routledge, ch. 4 'Permeability and Transparency of Enclosure' (nearest documented concept)",
+   "order": 2,
+   "to_confirm": true,
+   "level": "concept",
+   "category": "cat:space_making",
+   "axis": "axis:z",
+   "hierarchy_parent": "facet:spatial"
+  },
+  {
+   "id": "spatial:barrier",
+   "dimension": "design",
+   "facet": "spatial",
+   "label": "Barrier",
+   "definition": "Planting that stops movement: a dense, continuous physical enclosure, with or without a visual screen.",
+   "aliases": [
+    "hedge barrier",
+    "physical barrier",
+    "security planting"
+   ],
+   "source_of_term": "Robinson, N. (2016) The Planting Design Handbook, 3rd ed., Routledge, ch. 4 'Degree of Enclosure' (physical vs visual enclosure) and ch. 3 'Knee- to Eye-level Planting'",
+   "order": 3,
+   "level": "concept",
+   "category": "cat:space_making",
+   "axis": "axis:z",
+   "hierarchy_parent": "facet:spatial"
+  },
+  {
+   "id": "spatial:ceiling",
+   "dimension": "design",
+   "facet": "spatial",
+   "label": "Ceiling",
+   "definition": "Tree crowns forming an overhead plane that encloses a space from above.",
+   "aliases": [
+    "canopy ceiling",
+    "overhead plane",
+    "shade canopy"
+   ],
+   "source_of_term": "Robinson, N. (2016) The Planting Design Handbook, 3rd ed., Routledge, ch. 3 'Tree Planting' and ch. 4 'Degree of Enclosure'",
+   "order": 4,
+   "level": "concept",
+   "category": "cat:space_making",
+   "axis": "axis:z",
+   "hierarchy_parent": "facet:spatial"
+  },
+  {
+   "id": "composition:matrix",
+   "dimension": "design",
+   "facet": "composition",
+   "label": "Matrix",
+   "definition": "A continuous ground-covering planting of one or a few species into which structural and seasonal plants are set.",
+   "aliases": [
+    "groundcover matrix",
+    "matrix planting"
+   ],
+   "source_of_term": "Oudolf, P. & Kingsbury, N. (2013) Planting: A New Perspective, Timber Press (matrix plants); Robinson, N. (2016) The Planting Design Handbook, 3rd ed., Routledge, ch. 8 'Matrix Planting'; Rainer, T. & West, C. (2015) Planting in a Post-Wild World, Timber Press (groundcover matrix layer)",
+   "order": 1,
+   "level": "concept",
+   "category": "cat:composition",
+   "axis": "axis:z",
+   "hierarchy_parent": "facet:composition"
+  },
+  {
+   "id": "composition:drift",
+   "dimension": "design",
+   "facet": "composition",
+   "label": "Drift",
+   "definition": "An elongated, irregular group of one species that flows through a planting.",
+   "aliases": [
+    "drift planting",
+    "drifts"
+   ],
+   "source_of_term": "Oudolf, P. & Kingsbury, N. (2013) Planting: A New Perspective, Timber Press (drifts, as against blocks)",
+   "order": 2,
+   "level": "concept",
+   "category": "cat:composition",
+   "axis": "axis:z",
+   "hierarchy_parent": "facet:composition"
+  },
+  {
+   "id": "composition:group",
+   "dimension": "design",
+   "facet": "composition",
+   "label": "Grouping",
+   "definition": "Several plants of one kind set together as a block, group or mass.",
+   "aliases": [
+    "block",
+    "block planting",
+    "group",
+    "group planting",
+    "mass planting"
+   ],
+   "source_of_term": "Oudolf, P. & Kingsbury, N. (2013) Planting: A New Perspective, Timber Press (blocks); Robinson, N. (2016) The Planting Design Handbook, 3rd ed., Routledge, ch. 12 'Planting Patterns'; KPU 'Group or mass planting'",
+   "order": 3,
+   "level": "concept",
+   "category": "cat:composition",
+   "axis": "axis:z",
+   "hierarchy_parent": "facet:composition"
+  },
+  {
+   "id": "composition:scatter",
+   "dimension": "design",
+   "facet": "composition",
+   "label": "Scatter",
+   "definition": "Single plants distributed through a planting at random to give a natural feel.",
+   "aliases": [
+    "scatter plants",
+    "scattered"
+   ],
+   "source_of_term": "Oudolf, P. & Kingsbury, N. (2013) Planting: A New Perspective, Timber Press (scatter plants)",
+   "order": 4,
+   "level": "concept",
+   "category": "cat:composition",
+   "axis": "axis:z",
+   "hierarchy_parent": "facet:composition"
+  },
+  {
+   "id": "composition:layering",
+   "dimension": "design",
+   "facet": "composition",
+   "label": "Layering",
+   "definition": "Combining plants of different heights so that canopy, understorey, shrub and ground layers occupy the same ground.",
+   "aliases": [
+    "interplanting",
+    "layered planting",
+    "layers within layers",
+    "vertical layering"
+   ],
+   "source_of_term": "Robinson, N. (2016) The Planting Design Handbook, 3rd ed., Routledge, ch. 8 'Layers Within Layers' and ch. 12 'Canopy and Seasonal Layers'; Rainer, T. & West, C. (2015) Planting in a Post-Wild World, Timber Press (vertical layers of a designed plant community)",
+   "order": 5,
+   "level": "concept",
+   "category": "cat:composition",
+   "axis": "axis:z",
+   "hierarchy_parent": "facet:composition"
+  },
+  {
+   "id": "role:structural",
+   "dimension": "design",
+   "facet": "role",
+   "label": "Structural",
+   "definition": "Long-lived plants that give a planting its year-round framework.",
+   "aliases": [
+    "framework plant",
+    "structural and framework layer",
+    "structural plant",
+    "structure planting"
+   ],
+   "source_of_term": "Rainer, T. & West, C. (2015) Planting in a Post-Wild World, Timber Press (structural and framework layer); Robinson, N. (2016) The Planting Design Handbook, 3rd ed., Routledge (structure planting)",
+   "order": 1,
+   "level": "concept",
+   "category": "cat:planting_role",
+   "axis": "axis:z",
+   "hierarchy_parent": "facet:role"
+  },
+  {
+   "id": "role:seasonal",
+   "dimension": "design",
+   "facet": "role",
+   "label": "Seasonal theme",
+   "definition": "Plants that dominate the picture in one season and recede in others.",
+   "aliases": [
+    "seasonal layer",
+    "seasonal plant",
+    "seasonal theme layer"
+   ],
+   "source_of_term": "Rainer, T. & West, C. (2015) Planting in a Post-Wild World, Timber Press (seasonal theme layer); Robinson, N. (2016) The Planting Design Handbook, 3rd ed., Routledge, ch. 12 'Canopy and Seasonal Layers'",
+   "order": 2,
+   "level": "concept",
+   "category": "cat:planting_role",
+   "axis": "axis:z",
+   "hierarchy_parent": "facet:role"
+  },
+  {
+   "id": "role:ground_cover",
+   "dimension": "design",
+   "facet": "role",
+   "label": "Ground cover",
+   "definition": "Low plants that cover the soil between and beneath the others; the layer that carries most of the diversity and ecological function.",
+   "aliases": [
+    "ground cover plant",
+    "ground-cover layer",
+    "groundcover role"
+   ],
+   "source_of_term": "Rainer, T. & West, C. (2015) Planting in a Post-Wild World, Timber Press (ground cover layer); Robinson, N. (2016) The Planting Design Handbook, 3rd ed., Routledge, ch. 8 'Two Principles – Ground Cover and Diversity'",
+   "order": 3,
+   "level": "concept",
+   "category": "cat:planting_role",
+   "axis": "axis:z",
+   "hierarchy_parent": "facet:role"
+  },
+  {
+   "id": "role:filler",
+   "dimension": "design",
+   "facet": "role",
+   "label": "Filler",
+   "definition": "Short-lived or fast plants that fill gaps while the framework establishes.",
+   "aliases": [
+    "dynamic filler",
+    "filler layer",
+    "filler plant"
+   ],
+   "source_of_term": "Rainer, T. & West, C. (2015) Planting in a Post-Wild World, Timber Press (dynamic filler layer); KPU 'Filler'",
+   "order": 4,
+   "level": "concept",
+   "category": "cat:planting_role",
+   "axis": "axis:z",
+   "hierarchy_parent": "facet:role"
+  },
+  {
+   "id": "role:accent",
+   "dimension": "design",
+   "facet": "role",
+   "label": "Accent",
+   "definition": "A single plant placed for emphasis or focus: a specimen.",
+   "aliases": [
+    "accent plant",
+    "emphasis",
+    "focal plant",
+    "specimen",
+    "specimen plant"
+   ],
+   "source_of_term": "Robinson, N. (2016) The Planting Design Handbook, 3rd ed., Routledge, ch. 7 'Emphasis and Accent' and ch. 12 'Accents'; KPU 'Specimen plant', 'Accent plant'",
+   "order": 5,
+   "level": "concept",
+   "category": "cat:planting_role",
+   "axis": "axis:z",
+   "hierarchy_parent": "facet:role"
   }
  ]
 }

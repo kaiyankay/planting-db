@@ -2,7 +2,9 @@
 
 ARCH 540 Assignment 2 · UBC MLA · schema 0.4.0 (concept ids, ontology.json) · 2026-10-31
 
-**Knowledge Brain (live):** <https://kaiyankay.github.io/planting-db/brain/> — v5, the store as one 3D neural network (signals along real links) · [v4](https://kaiyankay.github.io/planting-db/brain/v4/) · [v3](https://kaiyankay.github.io/planting-db/brain/v3/) · [v2](https://kaiyankay.github.io/planting-db/brain/v2/) · [v1](https://kaiyankay.github.io/planting-db/brain/v1/) · code and notes in `brain/`
+**Neural Knowledge Brain — ontology preview (live, 2026-11-02):** <https://kaiyankay.github.io/planting-db/brain/ontology-preview/> — the XYZ ontology and the semantic graph (`brain/data/kg.json`) as one 3D neural network: regions X · Y · Z, evidence trace on every fibre, the four exploration paths, gaps & conflicts, growth · notes in `brain/ontology-preview/README.md`, report in `reports/kg-architecture-2026-11-02.md`
+
+**Knowledge Brain v5 (live):** <https://kaiyankay.github.io/planting-db/brain/> — the store as one 3D neural network (signals along real links) · [v4](https://kaiyankay.github.io/planting-db/brain/v4/) · [v3](https://kaiyankay.github.io/planting-db/brain/v3/) · [v2](https://kaiyankay.github.io/planting-db/brain/v2/) · [v1](https://kaiyankay.github.io/planting-db/brain/v1/) · code and notes in `brain/`
 
 ```
 planting-db/
@@ -20,11 +22,14 @@ planting-db/
 │   ├── acer-palmatum.json
 │   ├── vaccinium-ovatum.json
 │   └── gaultheria-shallon.json
-├── ontology.json      concept nodes (306) with definitions and aliases — tools/build_ontology.py
+├── ontology.json      0.2.0 — XYZ architecture: axis / category / facet nodes, 340 concepts (incl. taxonomy, 23 design concepts with
+│                      literature sources), 53 typed concept relations — tools/build_ontology.py (methods M31)
 ├── tools/
 │   ├── build_ontology.py        schema vocab + intents -> ontology.json
 │   ├── migrate_0_4.py           claims -> concept ids, concepts, conditions, place, time (reports/migration-0.4.md)
-│   ├── build_graph.py           graph.json + diagnosis.json for brain/
+│   ├── build_graph.py           graph.json + diagnosis.json for brain/ (v5 scope)
+│   ├── build_kg.py              kg.json — the semantic graph: typed, statused, evidenced edges + gaps/conflicts (M32)
+│   ├── kg_query.py              graph retrieval prototype: recognise → traverse → claims → LLM context; --all writes eval/kg-paths-<date>.md
 │   ├── validate.py              schema validator (T3) — run before committing any plant file
 │   ├── merge_claims.py          append claims, retire model placeholders, regenerate this table (T2)
 │   ├── cov_trees_fetch.py       City of Vancouver public-trees API -> data/cov_trees/ (T1)
@@ -34,7 +39,9 @@ planting-db/
 │   ├── build_viz.py             T7 entry view -> viz/index.html (all plants)
 │   ├── build_coverage.py        T7 coverage matrix -> viz/coverage.html
 │   ├── inat_to_claims.py        iNaturalist aggregates -> claims
-│   └── retrieve.py              T6 retrieval prototype (--eval)
+│   └── retrieve.py              T6 retrieval prototype (--eval, BM25 stand-in)
+├── brain/                 Neural Brain v5 (index.html, js/app5.js) and brain/ontology-preview/ (js/app6.js, js/kg.js) over brain/data/{graph,diagnosis,kg}.json
+├── reports/               migration-0.4.md · kg-architecture-2026-11-02.md (architecture changes + knowledge gaps)
 ├── data/
 │   └── cov_trees/               snapshot.json, <genus>_all.csv, <genus>_<species>.csv, facets, summary
 ├── inputs/
@@ -47,6 +54,8 @@ planting-db/
 
 ```bash
 python3 -I tools/validate.py
+python3 -I tools/build_ontology.py && python3 -I tools/build_graph.py && python3 -I tools/build_kg.py   # rebuild the graphs after any data change
+python3 -I tools/kg_query.py --ask "evergreen screen for a shady North Vancouver garden"
 python3 -I tools/cov_trees_fetch.py --genus ACER --species PALMATUM
 python3 -I tools/cov_trees_to_claims.py acer-palmatum ACER PALMATUM --merge
 ```

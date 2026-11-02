@@ -1,14 +1,14 @@
 {
- "generated": "2026-10-31",
- "ontology_version": "0.1.0",
- "schema_version": "0.4.0",
+ "generated": "2026-11-02",
+ "ontology_version": "0.2.0",
+ "schema_version": "0.4.1",
  "generated_by": "tools/build_graph.py",
  "counts": {
-  "nodes": 341,
+  "nodes": 345,
   "concepts": 312,
   "plants": 3,
   "cultivars": 4,
-  "sources": 22,
+  "sources": 26,
   "edges": 406,
   "claim_edges": 356,
   "live_claim_edges": 298,
@@ -4526,6 +4526,50 @@
    "parent": "survey",
    "observer_background": "MLA student and practising landscape designer; studio and professional experience",
    "url": null
+  },
+  {
+   "id": "source:robinson",
+   "type": "source",
+   "label": "Robinson, N.",
+   "source_type": "literature",
+   "geo": "global",
+   "licence_tier": "B",
+   "parent": null,
+   "observer_background": null,
+   "url": "https://www.routledge.com/The-Planting-Design-Handbook/Robinson/p/book/9781472415493"
+  },
+  {
+   "id": "source:rainer_west",
+   "type": "source",
+   "label": "Rainer, T. & West, C.",
+   "source_type": "literature",
+   "geo": "north_america",
+   "licence_tier": "B",
+   "parent": null,
+   "observer_background": null,
+   "url": "https://www.timberpress.com/9781604695533/planting-in-a-post-wild-world/"
+  },
+  {
+   "id": "source:oudolf_kingsbury",
+   "type": "source",
+   "label": "Oudolf, P. & Kingsbury, N.",
+   "source_type": "literature",
+   "geo": "global",
+   "licence_tier": "B",
+   "parent": null,
+   "observer_background": null,
+   "url": "https://www.timberpress.com/9781604693706/planting/"
+  },
+  {
+   "id": "source:mooney",
+   "type": "source",
+   "label": "Mooney, P.",
+   "source_type": "literature",
+   "geo": "north_america",
+   "licence_tier": "B",
+   "parent": null,
+   "observer_background": null,
+   "url": "https://www.routledge.com/Planting-Design-Connecting-People-and-Place/Mooney/p/book/9781138026056"
   }
  ],
  "edges": [

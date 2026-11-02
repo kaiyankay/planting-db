@@ -221,15 +221,171 @@ FACET_FIELDS = {
 }
 DIMENSIONS = {"classification": ["growth_form"], "condition": ["exposure", "soil", "water", "hardiness", "hardiness_usda", "hardiness_rhs", "wind"], "trait": ["evergreen", "height_class", "spread_class", "growth_rate", "colour", "texture", "form", "habit", "plant_type", "interest", "fruit", "maintenance", "toxicity", "photoperiod"], "use": ["use", "ecology"], "time": ["season", "month", "age"], "place": ["place"], "status": ["origin", "invasive"], "resistance": ["stress", "browsing", "pest"]}
 
+# ============================================================ XYZ knowledge architecture (brief 2026-11-02, methods M31)
+# Three axes of knowledge organisation (not coordinates, not separate databases): X identity & classification,
+# Y traits & performance, Z planting-design knowledge. Place · Time · Evidence · Media cut across all three.
+# Every existing node keeps its id, dimension and facet; it gains `axis`, `category` and `level`. New nodes:
+# axis / category / facet nodes (the 大类 and 小类 of the architecture), taxon nodes read from the plant entity
+# records, and the Z (design) concepts with their literature sources. Concept-level relations with a source and a
+# status live in `relations` (requires_trait · maps_to · typically_formed_by · corresponds_to).
+LIT = {   # literature sources for the Z dimension — also recorded in sources.json (type literature, tier B: cite facts, never copy text)
+    "robinson": "Robinson, N. (2016) The Planting Design Handbook, 3rd ed., Routledge",
+    "rainer_west": "Rainer, T. & West, C. (2015) Planting in a Post-Wild World, Timber Press",
+    "oudolf_kingsbury": "Oudolf, P. & Kingsbury, N. (2013) Planting: A New Perspective, Timber Press",
+    "mooney": "Mooney, P. (2020) Planting Design: Connecting People and Place, Routledge",
+}
+for n in NODES: n["level"] = "concept"
+
+AXES = {
+    "x": ("Plant Identity & Classification", "What a plant is: its taxonomic identity (family, genus, species, cultivar) and its growth form.", ["taxonomy", "growth_form_cat"]),
+    "y": ("Plant Traits & Performance", "What a plant needs, how it is built, how it behaves over time and what it does ecologically.", ["environment", "morphology", "temporal", "ecological"]),
+    "z": ("Planting Design Knowledge", "How plants are used in design: the vertical structure they build, the spaces they make, the way they are composed and the roles they play.", ["vertical_structure", "space_making", "composition", "planting_role", "landscape_use"]),
+}
+CATEGORIES = {   # id -> (axis, label, definition, facets, source)
+    "taxonomy": ("x", "Taxonomy", "Botanical identity: family → genus → species → cultivar. Species are the plant records; cultivars are read from claims.", ["taxon_family", "taxon_genus"], "entity records (plants/*.json); names as accepted by the sources cited there"),
+    "growth_form_cat": ("x", "Growth Form", "The life form a plant is read as (tree, shrub, graminoid, herbaceous perennial, fern, vine) and the KPU plant type that records it.", ["growth_form", "plant_type"], "ontology (M29); KPU plant type"),
+    "environment": ("y", "Environmental Conditions", "The site conditions a plant needs or tolerates: light, soil, water, hardiness, wind.", ["exposure", "soil", "water", "hardiness", "hardiness_usda", "hardiness_rhs", "wind"], "KPU facets; RHS and USDA hardiness scales"),
+    "morphology": ("y", "Morphology", "How a plant is built: height, spread, form, habit, texture, colour.", ["height_class", "spread_class", "form", "habit", "texture", "colour"], "KPU facets"),
+    "temporal": ("y", "Temporal Performance", "How a plant performs through time: growth rate, phenology (months), seasonality, leaf retention, photoperiod.", ["growth_rate", "month", "season", "evergreen", "interest", "fruit", "photoperiod"], "schema fields; iNaturalist phenology"),
+    "ecological": ("y", "Ecological Performance", "Habitat and ecological value, origin and invasive status, resistance to stress, browsing, pests and disease, plus management and risk (maintenance, toxicity).", ["ecology", "origin", "invasive", "stress", "browsing", "pest", "maintenance", "toxicity"], "schema gate fields; E-Flora BC, USDA PLANTS, ISC BC"),
+    "vertical_structure": ("z", "Vertical Structure", "The layers a planting is built from, top to bottom, and the height bands planting design works with.", ["layer", "height_band"], LIT["robinson"] + " ch. 3 (height bands) and ch. 8 (forest structures, canopy structures)"),
+    "space_making": ("z", "Space-making", "How planting encloses and shapes outdoor space: screens, scrims, barriers and ceilings; degree, permeability and transparency of enclosure.", ["spatial"], LIT["robinson"] + " ch. 4 'Creating Spaces with Plants'; " + LIT["mooney"] + " ch. 5 'Space and Place'"),
+    "composition": ("z", "Planting Composition", "How individual plants are arranged into a planting: matrix, drift, group, scatter, layering.", ["composition"], LIT["oudolf_kingsbury"] + "; " + LIT["robinson"] + " ch. 8 'Matrix Planting', ch. 12 'Planting Patterns'"),
+    "landscape_use": ("z", "Landscape Use (KPU)", "The documented use vocabulary: KPU's landscape-use facet as sources apply it to plants. The bridge from claims into the design concepts (maps_to, rule KG-R1); not a design theory in itself.", ["use"], "KPU landscape-use facet (plantdatabase.kpu.ca); intent_map 'hedge'"),
+    "planting_role": ("z", "Planting Roles", "The job a plant does in a designed plant community: structural, seasonal theme, ground cover, filler, accent.", ["role"], LIT["rainer_west"] + " (design layers); " + LIT["robinson"] + " ch. 7 'Emphasis and Accent', ch. 12 'Accents'"),
+}
+CROSS = {"place": ("Place", "Where a claim holds or was observed: from the Vancouver scale outward.", ["place"]), "time": ("Time", "When a claim holds: the plant's age at observation and the season or month of the record.", ["age"]), "evidence": ("Evidence & Sources", "The claims, sources, conditions and verification status behind every link.", []), "media": ("Media", "Images, GIS layers, planting plans and site observations that can be attached to a claim (`media[]`, schema 0.5.0).", [])}
+FACET_LABELS = {"taxon_family": "Family", "taxon_genus": "Genus", "growth_form": "Growth form", "plant_type": "Plant type (KPU)", "exposure": "Light", "soil": "Soil", "water": "Water", "hardiness": "Hardiness (Canadian zones)", "hardiness_usda": "Hardiness (USDA zones)", "hardiness_rhs": "Hardiness (RHS ratings)", "wind": "Wind exposure",
+    "height_class": "Height", "spread_class": "Spread", "form": "Form", "habit": "Habit", "texture": "Texture", "colour": "Colour", "growth_rate": "Growth rate", "month": "Phenology (months)", "season": "Seasonality", "evergreen": "Leaf retention", "interest": "Seasonal interest", "fruit": "Fruit", "photoperiod": "Photoperiod",
+    "use": "Landscape use (KPU)", "ecology": "Habitat & ecological value", "origin": "Origin status", "invasive": "Invasive status", "stress": "Stress tolerance", "browsing": "Browsing resistance", "pest": "Pests & diseases", "maintenance": "Maintenance", "toxicity": "Toxicity", "age": "Plant age", "place": "Place",
+    "layer": "Vertical layers", "height_band": "Height bands", "spatial": "Spatial elements", "composition": "Composition patterns", "role": "Planting roles"}
+FACET_DEFS = {"taxon_family": "The botanical family a plant belongs to, as recorded in its entity record.", "taxon_genus": "The genus, read from the scientific name.", "growth_form": "Organising life-form classes read from the sources (M29), never inferred from 'Broadleaf evergreen'.", "plant_type": "KPU's plant-type facet, which mixes life form and leaf habit; kept as a trait.",
+    "exposure": "Light the site offers, KPU's exposure facet with three groups (sun, part shade, shade).", "soil": "Soil types a plant takes, KPU's soil facet.", "water": "Water and drainage regime the plant needs.", "hardiness": "Canadian plant hardiness zones (KPU).", "hardiness_usda": "USDA hardiness zones as given by US sources.", "hardiness_rhs": "RHS hardiness ratings H1–H7.", "wind": "Need for shelter from wind.",
+    "height_class": "KPU mature-height classes; quantitative claims span the classes their range covers.", "spread_class": "KPU mature-spread classes.", "form": "Overall outline of the plant (KPU form facet).", "habit": "Branching and growth habit (KPU habit facet).", "texture": "Visual texture, fine to very coarse (KPU).", "colour": "Flower and foliage colours (KPU colour list).", "growth_rate": "Slow, moderate or fast growth.", "month": "Months of flowering or fruiting.", "season": "Season of interest.", "evergreen": "Whether leaves are held through winter.", "interest": "Seasonal interest features (fall colour, winter interest).", "fruit": "Fruit character (edible, showy).", "photoperiod": "Day-length response (survey c4; no source yet).",
+    "use": "KPU landscape uses a source lists the plant for; the documented layer beneath the design concepts.", "ecology": "Ecological values a plant offers: native, pollinator, bird food, cover, erosion control, habitat structure.", "origin": "Native or non-native status for BC.", "invasive": "Invasive-species listing status in BC.", "stress": "Abiotic stresses tolerated (drought, salt, wind, winter wet…).", "browsing": "Resistance to deer and rabbit browsing.", "pest": "Pests and diseases, as susceptibility or as resistance.", "maintenance": "Maintenance level required.", "toxicity": "Toxicity to pets, humans or livestock.", "age": "Age bands of the plant at the time a value holds.", "place": "Geographic scale of the record.",
+    "layer": "The vertical layers of a planting: canopy, understorey, shrub layer, ground layer.", "height_band": "Robinson's five planting-height bands, from carpeting plants to trees.", "spatial": "Spatial elements planting can make: screen, scrim, barrier, ceiling.", "composition": "Patterns for arranging plants: matrix, drift, group, scatter, layering.", "role": "Roles in a designed plant community: structural, seasonal theme, ground cover, filler, accent."}
+
+def struct(nid, level, label, definition, *, parent=None, source="ontology (XYZ architecture, brief 2026-11-02; M31)", aliases=(), **extra):
+    if nid in SEEN: raise SystemExit(f"duplicate node id {nid}")
+    SEEN.add(nid)
+    n = {"id": nid, "dimension": "architecture", "facet": level, "level": level, "label": label, "definition": definition, "aliases": sorted(set(aliases)), "source_of_term": source}
+    if parent: n["parent"] = parent
+    n.update(extra); NODES.append(n); return nid
+
+for ax, (lab, d, cats) in AXES.items(): struct(f"axis:{ax}", "axis", lab, d, categories=[f"cat:{c}" for c in cats], order="xyz".index(ax) + 1, aliases=[ax.upper()])
+for cid, (ax, lab, d, facets, src) in CATEGORIES.items(): struct(f"cat:{cid}", "category", lab, d, parent=f"axis:{ax}", facets=[f"facet:{f}" for f in facets], source=src, order=list(CATEGORIES).index(cid) + 1)
+for cid, (lab, d, facets) in CROSS.items(): struct(f"cross:{cid}", "category", lab, d, facets=[f"facet:{f}" for f in facets], cross_layer=True, order=list(CROSS).index(cid) + 1)
+FACET_PARENT = {f: f"cat:{c}" for c, (_, _, _, fs, _) in CATEGORIES.items() for f in fs}
+FACET_PARENT.update({f: f"cross:{c}" for c, (_, _, fs) in CROSS.items() for f in fs})
+for f, lab in FACET_LABELS.items(): struct(f"facet:{f}", "facet", lab, FACET_DEFS[f], parent=FACET_PARENT[f], facet_key=f, source="ontology (facet node; labels from the brief 2026-11-02 where it names them, else the schema field)")
+
+# ---- X taxonomy nodes, read from the plant entity records
+PLANTS_DIR = os.path.join(ROOT, "plants"); fams, gens = {}, {}
+for fn in sorted(os.listdir(PLANTS_DIR)):
+    if fn.endswith(".json"):
+        e = json.load(open(os.path.join(PLANTS_DIR, fn), encoding="utf-8"))["entity"]
+        fam = e.get("family"); gen = e["scientific_name"].split()[0]
+        if fam: fams.setdefault(fam, []).append(e["id"])
+        gens.setdefault(gen, {"family": fam, "plants": []})["plants"].append(e["id"])
+for fam, ps in sorted(fams.items()): node("taxon_family", "taxonomy", fam, f"The plant family {fam}, as recorded in the entity records of {', '.join(ps)}.", source="entity.family (plants/*.json)", id=f"family:{fam.lower()}")
+for gen, g in sorted(gens.items()): node("taxon_genus", "taxonomy", gen, f"The genus {gen}, read from the scientific name; family {g['family'] or 'unrecorded'}.", source="entity.scientific_name (plants/*.json)", parent=f"family:{g['family'].lower()}" if g["family"] else None, id=f"genus:{gen.lower()}")
+
+# ---- Z design concepts. Definitions written for this file; the source names the book and chapter the term comes from
+# (chapter titles verified against the published table of contents on 2026-11-02; page-level wording is 'to confirm').
+R, RW, OK_, MO = LIT["robinson"], LIT["rainer_west"], LIT["oudolf_kingsbury"], LIT["mooney"]
+node("layer", "design", "Canopy", "The uppermost layer: tree crowns that form the roof of a planting and shade everything beneath.", aliases=["tree canopy", "canopy layer", "overstorey", "overstory"], source=f"{R}, ch. 8 'Forest Structures' / 'Typical Canopy Structures as Models for Design' (tree canopy)", id="layer:canopy", order=1)
+node("layer", "design", "Understory", "Small trees and large shrubs that grow beneath the canopy and above the shrub layer (Robinson's low tree canopy / sub-canopy).", aliases=["understorey", "sub-canopy", "low tree canopy", "subcanopy"], source=f"{R}, ch. 8 (two- and three-layer canopy structures: 'low tree canopy')", id="layer:understorey", order=2)
+node("layer", "design", "Shrub layer", "Woody plants branching from near the ground that fill the space between the ground layer and the trees.", aliases=["shrub and sapling layer", "shrub stratum", "bush canopy"], source=f"{R}, ch. 8 ('shrub and sapling layer' in the canopy-structure types)", id="layer:shrub", order=3)
+node("layer", "design", "Ground layer", "The lowest layer: herbaceous, carpeting and low woody plants that cover the soil.", aliases=["field layer", "herb layer", "ground cover layer", "groundcover layer"], source=f"{R}, ch. 8 ('herb layer' / ground cover principle) and ch. 3 'Ground-level Planting (Carpeting Plants)'", id="layer:ground", order=4)
+BANDS = [("ground_level", "Ground-level planting (carpeting)", "Carpeting plants at ground level.", 0, 0.15), ("low", "Low planting (below knee)", "Shrubs and herbaceous plants below knee height.", 0.15, 0.5), ("medium", "Medium-height planting (knee to eye level)", "Planting between knee and eye level: a physical barrier that still allows views over it.", 0.5, 1.6), ("above_eye", "Tall shrub planting (above eye level)", "Planting above eye level: visual enclosure and screening.", 1.6, 6), ("tree", "Tree planting", "Trees: canopy, ceiling and shade above head height.", 4, None)]
+for i, (sid, lab, d, lo, hi) in enumerate(BANDS):
+    node("height_band", "design", lab, d + " Bounds are approximate readings of the heading names (knee ≈ 0.5 m, eye ≈ 1.6 m) — to confirm against the chapter text.", source=f"{R}, ch. 3 'Spatial Characteristics of Plants' (section headings)", id=f"height_band:{sid}", order=i + 1, min_m=lo, **({"max_m": hi} if hi is not None else {}))
+node("spatial", "design", "Screen", "Planting that blocks a view: visual enclosure above eye level, opaque in the seasons it has to work.", aliases=["screening", "visual screen", "privacy screen", "privacy planting"], source=f"{R}, ch. 3 'Planting Above Eye Level (Tall Shrub Planting)' and ch. 4 'Permeability and Transparency of Enclosure'", id="spatial:screen", order=1)
+node("spatial", "design", "Scrim", "A partly transparent screen: planting open enough to be seen through, which filters a view rather than blocking it. Term from the brief; not found under this name in Robinson, whose nearest heading is 'Permeability and Transparency of Enclosure' — to confirm.", aliases=["filtered screen", "veil", "see-through screen", "semi-transparent screen"], source=f"brief 2026-11-02; {R}, ch. 4 'Permeability and Transparency of Enclosure' (nearest documented concept)", id="spatial:scrim", order=2, to_confirm=True)
+node("spatial", "design", "Barrier", "Planting that stops movement: a dense, continuous physical enclosure, with or without a visual screen.", aliases=["physical barrier", "security planting", "hedge barrier"], source=f"{R}, ch. 4 'Degree of Enclosure' (physical vs visual enclosure) and ch. 3 'Knee- to Eye-level Planting'", id="spatial:barrier", order=3)
+node("spatial", "design", "Ceiling", "Tree crowns forming an overhead plane that encloses a space from above.", aliases=["canopy ceiling", "overhead plane", "shade canopy"], source=f"{R}, ch. 3 'Tree Planting' and ch. 4 'Degree of Enclosure'", id="spatial:ceiling", order=4)
+node("composition", "design", "Matrix", "A continuous ground-covering planting of one or a few species into which structural and seasonal plants are set.", aliases=["matrix planting", "groundcover matrix"], source=f"{OK_} (matrix plants); {R}, ch. 8 'Matrix Planting'; {RW} (groundcover matrix layer)", id="composition:matrix", order=1)
+node("composition", "design", "Drift", "An elongated, irregular group of one species that flows through a planting.", aliases=["drifts", "drift planting"], source=f"{OK_} (drifts, as against blocks)", id="composition:drift", order=2)
+node("composition", "design", "Grouping", "Several plants of one kind set together as a block, group or mass.", aliases=["group", "block", "mass planting", "group planting", "block planting"], source=f"{OK_} (blocks); {R}, ch. 12 'Planting Patterns'; KPU 'Group or mass planting'", id="composition:group", order=3)
+node("composition", "design", "Scatter", "Single plants distributed through a planting at random to give a natural feel.", aliases=["scatter plants", "scattered"], source=f"{OK_} (scatter plants)", id="composition:scatter", order=4)
+node("composition", "design", "Layering", "Combining plants of different heights so that canopy, understorey, shrub and ground layers occupy the same ground.", aliases=["layered planting", "interplanting", "layers within layers", "vertical layering"], source=f"{R}, ch. 8 'Layers Within Layers' and ch. 12 'Canopy and Seasonal Layers'; {RW} (vertical layers of a designed plant community)", id="composition:layering", order=5)
+node("role", "design", "Structural", "Long-lived plants that give a planting its year-round framework.", aliases=["structural plant", "framework plant", "structure planting", "structural and framework layer"], source=f"{RW} (structural and framework layer); {R} (structure planting)", id="role:structural", order=1)
+node("role", "design", "Seasonal theme", "Plants that dominate the picture in one season and recede in others.", aliases=["seasonal theme layer", "seasonal plant", "seasonal layer"], source=f"{RW} (seasonal theme layer); {R}, ch. 12 'Canopy and Seasonal Layers'", id="role:seasonal", order=2)
+node("role", "design", "Ground cover", "Low plants that cover the soil between and beneath the others; the layer that carries most of the diversity and ecological function.", aliases=["ground-cover layer", "groundcover role", "ground cover plant"], source=f"{RW} (ground cover layer); {R}, ch. 8 'Two Principles – Ground Cover and Diversity'", id="role:ground_cover", order=3)
+node("role", "design", "Filler", "Short-lived or fast plants that fill gaps while the framework establishes.", aliases=["dynamic filler", "filler plant", "filler layer"], source=f"{RW} (dynamic filler layer); KPU 'Filler'", id="role:filler", order=4)
+node("role", "design", "Accent", "A single plant placed for emphasis or focus: a specimen.", aliases=["specimen", "specimen plant", "accent plant", "focal plant", "emphasis"], source=f"{R}, ch. 7 'Emphasis and Accent' and ch. 12 'Accents'; KPU 'Specimen plant', 'Accent plant'", id="role:accent", order=5)
+
+# ---- concept-level relations (typed, directed, sourced). status: documented = stated in the named source;
+# derived = produced by a named rule from documented terms; to_confirm marks a reading of a source not yet checked at page level.
+RELS = []
+def rel(t, a, b, source, status="documented", **extra):
+    RELS.append({"id": f"{t}:{a}>{b}", "type": t, "from": a, "to": b, "source": source, "status": status, **extra})
+# vertical layers ↔ growth forms and height bands (Robinson names the layers by life form; bands by height)
+for layer, forms in (("layer:canopy", ["growth_form:tree"]), ("layer:understorey", ["growth_form:tree"]), ("layer:shrub", ["growth_form:shrub"]), ("layer:ground", ["growth_form:herbaceous_perennial", "growth_form:fern", "growth_form:graminoid", "growth_form:shrub"])):
+    for f in forms: rel("typically_formed_by", layer, f, f"{R}, ch. 8 (layers named by life form)", note="a life form says which layer a plant can occupy, not which role it plays" + ("; woody ground covers only" if (layer, f) == ("layer:ground", "growth_form:shrub") else ""))
+for layer, bands in (("layer:ground", ["height_band:ground_level", "height_band:low"]), ("layer:shrub", ["height_band:medium", "height_band:above_eye"]), ("layer:understorey", ["height_band:above_eye", "height_band:tree"]), ("layer:canopy", ["height_band:tree"])):
+    for b in bands: rel("corresponds_to", layer, b, f"{R}, ch. 3 height bands read against ch. 8 layers", status="derived", rule="KG-R3: a layer corresponds to the height bands its plants occupy", to_confirm=True)
+# what a spatial element or role needs from a plant (Y traits). strength: required | preferred. alternatives: any one suffices.
+def req(z, concepts, source, strength="required", note=None, to_confirm=False):
+    rel("requires_trait", z, concepts[0], source, strength=strength, alternatives=concepts, note=note, to_confirm=to_confirm)
+req("spatial:screen", ["height_band:above_eye", "height_band:tree"], f"{R}, ch. 3 'Planting Above Eye Level' (screening belongs to planting above eye level)", note="screening planting must rise above eye level")
+req("spatial:screen", ["habit:dense"], f"{R}, ch. 4 'Permeability and Transparency of Enclosure'", note="a screen needs dense foliage; open habits give a scrim", to_confirm=True)
+req("spatial:screen", ["evergreen:yes"], f"{R}, ch. 4 'Permeability and Transparency of Enclosure' (deciduous enclosure opens in winter)", strength="preferred", note="for a year-round screen", to_confirm=True)
+req("spatial:scrim", ["height_band:above_eye", "height_band:tree"], f"brief 2026-11-02; {R}, ch. 3", to_confirm=True)
+req("spatial:scrim", ["habit:open", "habit:twiggy", "habit:arching"], f"brief 2026-11-02; {R}, ch. 4 (transparency of enclosure)", note="open or airy habit lets the view through", to_confirm=True)
+req("spatial:barrier", ["habit:dense"], f"{R}, ch. 4 'Degree of Enclosure' (physical enclosure)", note="continuous dense growth stops movement", to_confirm=True)
+req("spatial:barrier", ["height_band:medium", "height_band:above_eye"], f"{R}, ch. 3 'Knee- to Eye-level Planting' (medium planting as a physical barrier)", to_confirm=True)
+req("spatial:ceiling", ["growth_form:tree"], f"{R}, ch. 3 'Tree Planting'", note="only tree crowns make an overhead plane")
+req("spatial:ceiling", ["height_band:tree"], f"{R}, ch. 3 'Tree Planting'")
+req("role:ground_cover", ["height_band:ground_level", "height_band:low"], f"{RW} (ground cover layer); {R}, ch. 3 'Ground-level Planting (Carpeting Plants)'")
+req("role:ground_cover", ["habit:spreading", "habit:dense", "form:creeping_mat_like", "form:mounded"], f"{RW} (ground cover layer: plants that cover the soil)", strength="preferred", to_confirm=True)
+req("role:structural", ["growth_form:tree", "growth_form:shrub"], f"{RW} (structural and framework layer: long-lived, often woody)", strength="preferred", to_confirm=True)
+req("role:structural", ["evergreen:yes", "interest:winter_interest"], f"{RW} (structural plants hold the picture year-round)", strength="preferred", to_confirm=True)
+req("role:seasonal", ["interest:seasonal_interest", "interest:fall_colour", "fruit:showy", "colour:red", "colour:pink", "colour:white", "colour:purple", "colour:yellow", "colour:orange", "colour:blue"], f"{RW} (seasonal theme layer: visually dominant in one season)", note="any sourced seasonal-interest feature counts; the facet is open", to_confirm=True)
+req("role:filler", ["growth_rate:fast"], f"{RW} (dynamic filler layer: quick, short-lived)", to_confirm=True)
+req("role:accent", ["form:weeping", "form:vase", "form:columnar", "form:pyramidal_narrowly", "interest:seasonal_interest"], f"{R}, ch. 7 'Emphasis and Accent' (contrast of form or colour)", strength="preferred", to_confirm=True)
+req("composition:matrix", ["height_band:ground_level", "height_band:low"], f"{OK_} (matrix plants: low, ground-covering); {R}, ch. 8 'Matrix Planting'", to_confirm=True)
+req("composition:matrix", ["growth_form:graminoid", "growth_form:herbaceous_perennial", "growth_form:shrub"], f"{OK_} (often grasses; any ground-covering species)", strength="preferred", to_confirm=True)
+req("composition:layering", ["layer:canopy", "layer:understorey", "layer:shrub", "layer:ground"], f"{R}, ch. 8 'Layers Within Layers'", note="layering combines plants of different layers; a single plant qualifies by occupying one layer", to_confirm=True)
+# KPU landscape uses that name a design concept (term equivalence, rule KG-R1). Only uses whose KPU label is the design term
+# or its direct synonym; 'Mixed shrub border', 'Woodland margin', 'Tall background' are left unmapped on purpose.
+MAPS = [("use:screening", "spatial:screen"), ("use:sheared_hedge", "spatial:screen"), ("use:sheared_hedge", "spatial:barrier"), ("use:hedge_row", "spatial:screen"), ("use:hedge_row", "spatial:barrier"), ("use:security_barrier", "spatial:barrier"), ("use:shade_tree", "spatial:ceiling"), ("use:shade_tree", "layer:canopy"), ("use:street_boulevard_tree", "layer:canopy"), ("use:wind_break", "spatial:barrier"),
+        ("use:ground_cover", "role:ground_cover"), ("use:ground_cover", "layer:ground"), ("use:group_or_mass_planting", "composition:group"), ("use:specimen_plant", "role:accent"), ("use:accent_plant", "role:accent"), ("use:filler", "role:filler"), ("use:spring_interest", "role:seasonal"), ("use:summer_interest", "role:seasonal"), ("use:fall_interest", "role:seasonal"), ("use:winter_interest", "role:seasonal")]
+for u, z in MAPS:
+    if u not in SEEN: raise SystemExit(f"maps_to: unknown use {u}")
+    rel("maps_to", u, z, "KPU landscape-use label read as the design term it names", status="derived", rule="KG-R1: a KPU use label that names a design concept maps to it; a plant with a sourced claim on the use is *derived* suited to the concept, with the claim as evidence", note="hedges are linear screens and barriers; wind break is shelter, mapped to barrier (physical), not screen" if "hedge" in u or "wind" in u else None)
+for r in RELS:
+    for k in ("from", "to"):
+        if r[k] not in SEEN: raise SystemExit(f"relation {r['id']}: unknown node {r[k]}")
+    for a in r.get("alternatives") or []:
+        if a not in SEEN: raise SystemExit(f"relation {r['id']}: unknown alternative {a}")
+    r = {k: v for k, v in r.items() if v is not None}
+RELS = [{k: v for k, v in r.items() if v is not None} for r in RELS]
+
+# axis / category of every node (concepts via their facet), for the brain and the validator
+FACET_CAT = {f: f"cat:{c}" for c, (_, _, _, fs, _) in CATEGORIES.items() for f in fs}; FACET_CAT.update({f: f"cross:{c}" for c, (_, _, fs) in CROSS.items() for f in fs})
+CAT_AXIS = {f"cat:{c}": f"axis:{v[0]}" for c, v in CATEGORIES.items()}
+for n in NODES:
+    n.setdefault("level", "concept")
+    if n["level"] == "concept":
+        n["category"] = FACET_CAT.get(n["facet"]); n["axis"] = CAT_AXIS.get(n["category"])
+        n["hierarchy_parent"] = n.get("parent") or f"facet:{n['facet']}"
+    elif n["level"] == "facet": n["category"] = n["parent"]; n["axis"] = CAT_AXIS.get(n["parent"]); n["hierarchy_parent"] = n["parent"]
+    elif n["level"] == "category": n["axis"] = n.get("parent"); n["hierarchy_parent"] = n.get("parent")
+    else: n["hierarchy_parent"] = None
+DIMENSIONS["taxonomy"] = ["taxon_family", "taxon_genus"]; DIMENSIONS["design"] = ["layer", "height_band", "spatial", "composition", "role"]; DIMENSIONS["architecture"] = ["axis", "category", "facet"]
+FACET_FIELDS.update({"taxon_family": ["entity.family"], "taxon_genus": ["entity.scientific_name"], "layer": ["landscape_use (via maps_to)", "mature_height (via height bands)"], "height_band": ["mature_height", "local_mature_size"], "spatial": ["landscape_use (via maps_to)"], "composition": ["landscape_use (via maps_to)"], "role": ["landscape_use (via maps_to)"]})
+XYZ = {"axes": {f"axis:{a}": {"label": v[0], "categories": [f"cat:{c}" for c in v[2]]} for a, v in AXES.items()}, "cross_layers": [f"cross:{c}" for c in CROSS], "relation_types": {"requires_trait": "design concept → trait it needs from a plant (strength required | preferred; alternatives: any one suffices); literature-sourced", "maps_to": "KPU landscape use → design concept it names (rule KG-R1)", "typically_formed_by": "vertical layer → growth form that forms it", "corresponds_to": "vertical layer → height band (rule KG-R3)"}, "status_vocabulary": {"documented": "stated in the named source or claim", "derived": "produced by a named rule from documented statements", "candidate": "inferred or observed, not asserted by any source; never promoted automatically", "unknown": "required by a concept but no evidence either way"}}
+
 out = {
-    "$ontology_version": "0.1.0", "updated": TODAY, "generated_by": "tools/build_ontology.py",
-    "note": "Concept nodes of the Planting Intelligence knowledge base. Ids are facet:slug. KPU labels verbatim. Definitions written for this file (methods M26, to confirm); terms from other vocabularies name their source in source_of_term. Rebuild with python3 -I tools/build_ontology.py.",
-    "dimensions": DIMENSIONS, "facet_fields": FACET_FIELDS, "nodes": NODES,
+    "$ontology_version": "0.2.0", "updated": TODAY, "generated_by": "tools/build_ontology.py",
+    "note": "Concept nodes of the Planting Intelligence knowledge base. Ids are facet:slug. KPU labels verbatim. Definitions written for this file (methods M26, to confirm); terms from other vocabularies name their source in source_of_term. Rebuild with python3 -I tools/build_ontology.py. 0.2.0 (2026-11-02, M31): XYZ architecture — axis / category / facet nodes, taxon nodes, design (Z) concepts with literature sources, and typed concept relations in `relations`.",
+    "dimensions": DIMENSIONS, "facet_fields": FACET_FIELDS, "xyz": XYZ, "relations": RELS, "nodes": NODES,
 }
 with open(os.path.join(ROOT, "ontology.json"), "w", encoding="utf-8") as f:
     json.dump(out, f, ensure_ascii=False, indent=1)
 by = {}
 for n in NODES: by[n["dimension"]] = by.get(n["dimension"], 0) + 1
-print(f"ontology.json: {len(NODES)} nodes · " + " · ".join(f"{k} {v}" for k, v in by.items()))
+print(f"ontology.json: {len(NODES)} nodes · " + " · ".join(f"{k} {v}" for k, v in by.items()) + f" · {len(RELS)} concept relations")
 missing = [n["id"] for n in NODES if not n["definition"].strip()]
 if missing: print("MISSING DEFINITIONS:", missing)

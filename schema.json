@@ -1,8 +1,8 @@
 {
-  "$schema_version": "0.4.0",
+  "$schema_version": "0.4.1",
   "name": "Planting Intelligence — Local Planting Knowledge Database",
   "scope": "City of Vancouver / Metro Vancouver, BC (Canadian hardiness zone 8a–8b)",
-  "updated": "2026-10-31",
+  "updated": "2026-11-02",
   "design_basis": {
     "field_tiers": "ARCH 540 user survey c1 (must-pass vs compared) and c2 (could not find / did not trust), n=6, 2026-10-30",
     "practitioner_metadata": "survey f1 (details needed before trusting someone's note)",
@@ -584,6 +584,21 @@
       "cultivar": {
         "type": "string|null",
         "note": "0.4.0: lifted from context `cultivar:'…'`; `(unrecorded)` for inventory records without a label"
+      },
+      "media": {
+        "type": "object[]",
+        "optional": true,
+        "shape": {
+          "kind": "enum[image, photo, gis, plan, section, observation, document]",
+          "url": "string (link or repo path; never a copy of licensed media)",
+          "caption": "string",
+          "licence": "string",
+          "credit": "string",
+          "place": "ontology place id",
+          "time": "ontology time id or ISO date",
+          "recorded_at": "date"
+        },
+        "note": "0.4.1 (2026-11-02): optional media attached to a claim — images, GIS layers, planting plans, site observations. A medium is evidence for the claim it hangs on; it never creates a claim by itself. Empty today."
       }
     }
   },
@@ -992,7 +1007,7 @@
   },
   "ontology": {
     "file": "ontology.json",
-    "version": "0.1.0",
-    "note": "concept nodes; claims are the edges that connect a plant to a concept with provenance (brief 2026-10-31)"
+    "version": "0.2.0",
+    "note": "concept nodes; claims are the edges that connect a plant to a concept with provenance (brief 2026-10-31). 0.2.0: XYZ architecture (axis / category / facet nodes), design concepts (Z) with literature sources and typed concept relations (brief 2026-11-02, M31). brain/data/kg.json (tools/build_kg.py) is the semantic graph built from claims + ontology relations (M32)."
   }
 }
