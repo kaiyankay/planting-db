@@ -13,7 +13,7 @@ Brief: *Planting Intelligence — Knowledge Graph Reconstruction* (XYZ ontology,
 | Retrieval | `tools/retrieve.py` (BM25 stand-in, R5 ranking) | + **`tools/kg_query.py`**: recognise → traverse → claims → LLM context block; the four paths A–D; `eval/kg-paths-2026-11-02.md` generated from the graph |
 | Schema (`schema.json`) | 0.4.0 | 0.4.1: optional `media[]` on claims (image · photo · gis · plan · section · observation · document) for the multimodal layer; empty today; ontology note updated |
 | Sources (`sources.json`) | 22 | + 4 literature sources (Robinson 2016, Rainer & West 2015, Oudolf & Kingsbury 2013, Mooney 2020), tier B: chapter titles cited, no passages |
-| Brain | v5 `brain/` | + **`brain/ontology-preview/`** (`index.html`, `js/app6.js`, `js/kg.js`) on the v5 engine; live at <https://kaiyankay.github.io/planting-db/brain/ontology-preview/> |
+| Brain | v5 `brain/` | + **`brain/ontology-preview/`** (`index.html`, `js/app6.js`, `js/kg.js`); redrawn the same day as a minimal sphere-and-line network with progressive disclosure (M33a); live at <https://kaiyankay.github.io/planting-db/brain/ontology-preview/> |
 
 ## 2. The XYZ architecture (ontology → XYZ mapping)
 

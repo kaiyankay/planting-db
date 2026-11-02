@@ -1,17 +1,11 @@
-// Neural Knowledge Brain — ontology preview (v6, brief 2026-11-02). The XYZ ontology, the semantic graph and its evidence
-// drawn as one 3D neural network, on the v5 engine (brain/js/app5.js: additive neurons, branch fibres, synapses, signal
-// propagation, growth). What is new is what the network *is*:
-//   regions   X Plant Identity & Classification · Y Traits & Performance · Z Planting Design Knowledge — three lobes; plants at
-//             the centre; Evidence (sources, places) beneath. Inside a lobe: category → facet → concept, from ontology.json.
-//   fibres    only real kg.json edges: claim links (plant → concept, one synapse per claim), hierarchy (part_of), taxonomy,
-//             classification, height bands and layers (derived), design links (derived · candidate), concept relations
-//             (requires_trait, maps_to, typically_formed_by, corresponds_to), source → plant, plant → plant relations.
-//   signal    a click or a question walks the real links; the four prototype paths are traversals of the kg engine (js/kg.js,
-//             the same rules as tools/kg_query.py), lit wave by wave.
-//   evidence  click a fibre: relation type, status (documented · derived · candidate · unknown), claims, sources, conditions,
-//             verification, rule or literature source.
-//   gaps      unknown and contradicted design links, dormant design concepts, gate gaps, disagreements and variations.
-//   growth    an observation grows candidate fibres; the requirement check re-runs with it, and stays candidate.
+// Neural Knowledge Brain — ontology preview (v6.1, brief 2026-11-02 "Visual Simplification & Redesign").
+// The same data (brain/data/kg.json, ontology.json, plants/*.json) and the same graph engine (js/kg.js), drawn as a
+// minimal 3D neural network: spheres, thin lines, a label on every visible node, and progressive disclosure —
+//   level 0   the three knowledge axes X · Y · Z with their categories, the three plants, the evidence region
+//   click     a category opens its facets; a facet its concepts in use; a concept or a plant its cross-dimensional links;
+//             a line opens the evidence trace (relation type, status, claims, sources, conditions, verification)
+//   back      Esc or ← Back collapses the last step; Overview returns to level 0; the background only deselects
+// Nothing is drawn that is not an edge of kg.json; unexplored knowledge is hidden, not removed.
 import * as THREE from 'three';
 import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
 import { loadAll } from './kg.js';
@@ -22,20 +16,21 @@ import { TYPE_COLOUR } from '../../js/model.js';
 const $ = s => document.querySelector(s);
 const esc = s => String(s ?? '').replace(/[&<>"]/g, ch => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[ch]));
 const LS_KEY = 'brain.candidates.v6';
-const STEP = 560;
-const AX = {   // the three lobes + the evidence region
-  'axis:x': { key: 'x', label: 'X · Identity & Classification', colour: '#f6d365', anchor: [0, 250, -140] },
-  'axis:y': { key: 'y', label: 'Y · Traits & Performance', colour: '#7cc4ff', anchor: [-340, -50, 120] },
-  'axis:z': { key: 'z', label: 'Z · Planting Design Knowledge', colour: '#6ff2b0', anchor: [340, -50, 120] },
-  evidence: { key: 'e', label: 'Evidence · Sources & Places', colour: '#ff9e6b', anchor: [0, -300, -80] },
+const STEP = 520;
+const AX = {
+  'axis:x': { key: 'x', label: 'X · Identity & Classification', colour: '#f6d365', anchor: [0, 215, -110] },
+  'axis:y': { key: 'y', label: 'Y · Traits & Performance', colour: '#7cc4ff', anchor: [-300, -55, 100] },
+  'axis:z': { key: 'z', label: 'Z · Planting Design Knowledge', colour: '#6ff2b0', anchor: [300, -55, 100] },
+  evidence: { key: 'e', label: 'Evidence · Sources & Places', colour: '#ff9e6b', anchor: [0, -265, -60] },
 };
 const ST = { documented: '#ffffff', derived: '#c9b8ff', candidate: '#ffd27a', unknown: '#ff6b6b', observation: TYPE_COLOUR.candidate, conflict: '#ff6b6b' };
-const S = { K: null, G: null, Graph: null, nodes: [], links: [], syn: [], labels: [], act: new Map(), actL: new Map(), alive: false, dirty: 2, centroid: {}, candidates: [], diag: null, mode: null, edgeLink: new Map(), selected: null, open: new Set() };
+const S = { K: null, G: null, Graph: null, reg: new Map(), nodes: [], links: [], visible: new Set(), expanded: new Set(), history: [], act: new Map(), actL: new Map(), alive: false, labels: [], selected: null, candidates: [], diag: null, edgeLink: new Map() };
+const ALL = () => [...S.reg.values()];
 
 function hash(s) { let h = 2166136261; for (let i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 16777619); } return (h >>> 0) / 4294967295; }
 const rnd = (s, i) => hash(`${s}#${i}`);
-function dir3(s) { const u = rnd(s, 1) * 2 - 1, t = rnd(s, 2) * Math.PI * 2; const r = Math.sqrt(Math.max(0, 1 - u * u)); return [r * Math.cos(t), u, r * Math.sin(t)]; }
-const add3 = (a, b, k = 1) => [a[0] + b[0] * k, a[1] + b[1] * k, a[2] + b[2] * k];
+const norm = v => { const L = Math.hypot(...v) || 1; return v.map(x => x / L); };
+const cross = (a, b) => [a[1] * b[2] - a[2] * b[1], a[2] * b[0] - a[0] * b[2], a[0] * b[1] - a[1] * b[0]];
 
 // ------------------------------------------------------------------ boot
 (async function boot() {
@@ -44,281 +39,272 @@ const add3 = (a, b, k = 1) => [a[0] + b[0] * k, a[1] + b[1] * k, a[2] + b[2] * k
     S.G = indexGraph(K.kg, K.db.diagnosis, K.db.ontology);
     S.candidates = loadCandidates(); for (const c of S.candidates) K.addCandidateEdges(candidateEdges(S.G, c), candToClaim(c));
     S.diag = S.candidates.length ? runDiag() : K.db.diagnosis;
-    initHost(); buildGraph(); initUi();
+    buildRegistry(); initHost(); overview(false); initUi();
     $('#loading').classList.add('gone');
   } catch (e) { $('#err').textContent = `could not load: ${e.message}\n\nserve the planting-db root:  python3 -m http.server 8766  → http://localhost:8766/brain/ontology-preview/`; console.error(e); }
 })();
 function runDiag() { const K = S.K; return diagnose(S.G.O, K.edges, id => K.label(id), K.kg.gate_facets, K.db.sources); }
-const regionOf = n => n.axis ? n.axis : (n.type === 'plant' || n.type === 'cultivar') ? 'centre' : (n.type === 'source' || n.type === 'practitioner' || n.category === 'cross:place') ? 'evidence' : (n.category === 'cross:time' ? 'axis:y' : 'axis:x');
 const colourOfNode = n => n.kind === 'plant' || n.kind === 'cultivar' ? TYPE_COLOUR.plant : n.kind === 'source' ? (TYPE_COLOUR[n.n.source_type] || '#8892a8') : (AX[n.region] || AX.evidence).colour;
+const plantsLinked = cid => { const fam = new Set(S.K.descendants(cid)); return new Set(S.K.edges.filter(e => e.live !== false && fam.has(e.target) && ['claim', 'entity', 'classification', 'height_band', 'layer', 'candidate', 'design'].includes(e.type) && !(e.type === 'design' && e.kg_status === 'unknown')).map(e => e.plant || e.source)); };
 
-// ------------------------------------------------------------------ graph data: hierarchy decides the home of every neuron
-function buildGraph() {
-  const K = S.K; const prev = new Map(S.nodes.map(n => [n.id, n])); const nodes = []; const links = []; const byId = new Map(); const linkMap = new Map();
-  const keep = n => { const o = prev.get(n.id); if (o) { n.x = o.x; n.y = o.y; n.z = o.z; n.vx = n.vy = n.vz = 0; } else { n.x = n.tgt[0] + (rnd(n.id, 7) - 0.5) * 16; n.y = n.tgt[1] + (rnd(n.id, 8) - 0.5) * 16; n.z = n.tgt[2] + (rnd(n.id, 9) - 0.5) * 16; } nodes.push(n); byId.set(n.id, n); return n; };
+// ------------------------------------------------------------------ registry: every kg node once, with its layout parent and children
+function buildRegistry() {
+  const K = S.K; const reg = S.reg; reg.clear();
   const used = new Set(); for (const e of K.edges) { if (e.live !== false && e.target && ['claim', 'entity', 'classification', 'height_band', 'layer', 'candidate', 'taxonomy'].includes(e.type) || (e.type === 'design' && ['derived', 'candidate'].includes(e.kg_status))) used.add(e.target); if (e.place && e.live !== false && ['claim', 'candidate'].includes(e.type)) used.add(e.place); }
   for (const c of K.kg.nodes) if (c.type === 'concept' && !used.has(c.id) && K.descendants(c.id).some(d => used.has(d))) used.add(c.id);
-  // axes
-  for (const [id, a] of Object.entries(AX)) if (id !== 'evidence') keep({ id, kind: 'axis', n: K.N.get(id), region: id, tgt: a.anchor, size: 46, base: 0.5, used: true });
-  keep({ id: 'region:evidence', kind: 'axis', n: { id: 'region:evidence', label: 'Evidence · Sources & Places', definition: 'The sources, respondents and places behind every claim; the cross-dimensional evidence layer.' }, region: 'evidence', tgt: AX.evidence.anchor, size: 36, base: 0.4, used: true });
-  // categories around their axis (a ring tilted toward the centre), facets around their category, concepts around their facet
-  const cats = K.kg.nodes.filter(n => n.type === 'category');
-  for (const ax of ['axis:x', 'axis:y', 'axis:z']) {
-    const mine = cats.filter(c => c.axis === ax).sort((a, b) => (a.order ?? 9) - (b.order ?? 9)); const A = AX[ax].anchor; const toC = [-A[0], -A[1] * 0.3, -A[2]]; const L = Math.hypot(...toC) || 1; const u = toC.map(v => v / L);
-    const side = [u[2], 0, -u[0]]; const up = [0, 1, 0];
-    mine.forEach((c, i) => { const th = (i / mine.length) * Math.PI * 2 + 0.4; const R = 120; const p = add3(add3(add3(A, side, Math.cos(th) * R), up, Math.sin(th) * R * 0.7), u, 30); keep({ id: c.id, kind: 'cat', n: c, region: ax, tgt: p, size: 24, base: 0.55, used: true }); });
-  }
-  for (const c of cats.filter(c => !c.axis)) { const i = ['cross:place', 'cross:time', 'cross:evidence', 'cross:media'].indexOf(c.id); const A = AX.evidence.anchor; keep({ id: c.id, kind: 'cat', n: c, region: 'evidence', tgt: [A[0] + Math.cos(i * 1.57) * 110, A[1] + 10, A[2] + Math.sin(i * 1.57) * 110], size: 16, base: 0.4, used: c.id === 'cross:place' || c.id === 'cross:evidence' }); }
-  for (const f of K.kg.nodes.filter(n => n.type === 'facet')) { const cat = byId.get(f.category); if (!cat) continue; const sib = K.kg.nodes.filter(n => n.type === 'facet' && n.category === f.category); const i = sib.findIndex(x => x.id === f.id); const d = dir3(f.id); const R = 54 + 8 * (i % 3); const inUse = K.kg.nodes.some(n => n.type === 'concept' && n.facet === f.facet_key && used.has(n.id)); keep({ id: f.id, kind: 'facet', n: f, region: cat.region, tgt: add3(cat.tgt, d, R), size: inUse ? 13 : 8, base: inUse ? 0.5 : 0.22, used: inUse }); }
-  const concepts = K.kg.nodes.filter(n => n.type === 'concept');
-  const plantsOf = cid => { const fam = new Set(K.descendants(cid)); return new Set(K.edges.filter(e => e.live !== false && fam.has(e.target) && ['claim', 'entity', 'classification', 'height_band', 'layer', 'candidate', 'design'].includes(e.type) && !(e.type === 'design' && e.kg_status === 'unknown')).map(e => e.plant || e.source)); };
-  const placesOf = cid => new Set(K.edges.filter(e => e.place === cid && e.live !== false).map(e => e.plant));
-  const place = (c, depth = 0) => { if (byId.has(c.id)) return byId.get(c.id); const hp = c.hierarchy_parent; const par = hp && (byId.get(hp) || (K.N.get(hp)?.type === 'concept' ? place(K.N.get(hp), depth + 1) : null)); const anchor = par ? par.tgt : (AX[regionOf(c)] || AX.evidence).anchor; const isUsed = used.has(c.id); const k = isUsed ? (c.facet === 'place' ? placesOf(c.id).size : plantsOf(c.id).size) : 0; const d = dir3(c.id); const R = par && par.kind === 'concept' ? 14 + rnd(c.id, 4) * 10 : (isUsed ? 20 + rnd(c.id, 4) * 22 : 44 + rnd(c.id, 4) * 40); return keep({ id: c.id, kind: 'concept', n: c, region: par ? par.region : regionOf(c), tgt: add3(anchor, d, R), size: isUsed ? 6.5 + 2.6 * k : 2.8, base: isUsed ? 0.9 : 0.22, used: isUsed, k, design: c.dimension === 'design' }); };
-  for (const c of concepts) place(c);
-  // plants at the centre, cultivars beside them, sources in the evidence region
-  K.plants.forEach((p, i) => { const a = i / K.plants.length * Math.PI * 2 + 0.9; keep({ id: p.id, kind: 'plant', n: p, region: 'centre', tgt: [Math.cos(a) * 100, (rnd(p.id, 3) - 0.5) * 70, Math.sin(a) * 100], size: 28, base: 0.95, used: true }); });
-  for (const cv of K.kg.nodes.filter(n => n.type === 'cultivar')) { const p = byId.get(cv.plant); keep({ id: cv.id, kind: 'cultivar', n: cv, region: 'centre', tgt: add3(p.tgt, dir3(cv.id), 28), size: 4, base: 0.5, used: true }); links.push({ id: `cv:${cv.id}`, kind: 'cv', source: cv.id, target: cv.plant, edges: [], status: 'documented' }); }
-  for (const s of K.kg.nodes.filter(n => (n.type === 'source' || n.type === 'practitioner') && !n.parent)) { const has = K.edges.some(e => e.live !== false && (e.source_id === s.id.split(':')[1])); const A = AX.evidence.anchor; keep({ id: s.id, kind: 'source', n: s, region: 'evidence', tgt: add3(A, dir3(s.id), has ? 60 + rnd(s.id, 4) * 50 : 120 + rnd(s.id, 4) * 60), size: has ? 9 : 4.5, base: has ? 0.75 : 0.2, used: has }); }
-  if (S.candidates.length) keep({ id: 'source:candidate', kind: 'source', n: { id: 'source:candidate', label: 'you (candidate)', source_type: 'candidate' }, region: 'evidence', tgt: add3(AX.evidence.anchor, dir3('cand'), 50), size: 9, base: 0.8, used: true });
-  // links from the kg edges — every fibre is a real edge (or a bundle of real claim edges)
-  const bundle = (key, kind, src, tgt, e, extra = {}) => { if (!byId.has(src) || !byId.has(tgt)) return null; if (!linkMap.has(key)) { const l = { id: key, kind, source: src, target: tgt, edges: [], ...extra }; linkMap.set(key, l); links.push(l); } const l = linkMap.get(key); l.edges.push(e); S.edgeLink.set(e.id, l); return l; };
-  S.edgeLink = new Map();
+  const put = n => { const o = reg.get(n.id); if (o) { n.x = o.x; n.y = o.y; n.z = o.z; n.tgt = o.tgt; } reg.set(n.id, n); return n; };
+  for (const [id, a] of Object.entries(AX)) if (id !== 'evidence') put({ id, kind: 'axis', n: K.N.get(id), region: id, parent: null, size: 11, used: true, level: 0 });
+  put({ id: 'region:evidence', kind: 'axis', n: { id: 'region:evidence', label: 'Evidence · Sources & Places', definition: 'The sources, respondents and places behind every claim; the cross-dimensional evidence layer.' }, region: 'evidence', parent: null, size: 9, used: true, level: 0 });
+  for (const c of K.kg.nodes.filter(n => n.type === 'category')) put({ id: c.id, kind: 'cat', n: c, region: c.axis || 'evidence', parent: c.axis || 'region:evidence', size: c.axis ? 6.5 : 5, used: !c.cross_layer || c.id === 'cross:place', level: 1 });
+  for (const f of K.kg.nodes.filter(n => n.type === 'facet')) { const inUse = K.kg.nodes.some(n => n.type === 'concept' && n.facet === f.facet_key && used.has(n.id)); put({ id: f.id, kind: 'facet', n: f, region: reg.get(f.category)?.region || 'evidence', parent: f.category, size: 4.4, used: inUse, level: 2 }); }
+  for (const c of K.kg.nodes.filter(n => n.type === 'concept')) { const isUsed = used.has(c.id); const k = isUsed ? plantsLinked(c.id).size : 0; const par = c.hierarchy_parent; put({ id: c.id, kind: 'concept', n: c, region: reg.get(c.category)?.region || (c.dimension === 'taxonomy' ? 'axis:x' : 'evidence'), parent: par, size: (c.dimension === 'design' ? 3.6 : 3) + 0.4 * k, used: isUsed, k, design: c.dimension === 'design', level: 3 }); }
+  K.plants.forEach((p, i) => put({ id: p.id, kind: 'plant', n: p, region: 'centre', parent: null, size: 8, used: true, level: 0, idx: i }));
+  for (const cv of K.kg.nodes.filter(n => n.type === 'cultivar')) put({ id: cv.id, kind: 'cultivar', n: cv, region: 'centre', parent: cv.plant, size: 2.6, used: true, level: 1 });
+  for (const s of K.kg.nodes.filter(n => (n.type === 'source' || n.type === 'practitioner') && !n.parent)) { const has = K.edges.some(e => e.live !== false && e.source_id === s.id.split(':')[1]); put({ id: s.id, kind: 'source', n: s, region: 'evidence', parent: 'region:evidence', size: has ? 4 : 2.5, used: has, level: 1 }); }
+  if (S.candidates.length) put({ id: 'source:candidate', kind: 'source', n: { id: 'source:candidate', label: 'you (candidate)', source_type: 'candidate' }, region: 'evidence', parent: 'region:evidence', size: 4, used: true, level: 1 });
+  for (const n of reg.values()) n.children = [];
+  for (const n of reg.values()) if (n.parent && reg.has(n.parent)) reg.get(n.parent).children.push(n);
+  for (const n of reg.values()) n.children.sort((a, b) => (a.n.order ?? 99) - (b.n.order ?? 99) || (b.k || 0) - (a.k || 0) || String(a.n.label).localeCompare(String(b.n.label)));
+}
+const ancestors = id => { const out = []; let n = S.reg.get(id); while (n && n.parent) { out.push(n.parent); n = S.reg.get(n.parent); } return out; };
+
+// ------------------------------------------------------------------ layout: deterministic rings around the parent, outward from the centre
+function ring(center, out, n, r, seed) {
+  const up = Math.abs(out[1]) > 0.9 ? [1, 0, 0] : [0, 1, 0]; const u = norm(cross(out, up)); const v = norm(cross(out, u)); const pts = [];
+  const two = n > 9; const n1 = two ? Math.ceil(n / 2) : n;
+  for (let i = 0; i < n; i++) { const inner = two && i < n1; const m = two ? (inner ? n1 : n - n1) : n; const j = two && !inner ? i - n1 : i; const R = inner ? r * 0.55 : r; const th = (j / m) * Math.PI * 2 + rnd(seed, 1) * 0.7 + (inner ? 0 : Math.PI / m); const w = (rnd(`${seed}:${i}`, 2) - 0.5) * r * 0.25; pts.push([center[0] + u[0] * Math.cos(th) * R + v[0] * Math.sin(th) * R + out[0] * w, center[1] + u[1] * Math.cos(th) * R + v[1] * Math.sin(th) * R + out[1] * w, center[2] + u[2] * Math.cos(th) * R + v[2] * Math.sin(th) * R + out[2] * w]); }
+  return pts;
+}
+function layout() {
+  const vis = id => S.visible.has(id); const R = S.reg;
+  for (const [id, a] of Object.entries(AX)) { const n = R.get(id === 'evidence' ? 'region:evidence' : id); n.tgt = a.anchor.slice(); }
+  for (const p of ALL().filter(n => n.kind === 'plant')) { const a = p.idx / 3 * Math.PI * 2 + 0.9; p.tgt = [Math.cos(a) * 95, [18, -14, 2][p.idx % 3], Math.sin(a) * 95]; }
+  const place = parent => {
+    const kids = parent.children.filter(k => vis(k.id)); if (!kids.length) return;
+    const P = parent.tgt; const out = parent.kind === 'plant' ? norm([P[0], P[1] + 40, P[2]]) : norm(P);
+    const n = kids.length; const spec = parent.kind === 'axis' ? [150, 24] : parent.kind === 'cat' ? [Math.max(80, 20 * n), 24] : parent.kind === 'facet' ? [Math.max(48, 9.5 * n), 18] : parent.kind === 'plant' ? [34, 0] : [30, 12];
+    const r = parent.id === 'region:evidence' ? Math.max(90, 14 * n) : spec[0]; const d = spec[1];
+    const pts = ring([P[0] + out[0] * d, P[1] + out[1] * d, P[2] + out[2] * d], out, n, r, parent.id);
+    kids.forEach((k, i) => { k.tgt = pts[i]; if (!Number.isFinite(k.x)) { k.x = P[0]; k.y = P[1]; k.z = P[2]; } place(k); });
+  };
+  for (const n of ALL()) if (!n.parent && vis(n.id)) { if (!Number.isFinite(n.x)) { n.x = n.tgt[0]; n.y = n.tgt[1]; n.z = n.tgt[2]; } place(n); }
+}
+
+// ------------------------------------------------------------------ visibility: what is shown is what has been explored
+function rebuild() {
+  const K = S.K; const vis = S.visible; const nodes = ALL().filter(n => vis.has(n.id)); const links = []; const map = new Map(); S.edgeLink = new Map();
+  layout();
+  const bundle = (key, kind, a, b, e, extra = {}) => { if (!vis.has(a) || !vis.has(b) || a === b) return; if (!map.has(key)) { const l = { id: key, kind, source: a, target: b, edges: [], ...extra }; map.set(key, l); links.push(l); } const l = map.get(key); l.edges.push(e); S.edgeLink.set(e.id, l); };
+  for (const n of nodes) if (n.parent && vis.has(n.parent)) links.push({ id: `h:${n.id}`, kind: 'hier', source: n.id, target: n.parent, edges: [], status: 'documented' });
   for (const e of K.edges) {
-    if (e.type === 'claim' || e.type === 'entity' || e.type === 'candidate') { if (e.live === false || !e.target) continue; bundle(`${e.plant}→${e.target}`, 'pc', e.plant, e.target, e); if (e.place && byId.has(e.place)) bundle(`${e.plant}→${e.place}`, 'pp', e.plant, e.place, e); if (byId.has(`source:${e.source_id}`)) bundle(`source:${e.source_id}→${e.plant}`, 'sp', `source:${e.source_id}`, e.plant, e); }
+    if (e.type === 'claim' || e.type === 'entity' || e.type === 'candidate') { if (e.live === false || !e.target) continue; bundle(`${e.plant}→${e.target}`, 'pc', e.plant, e.target, e); if (e.place) bundle(`${e.plant}→${e.place}`, 'pp', e.plant, e.place, e); bundle(`source:${e.source_id}→${e.plant}`, 'sp', `source:${e.source_id}`, e.plant, e); }
     else if (e.type === 'classification') bundle(e.id, 'gf', e.source, e.target, e, { status: 'derived' });
     else if (e.type === 'taxonomy') bundle(e.id, 'tax', e.source, e.target, e, { status: 'documented' });
     else if (e.type === 'height_band') bundle(`${e.plant}→${e.target}`, 'band', e.plant, e.target, e, { status: 'derived' });
     else if (e.type === 'layer') bundle(e.id, 'layer', e.source, e.target, e, { status: 'derived' });
-    else if (e.type === 'design') bundle(e.id, 'design', e.source, e.target, e, { status: e.kg_status, hidden: e.kg_status === 'unknown' });
+    else if (e.type === 'design') { if (e.kg_status === 'unknown') continue; bundle(e.id, 'design', e.source, e.target, e, { status: e.kg_status }); }
     else if (e.type === 'concept') bundle(e.id, 'cc', e.source, e.target, e, { status: e.kg_status, rel: e.rel });
-    else if (e.type === 'hierarchy' || e.type === 'parent') { const faint = !(byId.get(e.source)?.used); bundle(e.id, 'hier', e.source, e.target, e, { status: 'documented', faint }); }
-    else if (e.type === 'relation') { if (!e.live && e.kg_status !== 'candidate') continue; bundle(e.id, 'rel', e.source, e.target, e, { status: e.kg_status }); }
+    else if (e.type === 'relation') { if (!e.live && e.kg_status !== 'candidate') continue; if (e.kg_status === 'candidate' && !S.expanded.has(e.source) && !S.expanded.has(e.target)) continue; bundle(e.id, 'rel', e.source, e.target, e, { status: e.kg_status }); }
   }
-  // synapses: one bouton per claim on its plant → concept fibre
-  const syn = [];
-  for (const l of links) if (l.kind === 'pc') for (const e of l.edges) syn.push({ link: l, t: 0.3 + rnd(e.id, 5) * 0.5, off: dir3(e.id).map(v => v * 4), e, colour: new THREE.Color(e.status === 'verified' ? '#ffffff' : e.type === 'candidate' ? TYPE_COLOUR.candidate : e.source_type === 'entity' ? TYPE_COLOUR.plant : (AX[byId.get(l.target).region] || AX.evidence).colour) });
-  S.nodes = nodes; S.links = links; S.syn = syn;
+  for (const l of links) { l.source = S.reg.get(l.source); l.target = S.reg.get(l.target); }
+  S.nodes = nodes; S.links = links;
   S.Graph.graphData({ nodes, links });
-  S.Graph.d3Force('link').distance(l => ({ pc: 150, pp: 160, gf: 110, tax: 60, band: 150, layer: 150, design: 170, cc: 120, hier: 30, sp: 180, rel: 160, cv: 26 }[l.kind])).strength(l => ({ pc: 0.012, pp: 0.004, gf: 0.03, tax: 0.1, band: 0.01, layer: 0.01, design: 0.01, cc: 0.004, hier: 0.12, sp: 0.004, rel: 0, cv: 0.4 }[l.kind]));
-  S.Graph.d3Force('charge').strength(n => n.kind === 'plant' ? -500 : n.kind === 'axis' ? -300 : n.kind === 'cat' ? -140 : n.kind === 'facet' ? -40 : n.kind === 'concept' ? (n.used ? -16 : -5) : n.kind === 'source' ? -24 : -8).distanceMax(220);
-  buildSynapses(); rebuildLabels(); renderStats(); renderChips();
+  rebuildLabels(); renderStats(); renderCrumb();
+}
+function show(ids) { let changed = false; for (const id of ids) { if (!S.reg.has(id)) continue; for (const a of [id, ...ancestors(id)]) if (!S.visible.has(a)) { S.visible.add(a); changed = true; } } return changed; }
+function hideSubtree(id) { const n = S.reg.get(id); if (!n) return; for (const k of n.children) { if (S.visible.has(k.id)) { S.visible.delete(k.id); hideSubtree(k.id); } } S.expanded.delete(id); }
+function snapshot() { S.history.push({ visible: new Set(S.visible), expanded: new Set(S.expanded), selected: S.selected?.id || null }); if (S.history.length > 60) S.history.shift(); }
+function overview(animate = true) {
+  S.visible = new Set(); S.expanded = new Set(); S.history = []; S.selected = null; clearAct(); closeCard();
+  show(['axis:x', 'axis:y', 'axis:z', 'region:evidence', ...ALL().filter(n => n.kind === 'cat' && n.used && n.region !== 'evidence').map(n => n.id), ...ALL().filter(n => n.kind === 'plant').map(n => n.id)]);
+  rebuild(); const asp = window.innerWidth / window.innerHeight; const D = 900 * Math.max(1, 1.45 / asp); S.Graph.cameraPosition({ x: 0, y: D * 0.12, z: D }, { x: 0, y: -10, z: 0 }, animate ? 1200 : 0);
+}
+function back() { const h = S.history.pop(); if (!h) { overview(); return; } S.visible = h.visible; S.expanded = h.expanded; clearAct(); rebuild(); const n = h.selected && S.reg.get(h.selected); if (n && S.visible.has(n.id)) { S.selected = n; openCard(cardFor(n)); focusOn(n); } else closeCard(); renderCrumb(); }
+
+// what a click reveals (progressive disclosure), by kind — only nodes joined to it by a kg.json edge
+function revealFor(n) {
+  const K = S.K; const out = new Set();
+  if (n.kind === 'axis' || n.kind === 'cat') { for (const k of n.children) if (k.used) out.add(k.id); }
+  else if (n.kind === 'facet') { for (const k of n.children) if (k.used) { out.add(k.id); for (const g of k.children) if (g.used) out.add(g.id); } }
+  else if (n.kind === 'concept') {
+    for (const k of n.children) if (k.used) out.add(k.id);
+    for (const e of K.edges) {
+      if (e.type === 'concept' && (e.source === n.id || e.target === n.id || (e.alternatives || []).includes(n.id))) { out.add(e.source); out.add(e.target); for (const a of e.alternatives || []) if (e.source === n.id) out.add(a); }
+      if (e.type === 'design' && e.target === n.id && e.kg_status !== 'unknown') out.add(e.source);
+      if ((e.type === 'layer' || e.type === 'height_band' || e.type === 'classification' || e.type === 'taxonomy') && (e.target === n.id || e.source === n.id)) { out.add(e.source); out.add(e.target); }
+    }
+    for (const p of plantsLinked(n.id)) out.add(p);
+  }
+  else if (n.kind === 'plant') { for (const e of K.edgesFrom(n.id)) if (['classification', 'taxonomy', 'layer', 'cultivar_of'].includes(e.type) || (e.type === 'design' && e.kg_status !== 'unknown')) out.add(e.target); for (const k of n.children) out.add(k.id); for (const e of K.edgesTo(n.id)) if (e.type === 'cultivar_of') out.add(e.source); }
+  else if (n.kind === 'source') { for (const e of K.edges) if (e.source_id === n.id.split(':')[1] && e.live !== false && e.plant) out.add(e.plant); }
+  out.delete(n.id); return [...out];
+}
+function expandNode(n) {
+  const already = S.expanded.has(n.id);
+  snapshot();
+  if (already && (n.kind === 'axis' || n.kind === 'cat' || n.kind === 'facet')) { hideSubtree(n.id); if (n.kind !== 'axis') { } rebuild(); return []; }
+  const ids = revealFor(n); const fresh = ids.filter(id => !S.visible.has(id) && !ancestors(id).some(a => !S.visible.has(a) && !ids.includes(a)));
+  show(ids); S.expanded.add(n.id); rebuild();
+  return ids;
 }
 
-// ------------------------------------------------------------------ host
+// ------------------------------------------------------------------ host: spheres, thin lines, soft light
 function initHost() {
-  const Graph = new ForceGraph3D($('#graph'), { controlType: 'orbit' }).backgroundColor('#01020a').showNavInfo(false)
+  const Graph = new ForceGraph3D($('#graph'), { controlType: 'orbit' }).backgroundColor('#04060f').showNavInfo(false)
     .nodeThreeObject(nodeObject).nodeThreeObjectExtend(false).nodeLabel(() => '')
     .linkThreeObject(linkObject).linkThreeObjectExtend(false).linkPositionUpdate(linkPositionUpdate)
-    .enableNodeDrag(false).warmupTicks(140).cooldownTime(9000).d3AlphaDecay(0.02).d3VelocityDecay(0.3)
+    .enableNodeDrag(false).cooldownTicks(0).warmupTicks(0)
     .onNodeClick(n => { S.swallow = true; select(n); })
-    .onNodeHover(n => { document.body.style.cursor = n ? 'pointer' : ''; if (n) showTip(n); else hideTip(); })
-    .onLinkClick(l => { S.swallow = true; if (!l.hidden || S.mode === 'gaps') select({ kind: 'link', link: l }); })
-    .onBackgroundClick(() => { if (S.swallow) { S.swallow = false; return; } clearAll(); });
-  Graph.d3Force('home', homeForce());
-  const sc = Graph.scene(); sc.fog = new THREE.FogExp2(0x01020a, 0.00095);
-  Graph.postProcessingComposer().addPass(new UnrealBloomPass(new THREE.Vector2(window.innerWidth, window.innerHeight), 1.25, 0.7, 0.12));
-  Graph.cameraPosition({ x: 0, y: 120, z: 980 }, { x: 0, y: -10, z: 0 }, 0);
-  const ctl = Graph.controls(); ctl.autoRotate = true; ctl.autoRotateSpeed = 0.2; ctl.enableDamping = true; ctl.dampingFactor = 0.08; ctl.minDistance = 90; ctl.maxDistance = 1800;
-  ctl.addEventListener('start', () => { ctl.autoRotate = false; });
-  S.Graph = Graph; S.tex = glowTexture(); S.texRing = ringTexture();
-  buildNeuropil();
+    .onNodeHover(n => { document.body.style.cursor = n ? 'pointer' : ''; hover(n); })
+    .onLinkClick(l => { S.swallow = true; selectLink(l); })
+    .onBackgroundClick(() => { if (S.swallow) { S.swallow = false; return; } deselect(); });
+  const sc = Graph.scene(); sc.fog = new THREE.FogExp2(0x04060f, 0.0007);
+  sc.add(new THREE.HemisphereLight(0xdfe8ff, 0x101424, 0.9)); const dl = new THREE.DirectionalLight(0xffffff, 1.1); dl.position.set(300, 500, 400); sc.add(dl);
+  Graph.postProcessingComposer().addPass(new UnrealBloomPass(new THREE.Vector2(window.innerWidth, window.innerHeight), 0.22, 0.45, 0.82));
+  const ctl = Graph.controls(); ctl.autoRotate = false; ctl.enableDamping = true; ctl.dampingFactor = 0.08; ctl.minDistance = 60; ctl.maxDistance = 2000;
+  S.Graph = Graph; S.tex = glowTexture(); S.geo = new THREE.SphereGeometry(1, 28, 20);
   (function loop() { frame(); requestAnimationFrame(loop); })();
 }
-function homeForce() { let nodes = []; const f = alpha => { for (const n of nodes) { if (!n.tgt) continue; const k = alpha * ({ plant: 0.5, axis: 0.6, cat: 0.5, facet: 0.4, cultivar: 0.4 }[n.kind] ?? 0.3); n.vx += (n.tgt[0] - n.x) * k; n.vy += (n.tgt[1] - n.y) * k; n.vz += (n.tgt[2] - n.z) * k; } }; f.initialize = ns => { nodes = ns; }; return f; }
-function glowTexture() { const c = document.createElement('canvas'); c.width = c.height = 128; const g = c.getContext('2d'); const grd = g.createRadialGradient(64, 64, 0, 64, 64, 64); grd.addColorStop(0, 'rgba(255,255,255,1)'); grd.addColorStop(0.18, 'rgba(255,255,255,0.75)'); grd.addColorStop(0.5, 'rgba(255,255,255,0.16)'); grd.addColorStop(1, 'rgba(255,255,255,0)'); g.fillStyle = grd; g.fillRect(0, 0, 128, 128); return new THREE.CanvasTexture(c); }
-function ringTexture() { const c = document.createElement('canvas'); c.width = c.height = 128; const g = c.getContext('2d'); g.strokeStyle = 'rgba(255,255,255,0.9)'; g.lineWidth = 7; g.strokeRect(30, 30, 68, 68); const grd = g.createRadialGradient(64, 64, 10, 64, 64, 64); grd.addColorStop(0, 'rgba(255,255,255,0.35)'); grd.addColorStop(1, 'rgba(255,255,255,0)'); g.fillStyle = grd; g.fillRect(0, 0, 128, 128); return new THREE.CanvasTexture(c); }
-function mat(col, a, tex) { const m = new THREE.SpriteMaterial({ map: tex || S.tex, color: new THREE.Color(col), transparent: true, opacity: a, depthWrite: false, blending: THREE.AdditiveBlending }); m.userData.base = a; return m; }
+function glowTexture() { const c = document.createElement('canvas'); c.width = c.height = 128; const g = c.getContext('2d'); const grd = g.createRadialGradient(64, 64, 0, 64, 64, 64); grd.addColorStop(0, 'rgba(255,255,255,0.55)'); grd.addColorStop(0.35, 'rgba(255,255,255,0.14)'); grd.addColorStop(1, 'rgba(255,255,255,0)'); g.fillStyle = grd; g.fillRect(0, 0, 128, 128); return new THREE.CanvasTexture(c); }
 function nodeObject(n) {
-  const g = new THREE.Group(); const col = colourOfNode(n);
-  const halo = new THREE.Sprite(mat(col, n.base, n.kind === 'source' ? S.texRing : S.tex)); halo.scale.set(n.size, n.size, 1); g.add(halo);
-  if (n.kind === 'plant') { const core = new THREE.Sprite(mat('#ffffff', 0.9)); core.scale.set(9, 9, 1); g.add(core); }
-  if (n.kind === 'axis') { const core = new THREE.Sprite(mat('#ffffff', 0.35)); core.scale.set(10, 10, 1); g.add(core); }
-  if (n.kind === 'cat') { const core = new THREE.Sprite(mat('#ffffff', 0.5)); core.scale.set(5, 5, 1); g.add(core); }
-  if (n.kind === 'concept' && n.design && n.used) { const core = new THREE.Sprite(mat('#ffffff', 0.6)); core.scale.set(3.5, 3.5, 1); g.add(core); }
-  n.__obj = { group: g, halo, mats: [...g.children].map(c => c.material) }; return g;
+  const col = new THREE.Color(colourOfNode(n)); const g = new THREE.Group();
+  const mat = new THREE.MeshStandardMaterial({ color: col.clone().multiplyScalar(0.85), emissive: col, emissiveIntensity: n.used ? (n.kind === 'axis' || n.kind === 'cat' ? 0.28 : 0.4) : 0.12, roughness: 0.5, metalness: 0.05 });
+  const mesh = new THREE.Mesh(S.geo, mat); mesh.scale.setScalar(n.size); g.add(mesh);
+  const halo = new THREE.Sprite(new THREE.SpriteMaterial({ map: S.tex, color: col, transparent: true, opacity: n.used ? 0.32 : 0.12, depthWrite: false, blending: THREE.AdditiveBlending })); halo.scale.setScalar(n.size * 2.4); g.add(halo);
+  n.__obj = { group: g, mesh, mat, halo, baseE: mat.emissiveIntensity, baseH: halo.material.opacity }; return g;
 }
-const CURVE_N = 18;
-function linkBase(l) {
-  const t = S.nodes.find(n => n.id === (l.target.id || l.target)); const reg = t ? (AX[t.region] || AX.evidence).colour : '#8892a8';
+const SEG = 14;
+function linkStyle(l) {
   switch (l.kind) {
-    case 'pc': { const c = new THREE.Color(reg).lerp(new THREE.Color('#ffffff'), 0.25); const ver = l.edges.filter(e => e.status === 'verified').length / l.edges.length; const cand = l.edges.every(e => e.type === 'candidate'); return { col: cand ? new THREE.Color(ST.observation) : c, a: cand ? 0.6 : 0.14 + 0.3 * ver + 0.03 * Math.min(l.edges.length, 4) }; }
-    case 'pp': return { col: new THREE.Color(AX.evidence.colour), a: 0.05 };
-    case 'gf': return { col: new THREE.Color(AX['axis:x'].colour), a: 0.5 };
-    case 'tax': return { col: new THREE.Color(AX['axis:x'].colour), a: 0.3 };
-    case 'band': case 'layer': return { col: new THREE.Color(ST.derived), a: 0.16 };
-    case 'design': return { col: new THREE.Color(ST[l.status] || '#888'), a: l.status === 'derived' ? 0.3 : l.status === 'candidate' ? 0.2 : 0.0 };
-    case 'cc': return { col: new THREE.Color(l.rel === 'maps_to' ? ST.derived : AX['axis:z'].colour), a: 0.14 };
-    case 'hier': return { col: new THREE.Color('#aab4cc'), a: l.faint ? 0.012 : 0.06 };
-    case 'sp': { const st = l.edges[0].source_type; return { col: new THREE.Color(TYPE_COLOUR[st] || '#8892a8'), a: 0.06 }; }
-    case 'rel': return { col: new THREE.Color(l.status === 'candidate' ? ST.candidate : '#ffffff'), a: l.status === 'candidate' ? 0.08 : 0.2 };
-    default: return { col: new THREE.Color(TYPE_COLOUR.plant), a: 0.2 };
+    case 'hier': return { col: '#8f9bb8', a: 0.22 };
+    case 'pc': { const cand = l.edges.every(e => e.type === 'candidate'); const ver = l.edges.some(e => e.status === 'verified'); return { col: cand ? ST.observation : ver ? '#ffffff' : (AX[l.target.region] || AX.evidence).colour, a: cand ? 0.85 : 0.42 }; }
+    case 'pp': return { col: AX.evidence.colour, a: 0.25 };
+    case 'sp': return { col: TYPE_COLOUR[l.edges[0].source_type] || '#8892a8', a: 0.3 };
+    case 'gf': case 'tax': return { col: AX['axis:x'].colour, a: 0.55 };
+    case 'band': case 'layer': return { col: ST.derived, a: 0.45 };
+    case 'design': return { col: ST[l.status] || '#888', a: 0.55 };
+    case 'cc': return { col: l.rel === 'maps_to' ? ST.derived : AX['axis:z'].colour, a: 0.5 };
+    case 'rel': return { col: l.status === 'candidate' ? ST.candidate : '#ffffff', a: 0.35 };
+    default: return { col: '#8892a8', a: 0.3 };
   }
 }
 function linkObject(l) {
-  const st = linkBase(l);
-  const geo = new THREE.BufferGeometry(); geo.setAttribute('position', new THREE.BufferAttribute(new Float32Array(CURVE_N * 3), 3)); geo.setAttribute('color', new THREE.BufferAttribute(new Float32Array(CURVE_N * 3), 3));
-  const m = new THREE.LineBasicMaterial({ vertexColors: true, transparent: true, opacity: st.a, depthWrite: false, blending: THREE.AdditiveBlending });
-  const line = new THREE.Line(geo, m); l.__obj = { line, mat: m, base: st.a, col: st.col, pts: geo.attributes.position.array, cols: geo.attributes.color.array }; paintLink(l, 1); return line;
+  const st = linkStyle(l); const geo = new THREE.BufferGeometry(); geo.setAttribute('position', new THREE.BufferAttribute(new Float32Array(SEG * 3), 3)); geo.setAttribute('color', new THREE.BufferAttribute(new Float32Array(SEG * 3), 3));
+  const mat = new THREE.LineBasicMaterial({ vertexColors: true, transparent: true, opacity: st.a, depthWrite: false });
+  const line = new THREE.Line(geo, mat); l.__obj = { line, mat, base: st.a, col: new THREE.Color(st.col), pts: geo.attributes.position.array, cols: geo.attributes.color.array }; paintLink(l, 1); return line;
 }
-function paintLink(l, f) { const o = l.__obj; if (!o) return; const c = o.col, cols = o.cols; for (let i = 0; i < CURVE_N; i++) { const u = i / (CURVE_N - 1); const k = typeof f === 'function' ? f(u) : f; const w = Math.max(0, k - 1) * 0.6; cols[i * 3] = Math.min(1, c.r * k + w); cols[i * 3 + 1] = Math.min(1, c.g * k + w); cols[i * 3 + 2] = Math.min(1, c.b * k + w); } o.line.geometry.attributes.color.needsUpdate = true; }
+function paintLink(l, f) { const o = l.__obj; if (!o) return; const c = o.col, cols = o.cols; for (let i = 0; i < SEG; i++) { const k = typeof f === 'function' ? f(i / (SEG - 1)) : f; const w = Math.max(0, k - 1) * 0.5; cols[i * 3] = Math.min(1, c.r * k + w); cols[i * 3 + 1] = Math.min(1, c.g * k + w); cols[i * 3 + 2] = Math.min(1, c.b * k + w); } o.line.geometry.attributes.color.needsUpdate = true; }
 function linkPositionUpdate(obj, { start, end }, l) {
-  const o = l.__obj; if (!o) return false; const p = o.pts; const tgt = l.target; const len = Math.hypot(end.x - start.x, end.y - start.y, end.z - start.z) || 1; const w = dir3(l.id); let pts;
-  const C = (l.kind === 'pc' || l.kind === 'band' || l.kind === 'layer' || l.kind === 'design') && tgt.n?.category && S.centroid[tgt.n.category];
-  if (C) {   // a branch: shared stem from the plant toward the target's category, then the twig to the concept
-    const G = { x: C.x + (start.x - C.x) * 0.5, y: C.y + (start.y - C.y) * 0.5, z: C.z + (start.z - C.z) * 0.5 }; const wob = len * 0.1;
-    const M1 = { x: (start.x + G.x) / 2 + w[0] * wob * 0.5, y: (start.y + G.y) / 2 + w[1] * wob * 0.5, z: (start.z + G.z) / 2 + w[2] * wob * 0.5 }; const M2 = { x: G.x + (G.x - start.x) * 0.25 + w[0] * wob, y: G.y + (G.y - start.y) * 0.25 + w[1] * wob, z: G.z + (G.z - start.z) * 0.25 + w[2] * wob };
-    pts = i => { const u = i / (CURVE_N - 1); if (u < 0.45) { const t = u / 0.45, v = 1 - t; return [v * v * start.x + 2 * v * t * M1.x + t * t * G.x, v * v * start.y + 2 * v * t * M1.y + t * t * G.y, v * v * start.z + 2 * v * t * M1.z + t * t * G.z]; } const t = (u - 0.45) / 0.55, v = 1 - t; return [v * v * G.x + 2 * v * t * M2.x + t * t * end.x, v * v * G.y + 2 * v * t * M2.y + t * t * end.y, v * v * G.z + 2 * v * t * M2.z + t * t * end.z]; };
-  } else { const wob = len * (l.kind === 'hier' ? 0.04 : 0.16); const M = { x: (start.x + end.x) / 2 + w[0] * wob, y: (start.y + end.y) / 2 + w[1] * wob, z: (start.z + end.z) / 2 + w[2] * wob }; pts = i => { const t = i / (CURVE_N - 1), v = 1 - t; return [v * v * start.x + 2 * v * t * M.x + t * t * end.x, v * v * start.y + 2 * v * t * M.y + t * t * end.y, v * v * start.z + 2 * v * t * M.z + t * t * end.z]; }; }
-  const grow = l.born ? Math.min(1, (performance.now() - l.born) / 1400) : 1; let last = null;
-  for (let i = 0; i < CURVE_N; i++) { const u = i / (CURVE_N - 1); let q; if (u <= grow || !last) { q = pts(i); last = q; } else q = last; p[i * 3] = q[0]; p[i * 3 + 1] = q[1]; p[i * 3 + 2] = q[2]; }
-  o.line.geometry.attributes.position.needsUpdate = true; if (grow >= 1 && l.born && performance.now() - l.born > 1600) delete l.born; return true;
-}
-function buildSynapses() {
-  if (S.synObj) { S.Graph.scene().remove(S.synObj); S.synObj.geometry.dispose(); }
-  const n = S.syn.length; const geo = new THREE.BufferGeometry(); geo.setAttribute('position', new THREE.BufferAttribute(new Float32Array(n * 3), 3)); geo.setAttribute('color', new THREE.BufferAttribute(new Float32Array(n * 3), 3));
-  const m = new THREE.PointsMaterial({ size: 8, map: S.tex, vertexColors: true, transparent: true, opacity: 0.95, depthWrite: false, blending: THREE.AdditiveBlending, sizeAttenuation: true });
-  S.synObj = new THREE.Points(geo, m); S.Graph.scene().add(S.synObj);
-}
-function updateSynapses(now) {
-  if (!S.synObj) return; const pos = S.synObj.geometry.attributes.position.array, col = S.synObj.geometry.attributes.color.array;
-  S.syn.forEach((s, i) => { const o = s.link.__obj; if (!o) { pos[i * 3 + 1] = 1e5; return; } const f = s.t * (CURVE_N - 1); const a = Math.floor(f), b = Math.min(CURVE_N - 1, a + 1), r = f - a; const P = o.pts;
-    pos[i * 3] = P[a * 3] * (1 - r) + P[b * 3] * r + s.off[0]; pos[i * 3 + 1] = P[a * 3 + 1] * (1 - r) + P[b * 3 + 1] * r + s.off[1]; pos[i * 3 + 2] = P[a * 3 + 2] * (1 - r) + P[b * 3 + 2] * r + s.off[2];
-    let k = 0.5; const A = S.actL.get(s.link.id); if (A) { const p = (now - A.t0) / 700; const reached = A.dir > 0 ? p >= s.t : p >= 1 - s.t; k = reached ? 1.6 + 0.3 * Math.sin(now / 160 + i) : 0.12; } else if (S.alive) k = 0.06;
-    if (s.e.type === 'candidate') k *= 1.2; col[i * 3] = Math.min(1, s.colour.r * k); col[i * 3 + 1] = Math.min(1, s.colour.g * k); col[i * 3 + 2] = Math.min(1, s.colour.b * k); });
-  S.synObj.geometry.attributes.position.needsUpdate = true; S.synObj.geometry.attributes.color.needsUpdate = true;
-}
-function buildNeuropil() {
-  const pts = [], cols = []; const push = (x, y, z, c, k) => { pts.push(x, y, z); cols.push(c.r * k, c.g * k, c.b * k); }; const gauss = (s, i) => (rnd(s, i) + rnd(s, i + 50) + rnd(s, i + 100) - 1.5) * 2;
-  for (const [name, a] of Object.entries(AX)) { const col = new THREE.Color(a.colour); const sig = name === 'evidence' ? 70 : 120; for (let i = 0; i < 520; i++) { const s = `${name}:${i}`; push(a.anchor[0] + gauss(s, 1) * sig, a.anchor[1] + gauss(s, 2) * sig * 0.7, a.anchor[2] + gauss(s, 3) * sig, col, 0.14 + rnd(s, 4) * 0.16); } }
-  for (const name of Object.keys(AX)) { const col = new THREE.Color(AX[name].colour); const a = AX[name].anchor; for (let i = 0; i < 160; i++) { const s = `path:${name}:${i}`; const t = rnd(s, 1); push(a[0] * t + gauss(s, 2) * 20, a[1] * t + gauss(s, 3) * 20, a[2] * t + gauss(s, 4) * 20, col, 0.07 + rnd(s, 5) * 0.1); } }
-  const geo = new THREE.BufferGeometry(); geo.setAttribute('position', new THREE.Float32BufferAttribute(pts, 3)); geo.setAttribute('color', new THREE.Float32BufferAttribute(cols, 3));
-  S.neuropil = new THREE.Points(geo, new THREE.PointsMaterial({ size: 2.8, map: S.tex, vertexColors: true, transparent: true, opacity: 0.8, depthWrite: false, blending: THREE.AdditiveBlending })); S.Graph.scene().add(S.neuropil);
+  const o = l.__obj; if (!o) return false; const p = o.pts; const grow = l.born ? Math.min(1, (performance.now() - l.born) / 1200) : 1;
+  for (let i = 0; i < SEG; i++) { const t = Math.min(grow, i / (SEG - 1)); p[i * 3] = start.x + (end.x - start.x) * t; p[i * 3 + 1] = start.y + (end.y - start.y) * t; p[i * 3 + 2] = start.z + (end.z - start.z) * t; }
+  o.line.geometry.attributes.position.needsUpdate = true; if (grow >= 1 && l.born && performance.now() - l.born > 1400) delete l.born; return true;
 }
 
-// ------------------------------------------------------------------ activation
-function actOf(n, now) { const t0 = S.act.get(n.id); if (t0 === undefined) return 0; const p = (now - t0) / 380; return p <= 0 ? 0 : p >= 1 ? 1 : p * p * (3 - 2 * p); }
-function adjacency() { const adj = new Map(); for (const l of S.links) { if (l.hidden && S.mode !== 'gaps') continue; const a = l.source.id || l.source, b = l.target.id || l.target; if (!adj.has(a)) adj.set(a, []); if (!adj.has(b)) adj.set(b, []); adj.get(a).push({ l, v: b, dir: 1 }); adj.get(b).push({ l, v: a, dir: -1 }); } return adj; }
+// ------------------------------------------------------------------ activation: a short signal along the links just revealed, then rest
+function actOf(n, now) { const t0 = S.act.get(n.id); if (t0 === undefined) return 0; const p = (now - t0) / 360; return p <= 0 ? 0 : p >= 1 ? 1 : p * p * (3 - 2 * p); }
 function pulse(seeds, hops, allow, keep = false) {
   const now = performance.now(); if (!keep) { S.act.clear(); S.actL.clear(); }
-  const adj = adjacency(); const byId = new Map(S.nodes.map(n => [n.id, n])); let frontier = []; const seen = new Map();
-  for (const s of seeds) if (byId.has(s)) { S.act.set(s, now); seen.set(s, 0); frontier.push(s); }
-  for (let h = 0; h < hops && frontier.length; h++) { const next = []; for (const u of frontier) for (const { l, v, dir } of adj.get(u) || []) { if (seen.has(v) && seen.get(v) <= h) continue; if (allow && !allow(byId.get(u), l, byId.get(v), h)) continue; const jit = rnd(l.id, 11) * 160; if (!S.actL.has(l.id)) S.actL.set(l.id, { t0: now + h * STEP + jit, dir }); if (!seen.has(v)) { seen.set(v, h + 1); S.act.set(v, now + (h + 1) * STEP + jit); next.push(v); } } frontier = next; }
-  S.alive = S.act.size > 0; S.dirty = 3; S.Graph.controls().autoRotate = false; renderState();
+  const adj = new Map(); for (const l of S.links) { const a = l.source.id, b = l.target.id; if (!adj.has(a)) adj.set(a, []); if (!adj.has(b)) adj.set(b, []); adj.get(a).push({ l, v: b, dir: 1 }); adj.get(b).push({ l, v: a, dir: -1 }); }
+  let frontier = []; const seen = new Map(); for (const s of seeds) if (S.reg.has(s) && S.visible.has(s)) { S.act.set(s, now); seen.set(s, 0); frontier.push(s); }
+  for (let h = 0; h < hops && frontier.length; h++) { const next = []; for (const u of frontier) for (const { l, v, dir } of adj.get(u) || []) { if (seen.has(v) && seen.get(v) <= h) continue; if (allow && !allow(S.reg.get(u), l, S.reg.get(v), h)) continue; const jit = rnd(l.id, 11) * 140; if (!S.actL.has(l.id)) S.actL.set(l.id, { t0: now + h * STEP + jit, dir }); if (!seen.has(v)) { seen.set(v, h + 1); S.act.set(v, now + (h + 1) * STEP + jit); next.push(v); } } frontier = next; }
+  S.alive = S.act.size > 0; S.aliveUntil = now + (hops + 2) * STEP + 1400; renderState();
 }
-// light the waves an engine traversal returned: wave i's nodes at i·STEP, its edges (scene links) from (i−1)·STEP
 function pulseWaves(waves) {
-  const now = performance.now(); S.act.clear(); S.actL.clear(); const byId = new Map(S.nodes.map(n => [n.id, n]));
-  waves.forEach((w, i) => { for (const id of w.nodes) if (byId.has(id) && !S.act.has(id)) S.act.set(id, now + i * STEP + rnd(id, 13) * 120); for (const e of w.edges) { const l = S.edgeLink.get(e.id) || S.links.find(x => x.id === e.id); if (!l) continue; if (!S.actL.has(l.id)) { const srcLit = S.act.has(l.source.id || l.source); S.actL.set(l.id, { t0: now + Math.max(0, i - 1) * STEP + rnd(l.id, 11) * 160, dir: srcLit ? 1 : -1 }); } for (const id of [l.source.id || l.source, l.target.id || l.target]) if (!S.act.has(id)) S.act.set(id, now + i * STEP + 200); } });
-  S.alive = S.act.size > 0; S.dirty = 3; S.Graph.controls().autoRotate = false; renderState();
+  const now = performance.now(); S.act.clear(); S.actL.clear();
+  waves.forEach((w, i) => { for (const id of w.nodes) if (S.visible.has(id) && !S.act.has(id)) S.act.set(id, now + i * STEP + rnd(id, 13) * 100); for (const e of w.edges) { const l = S.edgeLink.get(e.id) || S.links.find(x => x.id === e.id); if (!l) continue; if (!S.actL.has(l.id)) { const srcLit = S.act.has(l.source.id); S.actL.set(l.id, { t0: now + Math.max(0, i - 1) * STEP + rnd(l.id, 11) * 140, dir: srcLit ? 1 : -1 }); } for (const id of [l.source.id, l.target.id]) if (!S.act.has(id)) S.act.set(id, now + i * STEP + 200); } });
+  S.alive = S.act.size > 0; S.aliveUntil = now + (waves.length + 1) * STEP + 1400; renderState();
 }
-function clearAct() { S.act.clear(); S.actL.clear(); S.alive = false; S.dirty = 3; S.Graph.controls().autoRotate = true; renderState(); }
-function lightFrom(n) {
-  const K = S.K;
-  if (n.kind === 'axis') pulse([n.id], 3, (u, l, v, h) => l.kind === 'hier' && (v.kind === 'cat' || v.kind === 'facet' || (v.kind === 'concept' && v.used)));
-  else if (n.kind === 'cat') pulse([n.id], 3, (u, l, v, h) => (l.kind === 'hier' && h < 2 && (v.kind === 'facet' || (v.kind === 'concept' && v.used))) || (h >= 1 && ['pc', 'band', 'layer', 'design', 'gf', 'tax'].includes(l.kind) && v.kind === 'plant'));
-  else if (n.kind === 'facet') pulse([n.id], 2, (u, l, v, h) => (l.kind === 'hier' && h === 0 && v.kind === 'concept' && v.used) || (h === 1 && ['pc', 'band', 'layer', 'design', 'gf', 'tax'].includes(l.kind) && v.kind === 'plant'));
-  else if (n.kind === 'concept' && n.design) { const fam = new Set(K.descendants(n.id)); pulse([n.id], 3, (u, l, v, h) => h === 0 ? (l.kind === 'cc' || (l.kind === 'design' && !l.hidden) || l.kind === 'layer' || l.kind === 'band' || (l.kind === 'hier' && v.kind === 'concept')) : h === 1 ? ((l.kind === 'pc' && v.kind === 'plant') || (['design', 'layer', 'band'].includes(l.kind) && v.kind === 'plant') || (l.kind === 'cc' && u.kind === 'concept' && !u.design)) : (l.kind === 'sp' || l.kind === 'gf')); }
-  else if (n.kind === 'concept') { const fam = new Set(K.descendants(n.id)); pulse([n.id], 3, (u, l, v, h) => l.kind === 'parent' || (l.kind === 'hier' && h === 0 && fam.has(v.id)) ? true : (l.kind === 'pc' || l.kind === 'band' || l.kind === 'gf' || l.kind === 'tax' || l.kind === 'layer') && (u.kind === 'concept' && fam.has(u.id)) && v.kind === 'plant' ? true : h >= 1 && u.kind === 'plant' && (l.kind === 'design' && !l.hidden || l.kind === 'sp' || l.kind === 'gf') ? true : h === 0 && l.kind === 'cc' && v.design ? true : false); }
-  else if (n.kind === 'plant') pulse([n.id], 2, (u, l, v, h) => h === 0 ? (l.kind !== 'rel' && !l.hidden && l.kind !== 'hier') : l.kind === 'hier');
-  else if (n.kind === 'source') pulse([n.id], 2, (u, l, v, h) => h === 0 ? l.kind === 'sp' : (l.kind === 'pc' && l.edges.some(e => e.source_id === n.id.split(':')[1])));
-  else if (n.kind === 'cultivar') pulse([n.id], 1);
+function clearAct() { S.act.clear(); S.actL.clear(); S.alive = false; renderState(); }
+// reveal the nodes of a traversal wave by wave, then send the signal along them
+function revealWaves(waves, seedId) {
+  snapshot(); const ids = waves.flatMap(w => w.nodes).concat(waves.flatMap(w => w.edges.flatMap(e => [e.source, e.target, e.plant].filter(Boolean))));
+  show(ids); for (const w of waves) for (const id of w.nodes) if (S.reg.get(id)?.kind !== 'concept') S.expanded.add(id);
+  rebuild(); pulseWaves(waves); const seed = S.reg.get(seedId); if (seed && S.visible.has(seed.id)) { S.selected = seed; focusOn(seed, 640); } renderCrumb();
 }
 
-// ------------------------------------------------------------------ per frame
+// ------------------------------------------------------------------ per frame: tween to the layout target, glow on activation, labels
 const _v = new THREE.Vector3();
 function frame() {
   const now = performance.now(); const cam = S.Graph.camera(); const w = window.innerWidth, h = window.innerHeight;
-  const acc = {}; for (const n of S.nodes) { if (!n.n?.category && n.kind !== 'cat') continue; const c = n.kind === 'cat' ? n.id : n.n.category; if (!c || !Number.isFinite(n.x) || (n.kind === 'concept' && !n.used)) continue; const a = acc[c] || (acc[c] = { x: 0, y: 0, z: 0, k: 0 }); a.x += n.x; a.y += n.y; a.z += n.z; a.k++; }
-  for (const [c, a] of Object.entries(acc)) S.centroid[c] = { x: a.x / a.k, y: a.y / a.k, z: a.z / a.k, n: a.k };
-  const alive = S.alive; const camDist = cam.position.length();
-  for (const n of S.nodes) { const o = n.__obj; if (!o) continue; const a = actOf(n, now); const breathe = 1 + 0.05 * Math.sin(now / 900 + rnd(n.id, 6) * 6.3); const sc = n.size * breathe * (1 + 0.32 * a + (a >= 1 ? 0.06 * Math.sin(now / 220 + rnd(n.id, 6) * 6) : 0)); o.halo.scale.set(sc, sc, 1); const f = alive ? (0.1 + 0.9 * a) : 1; for (const m of o.mats) m.opacity = Math.min(1, m.userData.base * f * (a >= 1 ? 1.25 : 1)); }
-  if (alive || S.dirty > 0) { for (const l of S.links) { const o = l.__obj; if (!o) continue; const A = S.actL.get(l.id); if (A) { const p = (now - A.t0) / 700; paintLink(l, u => { const d = (A.dir > 0 ? u : 1 - u) - p; if (p < 0) return 0.25; const win = Math.exp(-(d * 7) * (d * 7)); return (p > 1.25 ? 1.15 : (d < 0 ? 0.95 : 0.2)) + 1.3 * win; }); o.mat.opacity = Math.min(1, Math.max(o.base, 0.25) * 2.4); } else { paintLink(l, alive ? 0.12 : 1); o.mat.opacity = l.hidden ? (S.mode === 'gaps' ? 0.22 : 0) : o.base; } } if (S.dirty > 0) S.dirty--; }
-  if (S.neuropil) S.neuropil.material.opacity = alive ? 0.26 : 0.66;
-  updateSynapses(now);
-  const litCount = alive ? [...S.act.keys()].filter(id => { const n = S.nodes.find(x => x.id === id); return n && (n.kind === 'concept' || n.kind === 'source'); }).length : 0;
-  for (const L of S.labels) { const n = L.n; let show = true; if (!Number.isFinite(n.x)) { L.el.classList.add('hidden'); continue; } const a = actOf(n, now);
-    if (n.kind === 'concept' || n.kind === 'source' || n.kind === 'cultivar') show = a > 0.6 && (litCount <= 34 || n.k >= 2 || n.design || n.kind === 'source' || S.selected?.id === n.id);
-    else if (n.kind === 'facet') show = n.used && (camDist < 620 || a > 0.6 || S.open.has(n.n.category));
-    L.el.classList.toggle('muted', alive && a < 0.6 && (n.kind === 'plant' || n.kind === 'axis' || n.kind === 'cat' || n.kind === 'facet'));
-    if (!show) { L.el.classList.add('hidden'); continue; }
-    _v.set(n.x, n.y - (n.size || 10) * 0.45 - 2, n.z); _v.project(cam); if (_v.z > 1) { L.el.classList.add('hidden'); continue; }
-    L.el.classList.remove('hidden'); L.sx = (_v.x + 1) / 2 * w; L.sy = (1 - _v.y) / 2 * h; L.el.style.left = `${L.sx}px`; L.el.style.top = `${L.sy}px`; L.shown = true; }
-  const placed = []; for (const L of S.labels.filter(x => x.shown && ['concept', 'source', 'cultivar', 'facet'].includes(x.n.kind)).sort((a, b) => a.sy - b.sy)) { const wpx = L.el.offsetWidth || 60; let y = L.sy; for (const p of placed) if (Math.abs(p.x - L.sx) < (p.w + wpx) / 2 + 4 && y < p.y + 13 && y > p.y - 13) y = p.y + 13; if (y !== L.sy) L.el.style.top = `${y}px`; placed.push({ x: L.sx, y, w: wpx }); }
-  for (const L of S.labels) L.shown = false;
+  for (const n of S.nodes) { if (!n.tgt) continue; n.x += (n.tgt[0] - n.x) * 0.12; n.y += (n.tgt[1] - n.y) * 0.12; n.z += (n.tgt[2] - n.z) * 0.12; }
+  if (S.alive && now > S.aliveUntil) { S.alive = false; renderState(); }
+  const alive = S.alive;
+  for (const n of S.nodes) { const o = n.__obj; if (!o) continue; const a = alive ? actOf(n, now) : 0; const sel = S.selected?.id === n.id ? 1 : 0; o.mat.emissiveIntensity = o.baseE + 0.7 * a + 0.35 * sel; o.halo.material.opacity = o.baseH + 0.45 * a + 0.3 * sel; const sc = n.size * (1 + 0.18 * a + 0.1 * sel); o.mesh.scale.setScalar(sc); o.halo.scale.setScalar(sc * 2.4); }
+  for (const l of S.links) { const o = l.__obj; if (!o) continue; const A = alive && S.actL.get(l.id); if (A) { const p = (now - A.t0) / 650; paintLink(l, u => { const d = (A.dir > 0 ? u : 1 - u) - p; if (p < 0) return 1; const win = Math.exp(-(d * 6) * (d * 6)); return (p > 1.2 ? 1.5 : d < 0 ? 1.4 : 1) + 1.6 * win; }); o.mat.opacity = Math.min(1, o.base * 1.8 + 0.2); } else { const sel = S.selected && (l.source.id === S.selected.id || l.target.id === S.selected.id); paintLink(l, sel ? 1.5 : 1); o.mat.opacity = sel ? Math.min(1, o.base * 1.6 + 0.15) : o.base; } }
+  // every visible node keeps its label; labels nudge apart vertically
+  for (const L of S.labels) { const n = L.n; if (!Number.isFinite(n.x)) { L.el.classList.add('hidden'); continue; } _v.set(n.x, n.y - n.size - 3, n.z); _v.project(cam); if (_v.z > 1) { L.el.classList.add('hidden'); continue; } const dist = cam.position.distanceTo(new THREE.Vector3(n.x, n.y, n.z)); L.el.classList.remove('hidden'); L.el.classList.toggle('far', dist > 900 && n.kind === 'concept'); L.el.classList.toggle('sel', S.selected?.id === n.id); L.sx = (_v.x + 1) / 2 * w; L.sy = (1 - _v.y) / 2 * h; L.d = dist; L.el.style.left = `${L.sx}px`; L.el.style.top = `${L.sy}px`; L.shown = true; }
+  const placed = []; for (const L of S.labels.filter(x => x.shown).sort((a, b) => a.d - b.d)) { const wpx = L.el.offsetWidth || 60, hpx = L.el.offsetHeight || 14; let y = L.sy; for (let k = 0; k < 6; k++) { const hit = placed.find(p => Math.abs(p.x - L.sx) < (p.w + wpx) / 2 + 6 && y < p.y + p.h + 2 && y + hpx + 2 > p.y); if (!hit) break; y = hit.y + hit.h + 3; } if (y !== L.sy) L.el.style.top = `${y}px`; placed.push({ x: L.sx, y, w: wpx, h: hpx }); L.shown = false; }
 }
 function rebuildLabels() {
   for (const L of S.labels) L.el.remove(); S.labels = []; const K = S.K;
   const add = (n, html, cls) => { const el = document.createElement('div'); el.className = `lbl ${cls}`; el.innerHTML = html; el.addEventListener('click', e => { e.stopPropagation(); select(n); }); $('#labels').appendChild(el); S.labels.push({ n, el }); };
   for (const n of S.nodes) {
-    if (n.kind === 'axis') add(n, `${esc(n.n.label)}<small>${n.id === 'region:evidence' ? `${S.nodes.filter(x => x.kind === 'source' && x.used).length} sources in use` : `${S.nodes.filter(x => x.kind === 'cat' && x.region === n.id).length} categories · ${S.nodes.filter(x => x.kind === 'concept' && x.region === n.id && x.used).length} concepts in use`}</small>`, `axis ${AX[n.region]?.key || 'e'}`);
-    else if (n.kind === 'cat') add(n, `${esc(n.n.label)}<small>${n.id === 'cross:evidence' ? `${S.nodes.filter(x => x.kind === 'source' && x.used).length} sources` : n.id === 'cross:media' ? 'schema slot · empty' : `${S.nodes.filter(x => x.kind === 'concept' && x.n.category === n.id && x.used).length}/${S.nodes.filter(x => x.kind === 'concept' && x.n.category === n.id).length}`}</small>`, 'cat');
-    else if (n.kind === 'facet') add(n, esc(n.n.label), 'facet');
-    else if (n.kind === 'plant') add(n, `${esc(n.n.label)}<small>${esc((n.n.common || [])[0] || '')}${n.n.growth_form ? ` · ${esc(K.label(n.n.growth_form).toLowerCase())}` : ''}</small>`, 'plant');
-    else if (n.kind === 'concept') add(n, esc(n.n.label), `lit${n.design ? ' design' : ''}`);
-    else if (n.kind === 'source') add(n, esc(n.n.label.length > 24 ? n.n.label.slice(0, 22) + '…' : n.n.label), 'lit source');
-    else if (n.kind === 'cultivar') add(n, esc(n.n.label), 'lit');
+    const sub = n.kind === 'axis' ? (n.id === 'region:evidence' ? `${ALL().filter(x => x.kind === 'source' && x.used).length} sources` : `${ALL().filter(x => x.kind === 'concept' && x.region === n.id && x.used).length} concepts in use`) : n.kind === 'cat' ? `${ALL().filter(x => x.kind === 'concept' && x.n.category === n.id && x.used).length}` : n.kind === 'facet' ? `${n.children.filter(c => c.used).length}` : n.kind === 'plant' ? esc((n.n.common || [])[0] || '') : n.kind === 'concept' && n.k > 1 ? `${n.k}` : '';
+    add(n, `${esc(n.n.label.length > 34 && n.kind === 'source' ? n.n.label.slice(0, 32) + '…' : n.n.label)}${sub ? `<small>${sub}</small>` : ''}`, `${n.kind} ${AX[n.region]?.key || (n.kind === 'plant' ? 'p' : 'e')}${S.expanded.has(n.id) ? ' open' : ''}${n.design ? ' design' : ''}`);
   }
 }
 
-// ------------------------------------------------------------------ tooltip, state, chips
+// ------------------------------------------------------------------ hover, state line, breadcrumb
 const tip = $('#tip');
-function showTip(n) { const K = S.K; let html = '';
-  if (n.kind === 'concept') { const o = n.n; const ps = plantsLinked(n.id); html = `<b>${esc(o.label)}</b> <span class="meta">${esc(K.label(o.category || ''))}</span><div class="meta">${ps.size ? `${ps.size} plant${ps.size === 1 ? '' : 's'}` : 'dormant: in the vocabulary, no claim yet'}${o.to_confirm ? ' · term to confirm' : ''}</div>`; }
-  else if (n.kind === 'axis' || n.kind === 'cat' || n.kind === 'facet') html = `<b>${esc(n.n.label)}</b><div class="meta">${esc((n.n.definition || '').slice(0, 140))}</div>`;
-  else if (n.kind === 'plant') html = `<b><em>${esc(n.n.label)}</em></b><div class="meta">${K.plantEvidenceEdges(n.id).length} evidence links</div>`;
-  else if (n.kind === 'source') html = `<b>${esc(n.n.label)}</b><div class="meta">${esc(n.n.source_type || '')}${n.n.geo ? ' · ' + esc(n.n.geo) : ''}</div>`;
-  else html = `<b>${esc(n.n.label)}</b>`;
-  tip.innerHTML = html; tip.style.display = 'block'; }
-function hideTip() { tip.style.display = 'none'; }
-document.addEventListener('pointermove', e => { if (tip.style.display !== 'none') { tip.style.left = `${Math.min(window.innerWidth - 320, e.clientX + 14)}px`; tip.style.top = `${e.clientY + 14}px`; } });
-const plantsLinked = cid => { const fam = new Set(S.K.descendants(cid)); return new Set(S.K.edges.filter(e => e.live !== false && fam.has(e.target) && ['claim', 'entity', 'classification', 'height_band', 'layer', 'candidate', 'design'].includes(e.type) && !(e.type === 'design' && e.kg_status === 'unknown')).map(e => e.plant || e.source)); };
-function renderState() { const el = $('#state'); if (!S.alive) { el.innerHTML = S.candidates.length ? `<span class="cand">${S.candidates.length} candidate observation${S.candidates.length === 1 ? '' : 's'} grown this session</span>` : 'click a region, a concept or a plant · run a path · ask — the signal follows real relations only'; return; }
-  const ids = [...S.act.keys()]; const kinds = {}; for (const id of ids) { const n = S.nodes.find(x => x.id === id); if (n) kinds[n.kind] = (kinds[n.kind] || 0) + 1; }
-  const claims = [...S.actL.keys()].reduce((a, id) => { const l = S.links.find(x => x.id === id); return a + (l && l.kind === 'pc' ? l.edges.length : 0); }, 0);
-  el.innerHTML = `lit: <b>${kinds.concept || 0}</b> concepts · <b>${kinds.plant || 0}</b> plants · <b>${claims}</b> claims on <b>${[...S.actL.keys()].length}</b> fibres · <b>${kinds.source || 0}</b> sources <span class="faint">· Esc clears</span>`; }
-function renderStats() { const c = S.K.kg.counts; $('#stats').textContent = `${c.concepts} concepts (${S.nodes.filter(n => n.kind === 'concept' && n.used).length} in use) · ${c.architecture_nodes} architecture nodes · ${c.plants} plants · ${c.claims} claims · ${S.links.filter(l => !l.hidden).length} fibres · ${c.by_status.documented} documented · ${c.by_status.derived} derived · ${c.by_status.candidate} candidate · ${c.by_status.unknown} unknown`; renderState(); }
-function renderChips() {
-  $('#regions').innerHTML = Object.entries(AX).map(([id, a]) => `<button data-region="${id}"><i class="dot" style="background:${a.colour}"></i>${esc(a.label)}</button>`).join('') + `<button data-mode="gaps" class="warnb">Gaps & conflicts</button>`;
-  $('#regions').querySelectorAll('[data-region]').forEach(b => b.addEventListener('click', () => select(S.nodes.find(n => n.id === (b.dataset.region === 'evidence' ? 'region:evidence' : b.dataset.region)))));
-  $('#regions').querySelector('[data-mode="gaps"]').addEventListener('click', showGaps);
-  $('#paths').innerHTML = [['A', 'Classification', 'growth form → shrub → plants → attributes → evidence'], ['B', 'Design knowledge', 'screen → required traits → plants → conditions'], ['C', 'Knowledge variation', 'salal → height → conditions → claims → sources'], ['D', 'Knowledge gaps', 'scrim → required knowledge → evidence → missing']].map(([k, t, d]) => `<button data-path="${k}" title="${esc(d)}"><b>${k}</b> ${esc(t)}</button>`).join('');
-  $('#paths').querySelectorAll('button').forEach(b => b.addEventListener('click', () => runPath(b.dataset.path)));
+function hover(n) { if (!n) { tip.style.display = 'none'; return; } const K = S.K; const o = n.n; let html = `<b>${esc(o.label)}</b>`; if (n.kind === 'concept') html += `<div class="meta">${n.k ? `${n.k} plant${n.k === 1 ? '' : 's'}` : 'dormant'}${o.to_confirm ? ' · to confirm' : ''} · click to open its links</div>`; else if (n.kind === 'axis' || n.kind === 'cat' || n.kind === 'facet') html += `<div class="meta">${S.expanded.has(n.id) ? 'click to close' : 'click to open'}</div>`; else if (n.kind === 'plant') html += `<div class="meta">${K.plantEvidenceEdges(n.id).length} evidence links · click to open</div>`; tip.innerHTML = html; tip.style.display = 'block'; }
+document.addEventListener('pointermove', e => { if (tip.style.display !== 'none') { tip.style.left = `${Math.min(window.innerWidth - 300, e.clientX + 14)}px`; tip.style.top = `${e.clientY + 14}px`; } });
+function renderState() { const el = $('#state'); if (S.alive) { const n = [...S.act.keys()].length, l = [...S.actL.keys()].length; el.textContent = `signal: ${n} nodes · ${l} links`; } else el.textContent = S.candidates.length ? `${S.candidates.length} candidate observation${S.candidates.length === 1 ? '' : 's'} this session` : ''; }
+function renderStats() { const c = S.K.kg.counts; $('#stats').textContent = `${S.nodes.length} of ${S.reg.size} nodes shown · ${S.links.length} links · ${c.claims} claims · documented ${c.by_status.documented} · derived ${c.by_status.derived} · candidate ${c.by_status.candidate} · unknown ${c.by_status.unknown}`; }
+function renderCrumb() {
+  const el = $('#crumb'); const sel = S.selected; const path = sel ? [sel.id, ...ancestors(sel.id)].reverse() : [];
+  el.innerHTML = `<button id="btn-over" ${S.history.length || sel ? '' : 'disabled'}>Overview</button><button id="btn-back" ${S.history.length ? '' : 'disabled'}>← Back</button>` + (path.length ? `<span class="path">${path.map((id, i) => `<span class="link" data-id="${esc(id)}">${esc(S.K.label(id))}</span>`).join('<i>›</i>')}</span>` : '<span class="path faint">click a sphere to open it</span>');
+  $('#btn-over').addEventListener('click', () => overview()); $('#btn-back').addEventListener('click', back); bind(el);
 }
 
-// ------------------------------------------------------------------ selection and cards
+// ------------------------------------------------------------------ selection
 const card = $('#card'), CB = $('#card-body');
 function openCard(html) { CB.innerHTML = html; card.classList.add('open'); bind(CB); card.scrollTop = 0; }
-function closeCard() { card.classList.remove('open'); CB.innerHTML = ''; S.selected = null; }
-function clearAll() { closeCard(); clearAct(); S.mode = null; S.open.clear(); $('#regions').querySelectorAll('button').forEach(b => b.classList.remove('on')); $('#paths').querySelectorAll('button').forEach(b => b.classList.remove('on')); }
-function focusOn(n, dist) { if (!n || !Number.isFinite(n.x)) return; const cam = S.Graph.camera(); const ctl = S.Graph.controls(); const d = new THREE.Vector3().subVectors(cam.position, ctl.target).normalize(); const D = dist || (n.kind === 'axis' ? 620 : n.kind === 'cat' ? 420 : n.kind === 'plant' ? 480 : 380); S.Graph.cameraPosition({ x: n.x + d.x * D, y: n.y + d.y * D, z: n.z + d.z * D }, { x: n.x, y: n.y, z: n.z }, 1400); }
+function closeCard() { card.classList.remove('open'); CB.innerHTML = ''; }
+function deselect() { S.selected = null; closeCard(); clearAct(); rebuildLabels(); renderCrumb(); }
+function clearAll() { deselect(); }
+function focusOn(n, dist) { if (!n || !n.tgt) return; const cam = S.Graph.camera(); const ctl = S.Graph.controls(); const d = new THREE.Vector3().subVectors(cam.position, ctl.target).normalize(); const D = dist || (n.kind === 'axis' ? 720 : n.kind === 'cat' ? 600 : n.kind === 'facet' ? 520 : n.kind === 'plant' ? 560 : 480); const t = n.tgt; S.Graph.cameraPosition({ x: t[0] + d.x * D, y: t[1] + d.y * D, z: t[2] + d.z * D }, { x: t[0], y: t[1], z: t[2] }, 1100); }
+const cardFor = n => n.kind === 'concept' ? (n.design ? cardDesign(n) : cardConcept(n)) : n.kind === 'plant' ? cardPlant(n) : n.kind === 'source' ? cardSource(n) : n.kind === 'cultivar' ? cardPlant(S.reg.get(n.n.plant)) : cardStructure(n);
 function select(n) {
-  if (!n) return; $('#regions').querySelectorAll('button').forEach(b => b.classList.remove('on')); $('#paths').querySelectorAll('button').forEach(b => b.classList.remove('on')); S.mode = null;
-  if (n.kind === 'link') { const l = n.link; S.act.clear(); S.actL.clear(); const now = performance.now(); S.act.set(l.source.id, now); S.act.set(l.target.id, now + STEP); S.actL.set(l.id, { t0: now, dir: 1 }); S.alive = true; S.dirty = 3; renderState(); openCard(cardLink(l)); return; }
-  S.selected = n; if (n.kind === 'cat') S.open.add(n.id); if (n.kind === 'facet') S.open.add(n.n.category); lightFrom(n); focusOn(n);
-  openCard(n.kind === 'concept' ? (n.design ? cardDesign(n) : cardConcept(n)) : n.kind === 'plant' ? cardPlant(n) : n.kind === 'source' ? cardSource(n) : n.kind === 'cultivar' ? cardPlant(S.nodes.find(x => x.id === n.n.plant)) : cardStructure(n));
+  if (!n) return; if (typeof n === 'string') n = S.reg.get(n); if (!n) return;
+  if (n.kind === 'link') { selectLink(n.link); return; }
+  const revealed = expandNode(n); S.selected = n;
+  if (!S.visible.has(n.id)) { show([n.id]); rebuild(); }
+  pulse([n.id], 1, (u, l, v) => revealed.includes(v.id) || l.kind !== 'hier' || v.id === n.parent);
+  openCard(cardFor(n)); focusOn(n); rebuildLabels(); renderCrumb();
 }
+function revealAndSelect(id) { if (!S.visible.has(id)) { snapshot(); show([id]); rebuild(); } select(S.reg.get(id)); }
+function selectLink(l) {
+  if (!l) return; snapshot();
+  const sids = new Set(l.edges.map(e => e.source_id).filter(Boolean)); for (const e of l.edges) if (e.type === 'design') { for (const s of e.use_sources || []) sids.add(s); for (const r of e.requirements || []) for (const ev of r.evidence || []) if (ev.source_id) sids.add(ev.source_id); }
+  const srcs = [...sids].map(s => `source:${s}`).filter(s => S.reg.has(s)); show([l.source.id, l.target.id, ...srcs]); rebuild();
+  const L = S.links.find(x => x.id === l.id) || l; const now = performance.now(); S.act.clear(); S.actL.clear(); S.act.set(L.source.id, now); S.act.set(L.target.id, now + STEP); S.actL.set(L.id, { t0: now, dir: 1 });
+  for (const s of srcs) { const sl = S.links.find(x => x.kind === 'sp' && x.source.id === s && (x.target.id === L.source.id || x.target.id === L.target.id)); if (sl) { S.actL.set(sl.id, { t0: now + STEP, dir: 1 }); S.act.set(s, now + 2 * STEP); } }
+  S.alive = true; S.aliveUntil = now + 4 * STEP; S.selected = null; renderState(); openCard(cardLink(L)); renderCrumb();
+}
+function selectEdge(edgeId) { const l = S.edgeLink.get(edgeId); if (l) { selectLink(l); return; } const e = S.K.edges.find(x => x.id === edgeId); if (!e) return; snapshot(); show([e.source, e.target].filter(Boolean)); rebuild(); const l2 = S.edgeLink.get(edgeId); if (l2) selectLink(l2); }
 function bind(root) {
-  root.querySelectorAll('[data-id]').forEach(el => el.addEventListener('click', e => { e.stopPropagation(); const n = S.nodes.find(x => x.id === el.dataset.id); if (n) select(n); }));
-  root.querySelectorAll('[data-edge]').forEach(el => el.addEventListener('click', e => { e.stopPropagation(); const l = S.edgeLink.get(el.dataset.edge) || S.links.find(x => x.id === el.dataset.edge); if (l) select({ kind: 'link', link: l }); }));
-  root.querySelectorAll('[data-claim]').forEach(el => el.addEventListener('click', e => { e.stopPropagation(); const ed = S.K.edges.find(x => x.claim_id === el.dataset.claim && x.target); const l = ed && S.edgeLink.get(ed.id); if (l) select({ kind: 'link', link: l }); }));
+  root.querySelectorAll('[data-id]').forEach(el => el.addEventListener('click', e => { e.stopPropagation(); revealAndSelect(el.dataset.id); }));
+  root.querySelectorAll('[data-edge]').forEach(el => el.addEventListener('click', e => { e.stopPropagation(); selectEdge(el.dataset.edge); }));
+  root.querySelectorAll('[data-claim]').forEach(el => el.addEventListener('click', e => { e.stopPropagation(); const ed = S.K.edges.find(x => x.claim_id === el.dataset.claim && x.target); if (ed) selectEdge(ed.id); }));
   root.querySelectorAll('[data-path]').forEach(el => el.addEventListener('click', e => { e.stopPropagation(); runPath(el.dataset.path, el.dataset.arg, el.dataset.arg2); }));
 }
+
 const dot = c => `<i class="dot" style="background:${c}"></i>`;
 const stTag = s => `<span class="tag ${esc(s)}">${esc(s)}</span>`;
 const regionDot = n => dot((AX[n.region] || AX.evidence).colour);
 const crumb = id => S.K.hierarchyPath(id).reverse().map(x => `<span class="link" data-id="${esc(x)}">${esc(S.K.label(x))}</span>`).join(' › ');
 const edgeVal = e => e.value_label != null ? (Array.isArray(e.value_label) ? e.value_label.join(', ') : e.value_label) : e.numbers ? fmtNum(e.numbers) : S.K.label(e.target);
 function evidenceRow(e, withPlant = false) { const K = S.K; const conds = (e.conditions || []).map(c => K.label(c.concept_id)).join(', '); const c = e.claim_id ? K.claimOf(e.claim_id) : null; return `<div class="row" ${e.claim_id ? `data-claim="${esc(e.claim_id)}"` : ''}><i class="st ${esc(e.status || e.verification)}" style="--c:${TYPE_COLOUR[e.source_type] || TYPE_COLOUR.plant}"></i><div>${withPlant ? `<em>${esc(K.label(e.plant))}</em> · ` : ''}<span class="val">${esc(edgeVal(e))}</span>${e.spanned ? ' <span class="faint">(range spans this class)</span>' : ''}${e.cultivar ? ` <span class="muted">‘${esc(e.cultivar)}’</span>` : ''}<br><span class="meta">${esc(K.srcLabel(e.source_id))} · ${esc(e.status || e.verification)}${conds ? ' · under ' + esc(conds) : ''}${e.place ? ' · ' + esc(K.label(e.place)) + (K.PLACE_VAN.has(e.place) ? ' ✓ local' : '') : ''}${c?.source_url ? ` · <a href="${esc(c.source_url)}" target="_blank" rel="noopener">source</a>` : ''}</span></div></div>`; }
-const chip = (id, extra = '') => { const n = S.nodes.find(x => x.id === id); if (!n) return ''; const k = n.kind === 'concept' ? plantsLinked(id).size : 0; return `<span class="chip ${n.used === false ? 'dim' : ''}" data-id="${esc(id)}" style="--c:${colourOfNode(n)}">${esc(S.K.label(id))}${k ? `<small>${k}</small>` : ''}${extra}</span>`; };
+const chip = (id, extra = '') => { const n = ALL().find(x => x.id === id); if (!n) return ''; const k = n.kind === 'concept' ? plantsLinked(id).size : 0; return `<span class="chip ${n.used === false ? 'dim' : ''}${S.visible.has(id) ? ' on' : ''}" data-id="${esc(id)}" style="--c:${colourOfNode(n)}">${esc(S.K.label(id))}${k ? `<small>${k}</small>` : ''}${extra}</span>`; };
 function cardStructure(n) {
-  const K = S.K; const o = n.n; const kids = n.kind === 'axis' ? S.nodes.filter(x => x.kind === 'cat' && x.region === n.id) : n.kind === 'cat' ? S.nodes.filter(x => x.kind === 'facet' && x.n.category === n.id) : S.nodes.filter(x => x.kind === 'concept' && x.n.hierarchy_parent === n.id);
+  const K = S.K; const o = n.n; const kids = n.kind === 'axis' ? ALL().filter(x => x.kind === 'cat' && x.region === n.id) : n.kind === 'cat' ? ALL().filter(x => x.kind === 'facet' && x.n.category === n.id) : ALL().filter(x => x.kind === 'concept' && x.n.hierarchy_parent === n.id);
   const used = kids.filter(k => k.used); const dormant = kids.filter(k => !k.used);
-  const srcs = n.id === 'region:evidence' ? S.nodes.filter(x => x.kind === 'source' && x.used) : [];
+  const srcs = n.id === 'region:evidence' ? ALL().filter(x => x.kind === 'source' && x.used) : [];
   return `<h2>${regionDot(n)} ${esc(o.label)}</h2><div class="kicker">${n.kind === 'axis' ? 'knowledge axis' : n.kind === 'cat' ? `category · ${o.cross_layer ? 'cross-dimensional layer' : crumb(n.id)}` : `facet · ${crumb(n.id)}`}</div><p class="lead">${esc(o.definition || '')}</p>${o.source_of_term ? `<p class="muted small">source: ${esc(o.source_of_term)}</p>` : ''}
-  ${used.length ? `<h3>${n.kind === 'axis' ? 'categories' : n.kind === 'cat' ? 'facets in use' : 'concepts with evidence'} <span class="faint">${used.length}</span></h3><div class="chips">${used.map(k => chip(k.id, k.kind === 'concept' ? '' : `<small>${S.nodes.filter(x => x.kind === 'concept' && (k.kind === 'facet' ? x.n.hierarchy_parent === k.id || x.n.facet === k.n.facet_key : x.n.category === k.id) && x.used).length}</small>`)).join('')}</div>` : ''}
+  ${used.length ? `<h3>${n.kind === 'axis' ? 'categories' : n.kind === 'cat' ? 'facets in use' : 'concepts with evidence'} <span class="faint">${used.length}</span></h3><div class="chips">${used.map(k => chip(k.id, k.kind === 'concept' ? '' : `<small>${ALL().filter(x => x.kind === 'concept' && (k.kind === 'facet' ? x.n.hierarchy_parent === k.id || x.n.facet === k.n.facet_key : x.n.category === k.id) && x.used).length}</small>`)).join('')}</div>` : ''}
   ${srcs.length ? `<h3>sources</h3><div class="chips">${srcs.map(s => chip(s.id)).join('')}</div>` : ''}
   ${dormant.length ? `<details><summary>dormant vocabulary · ${dormant.length}</summary><div class="chips">${dormant.slice(0, 60).map(k => chip(k.id)).join('')}</div></details>` : ''}
-  <p class="muted small">Lit: the hierarchy beneath this node and, one hop further, the plants it reaches through real claims.</p>`;
+  <p class="muted small">Click the sphere again to close what it opened; chips open one item.</p>`;
 }
 function cardConcept(n) {
   const K = S.K; const o = n.n; const fam = new Set(K.descendants(n.id)); const es = K.edges.filter(e => e.live !== false && fam.has(e.target) && ['claim', 'entity', 'candidate', 'classification', 'height_band', 'layer'].includes(e.type)); const ps = [...new Set(es.map(e => e.plant || e.source))]; const srcs = [...new Set(es.map(e => e.source_id).filter(Boolean))];
@@ -364,11 +350,11 @@ function cardLink(l) {   // the evidence trace: relation type, status, claims, s
 }
 
 // ------------------------------------------------------------------ the four paths (engine traversals, lit wave by wave)
+
 function runPath(which, arg, arg2) {
-  const K = S.K; $('#paths').querySelectorAll('button').forEach(b => b.classList.toggle('on', b.dataset.path === which)); $('#regions').querySelectorAll('button').forEach(b => b.classList.remove('on')); S.mode = null;
+  const K = S.K; $('#paths').querySelectorAll('button').forEach(b => b.classList.toggle('on', b.dataset.path === which));
   const r = which === 'A' ? K.pathA(arg || 'growth_form:shrub') : which === 'B' ? K.pathB(arg || 'spatial:screen') : which === 'C' ? K.pathC(arg || 'plant:gaultheria-shallon', arg2 || 'height_class') : K.pathD(arg || 'spatial:scrim');
-  if (which === 'D') S.mode = 'gaps';
-  pulseWaves(r.waves); const seed = S.nodes.find(n => n.id === r.seed); focusOn(seed, 560);
+  revealWaves(r.waves, r.seed);
   const trail = `<div class="trail">${r.waves.map((w, i) => `<span class="w" style="animation-delay:${i * STEP}ms">${String(i + 1).padStart(2, '0')} ${esc(w.step)} <small>${w.nodes.length}</small></span>`).join('')}</div>`;
   let body = '';
   if (which === 'A') body = `<p class="lead">Hierarchy: ${crumb(r.seed)}</p>${r.classification.map(e => `<div class="row" data-edge="${esc(e.id)}"><i class="st ${esc(e.verification)}" style="--c:${AX['axis:x'].colour}"></i><div><em class="val">${esc(K.label(e.source))}</em> ${stTag(e.verification)} ${stTag('derived')}<br><span class="meta">${esc(e.text)}</span></div></div>`).join('')}${Object.entries(r.attributes).map(([p, cats]) => `<h3><em>${esc(K.label(p))}</em> · attributes by category</h3>${Object.entries(cats).map(([c, es]) => `<div class="small"><b>${esc(K.label(c))}</b> <span class="faint">${new Set(es.map(e => e.target)).size} concepts · ${new Set(es.map(e => e.claim_id)).size} claims</span><div class="chips">${[...new Set(es.map(e => e.target))].slice(0, 10).map(id => chip(id)).join('')}</div></div>`).join('')}<details><summary>evidence in R5 order · ${r.evidence[p].length} claims</summary>${r.evidence[p].slice(0, 20).map(c => `<div class="r" data-claim="${esc(c.id)}">${esc(K.attribute(c))}<div class="why">${esc(c.field.replace(/_/g, ' '))} · ${esc(c.status)} · ${esc(K.conds(c))}${K.citable(c) ? '' : ' · L0 withheld'}</div></div>`).join('')}</details>`).join('')}`;
@@ -379,29 +365,10 @@ function runPath(which, arg, arg2) {
 }
 
 // ------------------------------------------------------------------ gaps & conflicts
-function showGaps() {
-  const K = S.K; S.mode = 'gaps'; $('#regions').querySelectorAll('button').forEach(b => b.classList.toggle('on', b.dataset.mode === 'gaps')); const g = K.kg.gaps, c = K.kg.conflicts;
-  const unknownLinks = S.links.filter(l => l.kind === 'design' && l.hidden); const dis = S.diag.disagreement, vari = S.diag.variation;
-  const now = performance.now(); S.act.clear(); S.actL.clear();
-  for (const l of unknownLinks) { S.actL.set(l.id, { t0: now, dir: 1 }); S.act.set(l.source.id, now); S.act.set(l.target.id, now + STEP); }
-  for (const d of [...dis, ...vari]) for (const cid of d.claims) { const e = K.edges.find(x => x.claim_id === cid && x.target && x.facet === d.facet); const l = e && S.edgeLink.get(e.id); if (l) { S.actL.set(l.id, { t0: now + STEP, dir: 1 }); S.act.set(l.source.id, now); S.act.set(l.target.id, now + 2 * STEP); } }
-  for (const z of g.design_concepts_without_plants) S.act.set(z.concept, now + STEP);
-  for (const gg of g.gate_facet_missing) { S.act.set(gg.plant, now); S.act.set(`facet:${gg.facet}`, now + STEP); }
-  S.alive = true; S.dirty = 3; S.Graph.controls().autoRotate = false; renderState();
-  openCard(`<h2>${dot(ST.unknown)} Knowledge gaps & conflicts</h2><div class="kicker">what is missing, unknown, contradicted or conditional — never shown as fact</div>
-  <h3>design links without evidence · ${g.design_unknown.length + g.design_contradicted.length}</h3>${[...g.design_contradicted, ...g.design_unknown].map(x => `<div class="row" data-edge="design:${esc(x.plant)}:${esc(x.concept)}"><i class="st unknown" style="--c:${ST.unknown}"></i><div><em class="val">${esc(K.label(x.plant))}</em> ↔ ${esc(K.label(x.concept))}<br><span class="meta">${esc(x.text)}</span></div></div>`).join('')}
-  <h3>design concepts no plant reaches · ${g.design_concepts_without_plants.length}</h3><div class="chips">${g.design_concepts_without_plants.map(x => chip(x.concept)).join('')}</div>
-  <h3>gate facets without a claim · ${g.gate_facet_missing.length}</h3>${g.gate_facet_missing.map(x => `<div class="row" data-id="${esc(x.plant)}"><i class="st unknown" style="--c:${ST.unknown}"></i><div><span class="meta">${esc(x.text)}</span></div></div>`).join('')}
-  <h3>sources disagree · ${dis.length}</h3>${dis.map(x => `<div class="row" data-claim="${esc(x.claims[0])}"><i class="st unknown" style="--c:${ST.conflict}"></i><div><span class="meta">≠ ${esc(x.text)}</span></div></div>`).join('')}
-  <h3>values depend on conditions · ${vari.length}</h3>${vari.map(x => `<div class="row" data-claim="${esc(x.claims[0])}"><i class="st candidate" style="--c:${ST.candidate}"></i><div><span class="meta">↔ ${esc(x.text)}</span></div></div>`).join('')}
-  <h3>shared concepts, no relation · ${g.shared_concepts_no_relation.length}</h3>${g.shared_concepts_no_relation.map(x => `<p class="meta">${esc(x.text)}</p>`).join('')}
-  <p class="muted small">${g.single_source_links} plant–concept links rest on one source · ${g.relations_to_confirm.length} literature relations await page-level confirmation · ${g.model_placeholders.length} model placeholder relations remain candidates.</p>`);
-}
 
-// ------------------------------------------------------------------ Ask: graph retrieval (kg engine), lit wave by wave
 function runQuery(q) {
-  if (!q.trim()) return; const K = S.K; const r = K.ask(q); $('#regions').querySelectorAll('button').forEach(b => b.classList.remove('on')); $('#paths').querySelectorAll('button').forEach(b => b.classList.remove('on')); S.mode = null;
-  pulseWaves(r.waves);
+  if (!q.trim()) return; const K = S.K; const r = K.ask(q); $('#paths').querySelectorAll('button').forEach(b => b.classList.remove('on'));
+  revealWaves(r.waves, Object.keys(r.recognised.plants)[0] || Object.keys(r.recognised.concepts)[0]);
   const rec = r.recognised; const byC = {}; for (const c of Object.keys(rec.concepts)) { const n = K.N.get(c); const cat = n.category || n.id; (byC[cat] = byC[cat] || []).push(c); }
   openCard(`<h2>“${esc(q)}”</h2><div class="kicker">graph retrieval · recognise → traverse → claims (R5) → attribution (R6)</div>
   <h3><span class="step">01</span> recognised</h3>${Object.keys(rec.plants).length ? `<p class="small">plants: ${Object.keys(rec.plants).map(p => `<em class="link" data-id="${esc(p)}">${esc(K.label(p))}</em>`).join(', ')}</p>` : ''}${Object.entries(byC).map(([cat, ids]) => `<div class="muted small">${esc(K.label(cat))}</div><div class="chips">${ids.map(id => chip(id, `<small>${esc(rec.concepts[id])}</small>`)).join('')}</div>`).join('') || '<p class="muted">no concept matched by alias</p>'}
@@ -414,6 +381,7 @@ function runQuery(q) {
 }
 
 // ------------------------------------------------------------------ Grow: an observation becomes candidate fibres; the requirement check re-runs with it, still candidate
+
 const FIELD_WORDS = { mature_height: ['height', 'tall', 'high', ' cm', 'stays under', 'stays below', 'reaches', 'metre', 'meter', ' m ', 'ft'], mature_spread: ['spread', 'wide', 'width', 'across'], exposure: ['full sun', 'part shade', 'shade', 'shady', 'sunny', 'north-facing', 'exposure', 'aspect'], water_drainage: ['wet', 'dry soil', 'drainage', 'drought', 'moist', 'waterlogged', 'soggy', 'irrigat'], hardiness_zone: ['frost', 'hardy', 'winter kill', 'zone', 'cold snap', 'froze'], maintenance_level: ['maintenance', 'pruning', 'prune', 'easy care', 'low care', 'fuss'], growth_rate: ['fast', 'slow', 'growth rate', 'grows quickly', 'vigorous', 'per year'], habit: ['dense', 'open habit', 'twiggy', 'upright', 'spreading', 'arching'], landscape_use: ['hedge', 'screen', 'ground cover', 'container', 'roof', 'planter'], toxicity: ['toxic', 'poison', 'dog', 'cat ', 'pets', 'ate'], seasonal_interest: ['flower', 'bloom', 'fall colour', 'fall color', 'berries', 'fruit', 'autumn', 'evergreen', 'leaves turn'], ecological_value: ['bees', 'pollinator', 'birds', 'wildlife', 'hummingbird', 'habitat'], resistances: ['tolerates', 'tolerant', 'resistant', 'unbothered', 'deer', 'rabbit'] };
 function detect(text, fieldOverride = null) {   // the field chosen in the form wins over the keyword guess; one observation → one field
   const G = S.G, K = S.K; const t = ` ${text.toLowerCase()} `; const rec = K.recognise(text); const pid = Object.keys(rec.plants)[0]?.split(':')[1] || null;
@@ -437,7 +405,7 @@ function addCandidate(text, pid, field, basis, location) {
   const n = S.candidates.filter(c => c.plant === pid && c.field === field).length + 1; const before = S.diag;
   const c = { id: `candidate:${pid}:${field}:${String(n).padStart(2, '0')}`, plant: pid, field, value_kind: d.value_kind, value: d.value || { note: text.trim() }, value_label: d.value_label, text: text.trim(), context: ['candidate (this session)', location, d.conditions.map(x => K.label(x.concept_id).toLowerCase()).join(', ')].filter(Boolean).join('; '), concepts: d.concepts, conditions: d.conditions, place, time: d.time, cultivar: null, recorded_at: new Date().toISOString().slice(0, 10), recorded_by: 'user (browser session)', practitioner_meta: { basis: basis || null, location: location || null, site_conditions: d.conditions.map(x => K.label(x.concept_id)).join(', ') || null, observer_background: 'this session (unverified user input)', completeness: basis && location ? 'L2' : basis ? 'L1' : 'L0', citable: false } };
   S.candidates.push(c); saveCandidates(); K.addCandidateEdges(candidateEdges(G, c), candToClaim(c)); S.diag = runDiag();
-  const oldLinks = new Set(S.links.map(l => l.id)); buildGraph(); const P = `plant:${pid}`; const born = performance.now();
+  const oldLinks = new Set(S.links.map(l => l.id)); buildRegistry(); snapshot(); const P = `plant:${pid}`; show([P, ...d.concepts, ...d.conditions.map(x => x.concept_id), 'source:candidate', ...(place ? [place] : [])]); rebuild(); const born = performance.now();
   for (const l of S.links) if (!oldLinks.has(l.id) || (l.kind === 'pc' && l.edges.some(e => e.claim_id === c.id))) l.born = born;
   const after = S.diag; const items = [];
   items.push(`<em>${esc(K.label(P))}</em> grows ${d.concepts.length ? `${d.concepts.length} candidate synapse${d.concepts.length === 1 ? '' : 's'} to ${d.concepts.map(K.label).join(', ')}` : 'a candidate note with no concept — add a value, a condition or a place to connect it'}${d.conditions.length ? ` under ${d.conditions.map(x => K.label(x.concept_id).toLowerCase()).join(', ')}` : ''}${place ? ` at ${K.label(place)}` : ''}.`);
@@ -448,10 +416,10 @@ function addCandidate(text, pid, field, basis, location) {
   for (const x of after.disagreement.filter(x => x.candidate)) items.push(`Your reading disagrees with ${esc(K.srcLabel(x.sources.find(s => s !== 'candidate')))}: ${esc(x.text)}`);
   items.push(`Status: candidate (magenta), completeness ${c.practitioner_meta.completeness}, never citable, this browser only (localStorage ‘${LS_KEY}’). Nothing is written to the database.`);
   setTimeout(() => { pulse([P], 1, (u, l) => l.born !== undefined || (l.kind === 'pc' && l.edges.some(e => e.claim_id === c.id)) || (l.kind === 'sp' && l.source.id === 'source:candidate')); }, 1500);
-  focusOn(S.nodes.find(x => x.id === P));
+  S.selected = S.reg.get(P); focusOn(S.reg.get(P)); renderCrumb();
   openCard(`${growForm()}<div class="changed"><h3>What grew</h3><ul>${items.map(i => `<li>${i}</li>`).join('')}</ul><p><button data-id="${P}">show the plant</button></p></div>`); wireGrow(); renderStats();
 }
-function resetCandidates() { S.candidates = []; saveCandidates(); S.K.removeCandidates(); S.diag = S.K.db.diagnosis; buildGraph(); clearAll(); openCard(growForm()); wireGrow(); }
+function resetCandidates() { S.candidates = []; saveCandidates(); S.K.removeCandidates(); S.diag = S.K.db.diagnosis; buildRegistry(); S.visible.delete('source:candidate'); rebuild(); deselect(); openCard(growForm()); wireGrow(); }
 function growForm() { return `<h2>Add an observation</h2><div class="kicker">parsed into plant + concepts + conditions + place · grows a <span class="cand">candidate</span> fibre · this browser only · never verified here</div>
   <textarea id="add-text" placeholder="e.g. evergreen huckleberry in my North Van garden is dense and reaches 2 m in part shade"></textarea><div class="meta" id="add-detected" style="margin:4px 0"></div>
   <div class="grid2"><div><label>plant</label><select id="add-plant">${S.K.plants.map(p => `<option value="${p.id.split(':')[1]}">${esc(p.label)}</option>`).join('')}</select></div><div><label>field</label><select id="add-field">${Object.keys(FIELD_WORDS).map(f => `<option value="${f}">${f.replace(/_/g, ' ')}</option>`).join('')}</select></div><div><label>basis</label><select id="add-basis"><option value="">(none given)</option><option value="observed">observed on site</option><option value="project">my own project</option><option value="read">read somewhere</option><option value="mixed">mixed</option></select></div><div><label>location</label><input id="add-location" placeholder="e.g. North Vancouver"></div></div>
@@ -466,11 +434,15 @@ function wireGrow() {
 }
 
 // ------------------------------------------------------------------ UI
+
+// ------------------------------------------------------------------ UI
 function initUi() {
   $('#ask-run').addEventListener('click', () => runQuery($('#ask-input').value)); $('#ask-input').addEventListener('keydown', e => { if (e.key === 'Enter') runQuery($('#ask-input').value); });
   $('#btn-grow').addEventListener('click', () => { openCard(growForm()); wireGrow(); });
-  $('#card-close').addEventListener('click', clearAll);
-  document.addEventListener('keydown', e => { if (e.key === 'Escape') clearAll(); });
-  $('#legend').innerHTML = `<span><i style="background:${TYPE_COLOUR.plant}"></i>plant</span><span><i style="background:#fff"></i>verified</span><span><i style="background:${AX['axis:y'].colour}"></i>unverified · region colour</span><span><i class="ln" style="background:${ST.derived}"></i>derived (rule)</span><span><i class="ln" style="background:${ST.candidate}"></i>candidate (inferred)</span><span><i style="background:${ST.observation}"></i>observation</span><span><i class="ln" style="background:${ST.unknown}"></i>unknown / conflict</span>`;
+  $('#card-close').addEventListener('click', deselect);
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') { if (document.activeElement && document.activeElement.tagName === 'INPUT') document.activeElement.blur(); else back(); } });
+  $('#paths').innerHTML = [['A', 'Classification', 'growth form → shrub → plants → attributes → evidence'], ['B', 'Design knowledge', 'screen → required traits → plants → conditions'], ['C', 'Knowledge variation', 'salal → height → conditions → claims → sources'], ['D', 'Knowledge gaps', 'scrim → required knowledge → evidence → missing']].map(([k, t, d]) => `<button data-path="${k}" title="${esc(d)}"><b>${k}</b> ${esc(t)}</button>`).join('');
+  $('#paths').querySelectorAll('button').forEach(b => b.addEventListener('click', () => runPath(b.dataset.path)));
+  $('#legend').innerHTML = `<span><i style="background:${AX['axis:x'].colour}"></i>X</span><span><i style="background:${AX['axis:y'].colour}"></i>Y</span><span><i style="background:${AX['axis:z'].colour}"></i>Z</span><span><i style="background:${TYPE_COLOUR.plant}"></i>plant</span><span><i style="background:${AX.evidence.colour}"></i>evidence</span><span><i class="ln" style="background:#fff"></i>claim (verified white)</span><span><i class="ln" style="background:${ST.derived}"></i>derived</span><span><i class="ln" style="background:${ST.candidate}"></i>candidate</span><span><i class="ln" style="background:${ST.observation}"></i>observation</span>`;
 }
-window.brain = { S, select, pulse, pulseWaves, clearAll, runQuery, runPath, showGaps, addCandidate, resetCandidates, detect, AX };
+window.brain = { S, select, selectLink, back, overview, pulse, revealWaves, clearAll, runQuery, runPath, addCandidate, resetCandidates, detect, AX };
