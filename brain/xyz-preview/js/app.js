@@ -22,8 +22,18 @@ const S = { M: null, Graph: null, visible: new Set(), revealedEdges: new Set(), 
     initGraph(); initUi(); reset(false);
     window.xyz = { S, onNodeClick, selectNode, selectEdge, back, reset, fit, runPath, expand, collapse };   // for tests and the console
     $('#loading').classList.add('gone');
-  } catch (e) { $('#err').textContent = `could not load: ${e.message}\n\nserve the planting-db root:  python3 -m http.server 8766  → http://localhost:8766/brain/xyz-preview/`; console.error(e); }
+  } catch (e) { $('#err').textContent = explain(e); console.error(e); }
 })();
+
+function webglAvailable() { try { const c = document.createElement('canvas'); return !!(c.getContext('webgl2') || c.getContext('webgl') || c.getContext('experimental-webgl')); } catch { return false; } }
+function explain(e) {
+  if (/WebGL/i.test(e.message || '')) {
+    return webglAvailable()
+      ? `the browser could not create a WebGL context for the 3D view, although WebGL works in this browser.\nUsually there are too many 3D pages open (Chrome allows about 16 WebGL contexts): close other tabs with 3D graphs or maps, then reload.`
+      : `WebGL is not available in this browser, so the 3D view cannot start.\nTurn on graphics acceleration (Chrome: Settings → System → "Use graphics acceleration" · Safari: it is on by default · Firefox: about:preferences → Performance), or open the page in another browser, then reload.`;
+  }
+  return `could not load: ${e.message}\n\nserve the planting-db root:  python3 -m http.server 8766  → http://localhost:8766/brain/xyz-preview/`;
+}
 
 // ------------------------------------------------------------------ colours, sizes, labels
 const colourOf = n => n.kind === 'plant' ? C.plant : n.kind === 'concept' ? mix(C.y, '#ffffff', .22) : n.kind === 'cultivar' || n.kind === 'genus' || n.kind === 'family' ? mix(C.x, '#ffffff', .35) : n.kind === 'entrance' ? mix(C[n.dimension], '#ffffff', .3) : C[n.dimension] || C.doc;
@@ -68,7 +78,7 @@ function linkMaterial(l) {
 // ------------------------------------------------------------------ the graph
 function initGraph() {
   const el = $('#graph');
-  const Graph = ForceGraph3D({ controlType: 'orbit', rendererConfig: { antialias: true, alpha: false } })(el)
+  const Graph = ForceGraph3D({ controlType: 'orbit', rendererConfig: { antialias: true, alpha: false, failIfMajorPerformanceCaveat: false, powerPreference: 'default' } })(el)
     .backgroundColor('#f5f2eb').showNavInfo(false).enableNodeDrag(false)
     .nodeThreeObject(nodeObject).nodeThreeObjectExtend(false)
     .linkWidth(0).linkMaterial(linkMaterial).linkOpacity(1)
