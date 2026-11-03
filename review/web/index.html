@@ -7,71 +7,73 @@
 <style>
   :root { --ink:#111; --grey:#6b6b6b; --line:#e3e3e3; --chip:#f2f2f2; --ok:#2f6f4e; --warn:#b4541a; --r:12px; }
   * { box-sizing:border-box; }
-  body { margin:0; background:#fff; color:var(--ink); font:15px/1.45 -apple-system, "SF Pro Text", "Segoe UI", Helvetica, Arial, sans-serif; -webkit-font-smoothing:antialiased; }
-  .wrap { max-width:720px; margin:0 auto; padding:22px 20px 60px; }
-  .top { display:flex; align-items:center; gap:12px; flex-wrap:wrap; }
-  .top h1 { font-size:18px; font-weight:600; margin:0; }
+  html, body { height:100%; }
+  body { margin:0; background:#fff; color:var(--ink); font:14px/1.45 -apple-system, "SF Pro Text", "Segoe UI", Helvetica, Arial, sans-serif; -webkit-font-smoothing:antialiased; overflow:hidden; }
+  .app { height:100vh; display:grid; grid-template-rows:auto 1fr; }
+  .bar { display:flex; align-items:center; gap:8px; padding:12px 24px; border-bottom:1px solid var(--line); flex-wrap:wrap; }
+  .bar h1 { font-size:17px; font-weight:600; margin:0 14px 0 0; white-space:nowrap; }
+  .sep { width:1px; height:22px; background:var(--line); margin:0 6px; }
+  .chip { border:0; background:var(--chip); color:var(--ink); border-radius:999px; padding:5px 12px; font:inherit; font-size:13.5px; cursor:pointer; line-height:1.4; white-space:nowrap; }
+  .chip.on { background:var(--ink); color:#fff; } .chip small { font-size:12px; opacity:.6; margin-left:4px; }
+  .sub { color:var(--grey); font-size:13px; margin-left:10px; display:flex; gap:12px; white-space:nowrap; }
   .me { margin-left:auto; display:flex; gap:8px; align-items:center; color:var(--grey); font-size:13px; }
   .me input { width:130px; border:1px solid var(--line); border-radius:999px; padding:4px 11px; font:inherit; font-size:13px; }
-  .chips { display:flex; gap:6px; flex-wrap:wrap; margin:14px 0 0; }
-  .chip { border:0; background:var(--chip); color:var(--ink); border-radius:999px; padding:5px 12px; font:inherit; font-size:13.5px; cursor:pointer; line-height:1.4; }
-  .chip.on { background:var(--ink); color:#fff; } .chip small { font-size:12px; opacity:.6; margin-left:4px; }
-  .sub { color:var(--grey); font-size:13px; margin:10px 0 14px; display:flex; gap:12px; flex-wrap:wrap; }
+  select.issue { border:1px solid var(--line); border-radius:999px; padding:5px 10px; font:inherit; font-size:13.5px; max-width:420px; }
+  main { display:grid; grid-template-columns:minmax(0, 1fr) 400px; gap:16px; padding:16px 24px 20px; min-height:0; }
+  .col { min-height:0; display:flex; flex-direction:column; gap:12px; }
+  .col.read { overflow:auto; padding-right:2px; }
+  #claim, #decide { display:flex; flex-direction:column; gap:12px; flex:1 1 auto; min-height:0; }
+  #policy:empty { display:none; }
+  .card.fill.evidence { overflow:auto; }
+  .card { border:1px solid var(--line); border-radius:var(--r); padding:16px 20px; }
+  .card.fill { flex:1 1 auto; display:flex; flex-direction:column; }
   .link { color:var(--ink); text-decoration:underline; text-underline-offset:3px; cursor:pointer; background:none; border:0; font:inherit; padding:0; }
-  .issues { display:flex; flex-direction:column; gap:5px; margin:0 0 12px; }
-  .issues button { text-align:left; background:#fff; border:1px solid var(--line); border-radius:9px; padding:8px 12px; font:inherit; font-size:14px; cursor:pointer; display:flex; gap:10px; align-items:baseline; }
-  .issues button.on { border-color:var(--ink); } .issues button span { color:var(--grey); font-size:12.5px; margin-left:auto; white-space:nowrap; }
-  .policy { border:1px solid var(--line); border-radius:var(--r); padding:12px 16px; margin:0 0 12px; font-size:14px; }
-  .policy p { margin:0 0 6px; color:var(--grey); }
-  .policy select, .policy input { width:100%; border:1px solid var(--line); border-radius:8px; padding:7px 9px; font:inherit; font-size:14px; margin:4px 0; }
-  .card { border:1px solid var(--line); border-radius:var(--r); padding:18px 22px; margin:0 0 12px; }
+  .policy { border:1px solid var(--line); border-radius:var(--r); padding:10px 16px; font-size:13.5px; }
+  .policy p { margin:0 0 4px; color:var(--grey); }
+  .policy select, .policy input { width:100%; border:1px solid var(--line); border-radius:8px; padding:6px 9px; font:inherit; font-size:13.5px; margin:4px 0; }
   .head { display:flex; align-items:flex-start; gap:10px; flex-wrap:wrap; }
-  .head h2 { font-size:21px; font-weight:500; margin:0; line-height:1.25; flex:1 1 auto; } .head h2 i { font-style:italic; }
+  .head h2 { font-size:20px; font-weight:500; margin:0; line-height:1.25; flex:1 1 auto; } .head h2 i { font-style:italic; }
   .state { background:var(--chip); border-radius:999px; padding:4px 11px; font-size:12.5px; white-space:nowrap; margin-top:2px; }
   .field { margin:6px 0 2px; }
   .claimtext { color:var(--grey); margin:0; }
-  .meta { color:var(--grey); font-size:13px; margin-top:8px; }
-  h3 { font-size:16px; font-weight:600; margin:0 0 10px; }
+  .meta { color:var(--grey); font-size:12.5px; margin-top:6px; }
+  h3 { font-size:15px; font-weight:600; margin:0 0 10px; }
   .verdict { display:flex; gap:9px; align-items:flex-start; margin:0 0 6px; }
-  .verdict svg { flex:0 0 18px; width:18px; height:18px; margin-top:2px; display:block; }
+  .verdict svg { flex:0 0 18px; width:18px; height:18px; margin-top:1px; display:block; }
   .verdict > span { flex:1 1 auto; min-width:0; }
   .verdict.ok { color:var(--ok); } .verdict.warn { color:var(--warn); } .verdict.grey { color:var(--grey); }
-  .explain { color:var(--grey); margin:0; }
-  .source { margin-top:10px; font-size:14px; } .source a { color:var(--ink); } .source q { color:var(--grey); }
-  .toggle { margin-top:10px; color:var(--grey); font-size:14px; background:none; border:0; padding:0; cursor:pointer; font-family:inherit; } .toggle::before { content:"▸ "; } .toggle.open::before { content:"▾ "; }
+  .explain { color:var(--grey); margin:0; max-width:78ch; }
+  .source { margin-top:10px; font-size:13.5px; } .source a { color:var(--ink); } .source q { color:var(--grey); }
+  .toggles { display:flex; gap:16px; margin-top:12px; }
+  .toggle { margin:0; color:var(--grey); font-size:13.5px; background:none; border:0; padding:0; cursor:pointer; font-family:inherit; } .toggle::before { content:"▸ "; } .toggle.open::before { content:"▾ "; }
   .fold[hidden] { display:none; }
-  table { border-collapse:collapse; width:100%; font-size:13.5px; margin-top:8px; } th, td { text-align:left; padding:6px 6px; border-top:1px solid var(--line); vertical-align:top; } th { color:var(--grey); font-weight:500; border-top:0; }
-  tr.me td { font-weight:600; }
-  .opts { display:flex; flex-direction:column; gap:10px; margin:2px 0 14px; }
-  .opts label { display:flex; gap:12px; align-items:center; cursor:pointer; }
-  .opts input { appearance:none; width:20px; height:20px; border:1.5px solid #c9c9c9; border-radius:50%; margin:0; flex:none; display:grid; place-items:center; }
-  .opts input:checked { border-color:var(--ink); } .opts input:checked::after { content:""; width:10px; height:10px; border-radius:50%; background:var(--ink); }
+  table { border-collapse:collapse; width:100%; font-size:13px; margin-top:8px; } th, td { text-align:left; padding:5px 6px; border-top:1px solid var(--line); vertical-align:top; } th { color:var(--grey); font-weight:500; border-top:0; }
+  tr.cur td { font-weight:600; }
+  .opts { display:flex; flex-direction:column; gap:9px; margin:2px 0 12px; }
+  .opts label { display:flex; gap:11px; align-items:center; cursor:pointer; }
+  .opts input { appearance:none; width:19px; height:19px; border:1.5px solid #c9c9c9; border-radius:50%; margin:0; flex:none; display:grid; place-items:center; }
+  .opts input:checked { border-color:var(--ink); } .opts input:checked::after { content:""; width:9px; height:9px; border-radius:50%; background:var(--ink); }
   .opts input:focus-visible { outline:2px solid var(--ink); outline-offset:3px; }
-  .corr { margin:-4px 0 12px 32px; } .corr input { width:100%; border:1px solid var(--line); border-radius:8px; padding:7px 9px; font:inherit; font-size:14px; margin:3px 0; }
-  .notes label { display:block; margin-bottom:6px; }
-  textarea { width:100%; min-height:80px; border:1px solid var(--line); border-radius:10px; padding:10px 12px; font:inherit; resize:vertical; }
-  .bottom { display:flex; align-items:center; gap:12px; margin-top:14px; }
-  .nav { display:flex; gap:6px; margin:0 auto; } .nav button { width:38px; height:38px; border-radius:50%; border:1px solid var(--line); background:#fff; font-size:16px; cursor:pointer; } .nav button:disabled { opacity:.3; cursor:default; }
-  .primary { background:var(--ink); color:#fff; border:0; border-radius:999px; padding:10px 20px; font:inherit; cursor:pointer; } .primary:disabled { opacity:.4; }
-  .apply { border-top:1px solid var(--line); margin-top:14px; padding-top:12px; font-size:14px; }
-  .apply .row { display:flex; gap:8px; align-items:center; flex-wrap:wrap; margin-top:6px; } .apply button { border:1px solid var(--ink); background:#fff; border-radius:999px; padding:6px 14px; font:inherit; font-size:14px; cursor:pointer; } .apply button:disabled { opacity:.4; }
-  pre { white-space:pre-wrap; word-break:break-word; font-size:12.5px; background:var(--chip); border-radius:8px; padding:8px 10px; }
-  .foot { color:var(--grey); font-size:13px; margin-top:6px; }
-  .hist { margin:6px 0 0; padding-left:18px; } .hist li { font-size:13.5px; margin:3px 0; } .hist time { color:var(--grey); margin-right:6px; }
+  .corr { margin:-4px 0 10px 30px; } .corr input { width:100%; border:1px solid var(--line); border-radius:8px; padding:6px 9px; font:inherit; font-size:13.5px; margin:3px 0; }
+  .notes { display:flex; flex-direction:column; flex:1 1 auto; min-height:0; } .notes label { display:block; margin-bottom:6px; }
+  textarea { width:100%; flex:1 1 auto; min-height:70px; border:1px solid var(--line); border-radius:10px; padding:9px 11px; font:inherit; resize:none; }
+  .bottom { display:flex; align-items:center; gap:10px; margin-top:12px; }
+  .nav { display:flex; gap:6px; } .nav button { width:34px; height:34px; border-radius:50%; border:1px solid var(--line); background:#fff; font-size:15px; cursor:pointer; } .nav button:disabled { opacity:.3; cursor:default; }
+  .primary { margin-left:auto; background:var(--ink); color:#fff; border:0; border-radius:999px; padding:9px 18px; font:inherit; cursor:pointer; } .primary:disabled { opacity:.4; }
+  .apply { border-top:1px solid var(--line); margin-top:10px; padding-top:10px; font-size:13px; }
+  .apply .row { display:flex; gap:8px; align-items:center; flex-wrap:wrap; margin-top:6px; } .apply button { border:1px solid var(--ink); background:#fff; border-radius:999px; padding:5px 12px; font:inherit; font-size:13px; cursor:pointer; } .apply button:disabled { opacity:.4; }
+  pre { white-space:pre-wrap; word-break:break-word; font-size:12px; background:var(--chip); border-radius:8px; padding:8px 10px; max-height:140px; overflow:auto; }
+  .foot { color:var(--grey); font-size:12.5px; margin-top:6px; }
+  .hist { margin:6px 0 0; padding-left:18px; } .hist li { font-size:13px; margin:3px 0; } .hist time { color:var(--grey); margin-right:6px; }
   .empty { color:var(--grey); padding:30px 0; }
-  #toast { position:fixed; bottom:20px; left:50%; transform:translateX(-50%); background:var(--ink); color:#fff; border-radius:999px; padding:8px 16px; font-size:14px; display:none; }
-  @media (max-width:560px) { .wrap { padding:16px 14px 50px; } .card { padding:16px; } .me { margin-left:0; } .bottom { flex-wrap:wrap; } .nav { margin:0; } .primary { margin-left:auto; } }
+  #toast { position:fixed; bottom:20px; left:50%; transform:translateX(-50%); background:var(--ink); color:#fff; border-radius:999px; padding:8px 16px; font-size:13.5px; display:none; }
+  @media (max-width:1100px) { body { overflow:auto; } .app { height:auto; } main { grid-template-columns:1fr; padding:12px 16px 40px; } .col.read { overflow:visible; } .card.fill.evidence { overflow:visible; } .sub { margin-left:0; } textarea { resize:vertical; min-height:80px; } }
 </style>
 </head>
 <body>
-<div class="wrap">
-  <div class="top"><h1>Claim review</h1><div class="me"><span>Reviewer</span><input id="who" placeholder="your name"></div></div>
-  <div class="chips" id="scopes"></div>
-  <div class="chips" id="status"></div>
-  <div class="sub" id="sub"></div>
-  <div id="issues"></div>
-  <div id="policy"></div>
-  <div id="claim"></div>
+<div class="app">
+  <div class="bar"><h1>Claim review</h1><div id="scopes" style="display:contents"></div><span class="sep"></span><div id="status" style="display:contents"></div><div id="issues" style="display:contents"></div><div class="sub" id="sub"></div><div class="me"><span>Reviewer</span><input id="who" placeholder="your name"></div></div>
+  <main><div class="col read" id="left"><div id="policy"></div><div id="claim"></div></div><div class="col" id="right"><div id="decide"></div></div></main>
 </div>
 <div id="toast"></div>
 <script>
@@ -108,7 +110,7 @@ function buildSeq() {
   if (prio) rows = rows.filter(r => r.priority === 'high');
   seq = rows.map(r => r.claim_id);
 }
-function subline() { const o = DATA.overview; $('#sub').innerHTML = `<span>${seq.length} claims in view</span><span>${o.human_reviewed_claims} of ${o.in_queue} decided</span><span>${o.by_status.verified||0} verified · ${o.by_status.disputed||0} disputed in the database</span>`; }
+function subline() { const o = DATA.overview; $('#sub').innerHTML = `<span>${seq.length} in view</span><span>${o.human_reviewed_claims} of ${o.in_queue} decided</span><span>${o.by_status.verified||0} verified · ${o.by_status.disputed||0} disputed</span>`; }
 function render() {
   const o = DATA.overview, e = o.entries;
   $('#scopes').innerHTML = [['all','All claims', o.in_queue], ['conflicts','Conflicts', e.conflicts.groups], ['issues','Issues', e.issues.n], ['sample','Sample', e.sample.n]].map(([k,l,n]) => `<button class="chip ${scope===k?'on':''}" data-s="${k}">${l}<small>${n}</small></button>`).join('');
@@ -116,10 +118,10 @@ function render() {
   document.querySelectorAll('#scopes .chip').forEach(b => b.onclick = () => { scope = b.dataset.s; if (scope !== 'issues') { issueId = null; history.replaceState(null, '', ' '); } pos = 0; render(); });
   $('[data-st]').onclick = () => { status = status === 'unverified' ? 'any' : 'unverified'; pos = 0; render(); };
   $('[data-p]').onclick = () => { prio = !prio; pos = 0; render(); };
-  $('#issues').innerHTML = scope === 'issues' ? `<div class="issues">${DATA.issues.map(i => `<button class="${issueId===i.id?'on':''}" data-i="${esc(i.id)}">${esc(i.title)}<span>${i.decided} of ${i.n_claims} decided</span></button>`).join('')}</div>` : '';
-  document.querySelectorAll('#issues button').forEach(b => b.onclick = () => { issueId = b.dataset.i; location.hash = 'issue=' + encodeURIComponent(issueId); pos = 0; render(); });
+  $('#issues').innerHTML = scope === 'issues' ? `<select class="issue" id="issue-sel"><option value="">Choose an issue…</option>${DATA.issues.map(i => `<option value="${esc(i.id)}" ${issueId===i.id?'selected':''}>${esc(i.title)} (${i.decided}/${i.n_claims})</option>`).join('')}</select>` : '';
+  const sel = $('#issue-sel'); if (sel) sel.onchange = () => { issueId = sel.value || null; location.hash = issueId ? 'issue=' + encodeURIComponent(issueId) : ''; pos = 0; render(); };
   buildSeq(); if (pos >= seq.length) pos = 0; subline(); renderPolicy();
-  if (!seq.length) { $('#claim').innerHTML = `<div class="empty">${scope==='issues' && !issueId ? 'Choose an issue above.' : 'Nothing left in this view.'}</div>`; return; }
+  if (!seq.length) { $('#claim').innerHTML = `<div class="empty">${scope==='issues' && !issueId ? 'Choose an issue in the bar.' : 'Nothing left in this view.'}</div>`; $('#decide').innerHTML = ''; return; }
   showClaim(seq[pos]);
 }
 function renderPolicy() {
@@ -140,15 +142,17 @@ async function showClaim(cid) {
     <p class="claimtext">${esc(c.text)}</p>
     <div class="meta">${esc(c.context)}${c.note?` · extractor note: ${esc(c.note)}`:''}</div>
   </div>
-  <div class="card">
+  <div class="card fill evidence">
     <h3>AI evidence assessment</h3>
     <div class="verdict ${cls}"><svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><circle cx="9" cy="9" r="8" fill="none" stroke="currentColor" stroke-width="1.5"/>${cls==='ok'?'<path d="M5 9.5l2.5 2.5L13 6.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>':'<path d="M9 5v5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><circle cx="9" cy="13" r="1" fill="currentColor"/>'}</svg><span>${word}${a&&a.missing_context?' — '+esc(a.missing_context):''}</span></div>
     ${a?`<p class="explain">${esc(a.explanation)}</p>`:'<p class="explain">This claim has not been checked against its source yet.</p>'}
     <div class="source">Source: <a href="${esc(c.source_url||'#')}" target="_blank" rel="noopener">${esc(s.name||src(c.source_id))}</a>${a&&a.locator?` · ${esc(a.locator)}`:''}${a&&a.evidence_excerpt?`<br><q>${esc(a.evidence_excerpt)}</q>`:''}</div>
-    ${d.same_field.length>1?`<button class="toggle" data-fold="cmp">Compare the ${d.same_field.length} sources on this field</button><div class="fold" id="cmp" hidden><table><tr><th>source</th><th>value</th><th>context</th><th>status</th></tr>${d.same_field.map(x=>`<tr class="${x.id===c.id?'me':''}"><td>${esc(src(x.source_id))}${x.conflict?' ⇄':''}</td><td>${esc(fmtv(x.value_label ?? x.value))}</td><td style="color:var(--grey)">${esc(x.context)}</td><td>${esc(x.status)}</td></tr>`).join('')}</table></div>`:''}
-    <button class="toggle" data-fold="hist">History (${hist.length})</button><div class="fold" id="hist" hidden><ul class="hist">${hist.map(t=>`<li><time>${esc(String(t.at).slice(0,10))}</time>${esc(t.what)}</li>`).join('')}</ul></div>
-  </div>
-  <div class="card">
+    <div class="toggles">${d.same_field.length>1?`<button class="toggle" data-fold="cmp">Compare the ${d.same_field.length} sources on this field</button>`:''}<button class="toggle" data-fold="hist">History (${hist.length})</button></div>
+    ${d.same_field.length>1?`<div class="fold" id="cmp" hidden><table><tr><th>source</th><th>value</th><th>context</th><th>status</th></tr>${d.same_field.map(x=>`<tr class="${x.id===c.id?'cur':''}"><td>${esc(src(x.source_id))}${x.conflict?' ⇄':''}</td><td>${esc(fmtv(x.value_label ?? x.value))}</td><td style="color:var(--grey)">${esc(x.context)}</td><td>${esc(x.status)}</td></tr>`).join('')}</table></div>`:''}
+    <div class="fold" id="hist" hidden><ul class="hist">${hist.map(t=>`<li><time>${esc(String(t.at).slice(0,10))}</time>${esc(t.what)}</li>`).join('')}</ul></div>
+  </div>`;
+  $('#decide').innerHTML = `
+  <div class="card fill">
     <h3>Human decision</h3>
     ${pol?`<p class="explain" style="margin-bottom:10px">Issue policy: ${esc(pol.payload.option)}</p>`:''}
     <div class="opts">
@@ -160,14 +164,14 @@ async function showClaim(cid) {
     </div>
     <div class="corr" id="corr" hidden><input id="c-value" placeholder="corrected value (text or JSON)"><input id="c-text" placeholder="corrected sentence"></div>
     <div class="notes"><label for="notes">Review notes</label><textarea id="notes" placeholder="What supports the decision, or what still needs checking"></textarea></div>
-    <div class="bottom"><div class="nav"><button id="prev" ${pos===0?'disabled':''} aria-label="previous">↑</button><button id="next" ${pos>=seq.length-1?'disabled':''} aria-label="next">↓</button></div><button class="primary" id="save">Record decision</button></div>
-    <div class="foot">${pos+1} of ${seq.length}${last?` · last decision: ${esc((last.payload.decision||'').replace(/_/g,' '))} by ${esc(last.reviewer)}`:''}</div>
+    <div class="bottom"><div class="nav"><button id="prev" ${pos===0?'disabled':''} aria-label="previous">↑</button><button id="next" ${pos>=seq.length-1?'disabled':''} aria-label="next">↓</button></div><span class="foot" style="margin:0">${pos+1} of ${seq.length}</span><button class="primary" id="save">Record decision</button></div>
+    ${last?`<div class="foot">last decision: ${esc((last.payload.decision||'').replace(/_/g,' '))} by ${esc(last.reviewer)}</div>`:''}
     <div id="apply"></div>
   </div>`;
   document.querySelectorAll('.toggle').forEach(b => b.onclick = () => { const f = document.getElementById(b.dataset.fold); f.hidden = !f.hidden; b.classList.toggle('open', !f.hidden); });
   document.querySelectorAll('input[name=dec]').forEach(x => x.onchange = () => $('#corr').hidden = !(x.value==='propose_correction'&&x.checked));
-  $('#prev').onclick = () => { pos--; showClaim(seq[pos]); window.scrollTo({top:0}); };
-  $('#next').onclick = () => { pos++; showClaim(seq[pos]); window.scrollTo({top:0}); };
+  $('#prev').onclick = () => { pos--; showClaim(seq[pos]); $('#left').scrollTop = 0; };
+  $('#next').onclick = () => { pos++; showClaim(seq[pos]); $('#left').scrollTop = 0; };
   $('#save').onclick = async () => {
     const dec = document.querySelector('input[name=dec]:checked')?.value; if (!dec) return toast('Choose a decision'); if (!who()) return toast('Enter your name at the top');
     const body = {claim_id:c.id, decision:dec, reviewer:who(), reason:$('#notes').value, ai_review_id:a?.review_id||null, replaces_event:last?.event_id||null, notes: pol?`issue policy: ${pol.payload.option}`:null};
