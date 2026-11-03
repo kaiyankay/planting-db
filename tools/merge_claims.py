@@ -26,7 +26,7 @@ import copy, json, os, re, sys
 from datetime import date
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-ROOT = os.path.dirname(HERE)
+ROOT = os.environ.get("PLANTING_DB_ROOT") or os.path.dirname(HERE)   # a test root may be given (tools/review_tests.py)
 sys.path.insert(0, HERE)
 from validate import load_db, validate_plant, load_json  # noqa: E402
 

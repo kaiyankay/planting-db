@@ -1,5 +1,5 @@
 {
-  "$schema_version": "0.4.2",
+  "$schema_version": "0.4.3",
   "name": "Planting Intelligence — Local Planting Knowledge Database",
   "scope": "City of Vancouver / Metro Vancouver, BC (Canadian hardiness zone 8a–8b)",
   "updated": "2026-11-02",
@@ -76,6 +76,16 @@
       "survey_mentions": {
         "type": "integer",
         "note": "number of survey d1 lists naming the plant (any raw name); maintained by tools/survey_to_claims.py"
+      },
+      "identity_review": {
+        "type": "object",
+        "shape": {
+          "taxonomic_identity": "{status: confirmed|disputed|to_confirm, note}",
+          "geographic_origin": "{status, note}",
+          "botanical_growth_form": "{status, note}",
+          "design_function": "{status, note}"
+        },
+        "note": "0.4.3 (M45): the four identity questions kept apart — what the plant is, where it is from, how it grows, what designers use it for; written by tools/identity_audit.py from the sources on file; disputed = sources disagree, left for human judgement"
       }
     }
   },
@@ -607,6 +617,26 @@
           "recorded_at": "date"
         },
         "note": "0.4.1 (2026-11-02): optional media attached to a claim — images, GIS layers, planting plans, site observations. A medium is evidence for the claim it hangs on; it never creates a claim by itself. Empty today."
+      },
+      "verification_scope": {
+        "type": "enum",
+        "values": [
+          "statement",
+          "content"
+        ],
+        "optional": true,
+        "note": "0.4.3 (M44): what `status: verified` certifies. `statement` = the record of what a person said is accurate (survey claims: the respondent's words are recorded verbatim; the botanical content is NOT independently verified). `content` = the value itself was checked against its source or is open data stored as published (City of Vancouver). Absent on unverified claims; set by the review apply step."
+      },
+      "review_events": {
+        "type": "string[]",
+        "optional": true,
+        "note": "0.4.3: ids of the human review events (review/events/review_events.jsonl, private) that changed this claim; the events hold the reasons and the AI assessment they answered"
+      },
+      "corrects": {
+        "type": "string",
+        "ref": "claim.id",
+        "optional": true,
+        "note": "0.4.3: this claim replaces an earlier one after a human 'propose correction' decision; the original stays with status retired and retired_reason"
       }
     }
   },
@@ -698,8 +728,10 @@
           "suppresses",
           "supports_habitat",
           "layered_under",
-          "avoid_with"
-        ]
+          "avoid_with",
+          "co_occurs_with"
+        ],
+        "note": "0.4.3 (M43): `co_occurs_with` = a source states that the two plants grow together (e.g. E-Flora 'associated species', a flora's community description); never derived from shared attributes. Shared habitat / trait is an indirect connection through concept nodes and is not a relation."
       },
       "direction": {
         "type": "enum",
@@ -1019,5 +1051,12 @@
     "file": "ontology.json",
     "version": "0.2.0",
     "note": "concept nodes; claims are the edges that connect a plant to a concept with provenance (brief 2026-10-31). 0.2.0: XYZ architecture (axis / category / facet nodes), design concepts (Z) with literature sources and typed concept relations (brief 2026-11-02, M31). brain/data/kg.json (tools/build_kg.py) is the semantic graph built from claims + ontology relations (M32)."
+  },
+  "verification_layers": {
+    "note": "brief 2026-11-02 'Verification Workbench' §03C. Four statements about a claim that never substitute for one another; expressed by independent records, not by one status field.",
+    "statement_recorded": "the claim records what a source or person stated (every claim with a source_id; survey claims with verification_scope statement)",
+    "evidence_checked": "an AI or human reviewer found the original source and compared the claim with it (review/ai/assessments, review events of kind evidence_check) — an assessment, never a verification",
+    "claim_verified": "a human applied the verification workflow (tools/review_apply.py → status verified, verification_scope content, review_events)",
+    "locally_applicable": "the evidence supports use under stated Vancouver / site conditions (a claim with place at the Vancouver scale or a human review decision with locally_applicable: true); not derived from a global source alone"
   }
 }

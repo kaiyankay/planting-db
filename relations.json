@@ -21,7 +21,8 @@
         "citable": false,
         "observer_background": "MLA student and practising landscape designer; studio, professional and personal-garden experience"
       },
-      "note": "co-listing is weak evidence of compatibility — it records that a designer thinks of them together, nothing more"
+      "note": "co-listing is weak evidence of compatibility — it records that a designer thinks of them together, nothing more",
+      "verification_scope": "statement"
     },
     {
       "id": "rel:vaccinium-ovatum:gaultheria-shallon:m1",
@@ -55,7 +56,7 @@
       "source_type": "database",
       "context": "derived: overlapping habitat classes on the two atlas pages (forest, lowland, montane, coastal; modal zone CWH); the source does not state the association itself",
       "confidence": 0.5,
-      "status": "unverified",
+      "status": "retired",
       "recorded_at": "2026-10-29",
       "recorded_by": "claude (T5, derived)",
       "derived_from": [
@@ -68,7 +69,9 @@
       ],
       "citation": "In Klinkenberg, Brian. (Editor) 2020. E-Flora BC: Electronic Atlas of the Plants of British Columbia [eflora.bc.ca]. Lab for Advanced Spatial Analysis, Department of Geography, University of British Columbia, Vancouver. [Accessed: 2026-10-29]",
       "accessed": "2026-10-29",
-      "note": "habitat co-occurrence, not a planting-design recommendation; the model placeholder m1 says the same from general knowledge and is retired by this claim"
+      "note": "habitat co-occurrence, not a planting-design recommendation; the model placeholder m1 says the same from general knowledge and is retired by this claim",
+      "retired_at": "2026-11-02",
+      "retired_reason": "REL-R1 withdrawn 2026-11-02 (brief 'Verification Workbench' §03A, methods M43): a shared E-Flora habitat class is an indirect connection expressed through the habitat / bgc_zone concept nodes both plants link to, not a direct companion relation; record kept as history"
     },
     {
       "id": "rel:gaultheria-shallon:vaccinium-ovatum:m2",
@@ -166,7 +169,8 @@
         "citable": false,
         "observer_background": "landscape designer; studio/academic planting experience"
       },
-      "note": "co-listing is weak evidence of compatibility — it records that a designer thinks of them together, nothing more (brief 2026-11-02 §02)"
+      "note": "co-listing is weak evidence of compatibility — it records that a designer thinks of them together, nothing more (brief 2026-11-02 §02)",
+      "verification_scope": "statement"
     },
     {
       "id": "rel:gaillardia-aristata:gaultheria-shallon:01",
@@ -188,7 +192,8 @@
         "citable": false,
         "observer_background": "MLA student and practising landscape designer; studio, professional and personal-garden experience"
       },
-      "note": "co-listing is weak evidence of compatibility — it records that a designer thinks of them together, nothing more (brief 2026-11-02 §02)"
+      "note": "co-listing is weak evidence of compatibility — it records that a designer thinks of them together, nothing more (brief 2026-11-02 §02)",
+      "verification_scope": "statement"
     },
     {
       "id": "rel:gaillardia-aristata:vaccinium-ovatum:01",
@@ -210,7 +215,8 @@
         "citable": false,
         "observer_background": "MLA student and practising landscape designer; studio, professional and personal-garden experience"
       },
-      "note": "co-listing is weak evidence of compatibility — it records that a designer thinks of them together, nothing more (brief 2026-11-02 §02)"
+      "note": "co-listing is weak evidence of compatibility — it records that a designer thinks of them together, nothing more (brief 2026-11-02 §02)",
+      "verification_scope": "statement"
     },
     {
       "id": "rel:cercidiphyllum-japonicum:polystichum-munitum:01",
@@ -232,7 +238,8 @@
         "citable": false,
         "observer_background": "MLA student and practising landscape designer; studio and professional experience"
       },
-      "note": "co-listing is weak evidence of compatibility — it records that a designer thinks of them together, nothing more (brief 2026-11-02 §02)"
+      "note": "co-listing is weak evidence of compatibility — it records that a designer thinks of them together, nothing more (brief 2026-11-02 §02)",
+      "verification_scope": "statement"
     },
     {
       "id": "rel:arctostaphylos-uva-ursi:polystichum-munitum:01",
@@ -254,7 +261,8 @@
         "citable": false,
         "observer_background": "MLA student and practising landscape designer; studio and professional experience"
       },
-      "note": "co-listing is weak evidence of compatibility — it records that a designer thinks of them together, nothing more (brief 2026-11-02 §02)"
+      "note": "co-listing is weak evidence of compatibility — it records that a designer thinks of them together, nothing more (brief 2026-11-02 §02)",
+      "verification_scope": "statement"
     },
     {
       "id": "rel:arctostaphylos-uva-ursi:cercidiphyllum-japonicum:01",
@@ -276,7 +284,8 @@
         "citable": false,
         "observer_background": "MLA student and practising landscape designer; studio and professional experience"
       },
-      "note": "co-listing is weak evidence of compatibility — it records that a designer thinks of them together, nothing more (brief 2026-11-02 §02)"
+      "note": "co-listing is weak evidence of compatibility — it records that a designer thinks of them together, nothing more (brief 2026-11-02 §02)",
+      "verification_scope": "statement"
     },
     {
       "id": "rel:cercidiphyllum-japonicum:cornus-nuttallii:01",
@@ -298,7 +307,8 @@
         "citable": false,
         "observer_background": "practising landscape designer; personal-garden, professional and studio planting experience"
       },
-      "note": "co-listing is weak evidence of compatibility — it records that a designer thinks of them together, nothing more (brief 2026-11-02 §02)"
+      "note": "co-listing is weak evidence of compatibility — it records that a designer thinks of them together, nothing more (brief 2026-11-02 §02)",
+      "verification_scope": "statement"
     },
     {
       "id": "rel:cercidiphyllum-japonicum:gaultheria-shallon:01",
@@ -320,7 +330,8 @@
         "citable": false,
         "observer_background": "practising landscape designer; personal-garden, professional and studio planting experience"
       },
-      "note": "co-listing is weak evidence of compatibility — it records that a designer thinks of them together, nothing more (brief 2026-11-02 §02)"
+      "note": "co-listing is weak evidence of compatibility — it records that a designer thinks of them together, nothing more (brief 2026-11-02 §02)",
+      "verification_scope": "statement"
     },
     {
       "id": "rel:arctostaphylos-uva-ursi:cercidiphyllum-japonicum:02",
@@ -342,7 +353,8 @@
         "citable": false,
         "observer_background": "practising landscape designer; personal-garden, professional and studio planting experience"
       },
-      "note": "co-listing is weak evidence of compatibility — it records that a designer thinks of them together, nothing more (brief 2026-11-02 §02)"
+      "note": "co-listing is weak evidence of compatibility — it records that a designer thinks of them together, nothing more (brief 2026-11-02 §02)",
+      "verification_scope": "statement"
     },
     {
       "id": "rel:cornus-nuttallii:gaultheria-shallon:01",
@@ -364,7 +376,8 @@
         "citable": false,
         "observer_background": "practising landscape designer; personal-garden, professional and studio planting experience"
       },
-      "note": "co-listing is weak evidence of compatibility — it records that a designer thinks of them together, nothing more (brief 2026-11-02 §02)"
+      "note": "co-listing is weak evidence of compatibility — it records that a designer thinks of them together, nothing more (brief 2026-11-02 §02)",
+      "verification_scope": "statement"
     },
     {
       "id": "rel:arctostaphylos-uva-ursi:cornus-nuttallii:01",
@@ -386,7 +399,8 @@
         "citable": false,
         "observer_background": "practising landscape designer; personal-garden, professional and studio planting experience"
       },
-      "note": "co-listing is weak evidence of compatibility — it records that a designer thinks of them together, nothing more (brief 2026-11-02 §02)"
+      "note": "co-listing is weak evidence of compatibility — it records that a designer thinks of them together, nothing more (brief 2026-11-02 §02)",
+      "verification_scope": "statement"
     },
     {
       "id": "rel:arctostaphylos-uva-ursi:gaultheria-shallon:01",
@@ -408,7 +422,8 @@
         "citable": false,
         "observer_background": "practising landscape designer; personal-garden, professional and studio planting experience"
       },
-      "note": "co-listing is weak evidence of compatibility — it records that a designer thinks of them together, nothing more (brief 2026-11-02 §02)"
+      "note": "co-listing is weak evidence of compatibility — it records that a designer thinks of them together, nothing more (brief 2026-11-02 §02)",
+      "verification_scope": "statement"
     },
     {
       "id": "rel:achillea-millefolium:polystichum-munitum:01",
@@ -430,7 +445,8 @@
         "citable": false,
         "observer_background": "MLA student; studio and personal-garden planting experience"
       },
-      "note": "co-listing is weak evidence of compatibility — it records that a designer thinks of them together, nothing more (brief 2026-11-02 §02)"
+      "note": "co-listing is weak evidence of compatibility — it records that a designer thinks of them together, nothing more (brief 2026-11-02 §02)",
+      "verification_scope": "statement"
     },
     {
       "id": "rel:cornus-sericea:polystichum-munitum:01",
@@ -452,7 +468,8 @@
         "citable": false,
         "observer_background": "MLA student; former professional gardener; studio, personal-garden and professional planting experience"
       },
-      "note": "co-listing is weak evidence of compatibility — it records that a designer thinks of them together, nothing more (brief 2026-11-02 §02)"
+      "note": "co-listing is weak evidence of compatibility — it records that a designer thinks of them together, nothing more (brief 2026-11-02 §02)",
+      "verification_scope": "statement"
     },
     {
       "id": "rel:polystichum-munitum:vaccinium-ovatum:01",
@@ -483,7 +500,7 @@
       "context": "derived: shared habitat class (forest) and the CWH zone on the two atlas pages (minimum elevations 6 m and 0 m, province-wide means 1129 m and 194 m; modal zones IDF / CWH — a modal zone other than CWH/CDF means the plant is marginal in the coastal zone); the source does not state the association itself",
       "rule": "REL-R1",
       "confidence": 0.5,
-      "status": "unverified",
+      "status": "retired",
       "recorded_at": "2026-11-02",
       "recorded_by": "tools/derive_relations.py (REL-R1)",
       "derived_from": [
@@ -491,7 +508,9 @@
         "cornus-nuttallii:vancouver_context:eflora01"
       ],
       "citation": "In Klinkenberg, Brian. (Editor) 2020. E-Flora BC: Electronic Atlas of the Plants of British Columbia [eflora.bc.ca]. Lab for Advanced Spatial Analysis, Department of Geography, University of British Columbia, Vancouver. [Accessed: 2026-11-02]",
-      "note": "habitat co-occurrence, not a planting-design recommendation; two plants sharing a habitat class may still compete (see the salal placeholders)"
+      "note": "habitat co-occurrence, not a planting-design recommendation; two plants sharing a habitat class may still compete (see the salal placeholders)",
+      "retired_at": "2026-11-02",
+      "retired_reason": "REL-R1 withdrawn 2026-11-02 (brief 'Verification Workbench' §03A, methods M43): a shared E-Flora habitat class is an indirect connection expressed through the habitat / bgc_zone concept nodes both plants link to, not a direct companion relation; record kept as history"
     },
     {
       "id": "rel:arctostaphylos-uva-ursi:cornus-sericea:01",
@@ -505,7 +524,7 @@
       "context": "derived: shared habitat class (forest) and the CWH zone on the two atlas pages (minimum elevations 6 m and 0 m, province-wide means 1129 m and 759 m; modal zones IDF / SBS — a modal zone other than CWH/CDF means the plant is marginal in the coastal zone); the source does not state the association itself",
       "rule": "REL-R1",
       "confidence": 0.5,
-      "status": "unverified",
+      "status": "retired",
       "recorded_at": "2026-11-02",
       "recorded_by": "tools/derive_relations.py (REL-R1)",
       "derived_from": [
@@ -513,7 +532,9 @@
         "cornus-sericea:vancouver_context:eflora01"
       ],
       "citation": "In Klinkenberg, Brian. (Editor) 2020. E-Flora BC: Electronic Atlas of the Plants of British Columbia [eflora.bc.ca]. Lab for Advanced Spatial Analysis, Department of Geography, University of British Columbia, Vancouver. [Accessed: 2026-11-02]",
-      "note": "habitat co-occurrence, not a planting-design recommendation; two plants sharing a habitat class may still compete (see the salal placeholders)"
+      "note": "habitat co-occurrence, not a planting-design recommendation; two plants sharing a habitat class may still compete (see the salal placeholders)",
+      "retired_at": "2026-11-02",
+      "retired_reason": "REL-R1 withdrawn 2026-11-02 (brief 'Verification Workbench' §03A, methods M43): a shared E-Flora habitat class is an indirect connection expressed through the habitat / bgc_zone concept nodes both plants link to, not a direct companion relation; record kept as history"
     },
     {
       "id": "rel:arctostaphylos-uva-ursi:gaultheria-shallon:02",
@@ -527,7 +548,7 @@
       "context": "derived: shared habitat class (forest) and the CWH zone on the two atlas pages (minimum elevations 6 m and 0 m, province-wide means 1129 m and 219 m; modal zones IDF / CWH — a modal zone other than CWH/CDF means the plant is marginal in the coastal zone); the source does not state the association itself",
       "rule": "REL-R1",
       "confidence": 0.5,
-      "status": "unverified",
+      "status": "retired",
       "recorded_at": "2026-11-02",
       "recorded_by": "tools/derive_relations.py (REL-R1)",
       "derived_from": [
@@ -535,7 +556,9 @@
         "gaultheria-shallon:vancouver_context:eflora01"
       ],
       "citation": "In Klinkenberg, Brian. (Editor) 2020. E-Flora BC: Electronic Atlas of the Plants of British Columbia [eflora.bc.ca]. Lab for Advanced Spatial Analysis, Department of Geography, University of British Columbia, Vancouver. [Accessed: 2026-11-02]",
-      "note": "habitat co-occurrence, not a planting-design recommendation; two plants sharing a habitat class may still compete (see the salal placeholders)"
+      "note": "habitat co-occurrence, not a planting-design recommendation; two plants sharing a habitat class may still compete (see the salal placeholders)",
+      "retired_at": "2026-11-02",
+      "retired_reason": "REL-R1 withdrawn 2026-11-02 (brief 'Verification Workbench' §03A, methods M43): a shared E-Flora habitat class is an indirect connection expressed through the habitat / bgc_zone concept nodes both plants link to, not a direct companion relation; record kept as history"
     },
     {
       "id": "rel:arctostaphylos-uva-ursi:polystichum-munitum:02",
@@ -549,7 +572,7 @@
       "context": "derived: shared habitat class (forest) and the CWH zone on the two atlas pages (minimum elevations 6 m and 0 m, province-wide means 1129 m and 229 m; modal zones IDF / CWH — a modal zone other than CWH/CDF means the plant is marginal in the coastal zone); the source does not state the association itself",
       "rule": "REL-R1",
       "confidence": 0.5,
-      "status": "unverified",
+      "status": "retired",
       "recorded_at": "2026-11-02",
       "recorded_by": "tools/derive_relations.py (REL-R1)",
       "derived_from": [
@@ -557,7 +580,9 @@
         "polystichum-munitum:vancouver_context:eflora01"
       ],
       "citation": "In Klinkenberg, Brian. (Editor) 2020. E-Flora BC: Electronic Atlas of the Plants of British Columbia [eflora.bc.ca]. Lab for Advanced Spatial Analysis, Department of Geography, University of British Columbia, Vancouver. [Accessed: 2026-11-02]",
-      "note": "habitat co-occurrence, not a planting-design recommendation; two plants sharing a habitat class may still compete (see the salal placeholders)"
+      "note": "habitat co-occurrence, not a planting-design recommendation; two plants sharing a habitat class may still compete (see the salal placeholders)",
+      "retired_at": "2026-11-02",
+      "retired_reason": "REL-R1 withdrawn 2026-11-02 (brief 'Verification Workbench' §03A, methods M43): a shared E-Flora habitat class is an indirect connection expressed through the habitat / bgc_zone concept nodes both plants link to, not a direct companion relation; record kept as history"
     },
     {
       "id": "rel:arctostaphylos-uva-ursi:vaccinium-ovatum:01",
@@ -571,7 +596,7 @@
       "context": "derived: shared habitat class (forest) and the CWH zone on the two atlas pages (minimum elevations 6 m and 2 m, province-wide means 1129 m and 185 m; modal zones IDF / CWH — a modal zone other than CWH/CDF means the plant is marginal in the coastal zone); the source does not state the association itself",
       "rule": "REL-R1",
       "confidence": 0.5,
-      "status": "unverified",
+      "status": "retired",
       "recorded_at": "2026-11-02",
       "recorded_by": "tools/derive_relations.py (REL-R1)",
       "derived_from": [
@@ -579,7 +604,9 @@
         "vaccinium-ovatum:vancouver_context:eflora01"
       ],
       "citation": "In Klinkenberg, Brian. (Editor) 2020. E-Flora BC: Electronic Atlas of the Plants of British Columbia [eflora.bc.ca]. Lab for Advanced Spatial Analysis, Department of Geography, University of British Columbia, Vancouver. [Accessed: 2026-11-02]",
-      "note": "habitat co-occurrence, not a planting-design recommendation; two plants sharing a habitat class may still compete (see the salal placeholders)"
+      "note": "habitat co-occurrence, not a planting-design recommendation; two plants sharing a habitat class may still compete (see the salal placeholders)",
+      "retired_at": "2026-11-02",
+      "retired_reason": "REL-R1 withdrawn 2026-11-02 (brief 'Verification Workbench' §03A, methods M43): a shared E-Flora habitat class is an indirect connection expressed through the habitat / bgc_zone concept nodes both plants link to, not a direct companion relation; record kept as history"
     },
     {
       "id": "rel:cornus-nuttallii:cornus-sericea:01",
@@ -593,7 +620,7 @@
       "context": "derived: shared habitat class (forest) and the CWH zone on the two atlas pages (minimum elevations 0 m and 0 m, province-wide means 194 m and 759 m; modal zones CWH / SBS — a modal zone other than CWH/CDF means the plant is marginal in the coastal zone); the source does not state the association itself",
       "rule": "REL-R1",
       "confidence": 0.5,
-      "status": "unverified",
+      "status": "retired",
       "recorded_at": "2026-11-02",
       "recorded_by": "tools/derive_relations.py (REL-R1)",
       "derived_from": [
@@ -601,7 +628,9 @@
         "cornus-sericea:vancouver_context:eflora01"
       ],
       "citation": "In Klinkenberg, Brian. (Editor) 2020. E-Flora BC: Electronic Atlas of the Plants of British Columbia [eflora.bc.ca]. Lab for Advanced Spatial Analysis, Department of Geography, University of British Columbia, Vancouver. [Accessed: 2026-11-02]",
-      "note": "habitat co-occurrence, not a planting-design recommendation; two plants sharing a habitat class may still compete (see the salal placeholders)"
+      "note": "habitat co-occurrence, not a planting-design recommendation; two plants sharing a habitat class may still compete (see the salal placeholders)",
+      "retired_at": "2026-11-02",
+      "retired_reason": "REL-R1 withdrawn 2026-11-02 (brief 'Verification Workbench' §03A, methods M43): a shared E-Flora habitat class is an indirect connection expressed through the habitat / bgc_zone concept nodes both plants link to, not a direct companion relation; record kept as history"
     },
     {
       "id": "rel:cornus-nuttallii:gaultheria-shallon:02",
@@ -615,7 +644,7 @@
       "context": "derived: shared habitat class (forest) and the CWH zone on the two atlas pages (minimum elevations 0 m and 0 m, province-wide means 194 m and 219 m; modal zones CWH / CWH); the source does not state the association itself",
       "rule": "REL-R1",
       "confidence": 0.5,
-      "status": "unverified",
+      "status": "retired",
       "recorded_at": "2026-11-02",
       "recorded_by": "tools/derive_relations.py (REL-R1)",
       "derived_from": [
@@ -623,7 +652,9 @@
         "gaultheria-shallon:vancouver_context:eflora01"
       ],
       "citation": "In Klinkenberg, Brian. (Editor) 2020. E-Flora BC: Electronic Atlas of the Plants of British Columbia [eflora.bc.ca]. Lab for Advanced Spatial Analysis, Department of Geography, University of British Columbia, Vancouver. [Accessed: 2026-11-02]",
-      "note": "habitat co-occurrence, not a planting-design recommendation; two plants sharing a habitat class may still compete (see the salal placeholders)"
+      "note": "habitat co-occurrence, not a planting-design recommendation; two plants sharing a habitat class may still compete (see the salal placeholders)",
+      "retired_at": "2026-11-02",
+      "retired_reason": "REL-R1 withdrawn 2026-11-02 (brief 'Verification Workbench' §03A, methods M43): a shared E-Flora habitat class is an indirect connection expressed through the habitat / bgc_zone concept nodes both plants link to, not a direct companion relation; record kept as history"
     },
     {
       "id": "rel:cornus-nuttallii:polystichum-munitum:01",
@@ -637,7 +668,7 @@
       "context": "derived: shared habitat class (forest) and the CWH zone on the two atlas pages (minimum elevations 0 m and 0 m, province-wide means 194 m and 229 m; modal zones CWH / CWH); the source does not state the association itself",
       "rule": "REL-R1",
       "confidence": 0.5,
-      "status": "unverified",
+      "status": "retired",
       "recorded_at": "2026-11-02",
       "recorded_by": "tools/derive_relations.py (REL-R1)",
       "derived_from": [
@@ -645,7 +676,9 @@
         "polystichum-munitum:vancouver_context:eflora01"
       ],
       "citation": "In Klinkenberg, Brian. (Editor) 2020. E-Flora BC: Electronic Atlas of the Plants of British Columbia [eflora.bc.ca]. Lab for Advanced Spatial Analysis, Department of Geography, University of British Columbia, Vancouver. [Accessed: 2026-11-02]",
-      "note": "habitat co-occurrence, not a planting-design recommendation; two plants sharing a habitat class may still compete (see the salal placeholders)"
+      "note": "habitat co-occurrence, not a planting-design recommendation; two plants sharing a habitat class may still compete (see the salal placeholders)",
+      "retired_at": "2026-11-02",
+      "retired_reason": "REL-R1 withdrawn 2026-11-02 (brief 'Verification Workbench' §03A, methods M43): a shared E-Flora habitat class is an indirect connection expressed through the habitat / bgc_zone concept nodes both plants link to, not a direct companion relation; record kept as history"
     },
     {
       "id": "rel:cornus-nuttallii:vaccinium-ovatum:01",
@@ -659,7 +692,7 @@
       "context": "derived: shared habitat class (forest) and the CWH zone on the two atlas pages (minimum elevations 0 m and 2 m, province-wide means 194 m and 185 m; modal zones CWH / CWH); the source does not state the association itself",
       "rule": "REL-R1",
       "confidence": 0.5,
-      "status": "unverified",
+      "status": "retired",
       "recorded_at": "2026-11-02",
       "recorded_by": "tools/derive_relations.py (REL-R1)",
       "derived_from": [
@@ -667,7 +700,9 @@
         "vaccinium-ovatum:vancouver_context:eflora01"
       ],
       "citation": "In Klinkenberg, Brian. (Editor) 2020. E-Flora BC: Electronic Atlas of the Plants of British Columbia [eflora.bc.ca]. Lab for Advanced Spatial Analysis, Department of Geography, University of British Columbia, Vancouver. [Accessed: 2026-11-02]",
-      "note": "habitat co-occurrence, not a planting-design recommendation; two plants sharing a habitat class may still compete (see the salal placeholders)"
+      "note": "habitat co-occurrence, not a planting-design recommendation; two plants sharing a habitat class may still compete (see the salal placeholders)",
+      "retired_at": "2026-11-02",
+      "retired_reason": "REL-R1 withdrawn 2026-11-02 (brief 'Verification Workbench' §03A, methods M43): a shared E-Flora habitat class is an indirect connection expressed through the habitat / bgc_zone concept nodes both plants link to, not a direct companion relation; record kept as history"
     },
     {
       "id": "rel:cornus-sericea:gaultheria-shallon:01",
@@ -681,7 +716,7 @@
       "context": "derived: shared habitat class (forest) and the CWH zone on the two atlas pages (minimum elevations 0 m and 0 m, province-wide means 759 m and 219 m; modal zones SBS / CWH — a modal zone other than CWH/CDF means the plant is marginal in the coastal zone); the source does not state the association itself",
       "rule": "REL-R1",
       "confidence": 0.5,
-      "status": "unverified",
+      "status": "retired",
       "recorded_at": "2026-11-02",
       "recorded_by": "tools/derive_relations.py (REL-R1)",
       "derived_from": [
@@ -689,7 +724,9 @@
         "gaultheria-shallon:vancouver_context:eflora01"
       ],
       "citation": "In Klinkenberg, Brian. (Editor) 2020. E-Flora BC: Electronic Atlas of the Plants of British Columbia [eflora.bc.ca]. Lab for Advanced Spatial Analysis, Department of Geography, University of British Columbia, Vancouver. [Accessed: 2026-11-02]",
-      "note": "habitat co-occurrence, not a planting-design recommendation; two plants sharing a habitat class may still compete (see the salal placeholders)"
+      "note": "habitat co-occurrence, not a planting-design recommendation; two plants sharing a habitat class may still compete (see the salal placeholders)",
+      "retired_at": "2026-11-02",
+      "retired_reason": "REL-R1 withdrawn 2026-11-02 (brief 'Verification Workbench' §03A, methods M43): a shared E-Flora habitat class is an indirect connection expressed through the habitat / bgc_zone concept nodes both plants link to, not a direct companion relation; record kept as history"
     },
     {
       "id": "rel:cornus-sericea:polystichum-munitum:02",
@@ -703,7 +740,7 @@
       "context": "derived: shared habitat class (forest) and the CWH zone on the two atlas pages (minimum elevations 0 m and 0 m, province-wide means 759 m and 229 m; modal zones SBS / CWH — a modal zone other than CWH/CDF means the plant is marginal in the coastal zone); the source does not state the association itself",
       "rule": "REL-R1",
       "confidence": 0.5,
-      "status": "unverified",
+      "status": "retired",
       "recorded_at": "2026-11-02",
       "recorded_by": "tools/derive_relations.py (REL-R1)",
       "derived_from": [
@@ -711,7 +748,9 @@
         "polystichum-munitum:vancouver_context:eflora01"
       ],
       "citation": "In Klinkenberg, Brian. (Editor) 2020. E-Flora BC: Electronic Atlas of the Plants of British Columbia [eflora.bc.ca]. Lab for Advanced Spatial Analysis, Department of Geography, University of British Columbia, Vancouver. [Accessed: 2026-11-02]",
-      "note": "habitat co-occurrence, not a planting-design recommendation; two plants sharing a habitat class may still compete (see the salal placeholders)"
+      "note": "habitat co-occurrence, not a planting-design recommendation; two plants sharing a habitat class may still compete (see the salal placeholders)",
+      "retired_at": "2026-11-02",
+      "retired_reason": "REL-R1 withdrawn 2026-11-02 (brief 'Verification Workbench' §03A, methods M43): a shared E-Flora habitat class is an indirect connection expressed through the habitat / bgc_zone concept nodes both plants link to, not a direct companion relation; record kept as history"
     },
     {
       "id": "rel:cornus-sericea:vaccinium-ovatum:01",
@@ -725,7 +764,7 @@
       "context": "derived: shared habitat class (forest) and the CWH zone on the two atlas pages (minimum elevations 0 m and 2 m, province-wide means 759 m and 185 m; modal zones SBS / CWH — a modal zone other than CWH/CDF means the plant is marginal in the coastal zone); the source does not state the association itself",
       "rule": "REL-R1",
       "confidence": 0.5,
-      "status": "unverified",
+      "status": "retired",
       "recorded_at": "2026-11-02",
       "recorded_by": "tools/derive_relations.py (REL-R1)",
       "derived_from": [
@@ -733,7 +772,9 @@
         "vaccinium-ovatum:vancouver_context:eflora01"
       ],
       "citation": "In Klinkenberg, Brian. (Editor) 2020. E-Flora BC: Electronic Atlas of the Plants of British Columbia [eflora.bc.ca]. Lab for Advanced Spatial Analysis, Department of Geography, University of British Columbia, Vancouver. [Accessed: 2026-11-02]",
-      "note": "habitat co-occurrence, not a planting-design recommendation; two plants sharing a habitat class may still compete (see the salal placeholders)"
+      "note": "habitat co-occurrence, not a planting-design recommendation; two plants sharing a habitat class may still compete (see the salal placeholders)",
+      "retired_at": "2026-11-02",
+      "retired_reason": "REL-R1 withdrawn 2026-11-02 (brief 'Verification Workbench' §03A, methods M43): a shared E-Flora habitat class is an indirect connection expressed through the habitat / bgc_zone concept nodes both plants link to, not a direct companion relation; record kept as history"
     },
     {
       "id": "rel:gaultheria-shallon:polystichum-munitum:01",
@@ -747,7 +788,7 @@
       "context": "derived: shared habitat class (forest) and the CWH zone on the two atlas pages (minimum elevations 0 m and 0 m, province-wide means 219 m and 229 m; modal zones CWH / CWH); the source does not state the association itself",
       "rule": "REL-R1",
       "confidence": 0.5,
-      "status": "unverified",
+      "status": "retired",
       "recorded_at": "2026-11-02",
       "recorded_by": "tools/derive_relations.py (REL-R1)",
       "derived_from": [
@@ -755,7 +796,9 @@
         "polystichum-munitum:vancouver_context:eflora01"
       ],
       "citation": "In Klinkenberg, Brian. (Editor) 2020. E-Flora BC: Electronic Atlas of the Plants of British Columbia [eflora.bc.ca]. Lab for Advanced Spatial Analysis, Department of Geography, University of British Columbia, Vancouver. [Accessed: 2026-10-29]",
-      "note": "habitat co-occurrence, not a planting-design recommendation; two plants sharing a habitat class may still compete (see the salal placeholders)"
+      "note": "habitat co-occurrence, not a planting-design recommendation; two plants sharing a habitat class may still compete (see the salal placeholders)",
+      "retired_at": "2026-11-02",
+      "retired_reason": "REL-R1 withdrawn 2026-11-02 (brief 'Verification Workbench' §03A, methods M43): a shared E-Flora habitat class is an indirect connection expressed through the habitat / bgc_zone concept nodes both plants link to, not a direct companion relation; record kept as history"
     },
     {
       "id": "rel:polystichum-munitum:vaccinium-ovatum:02",
@@ -769,7 +812,7 @@
       "context": "derived: shared habitat class (forest) and the CWH zone on the two atlas pages (minimum elevations 0 m and 2 m, province-wide means 229 m and 185 m; modal zones CWH / CWH); the source does not state the association itself",
       "rule": "REL-R1",
       "confidence": 0.5,
-      "status": "unverified",
+      "status": "retired",
       "recorded_at": "2026-11-02",
       "recorded_by": "tools/derive_relations.py (REL-R1)",
       "derived_from": [
@@ -777,7 +820,9 @@
         "vaccinium-ovatum:vancouver_context:eflora01"
       ],
       "citation": "In Klinkenberg, Brian. (Editor) 2020. E-Flora BC: Electronic Atlas of the Plants of British Columbia [eflora.bc.ca]. Lab for Advanced Spatial Analysis, Department of Geography, University of British Columbia, Vancouver. [Accessed: 2026-11-02]",
-      "note": "habitat co-occurrence, not a planting-design recommendation; two plants sharing a habitat class may still compete (see the salal placeholders)"
+      "note": "habitat co-occurrence, not a planting-design recommendation; two plants sharing a habitat class may still compete (see the salal placeholders)",
+      "retired_at": "2026-11-02",
+      "retired_reason": "REL-R1 withdrawn 2026-11-02 (brief 'Verification Workbench' §03A, methods M43): a shared E-Flora habitat class is an indirect connection expressed through the habitat / bgc_zone concept nodes both plants link to, not a direct companion relation; record kept as history"
     },
     {
       "id": "rel:achillea-millefolium:arctostaphylos-uva-ursi:01",
@@ -791,7 +836,7 @@
       "context": "derived: shared habitat class (forest, rocky) and the CWH zone on the two atlas pages (minimum elevations 0 m and 6 m, province-wide means 1143 m and 1129 m; modal zones IDF / IDF — a modal zone other than CWH/CDF means the plant is marginal in the coastal zone); the source does not state the association itself",
       "rule": "REL-R1",
       "confidence": 0.5,
-      "status": "unverified",
+      "status": "retired",
       "recorded_at": "2026-11-02",
       "recorded_by": "tools/derive_relations.py (REL-R1)",
       "derived_from": [
@@ -799,7 +844,9 @@
         "arctostaphylos-uva-ursi:vancouver_context:eflora01"
       ],
       "citation": "In Klinkenberg, Brian. (Editor) 2020. E-Flora BC: Electronic Atlas of the Plants of British Columbia [eflora.bc.ca]. Lab for Advanced Spatial Analysis, Department of Geography, University of British Columbia, Vancouver. [Accessed: 2026-11-02]",
-      "note": "habitat co-occurrence, not a planting-design recommendation; two plants sharing a habitat class may still compete (see the salal placeholders)"
+      "note": "habitat co-occurrence, not a planting-design recommendation; two plants sharing a habitat class may still compete (see the salal placeholders)",
+      "retired_at": "2026-11-02",
+      "retired_reason": "REL-R1 withdrawn 2026-11-02 (brief 'Verification Workbench' §03A, methods M43): a shared E-Flora habitat class is an indirect connection expressed through the habitat / bgc_zone concept nodes both plants link to, not a direct companion relation; record kept as history"
     },
     {
       "id": "rel:achillea-millefolium:cornus-nuttallii:01",
@@ -813,7 +860,7 @@
       "context": "derived: shared habitat class (forest) and the CWH zone on the two atlas pages (minimum elevations 0 m and 0 m, province-wide means 1143 m and 194 m; modal zones IDF / CWH — a modal zone other than CWH/CDF means the plant is marginal in the coastal zone); the source does not state the association itself",
       "rule": "REL-R1",
       "confidence": 0.5,
-      "status": "unverified",
+      "status": "retired",
       "recorded_at": "2026-11-02",
       "recorded_by": "tools/derive_relations.py (REL-R1)",
       "derived_from": [
@@ -821,7 +868,9 @@
         "cornus-nuttallii:vancouver_context:eflora01"
       ],
       "citation": "In Klinkenberg, Brian. (Editor) 2020. E-Flora BC: Electronic Atlas of the Plants of British Columbia [eflora.bc.ca]. Lab for Advanced Spatial Analysis, Department of Geography, University of British Columbia, Vancouver. [Accessed: 2026-11-02]",
-      "note": "habitat co-occurrence, not a planting-design recommendation; two plants sharing a habitat class may still compete (see the salal placeholders)"
+      "note": "habitat co-occurrence, not a planting-design recommendation; two plants sharing a habitat class may still compete (see the salal placeholders)",
+      "retired_at": "2026-11-02",
+      "retired_reason": "REL-R1 withdrawn 2026-11-02 (brief 'Verification Workbench' §03A, methods M43): a shared E-Flora habitat class is an indirect connection expressed through the habitat / bgc_zone concept nodes both plants link to, not a direct companion relation; record kept as history"
     },
     {
       "id": "rel:achillea-millefolium:cornus-sericea:01",
@@ -835,7 +884,7 @@
       "context": "derived: shared habitat class (forest, grassland) and the CWH zone on the two atlas pages (minimum elevations 0 m and 0 m, province-wide means 1143 m and 759 m; modal zones IDF / SBS — a modal zone other than CWH/CDF means the plant is marginal in the coastal zone); the source does not state the association itself",
       "rule": "REL-R1",
       "confidence": 0.5,
-      "status": "unverified",
+      "status": "retired",
       "recorded_at": "2026-11-02",
       "recorded_by": "tools/derive_relations.py (REL-R1)",
       "derived_from": [
@@ -843,7 +892,9 @@
         "cornus-sericea:vancouver_context:eflora01"
       ],
       "citation": "In Klinkenberg, Brian. (Editor) 2020. E-Flora BC: Electronic Atlas of the Plants of British Columbia [eflora.bc.ca]. Lab for Advanced Spatial Analysis, Department of Geography, University of British Columbia, Vancouver. [Accessed: 2026-11-02]",
-      "note": "habitat co-occurrence, not a planting-design recommendation; two plants sharing a habitat class may still compete (see the salal placeholders)"
+      "note": "habitat co-occurrence, not a planting-design recommendation; two plants sharing a habitat class may still compete (see the salal placeholders)",
+      "retired_at": "2026-11-02",
+      "retired_reason": "REL-R1 withdrawn 2026-11-02 (brief 'Verification Workbench' §03A, methods M43): a shared E-Flora habitat class is an indirect connection expressed through the habitat / bgc_zone concept nodes both plants link to, not a direct companion relation; record kept as history"
     },
     {
       "id": "rel:achillea-millefolium:gaultheria-shallon:01",
@@ -857,7 +908,7 @@
       "context": "derived: shared habitat class (coastal, forest) and the CWH zone on the two atlas pages (minimum elevations 0 m and 0 m, province-wide means 1143 m and 219 m; modal zones IDF / CWH — a modal zone other than CWH/CDF means the plant is marginal in the coastal zone); the source does not state the association itself",
       "rule": "REL-R1",
       "confidence": 0.5,
-      "status": "unverified",
+      "status": "retired",
       "recorded_at": "2026-11-02",
       "recorded_by": "tools/derive_relations.py (REL-R1)",
       "derived_from": [
@@ -865,7 +916,9 @@
         "gaultheria-shallon:vancouver_context:eflora01"
       ],
       "citation": "In Klinkenberg, Brian. (Editor) 2020. E-Flora BC: Electronic Atlas of the Plants of British Columbia [eflora.bc.ca]. Lab for Advanced Spatial Analysis, Department of Geography, University of British Columbia, Vancouver. [Accessed: 2026-11-02]",
-      "note": "habitat co-occurrence, not a planting-design recommendation; two plants sharing a habitat class may still compete (see the salal placeholders)"
+      "note": "habitat co-occurrence, not a planting-design recommendation; two plants sharing a habitat class may still compete (see the salal placeholders)",
+      "retired_at": "2026-11-02",
+      "retired_reason": "REL-R1 withdrawn 2026-11-02 (brief 'Verification Workbench' §03A, methods M43): a shared E-Flora habitat class is an indirect connection expressed through the habitat / bgc_zone concept nodes both plants link to, not a direct companion relation; record kept as history"
     },
     {
       "id": "rel:achillea-millefolium:polystichum-munitum:02",
@@ -879,7 +932,7 @@
       "context": "derived: shared habitat class (forest) and the CWH zone on the two atlas pages (minimum elevations 0 m and 0 m, province-wide means 1143 m and 229 m; modal zones IDF / CWH — a modal zone other than CWH/CDF means the plant is marginal in the coastal zone); the source does not state the association itself",
       "rule": "REL-R1",
       "confidence": 0.5,
-      "status": "unverified",
+      "status": "retired",
       "recorded_at": "2026-11-02",
       "recorded_by": "tools/derive_relations.py (REL-R1)",
       "derived_from": [
@@ -887,7 +940,9 @@
         "polystichum-munitum:vancouver_context:eflora01"
       ],
       "citation": "In Klinkenberg, Brian. (Editor) 2020. E-Flora BC: Electronic Atlas of the Plants of British Columbia [eflora.bc.ca]. Lab for Advanced Spatial Analysis, Department of Geography, University of British Columbia, Vancouver. [Accessed: 2026-11-02]",
-      "note": "habitat co-occurrence, not a planting-design recommendation; two plants sharing a habitat class may still compete (see the salal placeholders)"
+      "note": "habitat co-occurrence, not a planting-design recommendation; two plants sharing a habitat class may still compete (see the salal placeholders)",
+      "retired_at": "2026-11-02",
+      "retired_reason": "REL-R1 withdrawn 2026-11-02 (brief 'Verification Workbench' §03A, methods M43): a shared E-Flora habitat class is an indirect connection expressed through the habitat / bgc_zone concept nodes both plants link to, not a direct companion relation; record kept as history"
     },
     {
       "id": "rel:achillea-millefolium:vaccinium-ovatum:01",
@@ -901,7 +956,7 @@
       "context": "derived: shared habitat class (coastal, forest) and the CWH zone on the two atlas pages (minimum elevations 0 m and 2 m, province-wide means 1143 m and 185 m; modal zones IDF / CWH — a modal zone other than CWH/CDF means the plant is marginal in the coastal zone); the source does not state the association itself",
       "rule": "REL-R1",
       "confidence": 0.5,
-      "status": "unverified",
+      "status": "retired",
       "recorded_at": "2026-11-02",
       "recorded_by": "tools/derive_relations.py (REL-R1)",
       "derived_from": [
@@ -909,7 +964,9 @@
         "vaccinium-ovatum:vancouver_context:eflora01"
       ],
       "citation": "In Klinkenberg, Brian. (Editor) 2020. E-Flora BC: Electronic Atlas of the Plants of British Columbia [eflora.bc.ca]. Lab for Advanced Spatial Analysis, Department of Geography, University of British Columbia, Vancouver. [Accessed: 2026-11-02]",
-      "note": "habitat co-occurrence, not a planting-design recommendation; two plants sharing a habitat class may still compete (see the salal placeholders)"
+      "note": "habitat co-occurrence, not a planting-design recommendation; two plants sharing a habitat class may still compete (see the salal placeholders)",
+      "retired_at": "2026-11-02",
+      "retired_reason": "REL-R1 withdrawn 2026-11-02 (brief 'Verification Workbench' §03A, methods M43): a shared E-Flora habitat class is an indirect connection expressed through the habitat / bgc_zone concept nodes both plants link to, not a direct companion relation; record kept as history"
     }
   ],
   "outside_db": [

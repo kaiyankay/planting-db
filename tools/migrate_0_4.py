@@ -134,6 +134,12 @@ def concepts_object(field, v, cid):
                 if f"month:{m}" in NODES: times.append(f"month:{m}"); record(field, "months")
         if isinstance(v.get("fruit"), str):
             out.append("fruit:edible" if "edible" in v["fruit"].lower() and "not edible" not in v["fruit"].lower() else "fruit:showy"); record(field, "fruit")
+    if field == "vancouver_context" and (v.get("habitat") or v.get("habitat_classes") or v.get("bgc_zones")):   # M43: E-Flora habitat objects
+        text = " ".join(str(x) for x in (v.get("habitat") or v.get("habitat_classes") or [])).lower()
+        for k, rx in (("forest", r"forest|woodland"), ("streamside", r"stream|riparian|river|lakeside"), ("swamp", r"swamp|marsh"), ("bog", r"\bbog"), ("meadow", r"meadow"), ("grassland", r"grassland|prairie|steppe"), ("rocky", r"rock|outcrop|talus|shallow soil|bluff"), ("coastal", r"coast|shore"), ("disturbed", r"disturb|roadside|cutover")):
+            if re.search(rx, text) and f"habitat:{k}" in NODES: out.append(f"habitat:{k}"); record(field, "habitat_class")
+        for z in v.get("bgc_zones") or []:
+            if f"bgc_zone:{str(z).lower()}" in NODES: out.append(f"bgc_zone:{str(z).lower()}"); record(field, "bgc_zone")
     if field == "toxicity":
         for key in ("pets", "humans"):
             t = v.get(key)

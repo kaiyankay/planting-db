@@ -47,7 +47,34 @@
     "survey_mentions": 2,
     "added": "2026-11-02",
     "added_by": "10-plant expansion (brief 2026-11-02); entity facts from the T5 extraction and the survey, see claims for evidence",
-    "usda_symbol": "CEJA2"
+    "usda_symbol": "CEJA2",
+    "identity_review": {
+      "audited": "2026-11-02",
+      "method": "tools/identity_audit.py (M45): sources on file + entity notes; disputed = left for human judgement",
+      "taxonomic_identity": {
+        "status": "confirmed",
+        "note": "Cercidiphyllum japonicum Siebold & Zucc.; USDA symbol CEJA2 (CEJA is Centaurea jacea — caught during extraction)"
+      },
+      "geographic_origin": {
+        "status": "confirmed",
+        "note": "non-native (Japan, China); USDA 'introduced' for the lower 48",
+        "origin_status_on_entity": "non_native"
+      },
+      "botanical_growth_form": {
+        "status": "confirmed",
+        "note": "read as tree from kpu (entity.kpu_plant_type), cov_trees, rhs, mobot, gpp, osu, survey (entity.respondent_roles) (supported; M29a)",
+        "kpu_plant_type": "Tree - deciduous"
+      },
+      "design_function": {
+        "status": "confirmed",
+        "note": "shade / specimen tree, street tree (2,647 in the Vancouver inventory)",
+        "respondent_roles_as_typed": [
+          "tree",
+          "tree"
+        ]
+      },
+      "synonyms_raw": null
+    }
   },
   "custom": [],
   "fill_plan": {
@@ -182,7 +209,8 @@
       "conditions": [],
       "place": "place:city_of_vancouver",
       "time": [],
-      "cultivar": null
+      "cultivar": null,
+      "verification_scope": "content"
     },
     {
       "id": "cercidiphyllum-japonicum:vancouver_context:cov01",
@@ -209,7 +237,8 @@
       "conditions": [],
       "place": "place:city_of_vancouver",
       "time": [],
-      "cultivar": null
+      "cultivar": null,
+      "verification_scope": "content"
     },
     {
       "id": "cercidiphyllum-japonicum:vancouver_context:cov02",
@@ -240,7 +269,8 @@
       "conditions": [],
       "place": "place:city_of_vancouver",
       "time": [],
-      "cultivar": null
+      "cultivar": null,
+      "verification_scope": "content"
     },
     {
       "id": "cercidiphyllum-japonicum:vancouver_context:cov03",
@@ -289,7 +319,8 @@
       "conditions": [],
       "place": "place:city_of_vancouver",
       "time": [],
-      "cultivar": null
+      "cultivar": null,
+      "verification_scope": "content"
     },
     {
       "id": "cercidiphyllum-japonicum:local_mature_size:cov01",
@@ -333,7 +364,8 @@
       "conditions": [],
       "place": "place:city_of_vancouver",
       "time": [],
-      "cultivar": null
+      "cultivar": null,
+      "verification_scope": "content"
     },
     {
       "id": "cercidiphyllum-japonicum:local_mature_size:cov02",
@@ -370,7 +402,8 @@
       "time": [
         "age:established"
       ],
-      "cultivar": null
+      "cultivar": null,
+      "verification_scope": "content"
     },
     {
       "id": "cercidiphyllum-japonicum:local_mature_size:cov03",
@@ -400,7 +433,8 @@
       "conditions": [],
       "place": "place:city_of_vancouver",
       "time": [],
-      "cultivar": null
+      "cultivar": null,
+      "verification_scope": "content"
     },
     {
       "id": "cercidiphyllum-japonicum:local_mature_size:cov04",
@@ -444,7 +478,8 @@
       "conditions": [],
       "place": "place:city_of_vancouver",
       "time": [],
-      "cultivar": "(unrecorded)"
+      "cultivar": "(unrecorded)",
+      "verification_scope": "content"
     },
     {
       "id": "cercidiphyllum-japonicum:local_mature_size:cov05",
@@ -481,7 +516,8 @@
       "time": [
         "age:established"
       ],
-      "cultivar": "(unrecorded)"
+      "cultivar": "(unrecorded)",
+      "verification_scope": "content"
     },
     {
       "id": "cercidiphyllum-japonicum:local_mature_size:cov06",
@@ -511,7 +547,8 @@
       "conditions": [],
       "place": "place:city_of_vancouver",
       "time": [],
-      "cultivar": "(unrecorded)"
+      "cultivar": "(unrecorded)",
+      "verification_scope": "content"
     },
     {
       "id": "cercidiphyllum-japonicum:vancouver_context:inat01",
@@ -582,7 +619,8 @@
       "conditions": [],
       "place": "place:vancouver",
       "time": [],
-      "cultivar": null
+      "cultivar": null,
+      "verification_scope": "statement"
     },
     {
       "id": "cercidiphyllum-japonicum:landscape_use:sv02",
@@ -624,7 +662,8 @@
       "conditions": [],
       "place": "place:vancouver",
       "time": [],
-      "cultivar": null
+      "cultivar": null,
+      "verification_scope": "statement"
     },
     {
       "id": "cercidiphyllum-japonicum:vancouver_context:sv02",
@@ -662,7 +701,8 @@
       "conditions": [],
       "place": "place:vancouver",
       "time": [],
-      "cultivar": null
+      "cultivar": null,
+      "verification_scope": "statement"
     },
     {
       "id": "cercidiphyllum-japonicum:mature_height:rhs01",

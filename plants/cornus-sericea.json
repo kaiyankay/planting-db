@@ -6,21 +6,16 @@
       "Cornus stolonifera",
       "Cornus alba subsp. stolonifera",
       "Swida sericea",
-      "Cornus stolonifera Michx.",
-      "Cornus alba subsp. stolonifera (Michx.) Wangerin",
-      "Cornus alba var. californica (C.A. Mey.) B. Boivin",
-      "Cornus alba var. occidentalis (Torr. & A. Gray) B. Boivin",
-      "Cornus occidentalis (Torr. & A. Gray) Coville",
-      "Cornus ×californica C.A. Mey.",
+      "Cornus alba var. californica",
+      "Cornus alba var. occidentalis",
+      "Cornus occidentalis",
       "Cornus sericea subsp. sericea",
-      "Cornus sericea subsp. stolonifera (Michx.) Fosberg",
-      "Cornus stolonifera var. californica (C.A. Mey.) McMinn",
-      "Cornus stolonifera var. occidentalis (Torr. & A. Gray) C.L. Hitchc.",
-      "Cornus baileyi J.M. Coult. & Evans",
-      "Cornus interior (Rydb.) N. Petersen",
-      "Swida sericea (L.) Holub",
-      "Swida stolonifera (Michx.) Rydb.",
-      "Cornus alba misapplied"
+      "Cornus sericea subsp. stolonifera",
+      "Cornus stolonifera var. californica",
+      "Cornus stolonifera var. occidentalis",
+      "Cornus baileyi",
+      "Cornus interior",
+      "Swida stolonifera"
     ],
     "common_names": {
       "en": [
@@ -67,7 +62,52 @@
     "survey_mentions": 1,
     "added": "2026-11-02",
     "added_by": "10-plant expansion (brief 2026-11-02); entity facts from the T5 extraction and the survey, see claims for evidence",
-    "usda_symbol": "COSE16"
+    "usda_symbol": "COSE16",
+    "identity_review": {
+      "audited": "2026-11-02",
+      "method": "tools/identity_audit.py (M45): sources on file + entity notes; disputed = left for human judgement",
+      "taxonomic_identity": {
+        "status": "confirmed",
+        "note": "Cornus sericea L. accepted; C. stolonifera Michx. and Swida sericea are synonyms (USDA, E-Flora, RHS); subspecies sericea / stolonifera recognised by USDA — species-level claims only, except the 'Baileyi' GPP claims (cultivar in context)"
+      },
+      "geographic_origin": {
+        "status": "confirmed",
+        "note": "native throughout BC incl. CWH / CDF at sea level (E-Flora Yellow S5)",
+        "origin_status_on_entity": "native_bc_west_of_cascades"
+      },
+      "botanical_growth_form": {
+        "status": "confirmed",
+        "note": "read as shrub from kpu (entity.kpu_plant_type), rhs, mobot, survey (entity.respondent_roles) (supported; M29a)",
+        "kpu_plant_type": "Shrub - deciduous"
+      },
+      "design_function": {
+        "status": "confirmed",
+        "note": "winter-stem shrub for mass planting, screens and wet ground (RHS, MOBOT); respondent 'colorful bark'",
+        "respondent_roles_as_typed": [
+          "shrub"
+        ]
+      },
+      "synonyms_raw": [
+        "Cornus stolonifera",
+        "Cornus alba subsp. stolonifera",
+        "Swida sericea",
+        "Cornus stolonifera Michx.",
+        "Cornus alba subsp. stolonifera (Michx.) Wangerin",
+        "Cornus alba var. californica (C.A. Mey.) B. Boivin",
+        "Cornus alba var. occidentalis (Torr. & A. Gray) B. Boivin",
+        "Cornus occidentalis (Torr. & A. Gray) Coville",
+        "Cornus ×californica C.A. Mey.",
+        "Cornus sericea subsp. sericea",
+        "Cornus sericea subsp. stolonifera (Michx.) Fosberg",
+        "Cornus stolonifera var. californica (C.A. Mey.) McMinn",
+        "Cornus stolonifera var. occidentalis (Torr. & A. Gray) C.L. Hitchc.",
+        "Cornus baileyi J.M. Coult. & Evans",
+        "Cornus interior (Rydb.) N. Petersen",
+        "Swida sericea (L.) Holub",
+        "Swida stolonifera (Michx.) Rydb.",
+        "Cornus alba misapplied"
+      ]
+    }
   },
   "custom": [],
   "fill_plan": {
@@ -373,7 +413,8 @@
       "conditions": [],
       "place": "place:vancouver",
       "time": [],
-      "cultivar": null
+      "cultivar": null,
+      "verification_scope": "statement"
     },
     {
       "id": "cornus-sericea:seasonal_interest:sv02",
@@ -413,7 +454,8 @@
       "conditions": [],
       "place": "place:vancouver",
       "time": [],
-      "cultivar": null
+      "cultivar": null,
+      "verification_scope": "statement"
     },
     {
       "id": "cornus-sericea:mature_height:rhs01",
@@ -1948,7 +1990,24 @@
       "source_url": "https://linnet.geog.ubc.ca/Atlas/Atlas.aspx?sciname=Cornus%20sericea",
       "note": "BGC zone list and site statistics from the atlas station records; ecological indicator values apply to coastal locations",
       "citation": "In Klinkenberg, Brian. (Editor) 2020. E-Flora BC: Electronic Atlas of the Plants of British Columbia [eflora.bc.ca]. Lab for Advanced Spatial Analysis, Department of Geography, University of British Columbia, Vancouver. [Accessed: 2026-11-02]",
-      "concepts": [],
+      "concepts": [
+        "bgc_zone:bg",
+        "bgc_zone:bwbs",
+        "bgc_zone:cdf",
+        "bgc_zone:cwh",
+        "bgc_zone:essf",
+        "bgc_zone:ich",
+        "bgc_zone:idf",
+        "bgc_zone:mh",
+        "bgc_zone:ms",
+        "bgc_zone:pp",
+        "bgc_zone:sbps",
+        "bgc_zone:sbs",
+        "habitat:forest",
+        "habitat:grassland",
+        "habitat:streamside",
+        "habitat:swamp"
+      ],
       "conditions": [],
       "place": "place:bc",
       "time": [],

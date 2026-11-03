@@ -27,3 +27,8 @@ inputs/survey/plant_candidates-derived-*.json
 
 # T1 scratch output before --merge
 *.cov_claims.json
+
+# Verification workbench — PRIVATE (reviewer identifiers, reasons) and licence-restricted page copies
+review/events/*.jsonl
+review/ai/cache/
+tests/review/out/

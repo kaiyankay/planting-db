@@ -1,0 +1,413 @@
+{
+ "generated": "2026-11-03",
+ "n": 40,
+ "method": "stratified by plant × source × priority, round-robin over strata, within a stratum preferring claims whose AI result is not 'supported' (so disagreement is testable), seed 2026",
+ "fields": [
+  "ecological_value",
+  "exposure",
+  "hardiness_zone",
+  "invasive_status",
+  "landscape_use",
+  "maintenance_level",
+  "mature_height",
+  "seasonal_interest",
+  "soil_type",
+  "vancouver_context",
+  "water_drainage"
+ ],
+ "by_plant": {
+  "acer-palmatum": 4,
+  "achillea-millefolium": 4,
+  "arctostaphylos-uva-ursi": 4,
+  "cercidiphyllum-japonicum": 4,
+  "cornus-nuttallii": 4,
+  "cornus-sericea": 4,
+  "gaillardia-aristata": 4,
+  "gaultheria-shallon": 4,
+  "polystichum-munitum": 4,
+  "vaccinium-ovatum": 4
+ },
+ "by_source": {
+  "gpp": 4,
+  "rhs": 4,
+  "inat": 2,
+  "eflora": 11,
+  "usda_plants": 3,
+  "osu": 9,
+  "mobot": 6,
+  "iscbc": 1
+ },
+ "by_priority": {
+  "high": 13,
+  "low": 12,
+  "medium": 15
+ },
+ "by_ai_result": {
+  "supported_by_source": 22,
+  "partially_supported": 17,
+  "conflicting_evidence": 1
+ },
+ "claims": [
+  {
+   "claim_id": "acer-palmatum:mature_height:gpp01",
+   "plant": "acer-palmatum",
+   "field": "mature_height",
+   "source_id": "gpp",
+   "priority": "high",
+   "ai_result": "supported_by_source",
+   "human_decision": null
+  },
+  {
+   "claim_id": "achillea-millefolium:maintenance_level:rhs01",
+   "plant": "achillea-millefolium",
+   "field": "maintenance_level",
+   "source_id": "rhs",
+   "priority": "high",
+   "ai_result": "partially_supported",
+   "human_decision": null
+  },
+  {
+   "claim_id": "arctostaphylos-uva-ursi:seasonal_interest:inat03",
+   "plant": "arctostaphylos-uva-ursi",
+   "field": "seasonal_interest",
+   "source_id": "inat",
+   "priority": "low",
+   "ai_result": "supported_by_source",
+   "human_decision": null
+  },
+  {
+   "claim_id": "cercidiphyllum-japonicum:landscape_use:rhs01",
+   "plant": "cercidiphyllum-japonicum",
+   "field": "landscape_use",
+   "source_id": "rhs",
+   "priority": "medium",
+   "ai_result": "partially_supported",
+   "human_decision": null
+  },
+  {
+   "claim_id": "cornus-nuttallii:exposure:eflora01",
+   "plant": "cornus-nuttallii",
+   "field": "exposure",
+   "source_id": "eflora",
+   "priority": "low",
+   "ai_result": "partially_supported",
+   "human_decision": null
+  },
+  {
+   "claim_id": "cornus-sericea:water_drainage:eflora01",
+   "plant": "cornus-sericea",
+   "field": "water_drainage",
+   "source_id": "eflora",
+   "priority": "high",
+   "ai_result": "partially_supported",
+   "human_decision": null
+  },
+  {
+   "claim_id": "gaillardia-aristata:mature_height:eflora01",
+   "plant": "gaillardia-aristata",
+   "field": "mature_height",
+   "source_id": "eflora",
+   "priority": "high",
+   "ai_result": "supported_by_source",
+   "human_decision": null
+  },
+  {
+   "claim_id": "gaultheria-shallon:soil_type:usdaplants01",
+   "plant": "gaultheria-shallon",
+   "field": "soil_type",
+   "source_id": "usda_plants",
+   "priority": "low",
+   "ai_result": "partially_supported",
+   "human_decision": null
+  },
+  {
+   "claim_id": "polystichum-munitum:ecological_value:eflora01",
+   "plant": "polystichum-munitum",
+   "field": "ecological_value",
+   "source_id": "eflora",
+   "priority": "medium",
+   "ai_result": "supported_by_source",
+   "human_decision": null
+  },
+  {
+   "claim_id": "vaccinium-ovatum:exposure:osu01",
+   "plant": "vaccinium-ovatum",
+   "field": "exposure",
+   "source_id": "osu",
+   "priority": "low",
+   "ai_result": "supported_by_source",
+   "human_decision": null
+  },
+  {
+   "claim_id": "acer-palmatum:exposure:osu01",
+   "plant": "acer-palmatum",
+   "field": "exposure",
+   "source_id": "osu",
+   "priority": "low",
+   "ai_result": "supported_by_source",
+   "human_decision": null
+  },
+  {
+   "claim_id": "achillea-millefolium:hardiness_zone:mobot01",
+   "plant": "achillea-millefolium",
+   "field": "hardiness_zone",
+   "source_id": "mobot",
+   "priority": "medium",
+   "ai_result": "supported_by_source",
+   "human_decision": null
+  },
+  {
+   "claim_id": "arctostaphylos-uva-ursi:mature_height:eflora01",
+   "plant": "arctostaphylos-uva-ursi",
+   "field": "mature_height",
+   "source_id": "eflora",
+   "priority": "high",
+   "ai_result": "supported_by_source",
+   "human_decision": null
+  },
+  {
+   "claim_id": "cercidiphyllum-japonicum:soil_type:mobot01",
+   "plant": "cercidiphyllum-japonicum",
+   "field": "soil_type",
+   "source_id": "mobot",
+   "priority": "low",
+   "ai_result": "supported_by_source",
+   "human_decision": null
+  },
+  {
+   "claim_id": "cornus-nuttallii:mature_height:eflora01",
+   "plant": "cornus-nuttallii",
+   "field": "mature_height",
+   "source_id": "eflora",
+   "priority": "high",
+   "ai_result": "supported_by_source",
+   "human_decision": null
+  },
+  {
+   "claim_id": "cornus-sericea:ecological_value:osu01",
+   "plant": "cornus-sericea",
+   "field": "ecological_value",
+   "source_id": "osu",
+   "priority": "medium",
+   "ai_result": "supported_by_source",
+   "human_decision": null
+  },
+  {
+   "claim_id": "gaillardia-aristata:ecological_value:eflora01",
+   "plant": "gaillardia-aristata",
+   "field": "ecological_value",
+   "source_id": "eflora",
+   "priority": "medium",
+   "ai_result": "supported_by_source",
+   "human_decision": null
+  },
+  {
+   "claim_id": "gaultheria-shallon:invasive_status:iscbc01",
+   "plant": "gaultheria-shallon",
+   "field": "invasive_status",
+   "source_id": "iscbc",
+   "priority": "medium",
+   "ai_result": "supported_by_source",
+   "human_decision": null
+  },
+  {
+   "claim_id": "polystichum-munitum:exposure:rhs01",
+   "plant": "polystichum-munitum",
+   "field": "exposure",
+   "source_id": "rhs",
+   "priority": "low",
+   "ai_result": "partially_supported",
+   "human_decision": null
+  },
+  {
+   "claim_id": "vaccinium-ovatum:maintenance_level:gpp01",
+   "plant": "vaccinium-ovatum",
+   "field": "maintenance_level",
+   "source_id": "gpp",
+   "priority": "medium",
+   "ai_result": "partially_supported",
+   "human_decision": null
+  },
+  {
+   "claim_id": "acer-palmatum:water_drainage:gpp01",
+   "plant": "acer-palmatum",
+   "field": "water_drainage",
+   "source_id": "gpp",
+   "priority": "medium",
+   "ai_result": "partially_supported",
+   "human_decision": null
+  },
+  {
+   "claim_id": "achillea-millefolium:water_drainage:mobot01",
+   "plant": "achillea-millefolium",
+   "field": "water_drainage",
+   "source_id": "mobot",
+   "priority": "high",
+   "ai_result": "partially_supported",
+   "human_decision": null
+  },
+  {
+   "claim_id": "arctostaphylos-uva-ursi:ecological_value:mobot01",
+   "plant": "arctostaphylos-uva-ursi",
+   "field": "ecological_value",
+   "source_id": "mobot",
+   "priority": "medium",
+   "ai_result": "supported_by_source",
+   "human_decision": null
+  },
+  {
+   "claim_id": "cercidiphyllum-japonicum:landscape_use:gpp01",
+   "plant": "cercidiphyllum-japonicum",
+   "field": "landscape_use",
+   "source_id": "gpp",
+   "priority": "low",
+   "ai_result": "partially_supported",
+   "human_decision": null
+  },
+  {
+   "claim_id": "cornus-nuttallii:water_drainage:eflora01",
+   "plant": "cornus-nuttallii",
+   "field": "water_drainage",
+   "source_id": "eflora",
+   "priority": "medium",
+   "ai_result": "partially_supported",
+   "human_decision": null
+  },
+  {
+   "claim_id": "cornus-sericea:ecological_value:mobot01",
+   "plant": "cornus-sericea",
+   "field": "ecological_value",
+   "source_id": "mobot",
+   "priority": "medium",
+   "ai_result": "supported_by_source",
+   "human_decision": null
+  },
+  {
+   "claim_id": "gaillardia-aristata:water_drainage:usdaplants01",
+   "plant": "gaillardia-aristata",
+   "field": "water_drainage",
+   "source_id": "usda_plants",
+   "priority": "high",
+   "ai_result": "partially_supported",
+   "human_decision": null
+  },
+  {
+   "claim_id": "gaultheria-shallon:mature_height:osu02",
+   "plant": "gaultheria-shallon",
+   "field": "mature_height",
+   "source_id": "osu",
+   "priority": "high",
+   "ai_result": "supported_by_source",
+   "human_decision": null
+  },
+  {
+   "claim_id": "polystichum-munitum:mature_height:eflora01",
+   "plant": "polystichum-munitum",
+   "field": "mature_height",
+   "source_id": "eflora",
+   "priority": "high",
+   "ai_result": "partially_supported",
+   "human_decision": null
+  },
+  {
+   "claim_id": "vaccinium-ovatum:hardiness_zone:osu01",
+   "plant": "vaccinium-ovatum",
+   "field": "hardiness_zone",
+   "source_id": "osu",
+   "priority": "medium",
+   "ai_result": "supported_by_source",
+   "human_decision": null
+  },
+  {
+   "claim_id": "acer-palmatum:hardiness_zone:osu01",
+   "plant": "acer-palmatum",
+   "field": "hardiness_zone",
+   "source_id": "osu",
+   "priority": "medium",
+   "ai_result": "supported_by_source",
+   "human_decision": null
+  },
+  {
+   "claim_id": "achillea-millefolium:ecological_value:eflora01",
+   "plant": "achillea-millefolium",
+   "field": "ecological_value",
+   "source_id": "eflora",
+   "priority": "medium",
+   "ai_result": "conflicting_evidence",
+   "human_decision": null
+  },
+  {
+   "claim_id": "arctostaphylos-uva-ursi:ecological_value:osu01",
+   "plant": "arctostaphylos-uva-ursi",
+   "field": "ecological_value",
+   "source_id": "osu",
+   "priority": "medium",
+   "ai_result": "supported_by_source",
+   "human_decision": null
+  },
+  {
+   "claim_id": "cercidiphyllum-japonicum:mature_height:osu01",
+   "plant": "cercidiphyllum-japonicum",
+   "field": "mature_height",
+   "source_id": "osu",
+   "priority": "high",
+   "ai_result": "supported_by_source",
+   "human_decision": null
+  },
+  {
+   "claim_id": "cornus-nuttallii:maintenance_level:mobot01",
+   "plant": "cornus-nuttallii",
+   "field": "maintenance_level",
+   "source_id": "mobot",
+   "priority": "high",
+   "ai_result": "supported_by_source",
+   "human_decision": null
+  },
+  {
+   "claim_id": "cornus-sericea:water_drainage:usdaplants01",
+   "plant": "cornus-sericea",
+   "field": "water_drainage",
+   "source_id": "usda_plants",
+   "priority": "high",
+   "ai_result": "partially_supported",
+   "human_decision": null
+  },
+  {
+   "claim_id": "gaillardia-aristata:seasonal_interest:eflora01",
+   "plant": "gaillardia-aristata",
+   "field": "seasonal_interest",
+   "source_id": "eflora",
+   "priority": "low",
+   "ai_result": "partially_supported",
+   "human_decision": null
+  },
+  {
+   "claim_id": "gaultheria-shallon:vancouver_context:inat02",
+   "plant": "gaultheria-shallon",
+   "field": "vancouver_context",
+   "source_id": "inat",
+   "priority": "low",
+   "ai_result": "supported_by_source",
+   "human_decision": null
+  },
+  {
+   "claim_id": "polystichum-munitum:exposure:osu01",
+   "plant": "polystichum-munitum",
+   "field": "exposure",
+   "source_id": "osu",
+   "priority": "low",
+   "ai_result": "partially_supported",
+   "human_decision": null
+  },
+  {
+   "claim_id": "vaccinium-ovatum:seasonal_interest:rhs01",
+   "plant": "vaccinium-ovatum",
+   "field": "seasonal_interest",
+   "source_id": "rhs",
+   "priority": "low",
+   "ai_result": "partially_supported",
+   "human_decision": null
+  }
+ ],
+ "note": "human_decision stays null until a reviewer records it in the workbench; this file is a target list, not a result"
+}

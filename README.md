@@ -1,6 +1,6 @@
 # Planting Intelligence — Local Planting Knowledge Database (prototype v0.2 · 10 plants)
 
-ARCH 540 Assignment 2 · UBC MLA · schema 0.4.2 (concept ids, ontology.json 0.2.0) · 2026-11-02 · **ten plants** (3 from 2026-10-29 + 7 survey-nominated plants added 2026-11-02 through the seven-step method — `reports/methodology-report-2026-11-02.md`)
+ARCH 540 Assignment 2 · UBC MLA · schema 0.4.3 (concept ids, ontology.json 0.2.0) · 2026-11-03 · **verification workbench** (`review/README.md`, `reports/verification-workbench-2026-11-03.md`) · **ten plants** (3 from 2026-10-29 + 7 survey-nominated plants added 2026-11-02 through the seven-step method — `reports/methodology-report-2026-11-02.md`)
 
 **Planting Knowledge Network (live, 2026-11-02):** <https://kaiyankay.github.io/planting-db/brain/ontology-preview/> — the semantic graph (`brain/data/kg.json`) as a plant-centred 3D network of spheres and lines: growth forms → plants → knowledge areas → shared knowledge nodes and direct relations, evidence trace on every line, graph retrieval, candidate growth; data-driven, so new plants appear after `tools/pipeline.py` · notes in `brain/ontology-preview/README.md`, report in `reports/kg-architecture-2026-11-02.md`
 
@@ -63,6 +63,9 @@ python3 -I tools/survey_to_claims.py  # T4: newest inputs/survey/responses-*.csv
 python3 -I tools/merge_t5.py inputs/t5/<plant>-<date>.json   # T5 step 4
 python3 -I tools/derive_relations.py  # REL-R1
 python3 -I tools/pipeline.py          # rebuild everything after any data change: ontology → graph → kg → validate
+python3 -I tools/ai_review.py --queue --fetch --checks --status   # AI evidence review stages (M42); --assess needs ANTHROPIC_API_KEY
+python3 -I tools/review_server.py     # Review Workbench on http://127.0.0.1:8767/ (local only); events -> review/events/ (private)
+python3 -I tools/review_tests.py      # workbench tests A–I on a copy of the database -> eval/review-tests-<date>.md
 python3 -I tools/kg_tests.py          # Tests A–F -> eval/kg-tests-<date>.md
 python3 -I tools/coverage_report.py   # -> eval/coverage-<date>.md
 python3 -I tools/scale_test.py        # synthetic plants through the same pipeline (Test F) -> eval/scale-test-<date>.md
@@ -94,7 +97,7 @@ with `verify_against` naming the sources that should replace it.
 
 ## Next steps
 
-1. Kay's unified review of the 534 unverified claims (`review/*-2026-11-02.md`, `review/*-2026-10-29.md`) and the human-review list in `reports/validation-2026-11-02.md` §4.
+1. Kay's review in the workbench: the 40-claim sample (`review/ai/sample-2026-11-03.json`), then the high-risk AI assessments; decisions apply to the database only through the preview → apply step (`reports/verification-workbench-2026-11-03.md` §10).
 2. Confirm methods M29a, M35–M41; decide the entity origin questions (yarrow, blanketflower) noted on the entities.
 3. Pojar & MacKinnon pages for habitat and the Gaultheria–Vaccinium relation; a tier-B toxicity source; Grow Green / NATS licences.
 4. Next survey round: ask d2 for location and site conditions (f1); new intent words → `intent_map.json`.

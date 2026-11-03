@@ -1,6 +1,6 @@
 {
  "$ontology_version": "0.2.0",
- "updated": "2026-11-02",
+ "updated": "2026-11-03",
  "generated_by": "tools/build_ontology.py",
  "note": "Concept nodes of the Planting Intelligence knowledge base. Ids are facet:slug. KPU labels verbatim. Definitions written for this file (methods M26, to confirm); terms from other vocabularies name their source in source_of_term. Rebuild with python3 -I tools/build_ontology.py. 0.2.0 (2026-11-02, M31): XYZ architecture — axis / category / facet nodes, taxon nodes, design (Z) concepts with literature sources, and typed concept relations in `relations`.",
  "dimensions": {
@@ -14,7 +14,9 @@
    "hardiness",
    "hardiness_usda",
    "hardiness_rhs",
-   "wind"
+   "wind",
+   "habitat",
+   "bgc_zone"
   ],
   "trait": [
    "evergreen",
@@ -188,6 +190,12 @@
   "pest": [
    "resistances",
    "pest_susceptibility"
+  ],
+  "habitat": [
+   "vancouver_context.habitat (E-Flora)"
+  ],
+  "bgc_zone": [
+   "vancouver_context.bgc_zones (E-Flora)"
   ],
   "taxon_family": [
    "entity.family"
@@ -1797,6 +1805,396 @@
    "category": "cat:environment",
    "axis": "axis:y",
    "hierarchy_parent": "facet:wind"
+  },
+  {
+   "id": "habitat:forest",
+   "dimension": "condition",
+   "facet": "habitat",
+   "label": "forest",
+   "definition": "Under or at the edge of tree canopy, dry to wet forest.",
+   "aliases": [
+    "coniferous forest",
+    "forest understory",
+    "open forest",
+    "woodland"
+   ],
+   "source_of_term": "E-Flora BC habitat statements, normalised (M43)",
+   "level": "concept",
+   "category": "cat:environment",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:habitat"
+  },
+  {
+   "id": "habitat:streamside",
+   "dimension": "condition",
+   "facet": "habitat",
+   "label": "streamside",
+   "definition": "Stream, river and lake margins; riparian ground.",
+   "aliases": [
+    "lakeside",
+    "riparian",
+    "river bank"
+   ],
+   "source_of_term": "E-Flora BC habitat statements, normalised (M43)",
+   "level": "concept",
+   "category": "cat:environment",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:habitat"
+  },
+  {
+   "id": "habitat:swamp",
+   "dimension": "condition",
+   "facet": "habitat",
+   "label": "swamp",
+   "definition": "Swamps and marshes with standing or slow water.",
+   "aliases": [
+    "marsh",
+    "wetland"
+   ],
+   "source_of_term": "E-Flora BC habitat statements, normalised (M43)",
+   "level": "concept",
+   "category": "cat:environment",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:habitat"
+  },
+  {
+   "id": "habitat:bog",
+   "dimension": "condition",
+   "facet": "habitat",
+   "label": "bog",
+   "definition": "Peat bogs: wet, acidic, nutrient-poor ground.",
+   "aliases": [
+    "peatland"
+   ],
+   "source_of_term": "E-Flora BC habitat statements, normalised (M43)",
+   "level": "concept",
+   "category": "cat:environment",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:habitat"
+  },
+  {
+   "id": "habitat:meadow",
+   "dimension": "condition",
+   "facet": "habitat",
+   "label": "meadow",
+   "definition": "Open herbaceous ground, moist to dry meadows.",
+   "aliases": [
+    "dry meadow",
+    "wet meadow"
+   ],
+   "source_of_term": "E-Flora BC habitat statements, normalised (M43)",
+   "level": "concept",
+   "category": "cat:environment",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:habitat"
+  },
+  {
+   "id": "habitat:grassland",
+   "dimension": "condition",
+   "facet": "habitat",
+   "label": "grassland",
+   "definition": "Grassland, prairie and steppe; open and usually dry.",
+   "aliases": [
+    "prairie",
+    "steppe"
+   ],
+   "source_of_term": "E-Flora BC habitat statements, normalised (M43)",
+   "level": "concept",
+   "category": "cat:environment",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:habitat"
+  },
+  {
+   "id": "habitat:rocky",
+   "dimension": "condition",
+   "facet": "habitat",
+   "label": "rocky",
+   "definition": "Rock outcrops, bluffs, talus and shallow soils.",
+   "aliases": [
+    "bluff",
+    "outcrop",
+    "shallow soil",
+    "talus"
+   ],
+   "source_of_term": "E-Flora BC habitat statements, normalised (M43)",
+   "level": "concept",
+   "category": "cat:environment",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:habitat"
+  },
+  {
+   "id": "habitat:coastal",
+   "dimension": "condition",
+   "facet": "habitat",
+   "label": "coastal",
+   "definition": "Shoreline and coastal sites exposed to salt and wind.",
+   "aliases": [
+    "beach",
+    "seaside",
+    "shore"
+   ],
+   "source_of_term": "E-Flora BC habitat statements, normalised (M43)",
+   "level": "concept",
+   "category": "cat:environment",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:habitat"
+  },
+  {
+   "id": "habitat:disturbed",
+   "dimension": "condition",
+   "facet": "habitat",
+   "label": "disturbed",
+   "definition": "Roadsides, cutover and other disturbed ground.",
+   "aliases": [
+    "cutover",
+    "roadside",
+    "ruderal"
+   ],
+   "source_of_term": "E-Flora BC habitat statements, normalised (M43)",
+   "level": "concept",
+   "category": "cat:environment",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:habitat"
+  },
+  {
+   "id": "bgc_zone:bafa",
+   "dimension": "condition",
+   "facet": "bgc_zone",
+   "label": "BAFA",
+   "definition": "BC biogeoclimatic zone BAFA (Boreal Altai Fescue Alpine).",
+   "aliases": [
+    "Boreal Altai Fescue Alpine"
+   ],
+   "source_of_term": "BC Biogeoclimatic Ecosystem Classification (BEC) zones as listed on E-Flora BC atlas pages",
+   "level": "concept",
+   "category": "cat:environment",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:bgc_zone"
+  },
+  {
+   "id": "bgc_zone:bg",
+   "dimension": "condition",
+   "facet": "bgc_zone",
+   "label": "BG",
+   "definition": "BC biogeoclimatic zone BG (Bunchgrass).",
+   "aliases": [
+    "Bunchgrass"
+   ],
+   "source_of_term": "BC Biogeoclimatic Ecosystem Classification (BEC) zones as listed on E-Flora BC atlas pages",
+   "level": "concept",
+   "category": "cat:environment",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:bgc_zone"
+  },
+  {
+   "id": "bgc_zone:bwbs",
+   "dimension": "condition",
+   "facet": "bgc_zone",
+   "label": "BWBS",
+   "definition": "BC biogeoclimatic zone BWBS (Boreal White and Black Spruce).",
+   "aliases": [
+    "Boreal White and Black Spruce"
+   ],
+   "source_of_term": "BC Biogeoclimatic Ecosystem Classification (BEC) zones as listed on E-Flora BC atlas pages",
+   "level": "concept",
+   "category": "cat:environment",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:bgc_zone"
+  },
+  {
+   "id": "bgc_zone:cdf",
+   "dimension": "condition",
+   "facet": "bgc_zone",
+   "label": "CDF",
+   "definition": "BC biogeoclimatic zone CDF (Coastal Douglas-fir); the dry coastal zone of SE Vancouver Island and the Gulf Islands.",
+   "aliases": [
+    "Coastal Douglas-fir"
+   ],
+   "source_of_term": "BC Biogeoclimatic Ecosystem Classification (BEC) zones as listed on E-Flora BC atlas pages",
+   "level": "concept",
+   "category": "cat:environment",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:bgc_zone"
+  },
+  {
+   "id": "bgc_zone:cma",
+   "dimension": "condition",
+   "facet": "bgc_zone",
+   "label": "CMA",
+   "definition": "BC biogeoclimatic zone CMA (Coastal Mountain-heather Alpine).",
+   "aliases": [
+    "Coastal Mountain-heather Alpine"
+   ],
+   "source_of_term": "BC Biogeoclimatic Ecosystem Classification (BEC) zones as listed on E-Flora BC atlas pages",
+   "level": "concept",
+   "category": "cat:environment",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:bgc_zone"
+  },
+  {
+   "id": "bgc_zone:cwh",
+   "dimension": "condition",
+   "facet": "bgc_zone",
+   "label": "CWH",
+   "definition": "BC biogeoclimatic zone CWH (Coastal Western Hemlock); the zone Metro Vancouver lies in.",
+   "aliases": [
+    "Coastal Western Hemlock"
+   ],
+   "source_of_term": "BC Biogeoclimatic Ecosystem Classification (BEC) zones as listed on E-Flora BC atlas pages",
+   "level": "concept",
+   "category": "cat:environment",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:bgc_zone"
+  },
+  {
+   "id": "bgc_zone:essf",
+   "dimension": "condition",
+   "facet": "bgc_zone",
+   "label": "ESSF",
+   "definition": "BC biogeoclimatic zone ESSF (Engelmann Spruce – Subalpine Fir).",
+   "aliases": [
+    "Engelmann Spruce – Subalpine Fir"
+   ],
+   "source_of_term": "BC Biogeoclimatic Ecosystem Classification (BEC) zones as listed on E-Flora BC atlas pages",
+   "level": "concept",
+   "category": "cat:environment",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:bgc_zone"
+  },
+  {
+   "id": "bgc_zone:ich",
+   "dimension": "condition",
+   "facet": "bgc_zone",
+   "label": "ICH",
+   "definition": "BC biogeoclimatic zone ICH (Interior Cedar – Hemlock).",
+   "aliases": [
+    "Interior Cedar – Hemlock"
+   ],
+   "source_of_term": "BC Biogeoclimatic Ecosystem Classification (BEC) zones as listed on E-Flora BC atlas pages",
+   "level": "concept",
+   "category": "cat:environment",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:bgc_zone"
+  },
+  {
+   "id": "bgc_zone:idf",
+   "dimension": "condition",
+   "facet": "bgc_zone",
+   "label": "IDF",
+   "definition": "BC biogeoclimatic zone IDF (Interior Douglas-fir).",
+   "aliases": [
+    "Interior Douglas-fir"
+   ],
+   "source_of_term": "BC Biogeoclimatic Ecosystem Classification (BEC) zones as listed on E-Flora BC atlas pages",
+   "level": "concept",
+   "category": "cat:environment",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:bgc_zone"
+  },
+  {
+   "id": "bgc_zone:ima",
+   "dimension": "condition",
+   "facet": "bgc_zone",
+   "label": "IMA",
+   "definition": "BC biogeoclimatic zone IMA (Interior Mountain-heather Alpine).",
+   "aliases": [
+    "Interior Mountain-heather Alpine"
+   ],
+   "source_of_term": "BC Biogeoclimatic Ecosystem Classification (BEC) zones as listed on E-Flora BC atlas pages",
+   "level": "concept",
+   "category": "cat:environment",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:bgc_zone"
+  },
+  {
+   "id": "bgc_zone:mh",
+   "dimension": "condition",
+   "facet": "bgc_zone",
+   "label": "MH",
+   "definition": "BC biogeoclimatic zone MH (Mountain Hemlock).",
+   "aliases": [
+    "Mountain Hemlock"
+   ],
+   "source_of_term": "BC Biogeoclimatic Ecosystem Classification (BEC) zones as listed on E-Flora BC atlas pages",
+   "level": "concept",
+   "category": "cat:environment",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:bgc_zone"
+  },
+  {
+   "id": "bgc_zone:ms",
+   "dimension": "condition",
+   "facet": "bgc_zone",
+   "label": "MS",
+   "definition": "BC biogeoclimatic zone MS (Montane Spruce).",
+   "aliases": [
+    "Montane Spruce"
+   ],
+   "source_of_term": "BC Biogeoclimatic Ecosystem Classification (BEC) zones as listed on E-Flora BC atlas pages",
+   "level": "concept",
+   "category": "cat:environment",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:bgc_zone"
+  },
+  {
+   "id": "bgc_zone:pp",
+   "dimension": "condition",
+   "facet": "bgc_zone",
+   "label": "PP",
+   "definition": "BC biogeoclimatic zone PP (Ponderosa Pine).",
+   "aliases": [
+    "Ponderosa Pine"
+   ],
+   "source_of_term": "BC Biogeoclimatic Ecosystem Classification (BEC) zones as listed on E-Flora BC atlas pages",
+   "level": "concept",
+   "category": "cat:environment",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:bgc_zone"
+  },
+  {
+   "id": "bgc_zone:sbps",
+   "dimension": "condition",
+   "facet": "bgc_zone",
+   "label": "SBPS",
+   "definition": "BC biogeoclimatic zone SBPS (Sub-Boreal Pine – Spruce).",
+   "aliases": [
+    "Sub-Boreal Pine – Spruce"
+   ],
+   "source_of_term": "BC Biogeoclimatic Ecosystem Classification (BEC) zones as listed on E-Flora BC atlas pages",
+   "level": "concept",
+   "category": "cat:environment",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:bgc_zone"
+  },
+  {
+   "id": "bgc_zone:sbs",
+   "dimension": "condition",
+   "facet": "bgc_zone",
+   "label": "SBS",
+   "definition": "BC biogeoclimatic zone SBS (Sub-Boreal Spruce).",
+   "aliases": [
+    "Sub-Boreal Spruce"
+   ],
+   "source_of_term": "BC Biogeoclimatic Ecosystem Classification (BEC) zones as listed on E-Flora BC atlas pages",
+   "level": "concept",
+   "category": "cat:environment",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:bgc_zone"
+  },
+  {
+   "id": "bgc_zone:swb",
+   "dimension": "condition",
+   "facet": "bgc_zone",
+   "label": "SWB",
+   "definition": "BC biogeoclimatic zone SWB (Spruce – Willow – Birch).",
+   "aliases": [
+    "Spruce – Willow – Birch"
+   ],
+   "source_of_term": "BC Biogeoclimatic Ecosystem Classification (BEC) zones as listed on E-Flora BC atlas pages",
+   "level": "concept",
+   "category": "cat:environment",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:bgc_zone"
   },
   {
    "id": "growth_form:tree",
@@ -5738,9 +6136,9 @@
    "facet": "category",
    "level": "category",
    "label": "Environmental Conditions",
-   "definition": "The site conditions a plant needs or tolerates: light, soil, water, hardiness, wind.",
+   "definition": "The site conditions a plant needs or tolerates: light, soil, water, hardiness, wind; the habitat classes and BC biogeoclimatic zones it is recorded in.",
    "aliases": [],
-   "source_of_term": "KPU facets; RHS and USDA hardiness scales",
+   "source_of_term": "KPU facets; RHS and USDA hardiness scales; E-Flora BC habitat and BEC zones",
    "parent": "axis:y",
    "facets": [
     "facet:exposure",
@@ -5749,7 +6147,9 @@
     "facet:hardiness",
     "facet:hardiness_usda",
     "facet:hardiness_rhs",
-    "facet:wind"
+    "facet:wind",
+    "facet:habitat",
+    "facet:bgc_zone"
    ],
    "order": 3,
    "axis": "axis:y",
@@ -6135,6 +6535,36 @@
    "source_of_term": "ontology (facet node; labels from the brief 2026-11-02 where it names them, else the schema field)",
    "parent": "cat:environment",
    "facet_key": "wind",
+   "category": "cat:environment",
+   "axis": "axis:y",
+   "hierarchy_parent": "cat:environment"
+  },
+  {
+   "id": "facet:habitat",
+   "dimension": "architecture",
+   "facet": "facet",
+   "level": "facet",
+   "label": "Habitat class (E-Flora)",
+   "definition": "Habitat classes a plant is recorded in by E-Flora BC (normalised, M43); a shared class is an indirect connection, not a planting relation.",
+   "aliases": [],
+   "source_of_term": "ontology (facet node; labels from the brief 2026-11-02 where it names them, else the schema field)",
+   "parent": "cat:environment",
+   "facet_key": "habitat",
+   "category": "cat:environment",
+   "axis": "axis:y",
+   "hierarchy_parent": "cat:environment"
+  },
+  {
+   "id": "facet:bgc_zone",
+   "dimension": "architecture",
+   "facet": "facet",
+   "level": "facet",
+   "label": "BC biogeoclimatic zone",
+   "definition": "Biogeoclimatic zones (BEC) an E-Flora atlas page lists the plant in; CWH is Metro Vancouver's zone.",
+   "aliases": [],
+   "source_of_term": "ontology (facet node; labels from the brief 2026-11-02 where it names them, else the schema field)",
+   "parent": "cat:environment",
+   "facet_key": "bgc_zone",
    "category": "cat:environment",
    "axis": "axis:y",
    "hierarchy_parent": "cat:environment"

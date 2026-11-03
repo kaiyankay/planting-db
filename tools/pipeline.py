@@ -16,7 +16,7 @@ run this, and the interface reads the new graph.
 import os, subprocess, sys, time
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-root = os.path.abspath(sys.argv[sys.argv.index("--root") + 1]) if "--root" in sys.argv else os.path.dirname(HERE)
+root = os.path.abspath(sys.argv[sys.argv.index("--root") + 1]) if "--root" in sys.argv else (os.environ.get("PLANTING_DB_ROOT") or os.path.dirname(HERE))   # --root, else the PLANTING_DB_ROOT env (review tests, apply), else this repository
 env = dict(os.environ, PLANTING_DB_ROOT=root)
 t0 = time.time()
 for step in ("build_ontology.py", "build_graph.py", "build_kg.py", "validate.py"):

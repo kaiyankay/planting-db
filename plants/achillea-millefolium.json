@@ -2,12 +2,7 @@
   "entity": {
     "id": "achillea-millefolium",
     "scientific_name": "Achillea millefolium",
-    "synonyms_scientific": [
-      "rhs",
-      "eflora",
-      "eflora_native_bc_taxon",
-      "eflora_varieties_recognised_in_bc"
-    ],
+    "synonyms_scientific": [],
     "common_names": {
       "en": [
         "Yarrow",
@@ -59,7 +54,39 @@
     "usda_symbol": "ACMI2",
     "notes": [
       "origin_status to confirm (2026-11-02): E-Flora BC lists Achillea millefolium sensu stricto as Exotic (SNA) and the native coastal yarrow under Achillea borealis var. borealis (Yellow, S5); USDA gives both native and introduced for Canada. The entity keeps native_bc_west_of_cascades because the native coastal taxon is what a BC planting means by 'yarrow'; the claims record each source's wording (ecological_value:eflora01 cites the A. borealis page)."
-    ]
+    ],
+    "identity_review": {
+      "audited": "2026-11-02",
+      "method": "tools/identity_audit.py (M45): sources on file + entity notes; disputed = left for human judgement",
+      "taxonomic_identity": {
+        "status": "disputed",
+        "note": "E-Flora BC treats Achillea millefolium sensu stricto as exotic (SNA) and the native coastal yarrow as Achillea borealis var. borealis (syn. A. millefolium var. borealis); RHS, MOBOT and USDA use A. millefolium in the broad sense. Which taxon a Vancouver planting means is a human decision; claims record each source's wording"
+      },
+      "geographic_origin": {
+        "status": "disputed",
+        "note": "native (A. borealis var. borealis, E-Flora Yellow S5; USDA native AND introduced for Canada) vs exotic (A. millefolium s.s., E-Flora). origin_status native_bc_west_of_cascades kept provisionally",
+        "origin_status_on_entity": "native_bc_west_of_cascades"
+      },
+      "botanical_growth_form": {
+        "status": "confirmed",
+        "note": "read as herbaceous_perennial from kpu (entity.kpu_plant_type), mobot (supported; M29a)",
+        "kpu_plant_type": "Herbaceous perennial"
+      },
+      "design_function": {
+        "status": "confirmed",
+        "note": "ground cover / wildflower / pollinator perennial (MOBOT, RHS; respondents 'groundcover')",
+        "respondent_roles_as_typed": [
+          "groundcover",
+          "groundcover"
+        ]
+      },
+      "synonyms_raw": [
+        "rhs",
+        "eflora",
+        "eflora_native_bc_taxon",
+        "eflora_varieties_recognised_in_bc"
+      ]
+    }
   },
   "custom": [],
   "fill_plan": {
@@ -332,7 +359,8 @@
       "conditions": [],
       "place": "place:vancouver",
       "time": [],
-      "cultivar": null
+      "cultivar": null,
+      "verification_scope": "statement"
     },
     {
       "id": "achillea-millefolium:vancouver_context:sv02",
@@ -371,7 +399,8 @@
       "conditions": [],
       "place": "place:vancouver",
       "time": [],
-      "cultivar": null
+      "cultivar": null,
+      "verification_scope": "statement"
     },
     {
       "id": "achillea-millefolium:ecological_value:sv03",
@@ -413,7 +442,8 @@
       "conditions": [],
       "place": "place:vancouver",
       "time": [],
-      "cultivar": null
+      "cultivar": null,
+      "verification_scope": "statement"
     },
     {
       "id": "achillea-millefolium:seasonal_interest:sv01",
@@ -450,7 +480,8 @@
       "conditions": [],
       "place": "place:vancouver",
       "time": [],
-      "cultivar": null
+      "cultivar": null,
+      "verification_scope": "statement"
     },
     {
       "id": "achillea-millefolium:behaviour_with_others:sv02",
@@ -488,7 +519,8 @@
       "conditions": [],
       "place": "place:vancouver",
       "time": [],
-      "cultivar": null
+      "cultivar": null,
+      "verification_scope": "statement"
     },
     {
       "id": "achillea-millefolium:landscape_use:sv03",
@@ -531,7 +563,8 @@
       "conditions": [],
       "place": "place:vancouver",
       "time": [],
-      "cultivar": null
+      "cultivar": null,
+      "verification_scope": "statement"
     },
     {
       "id": "achillea-millefolium:mature_height:rhs01",
@@ -1578,7 +1611,29 @@
       "accessed": "2026-11-02",
       "source_url": "https://linnet.geog.ubc.ca/Atlas/Atlas.aspx?sciname=Achillea%20millefolium",
       "citation": "In Klinkenberg, Brian. (Editor) 2020. E-Flora BC: Electronic Atlas of the Plants of British Columbia [eflora.bc.ca]. Lab for Advanced Spatial Analysis, Department of Geography, University of British Columbia, Vancouver. [Accessed: 2026-11-02]",
-      "concepts": [],
+      "concepts": [
+        "bgc_zone:bafa",
+        "bgc_zone:bg",
+        "bgc_zone:bwbs",
+        "bgc_zone:cdf",
+        "bgc_zone:cma",
+        "bgc_zone:cwh",
+        "bgc_zone:essf",
+        "bgc_zone:ich",
+        "bgc_zone:idf",
+        "bgc_zone:ima",
+        "bgc_zone:mh",
+        "bgc_zone:ms",
+        "bgc_zone:pp",
+        "bgc_zone:sbps",
+        "bgc_zone:sbs",
+        "bgc_zone:swb",
+        "habitat:coastal",
+        "habitat:forest",
+        "habitat:grassland",
+        "habitat:meadow",
+        "habitat:rocky"
+      ],
       "conditions": [],
       "place": "place:bc",
       "time": [],

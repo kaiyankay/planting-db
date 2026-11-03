@@ -1,5 +1,5 @@
 {
- "generated": "2026-11-02",
+ "generated": "2026-11-03",
  "rules": {
   "hubs": "concept linked to ≥ 2 plants by live sourced claims",
   "variation": "same plant + facet, two claims with different stated conditions (or cultivar equal) and non-overlapping values",
@@ -23,28 +23,28 @@
    "text": "Acer palmatum is linked to 58 concepts across 20 facets from 49 claims; sources disagree on height class, spread class, water; missing gate facets: ecology."
   },
   "plant:achillea-millefolium": {
-   "concepts": 56,
-   "facets": 24,
+   "concepts": 77,
+   "facets": 26,
    "gate_facets_covered": 8,
    "gate_facets_total": 8,
-   "claims": 46,
+   "claims": 47,
    "verified_edges": 3,
    "disagreements": 5,
    "variations": 0,
    "gate_gaps": [],
-   "text": "Achillea millefolium is linked to 56 concepts across 24 facets from 46 claims; sources disagree on maintenance, spread class, water; every gate facet has at least one claim."
+   "text": "Achillea millefolium is linked to 77 concepts across 26 facets from 47 claims; sources disagree on maintenance, spread class, water; every gate facet has at least one claim."
   },
   "plant:arctostaphylos-uva-ursi": {
-   "concepts": 69,
-   "facets": 23,
+   "concepts": 87,
+   "facets": 25,
    "gate_facets_covered": 8,
    "gate_facets_total": 8,
-   "claims": 61,
+   "claims": 62,
    "verified_edges": 1,
    "disagreements": 4,
    "variations": 0,
    "gate_gaps": [],
-   "text": "Arctostaphylos uva-ursi is linked to 69 concepts across 23 facets from 61 claims; sources disagree on growth rate, spread class, water; every gate facet has at least one claim."
+   "text": "Arctostaphylos uva-ursi is linked to 87 concepts across 25 facets from 62 claims; sources disagree on growth rate, spread class, water; every gate facet has at least one claim."
   },
   "plant:cercidiphyllum-japonicum": {
    "concepts": 51,
@@ -61,84 +61,84 @@
    "text": "Cercidiphyllum japonicum is linked to 51 concepts across 22 facets from 47 claims; sources disagree on height class, water; missing gate facets: ecology."
   },
   "plant:cornus-nuttallii": {
-   "concepts": 67,
-   "facets": 25,
+   "concepts": 74,
+   "facets": 27,
    "gate_facets_covered": 7,
    "gate_facets_total": 8,
-   "claims": 54,
+   "claims": 55,
    "verified_edges": 10,
    "disagreements": 6,
    "variations": 0,
    "gate_gaps": [
     "ecology"
    ],
-   "text": "Cornus nuttallii is linked to 67 concepts across 25 facets from 54 claims; sources disagree on exposure, height class, maintenance; missing gate facets: ecology."
+   "text": "Cornus nuttallii is linked to 74 concepts across 27 facets from 55 claims; sources disagree on exposure, height class, maintenance; missing gate facets: ecology."
   },
   "plant:cornus-sericea": {
-   "concepts": 73,
-   "facets": 25,
+   "concepts": 89,
+   "facets": 27,
    "gate_facets_covered": 8,
    "gate_facets_total": 8,
-   "claims": 57,
+   "claims": 58,
    "verified_edges": 2,
    "disagreements": 6,
    "variations": 0,
    "gate_gaps": [],
-   "text": "Cornus sericea is linked to 73 concepts across 25 facets from 57 claims; sources disagree on height class, water; every gate facet has at least one claim."
+   "text": "Cornus sericea is linked to 89 concepts across 27 facets from 58 claims; sources disagree on height class, water; every gate facet has at least one claim."
   },
   "plant:gaillardia-aristata": {
-   "concepts": 52,
-   "facets": 22,
+   "concepts": 60,
+   "facets": 24,
    "gate_facets_covered": 8,
    "gate_facets_total": 8,
-   "claims": 40,
+   "claims": 41,
    "verified_edges": 0,
    "disagreements": 6,
    "variations": 0,
    "gate_gaps": [],
-   "text": "Gaillardia aristata is linked to 52 concepts across 22 facets from 40 claims; sources disagree on exposure, maintenance, water; every gate facet has at least one claim."
+   "text": "Gaillardia aristata is linked to 60 concepts across 24 facets from 41 claims; sources disagree on exposure, maintenance, water; every gate facet has at least one claim."
   },
   "plant:gaultheria-shallon": {
-   "concepts": 54,
-   "facets": 19,
+   "concepts": 63,
+   "facets": 21,
    "gate_facets_covered": 7,
    "gate_facets_total": 8,
-   "claims": 37,
+   "claims": 38,
    "verified_edges": 4,
    "disagreements": 3,
    "variations": 1,
    "gate_gaps": [
     "maintenance"
    ],
-   "text": "Gaultheria shallon is linked to 54 concepts across 19 facets from 37 claims; sources disagree on exposure, water; height class depends on conditions; missing gate facets: maintenance."
+   "text": "Gaultheria shallon is linked to 63 concepts across 21 facets from 38 claims; sources disagree on exposure, water; height class depends on conditions; missing gate facets: maintenance."
   },
   "plant:polystichum-munitum": {
-   "concepts": 53,
-   "facets": 22,
+   "concepts": 61,
+   "facets": 24,
    "gate_facets_covered": 7,
    "gate_facets_total": 8,
-   "claims": 55,
+   "claims": 56,
    "verified_edges": 4,
    "disagreements": 20,
    "variations": 0,
    "gate_gaps": [
     "ecology"
    ],
-   "text": "Polystichum munitum is linked to 53 concepts across 22 facets from 55 claims; sources disagree on evergreen, exposure, water; missing gate facets: ecology."
+   "text": "Polystichum munitum is linked to 61 concepts across 24 facets from 56 claims; sources disagree on evergreen, exposure, water; missing gate facets: ecology."
   },
   "plant:vaccinium-ovatum": {
-   "concepts": 55,
-   "facets": 22,
+   "concepts": 63,
+   "facets": 24,
    "gate_facets_covered": 7,
    "gate_facets_total": 8,
-   "claims": 41,
+   "claims": 42,
    "verified_edges": 4,
    "disagreements": 6,
    "variations": 0,
    "gate_gaps": [
     "ecology"
    ],
-   "text": "Vaccinium ovatum is linked to 55 concepts across 22 facets from 41 claims; sources disagree on exposure, height class, water; missing gate facets: ecology."
+   "text": "Vaccinium ovatum is linked to 63 concepts across 24 facets from 42 claims; sources disagree on exposure, height class, water; missing gate facets: ecology."
   }
  },
  "hubs": [
@@ -528,6 +528,27 @@
    "text": "low links 8 plants (Acer palmatum, Achillea millefolium, Arctostaphylos uva-ursi, Cercidiphyllum japonicum, Cornus nuttallii, Gaillardia aristata, Polystichum munitum, Vaccinium ovatum) through 11 claims."
   },
   {
+   "concept": "bgc_zone:ich",
+   "label": "ICH",
+   "dimension": "condition",
+   "facet": "bgc_zone",
+   "plants": [
+    "plant:achillea-millefolium",
+    "plant:arctostaphylos-uva-ursi",
+    "plant:cornus-nuttallii",
+    "plant:cornus-sericea",
+    "plant:gaillardia-aristata",
+    "plant:gaultheria-shallon",
+    "plant:polystichum-munitum",
+    "plant:vaccinium-ovatum"
+   ],
+   "n_edges": 8,
+   "sources": [
+    "eflora"
+   ],
+   "text": "ICH links 8 plants (Achillea millefolium, Arctostaphylos uva-ursi, Cornus nuttallii, Cornus sericea, Gaillardia aristata, Gaultheria shallon, Polystichum munitum, Vaccinium ovatum) through 8 claims — a shared condition suggests they could share a planting layer."
+  },
+  {
    "concept": "hardiness_usda:z10",
    "label": "USDA zone 10",
    "dimension": "condition",
@@ -777,6 +798,86 @@
    "text": "Root rot links 7 plants (Acer palmatum, Arctostaphylos uva-ursi, Cornus nuttallii, Cornus sericea, Gaillardia aristata, Gaultheria shallon, Vaccinium ovatum) through 8 claims."
   },
   {
+   "concept": "bgc_zone:cdf",
+   "label": "CDF",
+   "dimension": "condition",
+   "facet": "bgc_zone",
+   "plants": [
+    "plant:achillea-millefolium",
+    "plant:arctostaphylos-uva-ursi",
+    "plant:cornus-nuttallii",
+    "plant:cornus-sericea",
+    "plant:gaultheria-shallon",
+    "plant:polystichum-munitum",
+    "plant:vaccinium-ovatum"
+   ],
+   "n_edges": 7,
+   "sources": [
+    "eflora"
+   ],
+   "text": "CDF links 7 plants (Achillea millefolium, Arctostaphylos uva-ursi, Cornus nuttallii, Cornus sericea, Gaultheria shallon, Polystichum munitum, Vaccinium ovatum) through 7 claims — a shared condition suggests they could share a planting layer."
+  },
+  {
+   "concept": "bgc_zone:cwh",
+   "label": "CWH",
+   "dimension": "condition",
+   "facet": "bgc_zone",
+   "plants": [
+    "plant:achillea-millefolium",
+    "plant:arctostaphylos-uva-ursi",
+    "plant:cornus-nuttallii",
+    "plant:cornus-sericea",
+    "plant:gaultheria-shallon",
+    "plant:polystichum-munitum",
+    "plant:vaccinium-ovatum"
+   ],
+   "n_edges": 7,
+   "sources": [
+    "eflora"
+   ],
+   "text": "CWH links 7 plants (Achillea millefolium, Arctostaphylos uva-ursi, Cornus nuttallii, Cornus sericea, Gaultheria shallon, Polystichum munitum, Vaccinium ovatum) through 7 claims — a shared condition suggests they could share a planting layer."
+  },
+  {
+   "concept": "bgc_zone:idf",
+   "label": "IDF",
+   "dimension": "condition",
+   "facet": "bgc_zone",
+   "plants": [
+    "plant:achillea-millefolium",
+    "plant:arctostaphylos-uva-ursi",
+    "plant:cornus-nuttallii",
+    "plant:cornus-sericea",
+    "plant:gaillardia-aristata",
+    "plant:gaultheria-shallon",
+    "plant:polystichum-munitum"
+   ],
+   "n_edges": 7,
+   "sources": [
+    "eflora"
+   ],
+   "text": "IDF links 7 plants (Achillea millefolium, Arctostaphylos uva-ursi, Cornus nuttallii, Cornus sericea, Gaillardia aristata, Gaultheria shallon, Polystichum munitum) through 7 claims — a shared condition suggests they could share a planting layer."
+  },
+  {
+   "concept": "habitat:forest",
+   "label": "forest",
+   "dimension": "condition",
+   "facet": "habitat",
+   "plants": [
+    "plant:achillea-millefolium",
+    "plant:arctostaphylos-uva-ursi",
+    "plant:cornus-nuttallii",
+    "plant:cornus-sericea",
+    "plant:gaultheria-shallon",
+    "plant:polystichum-munitum",
+    "plant:vaccinium-ovatum"
+   ],
+   "n_edges": 7,
+   "sources": [
+    "eflora"
+   ],
+   "text": "forest links 7 plants (Achillea millefolium, Arctostaphylos uva-ursi, Cornus nuttallii, Cornus sericea, Gaultheria shallon, Polystichum munitum, Vaccinium ovatum) through 7 claims — a shared condition suggests they could share a planting layer."
+  },
+  {
    "concept": "origin:native_bc_west_of_cascades",
    "label": "Native to BC west of the Cascades",
    "dimension": "status",
@@ -909,6 +1010,63 @@
     "osu"
    ],
    "text": "USDA zone 4 links 6 plants (Achillea millefolium, Arctostaphylos uva-ursi, Cercidiphyllum japonicum, Cornus sericea, Gaillardia aristata, Polystichum munitum) through 11 claims — a shared condition suggests they could share a planting layer."
+  },
+  {
+   "concept": "bgc_zone:essf",
+   "label": "ESSF",
+   "dimension": "condition",
+   "facet": "bgc_zone",
+   "plants": [
+    "plant:achillea-millefolium",
+    "plant:arctostaphylos-uva-ursi",
+    "plant:cornus-sericea",
+    "plant:gaillardia-aristata",
+    "plant:polystichum-munitum",
+    "plant:vaccinium-ovatum"
+   ],
+   "n_edges": 6,
+   "sources": [
+    "eflora"
+   ],
+   "text": "ESSF links 6 plants (Achillea millefolium, Arctostaphylos uva-ursi, Cornus sericea, Gaillardia aristata, Polystichum munitum, Vaccinium ovatum) through 6 claims — a shared condition suggests they could share a planting layer."
+  },
+  {
+   "concept": "bgc_zone:mh",
+   "label": "MH",
+   "dimension": "condition",
+   "facet": "bgc_zone",
+   "plants": [
+    "plant:achillea-millefolium",
+    "plant:arctostaphylos-uva-ursi",
+    "plant:cornus-sericea",
+    "plant:gaultheria-shallon",
+    "plant:polystichum-munitum",
+    "plant:vaccinium-ovatum"
+   ],
+   "n_edges": 6,
+   "sources": [
+    "eflora"
+   ],
+   "text": "MH links 6 plants (Achillea millefolium, Arctostaphylos uva-ursi, Cornus sericea, Gaultheria shallon, Polystichum munitum, Vaccinium ovatum) through 6 claims — a shared condition suggests they could share a planting layer."
+  },
+  {
+   "concept": "bgc_zone:sbs",
+   "label": "SBS",
+   "dimension": "condition",
+   "facet": "bgc_zone",
+   "plants": [
+    "plant:achillea-millefolium",
+    "plant:arctostaphylos-uva-ursi",
+    "plant:cornus-nuttallii",
+    "plant:cornus-sericea",
+    "plant:gaillardia-aristata",
+    "plant:vaccinium-ovatum"
+   ],
+   "n_edges": 6,
+   "sources": [
+    "eflora"
+   ],
+   "text": "SBS links 6 plants (Achillea millefolium, Arctostaphylos uva-ursi, Cornus nuttallii, Cornus sericea, Gaillardia aristata, Vaccinium ovatum) through 6 claims — a shared condition suggests they could share a planting layer."
   },
   {
    "concept": "growth_rate:moderate",
@@ -1096,6 +1254,24 @@
     "gpp"
    ],
    "text": "Establishing links 5 plants (Acer palmatum, Cercidiphyllum japonicum, Cornus sericea, Polystichum munitum, Vaccinium ovatum) through 5 claims."
+  },
+  {
+   "concept": "bgc_zone:ms",
+   "label": "MS",
+   "dimension": "condition",
+   "facet": "bgc_zone",
+   "plants": [
+    "plant:achillea-millefolium",
+    "plant:arctostaphylos-uva-ursi",
+    "plant:cornus-sericea",
+    "plant:gaillardia-aristata",
+    "plant:polystichum-munitum"
+   ],
+   "n_edges": 5,
+   "sources": [
+    "eflora"
+   ],
+   "text": "MS links 5 plants (Achillea millefolium, Arctostaphylos uva-ursi, Cornus sericea, Gaillardia aristata, Polystichum munitum) through 5 claims — a shared condition suggests they could share a planting layer."
   },
   {
    "concept": "spread_class:1.0-1.5m",
@@ -1410,6 +1586,40 @@
     "rhs"
    ],
    "text": "Mixed shrub border links 4 plants (Cornus sericea, Gaultheria shallon, Polystichum munitum, Vaccinium ovatum) through 5 claims."
+  },
+  {
+   "concept": "bgc_zone:bg",
+   "label": "BG",
+   "dimension": "condition",
+   "facet": "bgc_zone",
+   "plants": [
+    "plant:achillea-millefolium",
+    "plant:arctostaphylos-uva-ursi",
+    "plant:cornus-sericea",
+    "plant:gaillardia-aristata"
+   ],
+   "n_edges": 4,
+   "sources": [
+    "eflora"
+   ],
+   "text": "BG links 4 plants (Achillea millefolium, Arctostaphylos uva-ursi, Cornus sericea, Gaillardia aristata) through 4 claims — a shared condition suggests they could share a planting layer."
+  },
+  {
+   "concept": "bgc_zone:pp",
+   "label": "PP",
+   "dimension": "condition",
+   "facet": "bgc_zone",
+   "plants": [
+    "plant:achillea-millefolium",
+    "plant:arctostaphylos-uva-ursi",
+    "plant:cornus-sericea",
+    "plant:gaillardia-aristata"
+   ],
+   "n_edges": 4,
+   "sources": [
+    "eflora"
+   ],
+   "text": "PP links 4 plants (Achillea millefolium, Arctostaphylos uva-ursi, Cornus sericea, Gaillardia aristata) through 4 claims — a shared condition suggests they could share a planting layer."
   },
   {
    "concept": "browsing:deer",
@@ -1842,6 +2052,70 @@
    "text": "Established links 3 plants (Cornus nuttallii, Cornus sericea, Vaccinium ovatum) through 3 claims."
   },
   {
+   "concept": "bgc_zone:bwbs",
+   "label": "BWBS",
+   "dimension": "condition",
+   "facet": "bgc_zone",
+   "plants": [
+    "plant:achillea-millefolium",
+    "plant:arctostaphylos-uva-ursi",
+    "plant:cornus-sericea"
+   ],
+   "n_edges": 3,
+   "sources": [
+    "eflora"
+   ],
+   "text": "BWBS links 3 plants (Achillea millefolium, Arctostaphylos uva-ursi, Cornus sericea) through 3 claims — a shared condition suggests they could share a planting layer."
+  },
+  {
+   "concept": "bgc_zone:sbps",
+   "label": "SBPS",
+   "dimension": "condition",
+   "facet": "bgc_zone",
+   "plants": [
+    "plant:achillea-millefolium",
+    "plant:arctostaphylos-uva-ursi",
+    "plant:cornus-sericea"
+   ],
+   "n_edges": 3,
+   "sources": [
+    "eflora"
+   ],
+   "text": "SBPS links 3 plants (Achillea millefolium, Arctostaphylos uva-ursi, Cornus sericea) through 3 claims — a shared condition suggests they could share a planting layer."
+  },
+  {
+   "concept": "habitat:coastal",
+   "label": "coastal",
+   "dimension": "condition",
+   "facet": "habitat",
+   "plants": [
+    "plant:achillea-millefolium",
+    "plant:gaultheria-shallon",
+    "plant:vaccinium-ovatum"
+   ],
+   "n_edges": 3,
+   "sources": [
+    "eflora"
+   ],
+   "text": "coastal links 3 plants (Achillea millefolium, Gaultheria shallon, Vaccinium ovatum) through 3 claims — a shared condition suggests they could share a planting layer."
+  },
+  {
+   "concept": "habitat:grassland",
+   "label": "grassland",
+   "dimension": "condition",
+   "facet": "habitat",
+   "plants": [
+    "plant:achillea-millefolium",
+    "plant:cornus-sericea",
+    "plant:gaillardia-aristata"
+   ],
+   "n_edges": 3,
+   "sources": [
+    "eflora"
+   ],
+   "text": "grassland links 3 plants (Achillea millefolium, Cornus sericea, Gaillardia aristata) through 3 claims — a shared condition suggests they could share a planting layer."
+  },
+  {
    "concept": "hardiness_rhs:H5",
    "label": "RHS H5",
    "dimension": "condition",
@@ -2237,6 +2511,66 @@
    "text": "Winter interest links 2 plants (Arctostaphylos uva-ursi, Cornus sericea) through 3 claims."
   },
   {
+   "concept": "bgc_zone:bafa",
+   "label": "BAFA",
+   "dimension": "condition",
+   "facet": "bgc_zone",
+   "plants": [
+    "plant:achillea-millefolium",
+    "plant:arctostaphylos-uva-ursi"
+   ],
+   "n_edges": 2,
+   "sources": [
+    "eflora"
+   ],
+   "text": "BAFA links 2 plants (Achillea millefolium, Arctostaphylos uva-ursi) through 2 claims — a shared condition suggests they could share a planting layer."
+  },
+  {
+   "concept": "bgc_zone:cma",
+   "label": "CMA",
+   "dimension": "condition",
+   "facet": "bgc_zone",
+   "plants": [
+    "plant:achillea-millefolium",
+    "plant:arctostaphylos-uva-ursi"
+   ],
+   "n_edges": 2,
+   "sources": [
+    "eflora"
+   ],
+   "text": "CMA links 2 plants (Achillea millefolium, Arctostaphylos uva-ursi) through 2 claims — a shared condition suggests they could share a planting layer."
+  },
+  {
+   "concept": "bgc_zone:ima",
+   "label": "IMA",
+   "dimension": "condition",
+   "facet": "bgc_zone",
+   "plants": [
+    "plant:achillea-millefolium",
+    "plant:arctostaphylos-uva-ursi"
+   ],
+   "n_edges": 2,
+   "sources": [
+    "eflora"
+   ],
+   "text": "IMA links 2 plants (Achillea millefolium, Arctostaphylos uva-ursi) through 2 claims — a shared condition suggests they could share a planting layer."
+  },
+  {
+   "concept": "bgc_zone:swb",
+   "label": "SWB",
+   "dimension": "condition",
+   "facet": "bgc_zone",
+   "plants": [
+    "plant:achillea-millefolium",
+    "plant:arctostaphylos-uva-ursi"
+   ],
+   "n_edges": 2,
+   "sources": [
+    "eflora"
+   ],
+   "text": "SWB links 2 plants (Achillea millefolium, Arctostaphylos uva-ursi) through 2 claims — a shared condition suggests they could share a planting layer."
+  },
+  {
    "concept": "ecology:erosion_control",
    "label": "erosion control",
    "dimension": "use",
@@ -2314,6 +2648,36 @@
     "osu"
    ],
    "text": "Arching links 2 plants (Cercidiphyllum japonicum, Polystichum munitum) through 2 claims."
+  },
+  {
+   "concept": "habitat:disturbed",
+   "label": "disturbed",
+   "dimension": "condition",
+   "facet": "habitat",
+   "plants": [
+    "plant:cornus-nuttallii",
+    "plant:gaultheria-shallon"
+   ],
+   "n_edges": 2,
+   "sources": [
+    "eflora"
+   ],
+   "text": "disturbed links 2 plants (Cornus nuttallii, Gaultheria shallon) through 2 claims — a shared condition suggests they could share a planting layer."
+  },
+  {
+   "concept": "habitat:rocky",
+   "label": "rocky",
+   "dimension": "condition",
+   "facet": "habitat",
+   "plants": [
+    "plant:achillea-millefolium",
+    "plant:arctostaphylos-uva-ursi"
+   ],
+   "n_edges": 2,
+   "sources": [
+    "eflora"
+   ],
+   "text": "rocky links 2 plants (Achillea millefolium, Arctostaphylos uva-ursi) through 2 claims — a shared condition suggests they could share a planting layer."
   },
   {
    "concept": "hardiness_rhs:H4",
@@ -3577,7 +3941,7 @@
   },
   {
    "kind": "single_source_links",
-   "count": 341,
+   "count": 436,
    "items": [
     {
      "plant": "plant:arctostaphylos-uva-ursi",
@@ -5239,6 +5603,726 @@
     },
     {
      "plant": "plant:achillea-millefolium",
+     "concept": "bgc_zone:bafa",
+     "source": "eflora",
+     "claims": [
+      "achillea-millefolium:vancouver_context:eflora01"
+     ]
+    },
+    {
+     "plant": "plant:arctostaphylos-uva-ursi",
+     "concept": "bgc_zone:bafa",
+     "source": "eflora",
+     "claims": [
+      "arctostaphylos-uva-ursi:vancouver_context:eflora01"
+     ]
+    },
+    {
+     "plant": "plant:achillea-millefolium",
+     "concept": "bgc_zone:bg",
+     "source": "eflora",
+     "claims": [
+      "achillea-millefolium:vancouver_context:eflora01"
+     ]
+    },
+    {
+     "plant": "plant:arctostaphylos-uva-ursi",
+     "concept": "bgc_zone:bg",
+     "source": "eflora",
+     "claims": [
+      "arctostaphylos-uva-ursi:vancouver_context:eflora01"
+     ]
+    },
+    {
+     "plant": "plant:cornus-sericea",
+     "concept": "bgc_zone:bg",
+     "source": "eflora",
+     "claims": [
+      "cornus-sericea:vancouver_context:eflora01"
+     ]
+    },
+    {
+     "plant": "plant:gaillardia-aristata",
+     "concept": "bgc_zone:bg",
+     "source": "eflora",
+     "claims": [
+      "gaillardia-aristata:vancouver_context:eflora01"
+     ]
+    },
+    {
+     "plant": "plant:achillea-millefolium",
+     "concept": "bgc_zone:bwbs",
+     "source": "eflora",
+     "claims": [
+      "achillea-millefolium:vancouver_context:eflora01"
+     ]
+    },
+    {
+     "plant": "plant:arctostaphylos-uva-ursi",
+     "concept": "bgc_zone:bwbs",
+     "source": "eflora",
+     "claims": [
+      "arctostaphylos-uva-ursi:vancouver_context:eflora01"
+     ]
+    },
+    {
+     "plant": "plant:cornus-sericea",
+     "concept": "bgc_zone:bwbs",
+     "source": "eflora",
+     "claims": [
+      "cornus-sericea:vancouver_context:eflora01"
+     ]
+    },
+    {
+     "plant": "plant:achillea-millefolium",
+     "concept": "bgc_zone:cdf",
+     "source": "eflora",
+     "claims": [
+      "achillea-millefolium:vancouver_context:eflora01"
+     ]
+    },
+    {
+     "plant": "plant:arctostaphylos-uva-ursi",
+     "concept": "bgc_zone:cdf",
+     "source": "eflora",
+     "claims": [
+      "arctostaphylos-uva-ursi:vancouver_context:eflora01"
+     ]
+    },
+    {
+     "plant": "plant:cornus-nuttallii",
+     "concept": "bgc_zone:cdf",
+     "source": "eflora",
+     "claims": [
+      "cornus-nuttallii:vancouver_context:eflora01"
+     ]
+    },
+    {
+     "plant": "plant:cornus-sericea",
+     "concept": "bgc_zone:cdf",
+     "source": "eflora",
+     "claims": [
+      "cornus-sericea:vancouver_context:eflora01"
+     ]
+    },
+    {
+     "plant": "plant:gaultheria-shallon",
+     "concept": "bgc_zone:cdf",
+     "source": "eflora",
+     "claims": [
+      "gaultheria-shallon:vancouver_context:eflora01"
+     ]
+    },
+    {
+     "plant": "plant:polystichum-munitum",
+     "concept": "bgc_zone:cdf",
+     "source": "eflora",
+     "claims": [
+      "polystichum-munitum:vancouver_context:eflora01"
+     ]
+    },
+    {
+     "plant": "plant:vaccinium-ovatum",
+     "concept": "bgc_zone:cdf",
+     "source": "eflora",
+     "claims": [
+      "vaccinium-ovatum:vancouver_context:eflora01"
+     ]
+    },
+    {
+     "plant": "plant:achillea-millefolium",
+     "concept": "bgc_zone:cma",
+     "source": "eflora",
+     "claims": [
+      "achillea-millefolium:vancouver_context:eflora01"
+     ]
+    },
+    {
+     "plant": "plant:arctostaphylos-uva-ursi",
+     "concept": "bgc_zone:cma",
+     "source": "eflora",
+     "claims": [
+      "arctostaphylos-uva-ursi:vancouver_context:eflora01"
+     ]
+    },
+    {
+     "plant": "plant:achillea-millefolium",
+     "concept": "bgc_zone:cwh",
+     "source": "eflora",
+     "claims": [
+      "achillea-millefolium:vancouver_context:eflora01"
+     ]
+    },
+    {
+     "plant": "plant:arctostaphylos-uva-ursi",
+     "concept": "bgc_zone:cwh",
+     "source": "eflora",
+     "claims": [
+      "arctostaphylos-uva-ursi:vancouver_context:eflora01"
+     ]
+    },
+    {
+     "plant": "plant:cornus-nuttallii",
+     "concept": "bgc_zone:cwh",
+     "source": "eflora",
+     "claims": [
+      "cornus-nuttallii:vancouver_context:eflora01"
+     ]
+    },
+    {
+     "plant": "plant:cornus-sericea",
+     "concept": "bgc_zone:cwh",
+     "source": "eflora",
+     "claims": [
+      "cornus-sericea:vancouver_context:eflora01"
+     ]
+    },
+    {
+     "plant": "plant:gaultheria-shallon",
+     "concept": "bgc_zone:cwh",
+     "source": "eflora",
+     "claims": [
+      "gaultheria-shallon:vancouver_context:eflora01"
+     ]
+    },
+    {
+     "plant": "plant:polystichum-munitum",
+     "concept": "bgc_zone:cwh",
+     "source": "eflora",
+     "claims": [
+      "polystichum-munitum:vancouver_context:eflora01"
+     ]
+    },
+    {
+     "plant": "plant:vaccinium-ovatum",
+     "concept": "bgc_zone:cwh",
+     "source": "eflora",
+     "claims": [
+      "vaccinium-ovatum:vancouver_context:eflora01"
+     ]
+    },
+    {
+     "plant": "plant:achillea-millefolium",
+     "concept": "bgc_zone:essf",
+     "source": "eflora",
+     "claims": [
+      "achillea-millefolium:vancouver_context:eflora01"
+     ]
+    },
+    {
+     "plant": "plant:arctostaphylos-uva-ursi",
+     "concept": "bgc_zone:essf",
+     "source": "eflora",
+     "claims": [
+      "arctostaphylos-uva-ursi:vancouver_context:eflora01"
+     ]
+    },
+    {
+     "plant": "plant:cornus-sericea",
+     "concept": "bgc_zone:essf",
+     "source": "eflora",
+     "claims": [
+      "cornus-sericea:vancouver_context:eflora01"
+     ]
+    },
+    {
+     "plant": "plant:gaillardia-aristata",
+     "concept": "bgc_zone:essf",
+     "source": "eflora",
+     "claims": [
+      "gaillardia-aristata:vancouver_context:eflora01"
+     ]
+    },
+    {
+     "plant": "plant:polystichum-munitum",
+     "concept": "bgc_zone:essf",
+     "source": "eflora",
+     "claims": [
+      "polystichum-munitum:vancouver_context:eflora01"
+     ]
+    },
+    {
+     "plant": "plant:vaccinium-ovatum",
+     "concept": "bgc_zone:essf",
+     "source": "eflora",
+     "claims": [
+      "vaccinium-ovatum:vancouver_context:eflora01"
+     ]
+    },
+    {
+     "plant": "plant:achillea-millefolium",
+     "concept": "bgc_zone:ich",
+     "source": "eflora",
+     "claims": [
+      "achillea-millefolium:vancouver_context:eflora01"
+     ]
+    },
+    {
+     "plant": "plant:arctostaphylos-uva-ursi",
+     "concept": "bgc_zone:ich",
+     "source": "eflora",
+     "claims": [
+      "arctostaphylos-uva-ursi:vancouver_context:eflora01"
+     ]
+    },
+    {
+     "plant": "plant:cornus-nuttallii",
+     "concept": "bgc_zone:ich",
+     "source": "eflora",
+     "claims": [
+      "cornus-nuttallii:vancouver_context:eflora01"
+     ]
+    },
+    {
+     "plant": "plant:cornus-sericea",
+     "concept": "bgc_zone:ich",
+     "source": "eflora",
+     "claims": [
+      "cornus-sericea:vancouver_context:eflora01"
+     ]
+    },
+    {
+     "plant": "plant:gaillardia-aristata",
+     "concept": "bgc_zone:ich",
+     "source": "eflora",
+     "claims": [
+      "gaillardia-aristata:vancouver_context:eflora01"
+     ]
+    },
+    {
+     "plant": "plant:gaultheria-shallon",
+     "concept": "bgc_zone:ich",
+     "source": "eflora",
+     "claims": [
+      "gaultheria-shallon:vancouver_context:eflora01"
+     ]
+    },
+    {
+     "plant": "plant:polystichum-munitum",
+     "concept": "bgc_zone:ich",
+     "source": "eflora",
+     "claims": [
+      "polystichum-munitum:vancouver_context:eflora01"
+     ]
+    },
+    {
+     "plant": "plant:vaccinium-ovatum",
+     "concept": "bgc_zone:ich",
+     "source": "eflora",
+     "claims": [
+      "vaccinium-ovatum:vancouver_context:eflora01"
+     ]
+    },
+    {
+     "plant": "plant:achillea-millefolium",
+     "concept": "bgc_zone:idf",
+     "source": "eflora",
+     "claims": [
+      "achillea-millefolium:vancouver_context:eflora01"
+     ]
+    },
+    {
+     "plant": "plant:arctostaphylos-uva-ursi",
+     "concept": "bgc_zone:idf",
+     "source": "eflora",
+     "claims": [
+      "arctostaphylos-uva-ursi:vancouver_context:eflora01"
+     ]
+    },
+    {
+     "plant": "plant:cornus-nuttallii",
+     "concept": "bgc_zone:idf",
+     "source": "eflora",
+     "claims": [
+      "cornus-nuttallii:vancouver_context:eflora01"
+     ]
+    },
+    {
+     "plant": "plant:cornus-sericea",
+     "concept": "bgc_zone:idf",
+     "source": "eflora",
+     "claims": [
+      "cornus-sericea:vancouver_context:eflora01"
+     ]
+    },
+    {
+     "plant": "plant:gaillardia-aristata",
+     "concept": "bgc_zone:idf",
+     "source": "eflora",
+     "claims": [
+      "gaillardia-aristata:vancouver_context:eflora01"
+     ]
+    },
+    {
+     "plant": "plant:gaultheria-shallon",
+     "concept": "bgc_zone:idf",
+     "source": "eflora",
+     "claims": [
+      "gaultheria-shallon:vancouver_context:eflora01"
+     ]
+    },
+    {
+     "plant": "plant:polystichum-munitum",
+     "concept": "bgc_zone:idf",
+     "source": "eflora",
+     "claims": [
+      "polystichum-munitum:vancouver_context:eflora01"
+     ]
+    },
+    {
+     "plant": "plant:achillea-millefolium",
+     "concept": "bgc_zone:ima",
+     "source": "eflora",
+     "claims": [
+      "achillea-millefolium:vancouver_context:eflora01"
+     ]
+    },
+    {
+     "plant": "plant:arctostaphylos-uva-ursi",
+     "concept": "bgc_zone:ima",
+     "source": "eflora",
+     "claims": [
+      "arctostaphylos-uva-ursi:vancouver_context:eflora01"
+     ]
+    },
+    {
+     "plant": "plant:achillea-millefolium",
+     "concept": "bgc_zone:mh",
+     "source": "eflora",
+     "claims": [
+      "achillea-millefolium:vancouver_context:eflora01"
+     ]
+    },
+    {
+     "plant": "plant:arctostaphylos-uva-ursi",
+     "concept": "bgc_zone:mh",
+     "source": "eflora",
+     "claims": [
+      "arctostaphylos-uva-ursi:vancouver_context:eflora01"
+     ]
+    },
+    {
+     "plant": "plant:cornus-sericea",
+     "concept": "bgc_zone:mh",
+     "source": "eflora",
+     "claims": [
+      "cornus-sericea:vancouver_context:eflora01"
+     ]
+    },
+    {
+     "plant": "plant:gaultheria-shallon",
+     "concept": "bgc_zone:mh",
+     "source": "eflora",
+     "claims": [
+      "gaultheria-shallon:vancouver_context:eflora01"
+     ]
+    },
+    {
+     "plant": "plant:polystichum-munitum",
+     "concept": "bgc_zone:mh",
+     "source": "eflora",
+     "claims": [
+      "polystichum-munitum:vancouver_context:eflora01"
+     ]
+    },
+    {
+     "plant": "plant:vaccinium-ovatum",
+     "concept": "bgc_zone:mh",
+     "source": "eflora",
+     "claims": [
+      "vaccinium-ovatum:vancouver_context:eflora01"
+     ]
+    },
+    {
+     "plant": "plant:achillea-millefolium",
+     "concept": "bgc_zone:ms",
+     "source": "eflora",
+     "claims": [
+      "achillea-millefolium:vancouver_context:eflora01"
+     ]
+    },
+    {
+     "plant": "plant:arctostaphylos-uva-ursi",
+     "concept": "bgc_zone:ms",
+     "source": "eflora",
+     "claims": [
+      "arctostaphylos-uva-ursi:vancouver_context:eflora01"
+     ]
+    },
+    {
+     "plant": "plant:cornus-sericea",
+     "concept": "bgc_zone:ms",
+     "source": "eflora",
+     "claims": [
+      "cornus-sericea:vancouver_context:eflora01"
+     ]
+    },
+    {
+     "plant": "plant:gaillardia-aristata",
+     "concept": "bgc_zone:ms",
+     "source": "eflora",
+     "claims": [
+      "gaillardia-aristata:vancouver_context:eflora01"
+     ]
+    },
+    {
+     "plant": "plant:polystichum-munitum",
+     "concept": "bgc_zone:ms",
+     "source": "eflora",
+     "claims": [
+      "polystichum-munitum:vancouver_context:eflora01"
+     ]
+    },
+    {
+     "plant": "plant:achillea-millefolium",
+     "concept": "bgc_zone:pp",
+     "source": "eflora",
+     "claims": [
+      "achillea-millefolium:vancouver_context:eflora01"
+     ]
+    },
+    {
+     "plant": "plant:arctostaphylos-uva-ursi",
+     "concept": "bgc_zone:pp",
+     "source": "eflora",
+     "claims": [
+      "arctostaphylos-uva-ursi:vancouver_context:eflora01"
+     ]
+    },
+    {
+     "plant": "plant:cornus-sericea",
+     "concept": "bgc_zone:pp",
+     "source": "eflora",
+     "claims": [
+      "cornus-sericea:vancouver_context:eflora01"
+     ]
+    },
+    {
+     "plant": "plant:gaillardia-aristata",
+     "concept": "bgc_zone:pp",
+     "source": "eflora",
+     "claims": [
+      "gaillardia-aristata:vancouver_context:eflora01"
+     ]
+    },
+    {
+     "plant": "plant:achillea-millefolium",
+     "concept": "bgc_zone:sbps",
+     "source": "eflora",
+     "claims": [
+      "achillea-millefolium:vancouver_context:eflora01"
+     ]
+    },
+    {
+     "plant": "plant:arctostaphylos-uva-ursi",
+     "concept": "bgc_zone:sbps",
+     "source": "eflora",
+     "claims": [
+      "arctostaphylos-uva-ursi:vancouver_context:eflora01"
+     ]
+    },
+    {
+     "plant": "plant:cornus-sericea",
+     "concept": "bgc_zone:sbps",
+     "source": "eflora",
+     "claims": [
+      "cornus-sericea:vancouver_context:eflora01"
+     ]
+    },
+    {
+     "plant": "plant:achillea-millefolium",
+     "concept": "bgc_zone:sbs",
+     "source": "eflora",
+     "claims": [
+      "achillea-millefolium:vancouver_context:eflora01"
+     ]
+    },
+    {
+     "plant": "plant:arctostaphylos-uva-ursi",
+     "concept": "bgc_zone:sbs",
+     "source": "eflora",
+     "claims": [
+      "arctostaphylos-uva-ursi:vancouver_context:eflora01"
+     ]
+    },
+    {
+     "plant": "plant:cornus-nuttallii",
+     "concept": "bgc_zone:sbs",
+     "source": "eflora",
+     "claims": [
+      "cornus-nuttallii:vancouver_context:eflora01"
+     ]
+    },
+    {
+     "plant": "plant:cornus-sericea",
+     "concept": "bgc_zone:sbs",
+     "source": "eflora",
+     "claims": [
+      "cornus-sericea:vancouver_context:eflora01"
+     ]
+    },
+    {
+     "plant": "plant:gaillardia-aristata",
+     "concept": "bgc_zone:sbs",
+     "source": "eflora",
+     "claims": [
+      "gaillardia-aristata:vancouver_context:eflora01"
+     ]
+    },
+    {
+     "plant": "plant:vaccinium-ovatum",
+     "concept": "bgc_zone:sbs",
+     "source": "eflora",
+     "claims": [
+      "vaccinium-ovatum:vancouver_context:eflora01"
+     ]
+    },
+    {
+     "plant": "plant:achillea-millefolium",
+     "concept": "bgc_zone:swb",
+     "source": "eflora",
+     "claims": [
+      "achillea-millefolium:vancouver_context:eflora01"
+     ]
+    },
+    {
+     "plant": "plant:arctostaphylos-uva-ursi",
+     "concept": "bgc_zone:swb",
+     "source": "eflora",
+     "claims": [
+      "arctostaphylos-uva-ursi:vancouver_context:eflora01"
+     ]
+    },
+    {
+     "plant": "plant:achillea-millefolium",
+     "concept": "habitat:coastal",
+     "source": "eflora",
+     "claims": [
+      "achillea-millefolium:vancouver_context:eflora01"
+     ]
+    },
+    {
+     "plant": "plant:gaultheria-shallon",
+     "concept": "habitat:coastal",
+     "source": "eflora",
+     "claims": [
+      "gaultheria-shallon:vancouver_context:eflora01"
+     ]
+    },
+    {
+     "plant": "plant:vaccinium-ovatum",
+     "concept": "habitat:coastal",
+     "source": "eflora",
+     "claims": [
+      "vaccinium-ovatum:vancouver_context:eflora01"
+     ]
+    },
+    {
+     "plant": "plant:achillea-millefolium",
+     "concept": "habitat:forest",
+     "source": "eflora",
+     "claims": [
+      "achillea-millefolium:vancouver_context:eflora01"
+     ]
+    },
+    {
+     "plant": "plant:arctostaphylos-uva-ursi",
+     "concept": "habitat:forest",
+     "source": "eflora",
+     "claims": [
+      "arctostaphylos-uva-ursi:vancouver_context:eflora01"
+     ]
+    },
+    {
+     "plant": "plant:cornus-nuttallii",
+     "concept": "habitat:forest",
+     "source": "eflora",
+     "claims": [
+      "cornus-nuttallii:vancouver_context:eflora01"
+     ]
+    },
+    {
+     "plant": "plant:cornus-sericea",
+     "concept": "habitat:forest",
+     "source": "eflora",
+     "claims": [
+      "cornus-sericea:vancouver_context:eflora01"
+     ]
+    },
+    {
+     "plant": "plant:gaultheria-shallon",
+     "concept": "habitat:forest",
+     "source": "eflora",
+     "claims": [
+      "gaultheria-shallon:vancouver_context:eflora01"
+     ]
+    },
+    {
+     "plant": "plant:polystichum-munitum",
+     "concept": "habitat:forest",
+     "source": "eflora",
+     "claims": [
+      "polystichum-munitum:vancouver_context:eflora01"
+     ]
+    },
+    {
+     "plant": "plant:vaccinium-ovatum",
+     "concept": "habitat:forest",
+     "source": "eflora",
+     "claims": [
+      "vaccinium-ovatum:vancouver_context:eflora01"
+     ]
+    },
+    {
+     "plant": "plant:achillea-millefolium",
+     "concept": "habitat:grassland",
+     "source": "eflora",
+     "claims": [
+      "achillea-millefolium:vancouver_context:eflora01"
+     ]
+    },
+    {
+     "plant": "plant:cornus-sericea",
+     "concept": "habitat:grassland",
+     "source": "eflora",
+     "claims": [
+      "cornus-sericea:vancouver_context:eflora01"
+     ]
+    },
+    {
+     "plant": "plant:gaillardia-aristata",
+     "concept": "habitat:grassland",
+     "source": "eflora",
+     "claims": [
+      "gaillardia-aristata:vancouver_context:eflora01"
+     ]
+    },
+    {
+     "plant": "plant:achillea-millefolium",
+     "concept": "habitat:meadow",
+     "source": "eflora",
+     "claims": [
+      "achillea-millefolium:vancouver_context:eflora01"
+     ]
+    },
+    {
+     "plant": "plant:achillea-millefolium",
+     "concept": "habitat:rocky",
+     "source": "eflora",
+     "claims": [
+      "achillea-millefolium:vancouver_context:eflora01"
+     ]
+    },
+    {
+     "plant": "plant:arctostaphylos-uva-ursi",
+     "concept": "habitat:rocky",
+     "source": "eflora",
+     "claims": [
+      "arctostaphylos-uva-ursi:vancouver_context:eflora01"
+     ]
+    },
+    {
+     "plant": "plant:achillea-millefolium",
      "concept": "height_class:0.1-0.2m",
      "source": "eflora",
      "claims": [
@@ -6055,6 +7139,22 @@
     },
     {
      "plant": "plant:cornus-nuttallii",
+     "concept": "habitat:disturbed",
+     "source": "eflora",
+     "claims": [
+      "cornus-nuttallii:vancouver_context:eflora01"
+     ]
+    },
+    {
+     "plant": "plant:gaultheria-shallon",
+     "concept": "habitat:disturbed",
+     "source": "eflora",
+     "claims": [
+      "gaultheria-shallon:vancouver_context:eflora01"
+     ]
+    },
+    {
+     "plant": "plant:cornus-nuttallii",
      "concept": "height_class:1.3-2.0m",
      "source": "eflora",
      "claims": [
@@ -6147,6 +7247,22 @@
      "source": "mobot",
      "claims": [
       "cornus-sericea:resistances:mobot01"
+     ]
+    },
+    {
+     "plant": "plant:cornus-sericea",
+     "concept": "habitat:streamside",
+     "source": "eflora",
+     "claims": [
+      "cornus-sericea:vancouver_context:eflora01"
+     ]
+    },
+    {
+     "plant": "plant:cornus-sericea",
+     "concept": "habitat:swamp",
+     "source": "eflora",
+     "claims": [
+      "cornus-sericea:vancouver_context:eflora01"
      ]
     },
     {
@@ -6255,6 +7371,14 @@
     },
     {
      "plant": "plant:gaultheria-shallon",
+     "concept": "habitat:bog",
+     "source": "eflora",
+     "claims": [
+      "gaultheria-shallon:vancouver_context:eflora01"
+     ]
+    },
+    {
+     "plant": "plant:gaultheria-shallon",
      "concept": "use:sheared_hedge",
      "source": "usda_plants",
      "claims": [
@@ -6318,7 +7442,7 @@
      ]
     }
    ],
-   "text": "341 plant–concept links rest on a single source."
+   "text": "436 plant–concept links rest on a single source."
   },
   {
    "kind": "shared_concepts_no_relation",
@@ -6592,6 +7716,71 @@
    "kind": "shared_concepts_no_relation",
    "plants": [
     "plant:achillea-millefolium",
+    "plant:arctostaphylos-uva-ursi"
+   ],
+   "shared": [
+    "bgc_zone:bafa",
+    "bgc_zone:bg",
+    "bgc_zone:bwbs",
+    "bgc_zone:cdf",
+    "bgc_zone:cma",
+    "bgc_zone:cwh",
+    "bgc_zone:essf",
+    "bgc_zone:ich",
+    "bgc_zone:idf",
+    "bgc_zone:ima",
+    "bgc_zone:mh",
+    "bgc_zone:ms",
+    "bgc_zone:pp",
+    "bgc_zone:sbps",
+    "bgc_zone:sbs",
+    "bgc_zone:swb",
+    "colour:green",
+    "colour:pink",
+    "colour:red",
+    "colour:white",
+    "exposure:full_sun",
+    "exposure:part_sun_part_shade",
+    "exposure:sheltered",
+    "fruit:showy",
+    "growth_rate:moderate",
+    "habitat:forest",
+    "habitat:rocky",
+    "hardiness_rhs:H7",
+    "hardiness_usda:z3",
+    "hardiness_usda:z4",
+    "hardiness_usda:z5",
+    "hardiness_usda:z6",
+    "hardiness_usda:z7",
+    "hardiness_usda:z8",
+    "hardiness_usda:z9",
+    "height_class:0.1-0.2m",
+    "height_class:0.2-0.4m",
+    "height_class:0.4-0.7m",
+    "interest:winter_interest",
+    "invasive:not_listed",
+    "maintenance:low",
+    "origin:native",
+    "origin:native_bc_west_of_cascades",
+    "pest:mildew",
+    "pest:rust",
+    "soil:well_drained",
+    "spread_class:0.1-0.3m",
+    "spread_class:0.3-0.6m",
+    "spread_class:0.6-1.0m",
+    "stress:drought",
+    "toxicity:unknown",
+    "use:ground_cover",
+    "use:group_or_mass_planting",
+    "use:rock_garden",
+    "water:average"
+   ],
+   "text": "Achillea millefolium and Arctostaphylos uva-ursi share 55 concepts but no sourced relation links them — shared conditions do not by themselves prove they combine."
+  },
+  {
+   "kind": "shared_concepts_no_relation",
+   "plants": [
+    "plant:achillea-millefolium",
     "plant:cercidiphyllum-japonicum"
    ],
    "shared": [
@@ -6620,9 +7809,116 @@
    "kind": "shared_concepts_no_relation",
    "plants": [
     "plant:achillea-millefolium",
+    "plant:cornus-nuttallii"
+   ],
+   "shared": [
+    "bgc_zone:cdf",
+    "bgc_zone:cwh",
+    "bgc_zone:ich",
+    "bgc_zone:idf",
+    "bgc_zone:sbs",
+    "browsing:deer",
+    "colour:green",
+    "colour:pink",
+    "colour:white",
+    "evergreen:no",
+    "exposure:full_sun",
+    "exposure:part_sun_part_shade",
+    "exposure:sheltered",
+    "fruit:showy",
+    "growth_rate:moderate",
+    "habit:upright",
+    "habitat:forest",
+    "hardiness_usda:z7",
+    "hardiness_usda:z8",
+    "hardiness_usda:z9",
+    "height_class:0.1-0.2m",
+    "height_class:0.2-0.4m",
+    "height_class:0.4-0.7m",
+    "height_class:0.7-1.3m",
+    "invasive:not_listed",
+    "maintenance:low",
+    "maintenance:medium",
+    "origin:native",
+    "origin:native_bc_west_of_cascades",
+    "soil:well_drained",
+    "stress:drought",
+    "toxicity:unknown",
+    "use:attract_butterflies",
+    "use:group_or_mass_planting",
+    "water:average"
+   ],
+   "text": "Achillea millefolium and Cornus nuttallii share 35 concepts but no sourced relation links them — shared conditions do not by themselves prove they combine."
+  },
+  {
+   "kind": "shared_concepts_no_relation",
+   "plants": [
+    "plant:achillea-millefolium",
+    "plant:cornus-sericea"
+   ],
+   "shared": [
+    "bgc_zone:bg",
+    "bgc_zone:bwbs",
+    "bgc_zone:cdf",
+    "bgc_zone:cwh",
+    "bgc_zone:essf",
+    "bgc_zone:ich",
+    "bgc_zone:idf",
+    "bgc_zone:mh",
+    "bgc_zone:ms",
+    "bgc_zone:pp",
+    "bgc_zone:sbps",
+    "bgc_zone:sbs",
+    "browsing:deer",
+    "colour:green",
+    "colour:white",
+    "ecology:pollinator",
+    "evergreen:no",
+    "exposure:full_sun",
+    "exposure:part_sun_part_shade",
+    "exposure:sheltered",
+    "fruit:showy",
+    "growth_rate:moderate",
+    "habit:spreading",
+    "habitat:forest",
+    "habitat:grassland",
+    "hardiness_rhs:H7",
+    "hardiness_usda:z3",
+    "hardiness_usda:z4",
+    "hardiness_usda:z5",
+    "hardiness_usda:z6",
+    "hardiness_usda:z7",
+    "hardiness_usda:z8",
+    "hardiness_usda:z9",
+    "height_class:0.7-1.3m",
+    "interest:winter_interest",
+    "invasive:not_listed",
+    "maintenance:medium",
+    "origin:native",
+    "origin:native_bc_west_of_cascades",
+    "soil:alkaline",
+    "stress:drought",
+    "toxicity:unknown",
+    "use:attract_butterflies",
+    "use:group_or_mass_planting",
+    "water:wide_range"
+   ],
+   "text": "Achillea millefolium and Cornus sericea share 45 concepts but no sourced relation links them — shared conditions do not by themselves prove they combine."
+  },
+  {
+   "kind": "shared_concepts_no_relation",
+   "plants": [
+    "plant:achillea-millefolium",
     "plant:gaillardia-aristata"
    ],
    "shared": [
+    "bgc_zone:bg",
+    "bgc_zone:essf",
+    "bgc_zone:ich",
+    "bgc_zone:idf",
+    "bgc_zone:ms",
+    "bgc_zone:pp",
+    "bgc_zone:sbs",
     "colour:green",
     "colour:red",
     "ecology:pollinator",
@@ -6633,6 +7929,7 @@
     "fruit:showy",
     "growth_rate:moderate",
     "habit:upright",
+    "habitat:grassland",
     "hardiness_usda:z3",
     "hardiness_usda:z4",
     "hardiness_usda:z5",
@@ -6659,7 +7956,154 @@
     "use:wild_flower_garden",
     "water:average"
    ],
-   "text": "Achillea millefolium and Gaillardia aristata share 35 concepts but no sourced relation links them — shared conditions do not by themselves prove they combine."
+   "text": "Achillea millefolium and Gaillardia aristata share 43 concepts but no sourced relation links them — shared conditions do not by themselves prove they combine."
+  },
+  {
+   "kind": "shared_concepts_no_relation",
+   "plants": [
+    "plant:achillea-millefolium",
+    "plant:gaultheria-shallon"
+   ],
+   "shared": [
+    "bgc_zone:cdf",
+    "bgc_zone:cwh",
+    "bgc_zone:ich",
+    "bgc_zone:idf",
+    "bgc_zone:mh",
+    "colour:green",
+    "colour:pink",
+    "colour:white",
+    "exposure:full_sun",
+    "exposure:part_sun_part_shade",
+    "exposure:sheltered",
+    "fruit:showy",
+    "habit:spreading",
+    "habitat:coastal",
+    "habitat:forest",
+    "hardiness_usda:z6",
+    "hardiness_usda:z7",
+    "hardiness_usda:z8",
+    "hardiness_usda:z9",
+    "height_class:0.1-0.2m",
+    "height_class:0.2-0.4m",
+    "height_class:0.4-0.7m",
+    "height_class:0.7-1.3m",
+    "invasive:not_listed",
+    "origin:native",
+    "origin:native_bc_west_of_cascades",
+    "soil:well_drained",
+    "spread_class:0.3-0.6m",
+    "spread_class:0.6-1.0m",
+    "toxicity:unknown",
+    "use:cut_flower_or_foliage",
+    "use:ground_cover",
+    "use:rock_garden",
+    "water:average"
+   ],
+   "text": "Achillea millefolium and Gaultheria shallon share 34 concepts but no sourced relation links them — shared conditions do not by themselves prove they combine."
+  },
+  {
+   "kind": "shared_concepts_no_relation",
+   "plants": [
+    "plant:achillea-millefolium",
+    "plant:vaccinium-ovatum"
+   ],
+   "shared": [
+    "bgc_zone:cdf",
+    "bgc_zone:cwh",
+    "bgc_zone:essf",
+    "bgc_zone:ich",
+    "bgc_zone:mh",
+    "bgc_zone:sbs",
+    "colour:green",
+    "colour:pink",
+    "colour:white",
+    "exposure:full_sun",
+    "exposure:part_sun_part_shade",
+    "exposure:sheltered",
+    "fruit:showy",
+    "habit:upright",
+    "habitat:coastal",
+    "habitat:forest",
+    "hardiness_usda:z7",
+    "hardiness_usda:z8",
+    "hardiness_usda:z9",
+    "height_class:0.4-0.7m",
+    "height_class:0.7-1.3m",
+    "invasive:not_listed",
+    "maintenance:low",
+    "origin:native",
+    "origin:native_bc_west_of_cascades",
+    "pest:mildew",
+    "soil:well_drained",
+    "stress:drought",
+    "texture:fine",
+    "toxicity:unknown",
+    "use:cut_flower_or_foliage",
+    "use:group_or_mass_planting",
+    "water:average"
+   ],
+   "text": "Achillea millefolium and Vaccinium ovatum share 33 concepts but no sourced relation links them — shared conditions do not by themselves prove they combine."
+  },
+  {
+   "kind": "shared_concepts_no_relation",
+   "plants": [
+    "plant:arctostaphylos-uva-ursi",
+    "plant:cornus-sericea"
+   ],
+   "shared": [
+    "bgc_zone:bg",
+    "bgc_zone:bwbs",
+    "bgc_zone:cdf",
+    "bgc_zone:cwh",
+    "bgc_zone:essf",
+    "bgc_zone:ich",
+    "bgc_zone:idf",
+    "bgc_zone:mh",
+    "bgc_zone:ms",
+    "bgc_zone:pp",
+    "bgc_zone:sbps",
+    "bgc_zone:sbs",
+    "colour:green",
+    "colour:white",
+    "ecology:bird_food",
+    "ecology:erosion_control",
+    "exposure:full_sun",
+    "exposure:part_sun_part_shade",
+    "exposure:sheltered",
+    "fruit:showy",
+    "growth_rate:moderate",
+    "habitat:forest",
+    "hardiness_rhs:H7",
+    "hardiness_usda:z10",
+    "hardiness_usda:z11",
+    "hardiness_usda:z2",
+    "hardiness_usda:z3",
+    "hardiness_usda:z4",
+    "hardiness_usda:z5",
+    "hardiness_usda:z6",
+    "hardiness_usda:z7",
+    "hardiness_usda:z8",
+    "hardiness_usda:z9",
+    "interest:fall_colour",
+    "interest:winter_interest",
+    "invasive:not_listed",
+    "origin:native",
+    "origin:native_bc_west_of_cascades",
+    "pest:fungal_leaf_spot",
+    "pest:root_rot",
+    "soil:acidic",
+    "stress:drought",
+    "stress:erosion",
+    "texture:coarse",
+    "toxicity:unknown",
+    "use:attract_birds",
+    "use:erosion_control",
+    "use:group_or_mass_planting",
+    "use:winter_interest",
+    "water:moist"
+   ],
+   "text": "Arctostaphylos uva-ursi and Cornus sericea share 50 concepts but no sourced relation links them — shared conditions do not by themselves prove they combine."
   },
   {
    "kind": "shared_concepts_no_relation",
@@ -6668,6 +8112,13 @@
     "plant:gaillardia-aristata"
    ],
    "shared": [
+    "bgc_zone:bg",
+    "bgc_zone:essf",
+    "bgc_zone:ich",
+    "bgc_zone:idf",
+    "bgc_zone:ms",
+    "bgc_zone:pp",
+    "bgc_zone:sbs",
     "colour:green",
     "colour:red",
     "ecology:bird_food",
@@ -6703,7 +8154,58 @@
     "water:average",
     "water:dry"
    ],
-   "text": "Arctostaphylos uva-ursi and Gaillardia aristata share 34 concepts but no sourced relation links them — shared conditions do not by themselves prove they combine."
+   "text": "Arctostaphylos uva-ursi and Gaillardia aristata share 41 concepts but no sourced relation links them — shared conditions do not by themselves prove they combine."
+  },
+  {
+   "kind": "shared_concepts_no_relation",
+   "plants": [
+    "plant:arctostaphylos-uva-ursi",
+    "plant:vaccinium-ovatum"
+   ],
+   "shared": [
+    "bgc_zone:cdf",
+    "bgc_zone:cwh",
+    "bgc_zone:essf",
+    "bgc_zone:ich",
+    "bgc_zone:mh",
+    "bgc_zone:sbs",
+    "colour:bronze",
+    "colour:green",
+    "colour:pink",
+    "colour:white",
+    "evergreen:yes",
+    "exposure:full_sun",
+    "exposure:part_sun_part_shade",
+    "exposure:sheltered",
+    "fruit:showy",
+    "growth_rate:slow",
+    "habitat:forest",
+    "hardiness_usda:z10",
+    "hardiness_usda:z11",
+    "hardiness_usda:z7",
+    "hardiness_usda:z8",
+    "hardiness_usda:z9",
+    "height_class:0.4-0.7m",
+    "invasive:not_listed",
+    "maintenance:low",
+    "origin:native",
+    "origin:native_bc_west_of_cascades",
+    "pest:mildew",
+    "pest:root_rot",
+    "plant_type:broadleaf_evergreen",
+    "soil:acidic",
+    "soil:well_drained",
+    "spread_class:1.0-1.5m",
+    "spread_class:1.5-2.0m",
+    "stress:drought",
+    "toxicity:unknown",
+    "use:container_planting",
+    "use:group_or_mass_planting",
+    "use:native_planting",
+    "water:average",
+    "water:moist"
+   ],
+   "text": "Arctostaphylos uva-ursi and Vaccinium ovatum share 41 concepts but no sourced relation links them — shared conditions do not by themselves prove they combine."
   },
   {
    "kind": "shared_concepts_no_relation",
@@ -6802,9 +8304,71 @@
    "kind": "shared_concepts_no_relation",
    "plants": [
     "plant:cornus-nuttallii",
+    "plant:cornus-sericea"
+   ],
+   "shared": [
+    "age:established",
+    "bgc_zone:cdf",
+    "bgc_zone:cwh",
+    "bgc_zone:ich",
+    "bgc_zone:idf",
+    "bgc_zone:sbs",
+    "browsing:deer",
+    "colour:green",
+    "colour:white",
+    "evergreen:no",
+    "exposure:filtered_shade",
+    "exposure:full_sun",
+    "exposure:part_sun_part_shade",
+    "exposure:sheltered",
+    "fruit:showy",
+    "growth_rate:moderate",
+    "habitat:forest",
+    "hardiness_usda:z10",
+    "hardiness_usda:z11",
+    "hardiness_usda:z7",
+    "hardiness_usda:z8",
+    "hardiness_usda:z9",
+    "height_class:0.7-1.3m",
+    "height_class:1.3-2.0m",
+    "height_class:2-3m",
+    "height_class:3-5m",
+    "height_class:5-7m",
+    "interest:fall_colour",
+    "invasive:not_listed",
+    "maintenance:medium",
+    "origin:native",
+    "origin:native_bc_west_of_cascades",
+    "pest:anthracnose",
+    "pest:blight_or_needle_cast",
+    "pest:canker_or_sap_rot",
+    "pest:fungal_leaf_spot",
+    "pest:leaf_miner_insect",
+    "pest:root_rot",
+    "pest:scale_insects",
+    "soil:acidic",
+    "spread_class:3-4m",
+    "spread_class:4-5m",
+    "stress:clay_soil",
+    "stress:drought",
+    "toxicity:unknown",
+    "use:attract_birds",
+    "use:attract_butterflies",
+    "use:group_or_mass_planting",
+    "use:specimen_plant"
+   ],
+   "text": "Cornus nuttallii and Cornus sericea share 49 concepts but no sourced relation links them — shared conditions do not by themselves prove they combine."
+  },
+  {
+   "kind": "shared_concepts_no_relation",
+   "plants": [
+    "plant:cornus-nuttallii",
     "plant:gaillardia-aristata"
    ],
    "shared": [
+    "bgc_zone:ich",
+    "bgc_zone:idf",
+    "bgc_zone:sbs",
     "colour:green",
     "evergreen:no",
     "exposure:filtered_shade",
@@ -6832,7 +8396,100 @@
     "use:attract_butterflies",
     "water:average"
    ],
-   "text": "Cornus nuttallii and Gaillardia aristata share 26 concepts but no sourced relation links them — shared conditions do not by themselves prove they combine."
+   "text": "Cornus nuttallii and Gaillardia aristata share 29 concepts but no sourced relation links them — shared conditions do not by themselves prove they combine."
+  },
+  {
+   "kind": "shared_concepts_no_relation",
+   "plants": [
+    "plant:cornus-nuttallii",
+    "plant:polystichum-munitum"
+   ],
+   "shared": [
+    "bgc_zone:cdf",
+    "bgc_zone:cwh",
+    "bgc_zone:ich",
+    "bgc_zone:idf",
+    "colour:green",
+    "evergreen:no",
+    "exposure:filtered_shade",
+    "exposure:full_sun",
+    "exposure:part_sun_part_shade",
+    "exposure:sheltered",
+    "growth_rate:moderate",
+    "habitat:forest",
+    "hardiness_usda:z10",
+    "hardiness_usda:z11",
+    "hardiness_usda:z7",
+    "hardiness_usda:z8",
+    "hardiness_usda:z9",
+    "height_class:0.2-0.4m",
+    "height_class:0.4-0.7m",
+    "height_class:0.7-1.3m",
+    "height_class:1.3-2.0m",
+    "invasive:not_listed",
+    "maintenance:low",
+    "origin:native",
+    "origin:native_bc_west_of_cascades",
+    "pest:pest",
+    "soil:acidic",
+    "soil:humus_rich",
+    "soil:well_drained",
+    "stress:drought",
+    "texture:medium",
+    "toxicity:unknown",
+    "use:group_or_mass_planting",
+    "use:native_planting",
+    "use:specimen_plant",
+    "water:average"
+   ],
+   "text": "Cornus nuttallii and Polystichum munitum share 36 concepts but no sourced relation links them — shared conditions do not by themselves prove they combine."
+  },
+  {
+   "kind": "shared_concepts_no_relation",
+   "plants": [
+    "plant:cornus-nuttallii",
+    "plant:vaccinium-ovatum"
+   ],
+   "shared": [
+    "age:established",
+    "bgc_zone:cdf",
+    "bgc_zone:cwh",
+    "bgc_zone:ich",
+    "bgc_zone:sbs",
+    "colour:green",
+    "colour:pink",
+    "colour:white",
+    "exposure:filtered_shade",
+    "exposure:full_sun",
+    "exposure:part_sun_part_shade",
+    "exposure:sheltered",
+    "fruit:showy",
+    "habit:upright",
+    "habitat:forest",
+    "hardiness_usda:z10",
+    "hardiness_usda:z11",
+    "hardiness_usda:z7",
+    "hardiness_usda:z8",
+    "hardiness_usda:z9",
+    "height_class:0.4-0.7m",
+    "height_class:0.7-1.3m",
+    "height_class:1.3-2.0m",
+    "height_class:2-3m",
+    "height_class:3-5m",
+    "invasive:not_listed",
+    "maintenance:low",
+    "origin:native",
+    "origin:native_bc_west_of_cascades",
+    "pest:root_rot",
+    "soil:acidic",
+    "soil:well_drained",
+    "stress:drought",
+    "toxicity:unknown",
+    "use:group_or_mass_planting",
+    "use:native_planting",
+    "water:average"
+   ],
+   "text": "Cornus nuttallii and Vaccinium ovatum share 37 concepts but no sourced relation links them — shared conditions do not by themselves prove they combine."
   },
   {
    "kind": "shared_concepts_no_relation",
@@ -6841,6 +8498,13 @@
     "plant:gaillardia-aristata"
    ],
    "shared": [
+    "bgc_zone:bg",
+    "bgc_zone:essf",
+    "bgc_zone:ich",
+    "bgc_zone:idf",
+    "bgc_zone:ms",
+    "bgc_zone:pp",
+    "bgc_zone:sbs",
     "colour:green",
     "ecology:bird_food",
     "ecology:pollinator",
@@ -6851,6 +8515,7 @@
     "exposure:sheltered",
     "fruit:showy",
     "growth_rate:moderate",
+    "habitat:grassland",
     "hardiness_usda:z3",
     "hardiness_usda:z4",
     "hardiness_usda:z5",
@@ -6869,7 +8534,98 @@
     "use:attract_birds",
     "use:attract_butterflies"
    ],
-   "text": "Cornus sericea and Gaillardia aristata share 27 concepts but no sourced relation links them — shared conditions do not by themselves prove they combine."
+   "text": "Cornus sericea and Gaillardia aristata share 35 concepts but no sourced relation links them — shared conditions do not by themselves prove they combine."
+  },
+  {
+   "kind": "shared_concepts_no_relation",
+   "plants": [
+    "plant:cornus-sericea",
+    "plant:gaultheria-shallon"
+   ],
+   "shared": [
+    "bgc_zone:cdf",
+    "bgc_zone:cwh",
+    "bgc_zone:ich",
+    "bgc_zone:idf",
+    "bgc_zone:mh",
+    "colour:green",
+    "colour:white",
+    "ecology:bird_food",
+    "exposure:filtered_shade",
+    "exposure:full_sun",
+    "exposure:part_sun_part_shade",
+    "exposure:sheltered",
+    "fruit:showy",
+    "habit:spreading",
+    "habitat:forest",
+    "hardiness_usda:z10",
+    "hardiness_usda:z11",
+    "hardiness_usda:z6",
+    "hardiness_usda:z7",
+    "hardiness_usda:z8",
+    "hardiness_usda:z9",
+    "height_class:0.7-1.3m",
+    "height_class:1.3-2.0m",
+    "height_class:2-3m",
+    "height_class:3-5m",
+    "invasive:not_listed",
+    "origin:native",
+    "origin:native_bc_west_of_cascades",
+    "pest:root_rot",
+    "soil:acidic",
+    "toxicity:unknown",
+    "use:erosion_control",
+    "use:mixed_shrub_border",
+    "water:moist"
+   ],
+   "text": "Cornus sericea and Gaultheria shallon share 34 concepts but no sourced relation links them — shared conditions do not by themselves prove they combine."
+  },
+  {
+   "kind": "shared_concepts_no_relation",
+   "plants": [
+    "plant:cornus-sericea",
+    "plant:vaccinium-ovatum"
+   ],
+   "shared": [
+    "age:established",
+    "age:establishing",
+    "bgc_zone:cdf",
+    "bgc_zone:cwh",
+    "bgc_zone:essf",
+    "bgc_zone:ich",
+    "bgc_zone:mh",
+    "bgc_zone:sbs",
+    "colour:green",
+    "colour:white",
+    "exposure:filtered_shade",
+    "exposure:full_sun",
+    "exposure:part_sun_part_shade",
+    "exposure:sheltered",
+    "fruit:showy",
+    "habitat:forest",
+    "hardiness_usda:z10",
+    "hardiness_usda:z11",
+    "hardiness_usda:z7",
+    "hardiness_usda:z8",
+    "hardiness_usda:z9",
+    "height_class:0.7-1.3m",
+    "height_class:1.3-2.0m",
+    "height_class:2-3m",
+    "height_class:3-5m",
+    "invasive:not_listed",
+    "origin:native",
+    "origin:native_bc_west_of_cascades",
+    "pest:root_rot",
+    "soil:acidic",
+    "stress:drought",
+    "toxicity:unknown",
+    "use:group_or_mass_planting",
+    "use:hedge_row",
+    "use:mixed_shrub_border",
+    "use:screening",
+    "water:moist"
+   ],
+   "text": "Cornus sericea and Vaccinium ovatum share 37 concepts but no sourced relation links them — shared conditions do not by themselves prove they combine."
   },
   {
    "kind": "shared_concepts_no_relation",
@@ -6878,6 +8634,10 @@
     "plant:polystichum-munitum"
    ],
    "shared": [
+    "bgc_zone:essf",
+    "bgc_zone:ich",
+    "bgc_zone:idf",
+    "bgc_zone:ms",
     "colour:green",
     "evergreen:no",
     "exposure:filtered_shade",
@@ -6904,7 +8664,54 @@
     "use:perennial_border",
     "water:average"
    ],
-   "text": "Gaillardia aristata and Polystichum munitum share 25 concepts but no sourced relation links them — shared conditions do not by themselves prove they combine."
+   "text": "Gaillardia aristata and Polystichum munitum share 29 concepts but no sourced relation links them — shared conditions do not by themselves prove they combine."
+  },
+  {
+   "kind": "shared_concepts_no_relation",
+   "plants": [
+    "plant:gaultheria-shallon",
+    "plant:polystichum-munitum"
+   ],
+   "shared": [
+    "bgc_zone:cdf",
+    "bgc_zone:cwh",
+    "bgc_zone:ich",
+    "bgc_zone:idf",
+    "bgc_zone:mh",
+    "colour:green",
+    "evergreen:yes",
+    "exposure:deep_shade",
+    "exposure:filtered_shade",
+    "exposure:full_sun",
+    "exposure:part_sun_part_shade",
+    "exposure:sheltered",
+    "habit:dense",
+    "habitat:forest",
+    "hardiness_usda:z10",
+    "hardiness_usda:z11",
+    "hardiness_usda:z6",
+    "hardiness_usda:z7",
+    "hardiness_usda:z8",
+    "hardiness_usda:z9",
+    "height_class:0.2-0.4m",
+    "height_class:0.4-0.7m",
+    "height_class:0.7-1.3m",
+    "height_class:1.3-2.0m",
+    "invasive:not_listed",
+    "origin:native",
+    "origin:native_bc_west_of_cascades",
+    "pest:pest",
+    "soil:acidic",
+    "soil:well_drained",
+    "spread_class:1.0-1.5m",
+    "toxicity:unknown",
+    "use:ground_cover",
+    "use:mixed_shrub_border",
+    "use:native_planting",
+    "water:average",
+    "water:moist"
+   ],
+   "text": "Gaultheria shallon and Polystichum munitum share 37 concepts but no sourced relation links them — shared conditions do not by themselves prove they combine."
   }
  ],
  "single_voice": [
@@ -7819,6 +9626,264 @@
    "text": "Everything linking plants to ‘Rust’ comes from database sources only."
   },
   {
+   "concept": "bgc_zone:bafa",
+   "label": "BAFA",
+   "source_type": "database",
+   "plants": [
+    "plant:achillea-millefolium",
+    "plant:arctostaphylos-uva-ursi"
+   ],
+   "text": "Everything linking plants to ‘BAFA’ comes from database sources only."
+  },
+  {
+   "concept": "bgc_zone:bg",
+   "label": "BG",
+   "source_type": "database",
+   "plants": [
+    "plant:achillea-millefolium",
+    "plant:arctostaphylos-uva-ursi",
+    "plant:cornus-sericea",
+    "plant:gaillardia-aristata"
+   ],
+   "text": "Everything linking plants to ‘BG’ comes from database sources only."
+  },
+  {
+   "concept": "bgc_zone:bwbs",
+   "label": "BWBS",
+   "source_type": "database",
+   "plants": [
+    "plant:achillea-millefolium",
+    "plant:arctostaphylos-uva-ursi",
+    "plant:cornus-sericea"
+   ],
+   "text": "Everything linking plants to ‘BWBS’ comes from database sources only."
+  },
+  {
+   "concept": "bgc_zone:cdf",
+   "label": "CDF",
+   "source_type": "database",
+   "plants": [
+    "plant:achillea-millefolium",
+    "plant:arctostaphylos-uva-ursi",
+    "plant:cornus-nuttallii",
+    "plant:cornus-sericea",
+    "plant:gaultheria-shallon",
+    "plant:polystichum-munitum",
+    "plant:vaccinium-ovatum"
+   ],
+   "text": "Everything linking plants to ‘CDF’ comes from database sources only."
+  },
+  {
+   "concept": "bgc_zone:cma",
+   "label": "CMA",
+   "source_type": "database",
+   "plants": [
+    "plant:achillea-millefolium",
+    "plant:arctostaphylos-uva-ursi"
+   ],
+   "text": "Everything linking plants to ‘CMA’ comes from database sources only."
+  },
+  {
+   "concept": "bgc_zone:cwh",
+   "label": "CWH",
+   "source_type": "database",
+   "plants": [
+    "plant:achillea-millefolium",
+    "plant:arctostaphylos-uva-ursi",
+    "plant:cornus-nuttallii",
+    "plant:cornus-sericea",
+    "plant:gaultheria-shallon",
+    "plant:polystichum-munitum",
+    "plant:vaccinium-ovatum"
+   ],
+   "text": "Everything linking plants to ‘CWH’ comes from database sources only."
+  },
+  {
+   "concept": "bgc_zone:essf",
+   "label": "ESSF",
+   "source_type": "database",
+   "plants": [
+    "plant:achillea-millefolium",
+    "plant:arctostaphylos-uva-ursi",
+    "plant:cornus-sericea",
+    "plant:gaillardia-aristata",
+    "plant:polystichum-munitum",
+    "plant:vaccinium-ovatum"
+   ],
+   "text": "Everything linking plants to ‘ESSF’ comes from database sources only."
+  },
+  {
+   "concept": "bgc_zone:ich",
+   "label": "ICH",
+   "source_type": "database",
+   "plants": [
+    "plant:achillea-millefolium",
+    "plant:arctostaphylos-uva-ursi",
+    "plant:cornus-nuttallii",
+    "plant:cornus-sericea",
+    "plant:gaillardia-aristata",
+    "plant:gaultheria-shallon",
+    "plant:polystichum-munitum",
+    "plant:vaccinium-ovatum"
+   ],
+   "text": "Everything linking plants to ‘ICH’ comes from database sources only."
+  },
+  {
+   "concept": "bgc_zone:idf",
+   "label": "IDF",
+   "source_type": "database",
+   "plants": [
+    "plant:achillea-millefolium",
+    "plant:arctostaphylos-uva-ursi",
+    "plant:cornus-nuttallii",
+    "plant:cornus-sericea",
+    "plant:gaillardia-aristata",
+    "plant:gaultheria-shallon",
+    "plant:polystichum-munitum"
+   ],
+   "text": "Everything linking plants to ‘IDF’ comes from database sources only."
+  },
+  {
+   "concept": "bgc_zone:ima",
+   "label": "IMA",
+   "source_type": "database",
+   "plants": [
+    "plant:achillea-millefolium",
+    "plant:arctostaphylos-uva-ursi"
+   ],
+   "text": "Everything linking plants to ‘IMA’ comes from database sources only."
+  },
+  {
+   "concept": "bgc_zone:mh",
+   "label": "MH",
+   "source_type": "database",
+   "plants": [
+    "plant:achillea-millefolium",
+    "plant:arctostaphylos-uva-ursi",
+    "plant:cornus-sericea",
+    "plant:gaultheria-shallon",
+    "plant:polystichum-munitum",
+    "plant:vaccinium-ovatum"
+   ],
+   "text": "Everything linking plants to ‘MH’ comes from database sources only."
+  },
+  {
+   "concept": "bgc_zone:ms",
+   "label": "MS",
+   "source_type": "database",
+   "plants": [
+    "plant:achillea-millefolium",
+    "plant:arctostaphylos-uva-ursi",
+    "plant:cornus-sericea",
+    "plant:gaillardia-aristata",
+    "plant:polystichum-munitum"
+   ],
+   "text": "Everything linking plants to ‘MS’ comes from database sources only."
+  },
+  {
+   "concept": "bgc_zone:pp",
+   "label": "PP",
+   "source_type": "database",
+   "plants": [
+    "plant:achillea-millefolium",
+    "plant:arctostaphylos-uva-ursi",
+    "plant:cornus-sericea",
+    "plant:gaillardia-aristata"
+   ],
+   "text": "Everything linking plants to ‘PP’ comes from database sources only."
+  },
+  {
+   "concept": "bgc_zone:sbps",
+   "label": "SBPS",
+   "source_type": "database",
+   "plants": [
+    "plant:achillea-millefolium",
+    "plant:arctostaphylos-uva-ursi",
+    "plant:cornus-sericea"
+   ],
+   "text": "Everything linking plants to ‘SBPS’ comes from database sources only."
+  },
+  {
+   "concept": "bgc_zone:sbs",
+   "label": "SBS",
+   "source_type": "database",
+   "plants": [
+    "plant:achillea-millefolium",
+    "plant:arctostaphylos-uva-ursi",
+    "plant:cornus-nuttallii",
+    "plant:cornus-sericea",
+    "plant:gaillardia-aristata",
+    "plant:vaccinium-ovatum"
+   ],
+   "text": "Everything linking plants to ‘SBS’ comes from database sources only."
+  },
+  {
+   "concept": "bgc_zone:swb",
+   "label": "SWB",
+   "source_type": "database",
+   "plants": [
+    "plant:achillea-millefolium",
+    "plant:arctostaphylos-uva-ursi"
+   ],
+   "text": "Everything linking plants to ‘SWB’ comes from database sources only."
+  },
+  {
+   "concept": "habitat:coastal",
+   "label": "coastal",
+   "source_type": "database",
+   "plants": [
+    "plant:achillea-millefolium",
+    "plant:gaultheria-shallon",
+    "plant:vaccinium-ovatum"
+   ],
+   "text": "Everything linking plants to ‘coastal’ comes from database sources only."
+  },
+  {
+   "concept": "habitat:forest",
+   "label": "forest",
+   "source_type": "database",
+   "plants": [
+    "plant:achillea-millefolium",
+    "plant:arctostaphylos-uva-ursi",
+    "plant:cornus-nuttallii",
+    "plant:cornus-sericea",
+    "plant:gaultheria-shallon",
+    "plant:polystichum-munitum",
+    "plant:vaccinium-ovatum"
+   ],
+   "text": "Everything linking plants to ‘forest’ comes from database sources only."
+  },
+  {
+   "concept": "habitat:grassland",
+   "label": "grassland",
+   "source_type": "database",
+   "plants": [
+    "plant:achillea-millefolium",
+    "plant:cornus-sericea",
+    "plant:gaillardia-aristata"
+   ],
+   "text": "Everything linking plants to ‘grassland’ comes from database sources only."
+  },
+  {
+   "concept": "habitat:meadow",
+   "label": "meadow",
+   "source_type": "database",
+   "plants": [
+    "plant:achillea-millefolium"
+   ],
+   "text": "Everything linking plants to ‘meadow’ comes from database sources only."
+  },
+  {
+   "concept": "habitat:rocky",
+   "label": "rocky",
+   "source_type": "database",
+   "plants": [
+    "plant:achillea-millefolium",
+    "plant:arctostaphylos-uva-ursi"
+   ],
+   "text": "Everything linking plants to ‘rocky’ comes from database sources only."
+  },
+  {
    "concept": "height_class:0.1-0.2m",
    "label": "0.1 - 0.2m",
    "source_type": "database",
@@ -8312,6 +10377,16 @@
    "text": "Everything linking plants to ‘Horizontal’ comes from database sources only."
   },
   {
+   "concept": "habitat:disturbed",
+   "label": "disturbed",
+   "source_type": "database",
+   "plants": [
+    "plant:cornus-nuttallii",
+    "plant:gaultheria-shallon"
+   ],
+   "text": "Everything linking plants to ‘disturbed’ comes from database sources only."
+  },
+  {
    "concept": "height_class:1.3-2.0m",
    "label": "1.3 - 2.0m",
    "source_type": "database",
@@ -8383,6 +10458,24 @@
     "plant:cornus-sericea"
    ],
    "text": "Everything linking plants to ‘wet soil’ comes from database sources only."
+  },
+  {
+   "concept": "habitat:streamside",
+   "label": "streamside",
+   "source_type": "database",
+   "plants": [
+    "plant:cornus-sericea"
+   ],
+   "text": "Everything linking plants to ‘streamside’ comes from database sources only."
+  },
+  {
+   "concept": "habitat:swamp",
+   "label": "swamp",
+   "source_type": "database",
+   "plants": [
+    "plant:cornus-sericea"
+   ],
+   "text": "Everything linking plants to ‘swamp’ comes from database sources only."
   },
   {
    "concept": "water:wet",
@@ -8483,6 +10576,15 @@
    "text": "Everything linking plants to ‘Edible fruit’ comes from database sources only."
   },
   {
+   "concept": "habitat:bog",
+   "label": "bog",
+   "source_type": "database",
+   "plants": [
+    "plant:gaultheria-shallon"
+   ],
+   "text": "Everything linking plants to ‘bog’ comes from database sources only."
+  },
+  {
    "concept": "use:sheared_hedge",
    "label": "Sheared hedge",
    "source_type": "database",
@@ -8548,12 +10650,12 @@
   }
  ],
  "counts": {
-  "hubs": 127,
+  "hubs": 148,
   "variation": 1,
   "disagreement": 67,
   "gaps_gate": 6,
-  "gaps_single_source": 341,
-  "gaps_no_relation": 17,
-  "single_voice": 143
+  "gaps_single_source": 436,
+  "gaps_no_relation": 30,
+  "single_voice": 168
  }
 }

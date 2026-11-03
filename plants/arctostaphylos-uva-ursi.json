@@ -4,13 +4,11 @@
     "scientific_name": "Arctostaphylos uva-ursi",
     "synonyms_scientific": [
       "Arbutus uva-ursi",
-      "Uva-ursi uva-ursi",
       "Arctostaphylos officinalis",
-      "Arctostaphylos adenotricha (Fernald & J.F. Macbr.) Á. Löve & D. Löve & Kapoor",
-      "Arctostaphylos uva-ursi var. adenotricha Fernald & J.F. Macbr.",
-      "Arctostaphylos uva-ursi var. coactilis Fernald & J.F. Macbr.",
-      "Arctostaphylos uva-ursi subsp. uva-ursi",
-      "Uva-Ursi uva-ursi (L.) Britton"
+      "Arctostaphylos adenotricha",
+      "Arctostaphylos uva-ursi var. adenotricha",
+      "Arctostaphylos uva-ursi var. coactilis",
+      "Arctostaphylos uva-ursi subsp. uva-ursi"
     ],
     "common_names": {
       "en": [
@@ -65,7 +63,43 @@
     "survey_mentions": 2,
     "added": "2026-11-02",
     "added_by": "10-plant expansion (brief 2026-11-02); entity facts from the T5 extraction and the survey, see claims for evidence",
-    "usda_symbol": "ARUV"
+    "usda_symbol": "ARUV",
+    "identity_review": {
+      "audited": "2026-11-02",
+      "method": "tools/identity_audit.py (M45): sources on file + entity notes; disputed = left for human judgement",
+      "taxonomic_identity": {
+        "status": "confirmed",
+        "note": "Arctostaphylos uva-ursi (L.) Spreng.; infraspecific names (var. adenotricha, var. coactilis) and Arctous / Uva-ursi combinations are synonyms; 'Vancouver Jade' claims carry the cultivar"
+      },
+      "geographic_origin": {
+        "status": "to_confirm",
+        "note": "native throughout BC (E-Flora Yellow S5) but modal zone IDF with 92 of 5,666 BEC plots in CWH; native at the coast on bluffs and dry sites — origin_status native_bc_west_of_cascades kept, coastal frequency to confirm",
+        "origin_status_on_entity": "native_bc_west_of_cascades"
+      },
+      "botanical_growth_form": {
+        "status": "confirmed",
+        "note": "read as shrub from rhs, mobot, eflora, usda_plants (supported; M29a)",
+        "kpu_plant_type": "Broadleaf evergreen"
+      },
+      "design_function": {
+        "status": "confirmed",
+        "note": "ground cover is the DESIGN role (both respondents typed 'groundcover'; KPU use 'Ground cover' from MOBOT, OSU, RHS); the botanical form is a prostrate evergreen shrub — the two are kept apart (kpu_plant_type Broadleaf evergreen; 'Ground cover' as a KPU plant type is a role label and is not used)",
+        "respondent_roles_as_typed": [
+          "groundcover",
+          "groundcover"
+        ]
+      },
+      "synonyms_raw": [
+        "Arbutus uva-ursi",
+        "Uva-ursi uva-ursi",
+        "Arctostaphylos officinalis",
+        "Arctostaphylos adenotricha (Fernald & J.F. Macbr.) Á. Löve & D. Löve & Kapoor",
+        "Arctostaphylos uva-ursi var. adenotricha Fernald & J.F. Macbr.",
+        "Arctostaphylos uva-ursi var. coactilis Fernald & J.F. Macbr.",
+        "Arctostaphylos uva-ursi subsp. uva-ursi",
+        "Uva-Ursi uva-ursi (L.) Britton"
+      ]
+    }
   },
   "custom": [],
   "fill_plan": {
@@ -369,7 +403,8 @@
       "conditions": [],
       "place": "place:vancouver",
       "time": [],
-      "cultivar": null
+      "cultivar": null,
+      "verification_scope": "statement"
     },
     {
       "id": "arctostaphylos-uva-ursi:mature_height:rhs01",
@@ -1964,7 +1999,26 @@
       "source_url": "https://linnet.geog.ubc.ca/Atlas/Atlas.aspx?sciname=Arctostaphylos%20uva-ursi",
       "note": "BEC zone list from the atlas station records; the plant is primarily an interior / dry-site species in BC, so Vancouver fit rests on free-draining, open sites rather than typical CWH forest",
       "citation": "In Klinkenberg, Brian. (Editor) 2020. E-Flora BC: Electronic Atlas of the Plants of British Columbia [eflora.bc.ca]. Lab for Advanced Spatial Analysis, Department of Geography, University of British Columbia, Vancouver. [Accessed: 2026-11-02]",
-      "concepts": [],
+      "concepts": [
+        "bgc_zone:bafa",
+        "bgc_zone:bg",
+        "bgc_zone:bwbs",
+        "bgc_zone:cdf",
+        "bgc_zone:cma",
+        "bgc_zone:cwh",
+        "bgc_zone:essf",
+        "bgc_zone:ich",
+        "bgc_zone:idf",
+        "bgc_zone:ima",
+        "bgc_zone:mh",
+        "bgc_zone:ms",
+        "bgc_zone:pp",
+        "bgc_zone:sbps",
+        "bgc_zone:sbs",
+        "bgc_zone:swb",
+        "habitat:forest",
+        "habitat:rocky"
+      ],
       "conditions": [],
       "place": "place:bc",
       "time": [],

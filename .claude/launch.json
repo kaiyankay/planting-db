@@ -1,7 +1,38 @@
 {
   "version": "0.0.1",
   "configurations": [
-    { "name": "viz",   "runtimeExecutable": "python3", "runtimeArgs": ["-m", "http.server", "8765", "--directory", "viz"], "port": 8765 },
-    { "name": "brain", "runtimeExecutable": "python3", "runtimeArgs": ["-m", "http.server", "8766"], "port": 8766 }
+    {
+      "name": "viz",
+      "runtimeExecutable": "python3",
+      "runtimeArgs": [
+        "-m",
+        "http.server",
+        "8765",
+        "--directory",
+        "viz"
+      ],
+      "port": 8765
+    },
+    {
+      "name": "brain",
+      "runtimeExecutable": "python3",
+      "runtimeArgs": [
+        "-m",
+        "http.server",
+        "8766"
+      ],
+      "port": 8766
+    },
+    {
+      "name": "review",
+      "runtimeExecutable": "python3",
+      "runtimeArgs": [
+        "-I",
+        "tools/review_server.py",
+        "--port",
+        "8767"
+      ],
+      "port": 8767
+    }
   ]
 }

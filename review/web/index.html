@@ -1,0 +1,207 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Review Workbench</title>
+<style>
+  :root { --bg:#f6f7f5; --panel:#ffffff; --ink:#1d2320; --muted:#6b7570; --line:#dfe3df; --accent:#2f6f4e; --warn:#b4541a; --bad:#a3312b; --ok:#2f6f4e; --info:#2b5f8a; --chip:#eef1ee; }
+  * { box-sizing:border-box; }
+  body { margin:0; font:14px/1.45 -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; color:var(--ink); background:var(--bg); }
+  header { display:flex; gap:18px; align-items:baseline; padding:10px 16px; background:var(--panel); border-bottom:1px solid var(--line); flex-wrap:wrap; }
+  header h1 { font-size:16px; margin:0; font-weight:600; }
+  header .stat { color:var(--muted); font-size:12.5px; } header .stat b { color:var(--ink); font-weight:600; }
+  main { display:grid; grid-template-columns: 330px 1fr 360px; gap:0; height: calc(100vh - 46px); }
+  section { overflow:auto; border-right:1px solid var(--line); background:var(--panel); }
+  section:last-child { border-right:0; }
+  .pad { padding:12px 14px; }
+  h2 { font-size:12px; text-transform:uppercase; letter-spacing:.06em; color:var(--muted); margin:14px 0 6px; }
+  input, select, textarea, button { font:inherit; }
+  input[type=text], input[type=search], select, textarea { width:100%; padding:6px 8px; border:1px solid var(--line); border-radius:6px; background:#fff; }
+  textarea { min-height:72px; resize:vertical; }
+  .filters { display:grid; grid-template-columns:1fr 1fr; gap:6px; padding:10px 12px; border-bottom:1px solid var(--line); position:sticky; top:0; background:var(--panel); z-index:2; }
+  .filters .full { grid-column:1 / -1; }
+  .item { padding:8px 12px; border-bottom:1px solid var(--line); cursor:pointer; }
+  .item:hover { background:#f2f5f2; } .item.sel { background:#e8f0ea; border-left:3px solid var(--accent); }
+  .item .t { font-size:12px; color:var(--muted); display:flex; gap:6px; flex-wrap:wrap; align-items:center; }
+  .item .txt { margin-top:3px; font-size:13px; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
+  .chip { display:inline-block; padding:1px 7px; border-radius:10px; background:var(--chip); font-size:11.5px; white-space:nowrap; }
+  .chip.high { background:#fde7df; color:var(--bad); } .chip.medium { background:#fff1d6; color:var(--warn); } .chip.low { background:var(--chip); }
+  .chip.supported_by_source { background:#e2f0e6; color:var(--ok); } .chip.partially_supported { background:#fff1d6; color:var(--warn); } .chip.not_supported, .chip.conflicting_evidence { background:#fde7df; color:var(--bad); } .chip.source_unavailable, .chip.insufficient_evidence { background:#e9e9e9; color:#555; }
+  .chip.verify_applied, .chip.verified { background:#e2f0e6; color:var(--ok); } .chip.dispute_applied, .chip.disputed { background:#fde7df; color:var(--bad); } .chip.request_evidence, .chip.defer { background:#e4ecf5; color:var(--info); } .chip.verify_pending_apply, .chip.dispute_pending_apply, .chip.propose_correction_pending_apply { background:#fff1d6; color:var(--warn); } .chip.awaiting_human { background:var(--chip); color:var(--muted); }
+  .kv { display:grid; grid-template-columns: 150px 1fr; gap:4px 10px; font-size:13px; } .kv div:nth-child(odd) { color:var(--muted); }
+  .box { border:1px solid var(--line); border-radius:8px; padding:10px 12px; margin:8px 0; background:#fff; }
+  .box.ai { border-left:4px solid var(--info); } .box.warn { border-left:4px solid var(--warn); } .box.src { border-left:4px solid var(--accent); }
+  table { border-collapse:collapse; width:100%; font-size:12.5px; } th, td { text-align:left; padding:5px 6px; border-bottom:1px solid var(--line); vertical-align:top; } th { color:var(--muted); font-weight:500; }
+  tr.me { background:#eef6f0; } tr.conflict td:first-child { border-left:3px solid var(--bad); }
+  pre { white-space:pre-wrap; word-break:break-word; font-size:12px; background:#f6f7f5; padding:8px; border-radius:6px; margin:4px 0; }
+  a { color:var(--info); }
+  .decision label { display:flex; gap:8px; align-items:flex-start; padding:7px 8px; border:1px solid var(--line); border-radius:6px; margin-bottom:6px; cursor:pointer; }
+  .decision label:has(input:checked) { border-color:var(--accent); background:#eef6f0; }
+  .decision small { color:var(--muted); display:block; }
+  button { padding:7px 12px; border-radius:6px; border:1px solid var(--line); background:#fff; cursor:pointer; }
+  button.primary { background:var(--accent); color:#fff; border-color:var(--accent); } button.danger { background:#fff; color:var(--bad); border-color:var(--bad); }
+  button:disabled { opacity:.5; cursor:not-allowed; }
+  .row { display:flex; gap:8px; flex-wrap:wrap; align-items:center; }
+  .hist li { margin:4px 0; font-size:12.5px; } .hist time { color:var(--muted); font-size:11.5px; }
+  .muted { color:var(--muted); } .small { font-size:12px; }
+  .ok { color:var(--ok); } .bad { color:var(--bad); }
+  #toast { position:fixed; bottom:14px; left:50%; transform:translateX(-50%); background:#1d2320; color:#fff; padding:8px 14px; border-radius:8px; display:none; z-index:9; }
+  @media (max-width: 1100px) { main { grid-template-columns: 1fr; height:auto; } section { border-right:0; border-bottom:1px solid var(--line); max-height:70vh; } }
+</style>
+</head>
+<body>
+<header>
+  <h1>Planting Intelligence · Review Workbench</h1>
+  <span class="stat" id="s-queue"></span><span class="stat" id="s-ai"></span><span class="stat" id="s-human"></span><span class="stat" id="s-status"></span>
+  <span class="stat muted" style="margin-left:auto">local only · events → review/events/review_events.jsonl</span>
+</header>
+<main>
+  <section id="left">
+    <div class="filters">
+      <input class="full" type="search" id="f-q" placeholder="Search plant / claim id / field / text">
+      <select id="f-plant"><option value="">All plants</option></select>
+      <select id="f-source"><option value="">All sources</option></select>
+      <select id="f-ai"><option value="">AI: any</option><option>supported_by_source</option><option>partially_supported</option><option>not_supported</option><option>conflicting_evidence</option><option>source_unavailable</option><option>insufficient_evidence</option><option value="__none">awaiting AI</option></select>
+      <select id="f-human"><option value="">Human: any</option><option value="awaiting_human">awaiting human</option><option value="pending">decided, not applied</option><option value="applied">applied</option><option value="request_evidence">more evidence</option><option value="defer">deferred</option></select>
+      <select id="f-prio"><option value="">Priority: any</option><option>high</option><option>medium</option><option>low</option></select>
+      <select id="f-sort"><option value="impact">Sort: impact</option><option value="conflict">Sort: conflicts</option><option value="date">Sort: last event</option><option value="plant">Sort: plant</option></select>
+      <div class="full small muted" id="f-count"></div>
+    </div>
+    <div id="list"></div>
+    <div class="pad small muted" id="plant-progress"></div>
+  </section>
+  <section id="center"><div class="pad" id="claim"><p class="muted">Pick a claim on the left.</p></div></section>
+  <section id="right"><div class="pad" id="review"><p class="muted">The decision form appears here.</p></div></section>
+</main>
+<div id="toast"></div>
+<script>
+const $ = s => document.querySelector(s); const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+let ROWS = [], PLANTS = {}, SEL = null, CUR = null;
+const toast = m => { const t = $('#toast'); t.textContent = m; t.style.display = 'block'; setTimeout(() => t.style.display = 'none', 2600); };
+const api = (p, body) => fetch(p, body ? {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(body)} : {}).then(r => r.json());
+const fmtv = v => typeof v === 'string' ? v : JSON.stringify(v);
+const hstate = r => r.human_state;
+
+async function loadOverview() {
+  const o = await api('/api/overview');
+  $('#s-queue').innerHTML = `queue <b>${o.in_queue}</b> of ${o.total_live_claims} live claims`;
+  $('#s-ai').innerHTML = `AI reviewed <b>${o.ai_reviewed}</b> (source checked ${o.source_checked_by_ai}, unavailable ${o.ai_results.source_unavailable||0}, awaiting ${o.ai_results.awaiting_ai||0})`;
+  const h = o.human.by_state || {};
+  $('#s-human').innerHTML = `human decisions on <b>${o.human.claims_with_human_decision||0}</b> claims (verify ${(h.verify_applied||0)}+${(h.verify_pending_apply||0)} pending · dispute ${(h.dispute_applied||0)}+${(h.dispute_pending_apply||0)} · evidence ${h.request_evidence||0} · deferred ${h.defer||0} · correction ${(h.propose_correction_pending_apply||0)+(h.propose_correction_applied||0)})`;
+  $('#s-status').innerHTML = `claim status: verified <b>${o.by_status.verified||0}</b> · disputed <b>${o.by_status.disputed||0}</b> · unverified <b>${o.by_status.unverified||0}</b>`;
+  $('#plant-progress').innerHTML = '<h2>Progress by plant (queue · AI · human · verified)</h2>' + Object.entries(o.by_plant).map(([k,v]) => `<div><i>${esc(v.name)}</i>: ${v.queue} · ${v.ai} · ${v.human} · ${v.verified}${v.disputed?` · <span class="bad">disputed ${v.disputed}</span>`:''}</div>`).join('');
+}
+async function loadQueue() {
+  const q = await api('/api/queue'); ROWS = q.rows; PLANTS = q.plants;
+  const fp = $('#f-plant'); if (fp.options.length === 1) Object.entries(PLANTS).forEach(([k,v]) => fp.add(new Option(v, k)));
+  const fs = $('#f-source'); if (fs.options.length === 1) [...new Set(ROWS.map(r => r.source_id))].sort().forEach(s => fs.add(new Option(s, s)));
+  render();
+}
+function render() {
+  const q = $('#f-q').value.toLowerCase(), pl = $('#f-plant').value, src = $('#f-source').value, ai = $('#f-ai').value, hu = $('#f-human').value, pr = $('#f-prio').value, sort = $('#f-sort').value;
+  let rows = ROWS.filter(r => (!q || (r.claim_id + ' ' + r.plant_name + ' ' + r.field + ' ' + (r.text||'')).toLowerCase().includes(q)) && (!pl || r.plant === pl) && (!src || r.source_id === src) && (!pr || r.priority === pr)
+    && (!ai || (ai === '__none' ? !r.ai_result : r.ai_result === ai))
+    && (!hu || (hu === 'pending' ? /pending_apply$/.test(hstate(r)) : hu === 'applied' ? /_applied$/.test(hstate(r)) : hstate(r) === hu)));
+  if (sort === 'conflict') rows.sort((a,b) => b.n_conflicts - a.n_conflicts || b.priority_score - a.priority_score);
+  else if (sort === 'date') rows.sort((a,b) => (b.last_event||'').localeCompare(a.last_event||''));
+  else if (sort === 'plant') rows.sort((a,b) => a.plant.localeCompare(b.plant) || a.field.localeCompare(b.field));
+  $('#f-count').textContent = `${rows.length} claims shown`;
+  $('#list').innerHTML = rows.map(r => `<div class="item ${r.claim_id===SEL?'sel':''}" data-id="${esc(r.claim_id)}">
+    <div class="t"><i>${esc(r.plant_name)}</i> · ${esc(r.field.replace(/_/g,' '))} · ${esc(r.source_id)} <span class="chip ${r.priority}">${r.priority}</span>${r.n_conflicts?`<span class="chip">⇄ ${r.n_conflicts}</span>`:''}</div>
+    <div class="txt">${esc(r.text)}</div>
+    <div class="t">${r.ai_result?`<span class="chip ${r.ai_result}">AI ${r.ai_result.replace(/_/g,' ')}${r.ai_current===false?' (stale)':''}</span>`:'<span class="chip">AI pending</span>'} <span class="chip ${hstate(r)}">${hstate(r).replace(/_/g,' ')}</span>${r.status!=='unverified'?`<span class="chip ${r.status}">${r.status}</span>`:''}</div></div>`).join('');
+  document.querySelectorAll('.item').forEach(el => el.onclick = () => open(el.dataset.id));
+}
+['#f-q','#f-plant','#f-source','#f-ai','#f-human','#f-prio','#f-sort'].forEach(s => $(s).addEventListener('input', render));
+
+async function open(id) {
+  SEL = id; render(); const d = await api('/api/claim?id=' + encodeURIComponent(id)); CUR = d; const c = d.claim, a = d.ai, ch = d.checks || {}, src = d.source || {};
+  const meta = c.practitioner_meta ? `<div>practitioner</div><div>${esc(c.practitioner_meta.observer_background)} · basis ${esc(c.practitioner_meta.basis)} · ${esc(c.practitioner_meta.completeness)}${c.practitioner_meta.caveat?' · '+esc(c.practitioner_meta.caveat):''}</div>` : '';
+  $('#claim').innerHTML = `
+    <h2 style="margin-top:0">Claim</h2>
+    <div style="font-size:17px"><i>${esc(d.entity.scientific_name)}</i> <span class="muted">· ${esc((d.entity.common_names||{}).en?.[0]||'')}</span></div>
+    <div class="kv" style="margin-top:8px">
+      <div>claim id</div><div><code>${esc(c.id)}</code> <span class="muted small">fingerprint ${esc(d.fingerprint)}</span></div>
+      <div>field</div><div>${esc(c.field)} <span class="muted">(${esc(c.value_kind)})</span></div>
+      <div>value</div><div><pre>${esc(fmtv(c.value_label ?? c.value))}${c.value_label?`\n(ids: ${esc(fmtv(c.value))})`:''}</pre></div>
+      <div>text</div><div>${esc(c.text)}</div>
+      <div>context</div><div>${esc(c.context)}</div>
+      <div>place · time · cultivar</div><div>${esc(c.place||'—')} · ${esc((c.time||[]).join(', ')||'—')} · ${esc(c.cultivar||'—')}${(c.conditions||[]).length?' · conditions: '+esc(c.conditions.map(x=>x.concept_id).join(', ')):''}</div>
+      <div>status · confidence</div><div><span class="chip ${c.status}">${esc(c.status)}</span> ${c.verification_scope?`<span class="chip">scope: ${esc(c.verification_scope)}</span>`:''} · ${esc(c.confidence)} ${c.note?`<div class="small muted">note: ${esc(c.note)}</div>`:''}</div>
+      ${meta}
+      <div>recorded</div><div>${esc(c.recorded_at)} by ${esc(c.recorded_by||'—')}</div>
+    </div>
+    <div class="box src"><b>Source</b> — ${esc(src.name||c.source_id)} <span class="muted small">(${esc(src.type)} · tier ${esc(src.licence_tier||'?')} · ${esc(src.geo_specificity)})</span><br>
+      ${c.source_url?`<a href="${esc(c.source_url)}" target="_blank" rel="noopener">${esc(c.source_url)}</a>`:'<span class="muted">no URL on the claim</span>'}${c.citation?`<div class="small muted">${esc(c.citation)}</div>`:''}
+      <div class="small muted">accessed ${esc(c.accessed||'—')} · program check: ${esc(ch.program_result||'none')}${ch.url_status?` · HTTP ${esc(ch.url_status)}`:''}${ch.numbers_in_claim?.length?` · numbers in claim ${esc(ch.numbers_in_claim.join(', '))}; on page ${esc((ch.numbers_on_page||[]).join(', ')||'none')}`:''}</div></div>
+    ${a ? `<div class="box ai"><b>AI evidence review</b> <span class="chip ${a.result}">${esc(a.result.replace(/_/g,' '))}</span> <span class="chip ${a.risk}">risk ${esc(a.risk)}</span>${a.current===false?' <span class="chip high">stale: claim changed since</span>':''}<br>
+      <div class="small muted">${esc(a.model)} · ${esc(a.method)} · ${esc(a.reviewed_at)} · ${esc(a.review_id)}</div>
+      <div style="margin-top:6px">${esc(a.explanation)}</div>
+      ${a.locator?`<div class="small"><b>locator:</b> ${esc(a.locator)}</div>`:''}${a.evidence_excerpt?`<div class="small"><b>excerpt:</b> “${esc(a.evidence_excerpt)}”</div>`:''}
+      ${a.missing_context?`<div class="small"><b>missing context:</b> ${esc(a.missing_context)}</div>`:''}<div class="small"><b>taxonomy:</b> ${esc(a.taxonomy_check)} · <b>geo:</b> ${esc(a.geo_check||'—')}</div>${a.conflict_reading?`<div class="small"><b>conflict reading:</b> ${esc(a.conflict_reading)}</div>`:''}
+      ${d.ai_history.length>1?`<div class="small muted">${d.ai_history.length} AI assessments on record (latest shown)</div>`:''}</div>` : '<div class="box ai muted">No AI evidence review yet for this claim.</div>'}
+    <h2>Same field, every source — side by side (never merged)</h2>
+    <table><tr><th>source</th><th>value</th><th>context</th><th>conf</th><th>status</th><th>AI</th></tr>
+      ${d.same_field.map(x => `<tr class="${x.id===c.id?'me':''} ${x.conflict?'conflict':''}"><td>${esc(x.source_id)}${x.conflict?' <span class="bad">⇄</span>':''}</td><td>${esc(fmtv(x.value_label ?? x.value))}</td><td class="small">${esc(x.context)}</td><td>${esc(x.confidence)}</td><td><span class="chip ${x.status}">${esc(x.status)}</span></td><td>${x.ai_result?`<span class="chip ${x.ai_result}">${esc(x.ai_result.replace(/_/g,' '))}</span>`:''}</td></tr>`).join('')}</table>
+    <div class="small muted">⇄ = disjoint value under the same (unstated) conditions, from brain/data/diagnosis.json.</div>
+    <h2>Downstream use in the knowledge graph</h2>
+    ${d.downstream.length ? `<ul class="small">${d.downstream.map(e => `<li>${esc(e.type)} → ${esc(e.target_label)} <span class="chip">${esc(e.kg_status)}</span> <span class="muted">${esc(e.text)}</span></li>`).join('')}</ul>` : '<div class="small muted">not used by any derived or design edge</div>'}
+    <h2>Review history</h2>
+    <ul class="hist">${timeline(d).map(t => `<li><time>${esc(t.at)}</time> — ${esc(t.what)}</li>`).join('')}</ul>`;
+  renderReview(d);
+}
+function timeline(d) {
+  const c = d.claim, out = [{at: c.recorded_at, what: `Claim imported (${c.recorded_by||'—'})`}];
+  if (d.checks) out.push({at: d.checks.checked_at, what: `Automated validation and program checks: ${d.checks.program_result}`});
+  (d.ai_history||[]).forEach(a => out.push({at: a.reviewed_at, what: `AI evidence review: ${a.result} (${a.model})`}));
+  (d.events||[]).forEach(e => out.push({at: e.at, what: e.kind === 'human_decision' ? `Human decision by ${e.reviewer}: ${e.payload.decision}${e.payload.reason?' — '+e.payload.reason:''}${e.payload.replaces_event?' (replaces an earlier decision)':''}` : e.kind === 'decision_applied' ? `Decision applied by ${e.reviewer}: ${e.previous_status} → ${e.new_status}${e.payload.new_claim?.length?' (new claim '+e.payload.new_claim.join(', ')+')':''}` : e.kind === 'kg_rebuilt' ? `Knowledge graph rebuilt (${e.payload.pipeline?.ok?'ok':'FAILED'})` : e.kind === 'apply_failed' ? `Apply refused: ${e.payload.reason}` : `${e.kind}`}));
+  return out.sort((a,b) => String(a.at).localeCompare(String(b.at)));
+}
+function renderReview(d) {
+  const c = d.claim, a = d.ai, last = [...(d.events||[])].reverse().find(e => e.kind === 'human_decision');
+  const reviewer = localStorage.getItem('reviewer') || '';
+  $('#review').innerHTML = `
+    <h2 style="margin-top:0">Human review</h2>
+    <div class="small muted">Decide from the evidence on the left. The AI result is an assessment you may reject; your decision changes the database only after an explicit apply that passes validation.</div>
+    <div style="margin:8px 0 4px"><label class="small muted">Reviewer identifier</label><input type="text" id="r-who" value="${esc(reviewer)}" placeholder="e.g. Kay"></div>
+    <div class="decision" id="r-dec">
+      <label><input type="radio" name="dec" value="verify"><span><b>Verify</b><small>status → verified (scope: ${String(c.source_id).startsWith('survey')?'statement':'content'}); R10 retires placeholders</small></span></label>
+      <label><input type="radio" name="dec" value="dispute"><span><b>Dispute</b><small>status → disputed; reason required</small></span></label>
+      <label><input type="radio" name="dec" value="request_evidence"><span><b>Request more evidence</b><small>recorded; claim unchanged</small></span></label>
+      <label><input type="radio" name="dec" value="defer"><span><b>Defer / needs expert review</b><small>recorded; claim unchanged</small></span></label>
+      <label><input type="radio" name="dec" value="propose_correction"><span><b>Propose correction</b><small>original retired (kept), corrected claim added unverified; reason required</small></span></label>
+    </div>
+    <div id="r-corr" style="display:none" class="box warn"><b>Correction proposal</b>
+      <label class="small muted">value (JSON or text)</label><input type="text" id="c-value" placeholder='e.g. {"min": 1, "max": 1.5, "unit": "m"} or "Part sun/part shade"'>
+      <label class="small muted">text</label><input type="text" id="c-text" placeholder="corrected claim sentence">
+      <label class="small muted">context (optional)</label><input type="text" id="c-context" value="${esc(c.context)}">
+      <label class="small muted">note (optional)</label><input type="text" id="c-note"></div>
+    <label class="small muted">Decision reason / evidence</label><textarea id="r-reason" placeholder="What in the source (or your own knowledge of the site) supports this decision?"></textarea>
+    <label class="small muted">Supporting notes (optional)</label><textarea id="r-notes" style="min-height:48px"></textarea>
+    <label class="small" style="display:flex;gap:6px;align-items:center;margin:6px 0"><input type="checkbox" id="r-local"> Evidence supports use under Vancouver / stated site conditions (locally applicable)</label>
+    <div class="small muted">answers AI review: ${a?esc(a.review_id):'none'}</div>
+    <div class="row" style="margin-top:8px"><button class="primary" id="r-save">Record decision</button>${last?`<span class="small muted">latest: ${esc(last.payload.decision)} by ${esc(last.reviewer)} (${esc(last.at)})</span>`:''}</div>
+    <div id="r-apply"></div>`;
+  $('#r-who').oninput = e => localStorage.setItem('reviewer', e.target.value);
+  document.querySelectorAll('input[name=dec]').forEach(r => r.onchange = () => $('#r-corr').style.display = r.value === 'propose_correction' && r.checked ? 'block' : 'none');
+  $('#r-save').onclick = async () => {
+    const dec = document.querySelector('input[name=dec]:checked')?.value; if (!dec) return toast('choose a decision');
+    const body = {claim_id: c.id, decision: dec, reviewer: $('#r-who').value, reason: $('#r-reason').value, notes: $('#r-notes').value, ai_review_id: a?.review_id || null, locally_applicable: $('#r-local').checked, replaces_event: last?.event_id || null};
+    if (dec === 'propose_correction') { let v = $('#c-value').value; try { v = JSON.parse(v); } catch (e) {} body.correction = {value: v, text: $('#c-text').value, context: $('#c-context').value, note: $('#c-note').value || null}; }
+    const r = await api('/api/decision', body); if (r.error) return toast(r.error);
+    toast('decision recorded: ' + r.event.event_id); await open(c.id); loadOverview(); loadQueue();
+  };
+  renderApply(d);
+}
+function renderApply(d) {
+  const box = $('#r-apply'); if (!d.pending_apply.length) { box.innerHTML = ''; return; }
+  const ev = d.pending_apply[d.pending_apply.length - 1];
+  box.innerHTML = `<div class="box warn"><b>Pending write-back</b> — decision ${esc(ev)} is recorded but the database is unchanged.<div class="row" style="margin-top:6px"><button id="a-prev">Preview change</button><button class="danger" id="a-apply" disabled>Apply to database</button></div><div id="a-out" class="small"></div></div>`;
+  $('#a-prev').onclick = async () => { const p = await api('/api/apply/preview', {event_id: ev}); $('#a-out').innerHTML = p.ok ? `<pre>${esc(JSON.stringify(p.changes, null, 1))}</pre>${p.new_claim?`<div>new claim:</div><pre>${esc(JSON.stringify(p.new_claim, null, 1))}</pre>`:''}<div class="muted">then: ${esc(p.then.join(' → '))}</div>` : `<span class="bad">${esc(p.reason)}</span>`; $('#a-apply').disabled = !p.ok; };
+  $('#a-apply').onclick = async () => { if (!confirm('Apply this decision to plants/*.json? Validation runs first; the pipeline rebuilds the graph after.')) return; $('#a-apply').disabled = true; const r = await api('/api/apply', {event_id: ev, by: $('#r-who').value}); $('#a-out').innerHTML = r.ok ? `<span class="ok">applied: ${esc(r.new_status)} · pipeline ${r.pipeline?.ok?'ok':'failed'} ${esc(r.pipeline?.summary||'')}</span>` : `<span class="bad">refused: ${esc(r.reason)} ${esc((r.errors||[]).join('; '))}</span>`; await open(d.claim.id); loadOverview(); loadQueue(); };
+}
+loadOverview(); loadQueue();
+</script>
+</body>
+</html>

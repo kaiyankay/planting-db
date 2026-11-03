@@ -43,7 +43,34 @@
     "survey_respondents": [
       "survey-r07",
       "survey-r03"
-    ]
+    ],
+    "identity_review": {
+      "audited": "2026-11-02",
+      "method": "tools/identity_audit.py (M45): sources on file + entity notes; disputed = left for human judgement",
+      "taxonomic_identity": {
+        "status": "confirmed",
+        "note": "Gaultheria shallon Pursh; no synonyms in the sources on file"
+      },
+      "geographic_origin": {
+        "status": "confirmed",
+        "note": "native to coastal BC (E-Flora Yellow S5; USDA native)",
+        "origin_status_on_entity": "native_bc_west_of_cascades"
+      },
+      "botanical_growth_form": {
+        "status": "confirmed",
+        "note": "read as shrub from osu, eflora, survey (entity.respondent_roles) (supported; M29a)",
+        "kpu_plant_type": "Broadleaf evergreen"
+      },
+      "design_function": {
+        "status": "confirmed",
+        "note": "evergreen ground cover / mass planting / informal hedge (OSU, USDA; respondent 'evergreen ground cover' typed as shrub)",
+        "respondent_roles_as_typed": [
+          "shrub",
+          "shrub"
+        ]
+      },
+      "synonyms_raw": null
+    }
   },
   "claims": [
     {
@@ -83,7 +110,8 @@
       "conditions": [],
       "place": "place:vancouver",
       "time": [],
-      "cultivar": null
+      "cultivar": null,
+      "verification_scope": "statement"
     },
     {
       "id": "gaultheria-shallon:seasonal_interest:01",
@@ -114,7 +142,8 @@
       "conditions": [],
       "place": "place:vancouver",
       "time": [],
-      "cultivar": null
+      "cultivar": null,
+      "verification_scope": "statement"
     },
     {
       "id": "gaultheria-shallon:behaviour_with_others:m1",
@@ -1300,7 +1329,17 @@
       "accessed": "2026-10-29",
       "source_url": "https://linnet.geog.ubc.ca/Atlas/Atlas.aspx?sciname=Gaultheria%20shallon",
       "citation": "In Klinkenberg, Brian. (Editor) 2020. E-Flora BC: Electronic Atlas of the Plants of British Columbia [eflora.bc.ca]. Lab for Advanced Spatial Analysis, Department of Geography, University of British Columbia, Vancouver. [Accessed: 2026-10-29]",
-      "concepts": [],
+      "concepts": [
+        "bgc_zone:cdf",
+        "bgc_zone:cwh",
+        "bgc_zone:ich",
+        "bgc_zone:idf",
+        "bgc_zone:mh",
+        "habitat:bog",
+        "habitat:coastal",
+        "habitat:disturbed",
+        "habitat:forest"
+      ],
       "conditions": [],
       "place": "place:bc",
       "time": [],
@@ -1765,7 +1804,8 @@
       "conditions": [],
       "place": "place:vancouver",
       "time": [],
-      "cultivar": null
+      "cultivar": null,
+      "verification_scope": "statement"
     },
     {
       "id": "gaultheria-shallon:vancouver_context:sv02",
@@ -1802,7 +1842,8 @@
       "conditions": [],
       "place": "place:vancouver",
       "time": [],
-      "cultivar": null
+      "cultivar": null,
+      "verification_scope": "statement"
     },
     {
       "id": "gaultheria-shallon:landscape_use:sv03",
@@ -1844,7 +1885,8 @@
       "conditions": [],
       "place": "place:vancouver",
       "time": [],
-      "cultivar": null
+      "cultivar": null,
+      "verification_scope": "statement"
     }
   ],
   "custom": [],

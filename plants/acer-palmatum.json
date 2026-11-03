@@ -41,7 +41,35 @@
       "survey-r14",
       "survey-r01",
       "survey-r04"
-    ]
+    ],
+    "identity_review": {
+      "audited": "2026-11-02",
+      "method": "tools/identity_audit.py (M45): sources on file + entity notes; disputed = left for human judgement",
+      "taxonomic_identity": {
+        "status": "confirmed",
+        "note": "Acer palmatum Thunb.; all sources agree; cultivar claims carry the cultivar in context"
+      },
+      "geographic_origin": {
+        "status": "confirmed",
+        "note": "non-native (Japan, Korea, China); no source disputes",
+        "origin_status_on_entity": "non_native"
+      },
+      "botanical_growth_form": {
+        "status": "confirmed",
+        "note": "read as tree from kpu (entity.kpu_plant_type), gpp, cov_trees, survey (entity.respondent_roles) (supported; M29a)",
+        "kpu_plant_type": "Tree - deciduous"
+      },
+      "design_function": {
+        "status": "confirmed",
+        "note": "specimen / accent / small shade tree (MOBOT, RHS uses; survey 'amenity space')",
+        "respondent_roles_as_typed": [
+          "tree",
+          "tree",
+          "tree"
+        ]
+      },
+      "synonyms_raw": null
+    }
   },
   "claims": [
     {
@@ -77,7 +105,8 @@
       "conditions": [],
       "place": "place:vancouver",
       "time": [],
-      "cultivar": null
+      "cultivar": null,
+      "verification_scope": "statement"
     },
     {
       "id": "acer-palmatum:seasonal_interest:02",
@@ -113,7 +142,8 @@
       "conditions": [],
       "place": "place:vancouver",
       "time": [],
-      "cultivar": null
+      "cultivar": null,
+      "verification_scope": "statement"
     },
     {
       "id": "acer-palmatum:hardiness_zone:m1",
@@ -1693,7 +1723,8 @@
       "conditions": [],
       "place": "place:city_of_vancouver",
       "time": [],
-      "cultivar": null
+      "cultivar": null,
+      "verification_scope": "content"
     },
     {
       "id": "acer-palmatum:vancouver_context:cov01",
@@ -1720,7 +1751,8 @@
       "conditions": [],
       "place": "place:city_of_vancouver",
       "time": [],
-      "cultivar": null
+      "cultivar": null,
+      "verification_scope": "content"
     },
     {
       "id": "acer-palmatum:vancouver_context:cov02",
@@ -1792,7 +1824,8 @@
       "conditions": [],
       "place": "place:city_of_vancouver",
       "time": [],
-      "cultivar": null
+      "cultivar": null,
+      "verification_scope": "content"
     },
     {
       "id": "acer-palmatum:vancouver_context:cov03",
@@ -1841,7 +1874,8 @@
       "conditions": [],
       "place": "place:city_of_vancouver",
       "time": [],
-      "cultivar": null
+      "cultivar": null,
+      "verification_scope": "content"
     },
     {
       "id": "acer-palmatum:local_mature_size:cov01",
@@ -1885,7 +1919,8 @@
       "conditions": [],
       "place": "place:city_of_vancouver",
       "time": [],
-      "cultivar": null
+      "cultivar": null,
+      "verification_scope": "content"
     },
     {
       "id": "acer-palmatum:local_mature_size:cov02",
@@ -1923,7 +1958,8 @@
       "time": [
         "age:established"
       ],
-      "cultivar": null
+      "cultivar": null,
+      "verification_scope": "content"
     },
     {
       "id": "acer-palmatum:local_mature_size:cov03",
@@ -1953,7 +1989,8 @@
       "conditions": [],
       "place": "place:city_of_vancouver",
       "time": [],
-      "cultivar": null
+      "cultivar": null,
+      "verification_scope": "content"
     },
     {
       "id": "acer-palmatum:local_mature_size:cov04",
@@ -1996,7 +2033,8 @@
       "conditions": [],
       "place": "place:city_of_vancouver",
       "time": [],
-      "cultivar": "Osakazuki"
+      "cultivar": "Osakazuki",
+      "verification_scope": "content"
     },
     {
       "id": "acer-palmatum:local_mature_size:cov05",
@@ -2034,7 +2072,8 @@
       "time": [
         "age:established"
       ],
-      "cultivar": "Osakazuki"
+      "cultivar": "Osakazuki",
+      "verification_scope": "content"
     },
     {
       "id": "acer-palmatum:local_mature_size:cov06",
@@ -2064,7 +2103,8 @@
       "conditions": [],
       "place": "place:city_of_vancouver",
       "time": [],
-      "cultivar": "Osakazuki"
+      "cultivar": "Osakazuki",
+      "verification_scope": "content"
     },
     {
       "id": "acer-palmatum:local_mature_size:cov07",
@@ -2107,7 +2147,8 @@
       "conditions": [],
       "place": "place:city_of_vancouver",
       "time": [],
-      "cultivar": "Bloodgood"
+      "cultivar": "Bloodgood",
+      "verification_scope": "content"
     },
     {
       "id": "acer-palmatum:local_mature_size:cov08",
@@ -2137,7 +2178,8 @@
       "conditions": [],
       "place": "place:city_of_vancouver",
       "time": [],
-      "cultivar": "Bloodgood"
+      "cultivar": "Bloodgood",
+      "verification_scope": "content"
     },
     {
       "id": "acer-palmatum:local_mature_size:cov09",
@@ -2178,7 +2220,8 @@
       "conditions": [],
       "place": "place:city_of_vancouver",
       "time": [],
-      "cultivar": "Koto No Ito"
+      "cultivar": "Koto No Ito",
+      "verification_scope": "content"
     },
     {
       "id": "acer-palmatum:local_mature_size:cov10",
@@ -2208,7 +2251,8 @@
       "conditions": [],
       "place": "place:city_of_vancouver",
       "time": [],
-      "cultivar": "Koto No Ito"
+      "cultivar": "Koto No Ito",
+      "verification_scope": "content"
     },
     {
       "id": "acer-palmatum:local_mature_size:cov11",
@@ -2252,7 +2296,8 @@
       "conditions": [],
       "place": "place:city_of_vancouver",
       "time": [],
-      "cultivar": "(unrecorded)"
+      "cultivar": "(unrecorded)",
+      "verification_scope": "content"
     },
     {
       "id": "acer-palmatum:local_mature_size:cov12",
@@ -2289,7 +2334,8 @@
       "time": [
         "age:established"
       ],
-      "cultivar": "(unrecorded)"
+      "cultivar": "(unrecorded)",
+      "verification_scope": "content"
     },
     {
       "id": "acer-palmatum:local_mature_size:cov13",
@@ -2319,7 +2365,8 @@
       "conditions": [],
       "place": "place:city_of_vancouver",
       "time": [],
-      "cultivar": "(unrecorded)"
+      "cultivar": "(unrecorded)",
+      "verification_scope": "content"
     },
     {
       "id": "acer-palmatum:resistances:mobot01",
@@ -2425,7 +2472,8 @@
       "conditions": [],
       "place": "place:vancouver",
       "time": [],
-      "cultivar": null
+      "cultivar": null,
+      "verification_scope": "statement"
     }
   ],
   "custom": [],

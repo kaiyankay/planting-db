@@ -1,18 +1,18 @@
 #!/usr/bin/env python3
 """
-Rule-based plant-to-plant relations from documented claims (brief 2026-11-02 §06; methods M38).
+Shared-habitat connections between plants (brief 2026-11-02 §03A; methods M38 → M43).
 
-  python3 -I tools/derive_relations.py [--dry-run]
+  python3 -I tools/derive_relations.py                # REPORT: pairs that share E-Flora habitat / BGC-zone concept nodes (read-only)
+  python3 -I tools/derive_relations.py --retire-r1    # one-off migration: retire the REL-R1 `companion` relations written on
+                                                      # 2026-11-02 (and the hand-derived one of 2026-10-29); records are kept
 
-REL-R1 · habitat co-occurrence (E-Flora BC)
-  Two plants whose E-Flora `vancouver_context` claims both (a) list the Coastal Western Hemlock zone (CWH, the zone Vancouver
-  sits in), (b) are recorded down to sea level there (minimum elevation <= 50 m) and (c) share at least one habitat class after normalisation
-  (forest · streamside · swamp · bog · meadow · grassland · rocky · coastal) get a `companion` relation with
-  context "derived: …", `rule: REL-R1`, `derived_from` the two claims, status unverified, confidence 0.5.
-  The relation says the two species occur in the same habitat classes of the same zone — co-occurrence in nature.
-  It is NOT a planting recommendation (the text and note say so), and a plant pair with a sourced non-derived relation of
-  the same type keeps that one (this rule never overwrites or duplicates).
-Idempotent: re-running adds only pairs that are not yet recorded. Nothing is deleted. Standard library only.
+REL-R1 (first version, 2026-11-02 afternoon) wrote a direct `companion` relation when two plants shared an E-Flora habitat
+class in the CWH zone. That overstated the evidence: a shared habitat class is an INDIRECT connection — the two plants are
+each linked to the same knowledge node (Plant → habitat:forest ← Plant) — not an observed co-occurrence and not companion
+planting. Since M43 the habitat classes and BGC zones are ontology concepts (facets `habitat`, `bgc_zone`) that the
+annotation step attaches to every E-Flora `vancouver_context` claim; `build_kg.py` then shows them as shared knowledge
+nodes in `plant_pairs`. This tool no longer writes relations. Direct relations stay reserved for statements a source makes
+(`co_occurs_with`, `companion` …), survey co-listing (`co_listed`) and model candidates. Standard library only.
 """
 import json, os, re, sys
 from datetime import date
@@ -56,26 +56,25 @@ for pid, p in PLANTS.items():
     v = c["value"]; zones = [z.upper() for z in (v.get("bgc_zones") or [])]
     cands[pid] = {"claim": c, "cwh": "CWH" in zones, "elev": mean_elev(v), "min_elev": min_elev(v), "tokens": tokens(v), "modal": v.get("modal_zone")}
 
-added, skipped = [], []
+R1_IDS = [r["id"] for r in REL["relations"] if r.get("rule") == "REL-R1" or (r.get("source_id") == "eflora" and r.get("relation_type") == "companion" and str(r.get("context", "")).startswith("derived"))]
+
+if "--retire-r1" in sys.argv:
+    n = 0
+    for r in REL["relations"]:
+        if r["id"] in R1_IDS and r.get("status") != "retired":
+            r["status"] = "retired"; r["retired_at"] = TODAY; r["retired_reason"] = "REL-R1 withdrawn 2026-11-02 (brief 'Verification Workbench' §03A, methods M43): a shared E-Flora habitat class is an indirect connection expressed through the habitat / bgc_zone concept nodes both plants link to, not a direct companion relation; record kept as history"
+            n += 1
+    REL["updated"] = TODAY
+    if not DRY:
+        with open(os.path.join(ROOT, "relations.json"), "w", encoding="utf-8") as f: json.dump(REL, f, ensure_ascii=False, indent=2); f.write("\n")
+    print(f"retired {n} REL-R1 relations (ids kept): {', '.join(R1_IDS)}")
+
+shared = []
 for a, b in combinations(sorted(cands), 2):
-    A, B = cands[a], cands[b]
-    shared = A["tokens"] & B["tokens"]
-    ok = A["cwh"] and B["cwh"] and (A["min_elev"] if A["min_elev"] is not None else 1e9) <= MAX_MIN_ELEV and (B["min_elev"] if B["min_elev"] is not None else 1e9) <= MAX_MIN_ELEV and shared
-    if not ok:
-        skipped.append((a, b, "no CWH" if not (A["cwh"] and B["cwh"]) else "not recorded at sea level" if (A["min_elev"] if A["min_elev"] is not None else 1e9) > MAX_MIN_ELEV or (B["min_elev"] if B["min_elev"] is not None else 1e9) > MAX_MIN_ELEV else "no shared habitat class")); continue
-    if any(x["relation_type"] == "companion" and x["source_id"] == "eflora" and {x["plant_a"], x["plant_b"]} == {a, b} for x in REL["relations"]):
-        skipped.append((a, b, "already recorded")); continue
-    n = sum(1 for x in REL["relations"] if {x["plant_a"], x["plant_b"]} == {a, b}) + 1
-    la, lb = PLANTS[a]["entity"]["scientific_name"], PLANTS[b]["entity"]["scientific_name"]
-    REL["relations"].append({"id": f"rel:{a}:{b}:{n:02d}", "plant_a": a, "plant_b": b, "relation_type": "companion", "direction": "mutual",
-        "text": f"E-Flora BC records both {la} and {lb} in the Coastal Western Hemlock zone at low elevation and in the same habitat class ({', '.join(sorted(shared))}), so they co-occur naturally in the Vancouver region.",
-        "source_id": "eflora", "source_type": "database", "context": f"derived: shared habitat class ({', '.join(sorted(shared))}) and the CWH zone on the two atlas pages (minimum elevations {A['min_elev']} m and {B['min_elev']} m, province-wide means {A['elev']} m and {B['elev']} m; modal zones {A['modal']} / {B['modal']}{' — a modal zone other than CWH/CDF means the plant is marginal in the coastal zone' if not {A['modal'], B['modal']} <= {'CWH', 'CDF'} else ''}); the source does not state the association itself",
-        "rule": "REL-R1", "confidence": 0.5, "status": "unverified", "recorded_at": TODAY, "recorded_by": "tools/derive_relations.py (REL-R1)", "derived_from": [A["claim"]["id"], B["claim"]["id"]],
-        "citation": A["claim"].get("citation"), "note": "habitat co-occurrence, not a planting-design recommendation; two plants sharing a habitat class may still compete (see the salal placeholders)"})
-    added.append(REL["relations"][-1]["id"])
-REL["updated"] = TODAY
-if not DRY and added:
-    with open(os.path.join(ROOT, "relations.json"), "w", encoding="utf-8") as f: json.dump(REL, f, ensure_ascii=False, indent=2); f.write("\n")
-print(f"REL-R1: {len(cands)} plants with an E-Flora habitat claim ({', '.join(f'{p} CWH={c['cwh']} min={c['min_elev']} mean={c['elev']} {sorted(c['tokens'])}' for p, c in cands.items())})")
-print(f"  added {len(added)}{' (dry run)' if DRY else ''}: {', '.join(added)}")
-for a, b, why in skipped: print(f"  skipped {a} × {b}: {why}")
+    A, B = cands[a], cands[b]; t = A["tokens"] & B["tokens"]; z = A["cwh"] and B["cwh"]
+    if t or z: shared.append((a, b, sorted(t), z))
+print(f"shared-habitat report (read-only; M43): {len(cands)} plants with an E-Flora habitat claim")
+for p, c in cands.items(): print(f"  {p:26} CWH={c['cwh']} min elev={c['min_elev']} m · classes {sorted(c['tokens'])} · modal {c['modal']}")
+print(f"  {len(shared)} pairs share a habitat class or the CWH zone — shown in kg.json plant_pairs as shared knowledge nodes (habitat:* / bgc_zone:*), never as a relation:")
+for a, b, t, z in shared: print(f"    {a} × {b}: classes {t}{' + CWH' if z else ''}")
+print(f"  REL-R1 relations in relations.json: {len(R1_IDS)} ({sum(1 for r in REL['relations'] if r['id'] in R1_IDS and r.get('status') == 'retired')} retired)")

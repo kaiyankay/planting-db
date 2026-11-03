@@ -42,7 +42,33 @@
     "external_refs_note": "kpu: only a 'Thunderbird' cultivar page exists (no species page); link only",
     "survey_respondents": [
       "survey-r03"
-    ]
+    ],
+    "identity_review": {
+      "audited": "2026-11-02",
+      "method": "tools/identity_audit.py (M45): sources on file + entity notes; disputed = left for human judgement",
+      "taxonomic_identity": {
+        "status": "confirmed",
+        "note": "Vaccinium ovatum Pursh; var. saporosum recognised"
+      },
+      "geographic_origin": {
+        "status": "confirmed",
+        "note": "native to coastal BC (E-Flora Yellow S5; USDA native)",
+        "origin_status_on_entity": "native_bc_west_of_cascades"
+      },
+      "botanical_growth_form": {
+        "status": "to_confirm",
+        "note": "read as shrub from rhs, survey (entity.respondent_roles) (to confirm; M29a) — only RHS's 'mixed shrub border' use (weak) and the survey role say shrub; GPP / OSU pages describe a shrub but their claims on file carry no form word; a reviewer can confirm from the source",
+        "kpu_plant_type": "Broadleaf evergreen"
+      },
+      "design_function": {
+        "status": "confirmed",
+        "note": "evergreen hedge / screen / boxwood substitute (GPP; respondent's project note)",
+        "respondent_roles_as_typed": [
+          "shrub"
+        ]
+      },
+      "synonyms_raw": null
+    }
   },
   "claims": [
     {
@@ -82,7 +108,8 @@
       "conditions": [],
       "place": "place:vancouver",
       "time": [],
-      "cultivar": null
+      "cultivar": null,
+      "verification_scope": "statement"
     },
     {
       "id": "vaccinium-ovatum:seasonal_interest:01",
@@ -113,7 +140,8 @@
       "conditions": [],
       "place": "place:vancouver",
       "time": [],
-      "cultivar": null
+      "cultivar": null,
+      "verification_scope": "statement"
     },
     {
       "id": "vaccinium-ovatum:behaviour_with_others:01",
@@ -151,7 +179,8 @@
       "conditions": [],
       "place": "place:vancouver",
       "time": [],
-      "cultivar": null
+      "cultivar": null,
+      "verification_scope": "statement"
     },
     {
       "id": "vaccinium-ovatum:exposure:01",
@@ -191,7 +220,8 @@
       "conditions": [],
       "place": "place:vancouver",
       "time": [],
-      "cultivar": null
+      "cultivar": null,
+      "verification_scope": "statement"
     },
     {
       "id": "vaccinium-ovatum:mature_height:m1",
@@ -1293,7 +1323,16 @@
       "source_url": "https://linnet.geog.ubc.ca/Atlas/Atlas.aspx?sciname=Vaccinium%20ovatum",
       "note": "BGC zone list from the atlas station records",
       "citation": "In Klinkenberg, Brian. (Editor) 2020. E-Flora BC: Electronic Atlas of the Plants of British Columbia [eflora.bc.ca]. Lab for Advanced Spatial Analysis, Department of Geography, University of British Columbia, Vancouver. [Accessed: 2026-10-29]",
-      "concepts": [],
+      "concepts": [
+        "bgc_zone:cdf",
+        "bgc_zone:cwh",
+        "bgc_zone:essf",
+        "bgc_zone:ich",
+        "bgc_zone:mh",
+        "bgc_zone:sbs",
+        "habitat:coastal",
+        "habitat:forest"
+      ],
       "conditions": [],
       "place": "place:bc",
       "time": [],

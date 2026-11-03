@@ -53,7 +53,33 @@
     "usda_symbol": "GAAR",
     "notes": [
       "origin_status native_north_america kept (2026-11-02): E-Flora BC — native (Yellow, S5) but common only in south-central / south-east BC and INTRODUCED in the lower Fraser Valley; no CWH or CDF stations. A Vancouver planting uses it outside its native range."
-    ]
+    ],
+    "identity_review": {
+      "audited": "2026-11-02",
+      "method": "tools/identity_audit.py (M45): sources on file + entity notes; disputed = left for human judgement",
+      "taxonomic_identity": {
+        "status": "confirmed",
+        "note": "Gaillardia aristata Pursh; the garden hybrid G. × grandiflora is a different taxon and was not used"
+      },
+      "geographic_origin": {
+        "status": "disputed",
+        "note": "native to BC's interior (E-Flora Yellow S5; IDF / PP / BG stations, none in CWH or CDF) and INTRODUCED in the lower Fraser Valley (E-Flora); USDA / MOBOT 'native' at continental scale. origin_status native_north_america kept; 'native' as a Vancouver selection reason is not supported by the BC source",
+        "origin_status_on_entity": "native_north_america"
+      },
+      "botanical_growth_form": {
+        "status": "confirmed",
+        "note": "read as herbaceous_perennial from kpu (entity.kpu_plant_type), eflora (supported; M29a)",
+        "kpu_plant_type": "Herbaceous perennial"
+      },
+      "design_function": {
+        "status": "confirmed",
+        "note": "perennial border / wildflower garden (RHS, MOBOT); respondent 'long blooming flower'",
+        "respondent_roles_as_typed": [
+          "perennial_grass"
+        ]
+      },
+      "synonyms_raw": null
+    }
   },
   "custom": [],
   "fill_plan": {
@@ -351,7 +377,8 @@
       "conditions": [],
       "place": "place:vancouver",
       "time": [],
-      "cultivar": null
+      "cultivar": null,
+      "verification_scope": "statement"
     },
     {
       "id": "gaillardia-aristata:mature_height:rhs01",
@@ -1300,7 +1327,16 @@
       "source_url": "https://linnet.geog.ubc.ca/Atlas/Atlas.aspx?sciname=Gaillardia%20aristata",
       "note": "BEC zone list from the atlas station records; no CWH or CDF stations, so the species is interior-only as a native and Vancouver plantings are outside its native range — relevant to any 'native planting' use",
       "citation": "In Klinkenberg, Brian. (Editor) 2020. E-Flora BC: Electronic Atlas of the Plants of British Columbia [eflora.bc.ca]. Lab for Advanced Spatial Analysis, Department of Geography, University of British Columbia, Vancouver. [Accessed: 2026-11-02]",
-      "concepts": [],
+      "concepts": [
+        "bgc_zone:bg",
+        "bgc_zone:essf",
+        "bgc_zone:ich",
+        "bgc_zone:idf",
+        "bgc_zone:ms",
+        "bgc_zone:pp",
+        "bgc_zone:sbs",
+        "habitat:grassland"
+      ],
       "conditions": [],
       "place": "place:bc",
       "time": [],
