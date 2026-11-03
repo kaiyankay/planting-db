@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Planting Intelligence · XYZ Knowledge Graph</title>
+<link rel="icon" href="data:,">
+<style>
+  :root {
+    --bg: #f5f2eb; --ink: #2a2723; --ink-2: #5f5a52; --ink-3: #9a948a; --line: rgba(42, 39, 35, .12); --panel: rgba(252, 250, 246, .88);
+    --x: #b8892b; --y: #4a7da5; --z: #9b5c86; --plant: #5f7f62; --derived: #8370b4; --candidate: #c6962f; --unknown: #b4553a; --verified: #3f7f5a;
+    --sans: -apple-system, "Helvetica Neue", "Segoe UI", Inter, Roboto, sans-serif; --mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; background: var(--bg); color: var(--ink); font: 13px/1.45 var(--sans); overflow: hidden; -webkit-font-smoothing: antialiased; }
+  #graph { position: fixed; inset: 0; } #graph canvas { outline: none; }
+  .scene-nav-info, .scene-tooltip { display: none !important; }
+  a { color: var(--y); text-decoration: none; border-bottom: 1px dotted rgba(74,125,165,.45); } a:hover { border-bottom-style: solid; }
+  em, i.sci { font-style: italic; }
+  button { font: 12px var(--sans); color: var(--ink); background: var(--panel); border: 1px solid var(--line); border-radius: 6px; padding: 5px 10px; cursor: pointer; backdrop-filter: blur(10px); }
+  button:hover { background: #fff; border-color: rgba(42,39,35,.28); } button:disabled { opacity: .4; cursor: default; }
+  button.ent { padding: 6px 12px; font-weight: 500; } button.ent b { font: 600 10px var(--mono); margin-right: 6px; padding: 1px 5px; border-radius: 4px; color: #fff; }
+  button.ent.x b { background: var(--x); } button.ent.y b { background: var(--y); } button.ent.z b { background: var(--z); }
+  button.on { background: #fff; border-color: rgba(42,39,35,.35); box-shadow: inset 0 0 0 1px rgba(42,39,35,.08); }
+  input { font: 12.5px var(--sans); color: var(--ink); background: var(--panel); border: 1px solid var(--line); border-radius: 6px; padding: 6px 9px; width: 100%; outline: none; } input:focus { border-color: rgba(42,39,35,.3); background: #fff; }
+
+  #hud { position: fixed; inset: 0; pointer-events: none; } #hud > * { pointer-events: auto; }
+  #brand { position: absolute; left: 18px; top: 14px; width: 330px; }
+  #brand h1 { margin: 0 0 8px; font-size: 14px; font-weight: 500; letter-spacing: .01em; } #brand h1 small { font: 10px var(--mono); color: var(--ink-3); letter-spacing: .12em; text-transform: uppercase; margin-left: 8px; }
+  #entr { display: flex; gap: 6px; margin-bottom: 8px; }
+  #searchbox { position: relative; }
+  #results { position: absolute; left: 0; right: 0; top: 100%; margin-top: 4px; background: #fff; border: 1px solid var(--line); border-radius: 6px; box-shadow: 0 6px 24px rgba(42,39,35,.12); display: none; max-height: 320px; overflow: auto; z-index: 6; }
+  #results.open { display: block; } #results div { padding: 6px 10px; cursor: pointer; display: flex; justify-content: space-between; gap: 8px; } #results div:hover, #results div.hi { background: #f3efe6; } #results small { color: var(--ink-3); font-family: var(--mono); font-size: 10px; }
+  #stats { font: 10.5px var(--mono); color: var(--ink-3); margin-top: 8px; line-height: 1.5; }
+  #trail { margin-top: 6px; display: flex; flex-wrap: wrap; gap: 4px; align-items: center; font-size: 11.5px; color: var(--ink-2); }
+  #trail span.t { cursor: pointer; color: var(--ink); border-bottom: 1px dotted var(--line); } #trail span.t:hover { border-bottom-color: var(--ink); } #trail i { color: var(--ink-3); font-style: normal; } #trail span.cur { font-weight: 500; }
+
+  #controls { position: absolute; left: 18px; bottom: 16px; display: flex; gap: 6px; flex-wrap: wrap; align-items: center; max-width: 560px; }
+  #controls .sep { width: 1px; height: 18px; background: var(--line); margin: 0 4px; }
+  #controls button.path b { font: 600 10px var(--mono); margin-right: 5px; } #controls button.path.x b { color: var(--x); } #controls button.path.y b { color: var(--y); } #controls button.path.z b { color: var(--z); }
+
+  #legend { position: absolute; right: 18px; bottom: 16px; font: 10.5px var(--mono); color: var(--ink-3); display: flex; gap: 12px; flex-wrap: wrap; justify-content: flex-end; max-width: 520px; }
+  #legend i { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 4px; vertical-align: middle; } #legend i.ln { width: 16px; height: 0; border-top: 1.5px solid; border-radius: 0; } #legend i.ln.dash { border-top-style: dashed; } #legend i.ln.dot { border-top-style: dotted; }
+
+  #tip { position: fixed; display: none; pointer-events: none; background: #fff; border: 1px solid var(--line); border-radius: 5px; padding: 5px 9px; font-size: 11.5px; max-width: 300px; z-index: 5; box-shadow: 0 4px 14px rgba(42,39,35,.1); } #tip .m { font: 10px var(--mono); color: var(--ink-3); }
+
+  /* the card: right side, only after a click */
+  #card { position: absolute; right: 18px; top: 14px; width: 372px; max-height: calc(100vh - 70px); overflow: auto; background: var(--panel); backdrop-filter: blur(14px); border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px 14px; display: none; box-shadow: 0 10px 40px rgba(42,39,35,.08); }
+  #card.open { display: block; }
+  #card .close { position: absolute; right: 8px; top: 6px; border: 0; background: transparent; color: var(--ink-3); font-size: 15px; padding: 2px 7px; } #card .close:hover { color: var(--ink); }
+  #card .kicker { font: 10px var(--mono); color: var(--ink-3); letter-spacing: .1em; text-transform: uppercase; margin-bottom: 4px; display: flex; gap: 8px; align-items: center; } #card .kicker .sw { width: 9px; height: 9px; border-radius: 50%; display: inline-block; }
+  #card h2 { margin: 0 0 4px; font-size: 16px; font-weight: 500; line-height: 1.25; padding-right: 20px; } #card h2 small { display: block; font-size: 11.5px; color: var(--ink-2); font-weight: 400; margin-top: 2px; }
+  #card .def { color: var(--ink-2); font-size: 12.5px; margin: 4px 0 8px; }
+  #card h3 { margin: 14px 0 5px; font-size: 10.5px; letter-spacing: .12em; text-transform: uppercase; color: var(--ink-3); font-weight: 500; display: flex; align-items: center; gap: 8px; } #card h3 small { letter-spacing: 0; text-transform: none; font-family: var(--mono); color: var(--ink-3); }
+  #card p { margin: 5px 0; } #card .muted { color: var(--ink-2); } #card .faint { color: var(--ink-3); } #card .small { font-size: 11.5px; } #card .mono { font-family: var(--mono); font-size: 10.5px; }
+  #card .chips { display: flex; flex-wrap: wrap; gap: 4px; margin: 3px 0; }
+  #card .chip { font-size: 11.5px; padding: 2px 8px; border-radius: 12px; border: 1px solid var(--line); background: rgba(255,255,255,.6); cursor: pointer; color: var(--ink); display: inline-flex; align-items: center; gap: 5px; } #card .chip:hover { background: #fff; border-color: rgba(42,39,35,.3); } #card .chip.on { border-color: var(--ink); } #card .chip.static { cursor: default; }
+  #card .chip i.st { width: 7px; height: 7px; border-radius: 50%; display: inline-block; background: var(--c, var(--ink-3)); } #card .chip i.st.derived { background: var(--derived); } #card .chip i.st.candidate { background: transparent; border: 1.5px dashed var(--candidate); } #card .chip i.st.unknown { background: transparent; border: 1.5px dotted var(--unknown); } #card .chip i.st.documented { background: var(--ink-2); }
+  #card .chip small { font: 10px var(--mono); color: var(--ink-3); }
+  #card .tag { font: 10px var(--mono); padding: 1px 6px; border-radius: 4px; border: 1px solid var(--line); color: var(--ink-2); white-space: nowrap; }
+  #card .tag.documented { color: var(--ink); border-color: rgba(42,39,35,.35); } #card .tag.derived { color: var(--derived); border-color: var(--derived); } #card .tag.candidate { color: var(--candidate); border-color: var(--candidate); border-style: dashed; } #card .tag.unknown { color: var(--unknown); border-color: var(--unknown); border-style: dotted; }
+  #card .tag.verified, #card .tag.supported, #card .tag.entity, #card .tag.literature { color: var(--verified); border-color: rgba(63,127,90,.5); } #card .tag.unverified, #card .tag.none, #card .tag.to.confirm, #card .tag.toconfirm { color: #9a6a1f; border-color: rgba(154,106,31,.5); } #card .tag.conflict { color: var(--unknown); border-color: var(--unknown); }
+  #card .row { display: flex; gap: 8px; padding: 6px 7px; margin: 2px -7px; border-radius: 6px; cursor: pointer; align-items: flex-start; } #card .row:hover { background: rgba(255,255,255,.75); } #card .row .st { width: 8px; height: 8px; border-radius: 50%; margin-top: 5px; flex: none; }
+  #card .row .st.documented { background: var(--ink-2); } #card .row .st.derived { background: var(--derived); } #card .row .st.candidate { background: transparent; border: 1.5px dashed var(--candidate); } #card .row .st.unknown { background: transparent; border: 1.5px dotted var(--unknown); }
+  #card .row .b { flex: 1; } #card .row .meta { font: 10.5px var(--mono); color: var(--ink-3); margin-top: 1px; }
+  #card .claim { padding: 7px 0; border-top: 1px solid var(--line); font-size: 12px; } #card .claim:first-child { border-top: 0; } #card .claim .txt { color: var(--ink); } #card .claim .meta { font: 10.5px var(--mono); color: var(--ink-3); margin-top: 3px; line-height: 1.5; } #card .claim .meta b { font-weight: 500; color: var(--ink-2); }
+  #card .req { display: grid; grid-template-columns: 1fr auto; gap: 2px 8px; font-size: 12px; padding: 4px 0; border-top: 1px solid var(--line); } #card .req .alt { color: var(--ink-2); font-size: 11.5px; grid-column: 1 / -1; } #card .req .r { font: 10.5px var(--mono); } #card .req .r.met { color: var(--verified); } #card .req .r.unmet { color: var(--unknown); } #card .req .r.unknown { color: #9a6a1f; }
+  #card .warn { color: var(--unknown); } #card .note { font-size: 11.5px; color: var(--ink-2); background: rgba(255,255,255,.55); border-left: 2px solid var(--line); padding: 6px 9px; margin: 8px 0; border-radius: 0 6px 6px 0; }
+  #card .link { color: var(--y); cursor: pointer; } #card .link:hover { text-decoration: underline; }
+  #card details { margin-top: 6px; } #card summary { cursor: pointer; color: var(--ink-2); font-size: 11.5px; } #card summary:hover { color: var(--ink); }
+  #card .attr { font-size: 11.5px; margin: 3px 0; } #card .attr b { font-weight: 500; color: var(--ink-2); margin-right: 4px; }
+  #card .steps { counter-reset: s; } #card .step { display: flex; gap: 8px; padding: 6px 0; border-top: 1px solid var(--line); cursor: pointer; } #card .step:hover { background: rgba(255,255,255,.6); } #card .step .n { font: 600 10px var(--mono); color: var(--ink-3); width: 14px; padding-top: 3px; } #card .step .b { flex: 1; } #card .step .rel { font: 10.5px var(--mono); color: var(--ink-3); }
+  #card .gap { font-size: 11.5px; padding: 4px 0; border-top: 1px solid var(--line); color: var(--ink-2); } #card .gap b { font-weight: 500; color: var(--ink); }
+  #card .btns { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px; } #card .btns button { font-size: 11.5px; padding: 4px 9px; }
+
+  #loading { position: fixed; inset: 0; display: grid; place-items: center; color: var(--ink-3); font: 12px var(--mono); background: var(--bg); z-index: 9; } #loading.gone { display: none; } #err { color: var(--unknown); white-space: pre-wrap; max-width: 600px; }
+  @media (max-width: 900px) { #brand { width: calc(100vw - 36px); } #card { width: calc(100vw - 36px); top: auto; bottom: 60px; max-height: 50vh; } #legend { display: none; } #controls { max-width: calc(100vw - 36px); } }
+</style>
+<script type="importmap">
+{ "imports": { "three": "../vendor/three/three.module.js", "three/addons/": "../vendor/three/examples/jsm/" } }
+</script>
+<script src="../vendor/3d-force-graph.min.js"></script>
+</head>
+<body>
+<div id="graph"></div>
+<div id="hud">
+  <div id="brand">
+    <h1>Planting Intelligence <small>XYZ knowledge graph</small></h1>
+    <div id="entr"></div>
+    <div id="searchbox"><input id="search" placeholder="Search a plant, a concept, a function…" autocomplete="off" spellcheck="false"><div id="results"></div></div>
+    <div id="stats"></div>
+    <div id="trail"></div>
+  </div>
+  <div id="card"><button class="close" title="close">×</button><div id="cardbody"></div></div>
+  <div id="controls"></div>
+  <div id="legend"></div>
+</div>
+<div id="tip"></div>
+<div id="loading"><div>loading the XYZ projection…<div id="err"></div></div></div>
+<script type="module" src="./js/app.js"></script>
+</body>
+</html>

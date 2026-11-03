@@ -2,6 +2,8 @@
 
 ARCH 540 Assignment 2 · UBC MLA · schema 0.4.3 (concept ids, ontology.json 0.2.0) · 2026-11-03 · **verification workbench** (`review/README.md`, `reports/verification-workbench-2026-11-03.md`) · **ten plants** (3 from 2026-10-29 + 7 survey-nominated plants added 2026-11-02 through the seven-step method — `reports/methodology-report-2026-11-02.md`)
 
+**XYZ Knowledge Graph (live, 2026-11-03):** <https://kaiyankay.github.io/planting-db/brain/xyz-preview/> — three exploration entrances (Classification · Plant Knowledge · Spatial Functions) into a progressively revealed 3D network over `brain/data/xyz.json`, the projection `tools/build_xyz.py` writes from `kg.json`; evidence trace on every line, status and verification kept apart, unknown design links listed as gaps and never drawn, three demonstration paths found in the data · notes in `brain/xyz-preview/README.md`, report in `reports/xyz-graph-2026-11-03.md`, tests `tools/xyz_tests.py`
+
 **Planting Knowledge Network (live, 2026-11-02):** <https://kaiyankay.github.io/planting-db/brain/ontology-preview/> — the semantic graph (`brain/data/kg.json`) as a plant-centred 3D network of spheres and lines: growth forms → plants → knowledge areas → shared knowledge nodes and direct relations, evidence trace on every line, graph retrieval, candidate growth; data-driven, so new plants appear after `tools/pipeline.py` · notes in `brain/ontology-preview/README.md`, report in `reports/kg-architecture-2026-11-02.md`
 
 **Knowledge Brain v5 (live):** <https://kaiyankay.github.io/planting-db/brain/> — the store as one 3D neural network (signals along real links) · [v4](https://kaiyankay.github.io/planting-db/brain/v4/) · [v3](https://kaiyankay.github.io/planting-db/brain/v3/) · [v2](https://kaiyankay.github.io/planting-db/brain/v2/) · [v1](https://kaiyankay.github.io/planting-db/brain/v1/) · code and notes in `brain/`
@@ -45,7 +47,7 @@ planting-db/
 │   ├── build_coverage.py        T7 coverage matrix -> viz/coverage.html
 │   ├── inat_to_claims.py        iNaturalist aggregates -> claims
 │   └── retrieve.py              T6 retrieval prototype (--eval, BM25 stand-in)
-├── brain/                 Neural Brain v5 (index.html, js/app5.js) and brain/ontology-preview/ (js/app6.js, js/kg.js) over brain/data/{graph,diagnosis,kg}.json
+├── brain/                 Neural Brain v5 (index.html, js/app5.js), brain/ontology-preview/ (js/app6.js, js/kg.js) over brain/data/{graph,diagnosis,kg}.json, brain/xyz-preview/ (js/app.js, js/xyz.js) over brain/data/xyz.json
 ├── reports/               methodology-report · survey-integration · knowledge-graph · validation (all 2026-11-02, the 10-plant expansion) · kg-architecture-2026-11-02.md · migration-0.4.md
 ├── data/
 │   └── cov_trees/               snapshot.json, <genus>_all.csv, <genus>_<species>.csv, facets, summary
