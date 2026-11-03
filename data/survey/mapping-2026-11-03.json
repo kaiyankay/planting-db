@@ -1,0 +1,457 @@
+{
+  "note": "Researcher mapping of survey d1 selection reasons and d2 notes to database fields for plants in the database (T4, methods M35–M37). Keyed by anonymous respondent id and the raw name as typed; the raw text is the respondent's and is kept verbatim in claim text. Nothing here identifies a respondent. Entries absent from this table fall back to a qualitative `vancouver_context` claim carrying the raw reason (survey d1 asks for plants 'for Metro Vancouver'). Reviewed by: coding agent 2026-11-02; to confirm by Kay.",
+  "export": "responses-2026-11-03.csv (14 responses, questions_version 1)",
+  "restored_text": {
+    "note": "responses submitted before the planting-survey form fix (commit 00ee216, 2026-10-29) lost the spaces in d2; the wording below is restored by hand from the letters (methods M21). raw_export_text is kept on the claim.",
+    "survey-r05|Achillea millefolium": "Native species that does well in this local climate",
+    "survey-r06|Katsura": "It grows in my backyard and it’s leaf has a sweet smell",
+    "survey-r03|Vaccinium ovatum": "Good native substitute for English boxwood that takes shade better"
+  },
+  "d1": {
+    "survey-r01|Pacific dogwood": [
+      {
+        "field": "seasonal_interest",
+        "value_kind": "qualitative",
+        "value": {
+          "note": "flowers"
+        }
+      }
+    ],
+    "survey-r03|Gaillardia aristata": [
+      {
+        "field": "seasonal_interest",
+        "value_kind": "qualitative",
+        "value": {
+          "note": "long blooming"
+        }
+      }
+    ],
+    "survey-r05|Achillea millefolium": [
+      {
+        "field": "ecological_value",
+        "value_kind": "categorical",
+        "value": [
+          "native"
+        ]
+      }
+    ],
+    "survey-r07|Katsura": [
+      {
+        "field": "vancouver_context",
+        "value_kind": "qualitative",
+        "value": {
+          "note": "commonly planted, proved to be suitable, also having its own feature"
+        },
+        "mapping_note": "a designer's local-suitability judgement, not a measurement"
+      }
+    ],
+    "survey-r07|Pacific Dogwood": [
+      {
+        "field": "vancouver_context",
+        "value_kind": "qualitative",
+        "value": {
+          "note": "commonly planted and good aesthetic values"
+        }
+      }
+    ],
+    "survey-r07|Salal": [
+      {
+        "field": "ecological_value",
+        "value_kind": "categorical",
+        "value": [
+          "native"
+        ],
+        "mapping_note": "'ecological values' left unmapped — no specific function named"
+      }
+    ],
+    "survey-r07|Kinnikinnick": [
+      {
+        "field": "ecological_value",
+        "value_kind": "categorical",
+        "value": [
+          "native"
+        ]
+      }
+    ],
+    "survey-r08|Sword fern": [
+      {
+        "field": "ecological_value",
+        "value_kind": "categorical",
+        "value": [
+          "native"
+        ]
+      }
+    ],
+    "survey-r08|Yarrow": [
+      {
+        "field": "seasonal_interest",
+        "value_kind": "qualitative",
+        "value": {
+          "note": "pretty flowers, many flowers"
+        }
+      }
+    ],
+    "survey-r10|Polystichum munitum": [
+      {
+        "field": "ecological_value",
+        "value_kind": "categorical",
+        "value": [
+          "native"
+        ]
+      },
+      {
+        "field": "seasonal_interest",
+        "value_kind": "categorical",
+        "value": {
+          "evergreen": true
+        }
+      },
+      {
+        "field": "landscape_use",
+        "value_kind": "categorical",
+        "value": [
+          "Filler"
+        ],
+        "mapping_note": "'fills up space' read as the KPU use Filler; could also be Ground cover"
+      }
+    ],
+    "survey-r10|Cornus sericea": [
+      {
+        "field": "ecological_value",
+        "value_kind": "categorical",
+        "value": [
+          "native"
+        ]
+      },
+      {
+        "field": "seasonal_interest",
+        "value_kind": "categorical",
+        "value": {
+          "winter_interest": "colourful bark"
+        },
+        "mapping_note": "'colorful bark' read as winter interest (stem colour shows after leaf fall)"
+      }
+    ],
+    "survey-r14|acer palmatum": [
+      {
+        "field": "vancouver_context",
+        "value_kind": "qualitative",
+        "value": {
+          "note": "good for amenity space"
+        },
+        "mapping_note": "'amenity space' is a design-programme term with no KPU use value; kept as a Vancouver-context reason"
+      }
+    ]
+  },
+  "d2": {
+    "survey-r05|Achillea millefolium": {
+      "field": "vancouver_context",
+      "value_kind": "qualitative",
+      "claim_kind": "observation",
+      "value": {
+        "performance": "does well in the local climate",
+        "origin_note": "native species"
+      },
+      "location": null,
+      "derived": [
+        {
+          "field": "ecological_value",
+          "value_kind": "categorical",
+          "value": [
+            "native"
+          ]
+        }
+      ]
+    },
+    "survey-r06|Katsura": {
+      "field": "vancouver_context",
+      "value_kind": "qualitative",
+      "claim_kind": "observation",
+      "value": {
+        "growing_in": "respondent's backyard",
+        "observation": "leaf has a sweet smell"
+      },
+      "location": "respondent's own backyard (municipality not given)",
+      "derived": [
+        {
+          "field": "landscape_use",
+          "value_kind": "categorical",
+          "value": [
+            "Fragrance"
+          ],
+          "mapping_note": "scented foliage → KPU use Fragrance"
+        }
+      ]
+    },
+    "survey-r07|Salal": {
+      "field": "vancouver_context",
+      "value_kind": "qualitative",
+      "claim_kind": "observation",
+      "value": {
+        "where_used": "Pacific Northwest native-plant-focused gardens",
+        "less_seen_in": "other private / commercial greenspace"
+      },
+      "location": null,
+      "derived": [
+        {
+          "field": "landscape_use",
+          "value_kind": "categorical",
+          "value": [
+            "Native planting"
+          ]
+        }
+      ]
+    },
+    "survey-r08|Yarrow": {
+      "field": "behaviour_with_others",
+      "value_kind": "qualitative",
+      "claim_kind": "warning",
+      "value": {
+        "spread": "vigorous under certain conditions",
+        "advice": "use cautiously",
+        "upside": "large swathes can be beautiful"
+      },
+      "location": null,
+      "derived": [
+        {
+          "field": "landscape_use",
+          "value_kind": "categorical",
+          "value": [
+            "Group or mass planting"
+          ],
+          "mapping_note": "'large swathes' read as mass planting"
+        }
+      ]
+    },
+    "survey-r10|Polystichum munitum": {
+      "field": "long_term_performance",
+      "value_kind": "qualitative",
+      "claim_kind": "observation",
+      "value": {
+        "resilience": "survives anywhere it is put"
+      },
+      "location": null,
+      "derived": []
+    }
+  },
+  "candidates_not_in_db": {
+    "note": "raw names in the 14 responses that resolve to no plant in the database; canonical ids follow synonyms.json conventions (slug of the accepted scientific name). The respondent's spelling is kept in names. Added to synonyms.json with in_db false so a later addition resolves to the same id. Spelling corrections are the researcher's reading of the raw name.",
+    "entries": [
+      {
+        "id": "parrotia-persica",
+        "scientific": "Parrotia persica",
+        "names": [
+          "parrotia persica",
+          "Persian ironwood",
+          "波斯铁木"
+        ]
+      },
+      {
+        "id": "taxus-canadensis",
+        "scientific": "Taxus canadensis",
+        "names": [
+          "taxus canadensis",
+          "Canada yew",
+          "加拿大红豆杉"
+        ],
+        "note": "respondent's reason 'evergreen hedging' fits Taxus × media / T. baccata better than the prostrate T. canadensis; name kept as typed"
+      },
+      {
+        "id": "hylotelephium-autumn-joy",
+        "scientific": "Hylotelephium 'Herbstfreude' (Autumn Joy)",
+        "synonyms_scientific": [
+          "Sedum 'Autumn Joy'",
+          "Sedum spectabile 'Autumn Joy'"
+        ],
+        "names": [
+          "sedum autumn joy",
+          "Autumn Joy sedum",
+          "八宝景天 'Autumn Joy'"
+        ]
+      },
+      {
+        "id": "lavandula-angustifolia",
+        "scientific": "Lavandula angustifolia",
+        "names": [
+          "lavandula angustifolia hidcote",
+          "English lavender",
+          "Lavender 'Hidcote'",
+          "薰衣草"
+        ],
+        "note": "respondent named the cultivar 'Hidcote'"
+      },
+      {
+        "id": "geranium-hardy",
+        "scientific": "Geranium (hardy cranesbill, species not given)",
+        "names": [
+          "Hardy geranium",
+          "cranesbill",
+          "老鹳草"
+        ],
+        "note": "genus-level entry; the respondent did not name a species"
+      },
+      {
+        "id": "dryopteris",
+        "scientific": "Dryopteris (species not given)",
+        "names": [
+          "Dryopteris Fern",
+          "wood fern",
+          "鳞毛蕨"
+        ],
+        "note": "genus-level entry"
+      },
+      {
+        "id": "fragaria",
+        "scientific": "Fragaria (strawberry, species not given)",
+        "names": [
+          "Strawberry",
+          "草莓"
+        ],
+        "note": "genus-level; could be F. × ananassa (garden) or the native F. chiloensis / F. vesca"
+      },
+      {
+        "id": "cyclamen",
+        "scientific": "Cyclamen (species not given)",
+        "names": [
+          "Cyclamen",
+          "仙客来"
+        ],
+        "note": "hardy cyclamen in a Vancouver garden is most often C. hederifolium or C. coum; not stated"
+      },
+      {
+        "id": "catgrass",
+        "scientific": "cat grass (Avena sativa / Hordeum vulgare, unspecified)",
+        "names": [
+          "Catgrass",
+          "cat grass",
+          "猫草"
+        ],
+        "note": "a trade name for cereal grasses grown for cats, not a landscape plant"
+      },
+      {
+        "id": "prunus-flowering-cherry",
+        "scientific": "Prunus (flowering cherry, species not given)",
+        "names": [
+          "Cherry blossom",
+          "flowering cherry",
+          "樱花"
+        ],
+        "note": "Vancouver street cherries are mostly P. serrulata and P. × yedoensis cultivars; not stated"
+      },
+      {
+        "id": "sorbus",
+        "scientific": "Sorbus (mountain ash, species not given)",
+        "names": [
+          "Mountain ash",
+          "rowan",
+          "花楸"
+        ],
+        "note": "could be the native S. sitchensis / S. scopulina or the planted S. aucuparia"
+      },
+      {
+        "id": "helleborus",
+        "scientific": "Helleborus (species not given)",
+        "names": [
+          "Helleborus",
+          "hellebore",
+          "Lenten rose",
+          "铁筷子"
+        ]
+      },
+      {
+        "id": "metasequoia-glyptostroboides",
+        "scientific": "Metasequoia glyptostroboides",
+        "names": [
+          "Metasequoia glyptostroibodes",
+          "Dawn redwood",
+          "水杉"
+        ],
+        "note": "respondent's spelling 'glyptostroibodes'"
+      },
+      {
+        "id": "struthiopteris-spicant",
+        "scientific": "Struthiopteris spicant",
+        "synonyms_scientific": [
+          "Blechnum spicant"
+        ],
+        "names": [
+          "Deer fern",
+          "鹿蕨"
+        ]
+      },
+      {
+        "id": "stewartia-pseudocamellia",
+        "scientific": "Stewartia pseudocamellia",
+        "names": [
+          "Stewart’s pseudocamelia",
+          "Japanese stewartia",
+          "夏椿"
+        ],
+        "note": "respondent's spelling"
+      },
+      {
+        "id": "ginkgo-biloba",
+        "scientific": "Ginkgo biloba",
+        "names": [
+          "Ginko biloba",
+          "Ginkgo",
+          "Maidenhair tree",
+          "银杏"
+        ],
+        "note": "respondent's spelling 'Ginko'"
+      },
+      {
+        "id": "quercus-garryana",
+        "scientific": "Quercus garryana",
+        "names": [
+          "Quercus garyanna",
+          "Garry oak",
+          "Oregon white oak",
+          "加里栎"
+        ],
+        "note": "respondent's spelling 'garyanna'"
+      },
+      {
+        "id": "typha-latifolia",
+        "scientific": "Typha latifolia",
+        "names": [
+          "Typha latifolia",
+          "Common cattail",
+          "broadleaf cattail",
+          "宽叶香蒲"
+        ]
+      },
+      {
+        "id": "arbutus-menziesii",
+        "scientific": "Arbutus menziesii",
+        "names": [
+          "Arbitus menzesii",
+          "Arbutus",
+          "Pacific madrone",
+          "太平洋浆果鹃"
+        ],
+        "note": "respondent's spelling; carries a mixed-basis d2 note (hard to establish; needs sharp drainage) kept privately"
+      },
+      {
+        "id": "calamagrostis",
+        "scientific": "Calamagrostis spp.",
+        "names": [
+          "Calimagrastis spp.",
+          "reed grass",
+          "拂子茅"
+        ],
+        "note": "respondent's spelling; genus-level"
+      },
+      {
+        "id": "pseudotsuga-menziesii",
+        "scientific": "Pseudotsuga menziesii",
+        "names": [
+          "Douglas fir",
+          "Douglas-fir",
+          "花旗松"
+        ]
+      }
+    ]
+  },
+  "pseudonym_note": "respondent ids are assigned by tools/survey_to_claims.py in submission order (r01–r06 pre-existing; r07–r14 from the 2026-11-03 export); r09 submitted no plant list"
+}

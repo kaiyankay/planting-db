@@ -82,6 +82,10 @@ def merge_claims(plant_path, new_claims, entity_updates=None, dry_run=False, tod
         if c.get("plant") != plant_id:
             log["errors"].append(f"{c.get('id')}: plant {c.get('plant')!r} != {plant_id}")
             continue
+        if "concepts" not in c:   # 0.4.x: every landing path (T1 cov, iNat, T5, T4 survey) gets ontology ids, concepts, conditions, place, time, cultivar here — before the duplicate check, so re-runs compare like with like
+            from migrate_0_4 import annotate
+            _, unmapped = annotate([c])
+            for _cid, _f, _v in unmapped: log["warnings"].append(f"{_cid}: {_f} value {_v!r} has no ontology node (left as label)")
         dup = next((e for e in plant["claims"] if _same(e, c)), None)
         if dup:
             log["skipped_duplicate"].append(f"{c.get('id')} == {dup['id']}")

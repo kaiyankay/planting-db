@@ -18,7 +18,7 @@ import json, os, re, sys
 from collections import Counter, defaultdict
 from datetime import date
 
-ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+ROOT = os.environ.get("PLANTING_DB_ROOT") or os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 J = lambda p: json.load(open(os.path.join(ROOT, p), encoding="utf-8"))
 ONT = J("ontology.json"); SCHEMA = J("schema.json"); SOURCES = {s["id"]: s for s in J("sources.json")["sources"]}
 NODES = {n["id"]: n for n in ONT["nodes"]}
@@ -58,7 +58,7 @@ CAT_FIELDS = {"exposure": ["exposure"], "soil_type": ["soil"], "water_drainage":
               "maintenance_level": ["maintenance"], "invasive_status": ["invasive"], "photoperiod": ["photoperiod"]}
 ENUM_ID_FIELDS = {"water_drainage": "water", "maintenance_level": "maintenance", "invasive_status": "invasive", "photoperiod": "photoperiod", "growth_rate": "growth_rate"}
 PLACE_PATTERNS = [(r"UK growing conditions|\bUK\b", "place:uk"), (r"Willamette Valley", "place:willamette_valley"), (r"maritime Pacific Northwest", "place:pnw"), (r"St\.? Louis", "place:st_louis"), (r"US-wide|United States", "place:north_america"),
-                  (r"North Van", "place:north_vancouver"), (r"City of Vancouver|CoV public trees", "place:city_of_vancouver"), (r"Greater Vancouver|Metro Vancouver|Vancouver", "place:vancouver"), (r"\bBC\b|E-Flora|ISCBC", "place:bc"), (r"\bPNW\b|Pacific Northwest", "place:pnw")]
+                  (r"North Van", "place:north_vancouver"), (r"backyard|own garden|own project", "place:vancouver"), (r"City of Vancouver|CoV public trees", "place:city_of_vancouver"), (r"Greater Vancouver|Metro Vancouver|Vancouver", "place:vancouver"), (r"\bBC\b|E-Flora|ISCBC", "place:bc"), (r"\bPNW\b|Pacific Northwest", "place:pnw")]
 GEO_PLACE = {"vancouver": "place:vancouver", "bc": "place:bc", "pnw": "place:pnw", "north_america": "place:north_america", "global": "place:global"}
 COND_PATTERNS = [(r"full sun", "exposure", "exposure:full_sun"), (r"part(?:ial)? shade|part sun", "exposure", "exposure:part_sun_part_shade"), (r"filtered shade", "exposure", "exposure:filtered_shade"), (r"deep shade|full shade", "exposure", "exposure:deep_shade"), (r"\bshade\b", "exposure", "exposure:shade"),
                  (r"poor soil|thin soil|gravel", "soil", "soil:rocky_or_gravelly_or_dry"), (r"good soil|rich soil", "soil", "soil:humus_rich"), (r"once established|established \(DBH", "age", "age:established"), (r"in youth", "age", "age:young"), (r"at 20 years", "age", "age:mature")]
@@ -252,7 +252,21 @@ def write_report(plants):
         with open(os.path.join(ROOT, "reports", "migration-0.4.md"), "w", encoding="utf-8") as f: f.write(txt)
     return txt
 
+def annotate(claims):
+    """0.4.x annotation for a list of new claims (importable; used by tools/merge_t5.py and tools/survey_to_claims.py):
+    value ids + value_label, concepts, conditions, place, time, cultivar. Returns (claims, unmapped list). Idempotent."""
+    before = len(report["unmapped"])
+    for c in claims: migrate_claim(c)
+    return claims, report["unmapped"][before:]
+
+
 if __name__ == "__main__":
+    only = [a for a in sys.argv[1:] if a.endswith(".json")]
+    if only:   # annotate chosen plant files in place; schema.json and the migration report are left alone (2026-11-02, 10-plant expansion)
+        for f in only:
+            p = migrate_plant(os.path.relpath(os.path.abspath(f), ROOT)); print(f"{f}: {len(p['claims'])} claims annotated")
+        for cid, field, v in report["unmapped"]: print(f"  unmapped: {cid} · {field} · {v!r}")
+        sys.exit(1 if report["unmapped"] else 0)
     plants = [migrate_plant(os.path.join("plants", f)) for f in sorted(os.listdir(os.path.join(ROOT, "plants"))) if f.endswith(".json")]
     update_schema()
     txt = write_report(plants)

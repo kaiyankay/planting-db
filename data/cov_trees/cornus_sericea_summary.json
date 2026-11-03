@@ -1,0 +1,45 @@
+{
+  "genus": "CORNUS",
+  "species": "SERICEA",
+  "n_records": 0,
+  "snapshot": {
+    "data_processed": "2026-11-02T14:49:44+00:00",
+    "modified": "2026-11-02T14:49:44+00:00",
+    "records_count": 184152,
+    "licence": "Open Government Licence - Vancouver",
+    "licence_id": "OGL-Vancouver",
+    "fetched_at": "2026-11-03T02:27:53+00:00"
+  },
+  "fields_present": [
+    "asset_id",
+    "address",
+    "common_name",
+    "genus_name",
+    "species_name",
+    "cultivar_name",
+    "height_m",
+    "diameter_cm",
+    "local_area",
+    "geom",
+    "geo_point_2d"
+  ],
+  "date_planted_available": false,
+  "height_m": {
+    "n": 0
+  },
+  "diameter_cm": {
+    "n": 0
+  },
+  "height_m_where_diameter_ge_20cm": {
+    "n": 0
+  },
+  "cultivars": {},
+  "cultivar_stats": {},
+  "local_area": {},
+  "notes": [
+    "height_m and diameter_cm are as recorded at last inventory update; measurement date per tree is not published in this snapshot.",
+    "The snapshot has no date_planted field, so time_to_intended_size cannot be derived from CoV data alone.",
+    "cultivar_name 'NONE' means not recorded, not necessarily the straight species.",
+    "height_m is banded, not measured: ~97% of values sit on 4.6/7.6/10.7/13.7/16.8 m, i.e. 15/25/35/45/55 ft class midpoints. Treat as a height class; quote p90 as 'mostly <= 10.7 m class' rather than a precise figure."
+  ]
+}

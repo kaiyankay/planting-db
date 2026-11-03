@@ -5,11 +5,12 @@ by the pull script (aggregate only). Emits, per plant:
   vancouver_context  licensed verifiable observation count (+ research grade, year span)   conf 0.60
   vancouver_context  observations by month (observer effort, NOT plant activity)            conf 0.55, only if n >= MIN_MONTHS_N
   seasonal_interest  flowering_months / fruiting months from phenology annotations          conf 0.50, only if annotated n >= MIN_PHENOLOGY_N
-Usage: python3 -I tools/inat_to_claims.py <plant-id> [--merge]
+Usage: python3 -I tools/inat_to_claims.py <plant-id> [--merge] [--data greater_vancouver_<date>.json]   (default: newest pull in data/inat/)
 """
 import json, os, sys
 HERE = os.path.dirname(os.path.abspath(__file__)); ROOT = os.path.dirname(HERE)
-DATA = os.path.join(ROOT, "data", "inat", "greater_vancouver_2026-10-29.json")
+_INAT_DIR = os.path.join(ROOT, "data", "inat")
+DATA = os.path.join(_INAT_DIR, sys.argv[sys.argv.index("--data") + 1]) if "--data" in sys.argv else os.path.join(_INAT_DIR, sorted(f for f in os.listdir(_INAT_DIR) if f.startswith("greater_vancouver_") and f.endswith(".json"))[-1])   # newest pull unless --data <file> (tools/inat_fetch.py writes dated files)
 MIN_PHENOLOGY_N = 20      # M13 (to confirm)
 MIN_MONTHS_N = 100        # M13 (to confirm)
 MONTH_SHARE = 0.10        # a month counts as a flowering/fruiting month at >= 10 % of annotated observations

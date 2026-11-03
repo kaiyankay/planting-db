@@ -1,0 +1,234 @@
+{
+  "genus": "CORNUS",
+  "snapshot_data_processed": "2026-11-02T14:49:44+00:00",
+  "species": [
+    {
+      "species_name": "KOUSA",
+      "n": 1212
+    },
+    {
+      "species_name": "NUTTALLII",
+      "n": 620
+    },
+    {
+      "species_name": "XX",
+      "n": 503
+    },
+    {
+      "species_name": "FLORIDA",
+      "n": 252
+    },
+    {
+      "species_name": "SPECIES",
+      "n": 148
+    },
+    {
+      "species_name": "CONTROVERSA",
+      "n": 92
+    },
+    {
+      "species_name": "MAS",
+      "n": 54
+    },
+    {
+      "species_name": "OFFICINALIS",
+      "n": 25
+    },
+    {
+      "species_name": "ALTERNIFOLIA",
+      "n": 7
+    },
+    {
+      "species_name": "RACEMOSA",
+      "n": 5
+    },
+    {
+      "species_name": "ALBA",
+      "n": 2
+    },
+    {
+      "species_name": "RUTGERSENSIS",
+      "n": 2
+    },
+    {
+      "species_name": "SANGUINEA",
+      "n": 2
+    },
+    {
+      "species_name": "CAPITATA",
+      "n": 1
+    }
+  ],
+  "species_cultivar": [
+    {
+      "species_name": "KOUSA",
+      "cultivar_name": "NONE",
+      "n": 720
+    },
+    {
+      "species_name": "NUTTALLII",
+      "cultivar_name": "NONE",
+      "n": 608
+    },
+    {
+      "species_name": "XX",
+      "cultivar_name": "EDDIE'S WHITE WONDER",
+      "n": 478
+    },
+    {
+      "species_name": "FLORIDA",
+      "cultivar_name": "NONE",
+      "n": 230
+    },
+    {
+      "species_name": "KOUSA",
+      "cultivar_name": "SATOMI",
+      "n": 202
+    },
+    {
+      "species_name": "KOUSA",
+      "cultivar_name": "CHINENSIS",
+      "n": 183
+    },
+    {
+      "species_name": "SPECIES",
+      "cultivar_name": "NONE",
+      "n": 148
+    },
+    {
+      "species_name": "KOUSA",
+      "cultivar_name": "STELLAR PINK",
+      "n": 75
+    },
+    {
+      "species_name": "CONTROVERSA",
+      "cultivar_name": "NONE",
+      "n": 71
+    },
+    {
+      "species_name": "MAS",
+      "cultivar_name": "NONE",
+      "n": 54
+    },
+    {
+      "species_name": "KOUSA",
+      "cultivar_name": "VENUS",
+      "n": 31
+    },
+    {
+      "species_name": "OFFICINALIS",
+      "cultivar_name": "NONE",
+      "n": 25
+    },
+    {
+      "species_name": "CONTROVERSA",
+      "cultivar_name": "JUNE SNOW",
+      "n": 20
+    },
+    {
+      "species_name": "XX",
+      "cultivar_name": "AURORA",
+      "n": 18
+    },
+    {
+      "species_name": "FLORIDA",
+      "cultivar_name": "AUREUM",
+      "n": 17
+    },
+    {
+      "species_name": "NUTTALLII",
+      "cultivar_name": "GOLDSPOT",
+      "n": 11
+    },
+    {
+      "species_name": "ALTERNIFOLIA",
+      "cultivar_name": "NONE",
+      "n": 6
+    },
+    {
+      "species_name": "RACEMOSA",
+      "cultivar_name": "NONE",
+      "n": 5
+    },
+    {
+      "species_name": "XX",
+      "cultivar_name": "STARLIGHT",
+      "n": 4
+    },
+    {
+      "species_name": "FLORIDA",
+      "cultivar_name": "WELCHII",
+      "n": 3
+    },
+    {
+      "species_name": "RUTGERSENSIS",
+      "cultivar_name": "RUTBAN",
+      "n": 2
+    },
+    {
+      "species_name": "XX",
+      "cultivar_name": "VENUS",
+      "n": 2
+    },
+    {
+      "species_name": "ALBA",
+      "cultivar_name": "ELEGANTISSIMA",
+      "n": 1
+    },
+    {
+      "species_name": "ALBA",
+      "cultivar_name": "NONE",
+      "n": 1
+    },
+    {
+      "species_name": "ALTERNIFOLIA",
+      "cultivar_name": "ARGENTEA",
+      "n": 1
+    },
+    {
+      "species_name": "CAPITATA",
+      "cultivar_name": "MOUNTAIN MOON",
+      "n": 1
+    },
+    {
+      "species_name": "CONTROVERSA",
+      "cultivar_name": "VARIEGATA",
+      "n": 1
+    },
+    {
+      "species_name": "FLORIDA",
+      "cultivar_name": "CHEROKEE CHIEF",
+      "n": 1
+    },
+    {
+      "species_name": "FLORIDA",
+      "cultivar_name": "RAINBOW",
+      "n": 1
+    },
+    {
+      "species_name": "KOUSA",
+      "cultivar_name": "WOLF EYES",
+      "n": 1
+    },
+    {
+      "species_name": "NUTTALLII",
+      "cultivar_name": "CORIGO GIANT",
+      "n": 1
+    },
+    {
+      "species_name": "SANGUINEA",
+      "cultivar_name": "MIDWINTER FIRE",
+      "n": 1
+    },
+    {
+      "species_name": "SANGUINEA",
+      "cultivar_name": "NONE",
+      "n": 1
+    },
+    {
+      "species_name": "XX",
+      "cultivar_name": "CELESTIAL SHADOW",
+      "n": 1
+    }
+  ]
+}

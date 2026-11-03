@@ -107,7 +107,7 @@ for pid, p in PLANTS.items():
 # fern / climber count one per source; (3) a survey respondent's typed role counts as practitioner evidence. The form with most
 # distinct sources wins; one source -> status 'to confirm', two or more -> 'supported'. Evidence ids travel with the edge.
 KPU_FORM = {"Tree - deciduous": "tree", "Shrub - deciduous": "shrub", "Poales (grass-like)": "graminoid", "Bamboo": "graminoid", "Herbaceous perennial": "herbaceous_perennial", "Fern": "fern", "Vine - deciduous": "vine", "Vine or climber": "vine", "Conifer": "tree"}
-FORM_WORDS = [("tree", r"\b(?:small |medium |large )?trees?\b"), ("shrub", r"\b(?:sub-?)?shrubs?\b"), ("graminoid", r"\b(?:grass|grasses|sedges?|rushes?|bamboo)\b"), ("fern", r"\bferns?\b"), ("vine", r"\b(?:vine|climber|liana)s?\b"), ("herbaceous_perennial", r"\bherbaceous perennial\b")]
+FORM_WORDS = [("tree", r"\b(?:small |medium |large )?trees?\b"), ("shrub", r"\b(?:sub-?)?shrubs?\b"), ("graminoid", r"\b(?:grass|grasses|sedges?|rushes?|bamboo)\b"), ("fern", r"\b(?:ferns?|fronds?)\b"), ("vine", r"\b(?:vine|climber|liana)s?\b"), ("herbaceous_perennial", r"\bherbaceous\b|\bperennial(?! border)s?\b|\bforb\b")]   # M29a: fronds count as fern words; 'perennial' (not 'perennial border') and USDA's 'forb' count as herbaceous-perennial words
 FORM_FIELDS = {"habit", "form", "mature_height", "mature_spread", "growth_rate", "landscape_use", "behaviour_with_others", "long_term_performance", "vancouver_context", "texture"}
 growth_forms = {}
 for pid, p in PLANTS.items():
@@ -125,8 +125,12 @@ for pid, p in PLANTS.items():
     for role in e.get("respondent_roles") or []:
         if role in ("tree", "shrub", "graminoid", "fern", "vine"): votes[role].setdefault("survey (entity.respondent_roles)", f"respondent typed '{role}'")
     if not votes: continue
-    form, ev = max(votes.items(), key=lambda kv: (len(kv[1]), kv[0]))
-    strong = [sid for sid in ev if (form, sid) not in weak and not sid.startswith("survey")]
+    # M29a (2026-11-02): the form with the most STRONG votes wins (a KPU type that names a form, or a form word in a claim on a
+    # morphology / size / growth field); weak mentions (use / context fields) and the survey role break ties only, never
+    # outvote a strong statement — on 10 plants the old count read the sword fern as a shrub ("mixed shrub border" + a typed role)
+    def strong_of(f, v): return [sid for sid in v if (f, sid) not in weak and not sid.startswith("survey")]
+    form, ev = max(votes.items(), key=lambda kv: (len(strong_of(kv[0], kv[1])), len(kv[1]), kv[0]))
+    strong = strong_of(form, ev)
     status = "supported" if len(strong) >= 1 and len(ev) >= 2 else "to confirm"   # needs one strong database/KPU statement plus a second voice
     others = {f: list(v.keys()) for f, v in votes.items() if f != form}
     growth_forms[pid] = {"form": form, "status": status, "evidence": ev, "weak": sorted(sid for f, sid in weak if f == form), "other_mentions": others}

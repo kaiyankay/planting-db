@@ -17,10 +17,12 @@
     "family": "Ericaceae",
     "kpu_plant_type": "Broadleaf evergreen",
     "respondent_roles": [
+      "shrub",
       "shrub"
     ],
     "raw_names": [
-      "Gaultheria shallon"
+      "Gaultheria shallon",
+      "Salal"
     ],
     "origin_status": "native_bc_west_of_cascades",
     "external_refs": {
@@ -35,9 +37,13 @@
     },
     "in_vancouver_street_tree_list": false,
     "prototype_role": "native evergreen shrub / groundcover; aggressive rhizomatous spread — the main test case for behaviour_with_others and the relations layer. Co-listed with Vaccinium ovatum by the same respondent.",
-    "survey_mentions": 1,
+    "survey_mentions": 2,
     "role_note": "respondent typed 'shrub' but gave 'evergreen ground cover' as the reason — both kept (schema rule R8)",
-    "external_refs_note": "gpp: no entry (searched 2026-10-29); mobot: no entry"
+    "external_refs_note": "gpp: no entry (searched 2026-10-29); mobot: no entry",
+    "survey_respondents": [
+      "survey-r07",
+      "survey-r03"
+    ]
   },
   "claims": [
     {
@@ -1715,6 +1721,128 @@
       ],
       "conditions": [],
       "place": "place:bc",
+      "time": [],
+      "cultivar": null
+    },
+    {
+      "id": "gaultheria-shallon:ecological_value:sv01",
+      "plant": "gaultheria-shallon",
+      "field": "ecological_value",
+      "value_kind": "categorical",
+      "value": [
+        "origin:native"
+      ],
+      "text": "Salal — Common native shrub species, have ecological values.",
+      "source_id": "survey-r07",
+      "source_type": "practitioner",
+      "context": "Metro Vancouver, hypothetical plant list (survey d1)",
+      "confidence": 0.8,
+      "status": "verified",
+      "recorded_at": "2026-11-02",
+      "recorded_by": "tools/survey_to_claims.py (responses-2026-11-03.csv)",
+      "claim_kind": "selection_reason",
+      "practitioner_meta": {
+        "basis": null,
+        "location": null,
+        "maintenance_received": null,
+        "observer_background": "practising landscape designer; personal-garden, professional and studio planting experience",
+        "site_conditions": null,
+        "season_observed": null,
+        "plant_age_years": null,
+        "completeness": "L0",
+        "citable": false,
+        "note": "d1 'why' answers carry no basis — stored as selection reasons, never cited as observations (R2)"
+      },
+      "survey_question": "d1",
+      "respondent_role_as_typed": "Shrub",
+      "value_label": [
+        "native"
+      ],
+      "note": "'ecological values' left unmapped — no specific function named",
+      "concepts": [
+        "origin:native"
+      ],
+      "conditions": [],
+      "place": "place:vancouver",
+      "time": [],
+      "cultivar": null
+    },
+    {
+      "id": "gaultheria-shallon:vancouver_context:sv02",
+      "plant": "gaultheria-shallon",
+      "field": "vancouver_context",
+      "value_kind": "qualitative",
+      "value": {
+        "where_used": "Pacific Northwest native-plant-focused gardens",
+        "less_seen_in": "other private / commercial greenspace"
+      },
+      "text": "usually it's used in a more pacific northwest native plants focused gardens, less seen in other types of private/commercial greenspace.",
+      "source_id": "survey-r07",
+      "source_type": "practitioner",
+      "context": "survey d2 note (observed); location not recorded",
+      "confidence": 0.85,
+      "status": "verified",
+      "recorded_at": "2026-11-02",
+      "recorded_by": "tools/survey_to_claims.py (responses-2026-11-03.csv)",
+      "claim_kind": "observation",
+      "practitioner_meta": {
+        "basis": "observed",
+        "location": null,
+        "maintenance_received": null,
+        "observer_background": "practising landscape designer; personal-garden, professional and studio planting experience",
+        "site_conditions": null,
+        "season_observed": null,
+        "plant_age_years": null,
+        "completeness": "L1",
+        "citable": true,
+        "caveat": "location not recorded"
+      },
+      "survey_question": "d2",
+      "concepts": [],
+      "conditions": [],
+      "place": "place:vancouver",
+      "time": [],
+      "cultivar": null
+    },
+    {
+      "id": "gaultheria-shallon:landscape_use:sv03",
+      "plant": "gaultheria-shallon",
+      "field": "landscape_use",
+      "value_kind": "categorical",
+      "value": [
+        "use:native_planting"
+      ],
+      "text": "Salal — derived from the respondent's note: usually it's used in a more pacific northwest native plants focused gardens, les…",
+      "source_id": "survey-r07",
+      "source_type": "practitioner",
+      "context": "survey d2 note (observed); location not recorded; derived from gaultheria-shallon:vancouver_context:sv02",
+      "confidence": 0.8,
+      "status": "verified",
+      "recorded_at": "2026-11-02",
+      "recorded_by": "tools/survey_to_claims.py (derived, same source)",
+      "claim_kind": "observation",
+      "derived_from": "gaultheria-shallon:vancouver_context:sv02",
+      "practitioner_meta": {
+        "basis": "observed",
+        "location": null,
+        "maintenance_received": null,
+        "observer_background": "practising landscape designer; personal-garden, professional and studio planting experience",
+        "site_conditions": null,
+        "season_observed": null,
+        "plant_age_years": null,
+        "completeness": "L1",
+        "citable": true,
+        "caveat": "location not recorded"
+      },
+      "survey_question": "d2",
+      "value_label": [
+        "Native planting"
+      ],
+      "concepts": [
+        "use:native_planting"
+      ],
+      "conditions": [],
+      "place": "place:vancouver",
       "time": [],
       "cultivar": null
     }

@@ -1,0 +1,41 @@
+{
+  "genus": "CERCIDIPHYLLUM",
+  "snapshot_data_processed": "2026-11-02T14:49:44+00:00",
+  "species": [
+    {
+      "species_name": "JAPONICUM",
+      "n": 2647
+    },
+    {
+      "species_name": "MAGNIFICUM",
+      "n": 3
+    }
+  ],
+  "species_cultivar": [
+    {
+      "species_name": "JAPONICUM",
+      "cultivar_name": "NONE",
+      "n": 2611
+    },
+    {
+      "species_name": "JAPONICUM",
+      "cultivar_name": "RED FOX",
+      "n": 30
+    },
+    {
+      "species_name": "JAPONICUM",
+      "cultivar_name": "PENDULA",
+      "n": 5
+    },
+    {
+      "species_name": "MAGNIFICUM",
+      "cultivar_name": "NONE",
+      "n": 3
+    },
+    {
+      "species_name": "JAPONICUM",
+      "cultivar_name": "MORIOKA WEEPING",
+      "n": 1
+    }
+  ]
+}

@@ -1,10 +1,10 @@
 {
-  "$schema_version": "0.4.1",
+  "$schema_version": "0.4.2",
   "name": "Planting Intelligence — Local Planting Knowledge Database",
   "scope": "City of Vancouver / Metro Vancouver, BC (Canadian hardiness zone 8a–8b)",
   "updated": "2026-11-02",
   "design_basis": {
-    "field_tiers": "ARCH 540 user survey c1 (must-pass vs compared) and c2 (could not find / did not trust), n=6, 2026-10-30",
+    "field_tiers": "ARCH 540 user survey c1 (must-pass vs compared) and c2 (could not find / did not trust), n=6, 2026-10-30; re-assessed on n=14 (11 answering c1), 2026-11-02 — see reports/survey-integration-2026-11-02.md",
     "practitioner_metadata": "survey f1 (details needed before trusting someone's note)",
     "source_priority": "survey f2 (what makes an AI suggestion credible)",
     "conflict_rule": "survey c3 (what people do when sources disagree)",
@@ -68,6 +68,14 @@
       },
       "in_vancouver_street_tree_list": {
         "type": "boolean|null"
+      },
+      "survey_respondents": {
+        "type": "string[]",
+        "note": "0.4.2: anonymous respondent ids (survey-rNN) whose d1 lists or d2 notes name this plant; the idempotence key of tools/survey_to_claims.py. Parallel to raw_names / respondent_roles"
+      },
+      "survey_mentions": {
+        "type": "integer",
+        "note": "number of survey d1 lists naming the plant (any raw name); maintained by tools/survey_to_claims.py"
       }
     }
   },
@@ -610,10 +618,12 @@
         "values": [
           "read",
           "observed",
-          "project"
+          "project",
+          "mixed"
         ],
         "survey": "d2 basis field",
-        "required": true
+        "required": true,
+        "note": "0.4.2 (2026-11-02, M36): 'mixed' = survey d2_basis 'A combination of these' (read + observed + project); counts as a basis for completeness (L1+) like the others"
       },
       "location": {
         "type": "string",

@@ -16,11 +16,13 @@
     "kpu_plant_type": "Tree - deciduous",
     "respondent_roles": [
       "tree",
+      "tree",
       "tree"
     ],
     "raw_names": [
       "Japanese maple",
-      "Japanese Maple"
+      "Japanese Maple",
+      "acer palmatum"
     ],
     "origin_status": "non_native",
     "external_refs": {
@@ -34,7 +36,12 @@
     },
     "in_vancouver_street_tree_list": true,
     "prototype_role": "non-native tree; most-mentioned in survey (2/5 lists); heavy cultivar ambiguity — tests how conflicting values under one name are stored (cultivar goes in `context`)",
-    "survey_mentions": 2
+    "survey_mentions": 3,
+    "survey_respondents": [
+      "survey-r14",
+      "survey-r01",
+      "survey-r04"
+    ]
   },
   "claims": [
     {
@@ -2376,6 +2383,44 @@
       "source_url": "https://www.inaturalist.org/observations?place_id=27530&taxon_id=63512&verifiable=true&license=cc0,cc-by,cc-by-nc",
       "attribution": "iNaturalist community observations, CC0/CC-BY/CC-BY-NC, via api.inaturalist.org",
       "note": "presence evidence; observation counts reflect observer effort as much as abundance",
+      "concepts": [],
+      "conditions": [],
+      "place": "place:vancouver",
+      "time": [],
+      "cultivar": null
+    },
+    {
+      "id": "acer-palmatum:vancouver_context:sv01",
+      "plant": "acer-palmatum",
+      "field": "vancouver_context",
+      "value_kind": "qualitative",
+      "value": {
+        "note": "good for amenity space"
+      },
+      "text": "acer palmatum — good for amenity space.",
+      "source_id": "survey-r14",
+      "source_type": "practitioner",
+      "context": "Metro Vancouver, hypothetical plant list (survey d1)",
+      "confidence": 0.8,
+      "status": "verified",
+      "recorded_at": "2026-11-02",
+      "recorded_by": "tools/survey_to_claims.py (responses-2026-11-03.csv)",
+      "claim_kind": "selection_reason",
+      "practitioner_meta": {
+        "basis": null,
+        "location": null,
+        "maintenance_received": null,
+        "observer_background": "practising landscape designer; professional planting experience",
+        "site_conditions": null,
+        "season_observed": null,
+        "plant_age_years": null,
+        "completeness": "L0",
+        "citable": false,
+        "note": "d1 'why' answers carry no basis — stored as selection reasons, never cited as observations (R2)"
+      },
+      "survey_question": "d1",
+      "respondent_role_as_typed": "Tree",
+      "note": "'amenity space' is a design-programme term with no KPU use value; kept as a Vancouver-context reason",
       "concepts": [],
       "conditions": [],
       "place": "place:vancouver",

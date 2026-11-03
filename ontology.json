@@ -5057,6 +5057,7 @@
    "definition": "Dry spells without irrigation once established.",
    "aliases": [
     "drought tolerant",
+    "dry soil",
     "dry tolerant"
    ],
    "source_of_term": "schema resistances starter list (M11)",
@@ -5120,7 +5121,8 @@
    "definition": "Exhaust, dust and compacted soil of streets.",
    "aliases": [
     "pollution",
-    "street conditions"
+    "street conditions",
+    "urban conditions"
    ],
    "source_of_term": "schema resistances starter list (M11)",
    "level": "concept",
@@ -5154,7 +5156,57 @@
     "juglone",
     "under walnut"
    ],
-   "source_of_term": "schema resistances starter list (M11); MOBOT",
+   "source_of_term": "schema resistances starter list (M11); MOBOT 'Tolerate' line (open-list values, M11; clay soil / wet soil / erosion added 2026-11-02 for the 10-plant expansion)",
+   "level": "concept",
+   "category": "cat:ecological",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:stress"
+  },
+  {
+   "id": "stress:clay_soil",
+   "dimension": "resistance",
+   "facet": "stress",
+   "label": "clay soil",
+   "definition": "Heavy, slow-draining clay, the usual Vancouver subsoil once topsoil is stripped.",
+   "aliases": [
+    "clay",
+    "clay tolerant",
+    "heavy soil"
+   ],
+   "source_of_term": "schema resistances starter list (M11); MOBOT 'Tolerate' line (open-list values, M11; clay soil / wet soil / erosion added 2026-11-02 for the 10-plant expansion)",
+   "level": "concept",
+   "category": "cat:ecological",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:stress"
+  },
+  {
+   "id": "stress:wet_soil",
+   "dimension": "resistance",
+   "facet": "stress",
+   "label": "wet soil",
+   "definition": "Soil that stays saturated for long periods; rain gardens, swales, low ground.",
+   "aliases": [
+    "rain garden",
+    "waterlogged soil",
+    "wet site"
+   ],
+   "source_of_term": "schema resistances starter list (M11); MOBOT 'Tolerate' line (open-list values, M11; clay soil / wet soil / erosion added 2026-11-02 for the 10-plant expansion)",
+   "level": "concept",
+   "category": "cat:ecological",
+   "axis": "axis:y",
+   "hierarchy_parent": "facet:stress"
+  },
+  {
+   "id": "stress:erosion",
+   "dimension": "resistance",
+   "facet": "stress",
+   "label": "erosion",
+   "definition": "Unstable or eroding ground on slopes and banks where soil moves.",
+   "aliases": [
+    "eroding slope",
+    "unstable bank"
+   ],
+   "source_of_term": "schema resistances starter list (M11); MOBOT 'Tolerate' line (open-list values, M11; clay soil / wet soil / erosion added 2026-11-02 for the 10-plant expansion)",
    "level": "concept",
    "category": "cat:ecological",
    "axis": "axis:y",
@@ -6523,11 +6575,63 @@
    "hierarchy_parent": "cat:planting_role"
   },
   {
+   "id": "family:asteraceae",
+   "dimension": "taxonomy",
+   "facet": "taxon_family",
+   "label": "Asteraceae",
+   "definition": "The plant family Asteraceae, as recorded in the entity records of achillea-millefolium, gaillardia-aristata.",
+   "aliases": [],
+   "source_of_term": "entity.family (plants/*.json)",
+   "level": "concept",
+   "category": "cat:taxonomy",
+   "axis": "axis:x",
+   "hierarchy_parent": "facet:taxon_family"
+  },
+  {
+   "id": "family:cercidiphyllaceae",
+   "dimension": "taxonomy",
+   "facet": "taxon_family",
+   "label": "Cercidiphyllaceae",
+   "definition": "The plant family Cercidiphyllaceae, as recorded in the entity records of cercidiphyllum-japonicum.",
+   "aliases": [],
+   "source_of_term": "entity.family (plants/*.json)",
+   "level": "concept",
+   "category": "cat:taxonomy",
+   "axis": "axis:x",
+   "hierarchy_parent": "facet:taxon_family"
+  },
+  {
+   "id": "family:cornaceae",
+   "dimension": "taxonomy",
+   "facet": "taxon_family",
+   "label": "Cornaceae",
+   "definition": "The plant family Cornaceae, as recorded in the entity records of cornus-nuttallii, cornus-sericea.",
+   "aliases": [],
+   "source_of_term": "entity.family (plants/*.json)",
+   "level": "concept",
+   "category": "cat:taxonomy",
+   "axis": "axis:x",
+   "hierarchy_parent": "facet:taxon_family"
+  },
+  {
+   "id": "family:dryopteridaceae",
+   "dimension": "taxonomy",
+   "facet": "taxon_family",
+   "label": "Dryopteridaceae",
+   "definition": "The plant family Dryopteridaceae, as recorded in the entity records of polystichum-munitum.",
+   "aliases": [],
+   "source_of_term": "entity.family (plants/*.json)",
+   "level": "concept",
+   "category": "cat:taxonomy",
+   "axis": "axis:x",
+   "hierarchy_parent": "facet:taxon_family"
+  },
+  {
    "id": "family:ericaceae",
    "dimension": "taxonomy",
    "facet": "taxon_family",
    "label": "Ericaceae",
-   "definition": "The plant family Ericaceae, as recorded in the entity records of gaultheria-shallon, vaccinium-ovatum.",
+   "definition": "The plant family Ericaceae, as recorded in the entity records of arctostaphylos-uva-ursi, gaultheria-shallon, vaccinium-ovatum.",
    "aliases": [],
    "source_of_term": "entity.family (plants/*.json)",
    "level": "concept",
@@ -6563,6 +6667,76 @@
    "hierarchy_parent": "family:sapindaceae"
   },
   {
+   "id": "genus:achillea",
+   "dimension": "taxonomy",
+   "facet": "taxon_genus",
+   "label": "Achillea",
+   "definition": "The genus Achillea, read from the scientific name; family Asteraceae.",
+   "aliases": [],
+   "source_of_term": "entity.scientific_name (plants/*.json)",
+   "parent": "family:asteraceae",
+   "level": "concept",
+   "category": "cat:taxonomy",
+   "axis": "axis:x",
+   "hierarchy_parent": "family:asteraceae"
+  },
+  {
+   "id": "genus:arctostaphylos",
+   "dimension": "taxonomy",
+   "facet": "taxon_genus",
+   "label": "Arctostaphylos",
+   "definition": "The genus Arctostaphylos, read from the scientific name; family Ericaceae.",
+   "aliases": [],
+   "source_of_term": "entity.scientific_name (plants/*.json)",
+   "parent": "family:ericaceae",
+   "level": "concept",
+   "category": "cat:taxonomy",
+   "axis": "axis:x",
+   "hierarchy_parent": "family:ericaceae"
+  },
+  {
+   "id": "genus:cercidiphyllum",
+   "dimension": "taxonomy",
+   "facet": "taxon_genus",
+   "label": "Cercidiphyllum",
+   "definition": "The genus Cercidiphyllum, read from the scientific name; family Cercidiphyllaceae.",
+   "aliases": [],
+   "source_of_term": "entity.scientific_name (plants/*.json)",
+   "parent": "family:cercidiphyllaceae",
+   "level": "concept",
+   "category": "cat:taxonomy",
+   "axis": "axis:x",
+   "hierarchy_parent": "family:cercidiphyllaceae"
+  },
+  {
+   "id": "genus:cornus",
+   "dimension": "taxonomy",
+   "facet": "taxon_genus",
+   "label": "Cornus",
+   "definition": "The genus Cornus, read from the scientific name; family Cornaceae.",
+   "aliases": [],
+   "source_of_term": "entity.scientific_name (plants/*.json)",
+   "parent": "family:cornaceae",
+   "level": "concept",
+   "category": "cat:taxonomy",
+   "axis": "axis:x",
+   "hierarchy_parent": "family:cornaceae"
+  },
+  {
+   "id": "genus:gaillardia",
+   "dimension": "taxonomy",
+   "facet": "taxon_genus",
+   "label": "Gaillardia",
+   "definition": "The genus Gaillardia, read from the scientific name; family Asteraceae.",
+   "aliases": [],
+   "source_of_term": "entity.scientific_name (plants/*.json)",
+   "parent": "family:asteraceae",
+   "level": "concept",
+   "category": "cat:taxonomy",
+   "axis": "axis:x",
+   "hierarchy_parent": "family:asteraceae"
+  },
+  {
    "id": "genus:gaultheria",
    "dimension": "taxonomy",
    "facet": "taxon_genus",
@@ -6575,6 +6749,20 @@
    "category": "cat:taxonomy",
    "axis": "axis:x",
    "hierarchy_parent": "family:ericaceae"
+  },
+  {
+   "id": "genus:polystichum",
+   "dimension": "taxonomy",
+   "facet": "taxon_genus",
+   "label": "Polystichum",
+   "definition": "The genus Polystichum, read from the scientific name; family Dryopteridaceae.",
+   "aliases": [],
+   "source_of_term": "entity.scientific_name (plants/*.json)",
+   "parent": "family:dryopteridaceae",
+   "level": "concept",
+   "category": "cat:taxonomy",
+   "axis": "axis:x",
+   "hierarchy_parent": "family:dryopteridaceae"
   },
   {
    "id": "genus:vaccinium",

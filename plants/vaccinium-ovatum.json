@@ -39,7 +39,10 @@
     "in_vancouver_street_tree_list": false,
     "prototype_role": "native evergreen shrub; carries the only project-level practitioner note in the survey — tests practitioner and literature claims side by side",
     "survey_mentions": 1,
-    "external_refs_note": "kpu: only a 'Thunderbird' cultivar page exists (no species page); link only"
+    "external_refs_note": "kpu: only a 'Thunderbird' cultivar page exists (no species page); link only",
+    "survey_respondents": [
+      "survey-r03"
+    ]
   },
   "claims": [
     {

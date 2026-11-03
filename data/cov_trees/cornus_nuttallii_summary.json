@@ -1,0 +1,153 @@
+{
+  "genus": "CORNUS",
+  "species": "NUTTALLII",
+  "n_records": 620,
+  "snapshot": {
+    "data_processed": "2026-11-02T14:49:44+00:00",
+    "modified": "2026-11-02T14:49:44+00:00",
+    "records_count": 184152,
+    "licence": "Open Government Licence - Vancouver",
+    "licence_id": "OGL-Vancouver",
+    "fetched_at": "2026-11-03T02:27:50+00:00"
+  },
+  "fields_present": [
+    "asset_id",
+    "address",
+    "common_name",
+    "genus_name",
+    "species_name",
+    "cultivar_name",
+    "height_m",
+    "diameter_cm",
+    "local_area",
+    "geom",
+    "geo_point_2d"
+  ],
+  "date_planted_available": false,
+  "height_m": {
+    "n": 620,
+    "min": 4.6,
+    "p10": 7.6,
+    "p25": 7.6,
+    "median": 10.7,
+    "mean": 11.04,
+    "p75": 13.7,
+    "p90": 16.8,
+    "p95": 16.8,
+    "max": 32.0
+  },
+  "diameter_cm": {
+    "n": 620,
+    "min": 2.5,
+    "p10": 10.2,
+    "p25": 20.3,
+    "median": 30.5,
+    "mean": 38.21,
+    "p75": 50.8,
+    "p90": 68.6,
+    "p95": 81.3,
+    "max": 251.5
+  },
+  "height_m_where_diameter_ge_20cm": {
+    "n": 480,
+    "min": 4.6,
+    "p10": 7.6,
+    "p25": 10.7,
+    "median": 10.7,
+    "mean": 12.07,
+    "p75": 13.7,
+    "p90": 16.8,
+    "p95": 19.8,
+    "max": 32.0
+  },
+  "cultivars": {
+    "NONE": 608,
+    "GOLDSPOT": 11,
+    "CORIGO GIANT": 1
+  },
+  "cultivar_stats": {
+    "NONE": {
+      "n": 608,
+      "height_m": {
+        "n": 608,
+        "min": 4.6,
+        "p10": 7.6,
+        "p25": 7.6,
+        "median": 10.7,
+        "mean": 11.08,
+        "p75": 13.7,
+        "p90": 16.8,
+        "p95": 16.8,
+        "max": 32.0
+      },
+      "diameter_cm": {
+        "n": 608,
+        "min": 2.5,
+        "p10": 10.2,
+        "p25": 20.3,
+        "median": 30.5,
+        "mean": 38.35,
+        "p75": 50.8,
+        "p90": 68.6,
+        "p95": 81.3,
+        "max": 251.5
+      }
+    },
+    "GOLDSPOT": {
+      "n": 11,
+      "height_m": {
+        "n": 11,
+        "min": 4.6,
+        "p10": 7.6,
+        "p25": 7.6,
+        "median": 10.7,
+        "mean": 9.85,
+        "p75": 10.7,
+        "p90": 13.7,
+        "p95": 15.25,
+        "max": 16.8
+      },
+      "diameter_cm": {
+        "n": 11,
+        "min": 8.9,
+        "p10": 14.6,
+        "p25": 19.05,
+        "median": 25.4,
+        "mean": 33.32,
+        "p75": 43.85,
+        "p90": 61.0,
+        "p95": 68.6,
+        "max": 76.2
+      }
+    }
+  },
+  "local_area": {
+    "Killarney": 92,
+    "Riley Park": 66,
+    "West Point Grey": 56,
+    "Shaughnessy": 49,
+    "Dunbar-Southlands": 45,
+    "Marpole": 45,
+    "Kerrisdale": 36,
+    "South Cambie": 35,
+    "Kensington-Cedar Cottage": 28,
+    "Renfrew-Collingwood": 27,
+    "Hastings-Sunrise": 25,
+    "Kitsilano": 24,
+    "Sunset": 22,
+    "Victoria-Fraserview": 17,
+    "Oakridge": 15,
+    "Arbutus Ridge": 12,
+    "(blank)": 9,
+    "Strathcona": 7,
+    "Downtown": 6,
+    "West End": 2,
+    "Fairview": 2
+  },
+  "notes": [
+    "height_m and diameter_cm are as recorded at last inventory update; measurement date per tree is not published in this snapshot.",
+    "The snapshot has no date_planted field, so time_to_intended_size cannot be derived from CoV data alone.",
+    "cultivar_name 'NONE' means not recorded, not necessarily the straight species.",
+    "height_m is banded, not measured: ~97% of values sit on 4.6/7.6/10.7/13.7/16.8 m, i.e. 15/25/35/45/55 ft class midpoints. Treat as a height class; quote p90 as 'mostly <= 10.7 m class' rather than a precise figure."
+  ]
+}
