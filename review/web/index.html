@@ -33,7 +33,8 @@
   .meta { color:var(--grey); font-size:13px; margin-top:8px; }
   h3 { font-size:16px; font-weight:600; margin:0 0 10px; }
   .verdict { display:flex; gap:9px; align-items:flex-start; margin:0 0 6px; }
-  .verdict .dot { width:18px; height:18px; border-radius:50%; border:1.5px solid currentColor; display:grid; place-items:center; font-size:11px; font-weight:700; flex:none; margin-top:2px; }
+  .verdict svg { flex:0 0 18px; width:18px; height:18px; margin-top:2px; display:block; }
+  .verdict > span { flex:1 1 auto; min-width:0; }
   .verdict.ok { color:var(--ok); } .verdict.warn { color:var(--warn); } .verdict.grey { color:var(--grey); }
   .explain { color:var(--grey); margin:0; }
   .source { margin-top:10px; font-size:14px; } .source a { color:var(--ink); } .source q { color:var(--grey); }
@@ -141,7 +142,7 @@ async function showClaim(cid) {
   </div>
   <div class="card">
     <h3>AI evidence assessment</h3>
-    <div class="verdict ${cls}"><span class="dot">${cls==='ok'?'✓':'!'}</span><span>${word}${a&&a.missing_context?' — '+esc(a.missing_context):''}</span></div>
+    <div class="verdict ${cls}"><svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><circle cx="9" cy="9" r="8" fill="none" stroke="currentColor" stroke-width="1.5"/>${cls==='ok'?'<path d="M5 9.5l2.5 2.5L13 6.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>':'<path d="M9 5v5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><circle cx="9" cy="13" r="1" fill="currentColor"/>'}</svg><span>${word}${a&&a.missing_context?' — '+esc(a.missing_context):''}</span></div>
     ${a?`<p class="explain">${esc(a.explanation)}</p>`:'<p class="explain">This claim has not been checked against its source yet.</p>'}
     <div class="source">Source: <a href="${esc(c.source_url||'#')}" target="_blank" rel="noopener">${esc(s.name||src(c.source_id))}</a>${a&&a.locator?` · ${esc(a.locator)}`:''}${a&&a.evidence_excerpt?`<br><q>${esc(a.evidence_excerpt)}</q>`:''}</div>
     ${d.same_field.length>1?`<button class="toggle" data-fold="cmp">Compare the ${d.same_field.length} sources on this field</button><div class="fold" id="cmp" hidden><table><tr><th>source</th><th>value</th><th>context</th><th>status</th></tr>${d.same_field.map(x=>`<tr class="${x.id===c.id?'me':''}"><td>${esc(src(x.source_id))}${x.conflict?' ⇄':''}</td><td>${esc(fmtv(x.value_label ?? x.value))}</td><td style="color:var(--grey)">${esc(x.context)}</td><td>${esc(x.status)}</td></tr>`).join('')}</table></div>`:''}
