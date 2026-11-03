@@ -10,15 +10,18 @@
   html, body { height:100%; }
   body { margin:0; background:#fff; color:var(--ink); font:14px/1.45 -apple-system, "SF Pro Text", "Segoe UI", Helvetica, Arial, sans-serif; -webkit-font-smoothing:antialiased; overflow:hidden; }
   .app { height:100vh; display:grid; grid-template-rows:auto 1fr; }
-  .bar { display:flex; align-items:center; gap:8px; padding:12px 24px; border-bottom:1px solid var(--line); flex-wrap:wrap; }
+  .bar { display:flex; align-items:center; gap:8px; padding:12px 24px; border-bottom:1px solid var(--line); flex-wrap:nowrap; }
   .bar h1 { font-size:17px; font-weight:600; margin:0 14px 0 0; white-space:nowrap; }
   .sep { width:1px; height:22px; background:var(--line); margin:0 6px; }
   .chip { border:0; background:var(--chip); color:var(--ink); border-radius:999px; padding:5px 12px; font:inherit; font-size:13.5px; cursor:pointer; line-height:1.4; white-space:nowrap; }
   .chip.on { background:var(--ink); color:#fff; } .chip small { font-size:12px; opacity:.6; margin-left:4px; }
-  .sub { color:var(--grey); font-size:13px; margin-left:10px; display:flex; gap:12px; white-space:nowrap; }
-  .me { margin-left:auto; display:flex; gap:8px; align-items:center; color:var(--grey); font-size:13px; }
-  .me input { width:130px; border:1px solid var(--line); border-radius:999px; padding:4px 11px; font:inherit; font-size:13px; }
-  select.issue { border:1px solid var(--line); border-radius:999px; padding:5px 10px; font:inherit; font-size:13.5px; max-width:420px; }
+  .sub { color:var(--grey); font-size:12.5px; margin-left:8px; display:flex; gap:10px; white-space:nowrap; flex:1 1 auto; min-width:0; overflow:hidden; }
+  .me { margin-left:auto; flex:none; display:flex; gap:8px; align-items:center; color:var(--grey); font-size:13px; }
+  .me input { width:110px; border:1px solid var(--line); border-radius:999px; padding:4px 11px; font:inherit; font-size:13px; }
+  select.issue { border:1px solid var(--line); border-radius:999px; padding:5px 10px; font:inherit; font-size:13.5px; max-width:230px; }
+  main.list { grid-template-columns:1fr; }
+  .card.issues { overflow:auto; }
+  .ilist tr[data-i] { cursor:pointer; } .ilist tr[data-i]:hover td { background:#fafafa; } .ilist td.desc { color:var(--grey); max-width:70ch; } .ilist th, .ilist td { padding:9px 8px; }
   main { display:grid; grid-template-columns:minmax(0, 1fr) 400px; gap:16px; padding:16px 24px 20px; min-height:0; }
   .col { min-height:0; display:flex; flex-direction:column; gap:12px; }
   .col.read { overflow:auto; padding-right:2px; }
@@ -67,7 +70,7 @@
   .hist { margin:6px 0 0; padding-left:18px; } .hist li { font-size:13px; margin:3px 0; } .hist time { color:var(--grey); margin-right:6px; }
   .empty { color:var(--grey); padding:30px 0; }
   #toast { position:fixed; bottom:20px; left:50%; transform:translateX(-50%); background:var(--ink); color:#fff; border-radius:999px; padding:8px 16px; font-size:13.5px; display:none; }
-  @media (max-width:1100px) { body { overflow:auto; } .app { height:auto; } main { grid-template-columns:1fr; padding:12px 16px 40px; } .col.read { overflow:visible; } .card.fill.evidence { overflow:visible; } .sub { margin-left:0; } textarea { resize:vertical; min-height:80px; } }
+  @media (max-width:1100px) { .bar { flex-wrap:wrap; } body { overflow:auto; } .app { height:auto; } main { grid-template-columns:1fr; padding:12px 16px 40px; } .col.read { overflow:visible; } .card.fill.evidence { overflow:visible; } .sub { margin-left:0; } textarea { resize:vertical; min-height:80px; } }
 </style>
 </head>
 <body>
@@ -110,7 +113,7 @@ function buildSeq() {
   if (prio) rows = rows.filter(r => r.priority === 'high');
   seq = rows.map(r => r.claim_id);
 }
-function subline() { const o = DATA.overview; $('#sub').innerHTML = `<span>${seq.length} in view</span><span>${o.human_reviewed_claims} of ${o.in_queue} decided</span><span>${o.by_status.verified||0} verified · ${o.by_status.disputed||0} disputed</span>`; }
+function subline() { const o = DATA.overview; $('#sub').innerHTML = `<span>${seq.length} in view</span><span>${o.human_reviewed_claims}/${o.in_queue} decided · ${o.by_status.verified||0} verified${o.by_status.disputed?` · ${o.by_status.disputed} disputed`:''}</span>`; }
 function render() {
   const o = DATA.overview, e = o.entries;
   $('#scopes').innerHTML = [['all','All claims', o.in_queue], ['conflicts','Conflicts', e.conflicts.groups], ['issues','Issues', e.issues.n], ['sample','Sample', e.sample.n]].map(([k,l,n]) => `<button class="chip ${scope===k?'on':''}" data-s="${k}">${l}<small>${n}</small></button>`).join('');
@@ -118,10 +121,16 @@ function render() {
   document.querySelectorAll('#scopes .chip').forEach(b => b.onclick = () => { scope = b.dataset.s; if (scope !== 'issues') { issueId = null; history.replaceState(null, '', ' '); } pos = 0; render(); });
   $('[data-st]').onclick = () => { status = status === 'unverified' ? 'any' : 'unverified'; pos = 0; render(); };
   $('[data-p]').onclick = () => { prio = !prio; pos = 0; render(); };
-  $('#issues').innerHTML = scope === 'issues' ? `<select class="issue" id="issue-sel"><option value="">Choose an issue…</option>${DATA.issues.map(i => `<option value="${esc(i.id)}" ${issueId===i.id?'selected':''}>${esc(i.title)} (${i.decided}/${i.n_claims})</option>`).join('')}</select>` : '';
+  $('#issues').innerHTML = scope === 'issues' ? `<select class="issue" id="issue-sel"><option value="">All issues</option>${DATA.issues.map(i => `<option value="${esc(i.id)}" ${issueId===i.id?'selected':''}>${esc(i.title)} (${i.decided}/${i.n_claims})</option>`).join('')}</select>` : '';
   const sel = $('#issue-sel'); if (sel) sel.onchange = () => { issueId = sel.value || null; location.hash = issueId ? 'issue=' + encodeURIComponent(issueId) : ''; pos = 0; render(); };
   buildSeq(); if (pos >= seq.length) pos = 0; subline(); renderPolicy();
-  if (!seq.length) { $('#claim').innerHTML = `<div class="empty">${scope==='issues' && !issueId ? 'Choose an issue in the bar.' : 'Nothing left in this view.'}</div>`; $('#decide').innerHTML = ''; return; }
+  document.querySelector('main').classList.toggle('list', scope==='issues' && !issueId);
+  if (scope==='issues' && !issueId) {
+    $('#claim').innerHTML = `<div class="card issues"><h3>Recurring issues — ${DATA.issues.length} patterns across ${DATA.issues.reduce((n,i)=>n+i.n_claims,0)} claims. Pick one, record a policy once, then decide its claims one by one.</h3><table class="ilist"><tr><th>issue</th><th>what the assessments found</th><th>claims</th><th>decided</th><th>policy</th></tr>${DATA.issues.map(i=>`<tr data-i="${esc(i.id)}"><td><b>${esc(i.title)}</b></td><td class="desc">${esc(i.description)}</td><td>${i.n_claims}${i.conflicting?` <span title="conflicting">⇄ ${i.conflicting}</span>`:''}</td><td>${i.decided} of ${i.n_claims}</td><td>${i.policy?esc(i.policy.option):'<span style="color:var(--grey)">none yet</span>'}</td></tr>`).join('')}</table></div>`;
+    document.querySelectorAll('tr[data-i]').forEach(r => r.onclick = () => { issueId = r.dataset.i; location.hash = 'issue=' + encodeURIComponent(issueId); pos = 0; render(); });
+    $('#decide').innerHTML = ''; return;
+  }
+  if (!seq.length) { $('#claim').innerHTML = `<div class="empty">Nothing left in this view.</div>`; $('#decide').innerHTML = ''; return; }
   showClaim(seq[pos]);
 }
 function renderPolicy() {
