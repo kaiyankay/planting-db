@@ -5,62 +5,61 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Claim Review</title>
 <style>
-  :root { --ink:#000; --grey:#6e6e6e; --line:#e4e4e4; --chip:#f1f1f1; --ok:#2f6f4e; --warn:#b4541a; --r:14px; }
+  :root { --ink:#111; --grey:#6b6b6b; --line:#e3e3e3; --chip:#f2f2f2; --ok:#2f6f4e; --warn:#b4541a; --r:12px; }
   * { box-sizing:border-box; }
-  body { margin:0; background:#fff; color:var(--ink); font:17px/1.5 -apple-system, "SF Pro Text", "Segoe UI", Helvetica, Arial, sans-serif; -webkit-font-smoothing:antialiased; }
-  .wrap { max-width:760px; margin:0 auto; padding:28px 20px 80px; }
-  .top { display:flex; align-items:baseline; gap:12px; flex-wrap:wrap; }
-  .top h1 { font-size:22px; font-weight:600; margin:0; }
-  .top .me { margin-left:auto; display:flex; gap:8px; align-items:center; color:var(--grey); font-size:14px; }
-  .top .me input { width:140px; border:1px solid var(--line); border-radius:999px; padding:5px 12px; font:inherit; font-size:14px; }
-  .chips { display:flex; gap:8px; flex-wrap:wrap; margin:18px 0 6px; }
-  .chip { border:0; background:var(--chip); color:var(--ink); border-radius:999px; padding:7px 15px; font:inherit; font-size:15px; cursor:pointer; }
-  .chip.on { background:var(--ink); color:#fff; }
-  .chip small { color:inherit; opacity:.6; margin-left:4px; }
-  .sub { color:var(--grey); font-size:14.5px; margin:8px 0 18px; display:flex; gap:14px; flex-wrap:wrap; align-items:center; }
-  .sub a, .link { color:var(--ink); text-decoration:underline; text-underline-offset:3px; cursor:pointer; background:none; border:0; font:inherit; font-size:inherit; padding:0; }
-  .issues { display:flex; flex-direction:column; gap:6px; margin:6px 0 14px; }
-  .issues button { text-align:left; background:#fff; border:1px solid var(--line); border-radius:10px; padding:10px 14px; font:inherit; font-size:15px; cursor:pointer; display:flex; gap:10px; align-items:baseline; }
-  .issues button.on { border-color:var(--ink); } .issues button span { color:var(--grey); font-size:13.5px; margin-left:auto; white-space:nowrap; }
-  .policy { border:1px solid var(--line); border-radius:var(--r); padding:14px 18px; margin:0 0 14px; font-size:15px; }
-  .policy p { margin:0 0 8px; color:var(--grey); }
-  .policy select, .policy input { width:100%; border:1px solid var(--line); border-radius:8px; padding:8px 10px; font:inherit; font-size:15px; margin:4px 0; }
-  .card { border:1px solid var(--line); border-radius:var(--r); padding:22px 26px; margin:0 0 14px; }
-  .head { display:flex; align-items:flex-start; gap:14px; }
-  .head h2 { font-size:26px; font-weight:500; margin:0; line-height:1.2; } .head h2 i { font-style:italic; }
-  .state { margin-left:auto; background:var(--chip); border-radius:999px; padding:6px 14px; font-size:14px; white-space:nowrap; }
+  body { margin:0; background:#fff; color:var(--ink); font:15px/1.45 -apple-system, "SF Pro Text", "Segoe UI", Helvetica, Arial, sans-serif; -webkit-font-smoothing:antialiased; }
+  .wrap { max-width:720px; margin:0 auto; padding:22px 20px 60px; }
+  .top { display:flex; align-items:center; gap:12px; flex-wrap:wrap; }
+  .top h1 { font-size:18px; font-weight:600; margin:0; }
+  .me { margin-left:auto; display:flex; gap:8px; align-items:center; color:var(--grey); font-size:13px; }
+  .me input { width:130px; border:1px solid var(--line); border-radius:999px; padding:4px 11px; font:inherit; font-size:13px; }
+  .chips { display:flex; gap:6px; flex-wrap:wrap; margin:14px 0 0; }
+  .chip { border:0; background:var(--chip); color:var(--ink); border-radius:999px; padding:5px 12px; font:inherit; font-size:13.5px; cursor:pointer; line-height:1.4; }
+  .chip.on { background:var(--ink); color:#fff; } .chip small { font-size:12px; opacity:.6; margin-left:4px; }
+  .sub { color:var(--grey); font-size:13px; margin:10px 0 14px; display:flex; gap:12px; flex-wrap:wrap; }
+  .link { color:var(--ink); text-decoration:underline; text-underline-offset:3px; cursor:pointer; background:none; border:0; font:inherit; padding:0; }
+  .issues { display:flex; flex-direction:column; gap:5px; margin:0 0 12px; }
+  .issues button { text-align:left; background:#fff; border:1px solid var(--line); border-radius:9px; padding:8px 12px; font:inherit; font-size:14px; cursor:pointer; display:flex; gap:10px; align-items:baseline; }
+  .issues button.on { border-color:var(--ink); } .issues button span { color:var(--grey); font-size:12.5px; margin-left:auto; white-space:nowrap; }
+  .policy { border:1px solid var(--line); border-radius:var(--r); padding:12px 16px; margin:0 0 12px; font-size:14px; }
+  .policy p { margin:0 0 6px; color:var(--grey); }
+  .policy select, .policy input { width:100%; border:1px solid var(--line); border-radius:8px; padding:7px 9px; font:inherit; font-size:14px; margin:4px 0; }
+  .card { border:1px solid var(--line); border-radius:var(--r); padding:18px 22px; margin:0 0 12px; }
+  .head { display:flex; align-items:flex-start; gap:10px; flex-wrap:wrap; }
+  .head h2 { font-size:21px; font-weight:500; margin:0; line-height:1.25; flex:1 1 auto; } .head h2 i { font-style:italic; }
+  .state { background:var(--chip); border-radius:999px; padding:4px 11px; font-size:12.5px; white-space:nowrap; margin-top:2px; }
   .field { margin:6px 0 2px; }
   .claimtext { color:var(--grey); margin:0; }
-  .meta { color:var(--grey); font-size:14px; margin-top:10px; }
-  h3 { font-size:19px; font-weight:600; margin:0 0 12px; }
-  .verdict { display:flex; gap:10px; align-items:center; margin:0 0 8px; }
-  .verdict .dot { width:20px; height:20px; border-radius:50%; border:1.5px solid currentColor; display:grid; place-items:center; font-size:12px; font-weight:700; flex:none; }
+  .meta { color:var(--grey); font-size:13px; margin-top:8px; }
+  h3 { font-size:16px; font-weight:600; margin:0 0 10px; }
+  .verdict { display:flex; gap:9px; align-items:flex-start; margin:0 0 6px; }
+  .verdict .dot { width:18px; height:18px; border-radius:50%; border:1.5px solid currentColor; display:grid; place-items:center; font-size:11px; font-weight:700; flex:none; margin-top:2px; }
   .verdict.ok { color:var(--ok); } .verdict.warn { color:var(--warn); } .verdict.grey { color:var(--grey); }
   .explain { color:var(--grey); margin:0; }
-  .source { margin-top:12px; font-size:15px; } .source a { color:var(--ink); } .source q { color:var(--grey); }
-  details { margin-top:12px; } summary { cursor:pointer; color:var(--grey); font-size:15px; list-style:none; } summary::before { content:"▸ "; } details[open] summary::before { content:"▾ "; }
-  table { border-collapse:collapse; width:100%; font-size:14.5px; margin-top:8px; } th, td { text-align:left; padding:7px 6px; border-top:1px solid var(--line); vertical-align:top; } th { color:var(--grey); font-weight:500; border-top:0; }
+  .source { margin-top:10px; font-size:14px; } .source a { color:var(--ink); } .source q { color:var(--grey); }
+  .toggle { margin-top:10px; color:var(--grey); font-size:14px; background:none; border:0; padding:0; cursor:pointer; font-family:inherit; } .toggle::before { content:"▸ "; } .toggle.open::before { content:"▾ "; }
+  .fold[hidden] { display:none; }
+  table { border-collapse:collapse; width:100%; font-size:13.5px; margin-top:8px; } th, td { text-align:left; padding:6px 6px; border-top:1px solid var(--line); vertical-align:top; } th { color:var(--grey); font-weight:500; border-top:0; }
   tr.me td { font-weight:600; }
-  .opts { display:flex; flex-direction:column; gap:14px; margin:4px 0 18px; }
-  .opts label { display:flex; gap:14px; align-items:center; cursor:pointer; }
-  .opts input { appearance:none; width:26px; height:26px; border:1.5px solid var(--line); border-radius:50%; margin:0; flex:none; display:grid; place-items:center; }
-  .opts input:checked { border-color:var(--ink); } .opts input:checked::after { content:""; width:12px; height:12px; border-radius:50%; background:var(--ink); }
+  .opts { display:flex; flex-direction:column; gap:10px; margin:2px 0 14px; }
+  .opts label { display:flex; gap:12px; align-items:center; cursor:pointer; }
+  .opts input { appearance:none; width:20px; height:20px; border:1.5px solid #c9c9c9; border-radius:50%; margin:0; flex:none; display:grid; place-items:center; }
+  .opts input:checked { border-color:var(--ink); } .opts input:checked::after { content:""; width:10px; height:10px; border-radius:50%; background:var(--ink); }
   .opts input:focus-visible { outline:2px solid var(--ink); outline-offset:3px; }
-  .corr { display:none; margin:-6px 0 16px 40px; } .corr input { width:100%; border:1px solid var(--line); border-radius:8px; padding:8px 10px; font:inherit; font-size:15px; margin:4px 0; }
-  .notes label { display:block; margin-bottom:8px; }
-  textarea { width:100%; min-height:96px; border:1px solid var(--line); border-radius:12px; padding:12px 14px; font:inherit; resize:vertical; }
-  .bottom { display:flex; align-items:center; gap:14px; margin-top:18px; }
-  .nav { display:flex; gap:8px; margin:0 auto; } .nav button { width:48px; height:48px; border-radius:50%; border:1px solid var(--line); background:#fff; font-size:20px; cursor:pointer; } .nav button:disabled { opacity:.3; cursor:default; }
-  .primary { background:var(--ink); color:#fff; border:0; border-radius:999px; padding:14px 26px; font:inherit; font-size:17px; cursor:pointer; } .primary:disabled { opacity:.4; }
-  .apply { border-top:1px solid var(--line); margin-top:18px; padding-top:14px; font-size:15px; }
-  .apply .row { display:flex; gap:10px; align-items:center; flex-wrap:wrap; margin-top:8px; } .apply button { border:1px solid var(--ink); background:#fff; border-radius:999px; padding:8px 16px; font:inherit; font-size:15px; cursor:pointer; } .apply button:disabled { opacity:.4; }
-  pre { white-space:pre-wrap; word-break:break-word; font-size:13px; background:var(--chip); border-radius:8px; padding:10px; }
-  .foot { color:var(--grey); font-size:14px; margin-top:8px; }
-  .hist li { font-size:14.5px; margin:4px 0; } .hist time { color:var(--grey); }
-  .empty { color:var(--grey); padding:40px 0; }
-  #toast { position:fixed; bottom:22px; left:50%; transform:translateX(-50%); background:var(--ink); color:#fff; border-radius:999px; padding:10px 18px; font-size:15px; display:none; }
-  @media (max-width:600px) { .wrap { padding:18px 14px 60px; } .card { padding:18px; } .head { flex-direction:column; gap:8px; } .state { margin-left:0; } .top .me { margin-left:0; } }
-  @media (prefers-reduced-motion: no-preference) { .card { transition:opacity .15s; } }
+  .corr { margin:-4px 0 12px 32px; } .corr input { width:100%; border:1px solid var(--line); border-radius:8px; padding:7px 9px; font:inherit; font-size:14px; margin:3px 0; }
+  .notes label { display:block; margin-bottom:6px; }
+  textarea { width:100%; min-height:80px; border:1px solid var(--line); border-radius:10px; padding:10px 12px; font:inherit; resize:vertical; }
+  .bottom { display:flex; align-items:center; gap:12px; margin-top:14px; }
+  .nav { display:flex; gap:6px; margin:0 auto; } .nav button { width:38px; height:38px; border-radius:50%; border:1px solid var(--line); background:#fff; font-size:16px; cursor:pointer; } .nav button:disabled { opacity:.3; cursor:default; }
+  .primary { background:var(--ink); color:#fff; border:0; border-radius:999px; padding:10px 20px; font:inherit; cursor:pointer; } .primary:disabled { opacity:.4; }
+  .apply { border-top:1px solid var(--line); margin-top:14px; padding-top:12px; font-size:14px; }
+  .apply .row { display:flex; gap:8px; align-items:center; flex-wrap:wrap; margin-top:6px; } .apply button { border:1px solid var(--ink); background:#fff; border-radius:999px; padding:6px 14px; font:inherit; font-size:14px; cursor:pointer; } .apply button:disabled { opacity:.4; }
+  pre { white-space:pre-wrap; word-break:break-word; font-size:12.5px; background:var(--chip); border-radius:8px; padding:8px 10px; }
+  .foot { color:var(--grey); font-size:13px; margin-top:6px; }
+  .hist { margin:6px 0 0; padding-left:18px; } .hist li { font-size:13.5px; margin:3px 0; } .hist time { color:var(--grey); margin-right:6px; }
+  .empty { color:var(--grey); padding:30px 0; }
+  #toast { position:fixed; bottom:20px; left:50%; transform:translateX(-50%); background:var(--ink); color:#fff; border-radius:999px; padding:8px 16px; font-size:14px; display:none; }
+  @media (max-width:560px) { .wrap { padding:16px 14px 50px; } .card { padding:16px; } .me { margin-left:0; } .bottom { flex-wrap:wrap; } .nav { margin:0; } .primary { margin-left:auto; } }
 </style>
 </head>
 <body>
@@ -93,6 +92,8 @@ async function load() {
   DATA = {rows:q.rows, plants:q.plants, issues:i.issues, conflicts:c.groups, sample:s.claims||[], overview:o};
   const h = location.hash.slice(1); if (h.startsWith('issue=')) { scope = 'issues'; issueId = decodeURIComponent(h.slice(6)); }
   render();
+  await Promise.all(DATA.issues.map(async it => { const full = await api('/api/issue?id=' + encodeURIComponent(it.id)); it.claim_ids = full.claims.map(r => r.claim_id); }));
+  if (scope === 'issues') render();
 }
 function rowOf(id) { return DATA.rows.find(r => r.claim_id === id); }
 function buildSeq() {
@@ -106,32 +107,31 @@ function buildSeq() {
   if (prio) rows = rows.filter(r => r.priority === 'high');
   seq = rows.map(r => r.claim_id);
 }
+function subline() { const o = DATA.overview; $('#sub').innerHTML = `<span>${seq.length} claims in view</span><span>${o.human_reviewed_claims} of ${o.in_queue} decided</span><span>${o.by_status.verified||0} verified · ${o.by_status.disputed||0} disputed in the database</span>`; }
 function render() {
-  const o = DATA.overview, e = o.entries, decided = o.human_reviewed_claims;
+  const o = DATA.overview, e = o.entries;
   $('#scopes').innerHTML = [['all','All claims', o.in_queue], ['conflicts','Conflicts', e.conflicts.groups], ['issues','Issues', e.issues.n], ['sample','Sample', e.sample.n]].map(([k,l,n]) => `<button class="chip ${scope===k?'on':''}" data-s="${k}">${l}<small>${n}</small></button>`).join('');
-  $('#status').innerHTML = `<button class="chip ${status==='unverified'?'on':''}" data-st="unverified">Undecided</button><button class="chip ${prio?'on':''}" data-p="1">High priority</button>`;
-  document.querySelectorAll('#scopes .chip').forEach(b => b.onclick = () => { scope = b.dataset.s; if (scope !== 'issues') issueId = null; pos = 0; render(); });
+  $('#status').innerHTML = `<button class="chip ${status==='unverified'?'on':''}" data-st="1">Undecided</button><button class="chip ${prio?'on':''}" data-p="1">High priority</button>`;
+  document.querySelectorAll('#scopes .chip').forEach(b => b.onclick = () => { scope = b.dataset.s; if (scope !== 'issues') { issueId = null; history.replaceState(null, '', ' '); } pos = 0; render(); });
   $('[data-st]').onclick = () => { status = status === 'unverified' ? 'any' : 'unverified'; pos = 0; render(); };
   $('[data-p]').onclick = () => { prio = !prio; pos = 0; render(); };
   $('#issues').innerHTML = scope === 'issues' ? `<div class="issues">${DATA.issues.map(i => `<button class="${issueId===i.id?'on':''}" data-i="${esc(i.id)}">${esc(i.title)}<span>${i.decided} of ${i.n_claims} decided</span></button>`).join('')}</div>` : '';
   document.querySelectorAll('#issues button').forEach(b => b.onclick = () => { issueId = b.dataset.i; location.hash = 'issue=' + encodeURIComponent(issueId); pos = 0; render(); });
-  buildSeq(); if (pos >= seq.length) pos = 0;
-  $('#sub').innerHTML = `<span>${seq.length} claims in view</span><span>${decided} of ${o.in_queue} decided</span><span>${o.by_status.verified||0} verified · ${o.by_status.disputed||0} disputed in the database</span>`;
-  renderPolicy();
+  buildSeq(); if (pos >= seq.length) pos = 0; subline(); renderPolicy();
   if (!seq.length) { $('#claim').innerHTML = `<div class="empty">${scope==='issues' && !issueId ? 'Choose an issue above.' : 'Nothing left in this view.'}</div>`; return; }
   showClaim(seq[pos]);
 }
 function renderPolicy() {
-  const box = $('#policy'); if (scope !== 'issues' || !issueId) { box.innerHTML = ''; return; }
-  const i = DATA.issues.find(x => x.id === issueId); if (!i) { box.innerHTML = ''; return; }
-  box.innerHTML = `<div class="policy"><p>${esc(i.description)}</p>${i.policy ? `<div><b>Policy:</b> ${esc(i.policy.payload.option)}${i.policy.payload.reason?` <span style="color:var(--grey)">— ${esc(i.policy.payload.reason)}</span>`:''} <button class="link" id="pol-edit">change</button></div>` : `<button class="link" id="pol-edit">Set a policy for this issue</button>`}<div id="pol-form" style="display:none"><select id="pol-opt">${i.options.map(o=>`<option>${esc(o)}</option>`).join('')}<option value="__other">Other</option></select><input id="pol-reason" placeholder="Why — one line"><div class="apply" style="border:0;margin-top:6px;padding:0"><div class="row"><button id="pol-save">Record policy</button><span style="color:var(--grey)">A policy guides the claim-by-claim decisions; it changes no claim.</span></div></div></div></div>`;
-  $('#pol-edit').onclick = () => $('#pol-form').style.display = 'block';
-  $('#pol-save').onclick = async () => { const opt = $('#pol-opt').value === '__other' ? $('#pol-reason').value : $('#pol-opt').value; const r = await api('/api/issue_decision', {issue_id:i.id, option:opt, reviewer:who(), reason:$('#pol-reason').value}); if (r.error) return toast(r.error); toast('Policy recorded'); const ii = await api('/api/issues'); DATA.issues = ii.issues; renderPolicy(); };
+  const box = $('#policy'); const i = scope === 'issues' && issueId ? DATA.issues.find(x => x.id === issueId) : null; if (!i) { box.innerHTML = ''; return; }
+  box.innerHTML = `<div class="policy"><p>${esc(i.description)}</p>${i.policy ? `<div><b>Policy:</b> ${esc(i.policy.payload.option)}${i.policy.payload.reason?` <span style="color:var(--grey)">— ${esc(i.policy.payload.reason)}</span>`:''} <button class="link" id="pol-edit">change</button></div>` : `<button class="link" id="pol-edit">Set a policy for this issue</button>`}<div id="pol-form" hidden><select id="pol-opt">${i.options.map(o=>`<option>${esc(o)}</option>`).join('')}<option value="__other">Other</option></select><input id="pol-reason" placeholder="Why — one line"><div class="apply" style="border:0;margin-top:4px;padding:0"><div class="row"><button id="pol-save">Record policy</button><span style="color:var(--grey)">guides the claim-by-claim decisions; changes no claim</span></div></div></div></div>`;
+  $('#pol-edit').onclick = () => $('#pol-form').hidden = false;
+  $('#pol-save').onclick = async () => { const opt = $('#pol-opt').value === '__other' ? $('#pol-reason').value : $('#pol-opt').value; const r = await api('/api/issue_decision', {issue_id:i.id, option:opt, reviewer:who(), reason:$('#pol-reason').value}); if (r.error) return toast(r.error); toast('Policy recorded'); const ii = await api('/api/issues'); ii.issues.forEach(x => { const y = DATA.issues.find(z => z.id === x.id); if (y) Object.assign(y, x, {claim_ids: y.claim_ids}); }); renderPolicy(); };
 }
 async function showClaim(cid) {
   const d = await api('/api/claim?id=' + encodeURIComponent(cid)); if (d.error) return;
-  const c = d.claim, a = d.ai, s = d.source || {}, r = rowOf(cid) || {}, st = d.human_state, [cls, word] = a ? RESULT[a.result] : ['grey','No AI assessment'];
+  const c = d.claim, a = d.ai, s = d.source || {}, st = d.human_state, [cls, word] = a ? RESULT[a.result] : ['grey','No AI assessment'];
   const last = [...(d.events||[])].reverse().find(e => e.kind === 'human_decision'); const pol = (scope==='issues' && issueId) ? DATA.issues.find(x => x.id===issueId)?.policy : null;
+  const hist = timeline(d);
   $('#claim').innerHTML = `
   <div class="card">
     <div class="head"><h2><i>${esc(d.entity.scientific_name)}</i></h2><span class="state">${esc(STATE[st]||st)}</span></div>
@@ -144,12 +144,12 @@ async function showClaim(cid) {
     <div class="verdict ${cls}"><span class="dot">${cls==='ok'?'✓':'!'}</span><span>${word}${a&&a.missing_context?' — '+esc(a.missing_context):''}</span></div>
     ${a?`<p class="explain">${esc(a.explanation)}</p>`:'<p class="explain">This claim has not been checked against its source yet.</p>'}
     <div class="source">Source: <a href="${esc(c.source_url||'#')}" target="_blank" rel="noopener">${esc(s.name||src(c.source_id))}</a>${a&&a.locator?` · ${esc(a.locator)}`:''}${a&&a.evidence_excerpt?`<br><q>${esc(a.evidence_excerpt)}</q>`:''}</div>
-    ${d.same_field.length>1?`<details><summary>Compare the ${d.same_field.length} sources on this field</summary><table><tr><th>source</th><th>value</th><th>context</th><th>status</th></tr>${d.same_field.map(x=>`<tr class="${x.id===c.id?'me':''}"><td>${esc(src(x.source_id))}${x.conflict?' ⇄':''}</td><td>${esc(fmtv(x.value_label ?? x.value))}</td><td style="color:var(--grey)">${esc(x.context)}</td><td>${esc(x.status)}</td></tr>`).join('')}</table></details>`:''}
-    ${(d.events||[]).length||d.ai_history.length>1?`<details><summary>History</summary><ul class="hist">${timeline(d).map(t=>`<li><time>${esc(t.at.slice(0,10))}</time> ${esc(t.what)}</li>`).join('')}</ul></details>`:''}
+    ${d.same_field.length>1?`<button class="toggle" data-fold="cmp">Compare the ${d.same_field.length} sources on this field</button><div class="fold" id="cmp" hidden><table><tr><th>source</th><th>value</th><th>context</th><th>status</th></tr>${d.same_field.map(x=>`<tr class="${x.id===c.id?'me':''}"><td>${esc(src(x.source_id))}${x.conflict?' ⇄':''}</td><td>${esc(fmtv(x.value_label ?? x.value))}</td><td style="color:var(--grey)">${esc(x.context)}</td><td>${esc(x.status)}</td></tr>`).join('')}</table></div>`:''}
+    <button class="toggle" data-fold="hist">History (${hist.length})</button><div class="fold" id="hist" hidden><ul class="hist">${hist.map(t=>`<li><time>${esc(String(t.at).slice(0,10))}</time>${esc(t.what)}</li>`).join('')}</ul></div>
   </div>
   <div class="card">
     <h3>Human decision</h3>
-    ${pol?`<p class="explain" style="margin-bottom:12px">Issue policy: ${esc(pol.payload.option)}</p>`:''}
+    ${pol?`<p class="explain" style="margin-bottom:10px">Issue policy: ${esc(pol.payload.option)}</p>`:''}
     <div class="opts">
       <label><input type="radio" name="dec" value="verify">Verify</label>
       <label><input type="radio" name="dec" value="dispute">Dispute</label>
@@ -157,13 +157,14 @@ async function showClaim(cid) {
       <label><input type="radio" name="dec" value="defer">Defer / needs expert review</label>
       <label><input type="radio" name="dec" value="propose_correction">Propose a correction</label>
     </div>
-    <div class="corr" id="corr"><input id="c-value" placeholder="corrected value (text or JSON)"><input id="c-text" placeholder="corrected sentence"></div>
-    <div class="notes"><label for="notes">Review notes</label><textarea id="notes" placeholder="What supports the decision, or what still needs checking…"></textarea></div>
+    <div class="corr" id="corr" hidden><input id="c-value" placeholder="corrected value (text or JSON)"><input id="c-text" placeholder="corrected sentence"></div>
+    <div class="notes"><label for="notes">Review notes</label><textarea id="notes" placeholder="What supports the decision, or what still needs checking"></textarea></div>
     <div class="bottom"><div class="nav"><button id="prev" ${pos===0?'disabled':''} aria-label="previous">↑</button><button id="next" ${pos>=seq.length-1?'disabled':''} aria-label="next">↓</button></div><button class="primary" id="save">Record decision</button></div>
     <div class="foot">${pos+1} of ${seq.length}${last?` · last decision: ${esc((last.payload.decision||'').replace(/_/g,' '))} by ${esc(last.reviewer)}`:''}</div>
     <div id="apply"></div>
   </div>`;
-  document.querySelectorAll('input[name=dec]').forEach(x => x.onchange = () => $('#corr').style.display = x.value==='propose_correction'&&x.checked?'block':'none');
+  document.querySelectorAll('.toggle').forEach(b => b.onclick = () => { const f = document.getElementById(b.dataset.fold); f.hidden = !f.hidden; b.classList.toggle('open', !f.hidden); });
+  document.querySelectorAll('input[name=dec]').forEach(x => x.onchange = () => $('#corr').hidden = !(x.value==='propose_correction'&&x.checked));
   $('#prev').onclick = () => { pos--; showClaim(seq[pos]); window.scrollTo({top:0}); };
   $('#next').onclick = () => { pos++; showClaim(seq[pos]); window.scrollTo({top:0}); };
   $('#save').onclick = async () => {
@@ -171,17 +172,17 @@ async function showClaim(cid) {
     const body = {claim_id:c.id, decision:dec, reviewer:who(), reason:$('#notes').value, ai_review_id:a?.review_id||null, replaces_event:last?.event_id||null, notes: pol?`issue policy: ${pol.payload.option}`:null};
     if (dec==='propose_correction') { let v = $('#c-value').value; try { v = JSON.parse(v); } catch(e) {} body.correction = {value:v, text:$('#c-text').value, context:c.context}; }
     const res = await api('/api/decision', body); if (res.error) return toast(res.error);
-    toast('Decision recorded'); await refreshRow(c.id); showClaim(c.id);
+    toast('Decision recorded'); await refresh(); showClaim(c.id);
   };
   renderApply(d);
 }
-async function refreshRow(cid) { const q = await api('/api/queue'); DATA.rows = q.rows; DATA.overview = await api('/api/overview'); if (scope==='issues') DATA.issues = (await api('/api/issues')).issues; const o = DATA.overview; $('#sub').innerHTML = `<span>${seq.length} claims in view</span><span>${o.human_reviewed_claims} of ${o.in_queue} decided</span><span>${o.by_status.verified||0} verified · ${o.by_status.disputed||0} disputed in the database</span>`; }
+async function refresh() { const q = await api('/api/queue'); DATA.rows = q.rows; DATA.overview = await api('/api/overview'); const ii = await api('/api/issues'); ii.issues.forEach(x => { const y = DATA.issues.find(z => z.id === x.id); if (y) Object.assign(y, x, {claim_ids: y.claim_ids}); }); subline(); }
 function renderApply(d) {
   const box = $('#apply'); if (!d.pending_apply.length) { box.innerHTML = ''; return; }
   const ev = d.pending_apply[d.pending_apply.length-1];
   box.innerHTML = `<div class="apply">Recorded. The database is unchanged until you apply.<div class="row"><button id="a-prev">Preview the change</button><button id="a-go" disabled>Apply to the database</button></div><div id="a-out"></div></div>`;
   $('#a-prev').onclick = async () => { const p = await api('/api/apply/preview', {event_id:ev}); $('#a-out').innerHTML = p.ok ? `<pre>${esc(Object.entries(p.changes).map(([k,v])=>`${k}: ${fmtv(v.before)} → ${fmtv(v.after)}`).join('\n'))}${p.new_claim?'\nnew claim: '+esc(p.new_claim.text):''}</pre><div class="foot">Then the file is validated and the knowledge graph rebuilt.</div>` : `<div class="foot">${esc(p.reason)}</div>`; $('#a-go').disabled = !p.ok; };
-  $('#a-go').onclick = async () => { if (!confirm('Apply this decision to the database?')) return; $('#a-go').disabled = true; const r = await api('/api/apply', {event_id:ev, by:who()}); toast(r.ok ? `Applied — now ${r.new_status}` : `Not applied: ${r.reason}`); await refreshRow(d.claim.id); showClaim(d.claim.id); };
+  $('#a-go').onclick = async () => { if (!confirm('Apply this decision to the database?')) return; $('#a-go').disabled = true; const r = await api('/api/apply', {event_id:ev, by:who()}); toast(r.ok ? `Applied — now ${r.new_status}` : `Not applied: ${r.reason}`); await refresh(); showClaim(d.claim.id); };
 }
 function timeline(d) {
   const c = d.claim, out = [{at:c.recorded_at, what:'Claim imported'}];
@@ -189,9 +190,7 @@ function timeline(d) {
   (d.events||[]).forEach(e => out.push({at:e.at, what: e.kind==='human_decision' ? `${e.reviewer}: ${e.payload.decision.replace(/_/g,' ')}${e.payload.reason?' — '+e.payload.reason:''}` : e.kind==='decision_applied' ? `Applied by ${e.reviewer}: ${e.previous_status} → ${e.new_status}` : e.kind==='kg_rebuilt' ? 'Knowledge graph rebuilt' : e.kind==='apply_failed' ? `Apply refused: ${e.payload.reason}` : e.kind}));
   return out.sort((a,b)=>String(a.at).localeCompare(String(b.at)));
 }
-// issues need their claim ids: fetch once per issue lazily
-const _issues = api('/api/issues').then(async i => { for (const it of i.issues) { const full = await api('/api/issue?id=' + encodeURIComponent(it.id)); it.claim_ids = full.claims.map(r => r.claim_id); } return i; });
-(async () => { await load(); const i = await _issues; i.issues.forEach(x => { const y = DATA.issues.find(z => z.id === x.id); if (y) y.claim_ids = x.claim_ids; }); if (scope === 'issues') render(); })();
+load();
 </script>
 </body>
 </html>
