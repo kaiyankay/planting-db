@@ -5,203 +5,308 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Review Workbench</title>
 <style>
-  :root { --bg:#f6f7f5; --panel:#ffffff; --ink:#1d2320; --muted:#6b7570; --line:#dfe3df; --accent:#2f6f4e; --warn:#b4541a; --bad:#a3312b; --ok:#2f6f4e; --info:#2b5f8a; --chip:#eef1ee; }
+  :root { --bg:#f7f8f6; --panel:#fff; --ink:#1e2522; --muted:#6a746f; --line:#e1e5e1; --accent:#2f6f4e; --accent-soft:#e6f0e9; --warn:#b4541a; --warn-soft:#fdf0e3; --bad:#a3312b; --bad-soft:#fbe6e3; --info:#2b5f8a; --info-soft:#e4ecf5; --chip:#eef1ee; }
   * { box-sizing:border-box; }
-  body { margin:0; font:14px/1.45 -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; color:var(--ink); background:var(--bg); }
-  header { display:flex; gap:18px; align-items:baseline; padding:10px 16px; background:var(--panel); border-bottom:1px solid var(--line); flex-wrap:wrap; }
-  header h1 { font-size:16px; margin:0; font-weight:600; }
-  header .stat { color:var(--muted); font-size:12.5px; } header .stat b { color:var(--ink); font-weight:600; }
-  main { display:grid; grid-template-columns: 330px 1fr 360px; gap:0; height: calc(100vh - 46px); }
-  section { overflow:auto; border-right:1px solid var(--line); background:var(--panel); }
-  section:last-child { border-right:0; }
-  .pad { padding:12px 14px; }
-  h2 { font-size:12px; text-transform:uppercase; letter-spacing:.06em; color:var(--muted); margin:14px 0 6px; }
-  input, select, textarea, button { font:inherit; }
-  input[type=text], input[type=search], select, textarea { width:100%; padding:6px 8px; border:1px solid var(--line); border-radius:6px; background:#fff; }
-  textarea { min-height:72px; resize:vertical; }
-  .filters { display:grid; grid-template-columns:1fr 1fr; gap:6px; padding:10px 12px; border-bottom:1px solid var(--line); position:sticky; top:0; background:var(--panel); z-index:2; }
-  .filters .full { grid-column:1 / -1; }
-  .item { padding:8px 12px; border-bottom:1px solid var(--line); cursor:pointer; }
-  .item:hover { background:#f2f5f2; } .item.sel { background:#e8f0ea; border-left:3px solid var(--accent); }
-  .item .t { font-size:12px; color:var(--muted); display:flex; gap:6px; flex-wrap:wrap; align-items:center; }
-  .item .txt { margin-top:3px; font-size:13px; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
-  .chip { display:inline-block; padding:1px 7px; border-radius:10px; background:var(--chip); font-size:11.5px; white-space:nowrap; }
-  .chip.high { background:#fde7df; color:var(--bad); } .chip.medium { background:#fff1d6; color:var(--warn); } .chip.low { background:var(--chip); }
-  .chip.supported_by_source { background:#e2f0e6; color:var(--ok); } .chip.partially_supported { background:#fff1d6; color:var(--warn); } .chip.not_supported, .chip.conflicting_evidence { background:#fde7df; color:var(--bad); } .chip.source_unavailable, .chip.insufficient_evidence { background:#e9e9e9; color:#555; }
-  .chip.verify_applied, .chip.verified { background:#e2f0e6; color:var(--ok); } .chip.dispute_applied, .chip.disputed { background:#fde7df; color:var(--bad); } .chip.request_evidence, .chip.defer { background:#e4ecf5; color:var(--info); } .chip.verify_pending_apply, .chip.dispute_pending_apply, .chip.propose_correction_pending_apply { background:#fff1d6; color:var(--warn); } .chip.awaiting_human { background:var(--chip); color:var(--muted); }
-  .kv { display:grid; grid-template-columns: 150px 1fr; gap:4px 10px; font-size:13px; } .kv div:nth-child(odd) { color:var(--muted); }
-  .box { border:1px solid var(--line); border-radius:8px; padding:10px 12px; margin:8px 0; background:#fff; }
-  .box.ai { border-left:4px solid var(--info); } .box.warn { border-left:4px solid var(--warn); } .box.src { border-left:4px solid var(--accent); }
-  table { border-collapse:collapse; width:100%; font-size:12.5px; } th, td { text-align:left; padding:5px 6px; border-bottom:1px solid var(--line); vertical-align:top; } th { color:var(--muted); font-weight:500; }
-  tr.me { background:#eef6f0; } tr.conflict td:first-child { border-left:3px solid var(--bad); }
-  pre { white-space:pre-wrap; word-break:break-word; font-size:12px; background:#f6f7f5; padding:8px; border-radius:6px; margin:4px 0; }
-  a { color:var(--info); }
-  .decision label { display:flex; gap:8px; align-items:flex-start; padding:7px 8px; border:1px solid var(--line); border-radius:6px; margin-bottom:6px; cursor:pointer; }
-  .decision label:has(input:checked) { border-color:var(--accent); background:#eef6f0; }
-  .decision small { color:var(--muted); display:block; }
-  button { padding:7px 12px; border-radius:6px; border:1px solid var(--line); background:#fff; cursor:pointer; }
-  button.primary { background:var(--accent); color:#fff; border-color:var(--accent); } button.danger { background:#fff; color:var(--bad); border-color:var(--bad); }
-  button:disabled { opacity:.5; cursor:not-allowed; }
+  html, body { height:100%; }
+  body { margin:0; font:14px/1.5 -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; color:var(--ink); background:var(--bg); }
+  a { color:var(--info); text-decoration:none; } a:hover { text-decoration:underline; }
+  header { display:flex; align-items:center; gap:14px; padding:10px 18px; background:var(--panel); border-bottom:1px solid var(--line); position:sticky; top:0; z-index:5; }
+  header h1 { font-size:15px; margin:0; font-weight:600; white-space:nowrap; }
+  nav a { padding:6px 10px; border-radius:6px; color:var(--ink); } nav a.on { background:var(--accent-soft); color:var(--accent); font-weight:600; }
+  header .who { margin-left:auto; display:flex; gap:6px; align-items:center; font-size:12.5px; color:var(--muted); }
+  header .who input { width:120px; padding:4px 7px; border:1px solid var(--line); border-radius:6px; font:inherit; }
+  main { max-width:1500px; margin:0 auto; padding:16px 18px; }
+  h2 { font-size:18px; font-weight:600; margin:4px 0 12px; } h3 { font-size:12px; text-transform:uppercase; letter-spacing:.06em; color:var(--muted); margin:16px 0 6px; }
+  .cards { display:grid; grid-template-columns:repeat(auto-fit, minmax(230px, 1fr)); gap:12px; }
+  .card { background:var(--panel); border:1px solid var(--line); border-radius:10px; padding:14px 16px; }
+  .card.entry { cursor:pointer; } .card.entry:hover { border-color:var(--accent); }
+  .card .big { font-size:26px; font-weight:600; line-height:1.1; } .card .sub { color:var(--muted); font-size:12.5px; margin-top:4px; }
+  .bar { height:6px; background:var(--chip); border-radius:3px; overflow:hidden; margin-top:8px; } .bar i { display:block; height:100%; background:var(--accent); }
+  .chip { display:inline-block; padding:1px 7px; border-radius:10px; background:var(--chip); font-size:11.5px; white-space:nowrap; line-height:1.5; }
+  .chip.high, .chip.not_supported, .chip.conflicting_evidence, .chip.disputed, .chip.dispute_applied { background:var(--bad-soft); color:var(--bad); }
+  .chip.medium, .chip.partially_supported, .chip.verify_pending_apply, .chip.dispute_pending_apply, .chip.propose_correction_pending_apply, .chip.propose_correction_applied { background:var(--warn-soft); color:var(--warn); }
+  .chip.supported_by_source, .chip.verified, .chip.verify_applied, .chip.ok { background:var(--accent-soft); color:var(--accent); }
+  .chip.source_unavailable, .chip.insufficient_evidence, .chip.awaiting_human, .chip.low { background:var(--chip); color:var(--muted); }
+  .chip.request_evidence, .chip.defer { background:var(--info-soft); color:var(--info); }
+  table { border-collapse:collapse; width:100%; font-size:13px; background:var(--panel); } th, td { text-align:left; padding:7px 8px; border-bottom:1px solid var(--line); vertical-align:top; } th { color:var(--muted); font-weight:500; font-size:12px; }
+  tr.click { cursor:pointer; } tr.click:hover { background:#f3f6f3; } tr.me { background:#eef6f0; }
+  .list-item { padding:9px 12px; border-bottom:1px solid var(--line); cursor:pointer; background:var(--panel); }
+  .list-item:hover { background:#f3f6f3; } .list-item.sel { background:var(--accent-soft); border-left:3px solid var(--accent); }
+  .list-item .t { font-size:12px; color:var(--muted); display:flex; gap:6px; flex-wrap:wrap; align-items:center; }
+  .list-item .txt { font-size:13px; margin:2px 0; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
+  input[type=text], input[type=search], select, textarea { width:100%; padding:7px 9px; border:1px solid var(--line); border-radius:7px; background:#fff; font:inherit; }
+  textarea { min-height:70px; resize:vertical; }
+  button { padding:7px 13px; border-radius:7px; border:1px solid var(--line); background:#fff; cursor:pointer; font:inherit; }
+  button.primary { background:var(--accent); color:#fff; border-color:var(--accent); } button.danger { color:var(--bad); border-color:var(--bad); } button.link { border:0; background:none; color:var(--info); padding:0; }
+  button:disabled { opacity:.45; cursor:not-allowed; }
   .row { display:flex; gap:8px; flex-wrap:wrap; align-items:center; }
-  .hist li { margin:4px 0; font-size:12.5px; } .hist time { color:var(--muted); font-size:11.5px; }
-  .muted { color:var(--muted); } .small { font-size:12px; }
-  .ok { color:var(--ok); } .bad { color:var(--bad); }
-  #toast { position:fixed; bottom:14px; left:50%; transform:translateX(-50%); background:#1d2320; color:#fff; padding:8px 14px; border-radius:8px; display:none; z-index:9; }
-  @media (max-width: 1100px) { main { grid-template-columns: 1fr; height:auto; } section { border-right:0; border-bottom:1px solid var(--line); max-height:70vh; } }
+  .muted { color:var(--muted); } .small { font-size:12.5px; } .ok { color:var(--accent); } .bad { color:var(--bad); }
+  pre { white-space:pre-wrap; word-break:break-word; font-size:12px; background:#f4f6f4; padding:8px; border-radius:6px; margin:4px 0; }
+  details summary { cursor:pointer; color:var(--muted); font-size:12.5px; }
+  /* review workspace */
+  .work { display:grid; grid-template-columns:320px minmax(0, 1fr) 360px; gap:14px; align-items:start; }
+  .pane { background:var(--panel); border:1px solid var(--line); border-radius:10px; }
+  .pane.list { max-height:calc(100vh - 130px); overflow:auto; } .pane.read { padding:16px 18px; } .pane.decide { padding:14px 16px; position:sticky; top:60px; }
+  .list-head { padding:10px 12px; border-bottom:1px solid var(--line); font-size:12.5px; color:var(--muted); position:sticky; top:0; background:var(--panel); z-index:1; }
+  .step { margin:14px 0; } .step h4 { margin:0 0 6px; font-size:13px; color:var(--muted); font-weight:600; text-transform:uppercase; letter-spacing:.05em; }
+  .claim-head { font-size:19px; font-weight:600; } .claim-head i { font-weight:600; }
+  .value { font-size:16px; padding:8px 10px; background:#f4f6f4; border-radius:7px; margin:6px 0; }
+  .kv { display:grid; grid-template-columns:130px 1fr; gap:3px 10px; font-size:13px; } .kv div:nth-child(odd) { color:var(--muted); }
+  .box { border:1px solid var(--line); border-radius:8px; padding:10px 12px; margin:6px 0; background:#fff; }
+  .box.src { border-left:4px solid var(--accent); } .box.ai { border-left:4px solid var(--info); } .box.policy { border-left:4px solid var(--warn); background:var(--warn-soft); }
+  .decision label.opt { display:flex; gap:8px; align-items:flex-start; padding:7px 9px; border:1px solid var(--line); border-radius:7px; margin-bottom:6px; cursor:pointer; } .decision label.opt:has(input:checked) { border-color:var(--accent); background:var(--accent-soft); }
+  .decision small { color:var(--muted); display:block; }
+  .tabs { display:none; gap:0; border-bottom:1px solid var(--line); background:var(--panel); position:sticky; top:48px; z-index:4; }
+  .tabs button { flex:1; border:0; border-radius:0; padding:10px; background:none; color:var(--muted); } .tabs button.on { color:var(--accent); border-bottom:2px solid var(--accent); font-weight:600; }
+  .hist li { font-size:12.5px; margin:3px 0; } .hist time { color:var(--muted); font-size:11.5px; }
+  #toast { position:fixed; bottom:16px; left:50%; transform:translateX(-50%); background:#1e2522; color:#fff; padding:8px 14px; border-radius:8px; display:none; z-index:9; }
+  .progress-line { display:flex; gap:10px; flex-wrap:wrap; font-size:12.5px; color:var(--muted); }
+  @media (max-width:1100px) {
+    main { padding:10px 12px; }
+    .work { display:block; }
+    .tabs { display:flex; }
+    .work > .pane { display:none; } .work > .pane.show { display:block; max-height:none; position:static; }
+    header { flex-wrap:wrap; gap:6px 10px; padding:8px 12px; } header nav { order:3; width:100%; display:flex; gap:2px; overflow:auto; white-space:nowrap; } header nav a { padding:5px 8px; font-size:13px; } header .who span { display:none; } header .who input { width:100px; }
+    .tabs { top:86px; }
+  }
 </style>
 </head>
 <body>
 <header>
-  <h1>Planting Intelligence · Review Workbench</h1>
-  <span class="stat" id="s-queue"></span><span class="stat" id="s-ai"></span><span class="stat" id="s-human"></span><span class="stat" id="s-status"></span>
-  <span class="stat muted" style="margin-left:auto">local only · events → review/events/review_events.jsonl</span>
+  <h1><a href="#/" style="color:inherit">Review Workbench</a></h1>
+  <nav id="nav"><a href="#/">Overview</a><a href="#/conflicts">Conflicts</a><a href="#/issues">Issues</a><a href="#/sample">Sample</a><a href="#/all">All claims</a></nav>
+  <div class="who"><span>Reviewer</span><input type="text" id="who" placeholder="your name"></div>
 </header>
-<main>
-  <section id="left">
-    <div class="filters">
-      <input class="full" type="search" id="f-q" placeholder="Search plant / claim id / field / text">
-      <select id="f-plant"><option value="">All plants</option></select>
-      <select id="f-source"><option value="">All sources</option></select>
-      <select id="f-ai"><option value="">AI: any</option><option>supported_by_source</option><option>partially_supported</option><option>not_supported</option><option>conflicting_evidence</option><option>source_unavailable</option><option>insufficient_evidence</option><option value="__none">awaiting AI</option></select>
-      <select id="f-human"><option value="">Human: any</option><option value="awaiting_human">awaiting human</option><option value="pending">decided, not applied</option><option value="applied">applied</option><option value="request_evidence">more evidence</option><option value="defer">deferred</option></select>
-      <select id="f-prio"><option value="">Priority: any</option><option>high</option><option>medium</option><option>low</option></select>
-      <select id="f-sort"><option value="impact">Sort: impact</option><option value="conflict">Sort: conflicts</option><option value="date">Sort: last event</option><option value="plant">Sort: plant</option></select>
-      <div class="full small muted" id="f-count"></div>
-    </div>
-    <div id="list"></div>
-    <div class="pad small muted" id="plant-progress"></div>
-  </section>
-  <section id="center"><div class="pad" id="claim"><p class="muted">Pick a claim on the left.</p></div></section>
-  <section id="right"><div class="pad" id="review"><p class="muted">The decision form appears here.</p></div></section>
-</main>
+<div class="tabs" id="tabs"><button data-t="list">List</button><button data-t="read" class="on">Claim</button><button data-t="decide">Decide</button></div>
+<main id="main"></main>
 <div id="toast"></div>
 <script>
-const $ = s => document.querySelector(s); const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-let ROWS = [], PLANTS = {}, SEL = null, CUR = null;
-const toast = m => { const t = $('#toast'); t.textContent = m; t.style.display = 'block'; setTimeout(() => t.style.display = 'none', 2600); };
+const $ = s => document.querySelector(s), esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const api = (p, body) => fetch(p, body ? {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(body)} : {}).then(r => r.json());
-const fmtv = v => typeof v === 'string' ? v : JSON.stringify(v);
-const hstate = r => r.human_state;
+const toast = m => { const t = $('#toast'); t.textContent = m; t.style.display = 'block'; setTimeout(() => t.style.display = 'none', 2800); };
+const fmtv = v => typeof v === 'string' ? v : Array.isArray(v) ? v.join(', ') : JSON.stringify(v);
+const hs = s => (s || 'awaiting_human').replace(/_/g, ' ');
+const who = () => $('#who').value.trim();
+$('#who').value = localStorage.getItem('reviewer') || ''; $('#who').oninput = e => localStorage.setItem('reviewer', e.target.value);
+const SRC = {rhs:'RHS', mobot:'Missouri BG', gpp:'Great Plant Picks', osu:'Oregon State', eflora:'E-Flora BC', usda_plants:'USDA PLANTS', cov_trees:'City of Vancouver trees', inat:'iNaturalist', iscbc:'ISC BC'};
+const src = s => SRC[s] || (String(s).startsWith('survey-') ? 'survey respondent ' + s.split('-r')[1] : s);
+let CTX = {kind:'all', title:'All claims', items:[], back:'#/all', policy:null};   // the list shown beside a claim
 
-async function loadOverview() {
-  const o = await api('/api/overview');
-  $('#s-queue').innerHTML = `queue <b>${o.in_queue}</b> of ${o.total_live_claims} live claims`;
-  $('#s-ai').innerHTML = `AI reviewed <b>${o.ai_reviewed}</b> (source checked ${o.source_checked_by_ai}, unavailable ${o.ai_results.source_unavailable||0}, awaiting ${o.ai_results.awaiting_ai||0})`;
-  const h = o.human.by_state || {};
-  $('#s-human').innerHTML = `human decisions on <b>${o.human.claims_with_human_decision||0}</b> claims (verify ${(h.verify_applied||0)}+${(h.verify_pending_apply||0)} pending · dispute ${(h.dispute_applied||0)}+${(h.dispute_pending_apply||0)} · evidence ${h.request_evidence||0} · deferred ${h.defer||0} · correction ${(h.propose_correction_pending_apply||0)+(h.propose_correction_applied||0)})`;
-  $('#s-status').innerHTML = `claim status: verified <b>${o.by_status.verified||0}</b> · disputed <b>${o.by_status.disputed||0}</b> · unverified <b>${o.by_status.unverified||0}</b>`;
-  $('#plant-progress').innerHTML = '<h2>Progress by plant (queue · AI · human · verified)</h2>' + Object.entries(o.by_plant).map(([k,v]) => `<div><i>${esc(v.name)}</i>: ${v.queue} · ${v.ai} · ${v.human} · ${v.verified}${v.disputed?` · <span class="bad">disputed ${v.disputed}</span>`:''}</div>`).join('');
+// ---------------------------------------------------------------- routing
+window.addEventListener('hashchange', route); route();
+function route() {
+  const h = location.hash || '#/'; const [path, qs] = h.slice(2).split('?'); const q = Object.fromEntries(new URLSearchParams(qs || ''));
+  document.querySelectorAll('#nav a').forEach(a => a.classList.toggle('on', a.getAttribute('href') === '#/' + path.split('/')[0]));
+  $('#tabs').style.display = ''; document.body.classList.remove('reviewing');
+  if (path === '' ) overview(); else if (path === 'conflicts') conflicts(); else if (path === 'issues') issues(); else if (path.startsWith('issue/')) issue(decodeURIComponent(path.slice(6)));
+  else if (path === 'sample') sample(); else if (path === 'all') all(); else if (path.startsWith('claim/')) claim(decodeURIComponent(path.slice(6)), q); else overview();
 }
-async function loadQueue() {
-  const q = await api('/api/queue'); ROWS = q.rows; PLANTS = q.plants;
-  const fp = $('#f-plant'); if (fp.options.length === 1) Object.entries(PLANTS).forEach(([k,v]) => fp.add(new Option(v, k)));
-  const fs = $('#f-source'); if (fs.options.length === 1) [...new Set(ROWS.map(r => r.source_id))].sort().forEach(s => fs.add(new Option(s, s)));
-  render();
-}
-function render() {
-  const q = $('#f-q').value.toLowerCase(), pl = $('#f-plant').value, src = $('#f-source').value, ai = $('#f-ai').value, hu = $('#f-human').value, pr = $('#f-prio').value, sort = $('#f-sort').value;
-  let rows = ROWS.filter(r => (!q || (r.claim_id + ' ' + r.plant_name + ' ' + r.field + ' ' + (r.text||'')).toLowerCase().includes(q)) && (!pl || r.plant === pl) && (!src || r.source_id === src) && (!pr || r.priority === pr)
-    && (!ai || (ai === '__none' ? !r.ai_result : r.ai_result === ai))
-    && (!hu || (hu === 'pending' ? /pending_apply$/.test(hstate(r)) : hu === 'applied' ? /_applied$/.test(hstate(r)) : hstate(r) === hu)));
-  if (sort === 'conflict') rows.sort((a,b) => b.n_conflicts - a.n_conflicts || b.priority_score - a.priority_score);
-  else if (sort === 'date') rows.sort((a,b) => (b.last_event||'').localeCompare(a.last_event||''));
-  else if (sort === 'plant') rows.sort((a,b) => a.plant.localeCompare(b.plant) || a.field.localeCompare(b.field));
-  $('#f-count').textContent = `${rows.length} claims shown`;
-  $('#list').innerHTML = rows.map(r => `<div class="item ${r.claim_id===SEL?'sel':''}" data-id="${esc(r.claim_id)}">
-    <div class="t"><i>${esc(r.plant_name)}</i> · ${esc(r.field.replace(/_/g,' '))} · ${esc(r.source_id)} <span class="chip ${r.priority}">${r.priority}</span>${r.n_conflicts?`<span class="chip">⇄ ${r.n_conflicts}</span>`:''}</div>
-    <div class="txt">${esc(r.text)}</div>
-    <div class="t">${r.ai_result?`<span class="chip ${r.ai_result}">AI ${r.ai_result.replace(/_/g,' ')}${r.ai_current===false?' (stale)':''}</span>`:'<span class="chip">AI pending</span>'} <span class="chip ${hstate(r)}">${hstate(r).replace(/_/g,' ')}</span>${r.status!=='unverified'?`<span class="chip ${r.status}">${r.status}</span>`:''}</div></div>`).join('');
-  document.querySelectorAll('.item').forEach(el => el.onclick = () => open(el.dataset.id));
-}
-['#f-q','#f-plant','#f-source','#f-ai','#f-human','#f-prio','#f-sort'].forEach(s => $(s).addEventListener('input', render));
+function setMain(html) { $('#main').innerHTML = html; $('#tabs').style.display = 'none'; }
 
-async function open(id) {
-  SEL = id; render(); const d = await api('/api/claim?id=' + encodeURIComponent(id)); CUR = d; const c = d.claim, a = d.ai, ch = d.checks || {}, src = d.source || {};
-  const meta = c.practitioner_meta ? `<div>practitioner</div><div>${esc(c.practitioner_meta.observer_background)} · basis ${esc(c.practitioner_meta.basis)} · ${esc(c.practitioner_meta.completeness)}${c.practitioner_meta.caveat?' · '+esc(c.practitioner_meta.caveat):''}</div>` : '';
-  $('#claim').innerHTML = `
-    <h2 style="margin-top:0">Claim</h2>
-    <div style="font-size:17px"><i>${esc(d.entity.scientific_name)}</i> <span class="muted">· ${esc((d.entity.common_names||{}).en?.[0]||'')}</span></div>
-    <div class="kv" style="margin-top:8px">
-      <div>claim id</div><div><code>${esc(c.id)}</code> <span class="muted small">fingerprint ${esc(d.fingerprint)}</span></div>
-      <div>field</div><div>${esc(c.field)} <span class="muted">(${esc(c.value_kind)})</span></div>
-      <div>value</div><div><pre>${esc(fmtv(c.value_label ?? c.value))}${c.value_label?`\n(ids: ${esc(fmtv(c.value))})`:''}</pre></div>
-      <div>text</div><div>${esc(c.text)}</div>
-      <div>context</div><div>${esc(c.context)}</div>
-      <div>place · time · cultivar</div><div>${esc(c.place||'—')} · ${esc((c.time||[]).join(', ')||'—')} · ${esc(c.cultivar||'—')}${(c.conditions||[]).length?' · conditions: '+esc(c.conditions.map(x=>x.concept_id).join(', ')):''}</div>
-      <div>status · confidence</div><div><span class="chip ${c.status}">${esc(c.status)}</span> ${c.verification_scope?`<span class="chip">scope: ${esc(c.verification_scope)}</span>`:''} · ${esc(c.confidence)} ${c.note?`<div class="small muted">note: ${esc(c.note)}</div>`:''}</div>
-      ${meta}
-      <div>recorded</div><div>${esc(c.recorded_at)} by ${esc(c.recorded_by||'—')}</div>
+// ---------------------------------------------------------------- overview
+async function overview() {
+  const o = await api('/api/overview'); const e = o.entries, h = o.human.by_state || {};
+  const decided = o.human_reviewed_claims, ver = o.by_status.verified || 0, dis = o.by_status.disputed || 0;
+  setMain(`<h2>Review overview</h2>
+    <div class="cards">
+      <div class="card"><div class="big">${o.in_queue}</div><div class="sub">claims awaiting human review (of ${o.total_live_claims} live claims)</div></div>
+      <div class="card"><div class="big">${o.ai_reviewed}<span class="muted" style="font-size:14px"> / ${o.in_queue}</span></div><div class="sub">AI evidence reviews on file · source checked ${o.source_checked_by_ai} · unavailable ${o.ai_results.source_unavailable||0}</div><div class="bar"><i style="width:${o.in_queue?100*o.ai_reviewed/o.in_queue:0}%"></i></div></div>
+      <div class="card"><div class="big">${decided}</div><div class="sub">claims with a human decision · applied: verify ${h.verify_applied||0}, dispute ${h.dispute_applied||0}, correction ${h.propose_correction_applied||0} · pending apply ${(h.verify_pending_apply||0)+(h.dispute_pending_apply||0)+(h.propose_correction_pending_apply||0)}</div><div class="bar"><i style="width:${o.in_queue?100*decided/o.in_queue:0}%"></i></div></div>
+      <div class="card"><div class="big">${ver} <span class="muted" style="font-size:14px">verified</span> · ${dis} <span class="muted" style="font-size:14px">disputed</span></div><div class="sub">claim status in the database (${ver - (h.verify_applied||0)} verified claims are open data or survey statements from before the workbench)</div></div>
     </div>
-    <div class="box src"><b>Source</b> — ${esc(src.name||c.source_id)} <span class="muted small">(${esc(src.type)} · tier ${esc(src.licence_tier||'?')} · ${esc(src.geo_specificity)})</span><br>
-      ${c.source_url?`<a href="${esc(c.source_url)}" target="_blank" rel="noopener">${esc(c.source_url)}</a>`:'<span class="muted">no URL on the claim</span>'}${c.citation?`<div class="small muted">${esc(c.citation)}</div>`:''}
-      <div class="small muted">accessed ${esc(c.accessed||'—')} · program check: ${esc(ch.program_result||'none')}${ch.url_status?` · HTTP ${esc(ch.url_status)}`:''}${ch.numbers_in_claim?.length?` · numbers in claim ${esc(ch.numbers_in_claim.join(', '))}; on page ${esc((ch.numbers_on_page||[]).join(', ')||'none')}`:''}</div></div>
-    ${a ? `<div class="box ai"><b>AI evidence review</b> <span class="chip ${a.result}">${esc(a.result.replace(/_/g,' '))}</span> <span class="chip ${a.risk}">risk ${esc(a.risk)}</span>${a.current===false?' <span class="chip high">stale: claim changed since</span>':''}<br>
-      <div class="small muted">${esc(a.model)} · ${esc(a.method)} · ${esc(a.reviewed_at)} · ${esc(a.review_id)}</div>
-      <div style="margin-top:6px">${esc(a.explanation)}</div>
-      ${a.locator?`<div class="small"><b>locator:</b> ${esc(a.locator)}</div>`:''}${a.evidence_excerpt?`<div class="small"><b>excerpt:</b> “${esc(a.evidence_excerpt)}”</div>`:''}
-      ${a.missing_context?`<div class="small"><b>missing context:</b> ${esc(a.missing_context)}</div>`:''}<div class="small"><b>taxonomy:</b> ${esc(a.taxonomy_check)} · <b>geo:</b> ${esc(a.geo_check||'—')}</div>${a.conflict_reading?`<div class="small"><b>conflict reading:</b> ${esc(a.conflict_reading)}</div>`:''}
-      ${d.ai_history.length>1?`<div class="small muted">${d.ai_history.length} AI assessments on record (latest shown)</div>`:''}</div>` : '<div class="box ai muted">No AI evidence review yet for this claim.</div>'}
-    <h2>Same field, every source — side by side (never merged)</h2>
-    <table><tr><th>source</th><th>value</th><th>context</th><th>conf</th><th>status</th><th>AI</th></tr>
-      ${d.same_field.map(x => `<tr class="${x.id===c.id?'me':''} ${x.conflict?'conflict':''}"><td>${esc(x.source_id)}${x.conflict?' <span class="bad">⇄</span>':''}</td><td>${esc(fmtv(x.value_label ?? x.value))}</td><td class="small">${esc(x.context)}</td><td>${esc(x.confidence)}</td><td><span class="chip ${x.status}">${esc(x.status)}</span></td><td>${x.ai_result?`<span class="chip ${x.ai_result}">${esc(x.ai_result.replace(/_/g,' '))}</span>`:''}</td></tr>`).join('')}</table>
-    <div class="small muted">⇄ = disjoint value under the same (unstated) conditions, from brain/data/diagnosis.json.</div>
-    <h2>Downstream use in the knowledge graph</h2>
-    ${d.downstream.length ? `<ul class="small">${d.downstream.map(e => `<li>${esc(e.type)} → ${esc(e.target_label)} <span class="chip">${esc(e.kg_status)}</span> <span class="muted">${esc(e.text)}</span></li>`).join('')}</ul>` : '<div class="small muted">not used by any derived or design edge</div>'}
-    <h2>Review history</h2>
-    <ul class="hist">${timeline(d).map(t => `<li><time>${esc(t.at)}</time> — ${esc(t.what)}</li>`).join('')}</ul>`;
-  renderReview(d);
+    <h3>Where to review</h3>
+    <div class="cards">
+      <div class="card entry" onclick="location.hash='#/conflicts'"><div class="big">${e.conflicts.groups}</div><div class="sub"><b>Evidence conflicts</b> — plant × field groups where sources give disjoint values or the AI found the source contradicting itself (${e.conflicts.ai_conflicting} AI-flagged). ${e.conflicts.decided} of ${e.conflicts.claims} claims decided.</div></div>
+      <div class="card entry" onclick="location.hash='#/issues'"><div class="big">${e.issues.n}</div><div class="sub"><b>Knowledge issues</b> — recurring mapping problems across plants; decide a policy once, then the claims one by one. ${e.issues.with_policy} with a policy · ${e.issues.decided} of ${e.issues.claims} claims decided.</div></div>
+      <div class="card entry" onclick="location.hash='#/sample'"><div class="big">${e.sample.n}</div><div class="sub"><b>Human evaluation sample</b> — stratified claims to test how far the AI review can be trusted. ${e.sample.decided} of ${e.sample.n} decided.</div></div>
+      <div class="card entry" onclick="location.hash='#/all'"><div class="big">${e.all.n}</div><div class="sub"><b>All claims</b> — search and filter every claim; for look-ups, not a task list.</div></div>
+    </div>
+    <h3>Progress by plant</h3>
+    <table><tr><th>plant</th><th>in queue</th><th>AI reviewed</th><th>human decided</th><th>verified</th><th>disputed</th></tr>
+    ${Object.values(o.by_plant).map(p => `<tr><td><i>${esc(p.name)}</i></td><td>${p.queue}</td><td>${p.ai}</td><td>${p.human}</td><td>${p.verified}</td><td>${p.disputed?`<span class="bad">${p.disputed}</span>`:0}</td></tr>`).join('')}</table>
+    <p class="small muted">AI results are assessments; a claim becomes verified only through a human decision that is previewed, applied and validated. Local only — decisions are saved to review/events/ on this machine.</p>`);
+}
+
+// ---------------------------------------------------------------- conflicts
+async function conflicts() {
+  const c = await api('/api/conflicts');
+  setMain(`<h2>Evidence conflicts <span class="muted small">${c.groups.length} groups</span></h2>
+    <p class="small muted">Each group is one plant and one field where sources give values that do not overlap, or where the AI found a source contradicting itself. Sources are shown side by side and are never merged. Open a group to review its claims in turn.</p>
+    <div class="cards">${c.groups.map(g => `<div class="card entry" onclick="openGroup('conflict','${esc(g.id)}')">
+      <div><i>${esc(g.plant_name)}</i> · <b>${esc(g.field.replace(/_/g,' '))}</b> ${g.ai_conflicting?`<span class="chip conflicting_evidence">AI: conflicting ${g.ai_conflicting}</span>`:''}</div>
+      <table style="margin-top:6px"><tr><th>source</th><th>value</th><th>state</th></tr>${g.members.map(m => `<tr><td>${esc(src(m.source_id))}</td><td>${esc(fmtv(m.value))}</td><td><span class="chip ${m.human_state}">${esc(hs(m.human_state))}</span></td></tr>`).join('')}</table>
+      ${g.reading?`<div class="small muted" style="margin-top:6px">AI reading: ${esc(g.reading)}</div>`:''}
+      <div class="small muted" style="margin-top:4px">${g.decided} of ${g.n} decided</div></div>`).join('')}</div>`);
+}
+async function openGroup(kind, id) {
+  if (kind === 'conflict') { const c = await api('/api/conflicts'); const g = c.groups.find(x => x.id === id); CTX = {kind, title: `Conflict · ${g.plant_name} · ${g.field.replace(/_/g,' ')}`, items: g.members.map(m => ({claim_id:m.claim_id, line1:`${src(m.source_id)} · ${fmtv(m.value)}`, line2:m.text, state:m.human_state, ai:m.ai_result})), back:'#/conflicts', policy:null}; location.hash = '#/claim/' + encodeURIComponent(g.members[0].claim_id); }
+}
+
+// ---------------------------------------------------------------- issues
+async function issues() {
+  const d = await api('/api/issues');
+  setMain(`<h2>Knowledge issues <span class="muted small">${d.issues.length} recurring problems · ${d.issues.reduce((a,i)=>a+i.n_claims,0)} claims</span></h2>
+    <p class="small muted">The AI review found the same mapping problem across many plants and sources. Decide a policy for the issue once (recorded as an issue decision), then walk through its claims — each claim still gets its own decision and apply; nothing is verified in bulk.</p>
+    <div class="cards">${d.issues.map(i => `<div class="card entry" onclick="location.hash='#/issue/${encodeURIComponent(i.id)}'">
+      <div class="row"><b>${esc(i.title)}</b>${i.conflicting?`<span class="chip conflicting_evidence">${i.conflicting} conflicting</span>`:''}${i.gate_claims?`<span class="chip high">${i.gate_claims} gate</span>`:''}${i.policy?`<span class="chip ok">policy set</span>`:''}</div>
+      <div class="small muted" style="margin-top:4px">${i.n_claims} claims · ${i.plants.length} plants · ${Object.keys(i.sources).map(src).join(', ')}</div>
+      <div class="bar"><i style="width:${100*i.progress}%"></i></div><div class="small muted">${i.decided} of ${i.n_claims} decided</div></div>`).join('')}</div>`);
+}
+async function issue(id) {
+  const i = await api('/api/issue?id=' + encodeURIComponent(id)); if (i.error) return setMain(`<p class="bad">${esc(i.error)}</p>`);
+  setMain(`<p><a href="#/issues">← Knowledge issues</a></p><h2>${esc(i.title)}</h2>
+    <p>${esc(i.description)}</p>
+    <div class="progress-line"><span>${i.n_claims} claims</span><span>${i.plants.length} plants</span><span>fields: ${Object.entries(i.fields).map(([k,v])=>k.replace(/_/g,' ')+' '+v).join(', ')}</span><span>sources: ${Object.entries(i.sources).map(([k,v])=>src(k)+' '+v).join(', ')}</span>${i.gate_claims?`<span class="bad">${i.gate_claims} feed a gate field</span>`:''}${i.downstream.design?`<span>${i.downstream.design} feed design checks</span>`:''}</div>
+    <div class="bar" style="max-width:420px"><i style="width:${100*i.progress}%"></i></div><div class="small muted">${i.decided} of ${i.n_claims} claims decided</div>
+    <h3>Policy for this issue</h3>
+    ${i.policy ? `<div class="box policy"><b>Current policy</b> (${esc(i.policy.reviewer)}, ${esc(i.policy.at)}): ${esc(i.policy.payload.option)}<div class="small">${esc(i.policy.payload.reason||'')}</div>${i.policy_history.length>1?`<div class="small muted">${i.policy_history.length} policy decisions on record (latest shown)</div>`:''}</div>` : '<div class="small muted">No policy recorded yet. A policy is a note that guides the claim-by-claim decisions; it changes no claim.</div>'}
+    <div class="box"><div class="decision" id="pol-opts">${i.options.map((o, k) => `<label class="opt"><input type="radio" name="pol" value="${esc(o)}"><span>${esc(o)}</span></label>`).join('')}<label class="opt"><input type="radio" name="pol" value="__other"><span>Other (describe in the reason)</span></label></div>
+      <textarea id="pol-reason" placeholder="Why this policy? What evidence or rule supports it?"></textarea>
+      <div class="row" style="margin-top:8px"><button class="primary" id="pol-save">Record issue policy</button><span class="small muted">recorded as an issue decision; claims are unchanged</span></div></div>
+    <h3>Claims in this issue</h3>
+    <div class="row" style="margin-bottom:8px"><button class="primary" onclick="openIssue('${esc(i.id)}')">Review claims one by one</button></div>
+    <table><tr><th>plant</th><th>field</th><th>source</th><th>AI</th><th>priority</th><th>what the AI found</th><th>human</th></tr>
+    ${i.claims.map(r => `<tr class="click" onclick="openIssue('${esc(i.id)}','${esc(r.claim_id)}')"><td><i>${esc(r.plant.replace(/-/g,' '))}</i></td><td>${esc(r.field.replace(/_/g,' '))}</td><td>${esc(src(r.source_id))}</td><td><span class="chip ${r.ai_result}">${esc(r.ai_result.replace(/_/g,' '))}</span></td><td><span class="chip ${r.priority}">${esc(r.priority)}</span></td><td class="small">${esc(r.missing_context || r.explanation.slice(0,140))}</td><td><span class="chip ${r.human_state}">${esc(hs(r.human_state))}</span></td></tr>`).join('')}</table>`);
+  $('#pol-save').onclick = async () => {
+    const o = document.querySelector('input[name=pol]:checked'); if (!o) return toast('choose a resolution option');
+    const option = o.value === '__other' ? ($('#pol-reason').value.trim() || 'other') : o.value;
+    const r = await api('/api/issue_decision', {issue_id: i.id, option, reviewer: who(), reason: $('#pol-reason').value}); if (r.error) return toast(r.error);
+    toast('policy recorded'); issue(id);
+  };
+}
+async function openIssue(id, cid) {
+  const i = await api('/api/issue?id=' + encodeURIComponent(id));
+  CTX = {kind:'issue', title:`Issue · ${i.title}`, items: i.claims.map(r => ({claim_id:r.claim_id, line1:`${r.plant.replace(/-/g,' ')} · ${r.field.replace(/_/g,' ')} · ${src(r.source_id)}`, line2:r.missing_context || r.explanation, state:r.human_state, ai:r.ai_result})), back:'#/issue/' + encodeURIComponent(id), policy: i.policy ? i.policy.payload : null};
+  location.hash = '#/claim/' + encodeURIComponent(cid || i.claims[0].claim_id);
+}
+
+// ---------------------------------------------------------------- sample
+async function sample() {
+  const s = await api('/api/sample');
+  setMain(`<h2>Human evaluation sample <span class="muted small">${s.decided||0} of ${s.n} decided</span></h2>
+    <p class="small muted">${esc(s.method||s.note||'')} This sample tests the AI review; it does not stand for the other claims.</p>
+    <div class="bar" style="max-width:420px"><i style="width:${s.n?100*(s.decided||0)/s.n:0}%"></i></div>
+    <div class="row" style="margin:10px 0"><button class="primary" onclick="openSample()">Review the sample in order</button></div>
+    <table><tr><th>plant</th><th>field</th><th>source</th><th>priority</th><th>AI</th><th>claim</th><th>human</th></tr>
+    ${(s.claims||[]).map(r => `<tr class="click" onclick="openSample('${esc(r.claim_id)}')"><td><i>${esc(r.plant_name)}</i></td><td>${esc(r.field.replace(/_/g,' '))}</td><td>${esc(src(r.source_id))}</td><td><span class="chip ${r.priority}">${esc(r.priority)}</span></td><td><span class="chip ${r.ai_result}">${esc((r.ai_result||'none').replace(/_/g,' '))}</span></td><td class="small">${esc(r.text)}</td><td><span class="chip ${r.human_state}">${esc(hs(r.human_state))}</span></td></tr>`).join('')}</table>`);
+}
+async function openSample(cid) {
+  const s = await api('/api/sample');
+  CTX = {kind:'sample', title:'Evaluation sample', items: s.claims.map(r => ({claim_id:r.claim_id, line1:`${r.plant_name} · ${r.field.replace(/_/g,' ')} · ${src(r.source_id)}`, line2:r.text, state:r.human_state, ai:r.ai_result})), back:'#/sample', policy:null};
+  location.hash = '#/claim/' + encodeURIComponent(cid || s.claims[0].claim_id);
+}
+
+// ---------------------------------------------------------------- all claims
+let ROWS = null, PLANTS = {};
+async function all() {
+  if (!ROWS) { const q = await api('/api/queue'); ROWS = q.rows; PLANTS = q.plants; }
+  setMain(`<h2>All claims <span class="muted small">${ROWS.length}</span></h2>
+    <div class="card"><div class="cards" style="grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:8px">
+      <input type="search" id="f-q" placeholder="plant / claim id / field / text" style="grid-column:1/-1">
+      <select id="f-plant"><option value="">All plants</option>${Object.entries(PLANTS).map(([k,v])=>`<option value="${k}">${esc(v)}</option>`).join('')}</select>
+      <select id="f-source"><option value="">All sources</option>${[...new Set(ROWS.map(r=>r.source_id))].sort().map(s=>`<option value="${s}">${esc(src(s))}</option>`).join('')}</select>
+      <select id="f-ai"><option value="">AI: any</option><option>supported_by_source</option><option>partially_supported</option><option>not_supported</option><option>conflicting_evidence</option><option>source_unavailable</option><option>insufficient_evidence</option></select>
+      <select id="f-human"><option value="">Human: any</option><option value="awaiting_human">awaiting</option><option value="pending">decided, not applied</option><option value="applied">applied</option><option value="request_evidence">more evidence</option><option value="defer">deferred</option></select>
+      <select id="f-prio"><option value="">Priority: any</option><option>high</option><option>medium</option><option>low</option></select>
+      <select id="f-sort"><option value="impact">Sort: impact</option><option value="conflict">Sort: conflicts</option><option value="date">Sort: last event</option><option value="plant">Sort: plant</option></select>
+    </div><div class="small muted" id="f-count" style="margin-top:6px"></div></div>
+    <div id="all-list" class="pane" style="margin-top:10px"></div>`);
+  ['#f-q','#f-plant','#f-source','#f-ai','#f-human','#f-prio','#f-sort'].forEach(s => $(s).addEventListener('input', renderAll)); renderAll();
+}
+function filteredRows() {
+  const q = $('#f-q').value.toLowerCase(), pl = $('#f-plant').value, s = $('#f-source').value, ai = $('#f-ai').value, hu = $('#f-human').value, pr = $('#f-prio').value, sort = $('#f-sort').value;
+  let rows = ROWS.filter(r => (!q || (r.claim_id+' '+r.plant_name+' '+r.field+' '+(r.text||'')).toLowerCase().includes(q)) && (!pl||r.plant===pl) && (!s||r.source_id===s) && (!pr||r.priority===pr) && (!ai||r.ai_result===ai)
+    && (!hu || (hu==='pending' ? /pending_apply$/.test(r.human_state) : hu==='applied' ? /_applied$/.test(r.human_state) : r.human_state===hu)));
+  if (sort==='conflict') rows.sort((a,b)=>b.n_conflicts-a.n_conflicts||b.priority_score-a.priority_score); else if (sort==='date') rows.sort((a,b)=>(b.last_event||'').localeCompare(a.last_event||'')); else if (sort==='plant') rows.sort((a,b)=>a.plant.localeCompare(b.plant)||a.field.localeCompare(b.field));
+  return rows;
+}
+function renderAll() {
+  const rows = filteredRows(); $('#f-count').textContent = `${rows.length} claims`;
+  $('#all-list').innerHTML = rows.slice(0, 300).map(r => `<div class="list-item" onclick="openAll('${esc(r.claim_id)}')"><div class="t"><i>${esc(r.plant_name)}</i> · ${esc(r.field.replace(/_/g,' '))} · ${esc(src(r.source_id))} <span class="chip ${r.priority}">${r.priority}</span>${r.n_conflicts?`<span class="chip">⇄ ${r.n_conflicts}</span>`:''}</div><div class="txt">${esc(r.text)}</div><div class="t">${r.ai_result?`<span class="chip ${r.ai_result}">AI ${esc(r.ai_result.replace(/_/g,' '))}</span>`:'<span class="chip">AI pending</span>'}<span class="chip ${r.human_state}">${esc(hs(r.human_state))}</span>${r.status!=='unverified'?`<span class="chip ${r.status}">${r.status}</span>`:''}</div></div>`).join('') + (rows.length>300?`<div class="list-item muted">${rows.length-300} more — narrow the filters</div>`:'');
+}
+function openAll(cid) {
+  const rows = filteredRows(); CTX = {kind:'all', title:'All claims (filtered)', items: rows.slice(0,300).map(r => ({claim_id:r.claim_id, line1:`${r.plant_name} · ${r.field.replace(/_/g,' ')} · ${src(r.source_id)}`, line2:r.text, state:r.human_state, ai:r.ai_result})), back:'#/all', policy:null};
+  location.hash = '#/claim/' + encodeURIComponent(cid);
+}
+
+// ---------------------------------------------------------------- claim review (Claim → Source evidence → AI assessment → Human decision)
+async function claim(cid) {
+  const d = await api('/api/claim?id=' + encodeURIComponent(cid)); if (d.error) return setMain(`<p class="bad">${esc(d.error)}</p>`);
+  if (!CTX.items.some(x => x.claim_id === cid)) { if (!ROWS) { const q = await api('/api/queue'); ROWS = q.rows; PLANTS = q.plants; } const r = ROWS.find(x => x.claim_id === cid); CTX = {kind:'all', title:'All claims', items: r ? [{claim_id:cid, line1:`${r.plant_name} · ${r.field.replace(/_/g,' ')} · ${src(r.source_id)}`, line2:r.text, state:r.human_state, ai:r.ai_result}] : [], back:'#/all', policy:null}; }
+  const c = d.claim, a = d.ai, s = d.source || {}, ch = d.checks || {}; const idx = CTX.items.findIndex(x => x.claim_id === cid); const prev = CTX.items[idx-1], next = CTX.items[idx+1];
+  $('#main').innerHTML = `<div class="row small" style="margin-bottom:8px"><a href="${CTX.back}">← ${esc(CTX.title)}</a><span class="muted">${idx+1} of ${CTX.items.length}</span>${prev?`<button class="link" onclick="location.hash='#/claim/${encodeURIComponent(prev.claim_id)}'">‹ previous</button>`:''}${next?`<button class="link" onclick="location.hash='#/claim/${encodeURIComponent(next.claim_id)}'">next ›</button>`:''}</div>
+  <div class="work">
+    <div class="pane list" id="p-list"><div class="list-head">${esc(CTX.title)}</div>${CTX.items.map(x => `<div class="list-item ${x.claim_id===cid?'sel':''}" onclick="location.hash='#/claim/${encodeURIComponent(x.claim_id)}'"><div class="t">${esc(x.line1)}</div><div class="txt">${esc(x.line2||'')}</div><div class="t">${x.ai?`<span class="chip ${x.ai}">AI ${esc(x.ai.replace(/_/g,' '))}</span>`:''}<span class="chip ${x.state}">${esc(hs(x.state))}</span></div></div>`).join('')}</div>
+    <div class="pane read show" id="p-read">
+      <div class="step"><h4>1 · Claim</h4>
+        <div class="claim-head"><i>${esc(d.entity.scientific_name)}</i> <span class="muted" style="font-weight:400">· ${esc((d.entity.common_names||{}).en?.[0]||'')}</span></div>
+        <div class="muted">${esc(c.field.replace(/_/g,' '))}${c.cultivar?` · cultivar ${esc(c.cultivar)}`:''}</div>
+        <div class="value">${esc(fmtv(c.value_label ?? c.value))}</div>
+        <div>${esc(c.text)}</div>
+        <div class="kv" style="margin-top:6px"><div>context</div><div>${esc(c.context)}</div><div>place · time</div><div>${esc((c.place||'—').replace('place:',''))} · ${esc((c.time||[]).join(', ')||'—')}${(c.conditions||[]).length?' · conditions: '+esc(c.conditions.map(x=>x.concept_id.split(':')[1]).join(', ')):''}</div><div>status</div><div><span class="chip ${c.status}">${esc(c.status)}</span>${c.verification_scope?` <span class="chip">scope ${esc(c.verification_scope)}</span>`:''} · confidence ${esc(c.confidence)}</div>${c.note?`<div>extractor note</div><div class="small">${esc(c.note)}</div>`:''}${c.practitioner_meta?`<div>practitioner</div><div class="small">${esc(c.practitioner_meta.observer_background)} · basis ${esc(c.practitioner_meta.basis)} · ${esc(c.practitioner_meta.completeness)}</div>`:''}</div>
+        <details><summary>technical details</summary><div class="small">id <code>${esc(c.id)}</code> · fingerprint ${esc(d.fingerprint)} · recorded ${esc(c.recorded_at)} by ${esc(c.recorded_by||'—')} · value ids ${esc(fmtv(c.value))} · program check ${esc(ch.program_result||'none')}${ch.url_status?` (HTTP ${esc(ch.url_status)})`:''}</div></details></div>
+      <div class="step"><h4>2 · Source evidence</h4>
+        <div class="box src"><b>${esc(s.name||c.source_id)}</b> <span class="muted small">${esc(s.type||'')} · tier ${esc(s.licence_tier||'?')} · ${esc(s.geo_specificity||'')}</span><br>${c.source_url?`<a href="${esc(c.source_url)}" target="_blank" rel="noopener">${esc(c.source_url)}</a>`:'<span class="muted">no URL on the claim</span>'}${c.citation?`<div class="small muted">${esc(c.citation)}</div>`:''}<div class="small muted">accessed ${esc(c.accessed||'—')}</div>
+          ${a && (a.locator||a.evidence_excerpt)?`<div style="margin-top:6px">${a.locator?`<div class="small"><b>where on the page:</b> ${esc(a.locator)}</div>`:''}${a.evidence_excerpt?`<div class="small"><b>what the source says:</b> “${esc(a.evidence_excerpt)}”</div>`:''}</div>`:''}</div>
+        <h3 style="margin-top:10px">Same field, every source (never merged)</h3>
+        <table><tr><th>source</th><th>value</th><th>context</th><th>status</th><th>AI</th></tr>${d.same_field.map(x => `<tr class="${x.id===c.id?'me':''} click" onclick="location.hash='#/claim/${encodeURIComponent(x.id)}'"><td>${esc(src(x.source_id))}${x.conflict?' <span class="bad" title="disjoint value">⇄</span>':''}</td><td>${esc(fmtv(x.value_label ?? x.value))}</td><td class="small">${esc(x.context)}</td><td><span class="chip ${x.status}">${esc(x.status)}</span></td><td>${x.ai_result?`<span class="chip ${x.ai_result}">${esc(x.ai_result.replace(/_/g,' '))}</span>`:''}</td></tr>`).join('')}</table></div>
+      <div class="step"><h4>3 · AI assessment</h4>
+        ${a ? `<div class="box ai"><div class="row"><span class="chip ${a.result}">${esc(a.result.replace(/_/g,' '))}</span><span class="chip ${a.risk}">risk ${esc(a.risk)}</span>${a.current===false?'<span class="chip high">stale: claim changed since</span>':''}</div>
+          <div style="margin-top:6px">${esc(a.explanation)}</div>
+          ${a.missing_context?`<div class="small" style="margin-top:4px"><b>missing context:</b> ${esc(a.missing_context)}</div>`:''}${a.conflict_reading&&!/^n\.?a\.?$/i.test(a.conflict_reading)?`<div class="small"><b>conflict reading:</b> ${esc(a.conflict_reading)}</div>`:''}<div class="small"><b>taxonomy:</b> ${esc(a.taxonomy_check)} · <b>region:</b> ${esc(a.geo_check||'—')}</div>
+          <details><summary>how this was produced</summary><div class="small">${esc(a.model)} · ${esc(a.method)} · ${esc(a.reviewed_at)} · ${esc(a.review_id)}${d.ai_history.length>1?` · ${d.ai_history.length} assessments on record`:''}</div></details></div>` : '<div class="box ai muted">No AI evidence review for this claim.</div>'}
+        ${d.downstream.length?`<details><summary>used downstream in the knowledge graph (${d.downstream.length})</summary><ul class="small">${d.downstream.slice(0,12).map(e=>`<li>${esc(e.type)} → ${esc(e.target_label)} <span class="chip">${esc(e.kg_status)}</span></li>`).join('')}</ul></details>`:''}</div>
+      <div class="step"><h4>Review history</h4><ul class="hist">${timeline(d).map(t=>`<li><time>${esc(t.at)}</time> — ${esc(t.what)}</li>`).join('')}</ul></div>
+    </div>
+    <div class="pane decide" id="p-decide"></div>
+  </div>`;
+  renderDecide(d); bindTabs();
 }
 function timeline(d) {
-  const c = d.claim, out = [{at: c.recorded_at, what: `Claim imported (${c.recorded_by||'—'})`}];
-  if (d.checks) out.push({at: d.checks.checked_at, what: `Automated validation and program checks: ${d.checks.program_result}`});
-  (d.ai_history||[]).forEach(a => out.push({at: a.reviewed_at, what: `AI evidence review: ${a.result} (${a.model})`}));
-  (d.events||[]).forEach(e => out.push({at: e.at, what: e.kind === 'human_decision' ? `Human decision by ${e.reviewer}: ${e.payload.decision}${e.payload.reason?' — '+e.payload.reason:''}${e.payload.replaces_event?' (replaces an earlier decision)':''}` : e.kind === 'decision_applied' ? `Decision applied by ${e.reviewer}: ${e.previous_status} → ${e.new_status}${e.payload.new_claim?.length?' (new claim '+e.payload.new_claim.join(', ')+')':''}` : e.kind === 'kg_rebuilt' ? `Knowledge graph rebuilt (${e.payload.pipeline?.ok?'ok':'FAILED'})` : e.kind === 'apply_failed' ? `Apply refused: ${e.payload.reason}` : `${e.kind}`}));
-  return out.sort((a,b) => String(a.at).localeCompare(String(b.at)));
+  const c = d.claim, out = [{at:c.recorded_at, what:`Claim imported (${c.recorded_by||'—'})`}];
+  if (d.checks) out.push({at:d.checks.checked_at, what:`Automated validation and program checks: ${d.checks.program_result}`});
+  (d.ai_history||[]).forEach(a => out.push({at:a.reviewed_at, what:`AI evidence review: ${a.result.replace(/_/g,' ')}`}));
+  (d.events||[]).forEach(e => out.push({at:e.at, what: e.kind==='human_decision' ? `Human decision by ${e.reviewer}: ${e.payload.decision.replace(/_/g,' ')}${e.payload.reason?' — '+e.payload.reason:''}${e.payload.replaces_event?' (replaces an earlier decision)':''}` : e.kind==='decision_applied' ? `Decision applied by ${e.reviewer}: ${e.previous_status} → ${e.new_status}${e.payload.new_claim?.length?' (new claim '+e.payload.new_claim.join(', ')+')':''}` : e.kind==='kg_rebuilt' ? `Knowledge graph rebuilt (${e.payload.pipeline?.ok?'ok':'failed'})` : e.kind==='apply_failed' ? `Apply refused: ${e.payload.reason}` : e.kind}));
+  return out.sort((a,b)=>String(a.at).localeCompare(String(b.at)));
 }
-function renderReview(d) {
-  const c = d.claim, a = d.ai, last = [...(d.events||[])].reverse().find(e => e.kind === 'human_decision');
-  const reviewer = localStorage.getItem('reviewer') || '';
-  $('#review').innerHTML = `
-    <h2 style="margin-top:0">Human review</h2>
-    <div class="small muted">Decide from the evidence on the left. The AI result is an assessment you may reject; your decision changes the database only after an explicit apply that passes validation.</div>
-    <div style="margin:8px 0 4px"><label class="small muted">Reviewer identifier</label><input type="text" id="r-who" value="${esc(reviewer)}" placeholder="e.g. Kay"></div>
-    <div class="decision" id="r-dec">
-      <label><input type="radio" name="dec" value="verify"><span><b>Verify</b><small>status → verified (scope: ${String(c.source_id).startsWith('survey')?'statement':'content'}); R10 retires placeholders</small></span></label>
-      <label><input type="radio" name="dec" value="dispute"><span><b>Dispute</b><small>status → disputed; reason required</small></span></label>
-      <label><input type="radio" name="dec" value="request_evidence"><span><b>Request more evidence</b><small>recorded; claim unchanged</small></span></label>
-      <label><input type="radio" name="dec" value="defer"><span><b>Defer / needs expert review</b><small>recorded; claim unchanged</small></span></label>
-      <label><input type="radio" name="dec" value="propose_correction"><span><b>Propose correction</b><small>original retired (kept), corrected claim added unverified; reason required</small></span></label>
+function renderDecide(d) {
+  const c = d.claim, a = d.ai, last = [...(d.events||[])].reverse().find(e => e.kind==='human_decision'); const pol = CTX.policy;
+  $('#p-decide').innerHTML = `<h4 style="margin:0 0 6px;font-size:13px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em">4 · Human decision</h4>
+    ${pol?`<div class="box policy small"><b>Issue policy:</b> ${esc(pol.option)}${pol.reason?` — ${esc(pol.reason)}`:''}<div class="muted">a suggestion from the issue; decide this claim on its own evidence</div></div>`:''}
+    <div class="decision">
+      <label class="opt"><input type="radio" name="dec" value="verify"><span><b>Verify</b><small>the source supports it; status → verified</small></span></label>
+      <label class="opt"><input type="radio" name="dec" value="dispute"><span><b>Dispute</b><small>status → disputed; reason required</small></span></label>
+      <label class="opt"><input type="radio" name="dec" value="propose_correction"><span><b>Propose correction</b><small>original kept (retired), corrected claim added unverified; reason required</small></span></label>
+      <label class="opt"><input type="radio" name="dec" value="request_evidence"><span><b>Request more evidence</b><small>recorded; claim unchanged</small></span></label>
+      <label class="opt"><input type="radio" name="dec" value="defer"><span><b>Defer / needs expert</b><small>recorded; claim unchanged</small></span></label>
     </div>
-    <div id="r-corr" style="display:none" class="box warn"><b>Correction proposal</b>
-      <label class="small muted">value (JSON or text)</label><input type="text" id="c-value" placeholder='e.g. {"min": 1, "max": 1.5, "unit": "m"} or "Part sun/part shade"'>
-      <label class="small muted">text</label><input type="text" id="c-text" placeholder="corrected claim sentence">
-      <label class="small muted">context (optional)</label><input type="text" id="c-context" value="${esc(c.context)}">
-      <label class="small muted">note (optional)</label><input type="text" id="c-note"></div>
-    <label class="small muted">Decision reason / evidence</label><textarea id="r-reason" placeholder="What in the source (or your own knowledge of the site) supports this decision?"></textarea>
-    <label class="small muted">Supporting notes (optional)</label><textarea id="r-notes" style="min-height:48px"></textarea>
-    <label class="small" style="display:flex;gap:6px;align-items:center;margin:6px 0"><input type="checkbox" id="r-local"> Evidence supports use under Vancouver / stated site conditions (locally applicable)</label>
-    <div class="small muted">answers AI review: ${a?esc(a.review_id):'none'}</div>
-    <div class="row" style="margin-top:8px"><button class="primary" id="r-save">Record decision</button>${last?`<span class="small muted">latest: ${esc(last.payload.decision)} by ${esc(last.reviewer)} (${esc(last.at)})</span>`:''}</div>
-    <div id="r-apply"></div>`;
-  $('#r-who').oninput = e => localStorage.setItem('reviewer', e.target.value);
-  document.querySelectorAll('input[name=dec]').forEach(r => r.onchange = () => $('#r-corr').style.display = r.value === 'propose_correction' && r.checked ? 'block' : 'none');
+    <div id="r-corr" style="display:none" class="box"><b class="small">Correction</b><input type="text" id="c-value" placeholder='value (JSON or text), e.g. "average"' style="margin:4px 0"><input type="text" id="c-text" placeholder="corrected sentence" style="margin:4px 0"><input type="text" id="c-context" value="${esc(c.context)}" style="margin:4px 0"></div>
+    <textarea id="r-reason" placeholder="Reason — what in the source (or your knowledge of the site) supports this?" style="margin-top:6px"></textarea>
+    <label class="small" style="display:flex;gap:6px;align-items:center;margin:6px 0"><input type="checkbox" id="r-local"> locally applicable (Vancouver / stated site conditions)</label>
+    <div class="row"><button class="primary" id="r-save">Record decision</button>${last?`<span class="small muted">latest: ${esc(last.payload.decision.replace(/_/g,' '))} (${esc(last.reviewer)})</span>`:''}</div>
+    <div id="r-apply" style="margin-top:8px"></div>`;
+  document.querySelectorAll('input[name=dec]').forEach(r => r.onchange = () => $('#r-corr').style.display = (r.value==='propose_correction'&&r.checked)?'block':'none');
   $('#r-save').onclick = async () => {
-    const dec = document.querySelector('input[name=dec]:checked')?.value; if (!dec) return toast('choose a decision');
-    const body = {claim_id: c.id, decision: dec, reviewer: $('#r-who').value, reason: $('#r-reason').value, notes: $('#r-notes').value, ai_review_id: a?.review_id || null, locally_applicable: $('#r-local').checked, replaces_event: last?.event_id || null};
-    if (dec === 'propose_correction') { let v = $('#c-value').value; try { v = JSON.parse(v); } catch (e) {} body.correction = {value: v, text: $('#c-text').value, context: $('#c-context').value, note: $('#c-note').value || null}; }
+    const dec = document.querySelector('input[name=dec]:checked')?.value; if (!dec) return toast('choose a decision'); if (!who()) return toast('enter your reviewer name (top right)');
+    const body = {claim_id:c.id, decision:dec, reviewer:who(), reason:$('#r-reason').value, ai_review_id:a?.review_id||null, locally_applicable:$('#r-local').checked, replaces_event:last?.event_id||null, notes: pol?`issue policy: ${pol.option}`:null};
+    if (dec==='propose_correction') { let v = $('#c-value').value; try { v = JSON.parse(v); } catch(e) {} body.correction = {value:v, text:$('#c-text').value, context:$('#c-context').value}; }
     const r = await api('/api/decision', body); if (r.error) return toast(r.error);
-    toast('decision recorded: ' + r.event.event_id); await open(c.id); loadOverview(); loadQueue();
+    const it = CTX.items.find(x => x.claim_id===c.id); if (it) it.state = dec==='verify'?'verify_pending_apply':dec==='dispute'?'dispute_pending_apply':dec==='propose_correction'?'propose_correction_pending_apply':dec;
+    toast('decision recorded'); claim(c.id);
   };
   renderApply(d);
 }
 function renderApply(d) {
   const box = $('#r-apply'); if (!d.pending_apply.length) { box.innerHTML = ''; return; }
-  const ev = d.pending_apply[d.pending_apply.length - 1];
-  box.innerHTML = `<div class="box warn"><b>Pending write-back</b> — decision ${esc(ev)} is recorded but the database is unchanged.<div class="row" style="margin-top:6px"><button id="a-prev">Preview change</button><button class="danger" id="a-apply" disabled>Apply to database</button></div><div id="a-out" class="small"></div></div>`;
-  $('#a-prev').onclick = async () => { const p = await api('/api/apply/preview', {event_id: ev}); $('#a-out').innerHTML = p.ok ? `<pre>${esc(JSON.stringify(p.changes, null, 1))}</pre>${p.new_claim?`<div>new claim:</div><pre>${esc(JSON.stringify(p.new_claim, null, 1))}</pre>`:''}<div class="muted">then: ${esc(p.then.join(' → '))}</div>` : `<span class="bad">${esc(p.reason)}</span>`; $('#a-apply').disabled = !p.ok; };
-  $('#a-apply').onclick = async () => { if (!confirm('Apply this decision to plants/*.json? Validation runs first; the pipeline rebuilds the graph after.')) return; $('#a-apply').disabled = true; const r = await api('/api/apply', {event_id: ev, by: $('#r-who').value}); $('#a-out').innerHTML = r.ok ? `<span class="ok">applied: ${esc(r.new_status)} · pipeline ${r.pipeline?.ok?'ok':'failed'} ${esc(r.pipeline?.summary||'')}</span>` : `<span class="bad">refused: ${esc(r.reason)} ${esc((r.errors||[]).join('; '))}</span>`; await open(d.claim.id); loadOverview(); loadQueue(); };
+  const ev = d.pending_apply[d.pending_apply.length-1];
+  box.innerHTML = `<div class="box" style="border-left:4px solid var(--warn)"><b class="small">Pending write-back</b><div class="small muted">The decision is recorded; the database is unchanged until you preview and apply.</div><div class="row" style="margin-top:6px"><button id="a-prev">Preview change</button><button class="danger" id="a-apply" disabled>Apply to database</button></div><div id="a-out" class="small"></div></div>`;
+  $('#a-prev').onclick = async () => { const p = await api('/api/apply/preview', {event_id:ev}); $('#a-out').innerHTML = p.ok ? `<pre>${esc(JSON.stringify(p.changes,null,1))}</pre>${p.new_claim?`new claim:<pre>${esc(JSON.stringify(p.new_claim,null,1))}</pre>`:''}<div class="muted">then: ${esc(p.then.join(' → '))}</div>` : `<span class="bad">${esc(p.reason)}</span>`; $('#a-apply').disabled = !p.ok; };
+  $('#a-apply').onclick = async () => { if (!confirm('Apply this decision to the database? Validation runs first; the graph is rebuilt after.')) return; $('#a-apply').disabled = true; const r = await api('/api/apply', {event_id:ev, by:who()}); $('#a-out').innerHTML = r.ok ? `<span class="ok">applied: ${esc(r.new_status)} · graph ${r.pipeline?.ok?'rebuilt':'rebuild failed'}</span>` : `<span class="bad">refused: ${esc(r.reason)} ${esc((r.errors||[]).join('; '))}</span>`; const it = CTX.items.find(x => x.claim_id===d.claim.id); if (it && r.ok) it.state = it.state.replace('pending_apply','applied'); claim(d.claim.id); };
 }
-loadOverview(); loadQueue();
+function bindTabs() {
+  const t = $('#tabs'); t.style.display = ''; const show = k => { document.querySelectorAll('.work > .pane').forEach(p => p.classList.toggle('show', p.id === 'p-' + k)); t.querySelectorAll('button').forEach(b => b.classList.toggle('on', b.dataset.t === k)); };
+  t.querySelectorAll('button').forEach(b => b.onclick = () => show(b.dataset.t)); show('read');
+}
 </script>
 </body>
 </html>

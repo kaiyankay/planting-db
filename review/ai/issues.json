@@ -1,0 +1,2479 @@
+{
+ "generated": "2026-11-03",
+ "method": "tools/review_issues.py rule table over review/ai/assessments (M47); every non-supported assessment is in exactly one issue; note-level problems detected on supported claims",
+ "n_issues": 17,
+ "n_claims": 122,
+ "issues": [
+  {
+   "id": "water-range-collapsed",
+   "title": "A stated moisture range collapsed to one water class",
+   "description": "Sources state a range or two options ('dry to medium', 'moist but well-drained or well-drained', 'medium to wet', 'regular watering to drought tolerant'); the stored value keeps one end, which manufactures disagreements between sources that say the same thing.",
+   "options": [
+    "House rule: a stated range becomes two claims (M15) or `wide_range`; 'moist but well-drained' → average",
+    "Propose correction per claim to the fuller reading",
+    "Accept as is (verify) where the chosen end is the source's emphasis"
+   ],
+   "n_claims": 15,
+   "plants": [
+    "acer-palmatum",
+    "achillea-millefolium",
+    "arctostaphylos-uva-ursi",
+    "cercidiphyllum-japonicum",
+    "cornus-nuttallii",
+    "cornus-sericea",
+    "gaillardia-aristata",
+    "polystichum-munitum",
+    "vaccinium-ovatum"
+   ],
+   "fields": {
+    "water_drainage": 15
+   },
+   "sources": {
+    "gpp": 2,
+    "eflora": 4,
+    "mobot": 4,
+    "rhs": 5
+   },
+   "downstream": {
+    "claim": 15
+   },
+   "gate_claims": 15,
+   "conflicting": 0,
+   "impact_score": 45,
+   "claims": [
+    {
+     "claim_id": "acer-palmatum:water_drainage:gpp01",
+     "plant": "acer-palmatum",
+     "field": "water_drainage",
+     "source_id": "gpp",
+     "ai_result": "partially_supported",
+     "ai_risk": "medium",
+     "priority": "medium",
+     "downstream": [
+      "claim"
+     ],
+     "status": "unverified",
+     "missing_context": "Watering is advised 'during dry weather' to keep the tree at its best, i.e. a summer-drought caveat rather than a general moisture class.",
+     "explanation": "Quick Facts gives 'Water Requirements: regular watering' and Culture Notes say 'regular watering during dry weather helps maintain the tree at its best'. GPP gives a watering instruction, not a moisture class, so mapping it to 'average' is a defensible but loose interpretation; the dry-weather condition is in the claim text but not in the value. The cached text held only the site title because the page is JavaScript-rendered, so the programmatic 'taxon_not_on_page' pre-check is an artefact; the rendered page is headed 'Acer palmatum ‘Osakazuki’'."
+    },
+    {
+     "claim_id": "achillea-millefolium:water_drainage:eflora01",
+     "plant": "achillea-millefolium",
+     "field": "water_drainage",
+     "source_id": "eflora",
+     "ai_result": "partially_supported",
+     "ai_risk": "high",
+     "priority": "high",
+     "downstream": [
+      "claim"
+     ],
+     "status": "unverified",
+     "missing_context": "The 'wide_range' value comes from plot min/max; the Illustrated Flora habitat statement is 'mesic to dry' and the plot average is 3 (slightly drier than mesic).",
+     "explanation": "The page states habitat 'mesic to dry' and the BEC plot table gives SMR minimum 0, average 3, maximum 8 (0 very xeric, 4 mesic, 8 hydric), exactly the figures the claim quotes. 'wide_range' is an inference from plot extremes over 8,643 plots, not a stated tolerance; the Flora's own habitat statement is narrower (mesic to dry), so the category is defensible but not stated."
+    },
+    {
+     "claim_id": "achillea-millefolium:water_drainage:mobot01",
+     "plant": "achillea-millefolium",
+     "field": "water_drainage",
+     "source_id": "mobot",
+     "ai_result": "partially_supported",
+     "ai_risk": "high",
+     "priority": "high",
+     "downstream": [
+      "claim"
+     ],
+     "status": "unverified",
+     "missing_context": "The source's range starts at 'dry'; the value records only the 'medium/average' end (drought and dry-soil tolerance are in a separate resistances claim).",
+     "explanation": "MOBOT states Water: Dry to medium and 'Best grown in lean, dry to medium, well-drained sandy loams'. The claim text quotes this correctly, but the value firms the two-step range 'dry to medium' into the single category 'average', dropping the dry end that the source puts first."
+    },
+    {
+     "claim_id": "achillea-millefolium:water_drainage:rhs01",
+     "plant": "achillea-millefolium",
+     "field": "water_drainage",
+     "source_id": "rhs",
+     "ai_result": "partially_supported",
+     "ai_risk": "high",
+     "priority": "high",
+     "downstream": [
+      "claim"
+     ],
+     "status": "unverified",
+     "missing_context": "RHS's 'Plants for both Wet and Dry Conditions' listing is not reflected in the value.",
+     "explanation": "RHS gives Moisture 'Moist but well-drained or Well-drained' and lists the plant under 'Plants for both Wet and Dry Conditions', as the claim text and note say. Collapsing two RHS moisture classes into 'average' is a defensible but lossy mapping; the Wet & Dry listing suggests a broader tolerance than 'average' conveys."
+    },
+    {
+     "claim_id": "arctostaphylos-uva-ursi:water_drainage:mobot01",
+     "plant": "arctostaphylos-uva-ursi",
+     "field": "water_drainage",
+     "source_id": "mobot",
+     "ai_result": "partially_supported",
+     "ai_risk": "medium",
+     "priority": "high",
+     "downstream": [
+      "claim"
+     ],
+     "status": "unverified",
+     "missing_context": "The 'to medium' half of the range and the 'well-drained' condition are dropped from the stored value.",
+     "explanation": "The header gives 'Water: Dry to medium' and Culture says 'dry to medium, well-drained'. Storing water:dry keeps only the low end of a stated range, as the claim note acknowledges ('average would also fit')."
+    },
+    {
+     "claim_id": "arctostaphylos-uva-ursi:water_drainage:rhs01",
+     "plant": "arctostaphylos-uva-ursi",
+     "field": "water_drainage",
+     "source_id": "rhs",
+     "ai_result": "partially_supported",
+     "ai_risk": "medium",
+     "priority": "high",
+     "downstream": [
+      "claim"
+     ],
+     "status": "unverified",
+     "missing_context": "The source's emphasis is on drainage ('well-drained', 'lime-free') rather than on a moisture level.",
+     "explanation": "RHS lists 'Moisture Moist but well-drained or Well-drained' and the cultivation note says 'Grow in moist but well-drained ... soil'. The page gives no 'average' rating; water:average is the extractor's mapping of that phrase, defensible but not stated."
+    },
+    {
+     "claim_id": "arctostaphylos-uva-ursi:water_drainage:rhs02",
+     "plant": "arctostaphylos-uva-ursi",
+     "field": "water_drainage",
+     "source_id": "rhs",
+     "ai_result": "partially_supported",
+     "ai_risk": "medium",
+     "priority": "medium",
+     "downstream": [
+      "claim"
+     ],
+     "status": "unverified",
+     "missing_context": "'but well-drained' is a condition the stored value omits.",
+     "explanation": "The cultivar page lists 'Moisture Moist but well-drained' and the cultivation note repeats 'moist but well-drained ... lime-free soil'. water:moist keeps the first word and drops the drainage condition; the same phrase on the species page was mapped to 'average' (rhs01), so the two RHS claims apply different conventions to identical wording."
+    },
+    {
+     "claim_id": "cercidiphyllum-japonicum:water_drainage:rhs01",
+     "plant": "cercidiphyllum-japonicum",
+     "field": "water_drainage",
+     "source_id": "rhs",
+     "ai_result": "partially_supported",
+     "ai_risk": "high",
+     "priority": "high",
+     "downstream": [
+      "claim"
+     ],
+     "status": "unverified",
+     "missing_context": "The source's second option (well-drained, without 'moist') is not reflected in the value.",
+     "explanation": "RHS gives two acceptable moisture regimes, 'moist but well-drained' or 'well-drained'. The claim keeps only 'moist', dropping the plain well-drained alternative; 'average' would fit the pair at least as well."
+    },
+    {
+     "claim_id": "cornus-nuttallii:water_drainage:eflora01",
+     "plant": "cornus-nuttallii",
+     "field": "water_drainage",
+     "source_id": "eflora",
+     "ai_result": "partially_supported",
+     "ai_risk": "low",
+     "priority": "medium",
+     "downstream": [
+      "claim"
+     ],
+     "status": "unverified",
+     "missing_context": "The SMR scale places average 3 just below mesic (4); the data are coastal field-plot indicators, not a cultivation rating, as the claim context says.",
+     "explanation": "E-Flora's BEC table gives SMR min 0, average 3, max 7, and the indicator text says 'moderately dry to fresh' soils on 'water-shedding sites'; the claim text reports these correctly. 'water:average' is a cultivation category inferred from habitat indicator data, which the source never frames as a watering need."
+    },
+    {
+     "claim_id": "cornus-sericea:water_drainage:eflora01",
+     "plant": "cornus-sericea",
+     "field": "water_drainage",
+     "source_id": "eflora",
+     "ai_result": "partially_supported",
+     "ai_risk": "high",
+     "priority": "high",
+     "downstream": [
+      "claim"
+     ],
+     "status": "unverified",
+     "missing_context": "Habitat moisture, not a cultivation rating; mesic sites are included and the plot-average SMR is mesic.",
+     "explanation": "The claim text quotes the page faithfully (wet to mesic habitats, very moist to wet soils, fluctuating water tables). The stored category \"wet\" takes the wet end of a wet-to-mesic range whose plot mean SMR is 4 (mesic), so part of the stated span is dropped, as the note admits."
+    },
+    {
+     "claim_id": "cornus-sericea:water_drainage:mobot01",
+     "plant": "cornus-sericea",
+     "field": "water_drainage",
+     "source_id": "mobot",
+     "ai_result": "partially_supported",
+     "ai_risk": "high",
+     "priority": "high",
+     "downstream": [
+      "claim"
+     ],
+     "status": "unverified",
+     "missing_context": "Source range is medium to wet; wet/boggy tolerance is omitted from the water_drainage value itself.",
+     "explanation": "Mobot Plant Finder was denied in the built-in browser on both hosts; the page was fetched with curl (HTTP 200, strict TLS) and read in full. The source rates water \"Medium to wet\" and says best in consistently moist soil with tolerance of swampy or boggy conditions. The claim keeps only \"moist\"; the wet end of the stated range is dropped from this field (though the note says it is recorded under resistances, and resistances:mobot01 does list wet soil)."
+    },
+    {
+     "claim_id": "gaillardia-aristata:water_drainage:mobot01",
+     "plant": "gaillardia-aristata",
+     "field": "water_drainage",
+     "source_id": "mobot",
+     "ai_result": "partially_supported",
+     "ai_risk": "high",
+     "priority": "high",
+     "downstream": [
+      "claim"
+     ],
+     "status": "unverified",
+     "missing_context": "The source range spans dry and medium; the value narrows it to one end.",
+     "explanation": "MOBOT gives Water 'Dry to medium'. The claim text reports the range correctly but the stored value keeps only the dry end; 'average' would fit the same statement, as the note concedes."
+    },
+    {
+     "claim_id": "gaillardia-aristata:water_drainage:rhs01",
+     "plant": "gaillardia-aristata",
+     "field": "water_drainage",
+     "source_id": "rhs",
+     "ai_result": "partially_supported",
+     "ai_risk": "high",
+     "priority": "high",
+     "downstream": [
+      "claim"
+     ],
+     "status": "unverified",
+     "missing_context": "RHS gives drainage and drought tolerance, not a moisture regime; the 'dry' category is an inference.",
+     "explanation": "RHS states 'Moisture: Well-drained' and 'Drought Resistance: Yes' but gives no water-regime category. 'Well-drained' is a drainage requirement, so mapping it with drought resistance to 'dry' firms descriptive text into a category the source never states; 'average' would fit equally."
+    },
+    {
+     "claim_id": "polystichum-munitum:water_drainage:eflora01",
+     "plant": "polystichum-munitum",
+     "field": "water_drainage",
+     "source_id": "eflora",
+     "ai_result": "partially_supported",
+     "ai_risk": "medium",
+     "priority": "high",
+     "downstream": [
+      "claim"
+     ],
+     "status": "unverified",
+     "missing_context": "Plot SMR range 0-8 (very xeric to hydric) omitted; the figure is a habitat average, not a cultivation rating.",
+     "explanation": "The source gives habitat 'moist to mesic forests' and an average SMR of 4 (mesic) with plots ranging 0 (very xeric) to 8 (hydric). 'Average' is a fair label for the modal condition, but the single value drops the 0-8 range, which actually corroborates GPP's 'wet to dry' tolerance."
+    },
+    {
+     "claim_id": "vaccinium-ovatum:water_drainage:gpp01",
+     "plant": "vaccinium-ovatum",
+     "field": "water_drainage",
+     "source_id": "gpp",
+     "ai_result": "partially_supported",
+     "ai_risk": "medium",
+     "priority": "high",
+     "downstream": [
+      "claim"
+     ],
+     "status": "unverified",
+     "missing_context": "The source frames water need as conditional on establishment and on whether flowering/fruiting matter; the category 'average' drops both conditions.",
+     "explanation": "GPP gives a watering range 'regular watering to drought tolerant' and in Culture Notes says that once established it is drought tolerant but flowers and fruits better with occasional watering in dry weather. The claim text reproduces this accurately; collapsing the range to the single category 'average' is a defensible but lossy mapping that the source does not itself state."
+    }
+   ]
+  },
+  {
+   "id": "note-template-error",
+   "title": "Template sentence in the claim note or text",
+   "description": "The claim VALUE is right but the NOTE carries a sentence copied from a template: the iNaturalist month-histogram note says the plant is 'evergreen / visible year-round' on deciduous plants; the ISCBC listing claim asserts 'it is a BC native', which that page does not say.",
+   "options": [
+    "Propose correction of the note text (the original stays retired with its evidence)",
+    "Verify the value and add a note event explaining the template error"
+   ],
+   "n_claims": 15,
+   "plants": [
+    "achillea-millefolium",
+    "arctostaphylos-uva-ursi",
+    "cornus-nuttallii",
+    "cornus-sericea",
+    "gaillardia-aristata",
+    "gaultheria-shallon",
+    "polystichum-munitum",
+    "vaccinium-ovatum"
+   ],
+   "fields": {
+    "invasive_status": 8,
+    "vancouver_context": 7
+   },
+   "sources": {
+    "iscbc": 8,
+    "inat": 7
+   },
+   "downstream": {
+    "claim": 15
+   },
+   "gate_claims": 8,
+   "conflicting": 0,
+   "impact_score": 38,
+   "claims": [
+    {
+     "claim_id": "achillea-millefolium:invasive_status:iscbc01",
+     "plant": "achillea-millefolium",
+     "field": "invasive_status",
+     "source_id": "iscbc",
+     "ai_result": "supported_by_source",
+     "ai_risk": "medium",
+     "priority": "medium",
+     "downstream": [
+      "claim"
+     ],
+     "status": "unverified",
+     "missing_context": "The Grow Me Instead statement is not evidenced by the cited URL; absence from a list is time-bound (checked 2026-11-02).",
+     "explanation": "The cached ISCBC 'Find an Invasive Species' page (51,970 characters, ~840 KB HTML) contains no occurrence of 'Achillea' or 'yarrow' (the only 'milfoil' hit is Eurasian watermilfoil, Myriophyllum spicatum), which supports 'not_listed'. The second half of the claim text, that ISCBC's Grow Me Instead material names yarrow as a native alternative to tansy, field scabious and baby's-breath, is not on the cited page and was not found on the Grow Me Instead landing page either, so it remains unverified from the cited source."
+    },
+    {
+     "claim_id": "achillea-millefolium:vancouver_context:inat02",
+     "plant": "achillea-millefolium",
+     "field": "vancouver_context",
+     "source_id": "inat",
+     "ai_result": "supported_by_source",
+     "ai_risk": "low",
+     "priority": "low",
+     "downstream": [
+      "claim"
+     ],
+     "status": "unverified",
+     "missing_context": "Observer effort, not phenology, as the note says; the 'evergreen' remark in the note is not supported by the other sources.",
+     "explanation": "The live month-of-year histogram returns the same twelve counts as the claim, summing to 2063. The claim's own note calls the plant 'evergreen/visible year-round', which disagrees with RHS (Deciduous) and USDA (Leaf Retention No) on this plant; that remark is in the note, not the value."
+    },
+    {
+     "claim_id": "arctostaphylos-uva-ursi:invasive_status:iscbc01",
+     "plant": "arctostaphylos-uva-ursi",
+     "field": "invasive_status",
+     "source_id": "iscbc",
+     "ai_result": "supported_by_source",
+     "ai_risk": "low",
+     "priority": "medium",
+     "downstream": [
+      "claim"
+     ],
+     "status": "unverified",
+     "missing_context": "Non-listing on one ISCBC page is not a positive statement by ISCBC; the 'BC native' part of the claim text comes from E-Flora, not this source.",
+     "explanation": "The cached Identify page is ISCBC's species list; searching it for 'Arctostaphylos', 'uva-ursi', 'kinnikinnick' and 'bearberry' returns no hits, while known listed species (e.g. Hedera helix, Rubus armeniacus, Cytisus scoparius) are present. Absence from that list supports invasive:not_listed; no excerpt exists because the evidence is an absence."
+    },
+    {
+     "claim_id": "arctostaphylos-uva-ursi:vancouver_context:inat02",
+     "plant": "arctostaphylos-uva-ursi",
+     "field": "vancouver_context",
+     "source_id": "inat",
+     "ai_result": "supported_by_source",
+     "ai_risk": "low",
+     "priority": "low",
+     "downstream": [
+      "claim"
+     ],
+     "status": "unverified",
+     "missing_context": "The counts are observer activity, not phenology, per the claim note.",
+     "explanation": "The live monthly histogram matches all twelve stored counts exactly and sums to 495. The claim text's 'most in 4, 10, 3' is right for April (99) and October (56); March and September tie at 49 for third."
+    },
+    {
+     "claim_id": "cornus-nuttallii:invasive_status:iscbc01",
+     "plant": "cornus-nuttallii",
+     "field": "invasive_status",
+     "source_id": "iscbc",
+     "ai_result": "supported_by_source",
+     "ai_risk": "low",
+     "priority": "medium",
+     "downstream": [
+      "claim"
+     ],
+     "status": "unverified",
+     "missing_context": "ISCBC's web list is an identification index, not the BC Weed Control Act schedule; the claim note already says those schedules were not checked.",
+     "explanation": "The cached ISCBC identification list contains no entry for Cornus or dogwood (zero text matches), so 'not listed' is supported. The list mixes plant and animal profiles; I could not confirm the '68 plant profiles' count exactly, and the 'BC native' sentence comes from other sources, not ISCBC."
+    },
+    {
+     "claim_id": "cornus-nuttallii:vancouver_context:inat02",
+     "plant": "cornus-nuttallii",
+     "field": "vancouver_context",
+     "source_id": "inat",
+     "ai_result": "supported_by_source",
+     "ai_risk": "low",
+     "priority": "low",
+     "downstream": [
+      "claim"
+     ],
+     "status": "unverified",
+     "missing_context": "The note's 'evergreen' statement contradicts the deciduous status recorded in the seasonal_interest claims; the April–May peak coincides with flowering, so 'when people notice it' is a fair reading.",
+     "explanation": "The live monthly histogram matches the claim's twelve values exactly and sums to 386. The claim note, however, says the plant is 'evergreen/visible year-round'; every botanical source on this plant says deciduous, so that note sentence looks like a template carry-over and should be corrected."
+    },
+    {
+     "claim_id": "cornus-sericea:invasive_status:iscbc01",
+     "plant": "cornus-sericea",
+     "field": "invasive_status",
+     "source_id": "iscbc",
+     "ai_result": "supported_by_source",
+     "ai_risk": "medium",
+     "priority": "medium",
+     "downstream": [
+      "claim"
+     ],
+     "status": "unverified",
+     "missing_context": "Absence from ISCBC online profiles only; the claim context already limits it to that list.",
+     "explanation": "The cached ISCBC identify page lists the online species profiles (e.g. knotweeds, giant hogweed, English holly, Himalayan blackberry); a case-insensitive search for \"Cornus\", \"sericea\" and \"dogwood\" returns nothing, so the plant is not among the profiles, as claimed. No excerpt is possible for an absence."
+    },
+    {
+     "claim_id": "cornus-sericea:vancouver_context:inat02",
+     "plant": "cornus-sericea",
+     "field": "vancouver_context",
+     "source_id": "inat",
+     "ai_result": "supported_by_source",
+     "ai_risk": "low",
+     "priority": "low",
+     "downstream": [
+      "claim"
+     ],
+     "status": "unverified",
+     "missing_context": "Observer effort, not phenology; the note's \"evergreen\" remark is wrong for this deciduous shrub.",
+     "explanation": "All twelve monthly counts match the live histogram exactly, and the top three months are 5, 4 and 9 as stated. The queue note calls the plant \"evergreen/visible year-round\", which contradicts every other source (deciduous); the stored values are unaffected but the note should be corrected. Live API values queried on 2026-11-03 with the claim's filters; the cached count is identical, and small future drift from the pull date is expected and would still support the claim."
+    },
+    {
+     "claim_id": "gaillardia-aristata:invasive_status:iscbc01",
+     "plant": "gaillardia-aristata",
+     "field": "invasive_status",
+     "source_id": "iscbc",
+     "ai_result": "supported_by_source",
+     "ai_risk": "low",
+     "priority": "medium",
+     "downstream": [
+      "claim"
+     ],
+     "status": "unverified",
+     "missing_context": "ISCBC's 114 profiles are an outreach selection, not the provincial regulated-weed list; absence here is not a formal non-invasive status. The 'BC native' remark is unsourced from this page.",
+     "explanation": "The cached ISCBC identify page shows '114 Results' and its species list contains no entry for Gaillardia, gaillardia or blanketflower, so 'not listed' matches what the source shows. The claim text's closing clause 'it is a BC native' is not from ISCBC (it comes from E-Flora) and should not be attributed to this source."
+    },
+    {
+     "claim_id": "gaillardia-aristata:vancouver_context:inat02",
+     "plant": "gaillardia-aristata",
+     "field": "vancouver_context",
+     "source_id": "inat",
+     "ai_result": "supported_by_source",
+     "ai_risk": "low",
+     "priority": "low",
+     "downstream": [
+      "claim"
+     ],
+     "status": "unverified",
+     "missing_context": "The note's 'evergreen' remark is unsupported by any source read here.",
+     "explanation": "The live monthly histogram matches the claim's twelve counts exactly (n=249), with the top months 7, 6, 9. One caution on the queue note, not the value: it calls the plant 'evergreen/visible year-round', which contradicts USDA 'Leaf Retention: No' and RHS 'Foliage Deciduous'."
+    },
+    {
+     "claim_id": "gaultheria-shallon:invasive_status:iscbc01",
+     "plant": "gaultheria-shallon",
+     "field": "invasive_status",
+     "source_id": "iscbc",
+     "ai_result": "supported_by_source",
+     "ai_risk": "medium",
+     "priority": "medium",
+     "downstream": [
+      "claim"
+     ],
+     "status": "unverified",
+     "missing_context": "Absence on a cached index page; if the page loads further profiles by script or pagination, the cache would not show them. The native statement is not from this source.",
+     "explanation": "The cached ISCBC identify page (51,970 characters, listing profiles such as Scotch broom, English ivy, Himalayan blackberry) contains no match for 'Gaultheria', 'shallon' or 'salal', so invasive:not_listed is consistent with the page. The 'it is a BC native' clause in the claim text comes from E-Flora, not from ISCBC."
+    },
+    {
+     "claim_id": "gaultheria-shallon:vancouver_context:inat02",
+     "plant": "gaultheria-shallon",
+     "field": "vancouver_context",
+     "source_id": "inat",
+     "ai_result": "supported_by_source",
+     "ai_risk": "low",
+     "priority": "low",
+     "downstream": [
+      "claim"
+     ],
+     "status": "unverified",
+     "missing_context": "The source counts observations, not phenology; the claim's own note frames it as observer effort.",
+     "explanation": "The live monthly histogram matches the claim's counts to within 0-4 observations per month (e.g. April 1012 vs 1009, September 521 vs 514), with the same ranking of April first and September second; March and June now tie at 479. The drift is new observations since the pull and is expected."
+    },
+    {
+     "claim_id": "polystichum-munitum:invasive_status:iscbc01",
+     "plant": "polystichum-munitum",
+     "field": "invasive_status",
+     "source_id": "iscbc",
+     "ai_result": "supported_by_source",
+     "ai_risk": "low",
+     "priority": "medium",
+     "downstream": [
+      "claim"
+     ],
+     "status": "unverified",
+     "missing_context": "Negative evidence only; 'it is a BC native' comes from E-Flora, not ISCBC.",
+     "explanation": "The cached Identify Species page (about 77 profiles) contains no 'Polystichum' or 'sword fern' entry (the only 'fern' hits are 'fern-like leaves' of other plants), and a live site search for Polystichum munitum returned 'Nothing Found'. Absence from the list is negative evidence; it supports not_listed but the cache cannot prove the list was complete."
+    },
+    {
+     "claim_id": "polystichum-munitum:vancouver_context:inat02",
+     "plant": "polystichum-munitum",
+     "field": "vancouver_context",
+     "source_id": "inat",
+     "ai_result": "supported_by_source",
+     "ai_risk": "low",
+     "priority": "low",
+     "downstream": [
+      "claim"
+     ],
+     "status": "unverified",
+     "missing_context": "Monthly pattern is observer effort, not phenology, as the note says.",
+     "explanation": "The month-of-year histogram from the live API matches all twelve stored counts exactly, summing to the same 8110 observations; peak months 4, 9 and 10 are correct."
+    },
+    {
+     "claim_id": "vaccinium-ovatum:invasive_status:iscbc01",
+     "plant": "vaccinium-ovatum",
+     "field": "invasive_status",
+     "source_id": "iscbc",
+     "ai_result": "supported_by_source",
+     "ai_risk": "low",
+     "priority": "medium",
+     "downstream": [
+      "claim"
+     ],
+     "status": "unverified",
+     "missing_context": "The ISCBC browse page is a set of profiles, not a statutory list; absence here does not cover the BC Weed Control Act or regional noxious lists. The 'BC native' remark is sourced elsewhere.",
+     "explanation": "The cached ISCBC 'Find an Invasive Species' page lists its species profiles (plants and animals, e.g. Daphne, Himalayan blackberry, Scotch broom); a search of the cached text for 'Vaccinium' and 'huckleberry' returns nothing, which supports 'not listed'. The clause 'it is a BC native' in the claim text is not stated on this page (it comes from E-Flora)."
+    }
+   ]
+  },
+  {
+   "id": "season-to-month",
+   "title": "Season words or coarse colour lists turned into months and KPU colours",
+   "description": "'Summer' → months 6–8, 'Late spring' → 5–6, 'Spring' → 4–5 are conventions; cream flowers and 'sometimes pink' have no KPU colour.",
+   "options": [
+    "Record the season→month convention in methods and verify",
+    "Propose correction to drop months the source does not give",
+    "Keep as is"
+   ],
+   "n_claims": 8,
+   "plants": [
+    "achillea-millefolium",
+    "arctostaphylos-uva-ursi",
+    "cornus-sericea",
+    "gaillardia-aristata",
+    "vaccinium-ovatum"
+   ],
+   "fields": {
+    "seasonal_interest": 8
+   },
+   "sources": {
+    "eflora": 2,
+    "rhs": 3,
+    "gpp": 1,
+    "usda_plants": 2
+   },
+   "downstream": {
+    "claim": 8,
+    "design": 8,
+    "design_requirement": 8
+   },
+   "gate_claims": 0,
+   "conflicting": 0,
+   "impact_score": 32,
+   "claims": [
+    {
+     "claim_id": "achillea-millefolium:seasonal_interest:eflora01",
+     "plant": "achillea-millefolium",
+     "field": "seasonal_interest",
+     "source_id": "eflora",
+     "ai_result": "partially_supported",
+     "ai_risk": "low",
+     "priority": "low",
+     "downstream": [
+      "claim",
+      "design",
+      "design_requirement"
+     ],
+     "status": "unverified",
+     "missing_context": "Pink/red are qualified 'sometimes'; cream disk flowers are not recorded.",
+     "explanation": "The Flora describes ray flowers white to sometimes pink or reddish with cream disk flowers, and the Additional Notes say the species has been observed flowering in the Fraser Delta in December, matching the claim's winter note. The value lists White, Pink and Red as equals, firming 'sometimes pink or reddish' into categories and dropping the cream disk florets."
+    },
+    {
+     "claim_id": "achillea-millefolium:seasonal_interest:rhs01",
+     "plant": "achillea-millefolium",
+     "field": "seasonal_interest",
+     "source_id": "rhs",
+     "ai_result": "partially_supported",
+     "ai_risk": "low",
+     "priority": "low",
+     "downstream": [
+      "claim",
+      "design",
+      "design_requirement"
+     ],
+     "status": "unverified",
+     "missing_context": "Cream flower colour; the month range is a season-to-month convention.",
+     "explanation": "RHS describes small white, cream or pink flowers in summer and lists Foliage: Deciduous, so White, Pink and evergreen:false are supported. 'Summer' is converted to months 6-8 by convention rather than stated, cream is dropped (no vocabulary value), and the season-by-season table is not rendered in the cached text so it could not be checked."
+    },
+    {
+     "claim_id": "arctostaphylos-uva-ursi:seasonal_interest:rhs02",
+     "plant": "arctostaphylos-uva-ursi",
+     "field": "seasonal_interest",
+     "source_id": "rhs",
+     "ai_result": "partially_supported",
+     "ai_risk": "low",
+     "priority": "low",
+     "downstream": [
+      "claim",
+      "design",
+      "design_requirement"
+     ],
+     "status": "unverified",
+     "missing_context": "Red is a seasonal new-growth flush rather than a foliage colour; green is inferred from 'evergreen'.",
+     "explanation": "The page says 'evergreen shrub ... The new shoots are flushed with red and it has small, pink flowers in summer followed by red berries in autumn', with 'Foliage Evergreen'. Pink flowers, red autumn berries and evergreen are stated; 'Green' foliage is not stated in the cached text (the colour table cells are missing) and 'Red' refers to new-shoot flush, not mature foliage colour."
+    },
+    {
+     "claim_id": "cornus-sericea:seasonal_interest:gpp01",
+     "plant": "cornus-sericea",
+     "field": "seasonal_interest",
+     "source_id": "gpp",
+     "ai_result": "partially_supported",
+     "ai_risk": "low",
+     "priority": "low",
+     "downstream": [
+      "claim",
+      "design",
+      "design_requirement"
+     ],
+     "status": "unverified",
+     "missing_context": "No foliage colour is stated by GPP; flowering time is given as \"spring\"/\"late spring\", not months.",
+     "explanation": "Deciduous, white flowers in late spring (Quick Facts says \"spring\"), white berries late summer to early fall attractive to birds, autumn foliage colour and bright red winter stems are stated. The stored foliage_colour \"Green\" is not on the page, and months 5–6 are a convention. The page is the Cornus sericea 'Baileyi' entry (read in the built-in browser); the claim carries cultivar 'Baileyi', so claim and source match, but the values are cultivar-level and should not be read as species data."
+    },
+    {
+     "claim_id": "cornus-sericea:seasonal_interest:usdaplants01",
+     "plant": "cornus-sericea",
+     "field": "seasonal_interest",
+     "source_id": "usda_plants",
+     "ai_result": "partially_supported",
+     "ai_risk": "medium",
+     "priority": "medium",
+     "downstream": [
+      "claim",
+      "design",
+      "design_requirement"
+     ],
+     "status": "unverified",
+     "missing_context": "USDA gives the bloom period only as \"Spring\"; the month numbers are not on the page.",
+     "explanation": "White conspicuous flowers, green foliage, conspicuous fall colour, white conspicuous summer fruit of low abundance and no persistence, and no leaf retention are all stated. The source says only \"Bloom Period: Spring\"; the stored flowering_months 4–5 are the extractor's convention (flagged loose in the note) and feed design fields. The characteristics were read from the cached COSES PlantCharacteristics JSON (ssp. sericea); the same page carries a second value set tagged [cultivar Ruby], which the claim correctly ignores."
+    },
+    {
+     "claim_id": "gaillardia-aristata:seasonal_interest:eflora01",
+     "plant": "gaillardia-aristata",
+     "field": "seasonal_interest",
+     "source_id": "eflora",
+     "ai_result": "partially_supported",
+     "ai_risk": "low",
+     "priority": "low",
+     "downstream": [
+      "claim",
+      "design",
+      "design_requirement"
+     ],
+     "status": "unverified",
+     "missing_context": "The page's own 'Blooming Period: Spring' is the USDA characteristic, as the note says; E-Flora gives no BC flowering months and no foliage persistence statement.",
+     "explanation": "E-Flora describes 6-16 (commonly 13) yellow ray flowers, often purple-based, around brownish-purple disk flowers, on a perennial from a slender taproot. Flower colour Yellow and the ray/disk description are supported; 'herbaceous' and evergreen:false are not stated on the page, only implied by the taproot-and-stems description."
+    },
+    {
+     "claim_id": "gaillardia-aristata:seasonal_interest:usdaplants01",
+     "plant": "gaillardia-aristata",
+     "field": "seasonal_interest",
+     "source_id": "usda_plants",
+     "ai_result": "partially_supported",
+     "ai_risk": "medium",
+     "priority": "low",
+     "downstream": [
+      "claim",
+      "design",
+      "design_requirement"
+     ],
+     "status": "unverified",
+     "missing_context": "'Spring' is not a month range; the resulting 4-5 window is earlier and shorter than the other two sources and not listed under conflicting_claims.",
+     "explanation": "USDA gives Bloom Period Spring, Flower Color Yellow (conspicuous), Foliage Color Green, Fall Conspicuous No, Fruit/Seed Brown, inconspicuous, Summer to Fall, Leaf Retention No. All descriptive parts match; converting 'Spring' to months 4-5 is an approximation the source does not make, and it diverges from MOBOT (May-Oct) and RHS (Jul-Sep)."
+    },
+    {
+     "claim_id": "vaccinium-ovatum:seasonal_interest:rhs01",
+     "plant": "vaccinium-ovatum",
+     "field": "seasonal_interest",
+     "source_id": "rhs",
+     "ai_result": "partially_supported",
+     "ai_risk": "low",
+     "priority": "low",
+     "downstream": [
+      "claim",
+      "design",
+      "design_requirement"
+     ],
+     "status": "unverified",
+     "missing_context": "fall_colour=false is not readable in the cached seasonal table; it may be an inference from 'evergreen'.",
+     "explanation": "RHS's description gives pale pink urn-shaped flowers in spring, red fruits turning blue-black, dark green glossy foliage, and Botanical Details list Foliage Evergreen, supporting flower colour, foliage colour, fruit and evergreen. The value's fall_colour=false cannot be confirmed from the cached text: the 'Colour & Scent' season table renders only as its headings, so the autumn foliage entry is unreadable. The page describes 'A neat, erect, evergreen shrub'."
+    }
+   ]
+  },
+  {
+   "id": "use-mapping-loose",
+   "title": "Landscape-use mapping looser than the source wording",
+   "description": "Source garden types ('Architectural', 'Gravel garden', 'Banks and slopes', 'hedge tolerance') were mapped to KPU uses with a different meaning.",
+   "options": [
+    "Propose correction: keep only uses the source names in the KPU sense",
+    "Verify the direct items, dispute the stretched ones (split the claim)",
+    "Accept and record the mapping convention in methods"
+   ],
+   "n_claims": 10,
+   "plants": [
+    "arctostaphylos-uva-ursi",
+    "cercidiphyllum-japonicum",
+    "cornus-nuttallii",
+    "cornus-sericea",
+    "gaultheria-shallon",
+    "polystichum-munitum",
+    "vaccinium-ovatum"
+   ],
+   "fields": {
+    "landscape_use": 10
+   },
+   "sources": {
+    "mobot": 2,
+    "rhs": 6,
+    "gpp": 1,
+    "usda_plants": 1
+   },
+   "downstream": {
+    "claim": 10,
+    "design": 7
+   },
+   "gate_claims": 0,
+   "conflicting": 0,
+   "impact_score": 27,
+   "claims": [
+    {
+     "claim_id": "arctostaphylos-uva-ursi:landscape_use:mobot01",
+     "plant": "arctostaphylos-uva-ursi",
+     "field": "landscape_use",
+     "source_id": "mobot",
+     "ai_result": "partially_supported",
+     "ai_risk": "low",
+     "priority": "low",
+     "downstream": [
+      "claim",
+      "design"
+     ],
+     "status": "unverified",
+     "missing_context": "'naturalized areas', 'around shrubs', 'sunny border margins' and 'drape over a wall' are on the page but not stored (noted).",
+     "explanation": "The page gives 'Suggested Use: Ground Cover', 'Attracts: Birds', and Uses: 'Moderate to large scale ground cover with year round interest', erosion control on slopes, 'native plant gardens', 'Herb gardens', 'Rock gardens'. Ground cover, erosion control, attract birds, native planting, rock garden, herb and (via 'year round interest' plus winter-persistent fruit and bronze winter leaves) winter interest are supported; 'Group or mass planting' is the extractor's reading of 'moderate to large scale ground cover', which the page does not say as such."
+    },
+    {
+     "claim_id": "arctostaphylos-uva-ursi:landscape_use:rhs01",
+     "plant": "arctostaphylos-uva-ursi",
+     "field": "landscape_use",
+     "source_id": "rhs",
+     "ai_result": "partially_supported",
+     "ai_risk": "low",
+     "priority": "medium",
+     "downstream": [
+      "claim",
+      "design"
+     ],
+     "status": "unverified",
+     "missing_context": "'Gravel garden' is not the same RHS category as rock garden.",
+     "explanation": "RHS suggests 'Gravel garden', 'Mediterranean climate plants' and 'Ground cover'. Ground cover is stated; 'Rock garden' is a loose substitution for 'Gravel garden' (the page does not say rock garden), and 'Mediterranean climate plants' is dropped as the note explains."
+    },
+    {
+     "claim_id": "cercidiphyllum-japonicum:landscape_use:gpp01",
+     "plant": "cercidiphyllum-japonicum",
+     "field": "landscape_use",
+     "source_id": "gpp",
+     "ai_result": "partially_supported",
+     "ai_risk": "low",
+     "priority": "low",
+     "downstream": [
+      "claim",
+      "design"
+     ],
+     "status": "unverified",
+     "missing_context": "No explicit use category on the GPP page; the value is derived from a seasonal-interest attribute.",
+     "explanation": "GPP has no landscape-use line; it lists seasonal interest as autumn foliage colour and says the tree is easy to garden under. 'Fall interest' is an inference from the seasonal-interest field rather than a stated use."
+    },
+    {
+     "claim_id": "cercidiphyllum-japonicum:landscape_use:rhs01",
+     "plant": "cercidiphyllum-japonicum",
+     "field": "landscape_use",
+     "source_id": "rhs",
+     "ai_result": "partially_supported",
+     "ai_risk": "low",
+     "priority": "medium",
+     "downstream": [
+      "claim",
+      "design"
+     ],
+     "status": "unverified",
+     "missing_context": "'Architectural' is a garden style, not a specimen-plant role; 'woodland setting' is broader than a woodland margin.",
+     "explanation": "RHS lists 'Architectural' as the suggested garden type and says 'Best grown in a woodland setting'. Both source statements exist, but 'Specimen plant' and 'Woodland margin' are loose re-categorisations the page does not use."
+    },
+    {
+     "claim_id": "cornus-nuttallii:landscape_use:mobot01",
+     "plant": "cornus-nuttallii",
+     "field": "landscape_use",
+     "source_id": "mobot",
+     "ai_result": "partially_supported",
+     "ai_risk": "low",
+     "priority": "low",
+     "downstream": [
+      "claim",
+      "design"
+     ],
+     "status": "unverified",
+     "missing_context": "MOBOT frames the uses as residential (homes, patios, lawns); the page does not mention mass planting or margins.",
+     "explanation": "MOBOT's Uses section and 'Attracts: Birds, Butterflies' support specimen, native planting and attracting birds and butterflies. 'Group or mass planting' stretches 'small grouping', and 'Woodland margin' stretches 'woodland garden'; both mappings are acknowledged in the claim note."
+    },
+    {
+     "claim_id": "cornus-sericea:landscape_use:rhs01",
+     "plant": "cornus-sericea",
+     "field": "landscape_use",
+     "source_id": "rhs",
+     "ai_result": "partially_supported",
+     "ai_risk": "low",
+     "priority": "low",
+     "downstream": [
+      "claim",
+      "design"
+     ],
+     "status": "unverified",
+     "missing_context": "\"Cottage and informal garden\" has no stored value; erosion is not stated by RHS.",
+     "explanation": "The page lists cottage/informal garden, banks and slopes, and flower borders and beds. Banks and slopes is firmed into Erosion control (RHS never mentions erosion) and flower borders into Mixed shrub border; winter interest rests on the stated red winter stems. The text claim is accurate; two of the three stored values are inferences."
+    },
+    {
+     "claim_id": "gaultheria-shallon:landscape_use:rhs01",
+     "plant": "gaultheria-shallon",
+     "field": "landscape_use",
+     "source_id": "rhs",
+     "ai_result": "partially_supported",
+     "ai_risk": "low",
+     "priority": "low",
+     "downstream": [
+      "claim"
+     ],
+     "status": "unverified",
+     "missing_context": "RHS 'Fruit are ornamental - not to be eaten' caveat; RHS Cultivation also says it 'will make good groundcover', which is not in the value.",
+     "explanation": "RHS lists cottage/informal, gravel, rock, city and courtyard gardens, patio and container plants, banks and slopes, cut flowers, flower borders and beds, and edible fruit; rock garden, container, cut foliage, small garden and (loosely) border and erosion-control map from these. use:urban_agriculture rests on 'Edible fruit', but the same page's Potentially harmful box says 'Fruit are ornamental - not to be eaten ... not for edible use', so the source is internally inconsistent on that item."
+    },
+    {
+     "claim_id": "gaultheria-shallon:landscape_use:usdaplants01",
+     "plant": "gaultheria-shallon",
+     "field": "landscape_use",
+     "source_id": "usda_plants",
+     "ai_result": "partially_supported",
+     "ai_risk": "medium",
+     "priority": "medium",
+     "downstream": [
+      "claim",
+      "design"
+     ],
+     "status": "unverified",
+     "missing_context": "USDA 'hedge tolerance' is a conservation-planting characteristic, not a design recommendation.",
+     "explanation": "USDA rates Hedge Tolerance: High, as the claim text states. The value use:sheared_hedge turns a tolerance rating into a recommended landscape use; the page does not recommend hedging, so the mapping is loose (the claim note already flags it as loose)."
+    },
+    {
+     "claim_id": "polystichum-munitum:landscape_use:rhs01",
+     "plant": "polystichum-munitum",
+     "field": "landscape_use",
+     "source_id": "rhs",
+     "ai_result": "partially_supported",
+     "ai_risk": "low",
+     "priority": "low",
+     "downstream": [
+      "claim"
+     ],
+     "status": "unverified",
+     "missing_context": "'Cottage and informal garden' not represented in the value.",
+     "explanation": "RHS lists cottage and informal garden, flower borders and beds, and underplanting of roses and shrubs, as the claim text says. The stored values Perennial border and Mixed shrub border are loose mappings; 'cottage and informal garden' is dropped for lack of a label."
+    },
+    {
+     "claim_id": "vaccinium-ovatum:landscape_use:rhs01",
+     "plant": "vaccinium-ovatum",
+     "field": "landscape_use",
+     "source_id": "rhs",
+     "ai_result": "partially_supported",
+     "ai_risk": "low",
+     "priority": "low",
+     "downstream": [
+      "claim"
+     ],
+     "status": "unverified",
+     "missing_context": "RHS's 'Flower borders and beds' and 'Cottage and informal garden' are not carried; 'shrub borders' in the claim text is not on the page.",
+     "explanation": "RHS lists City and courtyard gardens, Cottage and informal garden, Patio and container plants, Edible fruit, and Flower borders and beds. Container planting and (via city/courtyard) small garden/space are well supported; 'edible fruit' to Urban agriculture is a loose mapping; the RHS entry is 'Flower borders and beds', not 'shrub borders' as the claim text states, so Mixed shrub border is a substitution. Cottage and informal garden is not represented."
+    }
+   ]
+  },
+  {
+   "id": "exposure-inferred",
+   "title": "Exposure inferred from habitat or from undefined wording (open / light shade)",
+   "description": "E-Flora gives habitats, not cultivation exposure; GPP's 'open shade' and OSU's unqualified 'shade' were mapped to KPU classes the source does not use.",
+   "options": [
+    "Keep as unverified inferred claims (context says 'inferred'), confidence ≤ 0.7",
+    "Dispute the specific class that is not stated (Filtered shade / Deep shade) and keep the stated ones",
+    "Verify where the reading is the only sensible one"
+   ],
+   "n_claims": 10,
+   "plants": [
+    "acer-palmatum",
+    "achillea-millefolium",
+    "arctostaphylos-uva-ursi",
+    "cercidiphyllum-japonicum",
+    "cornus-nuttallii",
+    "cornus-sericea",
+    "gaillardia-aristata",
+    "gaultheria-shallon",
+    "polystichum-munitum"
+   ],
+   "fields": {
+    "exposure": 10
+   },
+   "sources": {
+    "gpp": 2,
+    "eflora": 7,
+    "osu": 1
+   },
+   "downstream": {
+    "claim": 10
+   },
+   "gate_claims": 0,
+   "conflicting": 0,
+   "impact_score": 20,
+   "claims": [
+    {
+     "claim_id": "acer-palmatum:exposure:gpp01",
+     "plant": "acer-palmatum",
+     "field": "exposure",
+     "source_id": "gpp",
+     "ai_result": "partially_supported",
+     "ai_risk": "low",
+     "priority": "low",
+     "downstream": [
+      "claim"
+     ],
+     "status": "unverified",
+     "missing_context": "GPP's phrase is 'light to open shade'; 'filtered' (dappled) shade is not stated, and best autumn colour needs full sun to open shade.",
+     "explanation": "Quick Facts gives 'Sun/Light Exposure: full sun or light to open shade' and Culture Notes say best fall colour 'in full sun to open shade'. Full sun and a part-shade category are directly supported; 'filtered shade' is an interpretation of 'light to open shade' that the page does not use, so the third value is a looser mapping. The cached text held only the site title because the page is JavaScript-rendered, so the programmatic 'taxon_not_on_page' pre-check is an artefact; the rendered page is headed 'Acer palmatum ‘Osakazuki’'."
+    },
+    {
+     "claim_id": "achillea-millefolium:exposure:eflora01",
+     "plant": "achillea-millefolium",
+     "field": "exposure",
+     "source_id": "eflora",
+     "ai_result": "partially_supported",
+     "ai_risk": "low",
+     "priority": "low",
+     "downstream": [
+      "claim"
+     ],
+     "status": "unverified",
+     "missing_context": "No exposure rating on the page; the value is inferred from habitat classes.",
+     "explanation": "The page lists open habitats (bluffs, meadows, grasslands, rocky slopes, open forests) but gives no light or exposure rating. Full sun to part shade is a reasonable reading of those habitat classes, and the claim context states it is inferred, but the source does not say it."
+    },
+    {
+     "claim_id": "arctostaphylos-uva-ursi:exposure:eflora01",
+     "plant": "arctostaphylos-uva-ursi",
+     "field": "exposure",
+     "source_id": "eflora",
+     "ai_result": "partially_supported",
+     "ai_risk": "low",
+     "priority": "low",
+     "downstream": [
+      "claim"
+     ],
+     "status": "unverified",
+     "missing_context": "The source is describing wild habitat and a coastal indicator rating, not garden exposure; 'will sometimes tolerate shade' is weaker than a part-shade recommendation.",
+     "explanation": "E-Flora gives no cultivation exposure rating; it says the plant occurs on 'exposed, often rocky, sites', 'grows best in high light situations (but will sometimes tolerate shade)' and is 'shade-tolerant/intolerant'. Full sun plus part shade is a defensible reading of that habitat text, but it is an inference from habitat, as the claim context admits."
+    },
+    {
+     "claim_id": "cercidiphyllum-japonicum:exposure:gpp01",
+     "plant": "cercidiphyllum-japonicum",
+     "field": "exposure",
+     "source_id": "gpp",
+     "ai_result": "partially_supported",
+     "ai_risk": "low",
+     "priority": "low",
+     "downstream": [
+      "claim"
+     ],
+     "status": "unverified",
+     "missing_context": "GPP's 'open shade' is not defined on the page; the Filtered shade category is an interpretation.",
+     "explanation": "GPP gives 'full sun or light to open shade' and advises afternoon-sun protection where summers are hot. 'Full sun' and 'Part sun/part shade' follow directly; mapping 'open shade' to 'Filtered shade' is a vocabulary convention the source does not state."
+    },
+    {
+     "claim_id": "cornus-nuttallii:exposure:eflora01",
+     "plant": "cornus-nuttallii",
+     "field": "exposure",
+     "source_id": "eflora",
+     "ai_result": "partially_supported",
+     "ai_risk": "medium",
+     "priority": "low",
+     "downstream": [
+      "claim"
+     ],
+     "status": "unverified",
+     "missing_context": "The source's own light descriptor is 'shade-tolerant/intolerant', which supports neither value cleanly; 'filtered_shade' in particular is an interpretation, and the page also says the tree is 'readily visible along forest edges'.",
+     "explanation": "E-Flora places the species in the shrub layer of mixed and coniferous forests, on water-shedding colluvial slopes, in disturbed communities and young-seral forests, as the claim text says. The exposure values are read off those habitat classes; the only explicit light statement is the ambiguous 'shade-tolerant/intolerant'."
+    },
+    {
+     "claim_id": "cornus-sericea:exposure:eflora01",
+     "plant": "cornus-sericea",
+     "field": "exposure",
+     "source_id": "eflora",
+     "ai_result": "partially_supported",
+     "ai_risk": "low",
+     "priority": "low",
+     "downstream": [
+      "claim"
+     ],
+     "status": "unverified",
+     "missing_context": "No cultivation exposure rating exists on the page.",
+     "explanation": "The page calls the shrub shade-tolerant/intolerant and lists open (streamsides, swamps, clearings) and forest habitats, which is what the claim text says. The three stored exposure values are an inference from habitat; E-Flora gives no exposure rating, as the context admits."
+    },
+    {
+     "claim_id": "gaillardia-aristata:exposure:eflora01",
+     "plant": "gaillardia-aristata",
+     "field": "exposure",
+     "source_id": "eflora",
+     "ai_result": "partially_supported",
+     "ai_risk": "low",
+     "priority": "low",
+     "downstream": [
+      "claim"
+     ],
+     "status": "unverified",
+     "missing_context": "Exposure is inferred from habitat, not stated; the page gives no cultivation data.",
+     "explanation": "E-Flora gives no exposure rating; it lists habitats of dry grasslands and shrublands plus moist sand bars. 'Full sun' is an inference from open habitat classes, which the claim's context acknowledges; the claim text also drops 'moist' from 'moist sand bars'."
+    },
+    {
+     "claim_id": "gaultheria-shallon:exposure:eflora01",
+     "plant": "gaultheria-shallon",
+     "field": "exposure",
+     "source_id": "eflora",
+     "ai_result": "partially_supported",
+     "ai_risk": "low",
+     "priority": "low",
+     "downstream": [
+      "claim"
+     ],
+     "status": "unverified",
+     "missing_context": "The source's 'shade-tolerant/intolerant' and 'absent or sporadic' under closed canopy; the claim turns habitat description into exposure classes, which the context already flags.",
+     "explanation": "E-Flora's indicator text supports open-canopy forest and cutover habitat (filtered shade / part sun) and the Additional Notes say 'Great for the woodland garden, in dry shade'. The claim text says habitat records 'include shaded understory', but the source says the species is absent or sporadic in the shaded understory of closed-canopy stands, so exposure:deep_shade is not what the page states."
+    },
+    {
+     "claim_id": "polystichum-munitum:exposure:eflora01",
+     "plant": "polystichum-munitum",
+     "field": "exposure",
+     "source_id": "eflora",
+     "ai_result": "partially_supported",
+     "ai_risk": "low",
+     "priority": "low",
+     "downstream": [
+      "claim"
+     ],
+     "status": "unverified",
+     "missing_context": "Exposure inferred from habitat; the source also records persistence on cutover (open) sites.",
+     "explanation": "E-Flora gives habitat 'moist to mesic forests' and 'widespread in forest understories' but states no exposure classes; Filtered shade and Part sun/part shade are inferred, as the context says. The indicator text's 'shade-tolerant/intolerant' wording is ambiguous and weakens the inference."
+    },
+    {
+     "claim_id": "polystichum-munitum:exposure:osu01",
+     "plant": "polystichum-munitum",
+     "field": "exposure",
+     "source_id": "osu",
+     "ai_result": "partially_supported",
+     "ai_risk": "low",
+     "priority": "low",
+     "downstream": [
+      "claim"
+     ],
+     "status": "unverified",
+     "missing_context": "OSU's 'shade' is unqualified; deep shade is not stated.",
+     "explanation": "OSU states 'Part shade to shade'. Part sun/part shade is a direct match; rendering unqualified 'shade' as Deep shade is a loose mapping the note flags, and the intermediate Filtered shade class is skipped."
+    }
+   ]
+  },
+  {
+   "id": "usda-coded-contradiction",
+   "title": "USDA coded characteristic contradicts every descriptive source",
+   "description": "Coded USDA characteristics (leaf retention No, flower colour Purple, 6 ft mature vs 1 ft at 20 years, shade tolerance Low) are transcribed faithfully but contradict the descriptive sources and sometimes the same record. The claims are accurate transcriptions of an unreliable field.",
+   "options": [
+    "Dispute each with reason 'source record internally inconsistent / contradicted by all descriptive sources'",
+    "Keep side by side at low confidence (R1) and never let USDA codes drive evergreen, exposure or height for these species",
+    "Request a second USDA document (plant guide PDF) before deciding"
+   ],
+   "n_claims": 3,
+   "plants": [
+    "arctostaphylos-uva-ursi",
+    "gaultheria-shallon",
+    "polystichum-munitum"
+   ],
+   "fields": {
+    "seasonal_interest": 2,
+    "mature_height": 1
+   },
+   "sources": {
+    "usda_plants": 3
+   },
+   "downstream": {
+    "claim": 3,
+    "design": 2,
+    "design_requirement": 2,
+    "height_band": 1,
+    "layer": 1
+   },
+   "gate_claims": 1,
+   "conflicting": 3,
+   "impact_score": 20,
+   "claims": [
+    {
+     "claim_id": "arctostaphylos-uva-ursi:seasonal_interest:usdaplants01",
+     "plant": "arctostaphylos-uva-ursi",
+     "field": "seasonal_interest",
+     "source_id": "usda_plants",
+     "ai_result": "conflicting_evidence",
+     "ai_risk": "medium",
+     "priority": "low",
+     "downstream": [
+      "claim",
+      "design",
+      "design_requirement"
+     ],
+     "status": "unverified",
+     "missing_context": "'Late Spring' -> months 5-6 is an interpretation; USDA's colour categories are coarse and 'Purple' is not corroborated by any descriptive source.",
+     "explanation": "USDA gives Flower Color 'Purple', Bloom Period 'Late Spring', Foliage Color 'Dark Green', Fall Conspicuous 'Yes', red conspicuous persistent fruit Summer to Fall, and Leaf Retention 'Yes'; the claim extracts each faithfully, with 'Late Spring' mapped to months 5-6 by convention. The claim note records that USDA's 'Purple' contradicts the other sources, and I confirm it: RHS says 'pale pink', OSU 'white-tinged pink', MOBOT 'White with a pink tinge', and E-Flora's own description 'pinkish-white' (E-Flora merely echoes the USDA 'Purple' line)."
+    },
+    {
+     "claim_id": "gaultheria-shallon:mature_height:usdaplants01",
+     "plant": "gaultheria-shallon",
+     "field": "mature_height",
+     "source_id": "usda_plants",
+     "ai_result": "conflicting_evidence",
+     "ai_risk": "high",
+     "priority": "high",
+     "downstream": [
+      "claim",
+      "design",
+      "design_requirement",
+      "height_band",
+      "layer"
+     ],
+     "status": "unverified",
+     "missing_context": "No growing condition is attached to either USDA figure; the 1 ft at 20 years looks like a data-entry artefact but the page gives no way to tell.",
+     "explanation": "The USDA characteristics list a mature height of 6.0 ft (1.8 m, correctly converted) and a maximum height at 20 years of 1 ft. The two figures on the same page are mutually inconsistent, as the claim's note records; the claim reports both faithfully but the source itself is contradictory."
+    },
+    {
+     "claim_id": "polystichum-munitum:seasonal_interest:usdaplants01",
+     "plant": "polystichum-munitum",
+     "field": "seasonal_interest",
+     "source_id": "usda_plants",
+     "ai_result": "conflicting_evidence",
+     "ai_risk": "medium",
+     "priority": "medium",
+     "downstream": [
+      "claim"
+     ],
+     "status": "unverified",
+     "missing_context": "USDA's own 'Foliage Porosity Winter: Moderate' and 'Flower Color: Brown' (sori on a fern) suggest a coded record of limited reliability for this species.",
+     "explanation": "The USDA record does say Foliage Color Dark Green, Leaf Retention No and Fall Conspicuous Yes, so the claim transcribes it faithfully. The note's contradiction is confirmed against E-Flora, GPP, OSU and RHS (all evergreen), and the USDA record is internally inconsistent: it lists 'Foliage Porosity Winter: Moderate', which presupposes retained winter foliage."
+    }
+   ]
+  },
+  {
+   "id": "usda-rating-as-exposure",
+   "title": "USDA shade-tolerance rating stored as an exposure class",
+   "description": "USDA PLANTS gives a *shade tolerance* rating (Low / Medium / High) for conservation planting, not a sun requirement. The extraction turned Low into Full sun and High into shade classes, which then contradicts every horticultural source for forest-floor natives and feeds the exposure gate.",
+   "options": [
+    "Dispute the exposure value and keep the rating in a note (the rating is not a position)",
+    "Keep as unverified with confidence ≤ 0.55 and context 'inferred from shade-tolerance rating' (current state)",
+    "Add a facet 'shade_tolerance_rating' so the rating is stored as what it is"
+   ],
+   "n_claims": 8,
+   "plants": [
+    "achillea-millefolium",
+    "arctostaphylos-uva-ursi",
+    "cornus-nuttallii",
+    "cornus-sericea",
+    "gaillardia-aristata",
+    "gaultheria-shallon",
+    "polystichum-munitum",
+    "vaccinium-ovatum"
+   ],
+   "fields": {
+    "exposure": 8
+   },
+   "sources": {
+    "usda_plants": 8
+   },
+   "downstream": {
+    "claim": 8
+   },
+   "gate_claims": 0,
+   "conflicting": 1,
+   "impact_score": 19,
+   "claims": [
+    {
+     "claim_id": "achillea-millefolium:exposure:usdaplants01",
+     "plant": "achillea-millefolium",
+     "field": "exposure",
+     "source_id": "usda_plants",
+     "ai_result": "partially_supported",
+     "ai_risk": "low",
+     "priority": "low",
+     "downstream": [
+      "claim"
+     ],
+     "status": "unverified",
+     "missing_context": "No sun requirement is given by USDA; 'Full sun' is inferred.",
+     "explanation": "USDA states only Shade Tolerance: Medium; the characteristics table has no sun-requirement row. 'Part sun/part shade' follows from medium shade tolerance, but 'Full sun' is not stated anywhere on the USDA page and is an inference."
+    },
+    {
+     "claim_id": "arctostaphylos-uva-ursi:exposure:usdaplants01",
+     "plant": "arctostaphylos-uva-ursi",
+     "field": "exposure",
+     "source_id": "usda_plants",
+     "ai_result": "partially_supported",
+     "ai_risk": "low",
+     "priority": "low",
+     "downstream": [
+      "claim"
+     ],
+     "status": "unverified",
+     "missing_context": "Medium shade tolerance says nothing explicit about full-sun suitability.",
+     "explanation": "USDA gives only 'Shade Tolerance: Medium'; it has no sun-exposure field. Full sun plus part shade is a loose reading of 'medium' shade tolerance, as the claim note admits, not a statement on the page."
+    },
+    {
+     "claim_id": "cornus-nuttallii:exposure:usdaplants01",
+     "plant": "cornus-nuttallii",
+     "field": "exposure",
+     "source_id": "usda_plants",
+     "ai_result": "partially_supported",
+     "ai_risk": "medium",
+     "priority": "medium",
+     "downstream": [
+      "claim"
+     ],
+     "status": "unverified",
+     "missing_context": "USDA's shade tolerance is a conservation-planting characteristic with no region or canopy context; it conflicts with OSU 'Part shade' and MOBOT 'prefers part shade', and E-Flora's indicator text calls the species 'shade-tolerant/intolerant'.",
+     "explanation": "USDA records Shade Tolerance: Low; the claim text reports that accurately. The value 'exposure:full_sun' is an inference from low shade tolerance, and USDA says nothing about sun exposure as such."
+    },
+    {
+     "claim_id": "cornus-sericea:exposure:usdaplants01",
+     "plant": "cornus-sericea",
+     "field": "exposure",
+     "source_id": "usda_plants",
+     "ai_result": "partially_supported",
+     "ai_risk": "low",
+     "priority": "low",
+     "downstream": [
+      "claim"
+     ],
+     "status": "unverified",
+     "missing_context": "Full sun is not excluded by the source; no exposure category is stated.",
+     "explanation": "The page rates shade tolerance High, as the claim text says. The stored exposure values (part shade, filtered shade) are an inference: USDA has no sun-exposure field and high shade tolerance does not exclude full sun, which the note itself admits other sources give. The characteristics were read from the cached COSES PlantCharacteristics JSON (ssp. sericea); the same page carries a second value set tagged [cultivar Ruby], which the claim correctly ignores."
+    },
+    {
+     "claim_id": "gaillardia-aristata:exposure:usdaplants01",
+     "plant": "gaillardia-aristata",
+     "field": "exposure",
+     "source_id": "usda_plants",
+     "ai_result": "partially_supported",
+     "ai_risk": "medium",
+     "priority": "medium",
+     "downstream": [
+      "claim"
+     ],
+     "status": "unverified",
+     "missing_context": "A tolerance rating is not an exposure preference; the value omits full sun, which RHS and MOBOT state and E-Flora's open habitats imply.",
+     "explanation": "USDA rates Shade Tolerance High and says nothing else about light. The claim text is accurate, but the stored exposure classes (part sun/part shade, filtered shade) are an inference from a tolerance rating; the source does not state a preferred exposure and does not exclude full sun."
+    },
+    {
+     "claim_id": "gaultheria-shallon:exposure:usdaplants01",
+     "plant": "gaultheria-shallon",
+     "field": "exposure",
+     "source_id": "usda_plants",
+     "ai_result": "partially_supported",
+     "ai_risk": "medium",
+     "priority": "medium",
+     "downstream": [
+      "claim"
+     ],
+     "status": "unverified",
+     "missing_context": "USDA gives a shade-tolerance rating, not a sun requirement; no condition (soil, climate) is attached.",
+     "explanation": "USDA rates Shade Tolerance: Low, which the claim text quotes correctly. Mapping that to exposure:full_sun is an inference: the page gives a tolerance rating, not a light-exposure requirement, and the low rating is at odds with RHS ('Full shade, Partial shade') and OSU ('Sun or part shade')."
+    },
+    {
+     "claim_id": "polystichum-munitum:exposure:usdaplants01",
+     "plant": "polystichum-munitum",
+     "field": "exposure",
+     "source_id": "usda_plants",
+     "ai_result": "conflicting_evidence",
+     "ai_risk": "medium",
+     "priority": "medium",
+     "downstream": [
+      "claim"
+     ],
+     "status": "unverified",
+     "missing_context": "USDA's rating is a single unconditioned code; the species-level shade preference of every other source is omitted from this value.",
+     "explanation": "USDA does record 'Shade Tolerance: Low', so the claim text is accurate, but mapping it to Full sun is an inference. The note's contradiction is confirmed: GPP ('light to deep shade'), OSU ('Part shade to shade'), RHS ('Full shade, Partial shade') and E-Flora ('Widespread in forest understories') all place the species in shade; no other USDA field supports a sun preference."
+    },
+    {
+     "claim_id": "vaccinium-ovatum:exposure:usdaplants01",
+     "plant": "vaccinium-ovatum",
+     "field": "exposure",
+     "source_id": "usda_plants",
+     "ai_result": "partially_supported",
+     "ai_risk": "medium",
+     "priority": "medium",
+     "downstream": [
+      "claim"
+     ],
+     "status": "unverified",
+     "missing_context": "The USDA rating is a conservation-planting characteristic, not a garden-exposure recommendation; it says nothing about performance in part shade.",
+     "explanation": "USDA gives 'Shade Tolerance: Low', which the claim text states accurately. The value 'Full sun' is an inference: the source rates tolerance of shade for conservation plantings and never states an exposure category. The claim's own note records that the mapping disagrees with GPP (full sun to deep shade) and is kept side by side."
+    }
+   ]
+  },
+  {
+   "id": "maintenance-inferred",
+   "title": "Maintenance level inferred from pruning advice",
+   "description": "RHS gives a pruning group, not a maintenance rating; the value 'low' rests on 'pruning group 1' or 'no pruning' while the same page lists pests and diseases.",
+   "options": [
+    "House rule: no maintenance_level from pruning advice alone — dispute these",
+    "Keep at ≤ 0.65 as inferred",
+    "Verify where GPP / MOBOT give an explicit rating that agrees"
+   ],
+   "n_claims": 6,
+   "plants": [
+    "achillea-millefolium",
+    "arctostaphylos-uva-ursi",
+    "cercidiphyllum-japonicum",
+    "cornus-nuttallii",
+    "gaillardia-aristata",
+    "vaccinium-ovatum"
+   ],
+   "fields": {
+    "maintenance_level": 6
+   },
+   "sources": {
+    "rhs": 5,
+    "gpp": 1
+   },
+   "downstream": {
+    "claim": 6
+   },
+   "gate_claims": 6,
+   "conflicting": 0,
+   "impact_score": 18,
+   "claims": [
+    {
+     "claim_id": "achillea-millefolium:maintenance_level:rhs01",
+     "plant": "achillea-millefolium",
+     "field": "maintenance_level",
+     "source_id": "rhs",
+     "ai_result": "partially_supported",
+     "ai_risk": "high",
+     "priority": "high",
+     "downstream": [
+      "claim"
+     ],
+     "status": "unverified",
+     "missing_context": "RHS gives no overall maintenance rating; 'low' rests on the pruning line alone and omits the spread-control implication.",
+     "explanation": "RHS states only 'No pruning required'; the page carries no maintenance rating at all. Mapping a single pruning statement to maintenance:low is a loose inference, and the same page also says the plant 'Spreads readily and may be unwelcome in fine lawns' and is propagated by spring division, which implies some management."
+    },
+    {
+     "claim_id": "arctostaphylos-uva-ursi:maintenance_level:rhs01",
+     "plant": "arctostaphylos-uva-ursi",
+     "field": "maintenance_level",
+     "source_id": "rhs",
+     "ai_result": "partially_supported",
+     "ai_risk": "low",
+     "priority": "medium",
+     "downstream": [
+      "claim"
+     ],
+     "status": "unverified",
+     "missing_context": "The page also says 'Maybe susceptible to leaf spot'.",
+     "explanation": "RHS gives no maintenance rating; it lists 'Pruning pruning group 1' and 'Pests Generally pest-free'. maintenance:low is an inference from those two lines, as the note says, rather than a statement on the page."
+    },
+    {
+     "claim_id": "cercidiphyllum-japonicum:maintenance_level:rhs01",
+     "plant": "cercidiphyllum-japonicum",
+     "field": "maintenance_level",
+     "source_id": "rhs",
+     "ai_result": "partially_supported",
+     "ai_risk": "low",
+     "priority": "medium",
+     "downstream": [
+      "claim"
+     ],
+     "status": "unverified",
+     "missing_context": "No maintenance rating on the RHS page; the value rests on a pruning-group convention.",
+     "explanation": "RHS gives pruning group 1 and no maintenance rating. The claim text is accurate; the 'low' maintenance value is an inference from the pruning group, not a statement on the page."
+    },
+    {
+     "claim_id": "cornus-nuttallii:maintenance_level:rhs01",
+     "plant": "cornus-nuttallii",
+     "field": "maintenance_level",
+     "source_id": "rhs",
+     "ai_result": "partially_supported",
+     "ai_risk": "medium",
+     "priority": "high",
+     "downstream": [
+      "claim"
+     ],
+     "status": "unverified",
+     "missing_context": "RHS's same page lists possible horse chestnut scale, cornus anthracnose and honey fungus, which bear on maintenance but are not reflected in a 'low' rating.",
+     "explanation": "RHS says pruning group 1, best with minimal pruning, which the claim quotes correctly. RHS gives no maintenance rating, so 'maintenance:low' is an inference from pruning alone and ignores the pest/disease susceptibilities RHS lists on the same page."
+    },
+    {
+     "claim_id": "gaillardia-aristata:maintenance_level:rhs01",
+     "plant": "gaillardia-aristata",
+     "field": "maintenance_level",
+     "source_id": "rhs",
+     "ai_result": "partially_supported",
+     "ai_risk": "high",
+     "priority": "high",
+     "downstream": [
+      "claim"
+     ],
+     "status": "unverified",
+     "missing_context": "No explicit RHS maintenance rating exists; the category is a forced vocabulary mapping from pruning advice.",
+     "explanation": "RHS gives no maintenance rating; it advises regular deadheading, a cut-back after flowering and possible staking. The claim's advice summary is accurate, but 'medium' is an inference from that advice, not a value the source states."
+    },
+    {
+     "claim_id": "vaccinium-ovatum:maintenance_level:gpp01",
+     "plant": "vaccinium-ovatum",
+     "field": "maintenance_level",
+     "source_id": "gpp",
+     "ai_result": "partially_supported",
+     "ai_risk": "low",
+     "priority": "medium",
+     "downstream": [
+      "claim"
+     ],
+     "status": "unverified",
+     "missing_context": "Only pruning is addressed; GPP elsewhere recommends occasional dry-weather watering for better flowering and fruit.",
+     "explanation": "GPP says 'Little pruning is needed to maintain a nice looking shrub', which the claim quotes. Mapping that to maintenance 'low' is defensible but the source only speaks to pruning, not to other maintenance (watering for fruit, soil amendment). The sentence also explicitly calls the plant a shrub."
+    }
+   ]
+  },
+  {
+   "id": "rating-as-resistance",
+   "title": "A 'medium' or 'some' tolerance stored as a resistance",
+   "description": "A 'Medium' tolerance rating, a 'some drought tolerance once established' or a site descriptor ('Tolerate: Erosion', 'dry soils') was stored as a categorical resistance, which the graph reads as a plant property.",
+   "options": [
+    "House rule: only an explicit high / stated tolerance becomes a resistance; medium ratings go to a note",
+    "Keep but lower confidence to 0.5 and add the degree to the value label",
+    "Dispute"
+   ],
+   "n_claims": 8,
+   "plants": [
+    "achillea-millefolium",
+    "arctostaphylos-uva-ursi",
+    "cornus-nuttallii",
+    "cornus-sericea",
+    "gaillardia-aristata",
+    "vaccinium-ovatum"
+   ],
+   "fields": {
+    "resistances": 8
+   },
+   "sources": {
+    "usda_plants": 4,
+    "mobot": 2,
+    "gpp": 1,
+    "rhs": 1
+   },
+   "downstream": {
+    "claim": 8
+   },
+   "gate_claims": 0,
+   "conflicting": 0,
+   "impact_score": 16,
+   "claims": [
+    {
+     "claim_id": "achillea-millefolium:resistances:usdaplants01",
+     "plant": "achillea-millefolium",
+     "field": "resistances",
+     "source_id": "usda_plants",
+     "ai_result": "partially_supported",
+     "ai_risk": "low",
+     "priority": "low",
+     "downstream": [
+      "claim"
+     ],
+     "status": "unverified",
+     "missing_context": "The tolerance is rated Medium, not High.",
+     "explanation": "USDA gives Drought Tolerance Medium and Salinity Tolerance Low, exactly as the claim text says. Recording 'stress:drought' as a resistance from a 'Medium' rating firms a middling class into a positive tolerance; the note already marks this borderline."
+    },
+    {
+     "claim_id": "arctostaphylos-uva-ursi:resistances:mobot02",
+     "plant": "arctostaphylos-uva-ursi",
+     "field": "resistances",
+     "source_id": "mobot",
+     "ai_result": "partially_supported",
+     "ai_risk": "low",
+     "priority": "low",
+     "downstream": [
+      "claim"
+     ],
+     "status": "unverified",
+     "missing_context": "The same evidence already feeds use:erosion_control and ecology:erosion_control in other MOBOT claims.",
+     "explanation": "The header line reads 'Tolerate: Erosion' and Uses says it 'Helps control soil erosion on slopes and hillsides'. The phrase is verbatim, but in Plant Finder's convention 'Tolerate: Erosion' marks suitability for erosion-prone sites (a site/use descriptor) rather than a physiological stress resistance, so storing it as stress:erosion firms a use note into a resistance, as the claim note partly acknowledges."
+    },
+    {
+     "claim_id": "arctostaphylos-uva-ursi:resistances:usdaplants02",
+     "plant": "arctostaphylos-uva-ursi",
+     "field": "resistances",
+     "source_id": "usda_plants",
+     "ai_result": "partially_supported",
+     "ai_risk": "low",
+     "priority": "low",
+     "downstream": [
+      "claim"
+     ],
+     "status": "unverified",
+     "missing_context": "Rating is 'Medium', not high; OSU's 'good salt tolerance' is a separate source.",
+     "explanation": "USDA lists 'Salinity Tolerance: Medium'. A medium rating is reported accurately in the claim text, but firming it into a stress:salt resistance overstates a middling rating, which the note itself calls borderline."
+    },
+    {
+     "claim_id": "cornus-nuttallii:resistances:mobot02",
+     "plant": "cornus-nuttallii",
+     "field": "resistances",
+     "source_id": "mobot",
+     "ai_result": "partially_supported",
+     "ai_risk": "low",
+     "priority": "low",
+     "downstream": [
+      "claim"
+     ],
+     "status": "unverified",
+     "missing_context": "Only once established, and only 'some'; MOBOT also recommends mulch to keep roots cool and moist in summer.",
+     "explanation": "MOBOT says established plants have 'some' drought tolerance, which the claim text quotes with the 'once established' condition in context. Firming 'some' into a 'stress:drought' resistance tag goes beyond the hedge, and the same page's header lists Water: Medium while USDA rates drought tolerance Low."
+    },
+    {
+     "claim_id": "cornus-sericea:resistances:gpp01",
+     "plant": "cornus-sericea",
+     "field": "resistances",
+     "source_id": "gpp",
+     "ai_result": "partially_supported",
+     "ai_risk": "low",
+     "priority": "low",
+     "downstream": [
+      "claim"
+     ],
+     "status": "unverified",
+     "missing_context": "Regular summer watering recommended where the site is not wet.",
+     "explanation": "Winter-wet tolerance is stated directly. \"Drought\" is firmed from \"dry soils\", while the Culture Notes advise regular summer watering on non-wet sites, so the drought tag goes beyond what GPP commits to (the note flags this as loose). The page is the Cornus sericea 'Baileyi' entry (read in the built-in browser); the claim carries cultivar 'Baileyi', so claim and source match, but the values are cultivar-level and should not be read as species data."
+    },
+    {
+     "claim_id": "cornus-sericea:resistances:rhs01",
+     "plant": "cornus-sericea",
+     "field": "resistances",
+     "source_id": "rhs",
+     "ai_result": "partially_supported",
+     "ai_risk": "low",
+     "priority": "low",
+     "downstream": [
+      "claim"
+     ],
+     "status": "unverified",
+     "missing_context": "Poorly-drained is a soil condition, not specifically seasonal winter wetness.",
+     "explanation": "The only supporting text is the poorly-drained moisture option; \"winter wet\" is a loose reading of it. The People & Planet \"Wet and Dry Conditions\" category appearing in the cache is the explanatory modal, not a designation for this plant."
+    },
+    {
+     "claim_id": "gaillardia-aristata:resistances:usdaplants01",
+     "plant": "gaillardia-aristata",
+     "field": "resistances",
+     "source_id": "usda_plants",
+     "ai_result": "partially_supported",
+     "ai_risk": "low",
+     "priority": "low",
+     "downstream": [
+      "claim"
+     ],
+     "status": "unverified",
+     "missing_context": "A 'Medium' tolerance is being stored as a categorical resistance.",
+     "explanation": "USDA rates Drought Tolerance Medium. Recording 'drought' as a resistance from a medium rating is a borderline mapping, as the note says; the source does not call the plant drought resistant."
+    },
+    {
+     "claim_id": "vaccinium-ovatum:resistances:usdaplants01",
+     "plant": "vaccinium-ovatum",
+     "field": "resistances",
+     "source_id": "usda_plants",
+     "ai_result": "partially_supported",
+     "ai_risk": "low",
+     "priority": "low",
+     "downstream": [
+      "claim"
+     ],
+     "status": "unverified",
+     "missing_context": "The rating is 'Medium', not high; the claim's category drops the degree.",
+     "explanation": "USDA rates Drought Tolerance Medium and Moisture Use Low, which the claim text reports accurately. Recording a 'medium' rating as a drought resistance is borderline, as the claim's note already says; the source does not call the plant drought tolerant."
+    }
+   ]
+  },
+  {
+   "id": "ph-range-collapsed",
+   "title": "A pH range stored as Acidic or Alkaline only",
+   "description": "USDA pH ranges (e.g. 4.9–7.3, 5.5–8.0) were stored as 'Acidic' or 'Alkaline' alone; the KPU vocabulary has no neutral value.",
+   "options": [
+    "House rule: pH ranges stay quantitative in the value; Acidic only when max ≤ 6.5, Alkaline only when min ≥ 7.5",
+    "Propose correction per claim (keep both classes where the range spans them)",
+    "Verify as is where the chosen class is the source's emphasis"
+   ],
+   "n_claims": 8,
+   "plants": [
+    "achillea-millefolium",
+    "arctostaphylos-uva-ursi",
+    "cornus-nuttallii",
+    "cornus-sericea",
+    "gaillardia-aristata",
+    "gaultheria-shallon",
+    "polystichum-munitum"
+   ],
+   "fields": {
+    "soil_type": 8
+   },
+   "sources": {
+    "usda_plants": 7,
+    "osu": 1
+   },
+   "downstream": {
+    "claim": 8
+   },
+   "gate_claims": 0,
+   "conflicting": 0,
+   "impact_score": 16,
+   "claims": [
+    {
+     "claim_id": "achillea-millefolium:soil_type:usdaplants01",
+     "plant": "achillea-millefolium",
+     "field": "soil_type",
+     "source_id": "usda_plants",
+     "ai_result": "partially_supported",
+     "ai_risk": "low",
+     "priority": "low",
+     "downstream": [
+      "claim"
+     ],
+     "status": "unverified",
+     "missing_context": "The pH range also covers slightly acid and neutral soils; RHS on the same species says acid, neutral or alkaline.",
+     "explanation": "USDA gives pH 6.0-8.0, CaCO3 tolerance Medium and adaptation to medium-textured soils only (coarse No, fine No), exactly as the claim text says. The value 'Alkaline' alone firms a range that runs from slightly acid through neutral to moderately alkaline into one category; the claim note already flags this as a loose fit."
+    },
+    {
+     "claim_id": "arctostaphylos-uva-ursi:soil_type:osu01",
+     "plant": "arctostaphylos-uva-ursi",
+     "field": "soil_type",
+     "source_id": "osu",
+     "ai_result": "partially_supported",
+     "ai_risk": "low",
+     "priority": "low",
+     "downstream": [
+      "claim"
+     ],
+     "status": "unverified",
+     "missing_context": "The limestone-rock report (a non-acid substrate) is omitted from the stored values.",
+     "explanation": "OSU says the plant 'Does best in poor, sandy, infertile, acid soils' and adds 'There are reports that it grows well on limestone rock'. Acidic is stated; 'Rocky or gravelly or dry' is a loose mapping of 'poor, sandy, infertile' (sandy is not rocky, and dryness is not mentioned)."
+    },
+    {
+     "claim_id": "arctostaphylos-uva-ursi:soil_type:usdaplants01",
+     "plant": "arctostaphylos-uva-ursi",
+     "field": "soil_type",
+     "source_id": "usda_plants",
+     "ai_result": "partially_supported",
+     "ai_risk": "low",
+     "priority": "low",
+     "downstream": [
+      "claim"
+     ],
+     "status": "unverified",
+     "missing_context": "The pH range extends to 8.0 and CaCO3 tolerance is medium, which sits uneasily beside the 'acidic' / 'lime-free' values stored from other sources (the note records this).",
+     "explanation": "USDA gives pH 5.5-8.0, adapted to coarse and medium (not fine) textured soils, anaerobic tolerance none, fertility requirement low and CaCO3 tolerance medium; the claim text reports all of these correctly. soil:well_drained is not a USDA field and is an inference from texture adaptation plus no waterlogging tolerance, as the note says."
+    },
+    {
+     "claim_id": "cornus-nuttallii:soil_type:usdaplants01",
+     "plant": "cornus-nuttallii",
+     "field": "soil_type",
+     "source_id": "usda_plants",
+     "ai_result": "partially_supported",
+     "ai_risk": "low",
+     "priority": "low",
+     "downstream": [
+      "claim"
+     ],
+     "status": "unverified",
+     "missing_context": "The pH ceiling of 7.3 means USDA allows neutral soils; only the 4.9 floor and zero CaCO3 tolerance point to acidic.",
+     "explanation": "USDA gives pH 4.9–7.3, adapted to fine and medium but not coarse soils, CaCO3 tolerance none; the claim text reports these exactly. Mapping the range to 'Acidic' alone is loose because 7.3 reaches past neutral, as the claim note concedes."
+    },
+    {
+     "claim_id": "cornus-sericea:soil_type:usdaplants01",
+     "plant": "cornus-sericea",
+     "field": "soil_type",
+     "source_id": "usda_plants",
+     "ai_result": "partially_supported",
+     "ai_risk": "low",
+     "priority": "low",
+     "downstream": [
+      "claim"
+     ],
+     "status": "unverified",
+     "missing_context": "pH range extends to 7.5 (neutral to slightly alkaline soils are within tolerance).",
+     "explanation": "pH 4.8–7.5, adaptation to coarse, medium and fine soils, and no CaCO3 tolerance are all stated. Storing only \"Acidic\" is a convention: the range also reaches neutral and slightly alkaline (7.5), though the CaCO3 line supports leaving Alkaline out. The characteristics were read from the cached COSES PlantCharacteristics JSON (ssp. sericea); the same page carries a second value set tagged [cultivar Ruby], which the claim correctly ignores."
+    },
+    {
+     "claim_id": "gaillardia-aristata:soil_type:usdaplants01",
+     "plant": "gaillardia-aristata",
+     "field": "soil_type",
+     "source_id": "usda_plants",
+     "ai_result": "partially_supported",
+     "ai_risk": "low",
+     "priority": "low",
+     "downstream": [
+      "claim"
+     ],
+     "status": "unverified",
+     "missing_context": "The stored class is an inference; 'CaCO3 Tolerance: Medium' and salinity tolerance low on the same page are not used.",
+     "explanation": "USDA gives adaptation to coarse and medium but not fine soils, pH 5.5-7.9, low fertility requirement and no anaerobic tolerance; the claim text reports this accurately. 'Well-drained' is not a USDA term and is inferred from texture plus anaerobic intolerance."
+    },
+    {
+     "claim_id": "gaultheria-shallon:soil_type:usdaplants01",
+     "plant": "gaultheria-shallon",
+     "field": "soil_type",
+     "source_id": "usda_plants",
+     "ai_result": "partially_supported",
+     "ai_risk": "low",
+     "priority": "low",
+     "downstream": [
+      "claim"
+     ],
+     "status": "unverified",
+     "missing_context": "The range reaches neutral pH 7.0; soil texture adaptation (all three classes) is not in the value.",
+     "explanation": "USDA gives pH 5.5-7.0 and adaptation to coarse, medium and fine soils, as the claim text says. The value soil:acidic covers only the lower part of a range that runs to neutral (7.0), so the category is narrower than the source; CaCO3 Tolerance: None does lean the same way."
+    },
+    {
+     "claim_id": "polystichum-munitum:soil_type:usdaplants01",
+     "plant": "polystichum-munitum",
+     "field": "soil_type",
+     "source_id": "usda_plants",
+     "ai_result": "partially_supported",
+     "ai_risk": "low",
+     "priority": "low",
+     "downstream": [
+      "claim"
+     ],
+     "status": "unverified",
+     "missing_context": "pH range extends to 7.5 (mildly alkaline); medium-textured soils only.",
+     "explanation": "Every figure in the claim text is in the USDA record. The stored value 'Acidic' reflects only the lower pH bound; the source range 5.8-7.5 and medium CaCO3 tolerance also cover neutral to mildly alkaline soils."
+    }
+   ]
+  },
+  {
+   "id": "habit-form-inferred",
+   "title": "Habit or form read from passing description",
+   "description": "'Bushy' → Dense, 'conical' → Pyramidal-widely, 'pyramidal when young' → mature form, 'arching branches' in a leaf sentence → habit.",
+   "options": [
+    "Dispute where the source gives no habit / form statement",
+    "Propose correction to the narrower class the source supports",
+    "Request more evidence (a second source with an explicit habit)"
+   ],
+   "n_claims": 5,
+   "plants": [
+    "cercidiphyllum-japonicum",
+    "cornus-nuttallii",
+    "gaillardia-aristata",
+    "polystichum-munitum"
+   ],
+   "fields": {
+    "form": 2,
+    "habit": 3
+   },
+   "sources": {
+    "osu": 2,
+    "rhs": 3
+   },
+   "downstream": {
+    "claim": 5,
+    "design": 3,
+    "design_requirement": 3
+   },
+   "gate_claims": 0,
+   "conflicting": 0,
+   "impact_score": 16,
+   "claims": [
+    {
+     "claim_id": "cercidiphyllum-japonicum:form:osu01",
+     "plant": "cercidiphyllum-japonicum",
+     "field": "form",
+     "source_id": "osu",
+     "ai_result": "partially_supported",
+     "ai_risk": "low",
+     "priority": "low",
+     "downstream": [
+      "claim"
+     ],
+     "status": "unverified",
+     "missing_context": "Applies to young trees only; narrow vs wide not stated; mature form absent from OSU.",
+     "explanation": "OSU says only 'pyramidal when young' and gives no mature form or width qualifier. The claim text is accurate, but the 'Pyramidal - widely' class adds a narrow/wide distinction and a maturity implication the source does not state, and MOBOT describes the mature habit as rounded."
+    },
+    {
+     "claim_id": "cercidiphyllum-japonicum:habit:osu01",
+     "plant": "cercidiphyllum-japonicum",
+     "field": "habit",
+     "source_id": "osu",
+     "ai_result": "partially_supported",
+     "ai_risk": "low",
+     "priority": "low",
+     "downstream": [
+      "claim",
+      "design",
+      "design_requirement"
+     ],
+     "status": "unverified",
+     "missing_context": "No habit field on the OSU page; the value is read from a leaf-arrangement sentence.",
+     "explanation": "OSU mentions 'arching branches' inside the leaf description. The phrase exists, but it describes branch form in passing, not an overall habit category; 'Arching' as a habit is an inference."
+    },
+    {
+     "claim_id": "cornus-nuttallii:form:rhs01",
+     "plant": "cornus-nuttallii",
+     "field": "form",
+     "source_id": "rhs",
+     "ai_result": "partially_supported",
+     "ai_risk": "medium",
+     "priority": "low",
+     "downstream": [
+      "claim"
+     ],
+     "status": "unverified",
+     "missing_context": "RHS gives no crown-width descriptor; MOBOT describes a 'rounded to conical crown' with horizontal tiered branching, which the reviewer may weigh when choosing between form classes.",
+     "explanation": "RHS calls it 'a conical deciduous tree' and labels Habit 'Columnar upright'; the claim text quotes both. 'Pyramidal - widely' adds a width qualifier the source never gives, and the 'Columnar upright' label points toward a narrower form class, so the source supports a pyramidal/conical reading but not the 'widely' choice."
+    },
+    {
+     "claim_id": "gaillardia-aristata:habit:rhs01",
+     "plant": "gaillardia-aristata",
+     "field": "habit",
+     "source_id": "rhs",
+     "ai_result": "partially_supported",
+     "ai_risk": "medium",
+     "priority": "medium",
+     "downstream": [
+      "claim",
+      "design",
+      "design_requirement"
+     ],
+     "status": "unverified",
+     "missing_context": "KPU vocabulary lacks 'Clumping'; 'Dense' was chosen as the nearest label.",
+     "explanation": "RHS gives habit as 'Bushy, Clump forming'. The claim text matches, but the stored value 'Dense' is a loose vocabulary mapping; the source does not use the word dense and clump-forming describes growth pattern rather than density."
+    },
+    {
+     "claim_id": "polystichum-munitum:habit:rhs01",
+     "plant": "polystichum-munitum",
+     "field": "habit",
+     "source_id": "rhs",
+     "ai_result": "partially_supported",
+     "ai_risk": "medium",
+     "priority": "medium",
+     "downstream": [
+      "claim",
+      "design",
+      "design_requirement"
+     ],
+     "status": "unverified",
+     "missing_context": "'Bushy' and 'clump of erect fronds' describe outline, not density.",
+     "explanation": "RHS gives Habit 'Bushy' and describes a large clump of erect fronds, so the claim text is accurate. 'Bushy' → Dense is a forced vocabulary mapping the note already flags; the source does not say dense."
+    }
+   ]
+  },
+  {
+   "id": "pest-mapping-loose",
+   "title": "Pest or disease name forced into the KPU list, hedges dropped",
+   "description": "Honey fungus → Root rot, stem rot → Crown rot, unnamed leaf spot → Fungal leaf spot; hedges ('may be', 'generally pest-free', 'insufficient data') dropped from the value.",
+   "options": [
+    "House rule: a pathogen not in the KPU list is stored as an open-list value, never remapped",
+    "Propose correction per claim",
+    "Verify the directly stated items and dispute the remapped ones"
+   ],
+   "n_claims": 7,
+   "plants": [
+    "achillea-millefolium",
+    "arctostaphylos-uva-ursi",
+    "cercidiphyllum-japonicum",
+    "cornus-nuttallii",
+    "cornus-sericea",
+    "gaultheria-shallon"
+   ],
+   "fields": {
+    "pest_susceptibility": 7
+   },
+   "sources": {
+    "mobot": 2,
+    "rhs": 5
+   },
+   "downstream": {
+    "claim": 7
+   },
+   "gate_claims": 0,
+   "conflicting": 0,
+   "impact_score": 14,
+   "claims": [
+    {
+     "claim_id": "achillea-millefolium:pest_susceptibility:mobot01",
+     "plant": "achillea-millefolium",
+     "field": "pest_susceptibility",
+     "source_id": "mobot",
+     "ai_result": "partially_supported",
+     "ai_risk": "low",
+     "priority": "low",
+     "downstream": [
+      "claim"
+     ],
+     "status": "unverified",
+     "missing_context": "'Stem rot' is not 'crown rot'; the source also calls all three 'occasional'.",
+     "explanation": "MOBOT names stem rot, powdery mildew and rust as occasional diseases, so Mildew and Rust are stated. 'Stem rot' has been recorded as 'Crown rot', which is a different disease name; the note flags the mapping as loose."
+    },
+    {
+     "claim_id": "arctostaphylos-uva-ursi:pest_susceptibility:rhs01",
+     "plant": "arctostaphylos-uva-ursi",
+     "field": "pest_susceptibility",
+     "source_id": "rhs",
+     "ai_result": "partially_supported",
+     "ai_risk": "low",
+     "priority": "low",
+     "downstream": [
+      "claim"
+     ],
+     "status": "unverified",
+     "missing_context": "Stated as 'maybe susceptible', i.e. a weak possibility rather than a known problem.",
+     "explanation": "RHS says 'Pests Generally pest-free' and 'Diseases Maybe susceptible to leaf spot'. Leaf spot is stated, but the page does not name the pathogen, so 'Fungal leaf spot' adds a qualifier the source does not give."
+    },
+    {
+     "claim_id": "cercidiphyllum-japonicum:pest_susceptibility:rhs01",
+     "plant": "cercidiphyllum-japonicum",
+     "field": "pest_susceptibility",
+     "source_id": "rhs",
+     "ai_result": "partially_supported",
+     "ai_risk": "low",
+     "priority": "low",
+     "downstream": [
+      "claim"
+     ],
+     "status": "unverified",
+     "missing_context": "Honey fungus susceptibility is stated by RHS but not represented in the value list.",
+     "explanation": "RHS says leaves may be damaged by late frosts and the tree may be susceptible to honey fungus. The claim text reports both, but the value keeps only 'Abiotic disorder' and drops honey fungus, a disease the source names."
+    },
+    {
+     "claim_id": "cornus-nuttallii:pest_susceptibility:rhs01",
+     "plant": "cornus-nuttallii",
+     "field": "pest_susceptibility",
+     "source_id": "rhs",
+     "ai_result": "partially_supported",
+     "ai_risk": "low",
+     "priority": "low",
+     "downstream": [
+      "claim"
+     ],
+     "status": "unverified",
+     "missing_context": "All three susceptibilities are qualified 'may be'; RHS's lead statement is 'generally pest-free'.",
+     "explanation": "RHS names horse chestnut scale, cornus anthracnose and honey fungus, which the claim text quotes correctly. Scale insects and anthracnose are direct mappings; 'Root rot' for honey fungus is a looser mapping the source does not itself make, and the value drops the 'generally pest-free' and 'may be' hedges."
+    },
+    {
+     "claim_id": "cornus-sericea:pest_susceptibility:mobot01",
+     "plant": "cornus-sericea",
+     "field": "pest_susceptibility",
+     "source_id": "mobot",
+     "ai_result": "partially_supported",
+     "ai_risk": "low",
+     "priority": "low",
+     "downstream": [
+      "claim"
+     ],
+     "status": "unverified",
+     "missing_context": "Canker vulnerability is tied to hot, humid summer climates south of USDA zone 7.",
+     "explanation": "Mobot Plant Finder was denied in the built-in browser on both hosts; the page was fetched with curl (HTTP 200, strict TLS) and read in full. Blights, canker, leaf spots, scale, leaf miners and bagworms are all named. Two categories are firmed beyond the text: \"leaf spots\" becomes Fungal leaf spot (the page does not say fungal) and bagworms become Caterpillar or cutworm (the noted loose mapping); the canker caveat (stress in hot humid summers south of zone 7) is in the note only."
+    },
+    {
+     "claim_id": "cornus-sericea:pest_susceptibility:rhs01",
+     "plant": "cornus-sericea",
+     "field": "pest_susceptibility",
+     "source_id": "rhs",
+     "ai_result": "partially_supported",
+     "ai_risk": "low",
+     "priority": "low",
+     "downstream": [
+      "claim"
+     ],
+     "status": "unverified",
+     "missing_context": "RHS qualifies the pest list with \"generally pest-free\".",
+     "explanation": "Horse chestnut scale and cornus anthracnose are stated. Honey fungus is firmed into \"Root rot\", which the page does not say, and the \"generally pest-free\" qualifier is dropped from the stored values (kept in the text)."
+    },
+    {
+     "claim_id": "gaultheria-shallon:pest_susceptibility:rhs01",
+     "plant": "gaultheria-shallon",
+     "field": "pest_susceptibility",
+     "source_id": "rhs",
+     "ai_result": "partially_supported",
+     "ai_risk": "low",
+     "priority": "low",
+     "downstream": [
+      "claim"
+     ],
+     "status": "unverified",
+     "missing_context": "The RHS caveat 'insufficient data to determine degree of susceptibility' and the condition 'in gardens where it is present'.",
+     "explanation": "RHS says the plant may be susceptible to honey fungus but adds that there is insufficient data to determine the degree of susceptibility. The claim text keeps 'may be', but the value pest:root_rot is a loose mapping (honey fungus is an Armillaria root/collar disease) and drops the 'insufficient data' hedge."
+    }
+   ]
+  },
+  {
+   "id": "native-status-scope",
+   "title": "Native status attached at the wrong taxon or scale",
+   "description": "'Native' was attached to BC from a continental range (RHS), from a dual native+introduced record (USDA) or from a different accepted name (E-Flora *A. borealis*).",
+   "options": [
+    "Decide the yarrow taxon question first (entity identity_review), then dispute or verify each",
+    "Verify E-Flora / USDA 'native' at the scale the source gives, add scope to the text",
+    "Dispute the RHS-derived native claim"
+   ],
+   "n_claims": 3,
+   "plants": [
+    "achillea-millefolium",
+    "polystichum-munitum"
+   ],
+   "fields": {
+    "ecological_value": 3
+   },
+   "sources": {
+    "eflora": 1,
+    "usda_plants": 1,
+    "rhs": 1
+   },
+   "downstream": {
+    "claim": 3
+   },
+   "gate_claims": 3,
+   "conflicting": 1,
+   "impact_score": 12,
+   "claims": [
+    {
+     "claim_id": "achillea-millefolium:ecological_value:eflora01",
+     "plant": "achillea-millefolium",
+     "field": "ecological_value",
+     "source_id": "eflora",
+     "ai_result": "conflicting_evidence",
+     "ai_risk": "high",
+     "priority": "medium",
+     "downstream": [
+      "claim"
+     ],
+     "status": "unverified",
+     "missing_context": "The 'native' status is attached by E-Flora to A. borealis var. borealis (the coastal 10-40 cm form), not to A. millefolium, whose species page is rated Exotic/SNA; var. pacifica is also Exotic per the note.",
+     "explanation": "The cited page (Achillea borealis var. borealis) states Origin Native, S5, Yellow list, and lists Achillea millefolium var. borealis among its synonyms, so the claim text describes the source accurately. However the E-Flora page for the DB taxon itself, A. millefolium, states Origin Exotic, SNA, and the claim records 'native' against achillea-millefolium; the source as a whole therefore gives Exotic for the species name and Native only for a differently named taxon."
+    },
+    {
+     "claim_id": "achillea-millefolium:ecological_value:usdaplants01",
+     "plant": "achillea-millefolium",
+     "field": "ecological_value",
+     "source_id": "usda_plants",
+     "ai_result": "partially_supported",
+     "ai_risk": "medium",
+     "priority": "medium",
+     "downstream": [
+      "claim"
+     ],
+     "status": "unverified",
+     "missing_context": "USDA records Introduced as well as Native for CAN and L48; the value key keeps only 'native'.",
+     "explanation": "USDA NativeStatuses list Native for AK, CAN, GL, L48 and SPM and Introduced for CAN, HI, L48 and SPM, exactly as the claim text describes. The stored value carries only origin:native, so the equal-weight Introduced status for Canada and the lower 48 survives only in the free text."
+    },
+    {
+     "claim_id": "polystichum-munitum:ecological_value:rhs01",
+     "plant": "polystichum-munitum",
+     "field": "ecological_value",
+     "source_id": "rhs",
+     "ai_result": "partially_supported",
+     "ai_risk": "low",
+     "priority": "medium",
+     "downstream": [
+      "claim"
+     ],
+     "status": "unverified",
+     "missing_context": "RHS gives a continental range, not a BC native status.",
+     "explanation": "RHS states plant range W North America and not native to GB/Ireland, exactly as the claim text says. The stored value 'origin:native' (for BC) is an inference from the range statement, as the note acknowledges, not something RHS states."
+    }
+   ]
+  },
+  {
+   "id": "usda-moisture-as-water",
+   "title": "USDA moisture-use / drought ratings turned into a water class",
+   "description": "USDA gives Moisture Use, Drought Tolerance and Anaerobic Tolerance ratings; the extraction inferred a water class from them. The class is a reading, not a statement.",
+   "options": [
+    "Keep as unverified 'inferred' claims at ≤ 0.7 (current)",
+    "Dispute and store the three ratings in a qualitative claim instead",
+    "House rule table: (Use, Drought, Anaerobic) → class, recorded in methods"
+   ],
+   "n_claims": 4,
+   "plants": [
+    "arctostaphylos-uva-ursi",
+    "cornus-sericea",
+    "gaillardia-aristata",
+    "gaultheria-shallon"
+   ],
+   "fields": {
+    "water_drainage": 4
+   },
+   "sources": {
+    "usda_plants": 4
+   },
+   "downstream": {
+    "claim": 4
+   },
+   "gate_claims": 4,
+   "conflicting": 0,
+   "impact_score": 12,
+   "claims": [
+    {
+     "claim_id": "arctostaphylos-uva-ursi:water_drainage:usdaplants01",
+     "plant": "arctostaphylos-uva-ursi",
+     "field": "water_drainage",
+     "source_id": "usda_plants",
+     "ai_result": "partially_supported",
+     "ai_risk": "medium",
+     "priority": "high",
+     "downstream": [
+      "claim"
+     ],
+     "status": "unverified",
+     "missing_context": "USDA also gives Precipitation 14-45 in and Shade Tolerance Medium, which bound the 'dry' reading.",
+     "explanation": "USDA lists 'Moisture Use: Low', 'Drought Tolerance: High' and 'Anaerobic Tolerance: None'; the claim text reports these accurately. USDA has no water-need category, so water:dry is an inference from low moisture use rather than a stated rating."
+    },
+    {
+     "claim_id": "cornus-sericea:water_drainage:usdaplants01",
+     "plant": "cornus-sericea",
+     "field": "water_drainage",
+     "source_id": "usda_plants",
+     "ai_result": "partially_supported",
+     "ai_risk": "high",
+     "priority": "high",
+     "downstream": [
+      "claim"
+     ],
+     "status": "unverified",
+     "missing_context": "No source statement of soil-moisture class; \"moist\" is inferred.",
+     "explanation": "The three ratings in the claim text (moisture use high, drought tolerance low, anaerobic tolerance high) are stated exactly. USDA gives no moisture category, so the stored value \"moist\" is a derived reading; high anaerobic tolerance would equally justify \"wet\". The characteristics were read from the cached COSES PlantCharacteristics JSON (ssp. sericea); the same page carries a second value set tagged [cultivar Ruby], which the claim correctly ignores."
+    },
+    {
+     "claim_id": "gaillardia-aristata:water_drainage:usdaplants01",
+     "plant": "gaillardia-aristata",
+     "field": "water_drainage",
+     "source_id": "usda_plants",
+     "ai_result": "partially_supported",
+     "ai_risk": "high",
+     "priority": "high",
+     "downstream": [
+      "claim"
+     ],
+     "status": "unverified",
+     "missing_context": "USDA 'Moisture Use' is a consumption characteristic, not a watering regime; precipitation 16-30 in/yr on the same page is not used.",
+     "explanation": "USDA lists Moisture Use Medium, Drought Tolerance Medium and Anaerobic Tolerance None; the claim text reports these correctly. 'Average' is a loose mapping of 'Moisture Use: Medium', which describes water consumption rather than a preferred regime, as the note concedes."
+    },
+    {
+     "claim_id": "gaultheria-shallon:water_drainage:usdaplants01",
+     "plant": "gaultheria-shallon",
+     "field": "water_drainage",
+     "source_id": "usda_plants",
+     "ai_result": "partially_supported",
+     "ai_risk": "high",
+     "priority": "high",
+     "downstream": [
+      "claim"
+     ],
+     "status": "unverified",
+     "missing_context": "Anaerobic Tolerance: Low - the plant is rated moist-but-not-waterlogged, which 'moist' alone does not convey.",
+     "explanation": "USDA lists Moisture Use: High and Drought Tolerance: Low, exactly as the claim text says. The value water:moist is an inference from those two ratings rather than a soil-moisture class the page states, and the page's 'Anaerobic Tolerance: Low' (does not tolerate waterlogging) is not reflected."
+    }
+   ]
+  },
+  {
+   "id": "other-partial",
+   "title": "Other partially supported readings (one-offs)",
+   "description": "One-off readings the AI rated partially supported: a dropped caveat, a misread sentence, an inference the source does not make.",
+   "options": [
+    "Decide claim by claim",
+    "Request more evidence",
+    "Propose correction"
+   ],
+   "n_claims": 5,
+   "plants": [
+    "achillea-millefolium",
+    "cercidiphyllum-japonicum",
+    "cornus-sericea",
+    "gaultheria-shallon"
+   ],
+   "fields": {
+    "behaviour_with_others": 2,
+    "invasive_status": 1,
+    "long_term_performance": 1,
+    "vancouver_context": 1
+   },
+   "sources": {
+    "rhs": 2,
+    "iscbc": 1,
+    "osu": 1,
+    "eflora": 1
+   },
+   "downstream": {
+    "claim": 5,
+    "relation_derived": 1
+   },
+   "gate_claims": 1,
+   "conflicting": 0,
+   "impact_score": 11,
+   "claims": [
+    {
+     "claim_id": "achillea-millefolium:behaviour_with_others:rhs01",
+     "plant": "achillea-millefolium",
+     "field": "behaviour_with_others",
+     "source_id": "rhs",
+     "ai_result": "partially_supported",
+     "ai_risk": "low",
+     "priority": "low",
+     "downstream": [
+      "claim"
+     ],
+     "status": "unverified",
+     "missing_context": "The rhizome mechanism is not stated by RHS; it comes from other sources.",
+     "explanation": "RHS says the plant spreads readily and may be unwelcome in fine lawns, and is propagated by seed or spring division, matching the claim text. The value adds 'by rhizomes', which the RHS page never says (it describes a 'spreading native wildflower' without naming the mechanism), and 'can colonise fine lawns' paraphrases 'unwelcome in fine lawns'."
+    },
+    {
+     "claim_id": "cercidiphyllum-japonicum:invasive_status:iscbc01",
+     "plant": "cercidiphyllum-japonicum",
+     "field": "invasive_status",
+     "source_id": "iscbc",
+     "ai_result": "partially_supported",
+     "ai_risk": "low",
+     "priority": "medium",
+     "downstream": [
+      "claim"
+     ],
+     "status": "unverified",
+     "missing_context": "BC Weed Control Act schedules and the noxious-weed field guide were not checked; the cached listing may not be the full profile set.",
+     "explanation": "The cached ISCBC Identify page lists the council's species profiles (knotweeds, English ivy, Scotch broom, tree of heaven, etc.) and contains no occurrence of 'katsura' or 'Cercidiphyllum'. Absence from this listing is consistent with 'not listed', but the site-search part of the claim cannot be reproduced from the cache and a listing cannot positively state the value."
+    },
+    {
+     "claim_id": "cornus-sericea:behaviour_with_others:rhs01",
+     "plant": "cornus-sericea",
+     "field": "behaviour_with_others",
+     "source_id": "rhs",
+     "ai_result": "partially_supported",
+     "ai_risk": "low",
+     "priority": "low",
+     "downstream": [
+      "claim"
+     ],
+     "status": "unverified",
+     "missing_context": null,
+     "explanation": "Suckering, wide-spreading and the group 7 annual pruning to keep it compact are on the page. The stored value \"spreads into colonies\" is the extractor's wording; RHS does not use \"colonies\"."
+    },
+    {
+     "claim_id": "gaultheria-shallon:long_term_performance:osu01",
+     "plant": "gaultheria-shallon",
+     "field": "long_term_performance",
+     "source_id": "osu",
+     "ai_result": "partially_supported",
+     "ai_risk": "low",
+     "priority": "low",
+     "downstream": [
+      "claim"
+     ],
+     "status": "unverified",
+     "missing_context": "The source gives frost sensitivity as a distribution explanation, not a cultivation rating, and in the same page says hardy to USDA zone 6.",
+     "explanation": "OSU says the species is 'predominantly found at lower elevations due to its frost sensitivity' and is 'difficult to transplant'. Transplanting is stated; frost sensitivity is mentioned only as an ecological explanation of its distribution, without the grade 'high' that the value assigns, so the rating is firmer than the source."
+    },
+    {
+     "claim_id": "gaultheria-shallon:vancouver_context:eflora01",
+     "plant": "gaultheria-shallon",
+     "field": "vancouver_context",
+     "source_id": "eflora",
+     "ai_result": "partially_supported",
+     "ai_risk": "low",
+     "priority": "low",
+     "downstream": [
+      "claim",
+      "relation_derived"
+     ],
+     "status": "unverified",
+     "missing_context": "The indicator text applies to coastal locations only; 'shaded understory' is where the source says it is absent or sporadic, not a habitat.",
+     "explanation": "The habitat/range sentence, elevation 0/219/1700 m, modal BEC zone CWH and zone list CDF/CWH/ICH/IDF/MH, mor humus, open-canopy coniferous forest and cutover thickets are all on the page. The habitat item 'shaded understory' misreads the indicator text, which says the species is absent or sporadic in the shaded understory of closed-canopy stands."
+    }
+   ]
+  },
+  {
+   "id": "exposure-exposed-dropped",
+   "title": "RHS 'Exposed or Sheltered' stored as Sheltered only",
+   "description": "RHS lists Exposure 'Exposed or Sheltered'; KPU has no 'Exposed' label, so the value keeps Sheltered alone and reads as a shelter requirement.",
+   "options": [
+    "Propose correction: drop 'Sheltered' from the value, keep the RHS wording in text",
+    "Add 'Exposed' (ontology wind:exposed) to the exposure vocabulary and correct the claims",
+    "Verify as is with the note"
+   ],
+   "n_claims": 5,
+   "plants": [
+    "achillea-millefolium",
+    "arctostaphylos-uva-ursi",
+    "cornus-nuttallii",
+    "gaillardia-aristata",
+    "polystichum-munitum"
+   ],
+   "fields": {
+    "exposure": 5
+   },
+   "sources": {
+    "rhs": 5
+   },
+   "downstream": {
+    "claim": 5
+   },
+   "gate_claims": 0,
+   "conflicting": 0,
+   "impact_score": 10,
+   "claims": [
+    {
+     "claim_id": "achillea-millefolium:exposure:rhs01",
+     "plant": "achillea-millefolium",
+     "field": "exposure",
+     "source_id": "rhs",
+     "ai_result": "partially_supported",
+     "ai_risk": "low",
+     "priority": "low",
+     "downstream": [
+      "claim"
+     ],
+     "status": "unverified",
+     "missing_context": "'Exposed' is dropped; the source means either exposed or sheltered sites are suitable.",
+     "explanation": "RHS gives Position Full sun, any aspect, and Exposure 'Exposed or Sheltered', which the claim text quotes correctly. The value keeps 'Sheltered' alone because the vocabulary has no 'Exposed'; on its own that reads as a need for shelter, whereas the source says either exposure suits."
+    },
+    {
+     "claim_id": "arctostaphylos-uva-ursi:exposure:rhs01",
+     "plant": "arctostaphylos-uva-ursi",
+     "field": "exposure",
+     "source_id": "rhs",
+     "ai_result": "partially_supported",
+     "ai_risk": "low",
+     "priority": "low",
+     "downstream": [
+      "claim"
+     ],
+     "status": "unverified",
+     "missing_context": "The page says exposed OR sheltered; KPU has no 'Exposed' value, per the claim note.",
+     "explanation": "RHS lists Position 'Full sun, Partial shade' and Exposure 'Exposed or Sheltered'. Full sun and part shade are stated; 'Sheltered' is stated but the paired 'Exposed' is dropped, so storing only sheltered narrows what the page says."
+    },
+    {
+     "claim_id": "cornus-nuttallii:exposure:rhs01",
+     "plant": "cornus-nuttallii",
+     "field": "exposure",
+     "source_id": "rhs",
+     "ai_result": "partially_supported",
+     "ai_risk": "low",
+     "priority": "low",
+     "downstream": [
+      "claim"
+     ],
+     "status": "unverified",
+     "missing_context": "RHS says the tree tolerates exposed OR sheltered sites; recording only 'sheltered' could be read as a requirement the source does not impose.",
+     "explanation": "RHS lists Position Full sun / Partial shade, Aspect South- or West-facing, Exposure Exposed or Sheltered; the claim text quotes all of this. The value keeps 'Sheltered' and drops 'Exposed', so it narrows the source for want of a KPU 'Exposed' value."
+    },
+    {
+     "claim_id": "gaillardia-aristata:exposure:rhs01",
+     "plant": "gaillardia-aristata",
+     "field": "exposure",
+     "source_id": "rhs",
+     "ai_result": "partially_supported",
+     "ai_risk": "low",
+     "priority": "low",
+     "downstream": [
+      "claim"
+     ],
+     "status": "unverified",
+     "missing_context": "RHS says exposed OR sheltered; the stored value implies a sheltered-site requirement the source does not make.",
+     "explanation": "RHS gives Position 'Full sun' and Exposure 'Exposed or Sheltered'. Full sun is supported; keeping only 'Sheltered' drops the 'Exposed' half of the RHS statement, as the claim's note admits."
+    },
+    {
+     "claim_id": "polystichum-munitum:exposure:rhs01",
+     "plant": "polystichum-munitum",
+     "field": "exposure",
+     "source_id": "rhs",
+     "ai_result": "partially_supported",
+     "ai_risk": "low",
+     "priority": "low",
+     "downstream": [
+      "claim"
+     ],
+     "status": "unverified",
+     "missing_context": "Source also allows exposed sites; south aspect is not listed.",
+     "explanation": "RHS gives Full shade and Partial shade, aspect N/E/W and exposure 'Exposed or Sheltered', all reflected in the claim text. The value keeps Sheltered but drops Exposed (no KPU label), so it is narrower than the source."
+    }
+   ]
+  },
+  {
+   "id": "height-measure-convention",
+   "title": "Height figure is a different measure (frond length, 20-year maximum)",
+   "description": "Frond length stored as plant height (sword fern); USDA 6 ft mature beside 1 ft at 20 years (salal). These feed height bands and layers.",
+   "options": [
+    "Propose correction: record frond length under a note / qualitative claim and leave height to the sources that state it",
+    "Dispute the USDA salal height",
+    "Keep with lowered confidence"
+   ],
+   "n_claims": 2,
+   "plants": [
+    "polystichum-munitum"
+   ],
+   "fields": {
+    "mature_height": 2
+   },
+   "sources": {
+    "eflora": 1,
+    "osu": 1
+   },
+   "downstream": {
+    "claim": 2,
+    "design": 2,
+    "design_requirement": 2,
+    "height_band": 2,
+    "layer": 2
+   },
+   "gate_claims": 2,
+   "conflicting": 0,
+   "impact_score": 10,
+   "claims": [
+    {
+     "claim_id": "polystichum-munitum:mature_height:eflora01",
+     "plant": "polystichum-munitum",
+     "field": "mature_height",
+     "source_id": "eflora",
+     "ai_result": "partially_supported",
+     "ai_risk": "high",
+     "priority": "high",
+     "downstream": [
+      "claim",
+      "design",
+      "design_requirement",
+      "height_band",
+      "layer"
+     ],
+     "status": "unverified",
+     "missing_context": "Frond length, not plant height; fronds arch so standing height can be less than frond length.",
+     "explanation": "The source gives a leaf (frond) length of 20-150 cm; it states no plant height. The 0.2-1.5 m value is a correct unit conversion of frond length, but recording it as mature height assumes fronds stand fully erect, which the source does not say."
+    },
+    {
+     "claim_id": "polystichum-munitum:mature_height:osu01",
+     "plant": "polystichum-munitum",
+     "field": "mature_height",
+     "source_id": "osu",
+     "ai_result": "partially_supported",
+     "ai_risk": "high",
+     "priority": "high",
+     "downstream": [
+      "claim",
+      "design",
+      "design_requirement",
+      "height_band",
+      "layer"
+     ],
+     "status": "unverified",
+     "missing_context": "Frond length recorded as height; 'stiffly erect' is the only basis for treating length as height.",
+     "explanation": "OSU states fronds are 1-4 ft (0.3-1.2 m) long and stiffly erect; the metric conversion is the source's own. The source does not state a plant height, so using frond length as mature height is an inference the note already flags as loose."
+    }
+   ]
+  }
+ ]
+}

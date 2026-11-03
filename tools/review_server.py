@@ -14,6 +14,10 @@ Serves review/web/index.html and a small JSON API over the repository files:
   POST /api/apply/preview              {event_id} → the change the apply would make (nothing written)
   POST /api/apply                      {event_id, by} → fingerprint check → change → validate (revert on error) → event → pipeline
   GET  /api/history?id=<claim id>      the event timeline (only what actually happened)
+  GET  /api/issues · /api/issue?id=    recurring knowledge-mapping issues (review/ai/issues.json, M47) with progress and policy
+  GET  /api/conflicts                  evidence-conflict groups (plant × field) with every source side by side
+  GET  /api/sample                     the human-evaluation sample with progress
+  POST /api/issue_decision             {issue_id, option, reviewer, reason} → an issue-level POLICY event; changes no claim
 Standard library only. Reads plants/*.json, review/ai/*, review/events/*; writes only through tools/review_store.py and
 tools/review_apply.py. There is no bulk-verify endpoint on purpose.
 """
@@ -77,6 +81,54 @@ class Data:
                 "human": {k: v for k, v in RS.stats().items() if k != "state"}, "human_reviewed_claims": sum(1 for r in rows if r["human_state"] != "awaiting_human"), "by_plant": {pid: {"queue": sum(1 for r in rows if r["plant"] == pid and r["status"] == "unverified"), "ai": sum(1 for r in rows if r["plant"] == pid and r["ai_result"]), "human": sum(1 for r in rows if r["plant"] == pid and r["human_state"] != "awaiting_human"), "verified": sum(1 for c in all_claims if c["plant"] == pid and c.get("status") == "verified"), "disputed": sum(1 for c in all_claims if c["plant"] == pid and c.get("status") == "disputed"), "name": self.plants[pid]["entity"]["scientific_name"]} for pid in self.plants},
                 "by_source": dict(Counter(r["source_id"] for r in rows if r["status"] == "unverified")), "by_field": dict(Counter(r["field"] for r in rows if r["status"] == "unverified")), "priority": dict(Counter(r["priority"] for r in rows if r["status"] == "unverified")), "events": sum(len(v) for v in self.events.values())}
 
+    # ---- issue-based review (M47), evidence conflicts, evaluation sample
+    def issues(self):
+        doc = J(os.path.join(AIR.AI, "issues.json")) or {"issues": []}; pol = defaultdict(list)
+        for e in RS.issue_decisions(): pol[e["issue_id"]].append(e)
+        out = []
+        for i in doc["issues"]:
+            rows = [dict(r, human_state=self.human_state(r["claim_id"]), status=(self.claims.get(r["claim_id"]) or {}).get("status")) for r in i["claims"]]
+            dec = sum(1 for r in rows if r["human_state"] != "awaiting_human"); p = pol.get(i["id"], [])
+            out.append(dict(i, claims=rows, decided=dec, open=i["n_claims"] - dec, policy=(p[-1] if p else None), policy_history=p, progress=round(dec / i["n_claims"], 2) if i["n_claims"] else 0))
+        return out
+
+    def conflicts(self):
+        """groups of claims on one plant × field whose values are disjoint (diagnosis) or that the AI rated conflicting"""
+        groups = {}
+        for cid, r in self.queue.items():
+            a = self.ai_current(cid); hard = a and a["result"] == "conflicting_evidence"
+            if not (hard or (r.get("conflicting_claims") and r.get("priority") == "high")): continue
+            key = (r["plant"], r["field"]); g = groups.setdefault(key, {"plant": r["plant"], "plant_name": self.plants[r["plant"]]["entity"]["scientific_name"], "field": r["field"], "members": set(), "ai_conflicting": 0, "priority": r.get("priority")})
+            g["members"].add(cid); g["members"].update(x for x in r.get("conflicting_claims", []) if x in self.claims)
+            if hard: g["ai_conflicting"] += 1
+        out = []
+        for g in groups.values():
+            mem = []
+            for cid in sorted(g["members"]):
+                c = self.claims[cid]; a = self.ai_current(cid)
+                mem.append({"claim_id": cid, "source_id": c["source_id"], "value": c.get("value_label") or c.get("value"), "text": c.get("text"), "context": c.get("context"), "status": c.get("status"), "ai_result": a["result"] if a else None, "ai_conflict_reading": a.get("conflict_reading") if a else None, "human_state": self.human_state(cid)})
+            dec = sum(1 for m in mem if m["human_state"] != "awaiting_human")
+            out.append({"id": f"{g['plant']}:{g['field']}", "plant": g["plant"], "plant_name": g["plant_name"], "field": g["field"], "n": len(mem), "ai_conflicting": g["ai_conflicting"], "decided": dec, "members": mem, "reading": next((m["ai_conflict_reading"] for m in mem if m["ai_conflict_reading"] and m["ai_conflict_reading"].lower() not in ("n.a.", "n/a")), None)})
+        out.sort(key=lambda g: (-g["ai_conflicting"], -g["n"], g["plant"], g["field"]))
+        return out
+
+    def sample(self):
+        files = sorted(f for f in os.listdir(AIR.AI) if f.startswith("sample-") and f.endswith(".json"))
+        if not files: return {"n": 0, "claims": [], "note": "no sample file; run tools/review_eval.py --sample 40"}
+        s = J(os.path.join(AIR.AI, files[-1]))
+        for r in s["claims"]:
+            r["human_state"] = self.human_state(r["claim_id"]); r["ai_result"] = (self.ai_current(r["claim_id"]) or {}).get("result"); r["text"] = (self.claims.get(r["claim_id"]) or {}).get("text"); r["plant_name"] = self.plants[r["plant"]]["entity"]["scientific_name"]
+            ld = RS.latest_decision(r["claim_id"]); r["human_decision"] = ld["payload"]["decision"] if ld else None
+        s["decided"] = sum(1 for r in s["claims"] if r["human_decision"]); s["file"] = files[-1]
+        return s
+
+    def overview2(self):
+        o = self.overview(); iss = self.issues(); con = self.conflicts(); smp = self.sample()
+        o["entries"] = {"conflicts": {"groups": len(con), "claims": sum(g["n"] for g in con), "ai_conflicting": sum(g["ai_conflicting"] for g in con), "decided": sum(g["decided"] for g in con)},
+                        "issues": {"n": len(iss), "claims": sum(i["n_claims"] for i in iss), "decided": sum(i["decided"] for i in iss), "with_policy": sum(1 for i in iss if i["policy"])},
+                        "sample": {"n": smp.get("n", 0), "decided": smp.get("decided", 0), "file": smp.get("file")}, "all": {"n": o["in_queue"]}}
+        return o
+
     def claim(self, cid):
         c = self.claims.get(cid)
         if not c: return None
@@ -104,7 +156,12 @@ class H(BaseHTTPRequestHandler):
         if not self._guard(): return
         u = urllib.parse.urlparse(self.path); qs = urllib.parse.parse_qs(u.query); d = Data()
         if u.path == "/" or u.path == "/index.html": return self._send(200, open(os.path.join(WEB, "index.html"), "rb").read(), "text/html")
-        if u.path == "/api/overview": return self._send(200, d.overview())
+        if u.path == "/api/overview": return self._send(200, d.overview2())
+        if u.path == "/api/issues": return self._send(200, {"issues": [{k: v for k, v in i.items() if k != "claims"} for i in d.issues()]})
+        if u.path == "/api/issue":
+            i = next((x for x in d.issues() if x["id"] == qs.get("id", [""])[0]), None); return self._send(200, i) if i else self._send(404, {"error": "no such issue"})
+        if u.path == "/api/conflicts": return self._send(200, {"groups": d.conflicts()})
+        if u.path == "/api/sample": return self._send(200, d.sample())
         if u.path == "/api/queue": return self._send(200, {"rows": d.rows(), "plants": {pid: p["entity"]["scientific_name"] for pid, p in d.plants.items()}})
         if u.path == "/api/claim":
             c = d.claim(qs.get("id", [""])[0]); return self._send(200, c) if c else self._send(404, {"error": "no such claim"})
@@ -120,6 +177,8 @@ class H(BaseHTTPRequestHandler):
                 if not c: return self._send(404, {"error": "no such claim"})
                 ev = RS.record_decision(c, body.get("decision"), body.get("reviewer"), body.get("reason"), ai_review_id=body.get("ai_review_id"), notes=body.get("notes"), correction=body.get("correction"), locally_applicable=body.get("locally_applicable"), replaces=body.get("replaces_event"))
                 return self._send(200, {"ok": True, "event": ev})
+            if self.path == "/api/issue_decision":
+                ev = RS.record_issue_decision(body.get("issue_id"), body.get("option"), body.get("reviewer"), body.get("reason"), notes=body.get("notes")); return self._send(200, {"ok": True, "event": ev})
             if self.path == "/api/apply/preview": return self._send(200, RA.preview(body.get("event_id", "")))
             if self.path == "/api/apply":
                 if not (body.get("by") or "").strip(): return self._send(400, {"error": "reviewer identifier required"})

@@ -9,6 +9,8 @@ Event kinds:
   decision_applied   the controlled write-back succeeded (what changed, validation result, pipeline result)
   apply_failed       the write-back was refused (stale fingerprint, validation errors) — nothing changed
   kg_rebuilt         tools/pipeline.py ran after an applied decision
+  issue_decision     an issue-level POLICY (option chosen, reason) for a recurring knowledge-mapping issue (review/ai/issues.json);
+                     it changes no claim — every claim still needs its own decision and apply (brief 2026-11-03 §1)
   note               free-text note on a claim
 Each event: event_id, claim_id, fingerprint (claim content at the time), reviewer, at (UTC), previous_status, kind, payload…
 Importable: append(event) · events(claim_id=None) · latest_decision(claim_id) · history(claim_id) · stats()
@@ -43,7 +45,7 @@ def events(claim_id=None):
 def append(ev):
     os.makedirs(EVENTS_DIR, exist_ok=True)
     ev = dict(ev); ev.setdefault("at", NOW())
-    ev.setdefault("event_id", "rev:" + hashlib.sha256((ev["at"] + ev.get("claim_id", "") + ev.get("kind", "") + json.dumps(ev.get("payload", {}), sort_keys=True, ensure_ascii=False)).encode()).hexdigest()[:12])
+    ev.setdefault("event_id", "rev:" + hashlib.sha256((ev["at"] + (ev.get("claim_id") or ev.get("issue_id") or "") + ev.get("kind", "") + json.dumps(ev.get("payload", {}), sort_keys=True, ensure_ascii=False)).encode()).hexdigest()[:12])
     with open(EVENTS, "a", encoding="utf-8") as f: f.write(json.dumps(ev, ensure_ascii=False) + "\n")
     return ev
 
@@ -54,6 +56,17 @@ def record_decision(claim, decision, reviewer, reason, ai_review_id=None, notes=
     if decision == "propose_correction" and not correction: raise ValueError("propose_correction needs a correction proposal {field?, value, text, note}")
     if not (reviewer or "").strip(): raise ValueError("reviewer identifier required")
     return append({"kind": "human_decision", "claim_id": claim["id"], "plant": claim.get("plant"), "fingerprint": fingerprint(claim), "reviewer": reviewer.strip(), "previous_status": claim.get("status"), "payload": {"decision": decision, "reason": reason, "notes": notes, "ai_review_id": ai_review_id, "correction": correction, "locally_applicable": locally_applicable, "replaces_event": replaces}})
+
+
+def record_issue_decision(issue_id, option, reviewer, reason, notes=None):
+    """an issue-level POLICY (brief 2026-11-03 §1): recorded, shown as the suggestion on every claim of the issue; changes no claim"""
+    if not (reviewer or "").strip(): raise ValueError("reviewer identifier required")
+    if not (option or "").strip(): raise ValueError("choose a resolution option")
+    return append({"kind": "issue_decision", "claim_id": None, "issue_id": issue_id, "reviewer": reviewer.strip(), "payload": {"option": option, "reason": reason, "notes": notes}})
+
+
+def issue_decisions(issue_id=None):
+    return [e for e in events() if e["kind"] == "issue_decision" and (issue_id is None or e.get("issue_id") == issue_id)]
 
 
 def latest_decision(claim_id):
@@ -73,7 +86,8 @@ def history(claim_id):
 def stats(queue_ids=None):
     """counts that never double-count: a claim is in exactly one human-review state (its latest decision, or applied)"""
     by_claim = defaultdict(list)
-    for e in events(): by_claim[e["claim_id"]].append(e)
+    for e in events():
+        if e.get("claim_id"): by_claim[e["claim_id"]].append(e)
     state = {}
     for cid, evs in by_claim.items():
         dec = [e for e in evs if e["kind"] == "human_decision"]; app = [e for e in evs if e["kind"] == "decision_applied"]
