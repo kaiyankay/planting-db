@@ -1,0 +1,5145 @@
+{
+ "id": "demo-backyard",
+ "name": "Demo backyard",
+ "created": "2026-11-07T22:11:30.344Z",
+ "schema": "planting-intelligence/design-project/0.1",
+ "knowledge_snapshot": {
+  "generated": "2026-11-07",
+  "generated_by": "tools/build_explorer.py",
+  "method": "M49",
+  "inputs": {
+   "kg_generated": "2026-11-03",
+   "xyz_generated": "2026-11-03",
+   "relations_updated": "2026-11-02",
+   "schema_version": "0.4.3",
+   "ontology_version": "0.2.0"
+  }
+ },
+ "conversation": [
+  {
+   "id": "msg-aico3",
+   "time": "2026-11-07T22:11:30.344Z",
+   "role": "user",
+   "text": "I have a small backyard with an old tree on the north side. I want privacy, low maintenance and some ecological value, but it should not feel closed in. The kids need the middle to play."
+  },
+  {
+   "id": "msg-aico4",
+   "time": "2026-11-07T22:11:30.344Z",
+   "role": "ai",
+   "text": "",
+   "html": "<b>Read from what you said</b><ul><li>a small site — dimensions still unknown</li><li>an existing tree on the north — I will place a marker (canopy size assumed) once the site has geometry; move or resize it</li><li>an open area (kids) — I will suggest a no-plant zone once the site has geometry</li><li>goals: privacy, maintenance low, ecology, openness</li><li>screen → north edge (privacy → Screen (blocks a view); Scrim would only filter it)</li><li>scrim → north edge (openness + privacy → Scrim as the alternative to check) — alternative to check</li><li>ground cover → bed interior (low maintenance → carpeting ground layer reduces open soil (design heuristic, not a database claim))</li></ul><b>Unknown</b> (not assumed): site dimensions / scale; light; soil type and drainage; ecological performance — the database records some ecological-value claims (pollinator, bird food …) but no pollinator-interaction data; no score is possible.<br><b>Before a measured design:</b> no site geometry yet — draw a boundary or state the dimensions; scale unknown — measured spacing and quantities are blocked until a length is stated or calibrated; no planting bed yet — draw one or accept a suggestion.",
+   "mode": "interpretation: offline-parser (rules: existing-tree, open-centre, size-word, privacy, low_maintenance, ecology, openness)"
+  },
+  {
+   "id": "msg-aico5",
+   "time": "2026-11-07T22:11:30.344Z",
+   "role": "sys",
+   "text": "site set to 6 × 4 m (typed; a rectangle is assumed — redraw with the Site tool for another shape)"
+  },
+  {
+   "id": "msg-aico8",
+   "time": "2026-11-07T22:11:30.344Z",
+   "role": "sys",
+   "text": "bed-1 accepted"
+  },
+  {
+   "id": "msg-aico9",
+   "time": "2026-11-07T22:11:30.344Z",
+   "role": "user",
+   "text": "Privacy along the north edge; keep the middle open; it is part shade."
+  },
+  {
+   "id": "msg-aicoa",
+   "time": "2026-11-07T22:11:30.344Z",
+   "role": "ai",
+   "text": "",
+   "html": "<b>Read from what you said</b><ul><li>light: part-shade (stated)</li><li>an open area (keep the middle open) — I will suggest a no-plant zone once the site has geometry</li><li>goals: privacy, openness</li><li>screen → north edge (privacy → Screen (blocks a view); Scrim would only filter it)</li><li>scrim → north edge (openness + privacy → Scrim as the alternative to check) — alternative to check</li></ul><b>Unknown</b> (not assumed): site dimensions / scale; soil type and drainage.<br>Geometry and a bed are in place — say <i>generate</i>, or add goals and conditions first.",
+   "mode": "interpretation: offline-parser (rules: open-centre, light, privacy, openness)"
+  },
+  {
+   "id": "msg-aicoc",
+   "time": "2026-11-07T22:11:30.344Z",
+   "role": "ai",
+   "text": "",
+   "html": "<b>Design v-aicob</b> — 37 plant objects, 5 species, bed 18.36 m², seed 42; operators along_edge, stagger, fill_drift, repeat_accent.<ul><li>screen: <i>Gaultheria shallon</i> (gate unknown), <i>Vaccinium ovatum</i> (gate unknown)</li><li>ground: <i>Arctostaphylos uva-ursi</i> (gate unknown), <i>Polystichum munitum</i> (gate unknown)</li><li>accent: <i>Achillea millefolium</i> (gate unknown)</li><li>excluded: <i>Acer palmatum</i>, <i>Cercidiphyllum japonicum</i>, <i>Cornus nuttallii</i> — reasons in the Design panel</li><li>Screen along the north edge: row cover 2.28 m of 5.4 m (continuity 0.42, a geometric proxy)</li><li>37 plants rest on an <b>unknown</b> site gate (conditions not stated)</li></ul>Circle an area and say what should change, or drag plants directly.",
+   "mode": "engine: deterministic placement over the knowledge adapter (no model text)"
+  },
+  {
+   "id": "msg-aicod",
+   "time": "2026-11-07T22:11:30.344Z",
+   "role": "user",
+   "text": "Too dense here, but keep the privacy."
+  },
+  {
+   "id": "msg-aicoe",
+   "time": "2026-11-07T22:11:30.344Z",
+   "role": "ai",
+   "text": "",
+   "html": "<b>Proposed change (preview — nothing applied yet)</b><ul><li>scope: selection — &quot;here&quot; → the drawn selection; 19 plants inside</li><li>reduce density 25 %</li><li>preserve: screen — \"keep the privacy\"</li><li>result: 37 → 32 plants (−5 +0 ~0); nothing outside the scope changed</li><li class=\"small\">2 screen-row plants kept untouched to preserve the screen (an intent; screening performance is not quantified)</li><li class=\"small\">reduce density by 25 % (default interpretation candidate — adjust before applying): 5 of 17 eligible plants removed, the most crowded first; nothing outside the scope moves</li></ul>Review it on the canvas, then <b>Apply</b> or <b>Cancel</b> in the Revision panel. Privacy is kept as an intent (screen-row plants untouched); screening performance is not quantified.",
+   "mode": "interpretation: offline-parser (rules: reduce_density, preserve_privacy)"
+  },
+  {
+   "id": "msg-aicog",
+   "time": "2026-11-07T22:11:30.344Z",
+   "role": "sys",
+   "text": "applied as v-aicof: 32 plants (5 removed, 0 added)"
+  },
+  {
+   "id": "msg-aicoh",
+   "time": "2026-11-07T22:11:30.344Z",
+   "role": "sys",
+   "text": "undo → v-aicob (37 plants)"
+  },
+  {
+   "id": "msg-aicoi",
+   "time": "2026-11-07T22:11:30.344Z",
+   "role": "sys",
+   "text": "redo → v-aicof (32 plants)"
+  },
+  {
+   "id": "msg-aicoj",
+   "time": "2026-11-07T22:11:30.344Z",
+   "role": "user",
+   "text": "Move the taller plants away from the tree."
+  },
+  {
+   "id": "msg-aicok",
+   "time": "2026-11-07T22:11:30.344Z",
+   "role": "ai",
+   "text": "",
+   "html": "<b>Proposed change (preview — nothing applied yet)</b><ul><li>scope: bed — no selection and no direction word — the whole current bed is assumed; draw a selection to narrow it; 32 plants inside</li><li>move away — \"tree\"</li><li>result: 32 → 32 plants (−0 +0 ~1); nothing outside the scope changed</li><li class=\"small\">move taller plants away from existing tree: 1 moved, 1 could not be moved within the bed</li></ul>Review it on the canvas, then <b>Apply</b> or <b>Cancel</b> in the Revision panel.",
+   "mode": "interpretation: offline-parser (rules: move_away)"
+  },
+  {
+   "id": "msg-aicom",
+   "time": "2026-11-07T22:11:30.344Z",
+   "role": "sys",
+   "text": "applied as v-aicol: 32 plants (0 removed, 0 added)"
+  },
+  {
+   "id": "msg-aicon",
+   "time": "2026-11-07T22:11:30.344Z",
+   "role": "sys",
+   "text": "demonstration journey complete — every step above changed the model; export or keep editing"
+  }
+ ],
+ "inputs": [],
+ "site": {
+  "id": "site-1",
+  "coordinate_system": "local-meters",
+  "orientation": {
+   "north_angle_degrees": 0,
+   "basis": "assumption (north = up until stated)"
+  },
+  "scale": {
+   "status": "user-stated",
+   "known_length_m": 6,
+   "source": "width × height typed above the canvas (rectangle)"
+  },
+  "boundary": [
+   [
+    0,
+    0
+   ],
+   [
+    6,
+    0
+   ],
+   [
+    6,
+    4
+   ],
+   [
+    0,
+    4
+   ]
+  ],
+  "boundary_status": "user-stated",
+  "features": [
+   {
+    "locked": true,
+    "kind": "existing-tree",
+    "position_m": [
+     1.5,
+     3
+    ],
+    "radius_m": null,
+    "label": "existing tree",
+    "source": "conversation: \"an old tree on the north\" — position inferred from \"north\" (a quarter of the way along that edge), canopy not stated",
+    "status": "inferred",
+    "id": "tree-aico6"
+   },
+   {
+    "locked": true,
+    "kind": "no-plant-zone",
+    "polygon": [
+     [
+      1.8,
+      0.6
+     ],
+     [
+      4.2,
+      0.6
+     ],
+     [
+      4.2,
+      2.2
+     ],
+     [
+      1.8,
+      2.2
+     ]
+    ],
+    "label": "open (kids)",
+    "source": "conversation: \"kids\" — extent suggested, not stated",
+    "status": "inferred",
+    "id": "open-aico7"
+   }
+  ],
+  "beds": [
+   {
+    "id": "bed-1",
+    "name": "Bed 1",
+    "polygon": [
+     [
+      0.3,
+      0.3
+     ],
+     [
+      5.7,
+      0.3
+     ],
+     [
+      5.7,
+      3.7
+     ],
+     [
+      0.3,
+      3.7
+     ]
+    ],
+    "status": "user-accepted",
+    "source": "suggested: the site inset by 0.3 m — accept, redraw or split it",
+    "goals": [],
+    "conditions_overrides": {},
+    "area_m2": 18.36
+   }
+  ],
+  "conditions": {
+   "light": {
+    "value": "part-shade",
+    "status": "user-stated",
+    "source": "conversation: \"part shade\"",
+    "note": null
+   },
+   "soil_type": {
+    "value": null,
+    "status": "unknown",
+    "source": null,
+    "note": null
+   },
+   "soil_drainage": {
+    "value": null,
+    "status": "unknown",
+    "source": null,
+    "note": null
+   },
+   "water": {
+    "value": null,
+    "status": "unknown",
+    "source": null,
+    "note": null
+   },
+   "wind": {
+    "value": null,
+    "status": "unknown",
+    "source": null,
+    "note": null
+   },
+   "irrigation": {
+    "value": null,
+    "status": "unknown",
+    "source": null,
+    "note": null
+   }
+  },
+  "values": [],
+  "notes": [
+   {
+    "kind": "existing-tree",
+    "side": "north",
+    "evidence": "an old tree on the north",
+    "placed": true
+   },
+   {
+    "kind": "no-plant-zone",
+    "where": "centre",
+    "reason": "kids",
+    "evidence": "kids",
+    "placed": true
+   },
+   {
+    "kind": "no-plant-zone",
+    "where": "centre",
+    "reason": "keep the middle open",
+    "evidence": "keep the middle open",
+    "placed": true
+   }
+  ]
+ },
+ "brief": {
+  "provenance": "offline-parser",
+  "values": {
+   "privacy": 2,
+   "maintenance_low": 2,
+   "ecology": 2,
+   "openness": 2
+  },
+  "hard_constraints": [
+   {
+    "id": "keep-tree",
+    "kind": "preserve-feature",
+    "text": "preserve the existing tree",
+    "evidence": "an old tree on the north"
+   },
+   {
+    "id": "keep-open",
+    "kind": "no-plant-zone",
+    "text": "keep the centre open (kids)",
+    "evidence": "kids"
+   },
+   {
+    "id": "bed-only",
+    "kind": "bed-boundary",
+    "text": "never place plants outside accepted beds",
+    "evidence": "rule"
+   }
+  ],
+  "functions": [
+   {
+    "function": "z:screen",
+    "where": "north-edge",
+    "basis": "privacy → Screen (blocks a view); Scrim would only filter it",
+    "evidence": "privacy"
+   },
+   {
+    "function": "z:scrim",
+    "where": "north-edge",
+    "basis": "openness + privacy → Scrim as the alternative to check",
+    "evidence": "openness",
+    "alternative": true
+   },
+   {
+    "function": "z:ground_cover",
+    "where": "bed-interior",
+    "basis": "low maintenance → carpeting ground layer reduces open soil (design heuristic, not a database claim)",
+    "evidence": "low maintenance"
+   }
+  ],
+  "composition": [
+   "taller layer along the screened edge",
+   "open middle, graded density toward the edge",
+   "layered: structure + ground cover"
+  ],
+  "unknowns": [
+   "soil type and drainage",
+   "ecological performance — the database records some ecological-value claims (pollinator, bird food …) but no pollinator-interaction data; no score is possible"
+  ],
+  "evidence": [
+   {
+    "rule": "existing-tree",
+    "text": "an old tree on the north",
+    "says": "an existing tree on the north side — its species and canopy size are unknown until stated"
+   },
+   {
+    "rule": "open-centre",
+    "text": "kids",
+    "says": "an open area in the middle (kids) — a no-plant zone"
+   },
+   {
+    "rule": "size-word",
+    "text": "small backyard",
+    "says": "a small backyard — no dimensions yet"
+   },
+   {
+    "rule": "privacy",
+    "text": "privacy",
+    "says": "value: privacy"
+   },
+   {
+    "rule": "low_maintenance",
+    "text": "low maintenance",
+    "says": "value: maintenance low"
+   },
+   {
+    "rule": "ecology",
+    "text": "ecological",
+    "says": "value: ecology"
+   },
+   {
+    "rule": "openness",
+    "text": "not feel closed",
+    "says": "value: openness"
+   },
+   {
+    "rule": "open-centre",
+    "text": "keep the middle open",
+    "says": "an open area in the middle (keep the middle open) — a no-plant zone"
+   },
+   {
+    "rule": "light",
+    "text": "part shade",
+    "says": "light stated: part shade"
+   },
+   {
+    "rule": "privacy",
+    "text": "Privacy",
+    "says": "value: privacy"
+   },
+   {
+    "rule": "openness",
+    "text": "open",
+    "says": "value: openness"
+   }
+  ],
+  "updated": "2026-11-07T22:11:30.344Z"
+ },
+ "versions": [
+  {
+   "label": "generated (seed 42)",
+   "seed": 42,
+   "bed_id": "bed-1",
+   "generator": {
+    "operators": [
+     "along_edge",
+     "stagger",
+     "fill_drift",
+     "repeat_accent"
+    ],
+    "density": 1,
+    "params": {
+     "density": 1,
+     "stagger": true,
+     "id_start": 0
+    }
+   },
+   "knowledge_snapshot": {
+    "generated": "2026-11-07",
+    "generated_by": "tools/build_explorer.py",
+    "method": "M49",
+    "inputs": {
+     "kg_generated": "2026-11-03",
+     "xyz_generated": "2026-11-03",
+     "relations_updated": "2026-11-02",
+     "schema_version": "0.4.3",
+     "ontology_version": "0.2.0"
+    }
+   },
+   "geometry_precision": "approximate (user-calibrated)",
+   "plant_objects": [
+    {
+     "id": "plant-001",
+     "species_id": "plant:gaultheria-shallon",
+     "bed_id": "bed-1",
+     "position_m": [
+      5.36,
+      3.32
+     ],
+     "proxy_radius_m": 0.38,
+     "proxy_source": {
+      "claim": "gaultheria-shallon:mature_spread:rhs01",
+      "range_m": [
+       0.5,
+       1
+      ],
+      "status": "proxy: half the claimed mature spread",
+      "note": "one claimed range"
+     },
+     "height_m": 1.25,
+     "height_source": {
+      "claim": "gaultheria-shallon:mature_height:rhs01",
+      "range_m": [
+       1,
+       1.5
+      ],
+      "status": "proxy from a claimed height range"
+     },
+     "role": "screen",
+     "group_id": "group-1",
+     "zone_id": "zone-screen-north-edge",
+     "locked": false,
+     "origin": "generated"
+    },
+    {
+     "id": "plant-002",
+     "species_id": "plant:gaultheria-shallon",
+     "bed_id": "bed-1",
+     "position_m": [
+      4.18,
+      3.32
+     ],
+     "proxy_radius_m": 0.38,
+     "proxy_source": {
+      "claim": "gaultheria-shallon:mature_spread:rhs01",
+      "range_m": [
+       0.5,
+       1
+      ],
+      "status": "proxy: half the claimed mature spread",
+      "note": "one claimed range"
+     },
+     "height_m": 1.25,
+     "height_source": {
+      "claim": "gaultheria-shallon:mature_height:rhs01",
+      "range_m": [
+       1,
+       1.5
+      ],
+      "status": "proxy from a claimed height range"
+     },
+     "role": "screen",
+     "group_id": "group-1",
+     "zone_id": "zone-screen-north-edge",
+     "locked": false,
+     "origin": "generated"
+    },
+    {
+     "id": "plant-003",
+     "species_id": "plant:gaultheria-shallon",
+     "bed_id": "bed-1",
+     "position_m": [
+      3,
+      3.32
+     ],
+     "proxy_radius_m": 0.38,
+     "proxy_source": {
+      "claim": "gaultheria-shallon:mature_spread:rhs01",
+      "range_m": [
+       0.5,
+       1
+      ],
+      "status": "proxy: half the claimed mature spread",
+      "note": "one claimed range"
+     },
+     "height_m": 1.25,
+     "height_source": {
+      "claim": "gaultheria-shallon:mature_height:rhs01",
+      "range_m": [
+       1,
+       1.5
+      ],
+      "status": "proxy from a claimed height range"
+     },
+     "role": "screen",
+     "group_id": "group-1",
+     "zone_id": "zone-screen-north-edge",
+     "locked": false,
+     "origin": "generated"
+    },
+    {
+     "id": "plant-004",
+     "species_id": "plant:vaccinium-ovatum",
+     "bed_id": "bed-1",
+     "position_m": [
+      5.07,
+      2.31
+     ],
+     "proxy_radius_m": 0.63,
+     "proxy_source": {
+      "claim": "vaccinium-ovatum:mature_spread:rhs01",
+      "range_m": [
+       1,
+       1.5
+      ],
+      "status": "proxy: half the claimed mature spread",
+      "note": "one claimed range"
+     },
+     "height_m": 1.75,
+     "height_source": {
+      "claim": "vaccinium-ovatum:mature_height:rhs01",
+      "range_m": [
+       0.5,
+       3
+      ],
+      "status": "proxy from a claimed height range"
+     },
+     "role": "screen-layer",
+     "group_id": "group-2",
+     "zone_id": "zone-screen-north-edge",
+     "locked": false,
+     "origin": "generated"
+    },
+    {
+     "id": "plant-005",
+     "species_id": "plant:vaccinium-ovatum",
+     "bed_id": "bed-1",
+     "position_m": [
+      3.89,
+      2.31
+     ],
+     "proxy_radius_m": 0.63,
+     "proxy_source": {
+      "claim": "vaccinium-ovatum:mature_spread:rhs01",
+      "range_m": [
+       1,
+       1.5
+      ],
+      "status": "proxy: half the claimed mature spread",
+      "note": "one claimed range"
+     },
+     "height_m": 1.75,
+     "height_source": {
+      "claim": "vaccinium-ovatum:mature_height:rhs01",
+      "range_m": [
+       0.5,
+       3
+      ],
+      "status": "proxy from a claimed height range"
+     },
+     "role": "screen-layer",
+     "group_id": "group-2",
+     "zone_id": "zone-screen-north-edge",
+     "locked": false,
+     "origin": "generated"
+    },
+    {
+     "id": "plant-006",
+     "species_id": "plant:vaccinium-ovatum",
+     "bed_id": "bed-1",
+     "position_m": [
+      2.7,
+      2.31
+     ],
+     "proxy_radius_m": 0.63,
+     "proxy_source": {
+      "claim": "vaccinium-ovatum:mature_spread:rhs01",
+      "range_m": [
+       1,
+       1.5
+      ],
+      "status": "proxy: half the claimed mature spread",
+      "note": "one claimed range"
+     },
+     "height_m": 1.75,
+     "height_source": {
+      "claim": "vaccinium-ovatum:mature_height:rhs01",
+      "range_m": [
+       0.5,
+       3
+      ],
+      "status": "proxy from a claimed height range"
+     },
+     "role": "screen-layer",
+     "group_id": "group-2",
+     "zone_id": "zone-screen-north-edge",
+     "locked": false,
+     "origin": "generated"
+    },
+    {
+     "id": "plant-007",
+     "species_id": "plant:arctostaphylos-uva-ursi",
+     "bed_id": "bed-1",
+     "position_m": [
+      0.57,
+      0.54
+     ],
+     "proxy_radius_m": 0.15,
+     "proxy_source": {
+      "claim": "arctostaphylos-uva-ursi:mature_spread:rhs01",
+      "range_m": [
+       0.1,
+       0.5
+      ],
+      "status": "proxy: half the claimed mature spread",
+      "note": "median of 2 claimed ranges"
+     },
+     "height_m": 0.1,
+     "height_source": {
+      "claim": "arctostaphylos-uva-ursi:mature_height:osu02",
+      "range_m": [
+       0.05,
+       0.15
+      ],
+      "status": "proxy from a claimed height range"
+     },
+     "role": "ground",
+     "group_id": "group-3",
+     "zone_id": "zone-fill",
+     "locked": false,
+     "origin": "generated"
+    },
+    {
+     "id": "plant-008",
+     "species_id": "plant:arctostaphylos-uva-ursi",
+     "bed_id": "bed-1",
+     "position_m": [
+      1.12,
+      0.58
+     ],
+     "proxy_radius_m": 0.15,
+     "proxy_source": {
+      "claim": "arctostaphylos-uva-ursi:mature_spread:rhs01",
+      "range_m": [
+       0.1,
+       0.5
+      ],
+      "status": "proxy: half the claimed mature spread",
+      "note": "median of 2 claimed ranges"
+     },
+     "height_m": 0.1,
+     "height_source": {
+      "claim": "arctostaphylos-uva-ursi:mature_height:osu02",
+      "range_m": [
+       0.05,
+       0.15
+      ],
+      "status": "proxy from a claimed height range"
+     },
+     "role": "ground",
+     "group_id": "group-3",
+     "zone_id": "zone-fill",
+     "locked": false,
+     "origin": "generated"
+    },
+    {
+     "id": "plant-009",
+     "species_id": "plant:arctostaphylos-uva-ursi",
+     "bed_id": "bed-1",
+     "position_m": [
+      1.51,
+      0.56
+     ],
+     "proxy_radius_m": 0.15,
+     "proxy_source": {
+      "claim": "arctostaphylos-uva-ursi:mature_spread:rhs01",
+      "range_m": [
+       0.1,
+       0.5
+      ],
+      "status": "proxy: half the claimed mature spread",
+      "note": "median of 2 claimed ranges"
+     },
+     "height_m": 0.1,
+     "height_source": {
+      "claim": "arctostaphylos-uva-ursi:mature_height:osu02",
+      "range_m": [
+       0.05,
+       0.15
+      ],
+      "status": "proxy from a claimed height range"
+     },
+     "role": "ground",
+     "group_id": "group-3",
+     "zone_id": "zone-fill",
+     "locked": false,
+     "origin": "generated"
+    },
+    {
+     "id": "plant-010",
+     "species_id": "plant:achillea-millefolium",
+     "bed_id": "bed-1",
+     "position_m": [
+      2.03,
+      0.58
+     ],
+     "proxy_radius_m": 0.15,
+     "proxy_source": {
+      "claim": "achillea-millefolium:mature_spread:rhs01",
+      "range_m": [
+       0.1,
+       0.5
+      ],
+      "status": "proxy: half the claimed mature spread",
+      "note": "median of 2 claimed ranges"
+     },
+     "height_m": 0.55,
+     "height_source": {
+      "claim": "achillea-millefolium:mature_height:eflora01",
+      "range_m": [
+       0.1,
+       1
+      ],
+      "status": "proxy from a claimed height range"
+     },
+     "role": "accent",
+     "group_id": "group-4",
+     "zone_id": "zone-fill",
+     "locked": false,
+     "origin": "generated"
+    },
+    {
+     "id": "plant-011",
+     "species_id": "plant:arctostaphylos-uva-ursi",
+     "bed_id": "bed-1",
+     "position_m": [
+      2.65,
+      0.55
+     ],
+     "proxy_radius_m": 0.15,
+     "proxy_source": {
+      "claim": "arctostaphylos-uva-ursi:mature_spread:rhs01",
+      "range_m": [
+       0.1,
+       0.5
+      ],
+      "status": "proxy: half the claimed mature spread",
+      "note": "median of 2 claimed ranges"
+     },
+     "height_m": 0.1,
+     "height_source": {
+      "claim": "arctostaphylos-uva-ursi:mature_height:osu02",
+      "range_m": [
+       0.05,
+       0.15
+      ],
+      "status": "proxy from a claimed height range"
+     },
+     "role": "ground",
+     "group_id": "group-3",
+     "zone_id": "zone-fill",
+     "locked": false,
+     "origin": "generated"
+    },
+    {
+     "id": "plant-012",
+     "species_id": "plant:achillea-millefolium",
+     "bed_id": "bed-1",
+     "position_m": [
+      4.64,
+      0.57
+     ],
+     "proxy_radius_m": 0.15,
+     "proxy_source": {
+      "claim": "achillea-millefolium:mature_spread:rhs01",
+      "range_m": [
+       0.1,
+       0.5
+      ],
+      "status": "proxy: half the claimed mature spread",
+      "note": "median of 2 claimed ranges"
+     },
+     "height_m": 0.55,
+     "height_source": {
+      "claim": "achillea-millefolium:mature_height:eflora01",
+      "range_m": [
+       0.1,
+       1
+      ],
+      "status": "proxy from a claimed height range"
+     },
+     "role": "accent",
+     "group_id": "group-4",
+     "zone_id": "zone-fill",
+     "locked": false,
+     "origin": "generated"
+    },
+    {
+     "id": "plant-013",
+     "species_id": "plant:achillea-millefolium",
+     "bed_id": "bed-1",
+     "position_m": [
+      5.03,
+      0.55
+     ],
+     "proxy_radius_m": 0.15,
+     "proxy_source": {
+      "claim": "achillea-millefolium:mature_spread:rhs01",
+      "range_m": [
+       0.1,
+       0.5
+      ],
+      "status": "proxy: half the claimed mature spread",
+      "note": "median of 2 claimed ranges"
+     },
+     "height_m": 0.55,
+     "height_source": {
+      "claim": "achillea-millefolium:mature_height:eflora01",
+      "range_m": [
+       0.1,
+       1
+      ],
+      "status": "proxy from a claimed height range"
+     },
+     "role": "accent",
+     "group_id": "group-4",
+     "zone_id": "zone-fill",
+     "locked": false,
+     "origin": "generated"
+    },
+    {
+     "id": "plant-014",
+     "species_id": "plant:arctostaphylos-uva-ursi",
+     "bed_id": "bed-1",
+     "position_m": [
+      0.82,
+      0.91
+     ],
+     "proxy_radius_m": 0.15,
+     "proxy_source": {
+      "claim": "arctostaphylos-uva-ursi:mature_spread:rhs01",
+      "range_m": [
+       0.1,
+       0.5
+      ],
+      "status": "proxy: half the claimed mature spread",
+      "note": "median of 2 claimed ranges"
+     },
+     "height_m": 0.1,
+     "height_source": {
+      "claim": "arctostaphylos-uva-ursi:mature_height:osu02",
+      "range_m": [
+       0.05,
+       0.15
+      ],
+      "status": "proxy from a claimed height range"
+     },
+     "role": "ground",
+     "group_id": "group-3",
+     "zone_id": "zone-fill",
+     "locked": false,
+     "origin": "generated"
+    },
+    {
+     "id": "plant-015",
+     "species_id": "plant:arctostaphylos-uva-ursi",
+     "bed_id": "bed-1",
+     "position_m": [
+      1.27,
+      0.91
+     ],
+     "proxy_radius_m": 0.15,
+     "proxy_source": {
+      "claim": "arctostaphylos-uva-ursi:mature_spread:rhs01",
+      "range_m": [
+       0.1,
+       0.5
+      ],
+      "status": "proxy: half the claimed mature spread",
+      "note": "median of 2 claimed ranges"
+     },
+     "height_m": 0.1,
+     "height_source": {
+      "claim": "arctostaphylos-uva-ursi:mature_height:osu02",
+      "range_m": [
+       0.05,
+       0.15
+      ],
+      "status": "proxy from a claimed height range"
+     },
+     "role": "ground",
+     "group_id": "group-3",
+     "zone_id": "zone-fill",
+     "locked": false,
+     "origin": "generated"
+    },
+    {
+     "id": "plant-016",
+     "species_id": "plant:arctostaphylos-uva-ursi",
+     "bed_id": "bed-1",
+     "position_m": [
+      1.77,
+      1.04
+     ],
+     "proxy_radius_m": 0.15,
+     "proxy_source": {
+      "claim": "arctostaphylos-uva-ursi:mature_spread:rhs01",
+      "range_m": [
+       0.1,
+       0.5
+      ],
+      "status": "proxy: half the claimed mature spread",
+      "note": "median of 2 claimed ranges"
+     },
+     "height_m": 0.1,
+     "height_source": {
+      "claim": "arctostaphylos-uva-ursi:mature_height:osu02",
+      "range_m": [
+       0.05,
+       0.15
+      ],
+      "status": "proxy from a claimed height range"
+     },
+     "role": "ground",
+     "group_id": "group-3",
+     "zone_id": "zone-fill",
+     "locked": false,
+     "origin": "generated"
+    },
+    {
+     "id": "plant-017",
+     "species_id": "plant:polystichum-munitum",
+     "bed_id": "bed-1",
+     "position_m": [
+      4.27,
+      0.91
+     ],
+     "proxy_radius_m": 0.63,
+     "proxy_source": {
+      "claim": "polystichum-munitum:mature_spread:rhs01",
+      "range_m": [
+       1,
+       1.5
+      ],
+      "status": "proxy: half the claimed mature spread",
+      "note": "one claimed range"
+     },
+     "height_m": 0.85,
+     "height_source": {
+      "claim": "polystichum-munitum:mature_height:rhs01",
+      "range_m": [
+       0.2,
+       1.5
+      ],
+      "status": "proxy from a claimed height range"
+     },
+     "role": "ground",
+     "group_id": "group-3",
+     "zone_id": "zone-fill",
+     "locked": false,
+     "origin": "generated"
+    },
+    {
+     "id": "plant-018",
+     "species_id": "plant:achillea-millefolium",
+     "bed_id": "bed-1",
+     "position_m": [
+      4.87,
+      1.01
+     ],
+     "proxy_radius_m": 0.15,
+     "proxy_source": {
+      "claim": "achillea-millefolium:mature_spread:rhs01",
+      "range_m": [
+       0.1,
+       0.5
+      ],
+      "status": "proxy: half the claimed mature spread",
+      "note": "median of 2 claimed ranges"
+     },
+     "height_m": 0.55,
+     "height_source": {
+      "claim": "achillea-millefolium:mature_height:eflora01",
+      "range_m": [
+       0.1,
+       1
+      ],
+      "status": "proxy from a claimed height range"
+     },
+     "role": "accent",
+     "group_id": "group-4",
+     "zone_id": "zone-fill",
+     "locked": false,
+     "origin": "generated"
+    },
+    {
+     "id": "plant-019",
+     "species_id": "plant:arctostaphylos-uva-ursi",
+     "bed_id": "bed-1",
+     "position_m": [
+      5.32,
+      1.02
+     ],
+     "proxy_radius_m": 0.15,
+     "proxy_source": {
+      "claim": "arctostaphylos-uva-ursi:mature_spread:rhs01",
+      "range_m": [
+       0.1,
+       0.5
+      ],
+      "status": "proxy: half the claimed mature spread",
+      "note": "median of 2 claimed ranges"
+     },
+     "height_m": 0.1,
+     "height_source": {
+      "claim": "arctostaphylos-uva-ursi:mature_height:osu02",
+      "range_m": [
+       0.05,
+       0.15
+      ],
+      "status": "proxy from a claimed height range"
+     },
+     "role": "ground",
+     "group_id": "group-3",
+     "zone_id": "zone-fill",
+     "locked": false,
+     "origin": "generated"
+    },
+    {
+     "id": "plant-020",
+     "species_id": "plant:arctostaphylos-uva-ursi",
+     "bed_id": "bed-1",
+     "position_m": [
+      1.1,
+      1.5
+     ],
+     "proxy_radius_m": 0.15,
+     "proxy_source": {
+      "claim": "arctostaphylos-uva-ursi:mature_spread:rhs01",
+      "range_m": [
+       0.1,
+       0.5
+      ],
+      "status": "proxy: half the claimed mature spread",
+      "note": "median of 2 claimed ranges"
+     },
+     "height_m": 0.1,
+     "height_source": {
+      "claim": "arctostaphylos-uva-ursi:mature_height:osu02",
+      "range_m": [
+       0.05,
+       0.15
+      ],
+      "status": "proxy from a claimed height range"
+     },
+     "role": "ground",
+     "group_id": "group-3",
+     "zone_id": "zone-fill",
+     "locked": false,
+     "origin": "generated"
+    },
+    {
+     "id": "plant-021",
+     "species_id": "plant:achillea-millefolium",
+     "bed_id": "bed-1",
+     "position_m": [
+      1.57,
+      1.38
+     ],
+     "proxy_radius_m": 0.15,
+     "proxy_source": {
+      "claim": "achillea-millefolium:mature_spread:rhs01",
+      "range_m": [
+       0.1,
+       0.5
+      ],
+      "status": "proxy: half the claimed mature spread",
+      "note": "median of 2 claimed ranges"
+     },
+     "height_m": 0.55,
+     "height_source": {
+      "claim": "achillea-millefolium:mature_height:eflora01",
+      "range_m": [
+       0.1,
+       1
+      ],
+      "status": "proxy from a claimed height range"
+     },
+     "role": "accent",
+     "group_id": "group-4",
+     "zone_id": "zone-fill",
+     "locked": false,
+     "origin": "generated"
+    },
+    {
+     "id": "plant-022",
+     "species_id": "plant:arctostaphylos-uva-ursi",
+     "bed_id": "bed-1",
+     "position_m": [
+      5.05,
+      1.35
+     ],
+     "proxy_radius_m": 0.15,
+     "proxy_source": {
+      "claim": "arctostaphylos-uva-ursi:mature_spread:rhs01",
+      "range_m": [
+       0.1,
+       0.5
+      ],
+      "status": "proxy: half the claimed mature spread",
+      "note": "median of 2 claimed ranges"
+     },
+     "height_m": 0.1,
+     "height_source": {
+      "claim": "arctostaphylos-uva-ursi:mature_height:osu02",
+      "range_m": [
+       0.05,
+       0.15
+      ],
+      "status": "proxy from a claimed height range"
+     },
+     "role": "ground",
+     "group_id": "group-3",
+     "zone_id": "zone-fill",
+     "locked": false,
+     "origin": "generated"
+    },
+    {
+     "id": "plant-023",
+     "species_id": "plant:arctostaphylos-uva-ursi",
+     "bed_id": "bed-1",
+     "position_m": [
+      5.6,
+      1.43
+     ],
+     "proxy_radius_m": 0.15,
+     "proxy_source": {
+      "claim": "arctostaphylos-uva-ursi:mature_spread:rhs01",
+      "range_m": [
+       0.1,
+       0.5
+      ],
+      "status": "proxy: half the claimed mature spread",
+      "note": "median of 2 claimed ranges"
+     },
+     "height_m": 0.1,
+     "height_source": {
+      "claim": "arctostaphylos-uva-ursi:mature_height:osu02",
+      "range_m": [
+       0.05,
+       0.15
+      ],
+      "status": "proxy from a claimed height range"
+     },
+     "role": "ground",
+     "group_id": "group-3",
+     "zone_id": "zone-fill",
+     "locked": false,
+     "origin": "generated"
+    },
+    {
+     "id": "plant-024",
+     "species_id": "plant:achillea-millefolium",
+     "bed_id": "bed-1",
+     "position_m": [
+      0.83,
+      1.94
+     ],
+     "proxy_radius_m": 0.15,
+     "proxy_source": {
+      "claim": "achillea-millefolium:mature_spread:rhs01",
+      "range_m": [
+       0.1,
+       0.5
+      ],
+      "status": "proxy: half the claimed mature spread",
+      "note": "median of 2 claimed ranges"
+     },
+     "height_m": 0.55,
+     "height_source": {
+      "claim": "achillea-millefolium:mature_height:eflora01",
+      "range_m": [
+       0.1,
+       1
+      ],
+      "status": "proxy from a claimed height range"
+     },
+     "role": "accent",
+     "group_id": "group-4",
+     "zone_id": "zone-fill",
+     "locked": false,
+     "origin": "generated"
+    },
+    {
+     "id": "plant-025",
+     "species_id": "plant:arctostaphylos-uva-ursi",
+     "bed_id": "bed-1",
+     "position_m": [
+      1.24,
+      1.91
+     ],
+     "proxy_radius_m": 0.15,
+     "proxy_source": {
+      "claim": "arctostaphylos-uva-ursi:mature_spread:rhs01",
+      "range_m": [
+       0.1,
+       0.5
+      ],
+      "status": "proxy: half the claimed mature spread",
+      "note": "median of 2 claimed ranges"
+     },
+     "height_m": 0.1,
+     "height_source": {
+      "claim": "arctostaphylos-uva-ursi:mature_height:osu02",
+      "range_m": [
+       0.05,
+       0.15
+      ],
+      "status": "proxy from a claimed height range"
+     },
+     "role": "ground",
+     "group_id": "group-3",
+     "zone_id": "zone-fill",
+     "locked": false,
+     "origin": "generated"
+    },
+    {
+     "id": "plant-026",
+     "species_id": "plant:arctostaphylos-uva-ursi",
+     "bed_id": "bed-1",
+     "position_m": [
+      4.83,
+      1.89
+     ],
+     "proxy_radius_m": 0.15,
+     "proxy_source": {
+      "claim": "arctostaphylos-uva-ursi:mature_spread:rhs01",
+      "range_m": [
+       0.1,
+       0.5
+      ],
+      "status": "proxy: half the claimed mature spread",
+      "note": "median of 2 claimed ranges"
+     },
+     "height_m": 0.1,
+     "height_source": {
+      "claim": "arctostaphylos-uva-ursi:mature_height:osu02",
+      "range_m": [
+       0.05,
+       0.15
+      ],
+      "status": "proxy from a claimed height range"
+     },
+     "role": "ground",
+     "group_id": "group-3",
+     "zone_id": "zone-fill",
+     "locked": false,
+     "origin": "generated"
+    },
+    {
+     "id": "plant-027",
+     "species_id": "plant:arctostaphylos-uva-ursi",
+     "bed_id": "bed-1",
+     "position_m": [
+      5.34,
+      1.91
+     ],
+     "proxy_radius_m": 0.15,
+     "proxy_source": {
+      "claim": "arctostaphylos-uva-ursi:mature_spread:rhs01",
+      "range_m": [
+       0.1,
+       0.5
+      ],
+      "status": "proxy: half the claimed mature spread",
+      "note": "median of 2 claimed ranges"
+     },
+     "height_m": 0.1,
+     "height_source": {
+      "claim": "arctostaphylos-uva-ursi:mature_height:osu02",
+      "range_m": [
+       0.05,
+       0.15
+      ],
+      "status": "proxy from a claimed height range"
+     },
+     "role": "ground",
+     "group_id": "group-3",
+     "zone_id": "zone-fill",
+     "locked": false,
+     "origin": "generated"
+    },
+    {
+     "id": "plant-028",
+     "species_id": "plant:arctostaphylos-uva-ursi",
+     "bed_id": "bed-1",
+     "position_m": [
+      3.32,
+      2.68
+     ],
+     "proxy_radius_m": 0.15,
+     "proxy_source": {
+      "claim": "arctostaphylos-uva-ursi:mature_spread:rhs01",
+      "range_m": [
+       0.1,
+       0.5
+      ],
+      "status": "proxy: half the claimed mature spread",
+      "note": "median of 2 claimed ranges"
+     },
+     "height_m": 0.1,
+     "height_source": {
+      "claim": "arctostaphylos-uva-ursi:mature_height:osu02",
+      "range_m": [
+       0.05,
+       0.15
+      ],
+      "status": "proxy from a claimed height range"
+     },
+     "role": "ground",
+     "group_id": "group-3",
+     "zone_id": "zone-fill",
+     "locked": false,
+     "origin": "generated"
+    },
+    {
+     "id": "plant-029",
+     "species_id": "plant:arctostaphylos-uva-ursi",
+     "bed_id": "bed-1",
+     "position_m": [
+      4.27,
+      2.79
+     ],
+     "proxy_radius_m": 0.15,
+     "proxy_source": {
+      "claim": "arctostaphylos-uva-ursi:mature_spread:rhs01",
+      "range_m": [
+       0.1,
+       0.5
+      ],
+      "status": "proxy: half the claimed mature spread",
+      "note": "median of 2 claimed ranges"
+     },
+     "height_m": 0.1,
+     "height_source": {
+      "claim": "arctostaphylos-uva-ursi:mature_height:osu02",
+      "range_m": [
+       0.05,
+       0.15
+      ],
+      "status": "proxy from a claimed height range"
+     },
+     "role": "ground",
+     "group_id": "group-3",
+     "zone_id": "zone-fill",
+     "locked": false,
+     "origin": "generated"
+    },
+    {
+     "id": "plant-030",
+     "species_id": "plant:arctostaphylos-uva-ursi",
+     "bed_id": "bed-1",
+     "position_m": [
+      4.89,
+      2.82
+     ],
+     "proxy_radius_m": 0.15,
+     "proxy_source": {
+      "claim": "arctostaphylos-uva-ursi:mature_spread:rhs01",
+      "range_m": [
+       0.1,
+       0.5
+      ],
+      "status": "proxy: half the claimed mature spread",
+      "note": "median of 2 claimed ranges"
+     },
+     "height_m": 0.1,
+     "height_source": {
+      "claim": "arctostaphylos-uva-ursi:mature_height:osu02",
+      "range_m": [
+       0.05,
+       0.15
+      ],
+      "status": "proxy from a claimed height range"
+     },
+     "role": "ground",
+     "group_id": "group-3",
+     "zone_id": "zone-fill",
+     "locked": false,
+     "origin": "generated"
+    },
+    {
+     "id": "plant-031",
+     "species_id": "plant:arctostaphylos-uva-ursi",
+     "bed_id": "bed-1",
+     "position_m": [
+      5.44,
+      2.7
+     ],
+     "proxy_radius_m": 0.15,
+     "proxy_source": {
+      "claim": "arctostaphylos-uva-ursi:mature_spread:rhs01",
+      "range_m": [
+       0.1,
+       0.5
+      ],
+      "status": "proxy: half the claimed mature spread",
+      "note": "median of 2 claimed ranges"
+     },
+     "height_m": 0.1,
+     "height_source": {
+      "claim": "arctostaphylos-uva-ursi:mature_height:osu02",
+      "range_m": [
+       0.05,
+       0.15
+      ],
+      "status": "proxy from a claimed height range"
+     },
+     "role": "ground",
+     "group_id": "group-3",
+     "zone_id": "zone-fill",
+     "locked": false,
+     "origin": "generated"
+    },
+    {
+     "id": "plant-032",
+     "species_id": "plant:arctostaphylos-uva-ursi",
+     "bed_id": "bed-1",
+     "position_m": [
+      3.61,
+      3.27
+     ],
+     "proxy_radius_m": 0.15,
+     "proxy_source": {
+      "claim": "arctostaphylos-uva-ursi:mature_spread:rhs01",
+      "range_m": [
+       0.1,
+       0.5
+      ],
+      "status": "proxy: half the claimed mature spread",
+      "note": "median of 2 claimed ranges"
+     },
+     "height_m": 0.1,
+     "height_source": {
+      "claim": "arctostaphylos-uva-ursi:mature_height:osu02",
+      "range_m": [
+       0.05,
+       0.15
+      ],
+      "status": "proxy from a claimed height range"
+     },
+     "role": "ground",
+     "group_id": "group-3",
+     "zone_id": "zone-fill",
+     "locked": false,
+     "origin": "generated"
+    },
+    {
+     "id": "plant-033",
+     "species_id": "plant:arctostaphylos-uva-ursi",
+     "bed_id": "bed-1",
+     "position_m": [
+      4.62,
+      3.15
+     ],
+     "proxy_radius_m": 0.15,
+     "proxy_source": {
+      "claim": "arctostaphylos-uva-ursi:mature_spread:rhs01",
+      "range_m": [
+       0.1,
+       0.5
+      ],
+      "status": "proxy: half the claimed mature spread",
+      "note": "median of 2 claimed ranges"
+     },
+     "height_m": 0.1,
+     "height_source": {
+      "claim": "arctostaphylos-uva-ursi:mature_height:osu02",
+      "range_m": [
+       0.05,
+       0.15
+      ],
+      "status": "proxy from a claimed height range"
+     },
+     "role": "ground",
+     "group_id": "group-3",
+     "zone_id": "zone-fill",
+     "locked": false,
+     "origin": "generated"
+    },
+    {
+     "id": "plant-034",
+     "species_id": "plant:arctostaphylos-uva-ursi",
+     "bed_id": "bed-1",
+     "position_m": [
+      2.79,
+      3.6
+     ],
+     "proxy_radius_m": 0.15,
+     "proxy_source": {
+      "claim": "arctostaphylos-uva-ursi:mature_spread:rhs01",
+      "range_m": [
+       0.1,
+       0.5
+      ],
+      "status": "proxy: half the claimed mature spread",
+      "note": "median of 2 claimed ranges"
+     },
+     "height_m": 0.1,
+     "height_source": {
+      "claim": "arctostaphylos-uva-ursi:mature_height:osu02",
+      "range_m": [
+       0.05,
+       0.15
+      ],
+      "status": "proxy from a claimed height range"
+     },
+     "role": "ground",
+     "group_id": "group-3",
+     "zone_id": "zone-fill",
+     "locked": false,
+     "origin": "generated"
+    },
+    {
+     "id": "plant-035",
+     "species_id": "plant:arctostaphylos-uva-ursi",
+     "bed_id": "bed-1",
+     "position_m": [
+      3.31,
+      3.6
+     ],
+     "proxy_radius_m": 0.15,
+     "proxy_source": {
+      "claim": "arctostaphylos-uva-ursi:mature_spread:rhs01",
+      "range_m": [
+       0.1,
+       0.5
+      ],
+      "status": "proxy: half the claimed mature spread",
+      "note": "median of 2 claimed ranges"
+     },
+     "height_m": 0.1,
+     "height_source": {
+      "claim": "arctostaphylos-uva-ursi:mature_height:osu02",
+      "range_m": [
+       0.05,
+       0.15
+      ],
+      "status": "proxy from a claimed height range"
+     },
+     "role": "ground",
+     "group_id": "group-3",
+     "zone_id": "zone-fill",
+     "locked": false,
+     "origin": "generated"
+    },
+    {
+     "id": "plant-036",
+     "species_id": "plant:arctostaphylos-uva-ursi",
+     "bed_id": "bed-1",
+     "position_m": [
+      3.88,
+      3.58
+     ],
+     "proxy_radius_m": 0.15,
+     "proxy_source": {
+      "claim": "arctostaphylos-uva-ursi:mature_spread:rhs01",
+      "range_m": [
+       0.1,
+       0.5
+      ],
+      "status": "proxy: half the claimed mature spread",
+      "note": "median of 2 claimed ranges"
+     },
+     "height_m": 0.1,
+     "height_source": {
+      "claim": "arctostaphylos-uva-ursi:mature_height:osu02",
+      "range_m": [
+       0.05,
+       0.15
+      ],
+      "status": "proxy from a claimed height range"
+     },
+     "role": "ground",
+     "group_id": "group-3",
+     "zone_id": "zone-fill",
+     "locked": false,
+     "origin": "generated"
+    },
+    {
+     "id": "plant-037",
+     "species_id": "plant:arctostaphylos-uva-ursi",
+     "bed_id": "bed-1",
+     "position_m": [
+      4.83,
+      3.56
+     ],
+     "proxy_radius_m": 0.15,
+     "proxy_source": {
+      "claim": "arctostaphylos-uva-ursi:mature_spread:rhs01",
+      "range_m": [
+       0.1,
+       0.5
+      ],
+      "status": "proxy: half the claimed mature spread",
+      "note": "median of 2 claimed ranges"
+     },
+     "height_m": 0.1,
+     "height_source": {
+      "claim": "arctostaphylos-uva-ursi:mature_height:osu02",
+      "range_m": [
+       0.05,
+       0.15
+      ],
+      "status": "proxy from a claimed height range"
+     },
+     "role": "ground",
+     "group_id": "group-3",
+     "zone_id": "zone-fill",
+     "locked": false,
+     "origin": "generated"
+    }
+   ],
+   "groups": [
+    {
+     "id": "group-1",
+     "bed_id": "bed-1",
+     "zone_id": "zone-screen-north-edge",
+     "role": "screen",
+     "operator": "along_edge",
+     "params": {
+      "spacing": "0.75 × claimed mature spread",
+      "inset": "proxy radius",
+      "species": [
+       "plant:gaultheria-shallon",
+       "plant:vaccinium-ovatum"
+      ],
+      "alternate": true
+     },
+     "plant_ids": [
+      "plant-001",
+      "plant-002",
+      "plant-003"
+     ]
+    },
+    {
+     "id": "group-2",
+     "bed_id": "bed-1",
+     "zone_id": "zone-screen-north-edge",
+     "role": "screen-layer",
+     "operator": "stagger",
+     "params": {
+      "offset": "1.6 × radius inward",
+      "species": [
+       "plant:vaccinium-ovatum"
+      ]
+     },
+     "plant_ids": [
+      "plant-004",
+      "plant-005",
+      "plant-006"
+     ]
+    },
+    {
+     "id": "group-3",
+     "bed_id": "bed-1",
+     "zone_id": "zone-fill",
+     "role": "ground",
+     "operator": "fill_drift",
+     "params": {
+      "lattice": "hexagonal",
+      "spacing_m": 0.51,
+      "spacing_rule": "0.65 × the mean claimed mature spread of the ground species",
+      "jitter": 0.35,
+      "species": [
+       "plant:arctostaphylos-uva-ursi",
+       "plant:polystichum-munitum"
+      ],
+      "drift_field": "value noise",
+      "seed": 42
+     },
+     "plant_ids": [
+      "plant-007",
+      "plant-008",
+      "plant-009",
+      "plant-010",
+      "plant-011",
+      "plant-012",
+      "plant-013",
+      "plant-014",
+      "plant-015",
+      "plant-016",
+      "plant-017",
+      "plant-018",
+      "plant-019",
+      "plant-020",
+      "plant-021",
+      "plant-022",
+      "plant-023",
+      "plant-024",
+      "plant-025",
+      "plant-026",
+      "plant-027",
+      "plant-028",
+      "plant-029",
+      "plant-030",
+      "plant-031",
+      "plant-032",
+      "plant-033",
+      "plant-034",
+      "plant-035",
+      "plant-036",
+      "plant-037"
+     ]
+    },
+    {
+     "id": "group-4",
+     "bed_id": "bed-1",
+     "zone_id": "zone-fill",
+     "role": "accent",
+     "operator": "repeat_accent",
+     "params": {
+      "every": 4,
+      "toward": "the open zone",
+      "species": [
+       "plant:achillea-millefolium"
+      ]
+     },
+     "plant_ids": [
+      "plant-010",
+      "plant-021",
+      "plant-012",
+      "plant-018",
+      "plant-013",
+      "plant-024"
+     ]
+    }
+   ],
+   "zones": [
+    {
+     "id": "zone-screen-north-edge",
+     "kind": "edge",
+     "function": "z:screen",
+     "label": "Screen along the north edge",
+     "edges": [
+      {
+       "a": [
+        5.7,
+        3.7
+       ],
+       "b": [
+        0.3,
+        3.7
+       ],
+       "n": [
+        0,
+        1
+       ]
+      }
+     ],
+     "priority": 1,
+     "basis": "privacy → Screen (blocks a view); Scrim would only filter it"
+    },
+    {
+     "id": "zone-open-open-aico7",
+     "kind": "open",
+     "label": "open (kids)",
+     "polygon": [
+      [
+       1.8,
+       0.6
+      ],
+      [
+       4.2,
+       0.6
+      ],
+      [
+       4.2,
+       2.2
+      ],
+      [
+       1.8,
+       2.2
+      ]
+     ],
+     "priority": 1
+    },
+    {
+     "id": "zone-fill",
+     "kind": "fill",
+     "label": "ground layer (remaining bed area)",
+     "polygon": [
+      [
+       0.3,
+       0.3
+      ],
+      [
+       5.7,
+       0.3
+      ],
+      [
+       5.7,
+       3.7
+      ],
+      [
+       0.3,
+       3.7
+      ]
+     ],
+     "priority": 2
+    }
+   ],
+   "assemblage": {
+    "picks": {
+     "screen": [
+      {
+       "id": "plant:gaultheria-shallon",
+       "why": [
+        "Screen: derived — recorded use: Sheared hedge (usda_plants); gate unknown; evergreen (holds the screen in winter — design heuristic)"
+       ],
+       "gate": "unknown",
+       "proxy_radius_m": 0.38
+      },
+      {
+       "id": "plant:vaccinium-ovatum",
+       "why": [
+        "Screen: derived with a conflict (a trait claim contradicts the use) — recorded use: Hedge row, Screening, Sheared hedge (gpp, survey-r03); gate unknown; evergreen (holds the screen in winter — design heuristic)"
+       ],
+       "gate": "unknown",
+       "proxy_radius_m": 0.63
+      }
+     ],
+     "ground": [
+      {
+       "id": "plant:arctostaphylos-uva-ursi",
+       "why": [
+        "Ground Cover: derived — recorded use: Ground cover (mobot, osu, rhs); gate unknown"
+       ],
+       "gate": "unknown",
+       "proxy_radius_m": 0.15
+      },
+      {
+       "id": "plant:polystichum-munitum",
+       "why": [
+        "Ground Cover: derived — recorded use: Ground cover (gpp); gate unknown"
+       ],
+       "gate": "unknown",
+       "proxy_radius_m": 0.63
+      }
+     ],
+     "accent": [
+      {
+       "id": "plant:achillea-millefolium",
+       "why": [
+        "accent: ecological value recorded — pollinator; interest recorded — Winter interest; gate unknown"
+       ],
+       "gate": "unknown",
+       "proxy_radius_m": 0.15
+      }
+     ],
+     "canopy": []
+    },
+    "excluded": [
+     {
+      "id": "plant:acer-palmatum",
+      "reason": "a tree whose claimed mature spread (3–7.6 m, acer-palmatum:mature_spread:rhs01) exceeds the bed (5.4 × 3.4 m)"
+     },
+     {
+      "id": "plant:cercidiphyllum-japonicum",
+      "reason": "a tree whose claimed mature spread (7.6–18.3 m, cercidiphyllum-japonicum:mature_spread:mobot01) exceeds the bed (5.4 × 3.4 m)"
+     },
+     {
+      "id": "plant:cornus-nuttallii",
+      "reason": "a tree whose claimed mature spread (3–7.6 m, cornus-nuttallii:mature_spread:mobot01) exceeds the bed (5.4 × 3.4 m)"
+     }
+    ],
+    "not_used": [
+     {
+      "id": "plant:cornus-sericea",
+      "reason": "eligible but not needed by any zone"
+     },
+     {
+      "id": "plant:gaillardia-aristata",
+      "reason": "eligible but not needed by any zone"
+     }
+    ]
+   },
+   "assumptions": [
+    "existing tree: canopy radius 1.5 m is assumed 1.5 m — canopy not stated",
+    "plant sizes are proxies: half the claimed mature spread (one claim chosen per species, alternatives counted) — not measured plants; planting spacing is 0.75 × (screen rows) and 0.65 × (ground layer) the claimed mature spread, so canopies meet and overlap at maturity by design",
+    "no new tree placed: Acer palmatum, Cercidiphyllum japonicum, Cornus nuttallii exceed the bed at claimed mature spread"
+   ],
+   "unresolved": [
+    "unknown: soil type and drainage",
+    "unknown: ecological performance — the database records some ecological-value claims (pollinator, bird food …) but no pollinator-interaction data; no score is possible"
+   ],
+   "edit_event": null,
+   "schedule": [
+    {
+     "species_id": "plant:arctostaphylos-uva-ursi",
+     "count": 24,
+     "roles": [
+      "ground"
+     ],
+     "beds": [
+      "bed-1"
+     ]
+    },
+    {
+     "species_id": "plant:achillea-millefolium",
+     "count": 6,
+     "roles": [
+      "accent"
+     ],
+     "beds": [
+      "bed-1"
+     ]
+    },
+    {
+     "species_id": "plant:gaultheria-shallon",
+     "count": 3,
+     "roles": [
+      "screen"
+     ],
+     "beds": [
+      "bed-1"
+     ]
+    },
+    {
+     "species_id": "plant:vaccinium-ovatum",
+     "count": 3,
+     "roles": [
+      "screen-layer"
+     ],
+     "beds": [
+      "bed-1"
+     ]
+    },
+    {
+     "species_id": "plant:polystichum-munitum",
+     "count": 1,
+     "roles": [
+      "ground"
+     ],
+     "beds": [
+      "bed-1"
+     ]
+    }
+   ],
+   "validation": {
+    "ok": true,
+    "issues": []
+   },
+   "evaluation": {
+    "bed_area_m2": 18.36,
+    "plant_count": 37,
+    "species_count": 5,
+    "by_role": {
+     "screen": 3,
+     "screen-layer": 3,
+     "ground": 25,
+     "accent": 6
+    },
+    "edge_zones": [
+     {
+      "zone": "zone-screen-north-edge",
+      "label": "Screen along the north edge",
+      "edge_length_m": 5.4,
+      "screen_row_cover_m": 2.28,
+      "continuity": 0.42,
+      "note": "row cover = sum of proxy diameters over edge length — a geometric proxy for continuity, not a measured screening effect"
+     }
+    ],
+    "open_zones": [
+     {
+      "id": "open-aico7",
+      "area_m2": 3.84,
+      "plants_inside": 0
+     }
+    ],
+    "evidence_gates": {
+     "pass": 0,
+     "conditional": 0,
+     "unknown": 37
+    },
+    "cost": null,
+    "cost_note": "no prices in the database — not computed",
+    "ecology_score": null,
+    "ecology_note": "no pollinator-interaction data — no score; ecological-value claims are listed per species instead",
+    "unknown_conditions": [
+     "soil_type",
+     "soil_drainage",
+     "water",
+     "wind",
+     "irrigation"
+    ]
+   },
+   "id": "v-aicob",
+   "created": "2026-11-07T22:11:30.344Z",
+   "parent_version_id": null
+  },
+  {
+   "label": "edit: Too dense here, but keep the privacy.",
+   "seed": 42,
+   "bed_id": "bed-1",
+   "generator": {
+    "operators": [
+     "along_edge",
+     "stagger",
+     "fill_drift",
+     "repeat_accent"
+    ],
+    "density": 1,
+    "params": {
+     "density": 1,
+     "stagger": true,
+     "id_start": 0
+    }
+   },
+   "knowledge_snapshot": {
+    "generated": "2026-11-07",
+    "generated_by": "tools/build_explorer.py",
+    "method": "M49",
+    "inputs": {
+     "kg_generated": "2026-11-03",
+     "xyz_generated": "2026-11-03",
+     "relations_updated": "2026-11-02",
+     "schema_version": "0.4.3",
+     "ontology_version": "0.2.0"
+    }
+   },
+   "geometry_precision": "approximate (user-calibrated)",
+   "plant_objects": [
+    {
+     "id": "plant-001",
+     "species_id": "plant:gaultheria-shallon",
+     "bed_id": "bed-1",
+     "position_m": [
+      5.36,
+      3.32
+     ],
+     "proxy_radius_m": 0.38,
+     "proxy_source": {
+      "claim": "gaultheria-shallon:mature_spread:rhs01",
+      "range_m": [
+       0.5,
+       1
+      ],
+      "status": "proxy: half the claimed mature spread",
+      "note": "one claimed range"
+     },
+     "height_m": 1.25,
+     "height_source": {
+      "claim": "gaultheria-shallon:mature_height:rhs01",
+      "range_m": [
+       1,
+       1.5
+      ],
+      "status": "proxy from a claimed height range"
+     },
+     "role": "screen",
+     "group_id": "group-1",
+     "zone_id": "zone-screen-north-edge",
+     "locked": false,
+     "origin": "generated"
+    },
+    {
+     "id": "plant-002",
+     "species_id": "plant:gaultheria-shallon",
+     "bed_id": "bed-1",
+     "position_m": [
+      4.18,
+      3.32
+     ],
+     "proxy_radius_m": 0.38,
+     "proxy_source": {
+      "claim": "gaultheria-shallon:mature_spread:rhs01",
+      "range_m": [
+       0.5,
+       1
+      ],
+      "status": "proxy: half the claimed mature spread",
+      "note": "one claimed range"
+     },
+     "height_m": 1.25,
+     "height_source": {
+      "claim": "gaultheria-shallon:mature_height:rhs01",
+      "range_m": [
+       1,
+       1.5
+      ],
+      "status": "proxy from a claimed height range"
+     },
+     "role": "screen",
+     "group_id": "group-1",
+     "zone_id": "zone-screen-north-edge",
+     "locked": false,
+     "origin": "generated"
+    },
+    {
+     "id": "plant-003",
+     "species_id": "plant:gaultheria-shallon",
+     "bed_id": "bed-1",
+     "position_m": [
+      3,
+      3.32
+     ],
+     "proxy_radius_m": 0.38,
+     "proxy_source": {
+      "claim": "gaultheria-shallon:mature_spread:rhs01",
+      "range_m": [
+       0.5,
+       1
+      ],
+      "status": "proxy: half the claimed mature spread",
+      "note": "one claimed range"
+     },
+     "height_m": 1.25,
+     "height_source": {
+      "claim": "gaultheria-shallon:mature_height:rhs01",
+      "range_m": [
+       1,
+       1.5
+      ],
+      "status": "proxy from a claimed height range"
+     },
+     "role": "screen",
+     "group_id": "group-1",
+     "zone_id": "zone-screen-north-edge",
+     "locked": false,
+     "origin": "generated"
+    },
+    {
+     "id": "plant-006",
+     "species_id": "plant:vaccinium-ovatum",
+     "bed_id": "bed-1",
+     "position_m": [
+      2.7,
+      2.31
+     ],
+     "proxy_radius_m": 0.63,
+     "proxy_source": {
+      "claim": "vaccinium-ovatum:mature_spread:rhs01",
+      "range_m": [
+       1,
+       1.5
+      ],
+      "status": "proxy: half the claimed mature spread",
+      "note": "one claimed range"
+     },
+     "height_m": 1.75,
+     "height_source": {
+      "claim": "vaccinium-ovatum:mature_height:rhs01",
+      "range_m": [
+       0.5,
+       3
+      ],
+      "status": "proxy from a claimed height range"
+     },
+     "role": "screen-layer",
+     "group_id": "group-2",
+     "zone_id": "zone-screen-north-edge",
+     "locked": false,
+     "origin": "generated"
+    },
+    {
+     "id": "plant-007",
+     "species_id": "plant:arctostaphylos-uva-ursi",
+     "bed_id": "bed-1",
+     "position_m": [
+      0.57,
+      0.54
+     ],
+     "proxy_radius_m": 0.15,
+     "proxy_source": {
+      "claim": "arctostaphylos-uva-ursi:mature_spread:rhs01",
+      "range_m": [
+       0.1,
+       0.5
+      ],
+      "status": "proxy: half the claimed mature spread",
+      "note": "median of 2 claimed ranges"
+     },
+     "height_m": 0.1,
+     "height_source": {
+      "claim": "arctostaphylos-uva-ursi:mature_height:osu02",
+      "range_m": [
+       0.05,
+       0.15
+      ],
+      "status": "proxy from a claimed height range"
+     },
+     "role": "ground",
+     "group_id": "group-3",
+     "zone_id": "zone-fill",
+     "locked": false,
+     "origin": "generated"
+    },
+    {
+     "id": "plant-008",
+     "species_id": "plant:arctostaphylos-uva-ursi",
+     "bed_id": "bed-1",
+     "position_m": [
+      1.12,
+      0.58
+     ],
+     "proxy_radius_m": 0.15,
+     "proxy_source": {
+      "claim": "arctostaphylos-uva-ursi:mature_spread:rhs01",
+      "range_m": [
+       0.1,
+       0.5
+      ],
+      "status": "proxy: half the claimed mature spread",
+      "note": "median of 2 claimed ranges"
+     },
+     "height_m": 0.1,
+     "height_source": {
+      "claim": "arctostaphylos-uva-ursi:mature_height:osu02",
+      "range_m": [
+       0.05,
+       0.15
+      ],
+      "status": "proxy from a claimed height range"
+     },
+     "role": "ground",
+     "group_id": "group-3",
+     "zone_id": "zone-fill",
+     "locked": false,
+     "origin": "generated"
+    },
+    {
+     "id": "plant-009",
+     "species_id": "plant:arctostaphylos-uva-ursi",
+     "bed_id": "bed-1",
+     "position_m": [
+      1.51,
+      0.56
+     ],
+     "proxy_radius_m": 0.15,
+     "proxy_source": {
+      "claim": "arctostaphylos-uva-ursi:mature_spread:rhs01",
+      "range_m": [
+       0.1,
+       0.5
+      ],
+      "status": "proxy: half the claimed mature spread",
+      "note": "median of 2 claimed ranges"
+     },
+     "height_m": 0.1,
+     "height_source": {
+      "claim": "arctostaphylos-uva-ursi:mature_height:osu02",
+      "range_m": [
+       0.05,
+       0.15
+      ],
+      "status": "proxy from a claimed height range"
+     },
+     "role": "ground",
+     "group_id": "group-3",
+     "zone_id": "zone-fill",
+     "locked": false,
+     "origin": "generated"
+    },
+    {
+     "id": "plant-010",
+     "species_id": "plant:achillea-millefolium",
+     "bed_id": "bed-1",
+     "position_m": [
+      2.03,
+      0.58
+     ],
+     "proxy_radius_m": 0.15,
+     "proxy_source": {
+      "claim": "achillea-millefolium:mature_spread:rhs01",
+      "range_m": [
+       0.1,
+       0.5
+      ],
+      "status": "proxy: half the claimed mature spread",
+      "note": "median of 2 claimed ranges"
+     },
+     "height_m": 0.55,
+     "height_source": {
+      "claim": "achillea-millefolium:mature_height:eflora01",
+      "range_m": [
+       0.1,
+       1
+      ],
+      "status": "proxy from a claimed height range"
+     },
+     "role": "accent",
+     "group_id": "group-4",
+     "zone_id": "zone-fill",
+     "locked": false,
+     "origin": "generated"
+    },
+    {
+     "id": "plant-011",
+     "species_id": "plant:arctostaphylos-uva-ursi",
+     "bed_id": "bed-1",
+     "position_m": [
+      2.65,
+      0.55
+     ],
+     "proxy_radius_m": 0.15,
+     "proxy_source": {
+      "claim": "arctostaphylos-uva-ursi:mature_spread:rhs01",
+      "range_m": [
+       0.1,
+       0.5
+      ],
+      "status": "proxy: half the claimed mature spread",
+      "note": "median of 2 claimed ranges"
+     },
+     "height_m": 0.1,
+     "height_source": {
+      "claim": "arctostaphylos-uva-ursi:mature_height:osu02",
+      "range_m": [
+       0.05,
+       0.15
+      ],
+      "status": "proxy from a claimed height range"
+     },
+     "role": "ground",
+     "group_id": "group-3",
+     "zone_id": "zone-fill",
+     "locked": false,
+     "origin": "generated"
+    },
+    {
+     "id": "plant-012",
+     "species_id": "plant:achillea-millefolium",
+     "bed_id": "bed-1",
+     "position_m": [
+      4.64,
+      0.57
+     ],
+     "proxy_radius_m": 0.15,
+     "proxy_source": {
+      "claim": "achillea-millefolium:mature_spread:rhs01",
+      "range_m": [
+       0.1,
+       0.5
+      ],
+      "status": "proxy: half the claimed mature spread",
+      "note": "median of 2 claimed ranges"
+     },
+     "height_m": 0.55,
+     "height_source": {
+      "claim": "achillea-millefolium:mature_height:eflora01",
+      "range_m": [
+       0.1,
+       1
+      ],
+      "status": "proxy from a claimed height range"
+     },
+     "role": "accent",
+     "group_id": "group-4",
+     "zone_id": "zone-fill",
+     "locked": false,
+     "origin": "generated"
+    },
+    {
+     "id": "plant-013",
+     "species_id": "plant:achillea-millefolium",
+     "bed_id": "bed-1",
+     "position_m": [
+      5.03,
+      0.55
+     ],
+     "proxy_radius_m": 0.15,
+     "proxy_source": {
+      "claim": "achillea-millefolium:mature_spread:rhs01",
+      "range_m": [
+       0.1,
+       0.5
+      ],
+      "status": "proxy: half the claimed mature spread",
+      "note": "median of 2 claimed ranges"
+     },
+     "height_m": 0.55,
+     "height_source": {
+      "claim": "achillea-millefolium:mature_height:eflora01",
+      "range_m": [
+       0.1,
+       1
+      ],
+      "status": "proxy from a claimed height range"
+     },
+     "role": "accent",
+     "group_id": "group-4",
+     "zone_id": "zone-fill",
+     "locked": false,
+     "origin": "generated"
+    },
+    {
+     "id": "plant-014",
+     "species_id": "plant:arctostaphylos-uva-ursi",
+     "bed_id": "bed-1",
+     "position_m": [
+      0.82,
+      0.91
+     ],
+     "proxy_radius_m": 0.15,
+     "proxy_source": {
+      "claim": "arctostaphylos-uva-ursi:mature_spread:rhs01",
+      "range_m": [
+       0.1,
+       0.5
+      ],
+      "status": "proxy: half the claimed mature spread",
+      "note": "median of 2 claimed ranges"
+     },
+     "height_m": 0.1,
+     "height_source": {
+      "claim": "arctostaphylos-uva-ursi:mature_height:osu02",
+      "range_m": [
+       0.05,
+       0.15
+      ],
+      "status": "proxy from a claimed height range"
+     },
+     "role": "ground",
+     "group_id": "group-3",
+     "zone_id": "zone-fill",
+     "locked": false,
+     "origin": "generated"
+    },
+    {
+     "id": "plant-015",
+     "species_id": "plant:arctostaphylos-uva-ursi",
+     "bed_id": "bed-1",
+     "position_m": [
+      1.27,
+      0.91
+     ],
+     "proxy_radius_m": 0.15,
+     "proxy_source": {
+      "claim": "arctostaphylos-uva-ursi:mature_spread:rhs01",
+      "range_m": [
+       0.1,
+       0.5
+      ],
+      "status": "proxy: half the claimed mature spread",
+      "note": "median of 2 claimed ranges"
+     },
+     "height_m": 0.1,
+     "height_source": {
+      "claim": "arctostaphylos-uva-ursi:mature_height:osu02",
+      "range_m": [
+       0.05,
+       0.15
+      ],
+      "status": "proxy from a claimed height range"
+     },
+     "role": "ground",
+     "group_id": "group-3",
+     "zone_id": "zone-fill",
+     "locked": false,
+     "origin": "generated"
+    },
+    {
+     "id": "plant-016",
+     "species_id": "plant:arctostaphylos-uva-ursi",
+     "bed_id": "bed-1",
+     "position_m": [
+      1.77,
+      1.04
+     ],
+     "proxy_radius_m": 0.15,
+     "proxy_source": {
+      "claim": "arctostaphylos-uva-ursi:mature_spread:rhs01",
+      "range_m": [
+       0.1,
+       0.5
+      ],
+      "status": "proxy: half the claimed mature spread",
+      "note": "median of 2 claimed ranges"
+     },
+     "height_m": 0.1,
+     "height_source": {
+      "claim": "arctostaphylos-uva-ursi:mature_height:osu02",
+      "range_m": [
+       0.05,
+       0.15
+      ],
+      "status": "proxy from a claimed height range"
+     },
+     "role": "ground",
+     "group_id": "group-3",
+     "zone_id": "zone-fill",
+     "locked": false,
+     "origin": "generated"
+    },
+    {
+     "id": "plant-018",
+     "species_id": "plant:achillea-millefolium",
+     "bed_id": "bed-1",
+     "position_m": [
+      4.87,
+      1.01
+     ],
+     "proxy_radius_m": 0.15,
+     "proxy_source": {
+      "claim": "achillea-millefolium:mature_spread:rhs01",
+      "range_m": [
+       0.1,
+       0.5
+      ],
+      "status": "proxy: half the claimed mature spread",
+      "note": "median of 2 claimed ranges"
+     },
+     "height_m": 0.55,
+     "height_source": {
+      "claim": "achillea-millefolium:mature_height:eflora01",
+      "range_m": [
+       0.1,
+       1
+      ],
+      "status": "proxy from a claimed height range"
+     },
+     "role": "accent",
+     "group_id": "group-4",
+     "zone_id": "zone-fill",
+     "locked": false,
+     "origin": "generated"
+    },
+    {
+     "id": "plant-019",
+     "species_id": "plant:arctostaphylos-uva-ursi",
+     "bed_id": "bed-1",
+     "position_m": [
+      5.32,
+      1.02
+     ],
+     "proxy_radius_m": 0.15,
+     "proxy_source": {
+      "claim": "arctostaphylos-uva-ursi:mature_spread:rhs01",
+      "range_m": [
+       0.1,
+       0.5
+      ],
+      "status": "proxy: half the claimed mature spread",
+      "note": "median of 2 claimed ranges"
+     },
+     "height_m": 0.1,
+     "height_source": {
+      "claim": "arctostaphylos-uva-ursi:mature_height:osu02",
+      "range_m": [
+       0.05,
+       0.15
+      ],
+      "status": "proxy from a claimed height range"
+     },
+     "role": "ground",
+     "group_id": "group-3",
+     "zone_id": "zone-fill",
+     "locked": false,
+     "origin": "generated"
+    },
+    {
+     "id": "plant-020",
+     "species_id": "plant:arctostaphylos-uva-ursi",
+     "bed_id": "bed-1",
+     "position_m": [
+      1.1,
+      1.5
+     ],
+     "proxy_radius_m": 0.15,
+     "proxy_source": {
+      "claim": "arctostaphylos-uva-ursi:mature_spread:rhs01",
+      "range_m": [
+       0.1,
+       0.5
+      ],
+      "status": "proxy: half the claimed mature spread",
+      "note": "median of 2 claimed ranges"
+     },
+     "height_m": 0.1,
+     "height_source": {
+      "claim": "arctostaphylos-uva-ursi:mature_height:osu02",
+      "range_m": [
+       0.05,
+       0.15
+      ],
+      "status": "proxy from a claimed height range"
+     },
+     "role": "ground",
+     "group_id": "group-3",
+     "zone_id": "zone-fill",
+     "locked": false,
+     "origin": "generated"
+    },
+    {
+     "id": "plant-021",
+     "species_id": "plant:achillea-millefolium",
+     "bed_id": "bed-1",
+     "position_m": [
+      1.57,
+      1.38
+     ],
+     "proxy_radius_m": 0.15,
+     "proxy_source": {
+      "claim": "achillea-millefolium:mature_spread:rhs01",
+      "range_m": [
+       0.1,
+       0.5
+      ],
+      "status": "proxy: half the claimed mature spread",
+      "note": "median of 2 claimed ranges"
+     },
+     "height_m": 0.55,
+     "height_source": {
+      "claim": "achillea-millefolium:mature_height:eflora01",
+      "range_m": [
+       0.1,
+       1
+      ],
+      "status": "proxy from a claimed height range"
+     },
+     "role": "accent",
+     "group_id": "group-4",
+     "zone_id": "zone-fill",
+     "locked": false,
+     "origin": "generated"
+    },
+    {
+     "id": "plant-022",
+     "species_id": "plant:arctostaphylos-uva-ursi",
+     "bed_id": "bed-1",
+     "position_m": [
+      5.05,
+      1.35
+     ],
+     "proxy_radius_m": 0.15,
+     "proxy_source": {
+      "claim": "arctostaphylos-uva-ursi:mature_spread:rhs01",
+      "range_m": [
+       0.1,
+       0.5
+      ],
+      "status": "proxy: half the claimed mature spread",
+      "note": "median of 2 claimed ranges"
+     },
+     "height_m": 0.1,
+     "height_source": {
+      "claim": "arctostaphylos-uva-ursi:mature_height:osu02",
+      "range_m": [
+       0.05,
+       0.15
+      ],
+      "status": "proxy from a claimed height range"
+     },
+     "role": "ground",
+     "group_id": "group-3",
+     "zone_id": "zone-fill",
+     "locked": false,
+     "origin": "generated"
+    },
+    {
+     "id": "plant-023",
+     "species_id": "plant:arctostaphylos-uva-ursi",
+     "bed_id": "bed-1",
+     "position_m": [
+      5.6,
+      1.43
+     ],
+     "proxy_radius_m": 0.15,
+     "proxy_source": {
+      "claim": "arctostaphylos-uva-ursi:mature_spread:rhs01",
+      "range_m": [
+       0.1,
+       0.5
+      ],
+      "status": "proxy: half the claimed mature spread",
+      "note": "median of 2 claimed ranges"
+     },
+     "height_m": 0.1,
+     "height_source": {
+      "claim": "arctostaphylos-uva-ursi:mature_height:osu02",
+      "range_m": [
+       0.05,
+       0.15
+      ],
+      "status": "proxy from a claimed height range"
+     },
+     "role": "ground",
+     "group_id": "group-3",
+     "zone_id": "zone-fill",
+     "locked": false,
+     "origin": "generated"
+    },
+    {
+     "id": "plant-024",
+     "species_id": "plant:achillea-millefolium",
+     "bed_id": "bed-1",
+     "position_m": [
+      0.83,
+      1.94
+     ],
+     "proxy_radius_m": 0.15,
+     "proxy_source": {
+      "claim": "achillea-millefolium:mature_spread:rhs01",
+      "range_m": [
+       0.1,
+       0.5
+      ],
+      "status": "proxy: half the claimed mature spread",
+      "note": "median of 2 claimed ranges"
+     },
+     "height_m": 0.55,
+     "height_source": {
+      "claim": "achillea-millefolium:mature_height:eflora01",
+      "range_m": [
+       0.1,
+       1
+      ],
+      "status": "proxy from a claimed height range"
+     },
+     "role": "accent",
+     "group_id": "group-4",
+     "zone_id": "zone-fill",
+     "locked": false,
+     "origin": "generated"
+    },
+    {
+     "id": "plant-025",
+     "species_id": "plant:arctostaphylos-uva-ursi",
+     "bed_id": "bed-1",
+     "position_m": [
+      1.24,
+      1.91
+     ],
+     "proxy_radius_m": 0.15,
+     "proxy_source": {
+      "claim": "arctostaphylos-uva-ursi:mature_spread:rhs01",
+      "range_m": [
+       0.1,
+       0.5
+      ],
+      "status": "proxy: half the claimed mature spread",
+      "note": "median of 2 claimed ranges"
+     },
+     "height_m": 0.1,
+     "height_source": {
+      "claim": "arctostaphylos-uva-ursi:mature_height:osu02",
+      "range_m": [
+       0.05,
+       0.15
+      ],
+      "status": "proxy from a claimed height range"
+     },
+     "role": "ground",
+     "group_id": "group-3",
+     "zone_id": "zone-fill",
+     "locked": false,
+     "origin": "generated"
+    },
+    {
+     "id": "plant-026",
+     "species_id": "plant:arctostaphylos-uva-ursi",
+     "bed_id": "bed-1",
+     "position_m": [
+      4.83,
+      1.89
+     ],
+     "proxy_radius_m": 0.15,
+     "proxy_source": {
+      "claim": "arctostaphylos-uva-ursi:mature_spread:rhs01",
+      "range_m": [
+       0.1,
+       0.5
+      ],
+      "status": "proxy: half the claimed mature spread",
+      "note": "median of 2 claimed ranges"
+     },
+     "height_m": 0.1,
+     "height_source": {
+      "claim": "arctostaphylos-uva-ursi:mature_height:osu02",
+      "range_m": [
+       0.05,
+       0.15
+      ],
+      "status": "proxy from a claimed height range"
+     },
+     "role": "ground",
+     "group_id": "group-3",
+     "zone_id": "zone-fill",
+     "locked": false,
+     "origin": "generated"
+    },
+    {
+     "id": "plant-028",
+     "species_id": "plant:arctostaphylos-uva-ursi",
+     "bed_id": "bed-1",
+     "position_m": [
+      3.32,
+      2.68
+     ],
+     "proxy_radius_m": 0.15,
+     "proxy_source": {
+      "claim": "arctostaphylos-uva-ursi:mature_spread:rhs01",
+      "range_m": [
+       0.1,
+       0.5
+      ],
+      "status": "proxy: half the claimed mature spread",
+      "note": "median of 2 claimed ranges"
+     },
+     "height_m": 0.1,
+     "height_source": {
+      "claim": "arctostaphylos-uva-ursi:mature_height:osu02",
+      "range_m": [
+       0.05,
+       0.15
+      ],
+      "status": "proxy from a claimed height range"
+     },
+     "role": "ground",
+     "group_id": "group-3",
+     "zone_id": "zone-fill",
+     "locked": false,
+     "origin": "generated"
+    },
+    {
+     "id": "plant-030",
+     "species_id": "plant:arctostaphylos-uva-ursi",
+     "bed_id": "bed-1",
+     "position_m": [
+      4.89,
+      2.82
+     ],
+     "proxy_radius_m": 0.15,
+     "proxy_source": {
+      "claim": "arctostaphylos-uva-ursi:mature_spread:rhs01",
+      "range_m": [
+       0.1,
+       0.5
+      ],
+      "status": "proxy: half the claimed mature spread",
+      "note": "median of 2 claimed ranges"
+     },
+     "height_m": 0.1,
+     "height_source": {
+      "claim": "arctostaphylos-uva-ursi:mature_height:osu02",
+      "range_m": [
+       0.05,
+       0.15
+      ],
+      "status": "proxy from a claimed height range"
+     },
+     "role": "ground",
+     "group_id": "group-3",
+     "zone_id": "zone-fill",
+     "locked": false,
+     "origin": "generated"
+    },
+    {
+     "id": "plant-031",
+     "species_id": "plant:arctostaphylos-uva-ursi",
+     "bed_id": "bed-1",
+     "position_m": [
+      5.44,
+      2.7
+     ],
+     "proxy_radius_m": 0.15,
+     "proxy_source": {
+      "claim": "arctostaphylos-uva-ursi:mature_spread:rhs01",
+      "range_m": [
+       0.1,
+       0.5
+      ],
+      "status": "proxy: half the claimed mature spread",
+      "note": "median of 2 claimed ranges"
+     },
+     "height_m": 0.1,
+     "height_source": {
+      "claim": "arctostaphylos-uva-ursi:mature_height:osu02",
+      "range_m": [
+       0.05,
+       0.15
+      ],
+      "status": "proxy from a claimed height range"
+     },
+     "role": "ground",
+     "group_id": "group-3",
+     "zone_id": "zone-fill",
+     "locked": false,
+     "origin": "generated"
+    },
+    {
+     "id": "plant-032",
+     "species_id": "plant:arctostaphylos-uva-ursi",
+     "bed_id": "bed-1",
+     "position_m": [
+      3.61,
+      3.27
+     ],
+     "proxy_radius_m": 0.15,
+     "proxy_source": {
+      "claim": "arctostaphylos-uva-ursi:mature_spread:rhs01",
+      "range_m": [
+       0.1,
+       0.5
+      ],
+      "status": "proxy: half the claimed mature spread",
+      "note": "median of 2 claimed ranges"
+     },
+     "height_m": 0.1,
+     "height_source": {
+      "claim": "arctostaphylos-uva-ursi:mature_height:osu02",
+      "range_m": [
+       0.05,
+       0.15
+      ],
+      "status": "proxy from a claimed height range"
+     },
+     "role": "ground",
+     "group_id": "group-3",
+     "zone_id": "zone-fill",
+     "locked": false,
+     "origin": "generated"
+    },
+    {
+     "id": "plant-033",
+     "species_id": "plant:arctostaphylos-uva-ursi",
+     "bed_id": "bed-1",
+     "position_m": [
+      4.62,
+      3.15
+     ],
+     "proxy_radius_m": 0.15,
+     "proxy_source": {
+      "claim": "arctostaphylos-uva-ursi:mature_spread:rhs01",
+      "range_m": [
+       0.1,
+       0.5
+      ],
+      "status": "proxy: half the claimed mature spread",
+      "note": "median of 2 claimed ranges"
+     },
+     "height_m": 0.1,
+     "height_source": {
+      "claim": "arctostaphylos-uva-ursi:mature_height:osu02",
+      "range_m": [
+       0.05,
+       0.15
+      ],
+      "status": "proxy from a claimed height range"
+     },
+     "role": "ground",
+     "group_id": "group-3",
+     "zone_id": "zone-fill",
+     "locked": false,
+     "origin": "generated"
+    },
+    {
+     "id": "plant-034",
+     "species_id": "plant:arctostaphylos-uva-ursi",
+     "bed_id": "bed-1",
+     "position_m": [
+      2.79,
+      3.6
+     ],
+     "proxy_radius_m": 0.15,
+     "proxy_source": {
+      "claim": "arctostaphylos-uva-ursi:mature_spread:rhs01",
+      "range_m": [
+       0.1,
+       0.5
+      ],
+      "status": "proxy: half the claimed mature spread",
+      "note": "median of 2 claimed ranges"
+     },
+     "height_m": 0.1,
+     "height_source": {
+      "claim": "arctostaphylos-uva-ursi:mature_height:osu02",
+      "range_m": [
+       0.05,
+       0.15
+      ],
+      "status": "proxy from a claimed height range"
+     },
+     "role": "ground",
+     "group_id": "group-3",
+     "zone_id": "zone-fill",
+     "locked": false,
+     "origin": "generated"
+    },
+    {
+     "id": "plant-035",
+     "species_id": "plant:arctostaphylos-uva-ursi",
+     "bed_id": "bed-1",
+     "position_m": [
+      3.31,
+      3.6
+     ],
+     "proxy_radius_m": 0.15,
+     "proxy_source": {
+      "claim": "arctostaphylos-uva-ursi:mature_spread:rhs01",
+      "range_m": [
+       0.1,
+       0.5
+      ],
+      "status": "proxy: half the claimed mature spread",
+      "note": "median of 2 claimed ranges"
+     },
+     "height_m": 0.1,
+     "height_source": {
+      "claim": "arctostaphylos-uva-ursi:mature_height:osu02",
+      "range_m": [
+       0.05,
+       0.15
+      ],
+      "status": "proxy from a claimed height range"
+     },
+     "role": "ground",
+     "group_id": "group-3",
+     "zone_id": "zone-fill",
+     "locked": false,
+     "origin": "generated"
+    },
+    {
+     "id": "plant-036",
+     "species_id": "plant:arctostaphylos-uva-ursi",
+     "bed_id": "bed-1",
+     "position_m": [
+      3.88,
+      3.58
+     ],
+     "proxy_radius_m": 0.15,
+     "proxy_source": {
+      "claim": "arctostaphylos-uva-ursi:mature_spread:rhs01",
+      "range_m": [
+       0.1,
+       0.5
+      ],
+      "status": "proxy: half the claimed mature spread",
+      "note": "median of 2 claimed ranges"
+     },
+     "height_m": 0.1,
+     "height_source": {
+      "claim": "arctostaphylos-uva-ursi:mature_height:osu02",
+      "range_m": [
+       0.05,
+       0.15
+      ],
+      "status": "proxy from a claimed height range"
+     },
+     "role": "ground",
+     "group_id": "group-3",
+     "zone_id": "zone-fill",
+     "locked": false,
+     "origin": "generated"
+    },
+    {
+     "id": "plant-037",
+     "species_id": "plant:arctostaphylos-uva-ursi",
+     "bed_id": "bed-1",
+     "position_m": [
+      4.83,
+      3.56
+     ],
+     "proxy_radius_m": 0.15,
+     "proxy_source": {
+      "claim": "arctostaphylos-uva-ursi:mature_spread:rhs01",
+      "range_m": [
+       0.1,
+       0.5
+      ],
+      "status": "proxy: half the claimed mature spread",
+      "note": "median of 2 claimed ranges"
+     },
+     "height_m": 0.1,
+     "height_source": {
+      "claim": "arctostaphylos-uva-ursi:mature_height:osu02",
+      "range_m": [
+       0.05,
+       0.15
+      ],
+      "status": "proxy from a claimed height range"
+     },
+     "role": "ground",
+     "group_id": "group-3",
+     "zone_id": "zone-fill",
+     "locked": false,
+     "origin": "generated"
+    }
+   ],
+   "groups": [
+    {
+     "id": "group-1",
+     "bed_id": "bed-1",
+     "zone_id": "zone-screen-north-edge",
+     "role": "screen",
+     "operator": "along_edge",
+     "params": {
+      "spacing": "0.75 × claimed mature spread",
+      "inset": "proxy radius",
+      "species": [
+       "plant:gaultheria-shallon",
+       "plant:vaccinium-ovatum"
+      ],
+      "alternate": true
+     },
+     "plant_ids": [
+      "plant-001",
+      "plant-002",
+      "plant-003"
+     ]
+    },
+    {
+     "id": "group-2",
+     "bed_id": "bed-1",
+     "zone_id": "zone-screen-north-edge",
+     "role": "screen-layer",
+     "operator": "stagger",
+     "params": {
+      "offset": "1.6 × radius inward",
+      "species": [
+       "plant:vaccinium-ovatum"
+      ]
+     },
+     "plant_ids": [
+      "plant-006"
+     ]
+    },
+    {
+     "id": "group-3",
+     "bed_id": "bed-1",
+     "zone_id": "zone-fill",
+     "role": "ground",
+     "operator": "fill_drift",
+     "params": {
+      "lattice": "hexagonal",
+      "spacing_m": 0.51,
+      "spacing_rule": "0.65 × the mean claimed mature spread of the ground species",
+      "jitter": 0.35,
+      "species": [
+       "plant:arctostaphylos-uva-ursi",
+       "plant:polystichum-munitum"
+      ],
+      "drift_field": "value noise",
+      "seed": 42
+     },
+     "plant_ids": [
+      "plant-007",
+      "plant-008",
+      "plant-009",
+      "plant-010",
+      "plant-011",
+      "plant-012",
+      "plant-013",
+      "plant-014",
+      "plant-015",
+      "plant-016",
+      "plant-018",
+      "plant-019",
+      "plant-020",
+      "plant-021",
+      "plant-022",
+      "plant-023",
+      "plant-024",
+      "plant-025",
+      "plant-026",
+      "plant-028",
+      "plant-030",
+      "plant-031",
+      "plant-032",
+      "plant-033",
+      "plant-034",
+      "plant-035",
+      "plant-036",
+      "plant-037"
+     ]
+    },
+    {
+     "id": "group-4",
+     "bed_id": "bed-1",
+     "zone_id": "zone-fill",
+     "role": "accent",
+     "operator": "repeat_accent",
+     "params": {
+      "every": 4,
+      "toward": "the open zone",
+      "species": [
+       "plant:achillea-millefolium"
+      ]
+     },
+     "plant_ids": [
+      "plant-010",
+      "plant-021",
+      "plant-012",
+      "plant-018",
+      "plant-013",
+      "plant-024"
+     ]
+    }
+   ],
+   "zones": [
+    {
+     "id": "zone-screen-north-edge",
+     "kind": "edge",
+     "function": "z:screen",
+     "label": "Screen along the north edge",
+     "edges": [
+      {
+       "a": [
+        5.7,
+        3.7
+       ],
+       "b": [
+        0.3,
+        3.7
+       ],
+       "n": [
+        0,
+        1
+       ]
+      }
+     ],
+     "priority": 1,
+     "basis": "privacy → Screen (blocks a view); Scrim would only filter it"
+    },
+    {
+     "id": "zone-open-open-aico7",
+     "kind": "open",
+     "label": "open (kids)",
+     "polygon": [
+      [
+       1.8,
+       0.6
+      ],
+      [
+       4.2,
+       0.6
+      ],
+      [
+       4.2,
+       2.2
+      ],
+      [
+       1.8,
+       2.2
+      ]
+     ],
+     "priority": 1
+    },
+    {
+     "id": "zone-fill",
+     "kind": "fill",
+     "label": "ground layer (remaining bed area)",
+     "polygon": [
+      [
+       0.3,
+       0.3
+      ],
+      [
+       5.7,
+       0.3
+      ],
+      [
+       5.7,
+       3.7
+      ],
+      [
+       0.3,
+       3.7
+      ]
+     ],
+     "priority": 2
+    }
+   ],
+   "assemblage": {
+    "picks": {
+     "screen": [
+      {
+       "id": "plant:gaultheria-shallon",
+       "why": [
+        "Screen: derived — recorded use: Sheared hedge (usda_plants); gate unknown; evergreen (holds the screen in winter — design heuristic)"
+       ],
+       "gate": "unknown",
+       "proxy_radius_m": 0.38
+      },
+      {
+       "id": "plant:vaccinium-ovatum",
+       "why": [
+        "Screen: derived with a conflict (a trait claim contradicts the use) — recorded use: Hedge row, Screening, Sheared hedge (gpp, survey-r03); gate unknown; evergreen (holds the screen in winter — design heuristic)"
+       ],
+       "gate": "unknown",
+       "proxy_radius_m": 0.63
+      }
+     ],
+     "ground": [
+      {
+       "id": "plant:arctostaphylos-uva-ursi",
+       "why": [
+        "Ground Cover: derived — recorded use: Ground cover (mobot, osu, rhs); gate unknown"
+       ],
+       "gate": "unknown",
+       "proxy_radius_m": 0.15
+      },
+      {
+       "id": "plant:polystichum-munitum",
+       "why": [
+        "Ground Cover: derived — recorded use: Ground cover (gpp); gate unknown"
+       ],
+       "gate": "unknown",
+       "proxy_radius_m": 0.63
+      }
+     ],
+     "accent": [
+      {
+       "id": "plant:achillea-millefolium",
+       "why": [
+        "accent: ecological value recorded — pollinator; interest recorded — Winter interest; gate unknown"
+       ],
+       "gate": "unknown",
+       "proxy_radius_m": 0.15
+      }
+     ],
+     "canopy": []
+    },
+    "excluded": [
+     {
+      "id": "plant:acer-palmatum",
+      "reason": "a tree whose claimed mature spread (3–7.6 m, acer-palmatum:mature_spread:rhs01) exceeds the bed (5.4 × 3.4 m)"
+     },
+     {
+      "id": "plant:cercidiphyllum-japonicum",
+      "reason": "a tree whose claimed mature spread (7.6–18.3 m, cercidiphyllum-japonicum:mature_spread:mobot01) exceeds the bed (5.4 × 3.4 m)"
+     },
+     {
+      "id": "plant:cornus-nuttallii",
+      "reason": "a tree whose claimed mature spread (3–7.6 m, cornus-nuttallii:mature_spread:mobot01) exceeds the bed (5.4 × 3.4 m)"
+     }
+    ],
+    "not_used": [
+     {
+      "id": "plant:cornus-sericea",
+      "reason": "eligible but not needed by any zone"
+     },
+     {
+      "id": "plant:gaillardia-aristata",
+      "reason": "eligible but not needed by any zone"
+     }
+    ]
+   },
+   "assumptions": [
+    "existing tree: canopy radius 1.5 m is assumed 1.5 m — canopy not stated",
+    "plant sizes are proxies: half the claimed mature spread (one claim chosen per species, alternatives counted) — not measured plants; planting spacing is 0.75 × (screen rows) and 0.65 × (ground layer) the claimed mature spread, so canopies meet and overlap at maturity by design",
+    "no new tree placed: Acer palmatum, Cercidiphyllum japonicum, Cornus nuttallii exceed the bed at claimed mature spread"
+   ],
+   "unresolved": [
+    "unknown: soil type and drainage",
+    "unknown: ecological performance — the database records some ecological-value claims (pollinator, bird food …) but no pollinator-interaction data; no score is possible"
+   ],
+   "edit_event": {
+    "kind": "spatial_edit",
+    "command": {
+     "kind": "spatial_edit_request",
+     "utterance": "Too dense here, but keep the privacy.",
+     "provenance": "offline-parser",
+     "scope": {
+      "kind": "selection",
+      "selection_id": "lasso-demo",
+      "polygon": [
+       [
+        3.7560000000000002,
+        0.19999999999999998
+       ],
+       [
+        5.8,
+        0.19999999999999998
+       ],
+       [
+        5.8,
+        3.8000000000000003
+       ],
+       [
+        3.7560000000000002,
+        3.8000000000000003
+       ]
+      ],
+      "basis": "\"here\" → the drawn selection"
+     },
+     "operations": [
+      {
+       "type": "reduce_density",
+       "amount": {
+        "kind": "relative",
+        "value": 0.25,
+        "basis": "default interpretation candidate — adjust before applying"
+       }
+      }
+     ],
+     "preserve": [
+      {
+       "type": "spatial_function",
+       "value": "z:screen",
+       "evidence": "keep the privacy"
+      },
+      {
+       "type": "locked_objects",
+       "value": "existing-tree",
+       "evidence": "always"
+      }
+     ],
+     "evidence": [
+      {
+       "rule": "reduce_density",
+       "text": "Too dense"
+      },
+      {
+       "rule": "preserve_privacy",
+       "text": "keep the privacy"
+      }
+     ],
+     "notes": [],
+     "conflicts": [],
+     "confidence": "interpretation_candidate",
+     "requires_preview": true
+    },
+    "target_ids": [
+     "plant-001",
+     "plant-002",
+     "plant-004",
+     "plant-005",
+     "plant-012",
+     "plant-013",
+     "plant-017",
+     "plant-018",
+     "plant-019",
+     "plant-022",
+     "plant-023",
+     "plant-026",
+     "plant-027",
+     "plant-029",
+     "plant-030",
+     "plant-031",
+     "plant-033",
+     "plant-036",
+     "plant-037"
+    ],
+    "removed_ids": [
+     "plant-004",
+     "plant-017",
+     "plant-005",
+     "plant-029",
+     "plant-027"
+    ],
+    "added_ids": [],
+    "notes": [
+     "2 screen-row plants kept untouched to preserve the screen (an intent; screening performance is not quantified)",
+     "reduce density by 25 % (default interpretation candidate — adjust before applying): 5 of 17 eligible plants removed, the most crowded first; nothing outside the scope moves"
+    ],
+    "refused": []
+   },
+   "schedule": [
+    {
+     "species_id": "plant:arctostaphylos-uva-ursi",
+     "count": 22,
+     "roles": [
+      "ground"
+     ],
+     "beds": [
+      "bed-1"
+     ]
+    },
+    {
+     "species_id": "plant:achillea-millefolium",
+     "count": 6,
+     "roles": [
+      "accent"
+     ],
+     "beds": [
+      "bed-1"
+     ]
+    },
+    {
+     "species_id": "plant:gaultheria-shallon",
+     "count": 3,
+     "roles": [
+      "screen"
+     ],
+     "beds": [
+      "bed-1"
+     ]
+    },
+    {
+     "species_id": "plant:vaccinium-ovatum",
+     "count": 1,
+     "roles": [
+      "screen-layer"
+     ],
+     "beds": [
+      "bed-1"
+     ]
+    }
+   ],
+   "validation": {
+    "ok": true,
+    "issues": []
+   },
+   "evaluation": {
+    "bed_area_m2": 18.36,
+    "plant_count": 32,
+    "species_count": 4,
+    "by_role": {
+     "screen": 3,
+     "screen-layer": 1,
+     "ground": 22,
+     "accent": 6
+    },
+    "edge_zones": [
+     {
+      "zone": "zone-screen-north-edge",
+      "label": "Screen along the north edge",
+      "edge_length_m": 5.4,
+      "screen_row_cover_m": 2.28,
+      "continuity": 0.42,
+      "note": "row cover = sum of proxy diameters over edge length — a geometric proxy for continuity, not a measured screening effect"
+     }
+    ],
+    "open_zones": [
+     {
+      "id": "open-aico7",
+      "area_m2": 3.84,
+      "plants_inside": 0
+     }
+    ],
+    "evidence_gates": {
+     "pass": 0,
+     "conditional": 0,
+     "unknown": 32
+    },
+    "cost": null,
+    "cost_note": "no prices in the database — not computed",
+    "ecology_score": null,
+    "ecology_note": "no pollinator-interaction data — no score; ecological-value claims are listed per species instead",
+    "unknown_conditions": [
+     "soil_type",
+     "soil_drainage",
+     "water",
+     "wind",
+     "irrigation"
+    ]
+   },
+   "id": "v-aicof",
+   "created": "2026-11-07T22:11:30.344Z",
+   "parent_version_id": "v-aicob"
+  },
+  {
+   "label": "edit: Move the taller plants away from the tree.",
+   "seed": 42,
+   "bed_id": "bed-1",
+   "generator": {
+    "operators": [
+     "along_edge",
+     "stagger",
+     "fill_drift",
+     "repeat_accent"
+    ],
+    "density": 1,
+    "params": {
+     "density": 1,
+     "stagger": true,
+     "id_start": 0
+    }
+   },
+   "knowledge_snapshot": {
+    "generated": "2026-11-07",
+    "generated_by": "tools/build_explorer.py",
+    "method": "M49",
+    "inputs": {
+     "kg_generated": "2026-11-03",
+     "xyz_generated": "2026-11-03",
+     "relations_updated": "2026-11-02",
+     "schema_version": "0.4.3",
+     "ontology_version": "0.2.0"
+    }
+   },
+   "geometry_precision": "approximate (user-calibrated)",
+   "plant_objects": [
+    {
+     "id": "plant-001",
+     "species_id": "plant:gaultheria-shallon",
+     "bed_id": "bed-1",
+     "position_m": [
+      5.36,
+      3.32
+     ],
+     "proxy_radius_m": 0.38,
+     "proxy_source": {
+      "claim": "gaultheria-shallon:mature_spread:rhs01",
+      "range_m": [
+       0.5,
+       1
+      ],
+      "status": "proxy: half the claimed mature spread",
+      "note": "one claimed range"
+     },
+     "height_m": 1.25,
+     "height_source": {
+      "claim": "gaultheria-shallon:mature_height:rhs01",
+      "range_m": [
+       1,
+       1.5
+      ],
+      "status": "proxy from a claimed height range"
+     },
+     "role": "screen",
+     "group_id": "group-1",
+     "zone_id": "zone-screen-north-edge",
+     "locked": false,
+     "origin": "generated"
+    },
+    {
+     "id": "plant-002",
+     "species_id": "plant:gaultheria-shallon",
+     "bed_id": "bed-1",
+     "position_m": [
+      4.18,
+      3.32
+     ],
+     "proxy_radius_m": 0.38,
+     "proxy_source": {
+      "claim": "gaultheria-shallon:mature_spread:rhs01",
+      "range_m": [
+       0.5,
+       1
+      ],
+      "status": "proxy: half the claimed mature spread",
+      "note": "one claimed range"
+     },
+     "height_m": 1.25,
+     "height_source": {
+      "claim": "gaultheria-shallon:mature_height:rhs01",
+      "range_m": [
+       1,
+       1.5
+      ],
+      "status": "proxy from a claimed height range"
+     },
+     "role": "screen",
+     "group_id": "group-1",
+     "zone_id": "zone-screen-north-edge",
+     "locked": false,
+     "origin": "generated"
+    },
+    {
+     "id": "plant-003",
+     "species_id": "plant:gaultheria-shallon",
+     "bed_id": "bed-1",
+     "position_m": [
+      3,
+      3.32
+     ],
+     "proxy_radius_m": 0.38,
+     "proxy_source": {
+      "claim": "gaultheria-shallon:mature_spread:rhs01",
+      "range_m": [
+       0.5,
+       1
+      ],
+      "status": "proxy: half the claimed mature spread",
+      "note": "one claimed range"
+     },
+     "height_m": 1.25,
+     "height_source": {
+      "claim": "gaultheria-shallon:mature_height:rhs01",
+      "range_m": [
+       1,
+       1.5
+      ],
+      "status": "proxy from a claimed height range"
+     },
+     "role": "screen",
+     "group_id": "group-1",
+     "zone_id": "zone-screen-north-edge",
+     "locked": false,
+     "origin": "generated"
+    },
+    {
+     "id": "plant-006",
+     "species_id": "plant:vaccinium-ovatum",
+     "bed_id": "bed-1",
+     "position_m": [
+      4.22,
+      1.44
+     ],
+     "proxy_radius_m": 0.63,
+     "proxy_source": {
+      "claim": "vaccinium-ovatum:mature_spread:rhs01",
+      "range_m": [
+       1,
+       1.5
+      ],
+      "status": "proxy: half the claimed mature spread",
+      "note": "one claimed range"
+     },
+     "height_m": 1.75,
+     "height_source": {
+      "claim": "vaccinium-ovatum:mature_height:rhs01",
+      "range_m": [
+       0.5,
+       3
+      ],
+      "status": "proxy from a claimed height range"
+     },
+     "role": "screen-layer",
+     "group_id": "group-2",
+     "zone_id": "zone-screen-north-edge",
+     "locked": false,
+     "origin": "edit:move_away"
+    },
+    {
+     "id": "plant-007",
+     "species_id": "plant:arctostaphylos-uva-ursi",
+     "bed_id": "bed-1",
+     "position_m": [
+      0.57,
+      0.54
+     ],
+     "proxy_radius_m": 0.15,
+     "proxy_source": {
+      "claim": "arctostaphylos-uva-ursi:mature_spread:rhs01",
+      "range_m": [
+       0.1,
+       0.5
+      ],
+      "status": "proxy: half the claimed mature spread",
+      "note": "median of 2 claimed ranges"
+     },
+     "height_m": 0.1,
+     "height_source": {
+      "claim": "arctostaphylos-uva-ursi:mature_height:osu02",
+      "range_m": [
+       0.05,
+       0.15
+      ],
+      "status": "proxy from a claimed height range"
+     },
+     "role": "ground",
+     "group_id": "group-3",
+     "zone_id": "zone-fill",
+     "locked": false,
+     "origin": "generated"
+    },
+    {
+     "id": "plant-008",
+     "species_id": "plant:arctostaphylos-uva-ursi",
+     "bed_id": "bed-1",
+     "position_m": [
+      1.12,
+      0.58
+     ],
+     "proxy_radius_m": 0.15,
+     "proxy_source": {
+      "claim": "arctostaphylos-uva-ursi:mature_spread:rhs01",
+      "range_m": [
+       0.1,
+       0.5
+      ],
+      "status": "proxy: half the claimed mature spread",
+      "note": "median of 2 claimed ranges"
+     },
+     "height_m": 0.1,
+     "height_source": {
+      "claim": "arctostaphylos-uva-ursi:mature_height:osu02",
+      "range_m": [
+       0.05,
+       0.15
+      ],
+      "status": "proxy from a claimed height range"
+     },
+     "role": "ground",
+     "group_id": "group-3",
+     "zone_id": "zone-fill",
+     "locked": false,
+     "origin": "generated"
+    },
+    {
+     "id": "plant-009",
+     "species_id": "plant:arctostaphylos-uva-ursi",
+     "bed_id": "bed-1",
+     "position_m": [
+      1.51,
+      0.56
+     ],
+     "proxy_radius_m": 0.15,
+     "proxy_source": {
+      "claim": "arctostaphylos-uva-ursi:mature_spread:rhs01",
+      "range_m": [
+       0.1,
+       0.5
+      ],
+      "status": "proxy: half the claimed mature spread",
+      "note": "median of 2 claimed ranges"
+     },
+     "height_m": 0.1,
+     "height_source": {
+      "claim": "arctostaphylos-uva-ursi:mature_height:osu02",
+      "range_m": [
+       0.05,
+       0.15
+      ],
+      "status": "proxy from a claimed height range"
+     },
+     "role": "ground",
+     "group_id": "group-3",
+     "zone_id": "zone-fill",
+     "locked": false,
+     "origin": "generated"
+    },
+    {
+     "id": "plant-010",
+     "species_id": "plant:achillea-millefolium",
+     "bed_id": "bed-1",
+     "position_m": [
+      2.03,
+      0.58
+     ],
+     "proxy_radius_m": 0.15,
+     "proxy_source": {
+      "claim": "achillea-millefolium:mature_spread:rhs01",
+      "range_m": [
+       0.1,
+       0.5
+      ],
+      "status": "proxy: half the claimed mature spread",
+      "note": "median of 2 claimed ranges"
+     },
+     "height_m": 0.55,
+     "height_source": {
+      "claim": "achillea-millefolium:mature_height:eflora01",
+      "range_m": [
+       0.1,
+       1
+      ],
+      "status": "proxy from a claimed height range"
+     },
+     "role": "accent",
+     "group_id": "group-4",
+     "zone_id": "zone-fill",
+     "locked": false,
+     "origin": "generated"
+    },
+    {
+     "id": "plant-011",
+     "species_id": "plant:arctostaphylos-uva-ursi",
+     "bed_id": "bed-1",
+     "position_m": [
+      2.65,
+      0.55
+     ],
+     "proxy_radius_m": 0.15,
+     "proxy_source": {
+      "claim": "arctostaphylos-uva-ursi:mature_spread:rhs01",
+      "range_m": [
+       0.1,
+       0.5
+      ],
+      "status": "proxy: half the claimed mature spread",
+      "note": "median of 2 claimed ranges"
+     },
+     "height_m": 0.1,
+     "height_source": {
+      "claim": "arctostaphylos-uva-ursi:mature_height:osu02",
+      "range_m": [
+       0.05,
+       0.15
+      ],
+      "status": "proxy from a claimed height range"
+     },
+     "role": "ground",
+     "group_id": "group-3",
+     "zone_id": "zone-fill",
+     "locked": false,
+     "origin": "generated"
+    },
+    {
+     "id": "plant-012",
+     "species_id": "plant:achillea-millefolium",
+     "bed_id": "bed-1",
+     "position_m": [
+      4.64,
+      0.57
+     ],
+     "proxy_radius_m": 0.15,
+     "proxy_source": {
+      "claim": "achillea-millefolium:mature_spread:rhs01",
+      "range_m": [
+       0.1,
+       0.5
+      ],
+      "status": "proxy: half the claimed mature spread",
+      "note": "median of 2 claimed ranges"
+     },
+     "height_m": 0.55,
+     "height_source": {
+      "claim": "achillea-millefolium:mature_height:eflora01",
+      "range_m": [
+       0.1,
+       1
+      ],
+      "status": "proxy from a claimed height range"
+     },
+     "role": "accent",
+     "group_id": "group-4",
+     "zone_id": "zone-fill",
+     "locked": false,
+     "origin": "generated"
+    },
+    {
+     "id": "plant-013",
+     "species_id": "plant:achillea-millefolium",
+     "bed_id": "bed-1",
+     "position_m": [
+      5.03,
+      0.55
+     ],
+     "proxy_radius_m": 0.15,
+     "proxy_source": {
+      "claim": "achillea-millefolium:mature_spread:rhs01",
+      "range_m": [
+       0.1,
+       0.5
+      ],
+      "status": "proxy: half the claimed mature spread",
+      "note": "median of 2 claimed ranges"
+     },
+     "height_m": 0.55,
+     "height_source": {
+      "claim": "achillea-millefolium:mature_height:eflora01",
+      "range_m": [
+       0.1,
+       1
+      ],
+      "status": "proxy from a claimed height range"
+     },
+     "role": "accent",
+     "group_id": "group-4",
+     "zone_id": "zone-fill",
+     "locked": false,
+     "origin": "generated"
+    },
+    {
+     "id": "plant-014",
+     "species_id": "plant:arctostaphylos-uva-ursi",
+     "bed_id": "bed-1",
+     "position_m": [
+      0.82,
+      0.91
+     ],
+     "proxy_radius_m": 0.15,
+     "proxy_source": {
+      "claim": "arctostaphylos-uva-ursi:mature_spread:rhs01",
+      "range_m": [
+       0.1,
+       0.5
+      ],
+      "status": "proxy: half the claimed mature spread",
+      "note": "median of 2 claimed ranges"
+     },
+     "height_m": 0.1,
+     "height_source": {
+      "claim": "arctostaphylos-uva-ursi:mature_height:osu02",
+      "range_m": [
+       0.05,
+       0.15
+      ],
+      "status": "proxy from a claimed height range"
+     },
+     "role": "ground",
+     "group_id": "group-3",
+     "zone_id": "zone-fill",
+     "locked": false,
+     "origin": "generated"
+    },
+    {
+     "id": "plant-015",
+     "species_id": "plant:arctostaphylos-uva-ursi",
+     "bed_id": "bed-1",
+     "position_m": [
+      1.27,
+      0.91
+     ],
+     "proxy_radius_m": 0.15,
+     "proxy_source": {
+      "claim": "arctostaphylos-uva-ursi:mature_spread:rhs01",
+      "range_m": [
+       0.1,
+       0.5
+      ],
+      "status": "proxy: half the claimed mature spread",
+      "note": "median of 2 claimed ranges"
+     },
+     "height_m": 0.1,
+     "height_source": {
+      "claim": "arctostaphylos-uva-ursi:mature_height:osu02",
+      "range_m": [
+       0.05,
+       0.15
+      ],
+      "status": "proxy from a claimed height range"
+     },
+     "role": "ground",
+     "group_id": "group-3",
+     "zone_id": "zone-fill",
+     "locked": false,
+     "origin": "generated"
+    },
+    {
+     "id": "plant-016",
+     "species_id": "plant:arctostaphylos-uva-ursi",
+     "bed_id": "bed-1",
+     "position_m": [
+      1.77,
+      1.04
+     ],
+     "proxy_radius_m": 0.15,
+     "proxy_source": {
+      "claim": "arctostaphylos-uva-ursi:mature_spread:rhs01",
+      "range_m": [
+       0.1,
+       0.5
+      ],
+      "status": "proxy: half the claimed mature spread",
+      "note": "median of 2 claimed ranges"
+     },
+     "height_m": 0.1,
+     "height_source": {
+      "claim": "arctostaphylos-uva-ursi:mature_height:osu02",
+      "range_m": [
+       0.05,
+       0.15
+      ],
+      "status": "proxy from a claimed height range"
+     },
+     "role": "ground",
+     "group_id": "group-3",
+     "zone_id": "zone-fill",
+     "locked": false,
+     "origin": "generated"
+    },
+    {
+     "id": "plant-018",
+     "species_id": "plant:achillea-millefolium",
+     "bed_id": "bed-1",
+     "position_m": [
+      4.87,
+      1.01
+     ],
+     "proxy_radius_m": 0.15,
+     "proxy_source": {
+      "claim": "achillea-millefolium:mature_spread:rhs01",
+      "range_m": [
+       0.1,
+       0.5
+      ],
+      "status": "proxy: half the claimed mature spread",
+      "note": "median of 2 claimed ranges"
+     },
+     "height_m": 0.55,
+     "height_source": {
+      "claim": "achillea-millefolium:mature_height:eflora01",
+      "range_m": [
+       0.1,
+       1
+      ],
+      "status": "proxy from a claimed height range"
+     },
+     "role": "accent",
+     "group_id": "group-4",
+     "zone_id": "zone-fill",
+     "locked": false,
+     "origin": "generated"
+    },
+    {
+     "id": "plant-019",
+     "species_id": "plant:arctostaphylos-uva-ursi",
+     "bed_id": "bed-1",
+     "position_m": [
+      5.32,
+      1.02
+     ],
+     "proxy_radius_m": 0.15,
+     "proxy_source": {
+      "claim": "arctostaphylos-uva-ursi:mature_spread:rhs01",
+      "range_m": [
+       0.1,
+       0.5
+      ],
+      "status": "proxy: half the claimed mature spread",
+      "note": "median of 2 claimed ranges"
+     },
+     "height_m": 0.1,
+     "height_source": {
+      "claim": "arctostaphylos-uva-ursi:mature_height:osu02",
+      "range_m": [
+       0.05,
+       0.15
+      ],
+      "status": "proxy from a claimed height range"
+     },
+     "role": "ground",
+     "group_id": "group-3",
+     "zone_id": "zone-fill",
+     "locked": false,
+     "origin": "generated"
+    },
+    {
+     "id": "plant-020",
+     "species_id": "plant:arctostaphylos-uva-ursi",
+     "bed_id": "bed-1",
+     "position_m": [
+      1.1,
+      1.5
+     ],
+     "proxy_radius_m": 0.15,
+     "proxy_source": {
+      "claim": "arctostaphylos-uva-ursi:mature_spread:rhs01",
+      "range_m": [
+       0.1,
+       0.5
+      ],
+      "status": "proxy: half the claimed mature spread",
+      "note": "median of 2 claimed ranges"
+     },
+     "height_m": 0.1,
+     "height_source": {
+      "claim": "arctostaphylos-uva-ursi:mature_height:osu02",
+      "range_m": [
+       0.05,
+       0.15
+      ],
+      "status": "proxy from a claimed height range"
+     },
+     "role": "ground",
+     "group_id": "group-3",
+     "zone_id": "zone-fill",
+     "locked": false,
+     "origin": "generated"
+    },
+    {
+     "id": "plant-021",
+     "species_id": "plant:achillea-millefolium",
+     "bed_id": "bed-1",
+     "position_m": [
+      1.57,
+      1.38
+     ],
+     "proxy_radius_m": 0.15,
+     "proxy_source": {
+      "claim": "achillea-millefolium:mature_spread:rhs01",
+      "range_m": [
+       0.1,
+       0.5
+      ],
+      "status": "proxy: half the claimed mature spread",
+      "note": "median of 2 claimed ranges"
+     },
+     "height_m": 0.55,
+     "height_source": {
+      "claim": "achillea-millefolium:mature_height:eflora01",
+      "range_m": [
+       0.1,
+       1
+      ],
+      "status": "proxy from a claimed height range"
+     },
+     "role": "accent",
+     "group_id": "group-4",
+     "zone_id": "zone-fill",
+     "locked": false,
+     "origin": "generated"
+    },
+    {
+     "id": "plant-022",
+     "species_id": "plant:arctostaphylos-uva-ursi",
+     "bed_id": "bed-1",
+     "position_m": [
+      5.05,
+      1.35
+     ],
+     "proxy_radius_m": 0.15,
+     "proxy_source": {
+      "claim": "arctostaphylos-uva-ursi:mature_spread:rhs01",
+      "range_m": [
+       0.1,
+       0.5
+      ],
+      "status": "proxy: half the claimed mature spread",
+      "note": "median of 2 claimed ranges"
+     },
+     "height_m": 0.1,
+     "height_source": {
+      "claim": "arctostaphylos-uva-ursi:mature_height:osu02",
+      "range_m": [
+       0.05,
+       0.15
+      ],
+      "status": "proxy from a claimed height range"
+     },
+     "role": "ground",
+     "group_id": "group-3",
+     "zone_id": "zone-fill",
+     "locked": false,
+     "origin": "generated"
+    },
+    {
+     "id": "plant-023",
+     "species_id": "plant:arctostaphylos-uva-ursi",
+     "bed_id": "bed-1",
+     "position_m": [
+      5.6,
+      1.43
+     ],
+     "proxy_radius_m": 0.15,
+     "proxy_source": {
+      "claim": "arctostaphylos-uva-ursi:mature_spread:rhs01",
+      "range_m": [
+       0.1,
+       0.5
+      ],
+      "status": "proxy: half the claimed mature spread",
+      "note": "median of 2 claimed ranges"
+     },
+     "height_m": 0.1,
+     "height_source": {
+      "claim": "arctostaphylos-uva-ursi:mature_height:osu02",
+      "range_m": [
+       0.05,
+       0.15
+      ],
+      "status": "proxy from a claimed height range"
+     },
+     "role": "ground",
+     "group_id": "group-3",
+     "zone_id": "zone-fill",
+     "locked": false,
+     "origin": "generated"
+    },
+    {
+     "id": "plant-024",
+     "species_id": "plant:achillea-millefolium",
+     "bed_id": "bed-1",
+     "position_m": [
+      0.83,
+      1.94
+     ],
+     "proxy_radius_m": 0.15,
+     "proxy_source": {
+      "claim": "achillea-millefolium:mature_spread:rhs01",
+      "range_m": [
+       0.1,
+       0.5
+      ],
+      "status": "proxy: half the claimed mature spread",
+      "note": "median of 2 claimed ranges"
+     },
+     "height_m": 0.55,
+     "height_source": {
+      "claim": "achillea-millefolium:mature_height:eflora01",
+      "range_m": [
+       0.1,
+       1
+      ],
+      "status": "proxy from a claimed height range"
+     },
+     "role": "accent",
+     "group_id": "group-4",
+     "zone_id": "zone-fill",
+     "locked": false,
+     "origin": "generated"
+    },
+    {
+     "id": "plant-025",
+     "species_id": "plant:arctostaphylos-uva-ursi",
+     "bed_id": "bed-1",
+     "position_m": [
+      1.24,
+      1.91
+     ],
+     "proxy_radius_m": 0.15,
+     "proxy_source": {
+      "claim": "arctostaphylos-uva-ursi:mature_spread:rhs01",
+      "range_m": [
+       0.1,
+       0.5
+      ],
+      "status": "proxy: half the claimed mature spread",
+      "note": "median of 2 claimed ranges"
+     },
+     "height_m": 0.1,
+     "height_source": {
+      "claim": "arctostaphylos-uva-ursi:mature_height:osu02",
+      "range_m": [
+       0.05,
+       0.15
+      ],
+      "status": "proxy from a claimed height range"
+     },
+     "role": "ground",
+     "group_id": "group-3",
+     "zone_id": "zone-fill",
+     "locked": false,
+     "origin": "generated"
+    },
+    {
+     "id": "plant-026",
+     "species_id": "plant:arctostaphylos-uva-ursi",
+     "bed_id": "bed-1",
+     "position_m": [
+      4.83,
+      1.89
+     ],
+     "proxy_radius_m": 0.15,
+     "proxy_source": {
+      "claim": "arctostaphylos-uva-ursi:mature_spread:rhs01",
+      "range_m": [
+       0.1,
+       0.5
+      ],
+      "status": "proxy: half the claimed mature spread",
+      "note": "median of 2 claimed ranges"
+     },
+     "height_m": 0.1,
+     "height_source": {
+      "claim": "arctostaphylos-uva-ursi:mature_height:osu02",
+      "range_m": [
+       0.05,
+       0.15
+      ],
+      "status": "proxy from a claimed height range"
+     },
+     "role": "ground",
+     "group_id": "group-3",
+     "zone_id": "zone-fill",
+     "locked": false,
+     "origin": "generated"
+    },
+    {
+     "id": "plant-028",
+     "species_id": "plant:arctostaphylos-uva-ursi",
+     "bed_id": "bed-1",
+     "position_m": [
+      3.32,
+      2.68
+     ],
+     "proxy_radius_m": 0.15,
+     "proxy_source": {
+      "claim": "arctostaphylos-uva-ursi:mature_spread:rhs01",
+      "range_m": [
+       0.1,
+       0.5
+      ],
+      "status": "proxy: half the claimed mature spread",
+      "note": "median of 2 claimed ranges"
+     },
+     "height_m": 0.1,
+     "height_source": {
+      "claim": "arctostaphylos-uva-ursi:mature_height:osu02",
+      "range_m": [
+       0.05,
+       0.15
+      ],
+      "status": "proxy from a claimed height range"
+     },
+     "role": "ground",
+     "group_id": "group-3",
+     "zone_id": "zone-fill",
+     "locked": false,
+     "origin": "generated"
+    },
+    {
+     "id": "plant-030",
+     "species_id": "plant:arctostaphylos-uva-ursi",
+     "bed_id": "bed-1",
+     "position_m": [
+      4.89,
+      2.82
+     ],
+     "proxy_radius_m": 0.15,
+     "proxy_source": {
+      "claim": "arctostaphylos-uva-ursi:mature_spread:rhs01",
+      "range_m": [
+       0.1,
+       0.5
+      ],
+      "status": "proxy: half the claimed mature spread",
+      "note": "median of 2 claimed ranges"
+     },
+     "height_m": 0.1,
+     "height_source": {
+      "claim": "arctostaphylos-uva-ursi:mature_height:osu02",
+      "range_m": [
+       0.05,
+       0.15
+      ],
+      "status": "proxy from a claimed height range"
+     },
+     "role": "ground",
+     "group_id": "group-3",
+     "zone_id": "zone-fill",
+     "locked": false,
+     "origin": "generated"
+    },
+    {
+     "id": "plant-031",
+     "species_id": "plant:arctostaphylos-uva-ursi",
+     "bed_id": "bed-1",
+     "position_m": [
+      5.44,
+      2.7
+     ],
+     "proxy_radius_m": 0.15,
+     "proxy_source": {
+      "claim": "arctostaphylos-uva-ursi:mature_spread:rhs01",
+      "range_m": [
+       0.1,
+       0.5
+      ],
+      "status": "proxy: half the claimed mature spread",
+      "note": "median of 2 claimed ranges"
+     },
+     "height_m": 0.1,
+     "height_source": {
+      "claim": "arctostaphylos-uva-ursi:mature_height:osu02",
+      "range_m": [
+       0.05,
+       0.15
+      ],
+      "status": "proxy from a claimed height range"
+     },
+     "role": "ground",
+     "group_id": "group-3",
+     "zone_id": "zone-fill",
+     "locked": false,
+     "origin": "generated"
+    },
+    {
+     "id": "plant-032",
+     "species_id": "plant:arctostaphylos-uva-ursi",
+     "bed_id": "bed-1",
+     "position_m": [
+      3.61,
+      3.27
+     ],
+     "proxy_radius_m": 0.15,
+     "proxy_source": {
+      "claim": "arctostaphylos-uva-ursi:mature_spread:rhs01",
+      "range_m": [
+       0.1,
+       0.5
+      ],
+      "status": "proxy: half the claimed mature spread",
+      "note": "median of 2 claimed ranges"
+     },
+     "height_m": 0.1,
+     "height_source": {
+      "claim": "arctostaphylos-uva-ursi:mature_height:osu02",
+      "range_m": [
+       0.05,
+       0.15
+      ],
+      "status": "proxy from a claimed height range"
+     },
+     "role": "ground",
+     "group_id": "group-3",
+     "zone_id": "zone-fill",
+     "locked": false,
+     "origin": "generated"
+    },
+    {
+     "id": "plant-033",
+     "species_id": "plant:arctostaphylos-uva-ursi",
+     "bed_id": "bed-1",
+     "position_m": [
+      4.62,
+      3.15
+     ],
+     "proxy_radius_m": 0.15,
+     "proxy_source": {
+      "claim": "arctostaphylos-uva-ursi:mature_spread:rhs01",
+      "range_m": [
+       0.1,
+       0.5
+      ],
+      "status": "proxy: half the claimed mature spread",
+      "note": "median of 2 claimed ranges"
+     },
+     "height_m": 0.1,
+     "height_source": {
+      "claim": "arctostaphylos-uva-ursi:mature_height:osu02",
+      "range_m": [
+       0.05,
+       0.15
+      ],
+      "status": "proxy from a claimed height range"
+     },
+     "role": "ground",
+     "group_id": "group-3",
+     "zone_id": "zone-fill",
+     "locked": false,
+     "origin": "generated"
+    },
+    {
+     "id": "plant-034",
+     "species_id": "plant:arctostaphylos-uva-ursi",
+     "bed_id": "bed-1",
+     "position_m": [
+      2.79,
+      3.6
+     ],
+     "proxy_radius_m": 0.15,
+     "proxy_source": {
+      "claim": "arctostaphylos-uva-ursi:mature_spread:rhs01",
+      "range_m": [
+       0.1,
+       0.5
+      ],
+      "status": "proxy: half the claimed mature spread",
+      "note": "median of 2 claimed ranges"
+     },
+     "height_m": 0.1,
+     "height_source": {
+      "claim": "arctostaphylos-uva-ursi:mature_height:osu02",
+      "range_m": [
+       0.05,
+       0.15
+      ],
+      "status": "proxy from a claimed height range"
+     },
+     "role": "ground",
+     "group_id": "group-3",
+     "zone_id": "zone-fill",
+     "locked": false,
+     "origin": "generated"
+    },
+    {
+     "id": "plant-035",
+     "species_id": "plant:arctostaphylos-uva-ursi",
+     "bed_id": "bed-1",
+     "position_m": [
+      3.31,
+      3.6
+     ],
+     "proxy_radius_m": 0.15,
+     "proxy_source": {
+      "claim": "arctostaphylos-uva-ursi:mature_spread:rhs01",
+      "range_m": [
+       0.1,
+       0.5
+      ],
+      "status": "proxy: half the claimed mature spread",
+      "note": "median of 2 claimed ranges"
+     },
+     "height_m": 0.1,
+     "height_source": {
+      "claim": "arctostaphylos-uva-ursi:mature_height:osu02",
+      "range_m": [
+       0.05,
+       0.15
+      ],
+      "status": "proxy from a claimed height range"
+     },
+     "role": "ground",
+     "group_id": "group-3",
+     "zone_id": "zone-fill",
+     "locked": false,
+     "origin": "generated"
+    },
+    {
+     "id": "plant-036",
+     "species_id": "plant:arctostaphylos-uva-ursi",
+     "bed_id": "bed-1",
+     "position_m": [
+      3.88,
+      3.58
+     ],
+     "proxy_radius_m": 0.15,
+     "proxy_source": {
+      "claim": "arctostaphylos-uva-ursi:mature_spread:rhs01",
+      "range_m": [
+       0.1,
+       0.5
+      ],
+      "status": "proxy: half the claimed mature spread",
+      "note": "median of 2 claimed ranges"
+     },
+     "height_m": 0.1,
+     "height_source": {
+      "claim": "arctostaphylos-uva-ursi:mature_height:osu02",
+      "range_m": [
+       0.05,
+       0.15
+      ],
+      "status": "proxy from a claimed height range"
+     },
+     "role": "ground",
+     "group_id": "group-3",
+     "zone_id": "zone-fill",
+     "locked": false,
+     "origin": "generated"
+    },
+    {
+     "id": "plant-037",
+     "species_id": "plant:arctostaphylos-uva-ursi",
+     "bed_id": "bed-1",
+     "position_m": [
+      4.83,
+      3.56
+     ],
+     "proxy_radius_m": 0.15,
+     "proxy_source": {
+      "claim": "arctostaphylos-uva-ursi:mature_spread:rhs01",
+      "range_m": [
+       0.1,
+       0.5
+      ],
+      "status": "proxy: half the claimed mature spread",
+      "note": "median of 2 claimed ranges"
+     },
+     "height_m": 0.1,
+     "height_source": {
+      "claim": "arctostaphylos-uva-ursi:mature_height:osu02",
+      "range_m": [
+       0.05,
+       0.15
+      ],
+      "status": "proxy from a claimed height range"
+     },
+     "role": "ground",
+     "group_id": "group-3",
+     "zone_id": "zone-fill",
+     "locked": false,
+     "origin": "generated"
+    }
+   ],
+   "groups": [
+    {
+     "id": "group-1",
+     "bed_id": "bed-1",
+     "zone_id": "zone-screen-north-edge",
+     "role": "screen",
+     "operator": "along_edge",
+     "params": {
+      "spacing": "0.75 × claimed mature spread",
+      "inset": "proxy radius",
+      "species": [
+       "plant:gaultheria-shallon",
+       "plant:vaccinium-ovatum"
+      ],
+      "alternate": true
+     },
+     "plant_ids": [
+      "plant-001",
+      "plant-002",
+      "plant-003"
+     ]
+    },
+    {
+     "id": "group-2",
+     "bed_id": "bed-1",
+     "zone_id": "zone-screen-north-edge",
+     "role": "screen-layer",
+     "operator": "stagger",
+     "params": {
+      "offset": "1.6 × radius inward",
+      "species": [
+       "plant:vaccinium-ovatum"
+      ]
+     },
+     "plant_ids": [
+      "plant-006"
+     ]
+    },
+    {
+     "id": "group-3",
+     "bed_id": "bed-1",
+     "zone_id": "zone-fill",
+     "role": "ground",
+     "operator": "fill_drift",
+     "params": {
+      "lattice": "hexagonal",
+      "spacing_m": 0.51,
+      "spacing_rule": "0.65 × the mean claimed mature spread of the ground species",
+      "jitter": 0.35,
+      "species": [
+       "plant:arctostaphylos-uva-ursi",
+       "plant:polystichum-munitum"
+      ],
+      "drift_field": "value noise",
+      "seed": 42
+     },
+     "plant_ids": [
+      "plant-007",
+      "plant-008",
+      "plant-009",
+      "plant-010",
+      "plant-011",
+      "plant-012",
+      "plant-013",
+      "plant-014",
+      "plant-015",
+      "plant-016",
+      "plant-018",
+      "plant-019",
+      "plant-020",
+      "plant-021",
+      "plant-022",
+      "plant-023",
+      "plant-024",
+      "plant-025",
+      "plant-026",
+      "plant-028",
+      "plant-030",
+      "plant-031",
+      "plant-032",
+      "plant-033",
+      "plant-034",
+      "plant-035",
+      "plant-036",
+      "plant-037"
+     ]
+    },
+    {
+     "id": "group-4",
+     "bed_id": "bed-1",
+     "zone_id": "zone-fill",
+     "role": "accent",
+     "operator": "repeat_accent",
+     "params": {
+      "every": 4,
+      "toward": "the open zone",
+      "species": [
+       "plant:achillea-millefolium"
+      ]
+     },
+     "plant_ids": [
+      "plant-010",
+      "plant-021",
+      "plant-012",
+      "plant-018",
+      "plant-013",
+      "plant-024"
+     ]
+    }
+   ],
+   "zones": [
+    {
+     "id": "zone-screen-north-edge",
+     "kind": "edge",
+     "function": "z:screen",
+     "label": "Screen along the north edge",
+     "edges": [
+      {
+       "a": [
+        5.7,
+        3.7
+       ],
+       "b": [
+        0.3,
+        3.7
+       ],
+       "n": [
+        0,
+        1
+       ]
+      }
+     ],
+     "priority": 1,
+     "basis": "privacy → Screen (blocks a view); Scrim would only filter it"
+    },
+    {
+     "id": "zone-open-open-aico7",
+     "kind": "open",
+     "label": "open (kids)",
+     "polygon": [
+      [
+       1.8,
+       0.6
+      ],
+      [
+       4.2,
+       0.6
+      ],
+      [
+       4.2,
+       2.2
+      ],
+      [
+       1.8,
+       2.2
+      ]
+     ],
+     "priority": 1
+    },
+    {
+     "id": "zone-fill",
+     "kind": "fill",
+     "label": "ground layer (remaining bed area)",
+     "polygon": [
+      [
+       0.3,
+       0.3
+      ],
+      [
+       5.7,
+       0.3
+      ],
+      [
+       5.7,
+       3.7
+      ],
+      [
+       0.3,
+       3.7
+      ]
+     ],
+     "priority": 2
+    }
+   ],
+   "assemblage": {
+    "picks": {
+     "screen": [
+      {
+       "id": "plant:gaultheria-shallon",
+       "why": [
+        "Screen: derived — recorded use: Sheared hedge (usda_plants); gate unknown; evergreen (holds the screen in winter — design heuristic)"
+       ],
+       "gate": "unknown",
+       "proxy_radius_m": 0.38
+      },
+      {
+       "id": "plant:vaccinium-ovatum",
+       "why": [
+        "Screen: derived with a conflict (a trait claim contradicts the use) — recorded use: Hedge row, Screening, Sheared hedge (gpp, survey-r03); gate unknown; evergreen (holds the screen in winter — design heuristic)"
+       ],
+       "gate": "unknown",
+       "proxy_radius_m": 0.63
+      }
+     ],
+     "ground": [
+      {
+       "id": "plant:arctostaphylos-uva-ursi",
+       "why": [
+        "Ground Cover: derived — recorded use: Ground cover (mobot, osu, rhs); gate unknown"
+       ],
+       "gate": "unknown",
+       "proxy_radius_m": 0.15
+      },
+      {
+       "id": "plant:polystichum-munitum",
+       "why": [
+        "Ground Cover: derived — recorded use: Ground cover (gpp); gate unknown"
+       ],
+       "gate": "unknown",
+       "proxy_radius_m": 0.63
+      }
+     ],
+     "accent": [
+      {
+       "id": "plant:achillea-millefolium",
+       "why": [
+        "accent: ecological value recorded — pollinator; interest recorded — Winter interest; gate unknown"
+       ],
+       "gate": "unknown",
+       "proxy_radius_m": 0.15
+      }
+     ],
+     "canopy": []
+    },
+    "excluded": [
+     {
+      "id": "plant:acer-palmatum",
+      "reason": "a tree whose claimed mature spread (3–7.6 m, acer-palmatum:mature_spread:rhs01) exceeds the bed (5.4 × 3.4 m)"
+     },
+     {
+      "id": "plant:cercidiphyllum-japonicum",
+      "reason": "a tree whose claimed mature spread (7.6–18.3 m, cercidiphyllum-japonicum:mature_spread:mobot01) exceeds the bed (5.4 × 3.4 m)"
+     },
+     {
+      "id": "plant:cornus-nuttallii",
+      "reason": "a tree whose claimed mature spread (3–7.6 m, cornus-nuttallii:mature_spread:mobot01) exceeds the bed (5.4 × 3.4 m)"
+     }
+    ],
+    "not_used": [
+     {
+      "id": "plant:cornus-sericea",
+      "reason": "eligible but not needed by any zone"
+     },
+     {
+      "id": "plant:gaillardia-aristata",
+      "reason": "eligible but not needed by any zone"
+     }
+    ]
+   },
+   "assumptions": [
+    "existing tree: canopy radius 1.5 m is assumed 1.5 m — canopy not stated",
+    "plant sizes are proxies: half the claimed mature spread (one claim chosen per species, alternatives counted) — not measured plants; planting spacing is 0.75 × (screen rows) and 0.65 × (ground layer) the claimed mature spread, so canopies meet and overlap at maturity by design",
+    "no new tree placed: Acer palmatum, Cercidiphyllum japonicum, Cornus nuttallii exceed the bed at claimed mature spread"
+   ],
+   "unresolved": [
+    "unknown: soil type and drainage",
+    "unknown: ecological performance — the database records some ecological-value claims (pollinator, bird food …) but no pollinator-interaction data; no score is possible"
+   ],
+   "edit_event": {
+    "kind": "spatial_edit",
+    "command": {
+     "kind": "spatial_edit_request",
+     "utterance": "Move the taller plants away from the tree.",
+     "provenance": "offline-parser",
+     "scope": {
+      "kind": "bed",
+      "bed_id": "bed-1",
+      "polygon": [
+       [
+        0.3,
+        0.3
+       ],
+       [
+        5.7,
+        0.3
+       ],
+       [
+        5.7,
+        3.7
+       ],
+       [
+        0.3,
+        3.7
+       ]
+      ],
+      "basis": "no selection and no direction word — the whole current bed is assumed; draw a selection to narrow it"
+     },
+     "operations": [
+      {
+       "type": "move_away",
+       "filter": "taller",
+       "feature_id": "tree-aico6",
+       "phrase": "tree",
+       "resolved": true
+      }
+     ],
+     "preserve": [
+      {
+       "type": "locked_objects",
+       "value": "existing-tree",
+       "evidence": "always"
+      }
+     ],
+     "evidence": [
+      {
+       "rule": "move_away",
+       "text": "Move the taller plants away from the tree"
+      }
+     ],
+     "notes": [],
+     "conflicts": [],
+     "confidence": "interpretation_candidate",
+     "requires_preview": true
+    },
+    "target_ids": [
+     "plant-001",
+     "plant-002",
+     "plant-003",
+     "plant-006",
+     "plant-007",
+     "plant-008",
+     "plant-009",
+     "plant-010",
+     "plant-011",
+     "plant-012",
+     "plant-013",
+     "plant-014",
+     "plant-015",
+     "plant-016",
+     "plant-018",
+     "plant-019",
+     "plant-020",
+     "plant-021",
+     "plant-022",
+     "plant-023",
+     "plant-024",
+     "plant-025",
+     "plant-026",
+     "plant-028",
+     "plant-030",
+     "plant-031",
+     "plant-032",
+     "plant-033",
+     "plant-034",
+     "plant-035",
+     "plant-036",
+     "plant-037"
+    ],
+    "removed_ids": [],
+    "added_ids": [],
+    "notes": [
+     "move taller plants away from existing tree: 1 moved, 1 could not be moved within the bed"
+    ],
+    "refused": []
+   },
+   "schedule": [
+    {
+     "species_id": "plant:arctostaphylos-uva-ursi",
+     "count": 22,
+     "roles": [
+      "ground"
+     ],
+     "beds": [
+      "bed-1"
+     ]
+    },
+    {
+     "species_id": "plant:achillea-millefolium",
+     "count": 6,
+     "roles": [
+      "accent"
+     ],
+     "beds": [
+      "bed-1"
+     ]
+    },
+    {
+     "species_id": "plant:gaultheria-shallon",
+     "count": 3,
+     "roles": [
+      "screen"
+     ],
+     "beds": [
+      "bed-1"
+     ]
+    },
+    {
+     "species_id": "plant:vaccinium-ovatum",
+     "count": 1,
+     "roles": [
+      "screen-layer"
+     ],
+     "beds": [
+      "bed-1"
+     ]
+    }
+   ],
+   "validation": {
+    "ok": true,
+    "issues": []
+   },
+   "evaluation": {
+    "bed_area_m2": 18.36,
+    "plant_count": 32,
+    "species_count": 4,
+    "by_role": {
+     "screen": 3,
+     "screen-layer": 1,
+     "ground": 22,
+     "accent": 6
+    },
+    "edge_zones": [
+     {
+      "zone": "zone-screen-north-edge",
+      "label": "Screen along the north edge",
+      "edge_length_m": 5.4,
+      "screen_row_cover_m": 2.28,
+      "continuity": 0.42,
+      "note": "row cover = sum of proxy diameters over edge length — a geometric proxy for continuity, not a measured screening effect"
+     }
+    ],
+    "open_zones": [
+     {
+      "id": "open-aico7",
+      "area_m2": 3.84,
+      "plants_inside": 0
+     }
+    ],
+    "evidence_gates": {
+     "pass": 0,
+     "conditional": 0,
+     "unknown": 32
+    },
+    "cost": null,
+    "cost_note": "no prices in the database — not computed",
+    "ecology_score": null,
+    "ecology_note": "no pollinator-interaction data — no score; ecological-value claims are listed per species instead",
+    "unknown_conditions": [
+     "soil_type",
+     "soil_drainage",
+     "water",
+     "wind",
+     "irrigation"
+    ]
+   },
+   "id": "v-aicol",
+   "created": "2026-11-07T22:11:30.344Z",
+   "parent_version_id": "v-aicof"
+  }
+ ],
+ "current_version_id": "v-aicol",
+ "redo": [],
+ "plant_seq": 37,
+ "updated": "2026-11-07T15:11:30"
+}

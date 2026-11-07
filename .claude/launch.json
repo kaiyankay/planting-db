@@ -33,6 +33,17 @@
         "8767"
       ],
       "port": 8767
+    },
+    {
+      "name": "design",
+      "runtimeExecutable": "python3",
+      "runtimeArgs": [
+        "-I",
+        "tools/design_server.py",
+        "--port",
+        "8768"
+      ],
+      "port": 8768
     }
   ]
 }

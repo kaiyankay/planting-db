@@ -32,3 +32,6 @@ inputs/survey/plant_candidates-derived-*.json
 review/events/*.jsonl
 review/ai/cache/
 tests/review/out/
+
+# Design workspace: auto-saved working projects (the demo file is tracked)
+designs/proj-*.json

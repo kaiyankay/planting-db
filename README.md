@@ -2,6 +2,8 @@
 
 ARCH 540 Assignment 2 · UBC MLA · schema 0.4.3 (concept ids, ontology.json 0.2.0) · 2026-11-03 · **verification workbench** (`review/README.md`, `reports/verification-workbench-2026-11-03.md`) · **ten plants** (3 from 2026-10-29 + 7 survey-nominated plants added 2026-11-02 through the seven-step method — `reports/methodology-report-2026-11-02.md`)
 
+**Design Workspace (2026-11-07, Phase 2):** <https://kaiyankay.github.io/planting-db/design/> (after push; local: `python3 -I tools/design_server.py` → http://127.0.0.1:8768/design/) — describe a site in plain words, draw or type its geometry, accept a bed, generate a plant layout from the ten-plant database (real species ids, metre positions, size proxies citing their claims, named placement operators), then circle a region and say "too dense here, keep privacy": a typed command, a scoped preview and Apply / Undo on the same model that feeds the 2D plan, the 3D proxy, the schedule and the exports. Offline rule parser by default (every rule listed); nothing invented — unknown stays unknown · notes in `design/README.md`, report in `reports/design-workspace-2026-11-07.md`, tests `tools/design_tests.py`
+
 **Plant Knowledge Explorer (2026-11-07, Phase 1 after the desk crit):** <https://kaiyankay.github.io/planting-db/brain/explorer/> (after push; local: serve the root → `/brain/explorer/`) — one linked workspace over the same ten plants: Relationship graph · Spatial function matrix (10 × 5, status ≠ verification, blank ≠ unsuitable) · GIS-style Attribute table (every value kept, *not recorded* said) · Inspector with the evidence behind every line and cell and an A/B comparison in four separate sections. Reads `brain/data/explorer.json`, the relational projection `tools/build_explorer.py` writes (M49) · notes in `brain/explorer/README.md`, report in `reports/explorer-2026-11-07.md`, tests `tools/explorer_tests.py`
 
 **XYZ Knowledge Graph (live, 2026-11-03):** <https://kaiyankay.github.io/planting-db/brain/xyz-preview/> — three exploration entrances (Classification · Plant Knowledge · Spatial Functions) into a progressively revealed 3D network over `brain/data/xyz.json`, the projection `tools/build_xyz.py` writes from `kg.json`; evidence trace on every line, status and verification kept apart, unknown design links listed as gaps and never drawn, three demonstration paths found in the data · notes in `brain/xyz-preview/README.md`, report in `reports/xyz-graph-2026-11-03.md`, tests `tools/xyz_tests.py`
@@ -51,6 +53,7 @@ planting-db/
 │   ├── inat_to_claims.py        iNaturalist aggregates -> claims
 │   └── retrieve.py              T6 retrieval prototype (--eval, BM25 stand-in)
 ├── brain/                 Neural Brain v5 (index.html, js/app5.js), brain/ontology-preview/ (js/app6.js, js/kg.js) over brain/data/{graph,diagnosis,kg}.json, brain/xyz-preview/ (js/app.js, js/xyz.js) over brain/data/xyz.json, brain/explorer/ (js/model.js, js/app.js) over brain/data/explorer.json
+├── design/                Design Workspace (Phase 2): conversation + canvas + engine over brain/data/explorer.json; designs/ holds saved projects
 ├── reports/               methodology-report · survey-integration · knowledge-graph · validation (all 2026-11-02, the 10-plant expansion) · kg-architecture-2026-11-02.md · migration-0.4.md
 ├── data/
 │   └── cov_trees/               snapshot.json, <genus>_all.csv, <genus>_<species>.csv, facets, summary
@@ -69,6 +72,8 @@ python3 -I tools/merge_t5.py inputs/t5/<plant>-<date>.json   # T5 step 4
 python3 -I tools/derive_relations.py  # REL-R1
 python3 -I tools/pipeline.py          # rebuild everything after any data change: ontology → graph → kg → xyz → explorer → validate
 python3 -I tools/explorer_tests.py --browser   # Explorer tests A–K -> eval/explorer-tests-<date>.md (K needs Chrome + the local server)
+python3 -I tools/design_server.py     # Design Workspace on http://127.0.0.1:8768/design/ (saves designs/*.json)
+python3 -I tools/design_tests.py      # design tests (engine, interpreter, 12-step journey, saved file) in headless Chrome -> eval/design-tests-<date>.md
 python3 -I tools/ai_review.py --queue --fetch --checks --status   # AI evidence review stages (M42); --assess needs ANTHROPIC_API_KEY
 python3 -I tools/review_server.py     # Review Workbench on http://127.0.0.1:8767/ (local only); events -> review/events/ (private)
 python3 -I tools/review_tests.py      # workbench tests A–I on a copy of the database -> eval/review-tests-<date>.md
