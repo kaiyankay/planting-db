@@ -2,6 +2,8 @@
 
 ARCH 540 Assignment 2 · UBC MLA · schema 0.4.3 (concept ids, ontology.json 0.2.0) · 2026-11-03 · **verification workbench** (`review/README.md`, `reports/verification-workbench-2026-11-03.md`) · **ten plants** (3 from 2026-10-29 + 7 survey-nominated plants added 2026-11-02 through the seven-step method — `reports/methodology-report-2026-11-02.md`)
 
+**Plant Knowledge Explorer (2026-11-07, Phase 1 after the desk crit):** <https://kaiyankay.github.io/planting-db/brain/explorer/> (after push; local: serve the root → `/brain/explorer/`) — one linked workspace over the same ten plants: Relationship graph · Spatial function matrix (10 × 5, status ≠ verification, blank ≠ unsuitable) · GIS-style Attribute table (every value kept, *not recorded* said) · Inspector with the evidence behind every line and cell and an A/B comparison in four separate sections. Reads `brain/data/explorer.json`, the relational projection `tools/build_explorer.py` writes (M49) · notes in `brain/explorer/README.md`, report in `reports/explorer-2026-11-07.md`, tests `tools/explorer_tests.py`
+
 **XYZ Knowledge Graph (live, 2026-11-03):** <https://kaiyankay.github.io/planting-db/brain/xyz-preview/> — three exploration entrances (Classification · Plant Knowledge · Spatial Functions) into a progressively revealed 3D network over `brain/data/xyz.json`, the projection `tools/build_xyz.py` writes from `kg.json`; evidence trace on every line, status and verification kept apart, unknown design links listed as gaps and never drawn, three demonstration paths found in the data · notes in `brain/xyz-preview/README.md`, report in `reports/xyz-graph-2026-11-03.md`, tests `tools/xyz_tests.py`
 
 **Planting Knowledge Network (live, 2026-11-02):** <https://kaiyankay.github.io/planting-db/brain/ontology-preview/> — the semantic graph (`brain/data/kg.json`) as a plant-centred 3D network of spheres and lines: growth forms → plants → knowledge areas → shared knowledge nodes and direct relations, evidence trace on every line, graph retrieval, candidate growth; data-driven, so new plants appear after `tools/pipeline.py` · notes in `brain/ontology-preview/README.md`, report in `reports/kg-architecture-2026-11-02.md`
@@ -30,6 +32,7 @@ planting-db/
 │   ├── migrate_0_4.py           claims -> concept ids, concepts, conditions, place, time (reports/migration-0.4.md)
 │   ├── build_graph.py           graph.json + diagnosis.json for brain/ (v5 scope)
 │   ├── build_kg.py              kg.json — the semantic graph: typed, statused, evidenced edges + gaps/conflicts (M32)
+│   ├── build_explorer.py        explorer.json — the relational projection for brain/explorer/ (species · attributes · functions · 50 link cells · relations · pairs · evidence) (M49)
 │   ├── kg_query.py              graph retrieval prototype: recognise → traverse → claims → LLM context; --all writes eval/kg-paths-<date>.md
 │   ├── survey_to_claims.py      T4 survey ingestion: anonymous respondents, claims, co_listed relations, verbatim eval queries (M35–M37)
 │   ├── merge_t5.py              land an assisted extraction file (inputs/t5/) with entity refs, companions and a review list
@@ -47,7 +50,7 @@ planting-db/
 │   ├── build_coverage.py        T7 coverage matrix -> viz/coverage.html
 │   ├── inat_to_claims.py        iNaturalist aggregates -> claims
 │   └── retrieve.py              T6 retrieval prototype (--eval, BM25 stand-in)
-├── brain/                 Neural Brain v5 (index.html, js/app5.js), brain/ontology-preview/ (js/app6.js, js/kg.js) over brain/data/{graph,diagnosis,kg}.json, brain/xyz-preview/ (js/app.js, js/xyz.js) over brain/data/xyz.json
+├── brain/                 Neural Brain v5 (index.html, js/app5.js), brain/ontology-preview/ (js/app6.js, js/kg.js) over brain/data/{graph,diagnosis,kg}.json, brain/xyz-preview/ (js/app.js, js/xyz.js) over brain/data/xyz.json, brain/explorer/ (js/model.js, js/app.js) over brain/data/explorer.json
 ├── reports/               methodology-report · survey-integration · knowledge-graph · validation (all 2026-11-02, the 10-plant expansion) · kg-architecture-2026-11-02.md · migration-0.4.md
 ├── data/
 │   └── cov_trees/               snapshot.json, <genus>_all.csv, <genus>_<species>.csv, facets, summary
@@ -64,7 +67,8 @@ python3 -I tools/validate.py
 python3 -I tools/survey_to_claims.py  # T4: newest inputs/survey/responses-*.csv (private) -> respondents, claims, relations
 python3 -I tools/merge_t5.py inputs/t5/<plant>-<date>.json   # T5 step 4
 python3 -I tools/derive_relations.py  # REL-R1
-python3 -I tools/pipeline.py          # rebuild everything after any data change: ontology → graph → kg → validate
+python3 -I tools/pipeline.py          # rebuild everything after any data change: ontology → graph → kg → xyz → explorer → validate
+python3 -I tools/explorer_tests.py --browser   # Explorer tests A–K -> eval/explorer-tests-<date>.md (K needs Chrome + the local server)
 python3 -I tools/ai_review.py --queue --fetch --checks --status   # AI evidence review stages (M42); --assess needs ANTHROPIC_API_KEY
 python3 -I tools/review_server.py     # Review Workbench on http://127.0.0.1:8767/ (local only); events -> review/events/ (private)
 python3 -I tools/review_tests.py      # workbench tests A–I on a copy of the database -> eval/review-tests-<date>.md
