@@ -1,6 +1,6 @@
 # Design workspace tests — 2026-11-07
 
-`tools/design_tests.py` against http://127.0.0.1:8768 (headless Chrome). **50/50 pass.**
+`tools/design_tests.py` against http://127.0.0.1:8768 (headless Chrome). **53/53 pass.**
 
 | test | result | detail |
 |---|---|---|
@@ -16,7 +16,7 @@
 | T·C3 text-only "right side" → direction scope with a polygon; reduce_density + preserve screen | pass | "right side" read relative to the plan as drawn (north up); the region is the outer third of the bed on that side · amount 0.25 |
 | T·C4 "here" with a drawn selection → selection scope | pass | "here" → the drawn selection |
 | T·C5 contradictory request is refused, not silently applied | pass | filling the open zone with tall plants contradicts the open-space constraint; no change is made without an explicit override |
-| T·C6 "move the taller plants away from the tree" → move_away with a resolved feature | pass | {"type":"move_away","filter":"taller","feature_id":"tree-98w11","phrase":"tree","resolved":true} |
+| T·C6 "move the taller plants away from the tree" → move_away with a resolved feature | pass | {"type":"move_away","filter":"taller","feature_id":"tree-e3fr1","phrase":"tree","resolved":true} |
 | T·C7 overclaim classified | pass |  |
 | T·D1 every plant object has a stable id, a species from the database, a position inside the accepted bed | pass | 37 plants |
 | T·D2 no plant inside the no-plant zone, none under the locked tree | pass |  |
@@ -42,15 +42,18 @@
 | T·F1 vague request: no boundary, scale unknown, no plant quantities possible | pass |  |
 | T·F2 side region: "right" is the eastern third of the bed | pass |  |
 | J1 vague description: intent read, no geometry invented, blockers listed | pass | values ['privacy', 'maintenance_low', 'ecology', 'openness'] · unknown ['site dimensions / scale', 'light', 'soil type and drainage', 'ecological performance — the database records some ecological-value claims (pollinator, bird food …) but no pollinator-interaction data; no score is possible'] |
-| J2 6 × 4 m site: boundary, tree marker (inferred, canopy assumed), suggested open zone and bed | pass | [{"id": "tree-9fa26", "kind": "existing-tree", "status": "inferred"}, {"id": "open-9fa27", "kind": "no-plant-zone", "status": "inferred"}] |
+| J2 6 × 4 m site: boundary, tree marker (inferred, canopy assumed), suggested open zone and bed | pass | [{"id": "tree-e7cs6", "kind": "existing-tree", "status": "inferred"}, {"id": "open-e7cs7", "kind": "no-plant-zone", "status": "inferred"}] |
 | J3 bed accepted by the user | pass |  |
 | J4 brief: Screen on the north edge; light stated | pass | [{"function": "z:screen", "where": "north-edge", "basis": "privacy \u2192 Screen (blocks a view); Scrim would only filter it", "evidence": "privacy"}, {"function": "z:scrim", "where": "north-edge", "basis": "openness + privacy \u2192 Scrim as the alternative to check", "evidence": "openness", "alternative": true}, {"function": "z:ground_cover", "where": "bed-interior", "basis": "low maintenance \u2192 carpeting ground layer reduces open soil (design heuristic, not a database claim)", "evidence": |
 | J5 generated: plant objects with ids, schedule reconciles, operators named, no geometry error | pass | 37 plants · ['along_edge', 'stagger', 'fill_drift', 'repeat_accent'] · edge [{'zone': 'zone-screen-north-edge', 'label': 'Screen along the north edge', 'edge_length_m': 5.4, 'screen_row_cover_m': 2.28, 'continuity': 0.42, 'note': 'row cover = sum of proxy diameters over edge length — a geometric proxy for continuity, not a measured screening effect'}] |
+| J5b 2D plan draws one symbol group per plant object | pass | 37 symbols for 37 plants |
+| J6 3D garden (three.js) holds one object per plant of the same version | pass | garden {'plants': 37, 'meshes': 472} · model 37 |
 | J7 lasso + language: scoped command (selection, reduce_density, preserve screen), preview diff, nothing outside moved | pass | targets 19 · removed 5 |
 | J8 applied: new version with fewer plants = removed ids | pass | 32 plants, 5 removed |
+| J8b 3D garden re-synced after apply: plant count = applied version | pass | garden {'plants': 32, 'meshes': 408} · model 32 |
 | J9/10 undo returns to the generated version; redo returns to the edit | pass | undo 37 · redo 32 |
 | J11 text-only reference 'move the taller plants away from the tree' resolved to a typed move_away command | pass | {"diff": {"added": [], "removed": [], "changed": ["plant-006"], "unchanged": ["plant-001", "plant-002", "plant-003", "plant-007", "plant-008", "plant-009", "plant-010", "plant-011", "plant-012", "plant-013", "plant-014", "plant-015", "plant-016", "plant-018", "plant-019", "plant-020", "plant-021", " |
-| J12 export: SVG plant count = model = schedule total | pass | {"name": "12 export", "files": ["model.json", "plan.svg", "schedule.csv", "assumptions.md"], "svg_plants": 32, "model_plants": 32, "csv_total": 32} |
-| S1 design server reachable; designs saved to designs/ | pass | llm: ANTHROPIC_API_KEY not set — offline rule parser in use · designs ['demo-backyard', 'proj-9fa20'] |
-| S2 saved project: versions chain by parent id; current version's schedule equals its plant objects | pass | demo-backyard: 3 versions · current v-9fa2l · 32 plants |
+| J12 export: SVG plant count = model = schedule total | pass | {"name": "12 export", "files": ["model.json", "plan.svg", "schedule.csv", "assumptions.md"], "svg_plants": 32, "model_plants": 32, "csv_total": 32, "garden": {"plants": 32, "meshes": 408}} |
+| S1 design server reachable; designs saved to designs/ | pass | llm: ANTHROPIC_API_KEY not set — offline rule parser in use · designs ['demo-backyard', 'proj-e7cs0'] |
+| S2 saved project: versions chain by parent id; current version's schedule equals its plant objects | pass | demo-backyard: 3 versions · current v-e7w8l · 32 plants |
 | S3 saved project: every plant inside its bed polygon (file, not UI) | pass |  |

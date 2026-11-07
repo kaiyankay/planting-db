@@ -1,7 +1,7 @@
 {
  "id": "demo-backyard",
  "name": "Demo backyard",
- "created": "2026-11-07T22:11:30.344Z",
+ "created": "2026-11-07T23:04:22.716Z",
  "schema": "planting-intelligence/design-project/0.1",
  "knowledge_snapshot": {
   "generated": "2026-11-07",
@@ -17,108 +17,108 @@
  },
  "conversation": [
   {
-   "id": "msg-aico3",
-   "time": "2026-11-07T22:11:30.344Z",
+   "id": "msg-e7cs3",
+   "time": "2026-11-07T23:04:22.716Z",
    "role": "user",
    "text": "I have a small backyard with an old tree on the north side. I want privacy, low maintenance and some ecological value, but it should not feel closed in. The kids need the middle to play."
   },
   {
-   "id": "msg-aico4",
-   "time": "2026-11-07T22:11:30.344Z",
+   "id": "msg-e7cs4",
+   "time": "2026-11-07T23:04:22.716Z",
    "role": "ai",
    "text": "",
    "html": "<b>Read from what you said</b><ul><li>a small site — dimensions still unknown</li><li>an existing tree on the north — I will place a marker (canopy size assumed) once the site has geometry; move or resize it</li><li>an open area (kids) — I will suggest a no-plant zone once the site has geometry</li><li>goals: privacy, maintenance low, ecology, openness</li><li>screen → north edge (privacy → Screen (blocks a view); Scrim would only filter it)</li><li>scrim → north edge (openness + privacy → Scrim as the alternative to check) — alternative to check</li><li>ground cover → bed interior (low maintenance → carpeting ground layer reduces open soil (design heuristic, not a database claim))</li></ul><b>Unknown</b> (not assumed): site dimensions / scale; light; soil type and drainage; ecological performance — the database records some ecological-value claims (pollinator, bird food …) but no pollinator-interaction data; no score is possible.<br><b>Before a measured design:</b> no site geometry yet — draw a boundary or state the dimensions; scale unknown — measured spacing and quantities are blocked until a length is stated or calibrated; no planting bed yet — draw one or accept a suggestion.",
    "mode": "interpretation: offline-parser (rules: existing-tree, open-centre, size-word, privacy, low_maintenance, ecology, openness)"
   },
   {
-   "id": "msg-aico5",
-   "time": "2026-11-07T22:11:30.344Z",
+   "id": "msg-e7cs5",
+   "time": "2026-11-07T23:04:22.716Z",
    "role": "sys",
    "text": "site set to 6 × 4 m (typed; a rectangle is assumed — redraw with the Site tool for another shape)"
   },
   {
-   "id": "msg-aico8",
-   "time": "2026-11-07T22:11:30.344Z",
+   "id": "msg-e7cs8",
+   "time": "2026-11-07T23:04:22.716Z",
    "role": "sys",
    "text": "bed-1 accepted"
   },
   {
-   "id": "msg-aico9",
-   "time": "2026-11-07T22:11:30.344Z",
+   "id": "msg-e7cs9",
+   "time": "2026-11-07T23:04:22.716Z",
    "role": "user",
    "text": "Privacy along the north edge; keep the middle open; it is part shade."
   },
   {
-   "id": "msg-aicoa",
-   "time": "2026-11-07T22:11:30.344Z",
+   "id": "msg-e7csa",
+   "time": "2026-11-07T23:04:22.716Z",
    "role": "ai",
    "text": "",
    "html": "<b>Read from what you said</b><ul><li>light: part-shade (stated)</li><li>an open area (keep the middle open) — I will suggest a no-plant zone once the site has geometry</li><li>goals: privacy, openness</li><li>screen → north edge (privacy → Screen (blocks a view); Scrim would only filter it)</li><li>scrim → north edge (openness + privacy → Scrim as the alternative to check) — alternative to check</li></ul><b>Unknown</b> (not assumed): site dimensions / scale; soil type and drainage.<br>Geometry and a bed are in place — say <i>generate</i>, or add goals and conditions first.",
    "mode": "interpretation: offline-parser (rules: open-centre, light, privacy, openness)"
   },
   {
-   "id": "msg-aicoc",
-   "time": "2026-11-07T22:11:30.344Z",
+   "id": "msg-e7csc",
+   "time": "2026-11-07T23:04:22.716Z",
    "role": "ai",
    "text": "",
-   "html": "<b>Design v-aicob</b> — 37 plant objects, 5 species, bed 18.36 m², seed 42; operators along_edge, stagger, fill_drift, repeat_accent.<ul><li>screen: <i>Gaultheria shallon</i> (gate unknown), <i>Vaccinium ovatum</i> (gate unknown)</li><li>ground: <i>Arctostaphylos uva-ursi</i> (gate unknown), <i>Polystichum munitum</i> (gate unknown)</li><li>accent: <i>Achillea millefolium</i> (gate unknown)</li><li>excluded: <i>Acer palmatum</i>, <i>Cercidiphyllum japonicum</i>, <i>Cornus nuttallii</i> — reasons in the Design panel</li><li>Screen along the north edge: row cover 2.28 m of 5.4 m (continuity 0.42, a geometric proxy)</li><li>37 plants rest on an <b>unknown</b> site gate (conditions not stated)</li></ul>Circle an area and say what should change, or drag plants directly.",
+   "html": "<b>Design v-e7csb</b> — 37 plant objects, 5 species, bed 18.36 m², seed 42; operators along_edge, stagger, fill_drift, repeat_accent.<ul><li>screen: <i>Gaultheria shallon</i> (gate unknown), <i>Vaccinium ovatum</i> (gate unknown)</li><li>ground: <i>Arctostaphylos uva-ursi</i> (gate unknown), <i>Polystichum munitum</i> (gate unknown)</li><li>accent: <i>Achillea millefolium</i> (gate unknown)</li><li>excluded: <i>Acer palmatum</i>, <i>Cercidiphyllum japonicum</i>, <i>Cornus nuttallii</i> — reasons in the Design panel</li><li>Screen along the north edge: row cover 2.28 m of 5.4 m (continuity 0.42, a geometric proxy)</li><li>37 plants rest on an <b>unknown</b> site gate (conditions not stated)</li></ul>Switch to <b>Presentation</b> or the <b>3D garden</b> to see it, circle an area and say what should change, or drag plants directly.",
    "mode": "engine: deterministic placement over the knowledge adapter (no model text)"
   },
   {
-   "id": "msg-aicod",
-   "time": "2026-11-07T22:11:30.344Z",
+   "id": "msg-e7w8d",
+   "time": "2026-11-07T23:04:23.416Z",
    "role": "user",
    "text": "Too dense here, but keep the privacy."
   },
   {
-   "id": "msg-aicoe",
-   "time": "2026-11-07T22:11:30.344Z",
+   "id": "msg-e7w8e",
+   "time": "2026-11-07T23:04:23.416Z",
    "role": "ai",
    "text": "",
-   "html": "<b>Proposed change (preview — nothing applied yet)</b><ul><li>scope: selection — &quot;here&quot; → the drawn selection; 19 plants inside</li><li>reduce density 25 %</li><li>preserve: screen — \"keep the privacy\"</li><li>result: 37 → 32 plants (−5 +0 ~0); nothing outside the scope changed</li><li class=\"small\">2 screen-row plants kept untouched to preserve the screen (an intent; screening performance is not quantified)</li><li class=\"small\">reduce density by 25 % (default interpretation candidate — adjust before applying): 5 of 17 eligible plants removed, the most crowded first; nothing outside the scope moves</li></ul>Review it on the canvas, then <b>Apply</b> or <b>Cancel</b> in the Revision panel. Privacy is kept as an intent (screen-row plants untouched); screening performance is not quantified.",
+   "html": "<b>Proposed change (preview — nothing applied yet)</b><ul><li>scope: selection — &quot;here&quot; → the drawn selection; 19 plants inside</li><li>reduce density 25 %</li><li>preserve: screen — \"keep the privacy\"</li><li>result: 37 → 32 plants (−5 +0 ~0); nothing outside the scope changed</li><li class=\"small\">2 screen-row plants kept untouched to preserve the screen (an intent; screening performance is not quantified)</li><li class=\"small\">reduce density by 25 % (default interpretation candidate — adjust before applying): 5 of 17 eligible plants removed, the most crowded first; nothing outside the scope moves</li></ul>Review it on the canvas (red = to be removed, in 2D and 3D), then <b>Apply</b> or <b>Cancel</b> in the Revision panel. Privacy is kept as an intent (screen-row plants untouched); screening performance is not quantified.",
    "mode": "interpretation: offline-parser (rules: reduce_density, preserve_privacy)"
   },
   {
-   "id": "msg-aicog",
-   "time": "2026-11-07T22:11:30.344Z",
+   "id": "msg-e7w8g",
+   "time": "2026-11-07T23:04:23.416Z",
    "role": "sys",
-   "text": "applied as v-aicof: 32 plants (5 removed, 0 added)"
+   "text": "applied as v-e7w8f: 32 plants (5 removed, 0 added)"
   },
   {
-   "id": "msg-aicoh",
-   "time": "2026-11-07T22:11:30.344Z",
+   "id": "msg-e7w8h",
+   "time": "2026-11-07T23:04:23.416Z",
    "role": "sys",
-   "text": "undo → v-aicob (37 plants)"
+   "text": "undo → v-e7csb (37 plants)"
   },
   {
-   "id": "msg-aicoi",
-   "time": "2026-11-07T22:11:30.344Z",
+   "id": "msg-e7w8i",
+   "time": "2026-11-07T23:04:23.416Z",
    "role": "sys",
-   "text": "redo → v-aicof (32 plants)"
+   "text": "redo → v-e7w8f (32 plants)"
   },
   {
-   "id": "msg-aicoj",
-   "time": "2026-11-07T22:11:30.344Z",
+   "id": "msg-e7w8j",
+   "time": "2026-11-07T23:04:23.416Z",
    "role": "user",
    "text": "Move the taller plants away from the tree."
   },
   {
-   "id": "msg-aicok",
-   "time": "2026-11-07T22:11:30.344Z",
+   "id": "msg-e7w8k",
+   "time": "2026-11-07T23:04:23.416Z",
    "role": "ai",
    "text": "",
-   "html": "<b>Proposed change (preview — nothing applied yet)</b><ul><li>scope: bed — no selection and no direction word — the whole current bed is assumed; draw a selection to narrow it; 32 plants inside</li><li>move away — \"tree\"</li><li>result: 32 → 32 plants (−0 +0 ~1); nothing outside the scope changed</li><li class=\"small\">move taller plants away from existing tree: 1 moved, 1 could not be moved within the bed</li></ul>Review it on the canvas, then <b>Apply</b> or <b>Cancel</b> in the Revision panel.",
+   "html": "<b>Proposed change (preview — nothing applied yet)</b><ul><li>scope: bed — no selection and no direction word — the whole current bed is assumed; draw a selection to narrow it; 32 plants inside</li><li>move away — \"tree\"</li><li>result: 32 → 32 plants (−0 +0 ~1); nothing outside the scope changed</li><li class=\"small\">move taller plants away from existing tree: 1 moved, 1 could not be moved within the bed</li></ul>Review it on the canvas (red = to be removed, in 2D and 3D), then <b>Apply</b> or <b>Cancel</b> in the Revision panel.",
    "mode": "interpretation: offline-parser (rules: move_away)"
   },
   {
-   "id": "msg-aicom",
-   "time": "2026-11-07T22:11:30.344Z",
+   "id": "msg-e7w8m",
+   "time": "2026-11-07T23:04:23.416Z",
    "role": "sys",
-   "text": "applied as v-aicol: 32 plants (0 removed, 0 added)"
+   "text": "applied as v-e7w8l: 32 plants (0 removed, 0 added)"
   },
   {
-   "id": "msg-aicon",
-   "time": "2026-11-07T22:11:30.344Z",
+   "id": "msg-e7w8n",
+   "time": "2026-11-07T23:04:23.416Z",
    "role": "sys",
    "text": "demonstration journey complete — every step above changed the model; export or keep editing"
   }
@@ -167,7 +167,7 @@
     "label": "existing tree",
     "source": "conversation: \"an old tree on the north\" — position inferred from \"north\" (a quarter of the way along that edge), canopy not stated",
     "status": "inferred",
-    "id": "tree-aico6"
+    "id": "tree-e7cs6"
    },
    {
     "locked": true,
@@ -193,7 +193,7 @@
     "label": "open (kids)",
     "source": "conversation: \"kids\" — extent suggested, not stated",
     "status": "inferred",
-    "id": "open-aico7"
+    "id": "open-e7cs7"
    }
   ],
   "beds": [
@@ -402,7 +402,7 @@
     "says": "value: openness"
    }
   ],
-  "updated": "2026-11-07T22:11:30.344Z"
+  "updated": "2026-11-07T23:04:22.716Z"
  },
  "versions": [
   {
@@ -1800,7 +1800,7 @@
      "basis": "privacy → Screen (blocks a view); Scrim would only filter it"
     },
     {
-     "id": "zone-open-open-aico7",
+     "id": "zone-open-open-e7cs7",
      "kind": "open",
      "label": "open (kids)",
      "polygon": [
@@ -2011,7 +2011,7 @@
     ],
     "open_zones": [
      {
-      "id": "open-aico7",
+      "id": "open-e7cs7",
       "area_m2": 3.84,
       "plants_inside": 0
      }
@@ -2033,8 +2033,8 @@
      "irrigation"
     ]
    },
-   "id": "v-aicob",
-   "created": "2026-11-07T22:11:30.344Z",
+   "id": "v-e7csb",
+   "created": "2026-11-07T23:04:22.716Z",
    "parent_version_id": null
   },
   {
@@ -3262,7 +3262,7 @@
      "basis": "privacy → Screen (blocks a view); Scrim would only filter it"
     },
     {
-     "id": "zone-open-open-aico7",
+     "id": "zone-open-open-e7cs7",
      "kind": "open",
      "label": "open (kids)",
      "polygon": [
@@ -3563,7 +3563,7 @@
     ],
     "open_zones": [
      {
-      "id": "open-aico7",
+      "id": "open-e7cs7",
       "area_m2": 3.84,
       "plants_inside": 0
      }
@@ -3585,9 +3585,9 @@
      "irrigation"
     ]
    },
-   "id": "v-aicof",
-   "created": "2026-11-07T22:11:30.344Z",
-   "parent_version_id": "v-aicob"
+   "id": "v-e7w8f",
+   "created": "2026-11-07T23:04:23.416Z",
+   "parent_version_id": "v-e7csb"
   },
   {
    "label": "edit: Move the taller plants away from the tree.",
@@ -4814,7 +4814,7 @@
      "basis": "privacy → Screen (blocks a view); Scrim would only filter it"
     },
     {
-     "id": "zone-open-open-aico7",
+     "id": "zone-open-open-e7cs7",
      "kind": "open",
      "label": "open (kids)",
      "polygon": [
@@ -4979,7 +4979,7 @@
       {
        "type": "move_away",
        "filter": "taller",
-       "feature_id": "tree-aico6",
+       "feature_id": "tree-e7cs6",
        "phrase": "tree",
        "resolved": true
       }
@@ -5111,7 +5111,7 @@
     ],
     "open_zones": [
      {
-      "id": "open-aico7",
+      "id": "open-e7cs7",
       "area_m2": 3.84,
       "plants_inside": 0
      }
@@ -5133,13 +5133,13 @@
      "irrigation"
     ]
    },
-   "id": "v-aicol",
-   "created": "2026-11-07T22:11:30.344Z",
-   "parent_version_id": "v-aicof"
+   "id": "v-e7w8l",
+   "created": "2026-11-07T23:04:23.416Z",
+   "parent_version_id": "v-e7w8f"
   }
  ],
- "current_version_id": "v-aicol",
+ "current_version_id": "v-e7w8l",
  "redo": [],
  "plant_seq": 37,
- "updated": "2026-11-07T15:11:30"
+ "updated": "2026-11-07T16:04:31"
 }

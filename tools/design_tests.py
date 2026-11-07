@@ -40,7 +40,7 @@ def test(name, ok, detail=""):
 
 def dom(path, budget=9000):
     with tempfile.TemporaryDirectory() as td:
-        r = subprocess.run([CHROME, "--headless=new", "--disable-gpu", "--no-first-run", f"--user-data-dir={td}", "--window-size=1440,900", f"--virtual-time-budget={budget}", "--dump-dom", URL + path], capture_output=True, text=True, timeout=180)
+        r = subprocess.run([CHROME, "--headless=new", "--use-angle=swiftshader", "--enable-unsafe-swiftshader", "--no-first-run", f"--user-data-dir={td}", "--window-size=1440,900", f"--virtual-time-budget={budget}", "--dump-dom", URL + path], capture_output=True, text=True, timeout=180)
         return r.stdout
 
 
@@ -69,8 +69,11 @@ else:
         s3 = st.get("03", {}); test("J3 bed accepted by the user", s3.get("bed", {}).get("status") == "user-accepted")
         s4 = st.get("04", {}); test("J4 brief: Screen on the north edge; light stated", any(f["function"] == "z:screen" and f["where"] == "north-edge" for f in s4.get("functions", [])) and s4.get("light", {}).get("status") == "user-stated", json.dumps(s4.get("functions")))
         s5 = st.get("05", {}); n5 = s5.get("plants", 0); test("J5 generated: plant objects with ids, schedule reconciles, operators named, no geometry error", n5 > 5 and sum(r["count"] for r in s5.get("schedule", [])) == n5 and s5.get("validation_ok") and s5.get("operators"), f"{n5} plants · {s5.get('operators')} · edge {s5.get('edge')}")
+        test("J5b 2D plan draws one symbol group per plant object", s5.get("symbols_2d") == n5, f"{s5.get('symbols_2d')} symbols for {n5} plants")
+        s6 = st.get("06", {}); g6 = s6.get("garden") or {}; test("J6 3D garden (three.js) holds one object per plant of the same version", g6.get("plants") == s6.get("model_plants") and g6.get("plants", 0) > 0, f"garden {g6} · model {s6.get('model_plants')}")
         s7 = st.get("07", {}); test("J7 lasso + language: scoped command (selection, reduce_density, preserve screen), preview diff, nothing outside moved", s7.get("command", {}).get("scope") == "selection" and "reduce_density" in s7["command"]["ops"] and "z:screen" in s7["command"]["preserve"] and s7.get("diff", {}).get("removed") and s7.get("untouched_outside_scope") is True, f"targets {len(s7.get('targets') or [])} · removed {len(s7.get('diff', {}).get('removed') or [])}")
         s8 = st.get("08", {}); test("J8 applied: new version with fewer plants = removed ids", s8.get("plants") == n5 - len(s8.get("removed", [])) and s8.get("version"), f"{s8.get('plants')} plants, {len(s8.get('removed', []))} removed")
+        g8 = s8.get("garden") or {}; test("J8b 3D garden re-synced after apply: plant count = applied version", g8.get("plants") == s8.get("plants"), f"garden {g8} · model {s8.get('plants')}")
         s9, s10 = st.get("09", {}), st.get("10", {}); test("J9/10 undo returns to the generated version; redo returns to the edit", s9.get("plants") == n5 and s9.get("version", s9.get("current")) and s10.get("plants") == s8.get("plants"), f"undo {s9.get('plants')} · redo {s10.get('plants')}")
         s11 = st.get("11", {}); test("J11 text-only reference 'move the taller plants away from the tree' resolved to a typed move_away command", s11.get("command", {}).get("ops") == ["move_away"], json.dumps({"diff": s11.get("diff"), "notes": s11.get("notes")})[:300])
         s12 = st.get("12", {}); test("J12 export: SVG plant count = model = schedule total", s12.get("svg_plants") == s12.get("model_plants") == s12.get("csv_total") and s12.get("svg_plants"), json.dumps(s12))
