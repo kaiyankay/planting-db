@@ -35,3 +35,7 @@ tests/review/out/
 
 # Design workspace: auto-saved working projects (the demo file is tracked)
 designs/proj-*.json
+# UX acceptance scripts save throw-away projects through the design server
+designs/script-*.json
+.claude/skills/impeccable/scripts/bin/
+.impeccable/

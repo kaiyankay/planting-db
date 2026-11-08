@@ -81,10 +81,11 @@ export function render2D(svg, project, version, S, K) {
   }
   if (version && S.showZones && mode === 'plan') for (const z of version.zones) { if (z.kind === 'edge') { for (const e of z.edges) { const a = P(e.a), b = P(e.b); h += `<line class="zone" x1="${a[0]}" y1="${a[1]}" x2="${b[0]}" y2="${b[1]}"/>`; } const lab = P([(z.edges[0].a[0] + z.edges[0].b[0]) / 2 - z.edges[0].n[0] * .4, (z.edges[0].a[1] + z.edges[0].b[1]) / 2 - z.edges[0].n[1] * .4]); h += `<text class="zone-label" x="${lab[0]}" y="${lab[1]}" text-anchor="middle">${esc(z.label)}</text>`; } }
   if (S.scope?.polygon) h += `<polygon class="scope" points="${poly(S.scope.polygon)}"/>`;
+  else if (S.selection?.polygon) h += `<polygon class="scope selection" points="${poly(S.selection.polygon)}"/>`;   // a drawn region waiting for a command
   if (S.lasso?.length > 1) h += `<polygon class="lasso" points="${poly(S.lasso)}"/>`;
   if (S.draft?.length) { h += `<polyline class="draft" points="${poly(S.draft)}" fill="none"/>`; for (const p of S.draft) { const c = P(p); h += `<circle cx="${c[0]}" cy="${c[1]}" r="3" fill="var(--olive)"/>`; } }
   if (version) {
-    const pv = S.preview; const removed = new Set(pv?.diff.removed || []), added = new Set(pv?.diff.added || []), changed = new Set(pv?.diff.changed || []), targets = new Set(pv?.targets || []);
+    const pv = S.preview; const removed = new Set(pv?.diff.removed || []), added = new Set(pv?.diff.added || []), changed = new Set(pv?.diff.changed || []), targets = new Set(pv?.targets || (S.selection?.polygon ? version.plant_objects.filter(p => G.pointInPolygon(p.position_m, S.selection.polygon)).map(p => p.id) : []));
     const shown = pv ? pv.version.plant_objects : version.plant_objects; const base0 = new Map(version.plant_objects.map(p => [p.id, p]));
     const order = shown.slice().sort((a, b) => (b.proxy_radius_m - a.proxy_radius_m) || (a.position_m[1] - b.position_m[1]));
     for (const p of order) {

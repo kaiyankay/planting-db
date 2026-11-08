@@ -1,4 +1,14 @@
-# design/ — Planting Intelligence · Design Workspace (Phase 2)
+# design/ — Planting Intelligence · Design Journey (Phase 2)
+
+## UX redesign (2026-11-07, third brief: *Complete UI/UX Redesign & Implementation*)
+
+`index.html` is now a **journey**, not a dashboard: a document that scrolls **Imagine** (one large language field; photo / draw / dimensions / address as secondary entrances) → **Site** (what was read, as *stated · inferred or suggested · unknown* cards beside the editable plan; W × H, boundary, tree, open area, calibrate; the suggested bed is confirmed here) → **Intent** (goals with their engine effect spelled out — and *recorded only* where a goal has no placement rule — spatial functions, hard constraints, unknowns, the four operators, density · second row · seed, gate-checked candidate species) → **Generate**, which opens a fixed **Garden** stage that owns the viewport (Plan · Presentation · 3D of the same DesignVersion; a composer pill bottom-left; a revision card only while a region or a preview exists; plant card → evidence sheet; a schedule / versions / assumptions drawer; Undo · Redo · Export in the top bar; ← Site / ← Intent go back without losing anything). Stages unlock as data arrives and stay reachable in the top navigation; the wheel scrolls the page in the first three stages (⌘ / Ctrl + wheel zooms the plan) and zooms the canvas in the garden. Styles live in `css/journey.css` (warm ivory · deep olive · sage · caramel; Fraunces display with a serif fallback). The previous one-screen workspace is kept unchanged as **`classic.html`** (`js/app-classic.js`) for comparison and for anyone who wants every panel open at once.
+
+Model, interpreter, engine, renderers and 3D garden are untouched (`js/model.js`, `intent.js`, `engine.js`, `render.js`, `garden3d.js`, `plantforms.js`, `knowledge.js`, `geom.js`); `render.js` only gained the drawn-selection outline. Report with the audit, state map, before / after and the browser tests: `reports/design-journey-2026-11-07.md`; screenshots `brain/screenshots/design-journey/`; tests `tools/ux_tests.py` (acceptance scripts A–D at 1440 × 900 and 390 × 844, headless Chrome) and `tools/ux_browser_journey.sh` (agent-browser, real clicks); `tools/design_tests.py` unchanged (53/53 on the new page). URL parameters: `?fresh=1` new project · `?journey=1&fresh=1[&stop=N]` the demonstration · `?script=A|B|C|all&fresh=1` the acceptance scripts · `?stage=site|intent|garden` · `&mode=present|garden` · `&drawer=schedule|versions|assumptions|model` · `&composer=1`.
+
+---
+
+## The workspace underneath (second and first briefs, unchanged)
 
 **Local:** `python3 -I tools/design_server.py` → <http://127.0.0.1:8768/design/> (projects are saved as files in `designs/`) · any static server on the repository root also works (`python3 -m http.server 8766` → `/design/`, saving falls back to the browser's localStorage) · **GitHub Pages (after a push):** <https://kaiyankay.github.io/planting-db/design/>. Phase 1 (`brain/explorer/`) and the earlier previews are untouched.
 
