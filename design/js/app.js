@@ -295,7 +295,7 @@ function renderCanvas() {
   }
   svg.style.display = 'block'; $('#gl').style.display = 'none'; if (S.garden) S.garden.setVisible(false);
   svg.className.baseVal = `tool-${S.tool}`;
-  if (S.stage === 'garden') { const right = !$('#revision').hidden || !$('#plantcard').hidden || !$('#evidence').hidden; S.inset = { l: 150, r: right ? 400 : 70, t: 84, b: S.drawer ? Math.round(innerHeight * .46) : 150 }; if (innerWidth < 760) S.inset = { l: 16, r: 16, t: 110, b: right || S.drawer ? Math.round(innerHeight * .5) : 110 }; }
+  if (S.stage === 'garden') { const right = !$('#revision').hidden || !$('#plantcard').hidden || !$('#evidence').hidden; S.inset = { l: 150, r: right ? 400 : 70, t: 104, b: S.drawer ? Math.round(innerHeight * .46) : 150 }; if (innerWidth < 760) S.inset = { l: 16, r: 16, t: 110, b: right || S.drawer ? Math.round(innerHeight * .5) : 110 }; }
   else S.inset = { l: 28, r: 28, t: 44, b: 44 };
   if (S.stage !== 'garden') { S.mode = 'plan'; }
   S.T = R.render2D(svg, S.project, v, S, S.K);

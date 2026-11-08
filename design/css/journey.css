@@ -247,6 +247,7 @@ body.right-open #drawer-tab, body.right-open #legend { display: none; }
 footer.site-foot { padding: 40px 0 60px; font-size: 13px; color: var(--ink-3); } footer.site-foot .wrap { display: flex; gap: 18px; flex-wrap: wrap; }
 
 /* ---- responsive */
+@media (max-width: 1180px) { #gcomposer.closed .pill .hint, #gcomposer.closed .pill .x, #cfoot { display: none; } #gcomposer.closed .pill { padding: 10px; } }
 @media (max-width: 1080px) {
   #s-welcome .wrap { grid-template-columns: 1fr; gap: 24px; } .hero-art { max-height: 46vh; aspect-ratio: 16 / 10; order: -1; }
   #s-site .wrap, #s-intent .wrap { grid-template-columns: 1fr; gap: 24px; }
