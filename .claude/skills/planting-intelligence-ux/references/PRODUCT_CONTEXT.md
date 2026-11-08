@@ -29,6 +29,10 @@ Phase 2: https://kaiyankay.github.io/planting-db/design/
 Older prototype: https://github.com/kaiyankay/planting-intelligence
 Visual reference: https://pollinator.art/pathmaker
 
+## Phase 2 spatial proposal (2026-11-08)
+
+The Shape page no longer defaults to one bed = the site inset by 0.3 m. `design/js/spatial.js` (over `design/js/clip.js`, polygon-clipping vendored) derives the plantable area, proposes beds by edge / island / ribbon / infill / modular operations with reasons, validates them, offers alternatives, previews bed edits spoken in words, and `design/js/engine.js` plants all confirmed beds in one version with partial regeneration after a geometry change. See `SPATIAL_PROPOSAL.md`.
+
 ## The actual current capability caveat
 
 The public static app uses an offline rule parser for English utterances. A separate Python server exposes a conditional live LLM endpoint, but this path has not been demonstrated end-to-end. Uploaded images are currently overlaid for manual tracing, not reliably auto-segmented. Address is a saved reference only. Costs/ecology optimization cannot be declared without supporting data. Preserve these distinctions in all UI.
@@ -36,7 +40,7 @@ The public static app uses an offline rule parser for English utterances. A sepa
 ## Design stages with visibility rules
 
 1. **Welcome**: beautiful garden-focused invite, one natural-language input, secondary mixed-input affordances. No site-condition bureaucracy.
-2. **Site**: explanation of known/inferred/unknown + large editable plan; reveal contextual site tools. Don't show schedule or dense species evidence.
-3. **Intent**: readable brief and proposed spatial functions; approachable value adjustment; advanced controls optional; review/confirm assumptions. No unexplained score promise.
-4. **Garden**: full-view interactive 2D/PRESENTATION/3D, plant inspection on click, contextual evidence. Controls collapse; persistent easy-to-access AI composer. Scrolling over interactive canvas zooms with clear affordance; scrolling the surrounding experience remains predictable.
+2. **Shape**: the canvas with the site model and the proposed planting beds is the subject; the proposal panel (alternatives, reasoning, a row per bed with accept / reject), the change-in-words composer with its preview card, and the stated / inferred / unknown inspector collapsed beside it. Don't show schedule or dense species evidence.
+3. **Compose**: readable brief, site-wide and per-bed spatial functions, per-bed candidates against the site gates; approachable value adjustment; advanced controls optional; review/confirm assumptions. No unexplained score promise.
+4. **Grow**: full-view interactive 2D/PRESENTATION/3D over all confirmed beds; a geometry change after generation is offered as a partial update, never applied silently; plant inspection on click, contextual evidence. Controls collapse; persistent easy-to-access AI composer. Scrolling over interactive canvas zooms with clear affordance; scrolling the surrounding experience remains predictable.
 5. **Revision**: select region/direct object + natural-language edit, highlight scope, changed plant ID preview, Apply/Cancel/Undo, sync views and schedule. Export honest assumptions and references.

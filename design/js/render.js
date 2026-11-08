@@ -5,6 +5,7 @@
 import * as G from './geom.js';
 import { formOf, seeded, PALETTE } from './plantforms.js';
 const esc = s => String(s ?? '').replace(/[&<>"]/g, ch => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[ch]));
+const FN_SHORT = { 'z:screen': 'Screen', 'z:scrim': 'Scrim', 'z:ground_cover': 'Ground cover', 'z:ceiling_canopy': 'Canopy', 'z:barrier': 'Barrier' };
 export const COLOURS = ['#5f7f62', '#8a9a80', '#b8892b', '#7c6ea8', '#4a7da5', '#c2653f', '#6b8e7f', '#a07e5a', '#9b5c86', '#6f8f3e'];
 export function colourOf(K, speciesId) { const i = K.species.findIndex(s => s.id === speciesId); return COLOURS[(i < 0 ? 9 : i) % COLOURS.length]; }
 const formCache = new Map(); export function form(K, sid, light) { const k = `${sid}|${light || ''}`; if (!formCache.has(k)) formCache.set(k, formOf(K, sid, light)); return formCache.get(k); }
@@ -68,15 +69,25 @@ export function render2D(svg, project, version, S, K) {
   const W = svg.clientWidth || 800, H = svg.clientHeight || 500; svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
   const base = fit2D(project, W, H, S.inset || { l: 40, r: 40, t: 40, b: 40 }); const pz = S.pz || { x: 0, y: 0, k: 1 }; const k = base.k * pz.k; const mode = S.mode === 'present' ? 'present' : 'plan';
   const T = { k, toPx: m => { const [x, y] = base.toPx(m); return [x * pz.k + pz.x, y * pz.k + pz.y]; }, toM: ([px, py]) => base.toM([(px - pz.x) / pz.k, (py - pz.y) / pz.k]), B: base.B };
-  const site = project.site; const P = T.toPx; const poly = pts => pts.map(p => P(p).join(',')).join(' '); const light = site.conditions.light?.value;
+  const site = project.site; const P = T.toPx; const poly = pts => pts.map(p => P(p).join(',')).join(' '); const pathD = (outer, holes = []) => [outer, ...(holes || [])].map(r => 'M' + r.map(p => P(p).join(' ')).join('L') + 'Z').join(''); const light = site.conditions.light?.value;
   let h = `<defs><pattern id="paper" width="${k}" height="${k}" patternUnits="userSpaceOnUse" x="${pz.x + base.ox * pz.k}" y="${pz.y + base.oy * pz.k}"><path d="M ${k} 0 L 0 0 0 ${k}" fill="none" stroke="rgba(42,39,35,.07)" stroke-width="1"/></pattern><filter id="soft"><feGaussianBlur stdDeviation="1.2"/></filter></defs>`;
   if (site.scale.status !== 'unknown' && k > 10) h += `<rect width="${W}" height="${H}" fill="url(#paper)"/>`;
   h += `<g class="view">`;
   if (S.overlay?.src && S.overlay.show) { const [x0, y0] = P([S.overlay.x, S.overlay.y + S.overlay.h]); h += `<image class="overlay" href="${esc(S.overlay.src)}" x="${x0}" y="${y0}" width="${S.overlay.w * k}" height="${S.overlay.h * k}" preserveAspectRatio="none" style="opacity:${S.overlay.opacity ?? .5}"/>`; }
   if (site.boundary) h += `<polygon class="site ${mode}" points="${poly(site.boundary)}"/>`;
-  for (const b of site.beds) h += `<polygon class="bed ${mode} ${b.status === 'ai-suggested' ? 'suggested' : ''} ${S.bedId === b.id ? 'active' : ''}" points="${poly(b.polygon)}" data-bed="${esc(b.id)}"/>${mode === 'plan' || S.labels ? `<text x="${P(G.centroid(b.polygon))[0]}" y="${P([0, G.bbox(b.polygon).maxy])[1] + 12}" font-size="10" fill="var(--olive-deep)" text-anchor="middle">${esc(b.name)}${b.status === 'ai-suggested' ? ' · suggested' : ''}</text>` : ''}`;
+  if (S.showPlantable && S.plantable && mode === 'plan') for (const pl of S.plantable) h += `<path class="plantable" d="${pathD(pl.polygon, pl.holes)}" fill-rule="evenodd"/>`;
+  const ghost = S.bedPreview;   // a proposed geometry change: before (dashed) and after (solid) drawn together until Apply
+  for (const b of site.beds) {
+    if (b.status === 'rejected') continue; const ch = ghost?.changes.find(c => c.bed_id === b.id); const rm = ghost?.removed.some(r => r.bed_id === b.id);
+    const cls = `bed ${mode} ${b.status === 'ai-suggested' ? 'suggested' : 'confirmed'} ${S.bedId === b.id ? 'active' : ''} ${ch ? 'before' : ''} ${rm ? 'removing' : ''}`;
+    h += `<path class="${cls}" d="${pathD(b.polygon, b.holes)}" fill-rule="evenodd" data-bed="${esc(b.id)}"/>`;
+    if (ch) h += `<path class="bed ${mode} after" d="${pathD(ch.after.polygon, ch.after.holes)}" fill-rule="evenodd" data-bed="${esc(b.id)}"/>`;
+    if (mode === 'plan' || S.labels) { const c = P(G.centroid(b.polygon)); const fn = (b.functions || []).map(f => FN_SHORT[f.function] || f.function).join(' · '); h += `<text class="bed-label ${b.status === 'ai-suggested' ? 'suggested' : ''}" x="${c[0]}" y="${c[1] - (fn ? 2 : -3)}" text-anchor="middle">${esc(b.name)}${b.status === 'ai-suggested' ? ' · suggested' : ''}</text>${fn ? `<text class="bed-sub" x="${c[0]}" y="${c[1] + 11}" text-anchor="middle">${esc(fn)} · ${b.area_m2} m²</text>` : ''}`; }
+  }
+  if (ghost) for (const a of ghost.added || []) h += `<path class="bed ${mode} after added" d="${pathD(a.polygon, a.holes)}" fill-rule="evenodd"/>`;
+  if (ghost?.open_area) h += `<polygon class="open after" points="${poly(ghost.open_area.after.polygon)}"/>`;
   for (const f of site.features) {
-    if (f.kind === 'existing-tree') { const c = P(f.position_m); const r = (f.radius_m ?? 1.5) * k; h += mode === 'present' ? `<g transform="translate(${c[0]} ${c[1]}) scale(${k})">${symbol({ kind: 'tree', foliage: '#4a6a4c', accent: null, density: 1, evergreen: null }, f.id, f.radius_m ?? 1.5, 'present', { k, winter: S.winter })}</g>` : `<circle class="tree" cx="${c[0]}" cy="${c[1]}" r="${r}" data-feat="${esc(f.id)}"/><circle class="tree-centre" cx="${c[0]}" cy="${c[1]}" r="3"/>`; if (mode === 'plan' || S.labels) h += `<text x="${c[0]}" y="${c[1] - r - 3}" font-size="9.5" text-anchor="middle" fill="var(--olive-deep)">${esc(f.label || 'existing tree')}${f.radius_m == null ? ' · canopy assumed' : ''}</text>`; }
+    if (f.kind === 'existing-tree') { const c = P(f.position_m); const r = (f.radius_m ?? 1.5) * k; h += mode === 'present' ? `<g transform="translate(${c[0]} ${c[1]}) scale(${k})">${symbol({ kind: 'tree', foliage: '#4a6a4c', accent: null, density: 1, evergreen: null }, f.id, f.radius_m ?? 1.5, 'present', { k, winter: S.winter })}</g>` : `<circle class="tree" cx="${c[0]}" cy="${c[1]}" r="${r}" data-feat="${esc(f.id)}"/><circle class="tree-centre" cx="${c[0]}" cy="${c[1]}" r="3"/>`; if (mode === 'plan' || S.labels) h += `<text x="${c[0]}" y="${c[1] - r - 3}" font-size="9.5" text-anchor="middle" fill="var(--olive-deep)">${esc(f.label || 'existing tree')}${f.status === 'inferred' ? ' · position estimated' : ''}${f.radius_m == null ? ' · canopy assumed' : ''}</text>`; }
     else if (f.polygon) { const c = P(G.centroid(f.polygon)); h += `<polygon class="open ${mode}" points="${poly(f.polygon)}" data-feat="${esc(f.id)}"/>${mode === 'plan' || S.labels ? `<text x="${c[0]}" y="${c[1]}" font-size="9.5" text-anchor="middle" fill="var(--ink-3)">${esc(f.label || f.kind)}</text>` : ''}`; }
   }
   if (version && S.showZones && mode === 'plan') for (const z of version.zones) { if (z.kind === 'edge') { for (const e of z.edges) { const a = P(e.a), b = P(e.b); h += `<line class="zone" x1="${a[0]}" y1="${a[1]}" x2="${b[0]}" y2="${b[1]}"/>`; } const lab = P([(z.edges[0].a[0] + z.edges[0].b[0]) / 2 - z.edges[0].n[0] * .4, (z.edges[0].a[1] + z.edges[0].b[1]) / 2 - z.edges[0].n[1] * .4]); h += `<text class="zone-label" x="${lab[0]}" y="${lab[1]}" text-anchor="middle">${esc(z.label)}</text>`; } }
@@ -84,10 +95,12 @@ export function render2D(svg, project, version, S, K) {
   else if (S.selection?.polygon) h += `<polygon class="scope selection" points="${poly(S.selection.polygon)}"/>`;   // a drawn region waiting for a command
   if (S.lasso?.length > 1) h += `<polygon class="lasso" points="${poly(S.lasso)}"/>`;
   if (S.draft?.length) { h += `<polyline class="draft" points="${poly(S.draft)}" fill="none"/>`; for (const p of S.draft) { const c = P(p); h += `<circle cx="${c[0]}" cy="${c[1]}" r="3" fill="var(--olive)"/>`; } }
+  if (S.editBed && !ghost) { const b = site.beds.find(x => x.id === S.editBed); if (b) { const rings = [b.polygon, ...(b.holes || [])]; rings.forEach((ring, ri) => { ring.forEach((p, i) => { const q = ring[(i + 1) % ring.length]; const m = P([(p[0] + q[0]) / 2, (p[1] + q[1]) / 2]); h += `<circle class="handle mid" cx="${m[0]}" cy="${m[1]}" r="4" data-mid="${ri}:${i}" data-bed="${esc(b.id)}"/>`; }); ring.forEach((p, i) => { const c = P(p); h += `<circle class="handle ${S.dragVertex?.ring === ri && S.dragVertex?.i === i ? 'on' : ''}" cx="${c[0]}" cy="${c[1]}" r="5.5" data-vertex="${ri}:${i}" data-bed="${esc(b.id)}"><title>drag to reshape · double-click to delete</title></circle>`; }); }); } }
   if (version) {
     const pv = S.preview; const removed = new Set(pv?.diff.removed || []), added = new Set(pv?.diff.added || []), changed = new Set(pv?.diff.changed || []), targets = new Set(pv?.targets || (S.selection?.polygon ? version.plant_objects.filter(p => G.pointInPolygon(p.position_m, S.selection.polygon)).map(p => p.id) : []));
     const shown = pv ? pv.version.plant_objects : version.plant_objects; const base0 = new Map(version.plant_objects.map(p => [p.id, p]));
     const order = shown.slice().sort((a, b) => (b.proxy_radius_m - a.proxy_radius_m) || (a.position_m[1] - b.position_m[1]));
+    if (S.stage === 'site') h += '<g class="ghost-plants" opacity=".42">';   // on the Shape stage the design is context, the beds are the subject
     for (const p of order) {
       const c = P(p.position_m); const r = p.proxy_radius_m; const f = form(K, p.species_id, light);
       const cls = ['plant', S.selectedPlant === p.id ? 'sel' : '', added.has(p.id) ? 'added' : changed.has(p.id) ? 'changed' : targets.has(p.id) ? 'target' : '', p.locked ? 'locked' : ''].join(' ');
@@ -97,10 +110,11 @@ export function render2D(svg, project, version, S, K) {
       if (S.labels && r * k > 11) h += `<text class="plant-label" x="${c[0]}" y="${c[1] + (mode === 'present' ? r * k + 9 : 3)}" text-anchor="middle">${esc(K.name(p.species_id).split(' ').map((w, i) => i ? w.slice(0, 3) : w[0]).join('. '))}</text>`;
     }
     if (pv) for (const id of removed) { const p = base0.get(id); const c = P(p.position_m); h += `<circle class="plant removed" cx="${c[0]}" cy="${c[1]}" r="${Math.max(4, p.proxy_radius_m * k)}" data-plant="${esc(p.id)}"/>`; }
+    if (S.stage === 'site') h += '</g>';
   }
   h += `</g>`;
   if (site.scale.status !== 'unknown') { const L = k >= 60 ? 1 : k >= 25 ? 2 : 5; const x0 = 14, y0 = H - 18; h += `<line class="scalebar" x1="${x0}" y1="${y0}" x2="${x0 + L * k}" y2="${y0}"/><text x="${x0}" y="${y0 - 5}" font-size="10" fill="var(--ink-2)">${L} m · ${esc(site.scale.status)}</text>`; }
-  const nx = W - 26, ny = 30; h += `<g transform="translate(${nx},${ny}) rotate(${site.orientation.north_angle_degrees || 0})"><polygon class="north" points="0,-12 5,6 0,2 -5,6"/></g><text x="${nx}" y="${ny + 20}" font-size="9.5" text-anchor="middle" fill="var(--ink-3)">N${site.orientation.basis?.startsWith('assumption') ? ' (assumed up)' : ''}</text>`;
+  const nx = W - 46, ny = 30; h += `<g transform="translate(${nx},${ny}) rotate(${site.orientation.north_angle_degrees || 0})"><polygon class="north" points="0,-12 5,6 0,2 -5,6"/></g><text x="${nx}" y="${ny + 20}" font-size="9.5" text-anchor="middle" fill="var(--ink-3)">N${site.orientation.basis?.startsWith('assumption') ? ' (assumed up)' : ''}</text>`;
   if (!site.boundary && !site.beds.length) h += `<text x="${W / 2}" y="${H / 2 - 8}" font-size="13" text-anchor="middle" fill="var(--ink-3)">no site geometry yet</text><text x="${W / 2}" y="${H / 2 + 10}" font-size="11" text-anchor="middle" fill="var(--ink-3)">describe dimensions in the conversation, set W × H, or draw the boundary with the Site tool</text>`;
   svg.innerHTML = h; return T;
 }

@@ -42,7 +42,7 @@ export class Garden {
 
   // ---------------------------------------------------------------- scene from the model (static parts rebuilt on site change, plants on version/preview change)
   sync(project, version, S) {
-    const siteKey = JSON.stringify([project.site.boundary, project.site.beds.map(b => b.polygon), project.site.features]);
+    const siteKey = JSON.stringify([project.site.boundary, project.site.beds.map(b => [b.polygon, b.holes, b.status]), project.site.features]);
     if (this.siteKey !== siteKey) { this.siteKey = siteKey; this.buildStatic(project); if (!this.framed) { this.frame(project); this.framed = true; } }
     const plants = S.preview ? S.preview.version.plant_objects : (version?.plant_objects || []); const removed = S.preview ? S.preview.diff.removed : []; const added = new Set(S.preview?.diff.added || []); const targets = new Set(S.preview?.targets || []);
     const key = JSON.stringify([version?.id, plants.map(p => [p.id, p.species_id, p.position_m]), removed, [...added], [...targets], S.winter, S.labels, S.selectedPlant, project.site.conditions.light?.value]);
@@ -59,7 +59,7 @@ export class Garden {
     // graph-paper ground, far beyond the site
     const gw = Math.max(40, B.w * 6), gh = Math.max(40, B.h * 6); const ground = new THREE.Mesh(new THREE.PlaneGeometry(gw, gh), new THREE.MeshStandardMaterial({ map: paperTexture(gw, gh), roughness: 1 })); ground.rotation.x = -Math.PI / 2; ground.position.set(B.minx + B.w / 2, -.005, -(B.miny + B.h / 2)); ground.receiveShadow = true; this.static.add(ground);
     if (site.boundary) { const lawn = shapeMesh(site.boundary, flat('#d9dec6', { roughness: 1 }), .004); lawn.receiveShadow = true; this.static.add(lawn); this.static.add(outline(site.boundary, 0x5f5a52, .02)); }
-    for (const b of site.beds) { const soil = shapeMesh(b.polygon, flat('#a98f6f', { roughness: 1 }), .03, .06); soil.receiveShadow = true; soil.castShadow = true; this.static.add(soil); this.static.add(outline(b.polygon, 0x5f7f62, .095)); }
+    for (const b of site.beds) { if (b.status === 'rejected') continue; const soil = shapeMesh(b.polygon, flat('#a98f6f', { roughness: 1 }), .03, .06, b.holes); soil.receiveShadow = true; soil.castShadow = true; this.static.add(soil); this.static.add(outline(b.polygon, 0x5f7f62, .095)); for (const h of b.holes || []) this.static.add(outline(h, 0x5f7f62, .095)); }
     for (const f of site.features) {
       if (f.kind === 'no-plant-zone' && f.polygon) { const m = shapeMesh(f.polygon, flat('#e6e2d6', { roughness: 1 }), .012); this.static.add(m); this.static.add(outline(f.polygon, 0x9a948a, .02)); }
       if (f.kind === 'existing-tree') { const r = f.radius_m ?? 1.5; const g = buildTree({ foliage: '#4a6a4c', accent: null, density: 1, evergreen: null, id: f.id }, r, Math.max(3, r * 2.6), { nominal: f.radius_m == null }); g.position.copy(toV(f.position_m)); g.userData.feature = f.id; this.static.add(g); this.static.add(label(`${f.label || 'existing tree'} · ${f.radius_m == null ? 'canopy assumed' : 'canopy stated'}`, toV(f.position_m, Math.max(3, r * 2.6) + .5))); }
@@ -115,8 +115,8 @@ function buildGround(rec, r, h) {
   return g;
 }
 // ---------------------------------------------------------------- helpers
-function shapeMesh(polygon, material, y = 0, thickness = 0) {
-  const sh = new THREE.Shape(polygon.map(p => new THREE.Vector2(p[0], p[1])));   // rotated −90° about X: shape (x, y_north) → world (x, 0, −y_north) = toV
+function shapeMesh(polygon, material, y = 0, thickness = 0, holes = []) {
+  const sh = new THREE.Shape(polygon.map(p => new THREE.Vector2(p[0], p[1]))); for (const h of holes || []) sh.holes.push(new THREE.Path(h.map(p => new THREE.Vector2(p[0], p[1]))));   // rotated −90° about X: shape (x, y_north) → world (x, 0, −y_north) = toV
   const geo = thickness ? new THREE.ExtrudeGeometry(sh, { depth: thickness, bevelEnabled: false }) : new THREE.ShapeGeometry(sh);
   const m = new THREE.Mesh(geo, material); m.rotation.x = -Math.PI / 2; m.position.y = y; return m;
 }

@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Planting Intelligence — imagine your garden</title>
-<meta name="description" content="Describe a site in your own words; understand what is known, inferred and unknown; set the design intent; generate a planting proposal from a sourced plant knowledge base; refine it with language, selection and direct edits.">
+<meta name="description" content="Describe a site in your own words; see how the AI shapes it into planting beds you can edit; set the design intent; generate a planting proposal from a sourced plant knowledge base; refine it with language, selection and direct edits.">
 <link rel="icon" href="data:,">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..600;1,9..144,300..600&display=swap">
@@ -50,30 +50,29 @@
     </div>
   </section>
 
-  <!-- 2 · Site -->
+  <!-- 2 · Shape -->
   <section id="s-site" class="stage" aria-labelledby="h-site" hidden>
-    <div class="wrap">
-      <div class="stage-head"><h2 id="h-site">Understand your site.</h2><p id="site-lede">Here is what I read from your words, kept apart as stated, inferred and unknown. Nothing is measured until you say so: type the dimensions, draw the boundary, or trace a photo — then confirm the planting bed.</p></div>
-      <div class="read" id="site-read"></div>
-      <div>
+    <div class="wrap shape">
+      <div class="stage-head"><h2 id="h-site">Shape your space.</h2><p id="site-lede">Here’s a starting layout based on what you’ve shared. Adjust the planting areas, or tell me what should change.</p></div>
+      <div class="shape-main">
         <div class="site-canvas">
           <div class="canvas-head" id="site-tools"></div>
           <div id="site-canvas-body"><div class="canvas-hint" id="site-hint"></div></div>
           <div class="canvas-foot" id="site-foot"></div>
         </div>
-        <div class="card" style="margin-top:14px" id="site-beds"></div>
-        <div class="cta-row"><button class="btn primary big" id="to-intent">Continue to the design intent</button><span class="why-not" id="to-intent-why"></span></div>
+        <div class="cta-row"><button class="btn primary big" id="to-intent">Continue to composition</button><span class="why-not" id="to-intent-why"></span></div>
       </div>
+      <div class="shape-side" id="shape-side"></div>
     </div>
   </section>
 
   <!-- 3 · Intent -->
   <section id="s-intent" class="stage" aria-labelledby="h-intent" hidden>
     <div class="wrap">
-      <div class="stage-head"><h2 id="h-intent">Explore the design intent.</h2><p>Your words became a brief: what matters, where, and what must not change. Adjust it here or in words. Each goal says what it does to the generated planting — and when it does nothing yet.</p></div>
+      <div class="stage-head"><h2 id="h-intent">Compose the planting.</h2><p>Your words became a brief: what matters, where, and what must not change. Each confirmed bed lists its spatial function and the species that pass its site gates. Each goal says what it does to the generated planting — and when it does nothing yet.</p></div>
       <div id="brief-left"></div>
       <div id="brief-right"></div>
-      <div class="cta-row"><button class="btn primary big" id="generate">Generate my garden</button><span class="why-not" id="generate-why"></span></div>
+      <div class="cta-row"><button class="btn primary big" id="generate" disabled>Generate my garden</button><span class="why-not" id="generate-why"></span></div>
     </div>
   </section>
 

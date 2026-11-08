@@ -44,6 +44,16 @@ export const RULES = {
     { pattern: /\b(much|a lot|far|way|very|half)\b/i, value: 0.4 }, { pattern: /\b(a bit|slightly|a little|somewhat|touch)\b/i, value: 0.15 },
     { pattern: /(\d{1,2})\s?%/, value: m => Math.min(.9, +m[1] / 100) },
   ],
+  // Level 2 · planting-bed edits (Shape stage): each resolves to a typed request the spatial engine previews before anything changes
+  bed_edits: [
+    { id: 'bed_add', pattern: /\b(add|put|create|make)\s+(?:a\s+|another\s+|one more\s+)?(?:new\s+|small\s+|narrow\s+|wide\s+)?(?:planting\s+)?(bed|border|strip|band)\s+(?:along|on|at|by|against|next to)\s+(?:the\s+)?(north|south|east|west|left|right|back|rear|front|top|bottom)(?:\s+(?:edge|side|fence|wall|boundary))?/i, op: 'add' },
+    { id: 'bed_resize', pattern: /\b(?:make|let|have)?\s*(?:the\s+)?(north|south|east|west|left|right|back|rear|front|top|bottom|centre|center|middle|tree)?\s*(?:planting\s+|tree\s+)?(bed|island|border|strip|band)(?:\s+(?:\d+|[a-z]+))?\s+(?:a\s+(?:bit|little)\s+|much\s+|far\s+)?(wider|narrower|bigger|larger|smaller|deeper|shallower|thinner|longer|shorter)(?:\s+by\s+(\d+(?:\.\d+)?)\s*(m|metres?|meters?|cm))?/i, op: 'resize' },
+    { id: 'bed_resize_verb', pattern: /\b(widen|narrow|enlarge|expand|extend|shrink|reduce|grow)\s+(?:the\s+|(?=(?:north|south|east|west|left|right|back|rear|front|top|bottom|centre|center|middle|tree)\b))(north|south|east|west|left|right|back|rear|front|top|bottom|centre|center|middle|tree)?\s*(?:planting\s+|tree\s+)?(bed|island|border|strip|band)(?:\s+by\s+(\d+(?:\.\d+)?)\s*(m|metres?|meters?|cm))?/i, op: 'resize_verb' },
+    { id: 'bed_delete', pattern: /\b(remove|delete|drop|get rid of|take away)\s+(?:the\s+)?(north|south|east|west|left|right|back|rear|front|top|bottom|centre|center|middle|tree)?\s*(?:planting\s+|tree\s+)?(bed|island|border|strip|band)\b/i, op: 'delete' },
+    { id: 'bed_move', pattern: /\b(move|shift|push|pull)\s+(?:the\s+)?(north|south|east|west|left|right|back|rear|front|top|bottom|centre|center|middle|tree)?\s*(?:planting\s+|tree\s+)?(bed|island|border|strip|band)\s+(?:(?:to|towards?)\s+(?:the\s+)?)?(north|south|east|west|left|right|up|down|inwards?|outwards?|away from the tree|towards? the (?:fence|edge|boundary))(?:\s+by\s+(\d+(?:\.\d+)?)\s*(m|metres?|meters?|cm))?/i, op: 'move' },
+    { id: 'open_resize', pattern: /\b(?:make|keep|leave)\s+(?:the\s+)?(open\s+(?:area|centre|center|middle|space|ground|lawn)|lawn|play\s+(?:area|zone|space)|patio|centre|center|middle)\s+(?:a\s+(?:bit|little)\s+|much\s+)?(bigger|larger|wider|smaller|narrower)(?:\s+by\s+(\d+(?:\.\d+)?)\s*(m|metres?|meters?|cm))?/i, op: 'open_resize' },
+    { id: 'bed_split', pattern: /\b(split|divide|cut)\s+(?:the\s+)?(north|south|east|west|left|right|back|rear|front|top|bottom|centre|center|middle|tree)?\s*(?:planting\s+|tree\s+)?(bed|island|border|strip|band)\b/i, op: 'split' },
+  ],
 };
 
 export function findDirection(text) { const m = text.match(new RegExp(`\\b${DIR}\\b(?:\\s*(?:side|edge|half|part|end|corner|boundary|fence))?`, 'i')); if (!m) return null; const w = m[1].toLowerCase(); return { word: m[0], side: SIDE_WORD[w] || w, is_edge: /edge|boundary|fence/i.test(m[0]) }; }
@@ -90,9 +100,32 @@ export function interpretEdit(text, ctx) {
   return { kind: 'spatial_edit_request', utterance: text, provenance: 'offline-parser', scope, operations: ops, preserve, evidence, notes, conflicts, confidence: ops.length ? 'interpretation_candidate' : 'no_operation_recognised', requires_preview: true };
 }
 
+const SIDE_OF = w => { if (!w) return null; const x = w.toLowerCase(); if (x === 'tree') return null; if (x === 'centre' || x === 'center' || x === 'middle') return 'centre'; return SIDE_WORD[x] || (x === 'left' ? 'west' : x === 'right' ? 'east' : x); };
+const metres = (n, unit) => n == null ? null : unit && /cm/i.test(unit) ? +n / 100 : +n;
+/** a planting-bed edit request from an utterance (Shape stage). Returns null when no bed-edit rule matches. */
+export function interpretBedEdit(text, ctx = {}) {
+  const evidence = []; let req = null;
+  for (const r of RULES.bed_edits) {
+    const m = text.match(r.pattern); if (!m) continue; evidence.push({ rule: r.id, text: m[0] });
+    const amtWord = text.match(/\b(a bit|a little|slightly|much|a lot|far)\b/i); const relative = amtWord ? (/much|a lot|far/i.test(amtWord[0]) ? 1.0 : 0.3) : null;
+    if (r.op === 'resize') { const side = SIDE_OF(m[1]); const dir = m[3].toLowerCase(); const amount = metres(m[4], m[5]) ?? relative ?? 0.5; req = { op: 'resize', target: { side: side === 'centre' ? null : side, tree: /tree/i.test(m[1] || '') || /island/i.test(m[2]), name: side === 'centre' ? 'centre' : null }, direction: dir, amount_m: amount, amount_basis: m[4] ? `from "${m[4]} ${m[5]}"` : amtWord ? `from "${amtWord[0]}"` : 'default 0.5 m — adjust before applying' }; break; }
+    if (r.op === 'resize_verb') { const side = SIDE_OF(m[2]); const grow = /widen|enlarge|expand|extend|grow/i.test(m[1]); const amount = metres(m[4], m[5]) ?? relative ?? 0.5; req = { op: 'resize', target: { side: side === 'centre' ? null : side, tree: /tree/i.test(m[2] || '') || /island/i.test(m[3]), name: side === 'centre' ? 'centre' : null }, direction: grow ? 'wider' : 'narrower', amount_m: amount, amount_basis: m[4] ? `from "${m[4]} ${m[5]}"` : 'default 0.5 m — adjust before applying' }; break; }
+    if (r.op === 'delete') { const side = SIDE_OF(m[2]); req = { op: 'delete', target: { side: side === 'centre' ? null : side, tree: /tree/i.test(m[2] || '') || /island/i.test(m[3]), name: side === 'centre' ? 'centre' : null } }; break; }
+    if (r.op === 'add') { req = { op: 'add', side: SIDE_OF(m[3]), width_m: /narrow/i.test(m[0]) ? 0.6 : /wide/i.test(m[0]) ? 1.2 : 0.8, function: /screen|privacy|hedge/i.test(text) ? 'z:screen' : 'z:ground_cover' }; break; }
+    if (r.op === 'move') { const side = SIDE_OF(m[2]); const d = m[4].toLowerCase(); const direction = /away from the tree/.test(d) ? 'away-from-tree' : /towards? the/.test(d) ? 'outward' : d === 'up' ? 'north' : d === 'down' ? 'south' : /inward/.test(d) ? 'inward' : /outward/.test(d) ? 'outward' : SIDE_OF(d); req = { op: 'move', target: { side: side === 'centre' ? null : side, tree: /tree/i.test(m[2] || '') || /island/i.test(m[3]), name: side === 'centre' ? 'centre' : null }, direction, amount_m: metres(m[5], m[6]) ?? relative ?? 0.5 }; break; }
+    if (r.op === 'open_resize') { req = { op: 'open_resize', direction: /bigger|larger|wider/i.test(m[2]) ? 'bigger' : 'smaller', amount_m: metres(m[3], m[4]) ?? relative ?? 0.4 }; break; }
+    if (r.op === 'split') { const side = SIDE_OF(m[2]); req = { op: 'split', target: { side: side === 'centre' ? null : side, tree: /tree/i.test(m[2] || '') || /island/i.test(m[3]), name: side === 'centre' ? 'centre' : null } }; break; }
+  }
+  if (!req) return null;
+  const notes = []; if (req.target && !req.target.side && !req.target.tree && !req.target.name) { if (ctx.bedId) { req.target.bed_id = ctx.bedId; notes.push('no bed named — the selected bed is assumed'); } else notes.push('no bed named — the only bed, or the closest match, will be used'); }
+  if (req.target?.side && /back|rear|top|front|bottom/i.test(evidence[0].text)) notes.push('"back / front" read as north / south (plan up); correct the orientation if the site faces another way');
+  return { kind: 'bed_edit_request', utterance: text, provenance: 'offline-parser', request: req, evidence, notes, confidence: 'interpretation_candidate', requires_preview: true };
+}
+
 export function classify(text, ctx) {
   const t = text.trim();
   if (!t) return 'empty';
+  if (RULES.bed_edits.some(r => r.pattern.test(t)) && !(ctx.hasDesign && ctx.stage === 'garden' && !/\b(bed|island|border|strip|band|open (?:area|centre|center|middle|space)|lawn)\b/i.test(t))) return 'bed_edit';
   if (ctx.hasDesign && (RULES.edits.some(r => r.pattern.test(t)) || (ctx.selection && deictic(t)))) return 'edit';
   if (/\b(guarante\w+|highest|maximi[sz]e|best possible|optimal)\b/i.test(t) && /\b(pollinator|biodivers|ecolog)/i.test(t)) return 'overclaim';
   return 'description';

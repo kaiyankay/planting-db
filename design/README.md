@@ -1,3 +1,7 @@
+# Design workspace — read `../HANDOFF.md` first
+
+**2026-11-08 — Spatial proposal (brief 'Phase 2 Spatial Intelligence & Planting Bed Generation').** The journey is Describe (Imagine, frozen) → **Shape your space** (site model + AI planting-bed proposal on one canvas: `js/spatial.js` over `js/clip.js` / `vendor/polygon-clipping`; accept · reject · reshape · draw · say what should change → preview → Apply) → Compose (per-bed functions and candidates) → Grow (one version over all beds; partial regeneration after a geometry change). Tests: `python3 -I ../tools/spatial_tests.py` (87), `../tools/design_tests.py` (89), `../tools/ux_tests.py` (41); screenshots `../brain/screenshots/spatial/` via `sh ../tools/shots.sh`; report `../reports/spatial-proposal-2026-11-08.md`. Scripted replays for tests and screenshots: `index.html?script=demoA|demoB|demoC|demos&fresh=1[&stop=shape|intent|garden|three|preview|applied|intent2|banner|geom|garden2|drawer|three2|sized][&solo=1]`.
+
 # design/ — Planting Intelligence · Design Journey (Phase 2)
 
 ## UX redesign (2026-11-07, third brief: *Complete UI/UX Redesign & Implementation*)

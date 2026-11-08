@@ -15,7 +15,7 @@ export function newProject(name = 'Untitled backyard') {
     site: {
       id: 'site-1', coordinate_system: 'local-meters', orientation: { north_angle_degrees: 0, basis: 'assumption (north = up until stated)' },
       scale: { status: 'unknown', known_length_m: null, source: null }, boundary: null, boundary_status: 'unknown',
-      features: [], beds: [],
+      features: [], beds: [], proposals: null, history: [],
       conditions: { light: cond(), soil_type: cond(), soil_drainage: cond(), water: cond(), wind: cond(), irrigation: cond() },
       values: [], notes: [],
     },
@@ -29,8 +29,17 @@ export function emptyBrief() { return { provenance: null, values: {}, hard_const
 export function setBoundary(project, polygon, source = 'user-drawn') { project.site.boundary = polygon.map(p => [r2(p[0]), r2(p[1])]); project.site.boundary_status = source; }
 export function setScale(project, status, known_length_m, source) { project.site.scale = { status, known_length_m, source }; }
 export function addFeature(project, f) { const id = f.id || uid(f.kind === 'existing-tree' ? 'tree' : f.kind === 'no-plant-zone' ? 'open' : 'feat'); project.site.features.push({ locked: true, ...f, id }); return id; }
-export function addBed(project, polygon, status = 'user-drawn', name = null, source = 'canvas') { const id = `bed-${project.site.beds.length + 1}`; project.site.beds.push({ id, name: name || `Bed ${project.site.beds.length + 1}`, polygon: polygon.map(p => [r2(p[0]), r2(p[1])]), status, source, goals: [], conditions_overrides: {}, area_m2: r2(area(polygon)) }); return id; }
-export function acceptBed(project, bedId) { const b = project.site.beds.find(b => b.id === bedId); if (b) b.status = 'user-accepted'; }
+export function addBed(project, polygon, status = 'user-drawn', name = null, source = 'canvas', extra = {}) { project.site.bed_seq = (project.site.bed_seq || project.site.beds.length) + 1; const id = `bed-${project.site.bed_seq}`; const holes = (extra.holes || []).map(h => h.map(p => [r2(p[0]), r2(p[1])])); const poly = polygon.map(p => [r2(p[0]), r2(p[1])]); project.site.beds.push({ id, name: name || `Bed ${project.site.beds.length + 1}`, polygon: poly, holes, status, source, goals: [], conditions_overrides: {}, area_m2: r2(area(poly) - holes.reduce((s, h) => s + area(h), 0)), functions: extra.functions || [], strategy: extra.strategy || null, strategy_params: extra.strategy_params || null, reasoning: extra.reasoning || [], notes: extra.notes || [], under_canopy: extra.under_canopy || [], min_width_m: extra.min_width_m ?? null, proposal_id: extra.proposal_id || null, proposal_key: extra.proposal_key || null, confirmation: status === 'ai-suggested' ? 'proposed' : 'confirmed' }); return id; }
+export function acceptBed(project, bedId) { const b = project.site.beds.find(b => b.id === bedId); if (b) { b.status = 'user-accepted'; b.confirmation = 'confirmed'; } }
+export function setBedGeometry(project, bedId, polygon, holes = [], status = 'user-edited', source = 'edited on the canvas') { const b = project.site.beds.find(b => b.id === bedId); if (!b) return null; b.polygon = polygon.map(p => [r2(p[0]), r2(p[1])]); b.holes = (holes || []).map(h => h.map(p => [r2(p[0]), r2(p[1])])); b.area_m2 = r2(area(b.polygon) - b.holes.reduce((s, h) => s + area(h), 0)); b.status = status; b.source = source; b.confirmation = 'confirmed'; return b; }
+export function removeBed(project, bedId) { const i = project.site.beds.findIndex(b => b.id === bedId); if (i < 0) return false; project.site.beds.splice(i, 1); return true; }
+export const activeBeds = project => project.site.beds.filter(b => b.status !== 'rejected');
+export const confirmedBeds = project => project.site.beds.filter(b => ['user-accepted', 'user-drawn', 'user-edited', 'user-calibrated'].includes(b.status));
+export const bedShape = b => ({ polygon: b.polygon, holes: b.holes || [] });
+export const bedFingerprint = b => JSON.stringify([b.polygon, b.holes || [], (b.functions || []).map(f => [f.function, f.where])]);
+// site history: snapshots of beds + features for Undo / Reset on the Shape stage (capped)
+export function snapshotSite(project, label) { const h = project.site.history || (project.site.history = []); h.push({ label, time: now(), beds: JSON.parse(JSON.stringify(project.site.beds)), features: JSON.parse(JSON.stringify(project.site.features)) }); if (h.length > 30) h.shift(); }
+export function undoSite(project) { const h = project.site.history || []; const s = h.pop(); if (!s) return null; project.site.beds = s.beds; project.site.features = s.features; return s; }
 export function setCondition(project, key, value, status, source, note, bedId = null) { const c = cond(value, status, source, note); if (bedId) { const b = project.site.beds.find(b => b.id === bedId); if (b) b.conditions_overrides[key] = c; } else project.site.conditions[key] = c; }
 export function effectiveConditions(project, bedId) { const b = project.site.beds.find(b => b.id === bedId); return { ...project.site.conditions, ...(b?.conditions_overrides || {}) }; }
 export function addInput(project, input) { const id = uid(input.type); project.inputs.push({ id, added: now(), ...input }); return id; }
@@ -64,7 +73,7 @@ export function diff(a, b) {
 
 // ---------------------------------------------------------------- readiness: what the model knows, what blocks measured placement
 export function readiness(project) {
-  const s = project.site; const out = { site_boundary: !!s.boundary, scale: s.scale.status !== 'unknown', beds: s.beds.length, accepted_beds: s.beds.filter(b => b.status === 'user-accepted' || b.status === 'user-drawn').length, unknown_conditions: Object.entries(s.conditions).filter(([, c]) => c.status === 'unknown').map(([k]) => k), measured_placement: false, blockers: [] };
+  const s = project.site; const out = { site_boundary: !!s.boundary, scale: s.scale.status !== 'unknown', beds: s.beds.length, accepted_beds: s.beds.filter(b => ['user-accepted', 'user-drawn', 'user-edited'].includes(b.status)).length, unknown_conditions: Object.entries(s.conditions).filter(([, c]) => c.status === 'unknown').map(([k]) => k), measured_placement: false, blockers: [] };
   if (!out.site_boundary) out.blockers.push('no site geometry yet — draw a boundary or state the dimensions');
   if (!out.scale) out.blockers.push('scale unknown — measured spacing and quantities are blocked until a length is stated or calibrated');
   if (!out.beds) out.blockers.push('no planting bed yet — draw one or accept a suggestion');

@@ -1,0 +1,906 @@
+{
+ "id": "demo-b",
+ "name": "Demo B",
+ "created": "2026-11-08T22:37:08.438Z",
+ "schema": "planting-intelligence/design-project/0.1",
+ "knowledge_snapshot": {
+  "generated": "2026-11-07",
+  "generated_by": "tools/build_explorer.py",
+  "method": "M49",
+  "inputs": {
+   "kg_generated": "2026-11-03",
+   "xyz_generated": "2026-11-03",
+   "relations_updated": "2026-11-02",
+   "schema_version": "0.4.3",
+   "ontology_version": "0.2.0"
+  }
+ },
+ "conversation": [
+  {
+   "id": "msg-96l32",
+   "time": "2026-11-08T22:37:08.439Z",
+   "role": "user",
+   "text": "I want a low-maintenance ecological garden."
+  },
+  {
+   "id": "msg-96l73",
+   "time": "2026-11-08T22:37:08.443Z",
+   "role": "ai",
+   "text": "",
+   "html": "<b>Read from what you said</b><ul><li>goals: maintenance low, ecology</li><li>ground cover → bed interior (low maintenance → carpeting ground layer reduces open soil (design heuristic, not a database claim))</li></ul><b>Unknown</b> (not assumed): site dimensions / scale; light; soil type and drainage; ecological performance — the database records some ecological-value claims (pollinator, bird food …) but no pollinator-interaction data; no score is possible.<br><b>Not drawn yet:</b> How big is the site? Type width × height in metres, draw the boundary, or trace a photo and calibrate a known length.",
+   "mode": "interpretation: offline-parser (rules: low_maintenance, ecology)"
+  },
+  {
+   "id": "msg-96lz4",
+   "time": "2026-11-08T22:37:08.471Z",
+   "role": "sys",
+   "text": "site set to 5 × 4 m (typed; a rectangle is assumed — redraw with the Site tool for another shape)"
+  },
+  {
+   "id": "msg-96sm5",
+   "time": "2026-11-08T22:37:08.710Z",
+   "role": "ai",
+   "text": "",
+   "html": "<b>Starting layout</b> — Perimeter planting, centre left for use: North bed 5 m², East bed 3 m², West bed 3 m². 2 alternatives differ in how much ground stays open. Accept, edit, or say what should change.",
+   "mode": "spatial engine: site − excluded areas − clearances → beds by operation"
+  }
+ ],
+ "inputs": [],
+ "site": {
+  "id": "site-1",
+  "coordinate_system": "local-meters",
+  "orientation": {
+   "north_angle_degrees": 0,
+   "basis": "assumption (north = up until stated)"
+  },
+  "scale": {
+   "status": "user-stated",
+   "known_length_m": 5,
+   "source": "width × height typed (rectangle)"
+  },
+  "boundary": [
+   [
+    0,
+    0
+   ],
+   [
+    5,
+    0
+   ],
+   [
+    5,
+    4
+   ],
+   [
+    0,
+    4
+   ]
+  ],
+  "boundary_status": "user-stated",
+  "features": [],
+  "beds": [
+   {
+    "id": "bed-1",
+    "name": "North bed",
+    "polygon": [
+     [
+      0,
+      3
+     ],
+     [
+      5,
+      3
+     ],
+     [
+      5,
+      4
+     ],
+     [
+      0,
+      4
+     ]
+    ],
+    "holes": [],
+    "status": "ai-suggested",
+    "source": "proposal A · edge",
+    "goals": [],
+    "conditions_overrides": {},
+    "area_m2": 5,
+    "functions": [
+     {
+      "function": "z:ground_cover",
+      "where": "north-edge",
+      "basis": "habitat / low-maintenance planting → a 1 m perimeter bed on the edges that are not the access edge; the centre is left for use"
+     }
+    ],
+    "strategy": "edge",
+    "strategy_params": {
+     "sides": [
+      "north",
+      "east",
+      "west"
+     ],
+     "width_m": 1,
+     "function": "z:ground_cover"
+    },
+    "reasoning": [
+     "habitat / low-maintenance planting → a 1 m perimeter bed on the edges that are not the access edge; the centre is left for use"
+    ],
+    "notes": [],
+    "under_canopy": [],
+    "min_width_m": 1,
+    "proposal_id": "A",
+    "proposal_key": "A-1",
+    "confirmation": "proposed"
+   },
+   {
+    "id": "bed-2",
+    "name": "East bed",
+    "polygon": [
+     [
+      4,
+      0
+     ],
+     [
+      5,
+      0
+     ],
+     [
+      5,
+      3
+     ],
+     [
+      4,
+      3
+     ]
+    ],
+    "holes": [],
+    "status": "ai-suggested",
+    "source": "proposal A · edge",
+    "goals": [],
+    "conditions_overrides": {},
+    "area_m2": 3,
+    "functions": [
+     {
+      "function": "z:ground_cover",
+      "where": "east-edge",
+      "basis": "habitat / low-maintenance planting → a 1 m perimeter bed on the edges that are not the access edge; the centre is left for use"
+     }
+    ],
+    "strategy": "edge",
+    "strategy_params": {
+     "sides": [
+      "north",
+      "east",
+      "west"
+     ],
+     "width_m": 1,
+     "function": "z:ground_cover"
+    },
+    "reasoning": [
+     "habitat / low-maintenance planting → a 1 m perimeter bed on the edges that are not the access edge; the centre is left for use"
+    ],
+    "notes": [],
+    "under_canopy": [],
+    "min_width_m": 1,
+    "proposal_id": "A",
+    "proposal_key": "A-2",
+    "confirmation": "proposed"
+   },
+   {
+    "id": "bed-3",
+    "name": "West bed",
+    "polygon": [
+     [
+      0,
+      0
+     ],
+     [
+      1,
+      0
+     ],
+     [
+      1,
+      3
+     ],
+     [
+      0,
+      3
+     ]
+    ],
+    "holes": [],
+    "status": "ai-suggested",
+    "source": "proposal A · edge",
+    "goals": [],
+    "conditions_overrides": {},
+    "area_m2": 3,
+    "functions": [
+     {
+      "function": "z:ground_cover",
+      "where": "west-edge",
+      "basis": "habitat / low-maintenance planting → a 1 m perimeter bed on the edges that are not the access edge; the centre is left for use"
+     }
+    ],
+    "strategy": "edge",
+    "strategy_params": {
+     "sides": [
+      "north",
+      "east",
+      "west"
+     ],
+     "width_m": 1,
+     "function": "z:ground_cover"
+    },
+    "reasoning": [
+     "habitat / low-maintenance planting → a 1 m perimeter bed on the edges that are not the access edge; the centre is left for use"
+    ],
+    "notes": [],
+    "under_canopy": [],
+    "min_width_m": 1,
+    "proposal_id": "A",
+    "proposal_key": "A-3",
+    "confirmation": "proposed"
+   }
+  ],
+  "proposals": {
+   "generated": "2026-11-08T22:37:08.710Z",
+   "engine": "spatial.js (polygon-clipping booleans, metre units)",
+   "inputs_fp": "[[[0,0],[5,0],[5,4],[0,4]],[],{\"maintenance_low\":2,\"ecology\":2},[[\"z:ground_cover\",\"bed-interior\",null]],{\"north_angle_degrees\":0,\"basis\":\"assumption (north = up until stated)\"}]",
+   "conceptual": false,
+   "site": {
+    "site_m2": 20,
+    "plantable_m2": 20,
+    "excluded": [],
+    "open_areas": [],
+    "trees": [],
+    "access_edge": {
+     "side": "south",
+     "basis": "assumed: the site is entered from the south (front) edge until you say otherwise"
+    },
+    "assumptions": [
+     "access from the south edge is an assumption — say \"the gate is on the east side\" to change it"
+    ],
+    "questions": []
+   },
+   "intent": {
+    "screen_sides": [],
+    "wants_open": false,
+    "habitat": true,
+    "values": {
+     "maintenance_low": 2,
+     "ecology": 2
+    }
+   },
+   "candidates": [
+    {
+     "id": "A",
+     "label": "Recommended",
+     "recommended": true,
+     "summary": "Perimeter planting, centre left for use",
+     "strategies": [
+      {
+       "op": "edge",
+       "params": {
+        "sides": [
+         "north",
+         "east",
+         "west"
+        ],
+        "width_m": 1,
+        "function": "z:ground_cover"
+       },
+       "basis": "habitat / low-maintenance planting → a 1 m perimeter bed on the edges that are not the access edge; the centre is left for use",
+       "note": null,
+       "produced": 3
+      }
+     ],
+     "beds": [
+      {
+       "key": "A-1",
+       "polygon": [
+        [
+         0,
+         3
+        ],
+        [
+         5,
+         3
+        ],
+        [
+         5,
+         4
+        ],
+        [
+         0,
+         4
+        ]
+       ],
+       "holes": [],
+       "area_m2": 5,
+       "min_width_m": 1,
+       "functions": [
+        {
+         "function": "z:ground_cover",
+         "where": "north-edge",
+         "basis": "habitat / low-maintenance planting → a 1 m perimeter bed on the edges that are not the access edge; the centre is left for use"
+        }
+       ],
+       "side": "north",
+       "strategy": "edge",
+       "strategy_params": {
+        "sides": [
+         "north",
+         "east",
+         "west"
+        ],
+        "width_m": 1,
+        "function": "z:ground_cover"
+       },
+       "basis": "habitat / low-maintenance planting → a 1 m perimeter bed on the edges that are not the access edge; the centre is left for use",
+       "reasoning": [
+        "habitat / low-maintenance planting → a 1 m perimeter bed on the edges that are not the access edge; the centre is left for use"
+       ],
+       "notes": [],
+       "under_canopy": [],
+       "name": "North bed"
+      },
+      {
+       "key": "A-2",
+       "polygon": [
+        [
+         4,
+         0
+        ],
+        [
+         5,
+         0
+        ],
+        [
+         5,
+         3
+        ],
+        [
+         4,
+         3
+        ]
+       ],
+       "holes": [],
+       "area_m2": 3,
+       "min_width_m": 1,
+       "functions": [
+        {
+         "function": "z:ground_cover",
+         "where": "east-edge",
+         "basis": "habitat / low-maintenance planting → a 1 m perimeter bed on the edges that are not the access edge; the centre is left for use"
+        }
+       ],
+       "side": "east",
+       "strategy": "edge",
+       "strategy_params": {
+        "sides": [
+         "north",
+         "east",
+         "west"
+        ],
+        "width_m": 1,
+        "function": "z:ground_cover"
+       },
+       "basis": "habitat / low-maintenance planting → a 1 m perimeter bed on the edges that are not the access edge; the centre is left for use",
+       "reasoning": [
+        "habitat / low-maintenance planting → a 1 m perimeter bed on the edges that are not the access edge; the centre is left for use"
+       ],
+       "notes": [],
+       "under_canopy": [],
+       "name": "East bed"
+      },
+      {
+       "key": "A-3",
+       "polygon": [
+        [
+         0,
+         0
+        ],
+        [
+         1,
+         0
+        ],
+        [
+         1,
+         3
+        ],
+        [
+         0,
+         3
+        ]
+       ],
+       "holes": [],
+       "area_m2": 3,
+       "min_width_m": 1,
+       "functions": [
+        {
+         "function": "z:ground_cover",
+         "where": "west-edge",
+         "basis": "habitat / low-maintenance planting → a 1 m perimeter bed on the edges that are not the access edge; the centre is left for use"
+        }
+       ],
+       "side": "west",
+       "strategy": "edge",
+       "strategy_params": {
+        "sides": [
+         "north",
+         "east",
+         "west"
+        ],
+        "width_m": 1,
+        "function": "z:ground_cover"
+       },
+       "basis": "habitat / low-maintenance planting → a 1 m perimeter bed on the edges that are not the access edge; the centre is left for use",
+       "reasoning": [
+        "habitat / low-maintenance planting → a 1 m perimeter bed on the edges that are not the access edge; the centre is left for use"
+       ],
+       "notes": [],
+       "under_canopy": [],
+       "name": "West bed"
+      }
+     ],
+     "dropped": [],
+     "open_centre": {
+      "polygon": [
+       [
+        1,
+        0
+       ],
+       [
+        4,
+        0
+       ],
+       [
+        4,
+        3
+       ],
+       [
+        1,
+        3
+       ]
+      ],
+      "area_m2": 9
+     },
+     "metrics": {
+      "site_m2": 20,
+      "plantable_m2": 20,
+      "planting_m2": 11,
+      "open_m2": 9,
+      "planting_share": 0.55,
+      "beds": 3
+     },
+     "reasoning_summary": [
+      "habitat value comes from a continuous perimeter layer rather than scattered patches",
+      "the south edge stays free as access (assumed)"
+     ],
+     "assumptions": [
+      "access from the south edge is an assumption — say \"the gate is on the east side\" to change it"
+     ],
+     "source_constraints": [],
+     "validation": {
+      "ok": true,
+      "issues": []
+     },
+     "status": "proposed"
+    },
+    {
+     "id": "B",
+     "label": "Modular beds",
+     "recommended": false,
+     "summary": "Rectangular beds with maintenance paths between",
+     "strategies": [
+      {
+       "op": "modular",
+       "params": {
+        "cols": 2,
+        "rows": 1,
+        "cell_w_m": 2.15,
+        "cell_h_m": 4,
+        "gap_m": 0.7,
+        "function": "z:ground_cover"
+       },
+       "basis": "a regular site → modular rectangular beds separated by 0.7 m paths, each reachable from both sides for maintenance",
+       "note": null,
+       "produced": 2
+      }
+     ],
+     "beds": [
+      {
+       "key": "B-1",
+       "polygon": [
+        [
+         0,
+         0.9
+        ],
+        [
+         2.15,
+         0.9
+        ],
+        [
+         2.15,
+         4
+        ],
+        [
+         0,
+         4
+        ]
+       ],
+       "holes": [],
+       "area_m2": 6.66,
+       "min_width_m": 2.14,
+       "functions": [
+        {
+         "function": "z:ground_cover",
+         "where": "bed-interior",
+         "basis": "a regular site → modular rectangular beds separated by 0.7 m paths, each reachable from both sides for maintenance"
+        }
+       ],
+       "side": null,
+       "strategy": "modular",
+       "strategy_params": {
+        "cols": 2,
+        "rows": 1,
+        "cell_w_m": 2.15,
+        "cell_h_m": 4,
+        "gap_m": 0.7,
+        "function": "z:ground_cover"
+       },
+       "basis": "a regular site → modular rectangular beds separated by 0.7 m paths, each reachable from both sides for maintenance",
+       "reasoning": [
+        "a regular site → modular rectangular beds separated by 0.7 m paths, each reachable from both sides for maintenance"
+       ],
+       "notes": [],
+       "under_canopy": [],
+       "name": "West bed"
+      },
+      {
+       "key": "B-2",
+       "polygon": [
+        [
+         2.85,
+         0.9
+        ],
+        [
+         5,
+         0.9
+        ],
+        [
+         5,
+         4
+        ],
+        [
+         2.85,
+         4
+        ]
+       ],
+       "holes": [],
+       "area_m2": 6.67,
+       "min_width_m": 2.14,
+       "functions": [
+        {
+         "function": "z:ground_cover",
+         "where": "bed-interior",
+         "basis": "a regular site → modular rectangular beds separated by 0.7 m paths, each reachable from both sides for maintenance"
+        }
+       ],
+       "side": null,
+       "strategy": "modular",
+       "strategy_params": {
+        "cols": 2,
+        "rows": 1,
+        "cell_w_m": 2.15,
+        "cell_h_m": 4,
+        "gap_m": 0.7,
+        "function": "z:ground_cover"
+       },
+       "basis": "a regular site → modular rectangular beds separated by 0.7 m paths, each reachable from both sides for maintenance",
+       "reasoning": [
+        "a regular site → modular rectangular beds separated by 0.7 m paths, each reachable from both sides for maintenance"
+       ],
+       "notes": [],
+       "under_canopy": [],
+       "name": "East bed"
+      }
+     ],
+     "dropped": [],
+     "open_centre": {
+      "polygon": [
+       [
+        0,
+        0
+       ],
+       [
+        5,
+        0
+       ],
+       [
+        5,
+        0.9
+       ],
+       [
+        2.85,
+        0.9
+       ],
+       [
+        2.85,
+        4
+       ],
+       [
+        2.15,
+        4
+       ],
+       [
+        2.15,
+        0.9
+       ],
+       [
+        0,
+        0.9
+       ]
+      ],
+      "area_m2": 6.67
+     },
+     "metrics": {
+      "site_m2": 20,
+      "plantable_m2": 20,
+      "planting_m2": 13.33,
+      "open_m2": 6.67,
+      "planting_share": 0.67,
+      "beds": 2
+     },
+     "reasoning_summary": [
+      "an alternative organisation of the same plantable area",
+      "trade-off: more edge to maintain, less continuous ground layer"
+     ],
+     "assumptions": [
+      "access from the south edge is an assumption — say \"the gate is on the east side\" to change it"
+     ],
+     "source_constraints": [],
+     "validation": {
+      "ok": true,
+      "issues": []
+     },
+     "status": "proposed"
+    },
+    {
+     "id": "C",
+     "label": "More planting area",
+     "recommended": false,
+     "summary": "Beds fill the plantable ground except the open area and access",
+     "strategies": [
+      {
+       "op": "infill",
+       "params": {
+        "keep_out": 1,
+        "function": "z:ground_cover"
+       },
+       "basis": "everything plantable except a 0.9 m access strip becomes bed — the largest planted area, the least open ground",
+       "note": null,
+       "produced": 1
+      }
+     ],
+     "beds": [
+      {
+       "key": "C-1",
+       "polygon": [
+        [
+         0,
+         0.9
+        ],
+        [
+         5,
+         0.9
+        ],
+        [
+         5,
+         4
+        ],
+        [
+         0,
+         4
+        ]
+       ],
+       "holes": [],
+       "area_m2": 15.5,
+       "min_width_m": 3.09,
+       "functions": [
+        {
+         "function": "z:ground_cover",
+         "where": "bed-interior",
+         "basis": "everything plantable except a 0.9 m access strip becomes bed — the largest planted area, the least open ground"
+        }
+       ],
+       "side": null,
+       "strategy": "infill",
+       "strategy_params": {
+        "keep_out": 1,
+        "function": "z:ground_cover"
+       },
+       "basis": "everything plantable except a 0.9 m access strip becomes bed — the largest planted area, the least open ground",
+       "reasoning": [
+        "everything plantable except a 0.9 m access strip becomes bed — the largest planted area, the least open ground"
+       ],
+       "notes": [],
+       "under_canopy": [],
+       "name": "Centre bed"
+      }
+     ],
+     "dropped": [],
+     "open_centre": {
+      "polygon": [
+       [
+        0,
+        0
+       ],
+       [
+        5,
+        0
+       ],
+       [
+        5,
+        0.9
+       ],
+       [
+        0,
+        0.9
+       ]
+      ],
+      "area_m2": 4.5
+     },
+     "metrics": {
+      "site_m2": 20,
+      "plantable_m2": 20,
+      "planting_m2": 15.5,
+      "open_m2": 4.5,
+      "planting_share": 0.78,
+      "beds": 1
+     },
+     "reasoning_summary": [
+      "maximises planted area; the open area and the access strip are the only ground left",
+      "trade-off: little room to move, more to maintain"
+     ],
+     "assumptions": [
+      "access from the south edge is an assumption — say \"the gate is on the east side\" to change it"
+     ],
+     "source_constraints": [],
+     "validation": {
+      "ok": true,
+      "issues": []
+     },
+     "status": "proposed"
+    }
+   ],
+   "recommended_id": "A",
+   "params": {
+    "screen_band_m": 1.2,
+    "side_band_m": 0.8,
+    "perimeter_band_m": 1,
+    "access_band_m": 0.9,
+    "path_clearance_m": 0.3,
+    "building_clearance_m": 0.3,
+    "min_bed_width_m": 0.5,
+    "min_bed_area_m2": 0.6,
+    "sliver_m2": 0.15,
+    "tree_island_pad_m": 0.6,
+    "small_site_m": 5,
+    "alt_min_difference": 0.12
+   },
+   "active_id": "A",
+   "stale": false,
+   "pending": null,
+   "chosen_by": "engine"
+  },
+  "history": [
+   {
+    "label": "site 5 × 4",
+    "time": "2026-11-08T22:37:08.471Z",
+    "beds": [],
+    "features": []
+   }
+  ],
+  "conditions": {
+   "light": {
+    "value": null,
+    "status": "unknown",
+    "source": null,
+    "note": null
+   },
+   "soil_type": {
+    "value": null,
+    "status": "unknown",
+    "source": null,
+    "note": null
+   },
+   "soil_drainage": {
+    "value": null,
+    "status": "unknown",
+    "source": null,
+    "note": null
+   },
+   "water": {
+    "value": null,
+    "status": "unknown",
+    "source": null,
+    "note": null
+   },
+   "wind": {
+    "value": null,
+    "status": "unknown",
+    "source": null,
+    "note": null
+   },
+   "irrigation": {
+    "value": null,
+    "status": "unknown",
+    "source": null,
+    "note": null
+   }
+  },
+  "values": [],
+  "notes": [],
+  "bed_seq": 3
+ },
+ "brief": {
+  "provenance": "offline-parser",
+  "values": {
+   "maintenance_low": 2,
+   "ecology": 2
+  },
+  "hard_constraints": [
+   {
+    "id": "bed-only",
+    "kind": "bed-boundary",
+    "text": "never place plants outside accepted beds",
+    "evidence": "rule"
+   }
+  ],
+  "functions": [
+   {
+    "function": "z:ground_cover",
+    "where": "bed-interior",
+    "basis": "low maintenance → carpeting ground layer reduces open soil (design heuristic, not a database claim)",
+    "evidence": "low maintenance"
+   }
+  ],
+  "composition": [
+   "layered: structure + ground cover"
+  ],
+  "unknowns": [
+   "light",
+   "soil type and drainage",
+   "ecological performance — the database records some ecological-value claims (pollinator, bird food …) but no pollinator-interaction data; no score is possible"
+  ],
+  "evidence": [
+   {
+    "rule": "low_maintenance",
+    "text": "low-maintenance",
+    "says": "value: maintenance low"
+   },
+   {
+    "rule": "ecology",
+    "text": "ecological",
+    "says": "value: ecology"
+   }
+  ],
+  "updated": "2026-11-08T22:37:08.442Z"
+ },
+ "versions": [],
+ "current_version_id": null,
+ "redo": [],
+ "plant_seq": 0,
+ "ui": {
+  "unlocked": {
+   "welcome": true,
+   "site": true,
+   "intent": true,
+   "garden": false
+  },
+  "stage": "site",
+  "site_fp": null
+ },
+ "updated": "2026-11-08T15:37:08"
+}

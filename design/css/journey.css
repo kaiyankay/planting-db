@@ -113,7 +113,7 @@ table.t { border-collapse: collapse; width: 100%; font-size: 13.5px; } table.t t
 .hero-art figcaption i { font-style: italic; }
 
 /* ---- site */
-#s-site .wrap { display: grid; grid-template-columns: minmax(300px, 380px) minmax(0, 1fr); gap: 40px; align-items: start; }
+#s-site .wrap.shape { display: grid; grid-template-columns: minmax(0, 1fr) minmax(320px, 400px); gap: 32px; align-items: start; }
 #s-site .stage-head { grid-column: 1 / -1; }
 .read { display: flex; flex-direction: column; gap: 14px; }
 .card { background: var(--paper); border: 1px solid var(--line); border-radius: var(--r); padding: 16px 18px; }
@@ -250,11 +250,11 @@ footer.site-foot { padding: 40px 0 60px; font-size: 13px; color: var(--ink-3); }
 @media (max-width: 1180px) { #gcomposer.closed .pill .hint, #gcomposer.closed .pill .x, #cfoot { display: none; } #gcomposer.closed .pill { padding: 10px; } }
 @media (max-width: 1080px) {
   #s-welcome .wrap { grid-template-columns: 1fr; gap: 24px; } .hero-art { max-height: 46vh; aspect-ratio: 16 / 10; order: -1; }
-  #s-site .wrap, #s-intent .wrap { grid-template-columns: 1fr; gap: 24px; }
+  #s-site .wrap.shape, #s-intent .wrap { grid-template-columns: 1fr; gap: 24px; }
 }
 @media (max-width: 760px) {
   #top { padding: 10px 12px; gap: 8px; } #top .wordmark { font-size: 17px; } #top .wordmark small { display: none; } #stagenav { margin: 0 0 0 auto; padding: 3px; } #stagenav button { padding: 6px 9px; font-size: 13px; } #stagenav button .label { display: none; } #stagenav button.on .label { display: inline; } #top .right { display: none; }
-  #s-welcome .wrap, #s-site .wrap, #s-intent .wrap, #s-gate .wrap { grid-template-columns: minmax(0, 1fr); } .hero, .hero-art, .read, .site-canvas { min-width: 0; max-width: 100%; }
+  #s-welcome .wrap, #s-site .wrap.shape, #s-intent .wrap, #s-gate .wrap { grid-template-columns: minmax(0, 1fr); } .hero, .hero-art, .read, .site-canvas { min-width: 0; max-width: 100%; }
   .wrap { padding: 0 16px; } .stage { padding: 56px 0 72px; } .hero h1 { font-size: clamp(42px, 13vw, 60px); }
   .composer textarea { font-size: 16px; min-height: 96px; }
   #site-canvas-body { height: 56vh; min-height: 300px; }
@@ -271,3 +271,59 @@ footer.site-foot { padding: 40px 0 60px; font-size: 13px; color: var(--ink-3); }
   #drawer { left: 8px; right: 8px; bottom: 62px; max-height: 56vh; } #drawer-tab { right: 8px; bottom: 64px; }
   #banner { top: 118px; width: calc(100vw - 16px); flex-wrap: wrap; }
 }
+
+/* ---- Shape your space (2026-11-08): the canvas is the subject; the proposal, the change in words and the inspector sit beside it */
+.shape-main { min-width: 0; }
+.shape-side { display: flex; flex-direction: column; gap: 14px; min-width: 0; }
+#site-canvas-body { height: min(70vh, 720px); }
+.card.proposal h3 { margin-top: 10px; }
+.cands { display: grid; grid-template-columns: repeat(auto-fit, minmax(96px, 1fr)); gap: 6px; }
+.cand { display: flex; flex-direction: column; align-items: flex-start; gap: 2px; padding: 8px 10px; border: 1px solid var(--line); border-radius: 10px; background: var(--paper-2); text-align: left; transition: border-color .15s, background .15s; }
+.cand:hover { border-color: var(--ink-3); } .cand.on { background: var(--olive-soft); border-color: var(--olive); }
+.cand .k { font: 500 12px var(--mono); color: var(--olive-deep); } .cand .l { font-size: 13.5px; font-weight: 500; } .cand .m { font-size: 11.5px; color: var(--ink-3); }
+.card.proposal ul.why { margin: 4px 0 10px 18px; padding: 0; font-size: 13.5px; color: var(--ink-2); } .card.proposal ul.why li { margin: 3px 0; }
+.card.proposal .beds .bedrow { cursor: pointer; border-radius: 8px; padding: 7px 6px; margin: 0 -6px; gap: 8px; flex-wrap: wrap; }
+.card.proposal .beds .bedrow:hover { background: var(--paper-2); } .card.proposal .beds .bedrow.sel { background: var(--olive-soft); }
+.card.proposal .beds .bedrow b { font-weight: 500; }
+.bednote { padding: 2px 6px 8px 30px; }
+.sw { display: inline-block; width: 12px; height: 12px; border-radius: 3px; border: 1.5px solid var(--olive); background: rgba(91,122,87,.18); flex: none; vertical-align: -1px; }
+.sw.ai-suggested { border-style: dashed; border-color: var(--caramel); background: rgba(183,137,77,.14); }
+.sw.user-edited, .sw.user-drawn { border-color: var(--olive-deep); background: rgba(59,85,56,.25); }
+.sw.open { border-style: dotted; border-color: var(--ink-3); background: rgba(39,36,31,.06); }
+.sw.plantable { border-style: dotted; border-color: var(--sky); background: rgba(75,123,160,.06); }
+.sw.tree { border-radius: 50%; border-color: var(--olive-deep); background: rgba(59,85,56,.14); }
+.canvas-foot .lg { display: inline-flex; align-items: center; gap: 6px; font-size: 12.5px; color: var(--ink-2); }
+.moves { margin: 6px 0 0 0; padding: 0 0 0 4px; list-style: none; counter-reset: mv; font-size: 13.5px; }
+.moves li { display: flex; gap: 8px; align-items: baseline; padding: 5px 0; border-top: 1px solid var(--line); color: var(--ink-2); } .moves li:first-child { border-top: 0; }
+.moves .op { font: 11.5px var(--mono); color: var(--olive-deep); background: var(--sage-soft); padding: 1px 7px; border-radius: 5px; flex: none; }
+.card.concept .ask { margin-top: 12px; padding: 12px 14px; border-radius: 10px; background: var(--caramel-soft); font-size: 14px; }
+.card.concept .ask .btn svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 1.6; }
+.card.preview { border-color: var(--caramel); box-shadow: var(--shadow-soft); }
+.card.preview ul { margin: 6px 0 0 18px; padding: 0; } .card.preview li { margin: 3px 0; }
+details.inspector { background: var(--paper); border: 1px solid var(--line); border-radius: var(--r); padding: 0; }
+details.inspector > summary { padding: 14px 18px; font: 500 15px/1.3 var(--sans); color: var(--ink); display: flex; align-items: center; gap: 8px; list-style: none; cursor: pointer; }
+details.inspector > summary::-webkit-details-marker { display: none; }
+details.inspector > summary::before { content: ""; width: 7px; height: 7px; border-right: 1.5px solid var(--ink-3); border-bottom: 1.5px solid var(--ink-3); transform: rotate(-45deg); margin-right: 4px; transition: transform .2s var(--ease); }
+details.inspector[open] > summary::before { transform: rotate(45deg); }
+details.inspector > summary .n { margin-left: auto; font: 12px var(--mono); color: var(--ink-3); font-weight: 400; }
+details.inspector .read { padding: 0 14px 14px; }
+details.more { margin-top: 8px; } details.more > summary { font-size: 13px; } details.more .moves { font-size: 13px; }
+.bedcard h3 .sw { margin-right: 2px; }
+#svg .bed.confirmed { fill: rgba(91,122,87,.12); stroke: var(--olive-deep); stroke-width: 1.6; }
+#svg .bed.suggested { stroke-dasharray: 5 3; fill: rgba(183,137,77,.1); stroke: var(--caramel); stroke-width: 1.4; }
+#svg .bed.active { stroke-width: 2.4; }
+#svg .bed.before { stroke-dasharray: 4 3; fill: rgba(39,36,31,.04); stroke: var(--ink-3); stroke-width: 1.2; }
+#svg .bed.after { fill: rgba(91,122,87,.22); stroke: var(--olive-deep); stroke-width: 2; stroke-dasharray: none; pointer-events: none; }
+#svg .bed.after.added { fill: rgba(91,122,87,.18); stroke-dasharray: 2 2; }
+#svg .bed.removing { fill: rgba(176,79,54,.1); stroke: var(--rust); stroke-dasharray: 3 2; }
+#svg .open.after { fill: rgba(39,36,31,.08); stroke: var(--ink-2); stroke-width: 1.4; pointer-events: none; }
+#svg .plantable { fill: rgba(75,123,160,.035); stroke: var(--sky); stroke-width: 1; stroke-dasharray: 2 4; pointer-events: none; }
+#svg .bed-label { font-size: 10.5px; fill: var(--olive-deep); font-weight: 500; } #svg .bed-label.suggested { fill: #8a5f1c; } #svg .bed-sub { font-size: 9px; fill: var(--ink-3); font-family: var(--mono); }
+#svg .handle { fill: var(--paper); stroke: var(--olive-deep); stroke-width: 1.6; cursor: grab; } #svg .handle:hover, #svg .handle.on { fill: var(--caramel); stroke: var(--ink); } #svg .handle.mid { fill: transparent; stroke: var(--olive); stroke-dasharray: 2 2; opacity: .8; cursor: copy; }
+#svg .bed[data-bed] { cursor: pointer; }
+#svg .tree, #svg .tree-centre { cursor: grab; }
+@media (max-width: 1080px) { #s-site .wrap.shape { grid-template-columns: 1fr; } }
+/* a preview banner and the revision card must not collide on a narrow desktop */
+@media (max-width: 1300px) and (min-width: 761px) { #stage:has(#revision:not([hidden])) #banner { left: 150px; right: 400px; transform: none; width: auto; justify-content: flex-start; } }
+/* the canvas hint sits bottom-right so it never covers a feature label at the top of the plan */
+.canvas-hint { left: auto; right: 14px; top: auto; bottom: 36px; }

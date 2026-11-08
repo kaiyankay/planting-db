@@ -57,3 +57,8 @@ export const roundPt = p => [round(p[0]), round(p[1])];
 export function polygonFromRect(w, h, x0 = 0, y0 = 0) { return [[x0, y0], [x0 + w, y0], [x0 + w, y0 + h], [x0, y0 + h]]; }
 export function circlePolygon([cx, cy], r, n = 24) { return Array.from({ length: n }, (_, i) => [cx + r * Math.cos(i / n * 2 * Math.PI), cy + r * Math.sin(i / n * 2 * Math.PI)]); }
 export function polygonsIntersect(A, B) { return A.some(p => pointInPolygon(p, B)) || B.some(p => pointInPolygon(p, A)); }
+// polygon with holes: inside the outer ring and outside every hole
+export function pointInShape(p, shape) { if (!shape?.polygon) return false; if (!pointInPolygon(p, shape.polygon)) return false; return !(shape.holes || []).some(h => pointInPolygon(p, h)); }
+export const areaShape = s => s?.polygon ? area(s.polygon) - (s.holes || []).reduce((a, h) => a + area(h), 0) : 0;
+// distance to the nearest edge of the outer ring or of any hole
+export function distToShapeEdge(p, shape) { let d = distToBoundary(p, shape.polygon); for (const h of shape.holes || []) d = Math.min(d, distToBoundary(p, h)); return d; }
