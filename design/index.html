@@ -54,7 +54,7 @@
   <!-- 2 · Shape: the site model workspace -->
   <section id="s-site" class="stage" aria-labelledby="h-site" hidden>
     <div class="ws ws-shape">
-      <header class="ws-head"><h2 id="h-site">Shape</h2><span class="ws-model" id="ws-model"></span><span class="ws-scale" id="ws-scale"></span><p id="site-lede" class="sr"></p><div class="ws-lens" id="ws-lens" aria-label="Site conditions"></div></header>
+      <header class="ws-head"><h2 id="h-site">Shape</h2><span class="ws-model" id="ws-model"></span><span class="ws-scale" id="ws-scale"></span><p id="site-lede" class="sr"></p><div class="ws-lens" id="ws-lens" role="group" aria-label="Site conditions"></div></header>
       <nav class="ws-rail" id="site-tools" aria-label="Tools"></nav>
       <div class="ws-canvas site-canvas">
         <div id="site-canvas-body" class="canvas-home"><div class="canvas-hint" id="site-hint"></div><div id="site-preview" hidden></div></div>
@@ -70,11 +70,11 @@
   <!-- 3 · Compose: the same workspace and the same plan, read by spatial function -->
   <section id="s-intent" class="stage" aria-labelledby="h-intent" hidden>
     <div class="ws ws-compose">
-      <header class="ws-head"><h2 id="h-intent">Compose</h2><span class="ws-model" id="cws-model">Spatial function plan</span><span class="ws-scale" id="cws-scale"></span><div class="ws-lens" id="fn-legend" aria-label="Spatial functions"></div></header>
+      <header class="ws-head"><h2 id="h-intent">Compose</h2><span class="ws-model" id="cws-model">Spatial function plan</span><span class="ws-scale" id="cws-scale"></span><div class="ws-lens" id="fn-legend" role="group" aria-label="Spatial functions"></div></header>
       <nav class="ws-rail" id="compose-tools" aria-label="Tools"></nav>
       <div class="ws-canvas site-canvas">
         <div id="compose-canvas-body" class="canvas-home"><div class="canvas-hint" id="compose-hint"></div></div>
-        <div class="ws-panel" id="cws-panel"><button class="ws-panel-x" data-act="cpanel-close" aria-label="close the panel">×</button><div id="brief-left"></div></div>
+        <div class="ws-panel" id="cws-panel"><button class="ws-panel-x" data-act="cpanel-close" aria-label="close the panel">×</button><div id="brief-left"></div><div id="cws-evidence" aria-live="polite"></div></div>
         <div class="ws-zoom" id="cws-zoom"></div>
         <div class="ws-say" id="cws-say"></div>
       </div>

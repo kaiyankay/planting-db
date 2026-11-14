@@ -19,6 +19,8 @@ colors:
   ink: "#27241f"
   ink-2: "#5c5648"
   ink-3: "#716b5c"
+  on-olive: "#ffffff"
+  desk: "#f1ecdf"
   line: "rgba(39,36,31,.12)"
   line-2: "rgba(39,36,31,.26)"
 typography:
@@ -53,11 +55,22 @@ typography:
     fontFamily: "ui-monospace, SF Mono, Menlo, Consolas, monospace"
     fontSize: "11.5px"
     fontWeight: 400
+  action:
+    fontFamily: "-apple-system, Helvetica Neue, Segoe UI, Roboto, sans-serif"
+    fontSize: "14px"
+    fontWeight: 500
+  plan-label:
+    fontFamily: "-apple-system, Helvetica Neue, Segoe UI, Roboto, sans-serif"
+    fontSize: "10px"
+    fontWeight: 400
 rounded:
+  mark: "2px"
   xs: "4px"
   sm: "6px"
   md: "8px"
+  card: "10px"
   lg: "14px"
+  composer: "18px"
   pill: "999px"
 spacing:
   1: "4px"
@@ -113,7 +126,7 @@ share one site drawing, one navigation and one set of controls; they do not shar
 
 ## Colors
 
-- **Ivory `#f7f3ea`** is the desk; **paper `#fffdf8`** is anything you can write or draw on (the site sheet, panels, inputs).
+- **Ivory `#f7f3ea`** is the page, **desk `#f1ecdf`** the surface under the plan; **paper `#fffdf8`** is anything you can write or draw on (the site sheet, panels, inputs).
 - **Olive deep `#3b5538`** is the only filled accent: the primary action, the active tool, confirmed planting.
 - **Caramel `#b7894d`** means *not settled yet*: suggested beds, estimates, the one thing waiting for the user. Text on a
   light ground uses the darker caramel ink `#8a5f1c`.

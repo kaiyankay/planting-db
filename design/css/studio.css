@@ -4,17 +4,21 @@
 :root { --caramel-ink: #8a5f1c; --desk: #f1ecdf; --rail-w: 64px; --insp-w: 348px; --bar-h: 46px; --status-h: 52px; }
 
 /* ---------------------------------------------------------------- top bar: the four stages as a numbered stepper */
-#stagenav { counter-reset: step; gap: 0; background: none; padding: 0; align-items: center; }
-#stagenav li { counter-increment: step; display: flex; align-items: center; }
-#stagenav li + li::before { content: ""; width: 20px; height: 1px; background: var(--line-2); margin: 0 3px; }
-#stagenav button { padding: 5px 13px 5px 5px; gap: 8px; font-size: 14px; border: 1px solid transparent; transition: background .15s var(--ease); }
-#stagenav button .dot { width: 22px; height: 22px; display: grid; place-items: center; border-radius: 50%; background: none; border: 1px solid var(--line-2); font: 500 11.5px/1 var(--sans); color: var(--ink-3); }
-#stagenav button .dot::before { content: counter(step); }
-#stagenav button.done .dot { background: var(--olive-soft); border-color: transparent; color: var(--olive-deep); }
-#stagenav button.on { background: var(--paper); border-color: var(--line); box-shadow: var(--shadow-soft); color: var(--ink); }
-#stagenav button.on .dot { background: var(--olive-deep); border-color: var(--olive-deep); color: #fff; }
-#stagenav button:not(:disabled):not(.on):hover { background: var(--paper-2); }
-#stagenav button:disabled .dot { border-style: dashed; }
+:is(#stagenav, #gnav) { counter-reset: step; gap: 0; background: none; padding: 0; align-items: center; }
+:is(#stagenav, #gnav) li { counter-increment: step; display: flex; align-items: center; }
+:is(#stagenav, #gnav) li + li::before { content: ""; width: 20px; height: 1px; background: var(--line-2); margin: 0 3px; }
+:is(#stagenav, #gnav) button { padding: 5px 13px 5px 5px; gap: 8px; font-size: 14px; border: 1px solid transparent; transition: background .15s var(--ease); }
+:is(#stagenav, #gnav) button .dot { width: 22px; height: 22px; display: grid; place-items: center; border-radius: 50%; background: none; border: 1px solid var(--line-2); font: 500 11.5px/1 var(--sans); color: var(--ink-3); }
+:is(#stagenav, #gnav) button .dot::before { content: counter(step); }
+:is(#stagenav, #gnav) button.done .dot { background: var(--olive-soft); border-color: transparent; color: var(--olive-deep); }
+:is(#stagenav, #gnav) button.on { background: var(--paper); border-color: var(--line); box-shadow: var(--shadow-soft); color: var(--ink); }
+:is(#stagenav, #gnav) button.on .dot { background: var(--olive-deep); border-color: var(--olive-deep); color: #fff; }
+:is(#stagenav, #gnav) button:not(:disabled):not(.on):hover { background: var(--paper-2); }
+:is(#stagenav, #gnav) button:disabled .dot { border-style: dashed; }
+/* the same stepper on the garden stage's own top bar */
+#gnav { display: flex; list-style: none; margin: 0 0 0 14px; padding: 0; } #gnav button { font-size: 13.5px; border-radius: 999px; color: var(--ink-2); display: flex; align-items: center; }
+#gnav button .dot { width: 20px; height: 20px; font-size: 11px; } #gnav li + li::before { width: 12px; }
+@media (max-width: 1180px) { #gnav button:not(.on) .label { display: none; } #gnav button:not(.on) { padding-right: 5px; } }
 button.link { color: var(--olive-deep); font-size: 12.5px; text-decoration: underline; text-decoration-color: var(--line-2); text-underline-offset: 3px; } button.link:hover { text-decoration-color: currentColor; }
 
 /* ---------------------------------------------------------------- the site drawing (Shape and Compose share it) */
@@ -68,7 +72,7 @@ button.link { color: var(--olive-deep); font-size: 12.5px; text-decoration: unde
 .lens .ll { color: var(--ink-3); font-size: 12px; } .lens.unknown .lv { color: var(--ink-3); } .lens:hover, .lens-all:hover { background: var(--paper-2); }
 .lens-all { margin-left: 6px; padding: 5px 11px; border: 1px solid var(--line-2); border-radius: 999px; font-size: 12.5px; white-space: nowrap; } .lens-all small { color: var(--ink-3); font-size: 11.5px; margin-left: 2px; } .lens-all.on { background: var(--olive-deep); border-color: var(--olive-deep); color: #fff; } .lens-all.on small { color: rgba(255,255,255,.75); }
 #fn-legend { gap: 4px 16px; padding: 0; flex-wrap: nowrap; } .fl { font-size: 12.5px; white-space: nowrap; } .fl small { font-size: 11px; }
-.rb { padding: 7px 2px 6px; border-radius: 8px; font-size: 10.5px; transition: background .12s; } .rb svg { width: 20px; height: 20px; }
+.rb { padding: 7px 2px 6px; border-radius: 8px; font-size: 11px; transition: background .12s; } .rb svg { width: 20px; height: 20px; }
 .insp-h { font: 600 11px/1 var(--sans); letter-spacing: .06em; text-transform: uppercase; color: var(--ink-3); margin: 0 0 12px; }
 .insp-kind { font-size: 12px; color: var(--ink-3); margin-bottom: 3px; }
 .insp-sel > h3, .bedcard > h3, .ws-inspector .card.proposal.concept > h3 { font: 400 23px/1.15 var(--display); letter-spacing: -.01em; margin: 0 0 4px; display: block; }
@@ -116,9 +120,8 @@ button.eye:hover { background: var(--paper-2); } .eye.off { color: var(--ink-3);
 #compose-beds .bedrow { display: flex; }
 
 /* mode changes: the canvas stays, the tools around it change */
-@keyframes ws-enter { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
 @keyframes ws-fade { from { opacity: 0; } to { opacity: 1; } }
-.ws.enter { animation: ws-enter .42s var(--ease) both; }
+.ws.enter { animation: ws-fade .32s ease-out both; }   /* coming from Imagine or Grow: a fade only — the section's own first reveal already rises */
 .ws.swap .ws-rail, .ws.swap .ws-inspector, .ws.swap .ws-head > *, .ws.swap .ws-status > * { animation: ws-fade .22s ease-out both; }
 
 /* ---------------------------------------------------------------- desktop: fixed-viewport workspace */
@@ -138,22 +141,27 @@ button.eye:hover { background: var(--paper-2); } .eye.off { color: var(--ink-3);
   .ws-inspector { background: var(--paper); padding: 18px 18px 28px; }
   .ws-status { padding: 0 16px 0 20px; gap: 12px; } .ws-status .btn { padding: 9px 18px; font-size: 14px; } .ws-status .btn:not(.primary) { padding: 8px 14px; font-size: 13px; }
   .ws-canvas .canvas-hint { top: 14px; font-size: 12.5px; border-radius: 999px; padding: 6px 14px; background: var(--paper); box-shadow: var(--shadow-soft); }
-  .ws-say { width: min(560px, calc(100% - 300px)); }
+  .ws-say { width: min(540px, calc(100% - 400px)); }
   .ws-panel { width: 400px; left: 14px; top: 14px; bottom: 80px; padding: 16px 18px; }
+  #cws-evidence { display: none; font-size: 13.5px; padding-right: 22px; } #cws-panel.evidence #cws-evidence { display: block; } #cws-panel.evidence { width: 440px; }
   #cws-panel .brief-col { display: none; } #cws-panel.goals [data-col="goals"], #cws-panel.functions [data-col="functions"], #cws-panel.rules [data-col="rules"] { display: block; }
   #cws-panel .vrow { grid-template-columns: minmax(0, 1fr); gap: 7px; padding: 11px 0; } #cws-panel .seg { justify-self: start; }
   #cws-panel .fn { align-items: start; font-size: 13.5px; } #cws-panel .fn .fsw { margin-top: 4px; }
 }
 @media (min-width: 1081px) and (max-width: 1340px) {
   :root { --insp-w: 320px; }
-  .lens .ll { display: none; } .fl small { display: none; }
+  .lens.unknown { display: none; } .fl small { display: none; }
 }
 @media (max-width: 1080px) {
   .ws-lens { flex-wrap: wrap; } #fn-legend { flex-wrap: wrap; } .ws-compose .ws-status { justify-content: flex-start; }
 }
 @media (prefers-reduced-motion: reduce) { .ws.enter, .ws.swap * { animation: none !important; } }
 @media (max-width: 760px) {
-  #stagenav li + li::before { width: 8px; margin: 0 1px; } #stagenav button { padding: 4px; gap: 6px; } #stagenav button.on { padding-right: 10px; }
+  :is(#stagenav, #gnav) li + li::before { width: 8px; margin: 0 1px; } :is(#stagenav, #gnav) button { padding: 4px; gap: 6px; } :is(#stagenav, #gnav) button.on { padding-right: 10px; }
   #top { overflow: hidden; } #top .wordmark { min-width: 0; overflow: hidden; text-overflow: ellipsis; }
   .ws-head { min-width: 0; } .ws-lens, #fn-legend { max-width: 100%; overflow-x: auto; flex-wrap: nowrap; }
 }
+#addfn { flex: 1.4 1 160px; min-width: 0; } #addfnwhere { flex: 1 1 120px; min-width: 0; }
+/* the Imagine page is frozen: its top bar keeps the height it had before the stepper (74.695 px on desktop), so the hero below it does not move by a pixel */
+body[data-stage="welcome"] #stagenav { min-height: 45.6953125px; }
+@media (max-width: 760px) { body[data-stage="welcome"] #stagenav { min-height: 38.15px; } }

@@ -1,6 +1,6 @@
 # Design workspace tests — 2026-11-14
 
-`tools/design_tests.py` against http://127.0.0.1:8768 (headless Chrome). **183/183 pass.**
+`tools/design_tests.py` against http://127.0.0.1:8768 (headless Chrome). **193/193 pass.**
 
 | test | result | detail |
 |---|---|---|
@@ -16,7 +16,7 @@
 | T·C3 text-only "right side" → direction scope with a polygon; reduce_density + preserve screen | pass | "right side" read relative to the plan as drawn (north up); the region is the outer third of the bed on that side · amount 0.25 |
 | T·C4 "here" with a drawn selection → selection scope | pass | "here" → the drawn selection |
 | T·C5 contradictory request is refused, not silently applied | pass | filling the open zone with tall plants contradicts the open-space constraint; no change is made without an explicit override |
-| T·C6 "move the taller plants away from the tree" → move_away with a resolved feature | pass | {"type":"move_away","filter":"taller","feature_id":"tree-3nqu1","phrase":"tree","resolved":true} |
+| T·C6 "move the taller plants away from the tree" → move_away with a resolved feature | pass | {"type":"move_away","filter":"taller","feature_id":"tree-59311","phrase":"tree","resolved":true} |
 | T·C7 overclaim classified | pass |  |
 | T·D1 every plant object has a stable id, a species from the database, a position inside the accepted bed | pass | 31 plants |
 | T·D2 no plant inside the no-plant zone, none under the locked tree | pass |  |
@@ -150,7 +150,7 @@
 | H3 the tree whose position was not said is not on the plan: it waits beside it, and the page says who drew the sketch | pass | Drawn by the offline rule reader from your words — not an analysis of a photo, a map or an address. |
 | H4 the evidence separates provided, inferred, suggested and unknown | pass | ["You provided", "Inferred from your words", "Suggested by the sketch", "Unknown, not guessed"] |
 | H5 dragging the tree onto the sketch and confirming the open area: both are recorded as the user's, still without metres | pass | {"tree_pos_status": "user-placed", "open_confirmed": true, "features": 0} |
-| H6 giving a size (8 × 5 m) turns the sketch into site geometry: tree and open area at their relative place, kept as user-drawn | pass | {"tree": {"pos": [1.55, 3.1], "expected": [1.55, 3.1], "status": "user-drawn"}, "open": {"corner": [2.4, 1.1], "expected": [2.4, 1.1], "status": "user-drawn"}} |
+| H6 giving a size (8 × 5 m) turns the sketch into site geometry: tree and open area at their relative place, kept as user-drawn | pass | {"tree": {"pos": [1.42, 3.31], "expected": [1.42, 3.31], "status": "user-drawn"}, "open": {"corner": [2.4, 1.1], "expected": [2.4, 1.1], "status": "user-drawn"}} |
 | H7 the formal bed proposal then runs on the sized site (layout options and beds), with a scale bar | pass | 3 options · 4 beds |
 | H8 Start from scratch: the sketch leaves the plan, the boundary tool is armed, the canvas is blank, and the sketch can be brought back | pass | {"concept": "dismissed", "tool": "site", "canvas": true, "restore": true} |
 | H9 after drawing a boundary from scratch nothing read from the words is placed for the user: the tree waits beside the plan | pass | {"features": 0, "tray": 1, "notes_placed": [false]} |
@@ -161,13 +161,13 @@
 | J5 generated: plant objects with ids, schedule reconciles, operators named, no geometry error | pass | 38 plants · ['along_edge', 'fill_drift', 'repeat_accent'] · edge [{'zone': 'zone-screen-north-edge-bed-1', 'bed_id': 'bed-1', 'label': 'Screen along the north edge (North bed)', 'edge_length_m': 6, 'covered_m': 4.39, 'screen_row_cover_m': 4.39, 'continuity': 0.73, 'gaps': [{'edge': 0, 'from_m': 3.67, 'to_m': 5.28, 'length_m': 1.61}], 'gap_total_m': 1.61, 'target_height_m': 1.8, 'target_basis': 'heuristic default — no target height stated', 'year_round_required': False, 'year_round_basis': 'not s |
 | J5b 2D plan draws one symbol group per plant object | pass | 38 symbols for 38 plants |
 | J5c every bed of the layout is planted in the one version (multi-bed engine) | pass | [["North bed", 10], ["East bed", 19], ["West bed", 6], ["Tree island", 3]] |
-| J6 3D garden (three.js) holds one object per plant of the same version | pass | garden {'plants': 38, 'meshes': 525} · model 38 |
+| J6 3D garden (three.js) holds one object per plant of the same version | pass | garden {'plants': 38, 'meshes': 524} · model 38 |
 | J7 lasso + language: scoped command (selection, reduce_density, preserve screen), preview diff, nothing outside moved | pass | targets 24 · removed 5 |
 | J8 applied: new version with fewer plants = removed ids | pass | 33 plants, 5 removed |
-| J8b 3D garden re-synced after apply: plant count = applied version | pass | garden {'plants': 33, 'meshes': 466} · model 33 |
+| J8b 3D garden re-synced after apply: plant count = applied version | pass | garden {'plants': 33, 'meshes': 465} · model 33 |
 | J9/10 undo returns to the generated version; redo returns to the edit | pass | undo 38 · redo 33 |
 | J11 text-only reference 'move the taller plants away from the tree' resolved to a typed move_away command | pass | {"diff": {"added": [], "removed": [], "changed": [], "unchanged": ["plant-001", "plant-002", "plant-003", "plant-004", "plant-005", "plant-006", "plant-007", "plant-008", "plant-009", "plant-010", "plant-011", "plant-012", "plant-013", "plant-014", "plant-015", "plant-017", "plant-018", "plant-019", |
-| J12 export: SVG plant count = model = schedule total | pass | {"name": "12 export", "stage": "garden", "files": ["model.json", "plan.svg", "schedule.csv", "assumptions.md"], "svg_plants": 33, "model_plants": 33, "csv_total": 33, "garden": {"plants": 33, "meshes": 466}} |
+| J12 export: SVG plant count = model = schedule total | pass | {"name": "12 export", "stage": "garden", "files": ["model.json", "plan.svg", "schedule.csv", "assumptions.md"], "svg_plants": 33, "model_plants": 33, "csv_total": 33, "garden": {"plants": 33, "meshes": 465}} |
 | F1 Site page: every condition keeps its selector; wind and irrigation say they are recorded only, clay says it cannot be assessed | pass | ["soil_type", "wind", "irrigation"] |
 | F2 start: the north bed carries Screen and the first design plants a screen row | pass | {"North bed": ["z:screen@north-edge", "z:ground_cover@bed-interior"], "East bed": ["z:ground_cover@east-edge"], "West bed": ["z:ground_cover@west-edge"]} |
 | F3 removing the site-wide Screen removes it from the beds that carried it and marks the design stale | pass | {"North bed": ["z:ground_cover@bed-interior"], "East bed": ["z:ground_cover@east-edge"], "West bed": ["z:ground_cover@west-edge"]} |
@@ -184,6 +184,16 @@
 | G6 a 7 m screen: no species qualifies, no screen plant is drawn, and the reasons are listed | pass | ['unmet · Screen along the north edge (North bed): no screen plant is placed on this edge'] |
 | G7 the evaluation is a geometric estimate throughout: cover ≤ edge, certain ≤ possible ≤ cover, never marked as verified performance; the drawer shows it | pass | {"status": "not met", "checks": {"continuity": "not met", "target_height": "uncertain", "year_round": "not required", "evidence": "supported"}, "covered_m": 4.39, "edge_length_m": 6, "gaps": 1, "certain": 0, "possible": 4.39, "evergreen": 4.39, "verified_performance": false, "species": ["gaultheria- |
 | G8 ground cover is reported per bed as a share of the plantable area (0–1) with the plant count | pass | [{"name": "North bed", "share": 0.11, "plantable": 4.3, "plants": 7}, {"name": "East bed", "share": 0.52, "plantable": 2.48, "plants": 19}, {"name": "West bed", "share": 0.55, "plantable": 2.38, "plants": 6}, {"name": "Tree island", "share": 0.37, "plantable": 1.23, "plants": 2}] |
-| S1 design server reachable; designs saved to designs/ | pass | llm: ANTHROPIC_API_KEY not set — offline rule parser in use · designs ['demo-a', 'demo-b', 'demo-backyard', 'proj-13x0', 'proj-166r0', 'proj-17y40', 'proj-1geo0', 'proj-1icy0', 'proj-1jj10', 'proj-1jmy0', 'proj-1jmy1', 'proj-1q4x0', 'proj-1s4w0', 'proj-1tmq0', 'proj-1xeh0', 'proj-206b0', 'proj-228p0', 'proj-26ut0', 'proj-2anz0', 'proj-2aoj1', 'proj-2cr30', 'proj-2gg20', 'proj-2guv0', 'proj-2lrm0', 'proj-2nza0', 'proj-2owi0', 'proj-2wbf0', 'proj-2xka0', 'proj-2yk20', 'proj-2zaq0', 'proj-31ur0', ' |
-| S2 saved project: versions chain by parent id; current version's schedule equals its plant objects | pass | script-r2: 5 versions · current v-4lkhl · 77 plants |
+| W1 Demo A: a sentence with dimensions opens Shape on a scaled site model — size drawn as dimension lines, the tree in the corner that was named, layout options, no size form | pass | {"dims_drawn": ["6 m", "4 m"], "tree_source": "conversation: \"a tree in the northwest\" \u2014 position estimated from \"northwest corner\" (1 m in from both edges), canopy not stated", "cands": 3} |
+| W2 a layout option is held over the plan while compared; a selected bed shows in the inspector with its handles | pass | [{"option": "More open centre", "ghost": 2}, "North bed", 8] |
+| W3 Compose is the same workspace: the one plan moves into it and keeps its rectangle and its view (site drawn at the same pixels as in Shape) | pass | [[164, 92, 689, 459, 64, 1028, 663], [164, 92, 689, 459, 64, 1028, 663]] |
+| W4 a selected bed reads Spatial function → Plant selection → Arrangement, with its plants drawn on the plan | pass | [["Spatial function", "Plant selection", "Arrangement 7 plants \u00b7 seed 42"], ["rows1", "plants7 of 10", "spacing0.57 m", "edge6 m", "bed depth0.9 m"], 7] |
+| W5 what Compose draws is what Generate places: the preview of the selected bed and of every bed equals the generated version; the screen row reports its own evaluation | pass | 34 plants · not metMature crowns cover 4.27 of 6 m of the edge, 1 gap. 1.73 m of 6 m is not covered by a mature crown (1 gap: 4.27–6 m). the target height 1.8 m is reached  |
+| W6 going back keeps the design and the model: Compose and Shape reopen on the same site with the version kept | pass | [[164, 92, 689, 459, 64, 1028, 663], [164, 92, 689, 459, 64, 1028, 663]] |
+| W7 the workspace never scrolls sideways (every step of Demo A) | pass | {"site": 0, "compare": null, "bed": 0, "accepted": null, "compose": 0, "composeBed": 0, "garden": 0, "back_compose": 0, "back_site": 0} |
+| W8 Demo B: no dimensions → a concept sketch, not to scale; the tree waits beside the plan, no size is pre-filled, Compose is closed | pass | {"mark": "Sketch from your words \u2014 not to scale, no sizes", "tray": 1, "size_fields": ["", ""]} |
+| W9 the user places the tree and gives the size: the same workspace now holds a scaled model with layout options, the tree where it was placed | pass | [["7 m", "5 m"], 3, [{"kind": "existing-tree", "status": "user-drawn", "at": [1.94, 3.4]}]] |
+| W10 Demo B continues to Compose and Grow with the beds still suggested: Generate accepts them and places exactly what Compose showed | pass | 4 suggested → 89 plants |
+| S1 design server reachable; designs saved to designs/ | pass | llm: ANTHROPIC_API_KEY not set — offline rule parser in use · designs ['demo-a', 'demo-b', 'demo-backyard', 'proj-1050', 'proj-10wc0', 'proj-11r30', 'proj-13x0', 'proj-14870', 'proj-15b50', 'proj-166r0', 'proj-17jw0', 'proj-17y40', 'proj-18zl0', 'proj-1c6d0', 'proj-1clr0', 'proj-1g300', 'proj-1geo0', 'proj-1gp00', 'proj-1icy0', 'proj-1jj10', 'proj-1jmy0', 'proj-1jmy1', 'proj-1jty0', 'proj-1kl50', 'proj-1n960', 'proj-1nu50', 'proj-1q4x0', 'proj-1qxe0', 'proj-1r1h0', 'proj-1s4w0', 'proj-1tmq0', 'p |
+| S2 saved project: versions chain by parent id; current version's schedule equals its plant objects | pass | studiob: 1 versions · current v-666s9 · 89 plants |
 | S3 saved project: every plant inside its bed polygon (file, not UI) | pass |  |
