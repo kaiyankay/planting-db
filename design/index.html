@@ -53,19 +53,17 @@
 
   <!-- 2 · Shape -->
   <section id="s-site" class="stage" aria-labelledby="h-site" hidden>
-    <div class="wrap shape">
-      <div class="stage-head"><h2 id="h-site">Shape your space.</h2><p id="site-lede">Here’s a starting layout based on what you’ve shared. Adjust the planting areas, or tell me what should change.</p></div>
-      <div class="shape-main">
-        <div class="site-canvas">
-          <div class="canvas-head" id="site-tools"></div>
-          <div id="site-canvas-body"><div class="canvas-hint" id="site-hint"></div><div id="site-preview" hidden></div></div>
-          <div class="canvas-foot" id="site-foot"></div>
-        </div>
-        <div class="conditions" id="site-conditions"></div>
-        <div id="site-evidence"></div>
-        <div class="cta-row"><button class="btn primary big" id="to-intent">Continue to composition</button><span class="why-not" id="to-intent-why"></span></div>
+    <div class="ws">
+      <header class="ws-head"><h2 id="h-site">Shape</h2><span class="ws-model" id="ws-model"></span><span class="ws-scale" id="ws-scale"></span><p id="site-lede"></p></header>
+      <nav class="ws-rail" id="site-tools" aria-label="Tools"></nav>
+      <div class="ws-canvas site-canvas">
+        <div id="site-canvas-body"><div class="canvas-hint" id="site-hint"></div><div id="site-preview" hidden></div></div>
+        <div class="ws-panel" id="ws-panel"><button class="ws-panel-x" data-act="panel-close" aria-label="close the panel">×</button><div class="conditions" id="site-conditions"></div><div id="site-evidence"></div></div>
+        <div class="ws-zoom" id="ws-zoom"></div>
+        <div class="ws-say" id="ws-say"></div>
       </div>
-      <div class="shape-side" id="shape-side"></div>
+      <aside class="ws-inspector shape-side" id="shape-side" aria-label="Inspector and layers"></aside>
+      <footer class="ws-status"><div class="canvas-foot" id="site-foot"></div><span class="why-not" id="to-intent-why"></span><button class="btn primary" id="to-intent">Confirm model →</button></footer>
     </div>
   </section>
 

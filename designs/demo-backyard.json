@@ -1,7 +1,7 @@
 {
  "id": "demo-backyard",
  "name": "Demo backyard",
- "created": "2026-11-14T08:30:29.324Z",
+ "created": "2026-11-14T08:51:14.232Z",
  "schema": "planting-intelligence/design-project/0.1",
  "knowledge_snapshot": {
   "generated": "2026-11-13",
@@ -17,128 +17,128 @@
  },
  "conversation": [
   {
-   "id": "msg-mmp2",
-   "time": "2026-11-14T08:30:29.329Z",
+   "id": "msg-5vll2",
+   "time": "2026-11-14T08:51:14.233Z",
    "role": "user",
    "text": "I have a small backyard with an old tree on the north side. I want privacy, low maintenance and some ecological value, but it should not feel closed in. The kids need the middle to play."
   },
   {
-   "id": "msg-mn43",
-   "time": "2026-11-14T08:30:29.344Z",
+   "id": "msg-5vm33",
+   "time": "2026-11-14T08:51:14.251Z",
    "role": "ai",
    "text": "",
    "html": "<b>Read from what you said</b><ul><li>a small site — dimensions still unknown</li><li>an existing tree on the north — sketched there (the exact spot is an estimate; drag it to where it stands)</li><li>an open area (kids) — sketched in the middle, as you said; its extent is not stated</li><li>goals: privacy, maintenance low, ecology, openness</li><li>screen → edge not chosen (privacy → Screen (blocks a view); Scrim would only filter it)</li><li>scrim → edge not chosen (openness + privacy → Scrim as the alternative to check) — alternative to check</li><li>ground cover → bed interior (low maintenance → carpeting ground layer reduces open soil (design heuristic, not a database claim))</li></ul><b>Unknown</b> (not assumed): which edge to screen — &quot;middle&quot; names no compass side; choose the edge (north / south / east / west); site dimensions / scale; light; soil type and drainage; ecological performance — the database records some ecological-value claims (pollinator, bird food …) but no pollinator-interaction data; no score is possible.<br><b>Not drawn yet:</b> How big is the site? Type width × height in metres, draw the boundary, or trace a photo and calibrate a known length.",
    "mode": "interpretation: offline-parser (rules: existing-tree, open-centre, size-word, privacy, low_maintenance, ecology, openness)"
   },
   {
-   "id": "msg-mom4",
-   "time": "2026-11-14T08:30:29.398Z",
+   "id": "msg-5vnr4",
+   "time": "2026-11-14T08:51:14.311Z",
    "role": "sys",
    "text": "site set to 6 × 4 m (typed; a rectangle is assumed — redraw with the Site tool for another shape)"
   },
   {
-   "id": "msg-mom7",
-   "time": "2026-11-14T08:30:29.398Z",
+   "id": "msg-5vnr7",
+   "time": "2026-11-14T08:51:14.311Z",
    "role": "sys",
    "text": "the sketch was carried into the 6 × 4 m site: 2 objects kept at their relative place. Positions scaled from a sketch are estimates unless you placed or confirmed them."
   },
   {
-   "id": "msg-mz78",
-   "time": "2026-11-14T08:30:29.779Z",
+   "id": "msg-5vzu8",
+   "time": "2026-11-14T08:51:14.746Z",
    "role": "ai",
    "text": "",
    "html": "<b>Starting layout</b> — Planting at the edges, open centre kept: North bed 4.8 m², East bed 2.56 m², West bed 2.56 m², Tree island 2.45 m². 2 alternatives differ in how much ground stays open. Accept, edit, or say what should change.",
    "mode": "spatial engine: site − excluded areas − clearances → beds by operation"
   },
   {
-   "id": "msg-n0s9",
-   "time": "2026-11-14T08:30:29.836Z",
+   "id": "msg-5w279",
+   "time": "2026-11-14T08:51:14.831Z",
    "role": "sys",
    "text": "4 suggested beds confirmed as drawn — North bed 4.8 m², East bed 2.56 m², West bed 2.56 m², Tree island 2.45 m²"
   },
   {
-   "id": "msg-n20a",
-   "time": "2026-11-14T08:30:29.880Z",
+   "id": "msg-5w3aa",
+   "time": "2026-11-14T08:51:14.870Z",
    "role": "user",
    "text": "Privacy along the north edge; keep the middle open; it is part shade."
   },
   {
-   "id": "msg-n22b",
-   "time": "2026-11-14T08:30:29.882Z",
+   "id": "msg-5w3cb",
+   "time": "2026-11-14T08:51:14.872Z",
    "role": "sys",
    "text": "Screen (north edge) set site-wide and on North bed"
   },
   {
-   "id": "msg-nf3c",
-   "time": "2026-11-14T08:30:30.351Z",
+   "id": "msg-5wf1c",
+   "time": "2026-11-14T08:51:15.293Z",
    "role": "ai",
    "text": "",
    "html": "<b>Read from what you said</b><ul><li>light: part-shade (stated)</li><li>an open area (keep the middle open) — sketched in the middle, as you said; its extent is not stated</li><li>goals: privacy, openness</li><li>screen → north edge (privacy → Screen (blocks a view); Scrim would only filter it)</li><li>scrim → north edge (openness + privacy → Scrim as the alternative to check) — alternative to check</li></ul><b>Unknown</b> (not assumed): soil type and drainage.<br><b>Starting layout:</b> Planting at the edges, open centre kept — 4 planting beds proposed; adjust them on the canvas or say what should change.",
    "mode": "interpretation: offline-parser (rules: open-centre, light, privacy, openness)"
   },
   {
-   "id": "msg-nh7e",
-   "time": "2026-11-14T08:30:30.427Z",
+   "id": "msg-5wgoe",
+   "time": "2026-11-14T08:51:15.352Z",
    "role": "ai",
    "text": "",
-   "html": "<b>Design v-nh6d</b> — 38 plant objects, 3 species in 4 beds (12.37 m²), seed 42; operators along_edge, fill_drift, repeat_accent.<ul><li>North bed: 10 plants, 3 species · Ground cover, Screen</li><li>East bed: 19 plants, 2 species · Ground cover</li><li>West bed: 6 plants, 3 species · Ground cover</li><li>Tree island: 3 plants, 3 species · Ground cover</li><li>screen: <i>Gaultheria shallon</i> (gate unknown)</li><li>ground: <i>Arctostaphylos uva-ursi</i> (gate unknown), <i>Polystichum munitum</i> (gate unknown), <i>Gaultheria shallon</i> (gate unknown)</li><li>accent: <i>Achillea millefolium</i> (gate unknown)</li><li>excluded: <i>Acer palmatum</i>, <i>Cercidiphyllum japonicum</i>, <i>Cornus nuttallii</i>, <i>Cornus sericea</i> — reasons in Assumptions</li><li>Screen along the north edge (North bed): row cover 4.39 m of 6 m (continuity 0.73, a geometric proxy)</li><li>35 plants rest on an <b>unknown</b> site gate (conditions not stated)</li></ul>Circle an area and say what should change, or drag plants directly.",
+   "html": "<b>Design v-5wgod</b> — 38 plant objects, 3 species in 4 beds (12.37 m²), seed 42; operators along_edge, fill_drift, repeat_accent.<ul><li>North bed: 10 plants, 3 species · Ground cover, Screen</li><li>East bed: 19 plants, 2 species · Ground cover</li><li>West bed: 6 plants, 3 species · Ground cover</li><li>Tree island: 3 plants, 3 species · Ground cover</li><li>screen: <i>Gaultheria shallon</i> (gate unknown)</li><li>ground: <i>Arctostaphylos uva-ursi</i> (gate unknown), <i>Polystichum munitum</i> (gate unknown), <i>Gaultheria shallon</i> (gate unknown)</li><li>accent: <i>Achillea millefolium</i> (gate unknown)</li><li>excluded: <i>Acer palmatum</i>, <i>Cercidiphyllum japonicum</i>, <i>Cornus nuttallii</i>, <i>Cornus sericea</i> — reasons in Assumptions</li><li>Screen along the north edge (North bed): row cover 4.39 m of 6 m (continuity 0.73, a geometric proxy)</li><li>35 plants rest on an <b>unknown</b> site gate (conditions not stated)</li></ul>Circle an area and say what should change, or drag plants directly.",
    "mode": "engine: deterministic placement over the knowledge adapter (no model text)"
   },
   {
-   "id": "msg-odxf",
-   "time": "2026-11-14T08:30:31.605Z",
+   "id": "msg-6a9kf",
+   "time": "2026-11-14T08:51:33.240Z",
    "role": "user",
    "text": "Too dense here, but keep the privacy."
   },
   {
-   "id": "msg-odxg",
-   "time": "2026-11-14T08:30:31.605Z",
+   "id": "msg-6a9kg",
+   "time": "2026-11-14T08:51:33.240Z",
    "role": "ai",
    "text": "",
    "html": "<b>Proposed change — preview, nothing applied yet.</b> Scope: selection (&quot;here&quot; → the drawn selection), 24 plants inside. reduce density 25 %. Result 38 → 33 plants; nothing outside the scope changed. Red = to be removed, in every view. Apply or cancel in the card. Privacy is kept as an intent (screen-row plants untouched); screening performance is not quantified.",
    "mode": "interpretation: offline-parser (rules: reduce_density, preserve_privacy)"
   },
   {
-   "id": "msg-odxi",
-   "time": "2026-11-14T08:30:31.605Z",
+   "id": "msg-6a9ki",
+   "time": "2026-11-14T08:51:33.240Z",
    "role": "sys",
-   "text": "applied as v-odxh: 33 plants (5 removed, 0 added)"
+   "text": "applied as v-6a9kh: 33 plants (5 removed, 0 added)"
   },
   {
-   "id": "msg-odxj",
-   "time": "2026-11-14T08:30:31.605Z",
+   "id": "msg-6a9kj",
+   "time": "2026-11-14T08:51:33.240Z",
    "role": "sys",
-   "text": "undo → v-nh6d (38 plants)"
+   "text": "undo → v-5wgod (38 plants)"
   },
   {
-   "id": "msg-odxk",
-   "time": "2026-11-14T08:30:31.605Z",
+   "id": "msg-6a9kk",
+   "time": "2026-11-14T08:51:33.240Z",
    "role": "sys",
-   "text": "redo → v-odxh (33 plants)"
+   "text": "redo → v-6a9kh (33 plants)"
   },
   {
-   "id": "msg-odxl",
-   "time": "2026-11-14T08:30:31.605Z",
+   "id": "msg-6a9kl",
+   "time": "2026-11-14T08:51:33.240Z",
    "role": "user",
    "text": "Move the taller plants away from the tree."
   },
   {
-   "id": "msg-odxm",
-   "time": "2026-11-14T08:30:31.605Z",
+   "id": "msg-6a9km",
+   "time": "2026-11-14T08:51:33.240Z",
    "role": "ai",
    "text": "",
    "html": "<b>Proposed change — preview, nothing applied yet.</b> Scope: bed (no selection and no direction word — the whole current bed is assumed; draw a selection to narrow it), 10 plants inside. move away. Result 33 → 33 plants; nothing outside the scope changed. Red = to be removed, in every view. Apply or cancel in the card.",
    "mode": "interpretation: offline-parser (rules: move_away)"
   },
   {
-   "id": "msg-odxo",
-   "time": "2026-11-14T08:30:31.605Z",
+   "id": "msg-6a9ko",
+   "time": "2026-11-14T08:51:33.240Z",
    "role": "sys",
-   "text": "applied as v-odxn: 33 plants (0 removed, 0 added)"
+   "text": "applied as v-6a9kn: 33 plants (0 removed, 0 added)"
   },
   {
-   "id": "msg-odxp",
-   "time": "2026-11-14T08:30:31.605Z",
+   "id": "msg-6a9kp",
+   "time": "2026-11-14T08:51:33.240Z",
    "role": "sys",
    "text": "demonstration journey complete — every step above changed the model; export or keep editing"
   }
@@ -188,7 +188,7 @@
     "status": "inferred",
     "source": "conversation: \"an old tree on the north\" — estimated in the sketch from your words; scaled with the sketch to the stated size, canopy not stated",
     "from_concept": "c-tree-1",
-    "id": "tree-mom5"
+    "id": "tree-5vnr5"
    },
    {
     "locked": true,
@@ -215,7 +215,7 @@
     "status": "inferred",
     "source": "conversation: \"kids\" — estimated in the sketch from your words; extent scaled with the sketch, not stated in metres",
     "from_concept": "c-open-2",
-    "id": "open-mom6"
+    "id": "open-5vnr6"
    }
   ],
   "beds": [
@@ -277,7 +277,7 @@
     ],
     "under_canopy": [
      {
-      "tree": "tree-mom5",
+      "tree": "tree-5vnr5",
       "label": "existing tree",
       "m2": 2.27,
       "radius_status": "assumed 1.5 m"
@@ -394,7 +394,7 @@
     ],
     "under_canopy": [
      {
-      "tree": "tree-mom5",
+      "tree": "tree-5vnr5",
       "label": "existing tree",
       "m2": 0.52,
       "radius_status": "assumed 1.5 m"
@@ -484,7 +484,7 @@
     ],
     "under_canopy": [
      {
-      "tree": "tree-mom5",
+      "tree": "tree-5vnr5",
       "label": "existing tree",
       "m2": 2.45,
       "radius_status": "assumed 1.5 m"
@@ -497,7 +497,7 @@
    }
   ],
   "proposals": {
-   "generated": "2026-11-14T08:30:29.778Z",
+   "generated": "2026-11-14T08:51:14.745Z",
    "engine": "spatial.js (polygon-clipping booleans, metre units)",
    "inputs_fp": "[[[0,0],[6,0],[6,4],[0,4]],[[\"existing-tree\",[1.68,3.2],null,null],[\"no-plant-zone\",null,[[1.8,0.88],[4.2,0.88],[4.2,2.4],[1.8,2.4]],null]],{\"privacy\":2,\"maintenance_low\":2,\"ecology\":2,\"openness\":2},[[\"z:screen\",\"edge-unset\",null],[\"z:scrim\",\"edge-unset\",true],[\"z:ground_cover\",\"bed-interior\",null]],{\"north_angle_degrees\":0,\"basis\":\"assumption (north = up until stated)\"}]",
    "conceptual": false,
@@ -506,7 +506,7 @@
     "plantable_m2": 20.35,
     "excluded": [
      {
-      "id": "open-mom6",
+      "id": "open-5vnr6",
       "kind": "no-plant-zone",
       "label": "open (kids)",
       "clearance_m": 0
@@ -514,7 +514,7 @@
     ],
     "open_areas": [
      {
-      "id": "open-mom6",
+      "id": "open-5vnr6",
       "label": "open (kids)",
       "area_m2": 3.65,
       "status": "inferred"
@@ -522,7 +522,7 @@
     ],
     "trees": [
      {
-      "id": "tree-mom5",
+      "id": "tree-5vnr5",
       "label": "existing tree",
       "centre": [
        1.68,
@@ -648,7 +648,7 @@
        ],
        "under_canopy": [
         {
-         "tree": "tree-mom5",
+         "tree": "tree-5vnr5",
          "label": "existing tree",
          "m2": 2.27,
          "radius_status": "assumed 1.5 m"
@@ -755,7 +755,7 @@
        ],
        "under_canopy": [
         {
-         "tree": "tree-mom5",
+         "tree": "tree-5vnr5",
          "label": "existing tree",
          "m2": 0.52,
          "radius_status": "assumed 1.5 m"
@@ -840,7 +840,7 @@
        ],
        "under_canopy": [
         {
-         "tree": "tree-mom5",
+         "tree": "tree-5vnr5",
          "label": "existing tree",
          "m2": 2.45,
          "radius_status": "assumed 1.5 m"
@@ -945,7 +945,7 @@
        "from": "kids"
       },
       {
-       "id": "tree:tree-mom5",
+       "id": "tree:tree-5vnr5",
        "text": "existing tree kept (estimated from your words; canopy assumed 1.5 m)",
        "from": "site"
       }
@@ -1091,7 +1091,7 @@
        ],
        "under_canopy": [
         {
-         "tree": "tree-mom5",
+         "tree": "tree-5vnr5",
          "label": "existing tree",
          "m2": 5.23,
          "radius_status": "assumed 1.5 m"
@@ -1239,7 +1239,7 @@
        "from": "kids"
       },
       {
-       "id": "tree:tree-mom5",
+       "id": "tree:tree-5vnr5",
        "text": "existing tree kept (estimated from your words; canopy assumed 1.5 m)",
        "from": "site"
       }
@@ -1395,7 +1395,7 @@
        ],
        "under_canopy": [
         {
-         "tree": "tree-mom5",
+         "tree": "tree-5vnr5",
          "label": "existing tree",
          "m2": 5.23,
          "radius_status": "assumed 1.5 m"
@@ -1631,7 +1631,7 @@
        "from": "kids"
       },
       {
-       "id": "tree:tree-mom5",
+       "id": "tree:tree-5vnr5",
        "text": "existing tree kept (estimated from your words; canopy assumed 1.5 m)",
        "from": "site"
       }
@@ -1661,7 +1661,7 @@
    "active_id": "A",
    "stale": true,
    "pending": {
-    "generated": "2026-11-14T08:30:30.351Z",
+    "generated": "2026-11-14T08:51:15.293Z",
     "engine": "spatial.js (polygon-clipping booleans, metre units)",
     "inputs_fp": "[[[0,0],[6,0],[6,4],[0,4]],[[\"existing-tree\",[1.68,3.2],null,null],[\"no-plant-zone\",null,[[1.8,0.88],[4.2,0.88],[4.2,2.4],[1.8,2.4]],null]],{\"privacy\":2,\"maintenance_low\":2,\"ecology\":2,\"openness\":2},[[\"z:ground_cover\",\"bed-interior\",null],[\"z:screen\",\"north-edge\",null],[\"z:scrim\",\"north-edge\",true]],{\"north_angle_degrees\":0,\"basis\":\"assumption (north = up until stated)\"}]",
     "conceptual": false,
@@ -1670,7 +1670,7 @@
      "plantable_m2": 20.35,
      "excluded": [
       {
-       "id": "open-mom6",
+       "id": "open-5vnr6",
        "kind": "no-plant-zone",
        "label": "open (kids)",
        "clearance_m": 0
@@ -1678,7 +1678,7 @@
      ],
      "open_areas": [
       {
-       "id": "open-mom6",
+       "id": "open-5vnr6",
        "label": "open (kids)",
        "area_m2": 3.65,
        "status": "inferred"
@@ -1686,7 +1686,7 @@
      ],
      "trees": [
       {
-       "id": "tree-mom5",
+       "id": "tree-5vnr5",
        "label": "existing tree",
        "centre": [
         1.68,
@@ -1824,7 +1824,7 @@
         ],
         "under_canopy": [
          {
-          "tree": "tree-mom5",
+          "tree": "tree-5vnr5",
           "label": "existing tree",
           "m2": 2.57,
           "radius_status": "assumed 1.5 m"
@@ -1929,7 +1929,7 @@
         ],
         "under_canopy": [
          {
-          "tree": "tree-mom5",
+          "tree": "tree-5vnr5",
           "label": "existing tree",
           "m2": 0.45,
           "radius_status": "assumed 1.5 m"
@@ -2014,7 +2014,7 @@
         ],
         "under_canopy": [
          {
-          "tree": "tree-mom5",
+          "tree": "tree-5vnr5",
           "label": "existing tree",
           "m2": 2.21,
           "radius_status": "assumed 1.5 m"
@@ -2119,7 +2119,7 @@
         "from": "kids"
        },
        {
-        "id": "tree:tree-mom5",
+        "id": "tree:tree-5vnr5",
         "text": "existing tree kept (estimated from your words; canopy assumed 1.5 m)",
         "from": "site"
        }
@@ -2219,7 +2219,7 @@
         ],
         "under_canopy": [
          {
-          "tree": "tree-mom5",
+          "tree": "tree-5vnr5",
           "label": "existing tree",
           "m2": 1.91,
           "radius_status": "assumed 1.5 m"
@@ -2324,7 +2324,7 @@
         ],
         "under_canopy": [
          {
-          "tree": "tree-mom5",
+          "tree": "tree-5vnr5",
           "label": "existing tree",
           "m2": 3.32,
           "radius_status": "assumed 1.5 m"
@@ -2455,7 +2455,7 @@
         "from": "kids"
        },
        {
-        "id": "tree:tree-mom5",
+        "id": "tree:tree-5vnr5",
         "text": "existing tree kept (estimated from your words; canopy assumed 1.5 m)",
         "from": "site"
        }
@@ -2565,7 +2565,7 @@
         ],
         "under_canopy": [
          {
-          "tree": "tree-mom5",
+          "tree": "tree-5vnr5",
           "label": "existing tree",
           "m2": 3.24,
           "radius_status": "assumed 1.5 m"
@@ -2662,7 +2662,7 @@
         ],
         "under_canopy": [
          {
-          "tree": "tree-mom5",
+          "tree": "tree-5vnr5",
           "label": "existing tree",
           "m2": 1.98,
           "radius_status": "assumed 1.5 m"
@@ -2873,7 +2873,7 @@
         "from": "kids"
        },
        {
-        "id": "tree:tree-mom5",
+        "id": "tree:tree-5vnr5",
         "text": "existing tree kept (estimated from your words; canopy assumed 1.5 m)",
         "from": "site"
        }
@@ -2906,13 +2906,13 @@
   "history": [
    {
     "label": "site 6 × 4",
-    "time": "2026-11-14T08:30:29.398Z",
+    "time": "2026-11-14T08:51:14.310Z",
     "beds": [],
     "features": []
    },
    {
     "label": "accept layout",
-    "time": "2026-11-14T08:30:29.835Z",
+    "time": "2026-11-14T08:51:14.830Z",
     "beds": [
      {
       "id": "bed-1",
@@ -2966,7 +2966,7 @@
       ],
       "under_canopy": [
        {
-        "tree": "tree-mom5",
+        "tree": "tree-5vnr5",
         "label": "existing tree",
         "m2": 2.27,
         "radius_status": "assumed 1.5 m"
@@ -3083,7 +3083,7 @@
       ],
       "under_canopy": [
        {
-        "tree": "tree-mom5",
+        "tree": "tree-5vnr5",
         "label": "existing tree",
         "m2": 0.52,
         "radius_status": "assumed 1.5 m"
@@ -3173,7 +3173,7 @@
       ],
       "under_canopy": [
        {
-        "tree": "tree-mom5",
+        "tree": "tree-5vnr5",
         "label": "existing tree",
         "m2": 2.45,
         "radius_status": "assumed 1.5 m"
@@ -3198,7 +3198,7 @@
       "status": "inferred",
       "source": "conversation: \"an old tree on the north\" — estimated in the sketch from your words; scaled with the sketch to the stated size, canopy not stated",
       "from_concept": "c-tree-1",
-      "id": "tree-mom5"
+      "id": "tree-5vnr5"
      },
      {
       "locked": true,
@@ -3225,7 +3225,7 @@
       "status": "inferred",
       "source": "conversation: \"kids\" — estimated in the sketch from your words; extent scaled with the sketch, not stated in metres",
       "from_concept": "c-open-2",
-      "id": "open-mom6"
+      "id": "open-5vnr6"
      }
     ]
    }
@@ -3299,7 +3299,7 @@
    ],
    "seq": 2,
    "converted": {
-    "at": "2026-11-14T08:30:29.398Z",
+    "at": "2026-11-14T08:51:14.311Z",
     "size_m": [
      6,
      4
@@ -3490,7 +3490,7 @@
     "says": "value: openness"
    }
   ],
-  "updated": "2026-11-14T08:30:29.882Z"
+  "updated": "2026-11-14T08:51:14.872Z"
  },
  "versions": [
   {
@@ -5235,7 +5235,7 @@
      ]
     },
     {
-     "id": "zone-open-open-mom6-bed-1",
+     "id": "zone-open-open-5vnr6-bed-1",
      "bed_id": "bed-1",
      "kind": "open",
      "label": "open (kids)",
@@ -5285,7 +5285,7 @@
      "priority": 2
     },
     {
-     "id": "zone-open-open-mom6-bed-2",
+     "id": "zone-open-open-5vnr6-bed-2",
      "bed_id": "bed-2",
      "kind": "open",
      "label": "open (kids)",
@@ -5335,7 +5335,7 @@
      "priority": 2
     },
     {
-     "id": "zone-open-open-mom6-bed-3",
+     "id": "zone-open-open-5vnr6-bed-3",
      "bed_id": "bed-3",
      "kind": "open",
      "label": "open (kids)",
@@ -5385,7 +5385,7 @@
      "priority": 2
     },
     {
-     "id": "zone-open-open-mom6-bed-4",
+     "id": "zone-open-open-5vnr6-bed-4",
      "bed_id": "bed-4",
      "kind": "open",
      "label": "open (kids)",
@@ -7418,7 +7418,7 @@
     ],
     "open_zones": [
      {
-      "id": "open-mom6",
+      "id": "open-5vnr6",
       "area_m2": 3.65,
       "plants_inside": 0
      }
@@ -7520,8 +7520,8 @@
      }
     }
    },
-   "id": "v-nh6d",
-   "created": "2026-11-14T08:30:30.426Z",
+   "id": "v-5wgod",
+   "created": "2026-11-14T08:51:15.352Z",
    "parent_version_id": null
   },
   {
@@ -9091,7 +9091,7 @@
      ]
     },
     {
-     "id": "zone-open-open-mom6-bed-1",
+     "id": "zone-open-open-5vnr6-bed-1",
      "bed_id": "bed-1",
      "kind": "open",
      "label": "open (kids)",
@@ -9141,7 +9141,7 @@
      "priority": 2
     },
     {
-     "id": "zone-open-open-mom6-bed-2",
+     "id": "zone-open-open-5vnr6-bed-2",
      "bed_id": "bed-2",
      "kind": "open",
      "label": "open (kids)",
@@ -9191,7 +9191,7 @@
      "priority": 2
     },
     {
-     "id": "zone-open-open-mom6-bed-3",
+     "id": "zone-open-open-5vnr6-bed-3",
      "bed_id": "bed-3",
      "kind": "open",
      "label": "open (kids)",
@@ -9241,7 +9241,7 @@
      "priority": 2
     },
     {
-     "id": "zone-open-open-mom6-bed-4",
+     "id": "zone-open-open-5vnr6-bed-4",
      "bed_id": "bed-4",
      "kind": "open",
      "label": "open (kids)",
@@ -11379,7 +11379,7 @@
     ],
     "open_zones": [
      {
-      "id": "open-mom6",
+      "id": "open-5vnr6",
       "area_m2": 3.65,
       "plants_inside": 0
      }
@@ -11481,9 +11481,9 @@
      }
     }
    },
-   "id": "v-odxh",
-   "created": "2026-11-14T08:30:31.605Z",
-   "parent_version_id": "v-nh6d"
+   "id": "v-6a9kh",
+   "created": "2026-11-14T08:51:33.240Z",
+   "parent_version_id": "v-5wgod"
   },
   {
    "label": "edit: Move the taller plants away from the tree.",
@@ -13052,7 +13052,7 @@
      ]
     },
     {
-     "id": "zone-open-open-mom6-bed-1",
+     "id": "zone-open-open-5vnr6-bed-1",
      "bed_id": "bed-1",
      "kind": "open",
      "label": "open (kids)",
@@ -13102,7 +13102,7 @@
      "priority": 2
     },
     {
-     "id": "zone-open-open-mom6-bed-2",
+     "id": "zone-open-open-5vnr6-bed-2",
      "bed_id": "bed-2",
      "kind": "open",
      "label": "open (kids)",
@@ -13152,7 +13152,7 @@
      "priority": 2
     },
     {
-     "id": "zone-open-open-mom6-bed-3",
+     "id": "zone-open-open-5vnr6-bed-3",
      "bed_id": "bed-3",
      "kind": "open",
      "label": "open (kids)",
@@ -13202,7 +13202,7 @@
      "priority": 2
     },
     {
-     "id": "zone-open-open-mom6-bed-4",
+     "id": "zone-open-open-5vnr6-bed-4",
      "bed_id": "bed-4",
      "kind": "open",
      "label": "open (kids)",
@@ -15034,7 +15034,7 @@
       {
        "type": "move_away",
        "filter": "taller",
-       "feature_id": "tree-mom5",
+       "feature_id": "tree-5vnr5",
        "phrase": "tree",
        "resolved": true
       }
@@ -15309,7 +15309,7 @@
     ],
     "open_zones": [
      {
-      "id": "open-mom6",
+      "id": "open-5vnr6",
       "area_m2": 3.65,
       "plants_inside": 0
      }
@@ -15411,12 +15411,12 @@
      }
     }
    },
-   "id": "v-odxn",
-   "created": "2026-11-14T08:30:31.605Z",
-   "parent_version_id": "v-odxh"
+   "id": "v-6a9kn",
+   "created": "2026-11-14T08:51:33.240Z",
+   "parent_version_id": "v-6a9kh"
   }
  ],
- "current_version_id": "v-odxn",
+ "current_version_id": "v-6a9kn",
  "redo": [],
  "plant_seq": 38,
  "ui": {
@@ -15430,5 +15430,5 @@
   "site_fp": "[[[0,0],[6,0],[6,4],[0,4]],[[\"existing-tree\",[1.68,3.2],null,null],[\"no-plant-zone\",null,[[1.8,0.88],[4.2,0.88],[4.2,2.4],[1.8,2.4]],null]],{\"light\":{\"value\":\"part-shade\",\"status\":\"user-stated\",\"source\":\"conversation: \\\"part shade\\\"\",\"note\":null},\"soil_type\":{\"value\":null,\"status\":\"unknown\",\"source\":null,\"note\":null},\"soil_drainage\":{\"value\":null,\"status\":\"unknown\",\"source\":null,\"note\":null},\"water\":{\"value\":null,\"status\":\"unknown\",\"source\":null,\"note\":null},\"wind\":{\"value\":null,\"status\":\"unknown\",\"source\":null,\"note\":null},\"irrigation\":{\"value\":null,\"status\":\"unknown\",\"source\":null,\"note\":null}}]",
   "geometry_ack": "[[\"bed-1\",\"[[[0,3.2],[6,3.2],[6,4],[0,4]],[],[[\\\"z:ground_cover\\\",\\\"north-edge\\\"],[\\\"z:screen\\\",\\\"north-edge\\\"]]]\"],[\"bed-2\",\"[[[5.2,0],[6,0],[6,3.2],[5.2,3.2]],[],[[\\\"z:ground_cover\\\",\\\"east-edge\\\"]]]\"],[\"bed-3\",\"[[[0,0],[0.8,0],[0.8,3.2],[0,3.2]],[],[[\\\"z:ground_cover\\\",\\\"west-edge\\\"]]]\"],[\"bed-4\",\"[[[0.8,1.99],[1.03,1.85],[1.35,1.74],[1.68,1.7],[1.8,1.71],[1.8,2.4],[2.94,2.4],[3.03,2.55],[3.14,2.87],[3.18,3.2],[0.8,3.2]],[],[[\\\"z:ground_cover\\\",\\\"bed-interior\\\"]]]\"]]"
  },
- "updated": "2026-11-14T01:30:37"
+ "updated": "2026-11-14T01:51:34"
 }
