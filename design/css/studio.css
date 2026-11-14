@@ -44,7 +44,7 @@ button.link { color: var(--olive-deep); font-size: 12.5px; text-decoration: unde
 .canvas-home #svg.compose .tree { cursor: default; pointer-events: none; }
 .canvas-home #svg .tree-branches circle { fill: none; stroke: var(--olive-deep); stroke-width: 1; opacity: .55; pointer-events: none; }
 .canvas-home #svg .tree-centre { fill: var(--olive-deep); stroke: var(--paper); stroke-width: 1.5; }
-.canvas-home #svg .open.plan { fill: rgba(255,253,248,.3); stroke: var(--ink-3); stroke-width: 1.1; }
+.canvas-home #svg .open.plan { fill: rgba(39,36,31,.045); stroke: var(--ink-3); stroke-width: 1.1; }   /* open space the user asked for: a quiet tint and an ink outline, never the no-plant hatch */
 .canvas-home #svg .tree.csel, .canvas-home #svg .open.csel { stroke: var(--ink); stroke-width: 2.2; }
 .canvas-home #svg .dim path { fill: none; stroke: var(--ink-3); stroke-width: 1; } .canvas-home #svg .dim text { font-size: 10.5px; font-weight: 500; fill: var(--ink-2); }
 .canvas-home #svg g.scalebar { stroke: none; } .canvas-home #svg .scalebar rect { stroke: var(--ink); stroke-width: 1; } .canvas-home #svg .scalebar rect.a { fill: var(--ink); } .canvas-home #svg .scalebar rect.b { fill: var(--paper); }
@@ -162,6 +162,28 @@ button.eye:hover { background: var(--paper-2); } .eye.off { color: var(--ink-3);
   .ws-head { min-width: 0; } .ws-lens, #fn-legend { max-width: 100%; overflow-x: auto; flex-wrap: nowrap; }
 }
 #addfn { flex: 1.4 1 160px; min-width: 0; } #addfnwhere { flex: 1 1 120px; min-width: 0; }
+/* ---- 2026-11-14 · review fixes (M61) ---------------------------------------------------------------------------------------
+   1 an unmet or uncertain Screen is said where the bed is read: a verdict block in the inspector, a tag and the gaps on the plan */
+.verdict { margin: 12px 0 6px; padding: 11px 12px 9px; border-radius: 8px; border: 1.5px solid var(--rust); background: var(--rust-soft); color: #7d3826; font-size: 12.5px; line-height: 1.45; }
+.verdict.uncertain { border: 1.5px dashed var(--caramel); background: var(--caramel-soft); color: var(--caramel-ink); }
+.verdict.meets { border: 1px solid var(--line-2); background: none; color: var(--ink-2); }
+.verdict .vh { display: flex; align-items: center; justify-content: space-between; gap: 10px; } .verdict .vk { display: inline-flex; align-items: center; gap: 8px; font-weight: 600; font-size: 13.5px; color: var(--ink); min-width: 0; }
+.verdict .vs { flex: none; font: 600 11.5px var(--sans); letter-spacing: .05em; text-transform: uppercase; padding: 3px 9px; border-radius: 3px; background: var(--rust); color: #fff; }
+.verdict.uncertain .vs { background: var(--caramel-ink); } .verdict.meets .vs { background: none; color: var(--olive-deep); border: 1.3px solid var(--olive-deep); }
+.verdict .vfigs { display: flex; flex-wrap: wrap; gap: 2px 14px; margin: 8px 0 2px; font-size: 13px; color: var(--ink); } .verdict .vfigs b { font-weight: 600; font-size: 15px; }
+.verdict p { margin: 5px 0 0; } .verdict .vsay { color: var(--ink); } .verdict .vnote { color: var(--ink-2); font-size: 12px; } .verdict .vunc b { font-weight: 600; margin-right: 4px; }
+.verdict .vchecks { display: flex; flex-wrap: wrap; gap: 4px 6px; margin-top: 7px; } .verdict .ck { font-size: 11.5px; padding: 1px 7px; border-radius: 3px; background: rgba(255,253,248,.7); color: var(--ink-2); } .verdict .ck b { font-weight: 600; color: var(--ink); } .verdict .ck.fails b { color: var(--rust); } .verdict .ck.uncertain b { color: var(--caramel-ink); }
+.verdict + .verdict { margin-top: 8px; } .bedcard.overview .verdict { margin-top: 12px; }
+.vtag { display: inline-block; font: 600 11px var(--sans); padding: 1px 6px; border-radius: 3px; background: var(--rust-soft); color: #7d3826; vertical-align: 1px; white-space: nowrap; } .vtag.uncertain { background: var(--caramel-soft); color: var(--caramel-ink); }
+.canvas-home #svg .fn-gap { stroke: var(--rust); stroke-width: 5; stroke-linecap: butt; stroke-dasharray: 3 2.5; pointer-events: none; } .canvas-home #svg .fn-gap.uncertain { stroke: var(--caramel); }
+.canvas-home #svg .fn-verdict { pointer-events: none; } .canvas-home #svg .fn-verdict rect { fill: var(--rust); stroke: var(--paper); stroke-width: 1.5; } .canvas-home #svg .fn-verdict.uncertain rect { fill: var(--caramel-ink); } .canvas-home #svg .fn-verdict text { font: 600 11px var(--sans); fill: #fff; stroke: none; }
+.canvas-home #svg .bed-sub.v-fails { fill: var(--rust); font-weight: 600; } .canvas-home #svg .bed-sub.v-uncertain { fill: var(--caramel-ink); font-weight: 600; }
+/* 2 three kinds of ground without a bed, three marks: hatch = planting ruled out by the site · plain with an ink outline = open space the user asked for · dotted olive = no bed yet */
+.sw.openk { border: 1.1px solid var(--ink-3); border-radius: 2px; background: rgba(39,36,31,.07); } .sw.free { border: 1.2px dotted rgba(91,122,87,.95); border-radius: 2px; background: none; }
+.ground-key { display: grid; gap: 5px; padding: 7px 0 8px; border-top: 1px solid var(--line); font-size: 12.5px; color: var(--ink-2); } .ground-key > span { display: grid; grid-template-columns: 12px auto minmax(0, 1fr); gap: 8px; align-items: baseline; } .ground-key .sw { align-self: center; } .ground-key small { font-size: 11.5px; color: var(--ink-3); text-align: right; }
+.canvas-foot .sw.openk, .canvas-foot .sw.free { vertical-align: -2px; margin-right: 6px; }
+.canvas-home #svg .open-sub { font-size: 9px; fill: var(--ink-3); letter-spacing: .02em; }
+@media (min-width: 1081px) and (max-width: 1340px) { #compose-foot .lg, #site-foot .lg[title] { display: none; } .canvas-foot .lg { white-space: nowrap; } #generate-why, #to-intent-why { max-width: 300px; } }   /* at 1280 the status bar keeps to one line: the function key is already in the mode bar */
 /* the Imagine page is frozen: its top bar keeps the height it had before the stepper (74.695 px on desktop), so the hero below it does not move by a pixel */
 body[data-stage="welcome"] #stagenav { min-height: 45.6953125px; }
 @media (max-width: 760px) { body[data-stage="welcome"] #stagenav { min-height: 38.15px; } }

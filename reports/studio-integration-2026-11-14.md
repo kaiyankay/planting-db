@@ -5,6 +5,17 @@ Desktop web, checked at 1440 × 900 and 1280 × 800. Interface, drawing and wiri
 graph, the knowledge adapter, the planting algorithm, `concept.js`, DesignVersion and the Grow stage's functions are unchanged
 (the three exceptions are listed under *Not interface*).
 
+## Review fixes (2026-11-14, after Kay's review of d836b60; methods M61)
+
+The integration stands as reviewed; four small corrections, no new function, no algorithm change, no phone work.
+
+1. **An unmet Screen is said, not only drawn.** The bed's inspector now opens with the engine's verdict: `NOT MET`, "7 of 10 plants placed", "4.27 of 6 m of the edge covered", "1 gap", the four checks (continuity not met · height 1.8 m uncertain · year-round not required · evidence supported), what is uncertain (*Gaultheria shallon*: fit uncertain, site gate unknown) and "a geometric estimate on claimed mature sizes, not a verified performance". On the plan the bed carries a rust tag ("Screen not met · 7 of 10 placed · 1 gap") and the gap is marked on the edge. Before any bed is opened, the function plan says it too: on the bed, in the bed list, in the overview and in the status bar; beside Generate it reads "Screen not met as composed". The plant symbols are kept. `uncertain` uses the same places in caramel.
+2. **Three kinds of ground, three marks.** The hatch used to cover everything outside the plantable area, so the open centre the user asked for looked forbidden. Now: hatch = a true no-plant zone only (planting ruled out by the site: building, paving, path and clearance); open space the user asked for = quiet tint, outline, "kept open at your request"; ground with no bed yet = plain. The Layers panel and the status bar name all three with their areas (Demo A: no-plant zone none · open space 3.8 m² · no bed yet 7.7 m²). No tool in this interface creates a true no-plant zone yet, so neither demonstration shows a hatch; the hatch was checked on a project that holds one.
+3. **The corner tree is an editable estimate.** The inset is min(1 m, a quarter of the site), so the tree stays in the named corner on small sites (3 × 2 m → 0.75, 1.5; 1.5 × 1.5 m southeast → 1.12, 0.38; checked down to 1 × 1 m and on 2 × 8 / 8 × 2 m). Before, 1 m on a site under 2 m wide carried it past the middle. The inspector reads "about 1, 3 m · a default estimate, not measured" with a note to drag it; the source says only a direction was given; after a drag it is "placed by you".
+4. **Compose opens on the whole function plan.** A bed is selected only by the user (in Shape or in Compose); that selection is kept across modes and when coming back from Grow.
+
+Tests after the fixes: design **199/199** (W11–W16 new), spatial **156/156**, ux **41/41**. Screenshots in `brain/screenshots/studio/` were retaken.
+
 ## What is different
 
 **One workspace, two modes.** Shape and Compose are now the same fixed-viewport shell — mode bar, tool rail, canvas, inspector,
@@ -13,8 +24,8 @@ the same pixels in both modes (tested). Only the tools around it change, with a 
 
 **The plan is a site drawing.** A paper sheet on a desk with a 1 m grid inside the boundary; overall dimension lines and a
 graphic scale bar when the site has a stated or calibrated size (never on the sketch); a compass that says when north is
-assumed; the existing tree as canopy + trunk, dotted when its canopy is assumed; a light hatch on the ground where beds may not
-go (whatever the plantable area leaves: access, clearances, open areas); suggested beds dashed in caramel, confirmed beds solid
+assumed; the existing tree as canopy + trunk, dotted when its canopy is assumed; a light hatch only on a true no-plant zone
+(see *Review fixes*); suggested beds dashed in caramel, confirmed beds solid
 in olive; narrow beds carry their label along their length; selection is an ink outline with square corner handles.
 
 **Shape.** Opens on what Page 1 gave it: a scaled model when the sentence had dimensions, the editable sketch when it had none,
@@ -121,5 +132,6 @@ zoom read-out and fit key, status bar. garden-planner has no licence, so nothing
 - **Grow** got the stepper only; its plan still uses the older drawing conventions.
 - **Hint pill** sits over the top of the plan and can cross a canopy or the dimension line.
 - **Language** is read by the offline rules everywhere (the page says so); no live model was exercised.
-- To confirm: the hatch reading ("no beds here"), the default of showing the first bed selected in Compose, the corner rule
-  (1 m in from both edges), and whether the dry-run preview should also be offered for all beds at once.
+- Settled by the review (see *Review fixes*): the hatch, Compose's default view, the corner rule. Still open: whether the
+  dry-run preview should also be offered for all beds at once.
+- No tool creates a true no-plant zone (building, paving, path) in this interface; the spatial engine supports them.

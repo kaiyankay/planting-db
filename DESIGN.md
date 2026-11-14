@@ -182,7 +182,9 @@ The plan is drawn like a landscape drawing, and its conventions are the interfac
 | solid line | stated or confirmed by the user |
 | dashed caramel line | suggested or estimated, not accepted yet |
 | dotted line | assumed until stated |
-| light diagonal hatch | ground where beds may not go (access, clearances, open areas) |
+| light diagonal hatch | a true no-plant zone: planting is ruled out by the site itself (a building, paving, a path and its clearance). Never used for anything else |
+| quiet tint, ink outline, "kept open at your request" | open space the user asked to keep. Plants could grow there; beds stay out because the user said so |
+| plain sheet, dotted olive outline | plantable ground that has no bed yet |
 | olive wash | a confirmed planting bed |
 | heavy edge + diagonal hatch | Screen along that edge |
 | stipple | Ground Cover |
@@ -190,6 +192,8 @@ The plan is drawn like a landscape drawing, and its conventions are the interfac
 | dimension lines, scale bar | only when the site has a stated or calibrated size |
 
 Nothing is drawn that the model does not hold: no terrain, no buildings, no shadows that imply sun data.
+
+**A verdict is said, not only drawn.** Plant symbols on the plan look like a result. When the engine's own evaluation of a function is `not met` or `uncertain`, the plan and the inspector say so in words at the same size as the bed's name: a rust verdict block opens the bed's inspector (status, plants placed of those expected, what is uncertain), a rust tag sits on the bed and rust dashes mark the gaps on the screened edge. Rust is reserved for this; caramel dashes mean uncertain. A position that was estimated from words is written "about …, a default estimate, not measured" until the user moves it.
 
 ## Do's and Don'ts
 

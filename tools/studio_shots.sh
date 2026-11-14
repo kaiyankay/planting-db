@@ -21,4 +21,4 @@ shot 07-shape-bed-selected      "fresh=1&script=studioA&stop=bed"
 shot 08-compose-function-plan   "fresh=1&script=studioA&stop=compose"
 shot 09-compose-bed-arrangement "fresh=1&script=studioA&stop=composeBed"
 shot 10-grow                    "fresh=1&script=studioA&stop=garden" 14000
-shot 11-compose-demo-b          "fresh=1&script=studioB&stop=compose"
+shot 11-compose-demo-b          "fresh=1&script=studioB&stop=composeBed"

@@ -149,6 +149,18 @@ else:
             o = {"error": repr(ex)}
         if o.get("error"): test(f"W0 {which} ran without an error", False, o["error"][:300])
         return o.get(which)
+    Cn = studio("corner")   # runs before the two demonstrations, so the last saved project is still a generated one
+    if Cn:
+        rows = Cn["rows"]; half = lambda r: (r["rel"][0] < .5 if "west" in r["where"] else r["rel"][0] > .5 if "east" in r["where"] else True) and (r["rel"][1] > .5 if "north" in r["where"] else r["rel"][1] < .5 if "south" in r["where"] else True)
+        test("W14 a tree placed from a direction stays inside the site and in the part that was named on every size, 6 × 4 m down to 1 × 1 m (the default inset is 1 m, never more than a quarter of the site)",
+             len(rows) == 7 and all(r["size"] == r["asked"] and r["inside"] and half(r) and r["status"] == "inferred" for r in rows) and rows[0]["pos"] == [1, 3] and rows[1]["pos"] == [0.75, 1.5], json.dumps([[r["asked"], r["where"], r["pos"]] for r in rows]))
+        test("W15 that position is shown as an editable estimate, never as a measurement: source, inspector and plan label say so; dragging the tree makes it the user's own placement",
+             all("not a measurement" in r["source"] and "not measured" in (r["meta"] or "") and r["ask"] and "estimated" in (r["label"] or "") for r in rows)
+             and Cn["dragged"]["status"] == "user-drawn" and Cn["dragged"]["pos"] != Cn["before"]["pos"] and not Cn["dragged"]["ask"] and "not measured" not in (Cn["dragged"]["meta"] or ""), json.dumps([rows[1]["meta"], rows[1]["label"], Cn["dragged"]["meta"], Cn["dragged"]["status"]]))
+        pv = Cn["paved"]
+        test("W16 a true no-plant zone (paving, with its clearance) is the only ground that is hatched, and the key names it with its area", pv["hatch"] >= 1 and "ruled out by the site" in pv["key"][0] and "no-plant zone" in pv["legend"], json.dumps(pv))
+    else:
+        test("W0 corner script ran", False, "no corner block in #script-out")
     A = studio("studioA")
     if A:
         si, cb, g = A["site"], A["composeBed"], A["garden"]
@@ -159,11 +171,18 @@ else:
         test("W3 Compose is the same workspace: the one plan moves into it and keeps its rectangle and its view (site drawn at the same pixels as in Shape)",
              A["bed"]["svg_home"] == "site-canvas-body" and cb["svg_home"] == "compose-canvas-body" and rel(A["bed"]) == rel(cb) and cb["dims_drawn"] == si["dims_drawn"], json.dumps([rel(A["bed"]), rel(cb)]))
         test("W4 a selected bed reads Spatial function → Plant selection → Arrangement, with its plants drawn on the plan",
-             cb["bed"] == "North bed" and [x.split(" ")[0] for x in cb["steps"]] == ["Spatial", "Plant", "Arrangement"] and len(cb["picks"]) >= 1 and cb["preview_symbols"] > 0 and len(cb["figs"]) >= 4 and A["compose"]["preview_symbols"] == 0 and A["compose"]["bed"] == "Function plan", json.dumps([cb["steps"], cb["figs"], cb["preview_symbols"]]))
+             cb["bed"] == "North bed" and [x.split(" ")[0] for x in cb["steps"]] == ["Spatial", "Plant", "Arrangement"] and len(cb["picks"]) >= 1 and cb["preview_symbols"] > 0 and len(cb["figs"]) >= 4 and A["compose"]["preview_symbols"] == 0 and A["compose"]["bed"] == "Function plan" and not A["compose"]["selected"] and A["back_compose"]["bed"] == "North bed", json.dumps([cb["steps"], cb["figs"], cb["preview_symbols"], A["compose"]["bed"], A["back_compose"]["bed"]]))
         test("W5 what Compose draws is what Generate places: the preview of the selected bed and of every bed equals the generated version; the screen row reports its own evaluation",
              g["selected_bed_preview_equals_generated"] and g["dry_run_equals_generated"] and g["valid"] and g["inside_beds"] and g["in_open"] == 0 and g["symbols"] == g["plants"] and "not" in (cb["edge_eval"] or "") + "not", f"{g['plants']} plants · {cb['edge_eval']}")
         test("W6 going back keeps the design and the model: Compose and Shape reopen on the same site with the version kept",
              A["back_compose"]["design_kept"] and A["back_compose"]["open_garden_link"] and A["back_site"]["design_kept"] and A["back_site"]["beds"] == g["beds"] and rel(A["back_site"]) == rel(A["bed"]) and rel(A["back_compose"]) == rel(cb), json.dumps([rel(A["back_site"]), rel(A["bed"])]))
+        co = A["compose"]
+        test("W11 an unmet Screen is said, not only drawn: the bed's inspector opens with the engine's verdict, the plants placed of those expected and what is uncertain; the plan carries the verdict and the gap; the function plan, the bed list and the status bar say it before any bed is opened",
+             cb["verdict"] == "not met" and "7 of 10 plants placed" in cb["verdict_text"] and "Uncertain" in cb["verdict_text"] and "not met" in (cb["canvas_verdict"] or "") and "7 of 10" in (cb["canvas_verdict"] or "") and cb["gap_marks"] >= 1
+             and co["verdict"] == "not met" and co["bed_tags"] == ["not met"] and "not met" in co["status_bar"] and co["gap_marks"] >= 1, json.dumps([cb["canvas_verdict"], co["status_bar"], cb["verdict_text"][:120]]))
+        test("W12 ground without a bed is three things, drawn three ways: no hatch where the user only asked for open space (it is labelled as kept open at their request), a hatch only for a true no-plant zone, the rest is ground with no bed yet",
+             si["hatch"] == 0 and si["open_sub"] == "kept open at your request" and len(si["ground_key"]) == 3 and "none on this site" in si["ground_key"][0] and "at your request" in si["ground_key"][1] and "beds may go here" in si["ground_key"][2], json.dumps(si["ground_key"]))
+        test("W13 the tree placed from a direction is an estimate and says so: not a measurement, a default, to be dragged", "not a measurement" in si["tree_source"] and "estimated by default" in si["tree_source"] and "drag" in si["tree_source"] and si["features"][0]["status"] == "inferred", si["tree_source"])
         test("W7 the workspace never scrolls sideways (every step of Demo A)", all(v.get("overflow_x", 0) <= 0 for v in A.values()), json.dumps({k: v.get("overflow_x") for k, v in A.items()}))
     else:
         test("W0 studio script A ran", False, "no studioA block in #script-out")
@@ -175,7 +194,7 @@ else:
         test("W9 the user places the tree and gives the size: the same workspace now holds a scaled model with layout options, the tree where it was placed",
              pl["tree"]["placed"] and pl["tree"]["pos_status"] == "user-placed" and pl["tray"] == 0 and sz["boundary"]["w"] == 7 and sz["boundary"]["h"] == 5 and sz["dims_drawn"] == ["7 m", "5 m"] and sz["mark"] is None and sz["cands"] >= 2 and sz["bed_rows"] == len(sz["beds"]) >= 2 and sz["features"][0]["status"] == "user-drawn" and sz["canvas"][2:] == sk["canvas"][2:], json.dumps([sz["dims_drawn"], sz["cands"], sz["features"]]))
         test("W10 Demo B continues to Compose and Grow with the beds still suggested: Generate accepts them and places exactly what Compose showed",
-             co["stage"] == "intent" and co["still_suggested"] > 0 and co["preview_symbols"] > 0 and g["dry_run_equals_generated"] and g["plants"] > 0 and g["valid"] and g["inside_beds"] and all(b["status"] == "user-accepted" for b in g["beds"]), f"{co['still_suggested']} suggested → {g['plants']} plants")
+             co["stage"] == "intent" and co["still_suggested"] > 0 and co["bed"] == "Function plan" and co["preview_symbols"] == 0 and Bd["composeBed"]["preview_symbols"] > 0 and g["dry_run_equals_generated"] and g["plants"] > 0 and g["valid"] and g["inside_beds"] and all(b["status"] == "user-accepted" for b in g["beds"]), f"{co['still_suggested']} suggested → {g['plants']} plants")
     else:
         test("W0 studio script B ran", False, "no studioB block in #script-out")
     # S saved file (only when the design server is the target)
