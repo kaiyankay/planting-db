@@ -19,12 +19,15 @@ export function fromMulti(multi, minArea = 1e-6) {
   return out;
 }
 const asMulti = x => Array.isArray(x) ? (x.length && Array.isArray(x[0]) && Array.isArray(x[0][0]) && Array.isArray(x[0][0][0]) ? x : toMulti(x)) : x?.polygon ? toMulti(x.polygon, x.holes) : [];
-const safe = (fn, a, b) => { try { return fn(a, b); } catch (e) { return fn(cleanMulti(a), cleanMulti(b)); } };
-export const union = (a, b) => b === undefined ? (asMulti(a).length ? pc.union(asMulti(a)) : []) : safe(pc.union, asMulti(a), asMulti(b));
+/* polygon-clipping can fail on nearly coincident points ("Unable to complete output ring"). The same operation is then repeated on
+   the same geometry snapped to a grid — 1 mm, then 0.1 mm, then 2 mm — and only fails if every attempt does. No result is dropped. */
+const snapMulti = (m, q) => (m || []).map(poly => poly.map(ring => { const r = []; for (const p of ring) { const v = [Math.round(p[0] / q) * q, Math.round(p[1] / q) * q]; if (!r.length || r[r.length - 1][0] !== v[0] || r[r.length - 1][1] !== v[1]) r.push(v); } if (r.length && (r[0][0] !== r[r.length - 1][0] || r[0][1] !== r[r.length - 1][1])) r.push([r[0][0], r[0][1]]); return r; }).filter(r => r.length >= 4)).filter(p => p.length);
+const safe = (fn, a, b) => { let err; for (const q of [0, 1e-3, 1e-4, 2e-3]) { try { const x = q ? snapMulti(a, q) : a; if (b === undefined) return x.length ? fn(x) : []; return fn(x, q ? snapMulti(b, q) : b); } catch (e) { err = e; } } throw err; };
+export const union = (a, b) => b === undefined ? safe(pc.union, asMulti(a)) : safe(pc.union, asMulti(a), asMulti(b));
 export const difference = (a, b) => asMulti(b).length ? safe(pc.difference, asMulti(a), asMulti(b)) : asMulti(a);
 export const intersection = (a, b) => safe(pc.intersection, asMulti(a), asMulti(b));
 export const xor = (a, b) => safe(pc.xor, asMulti(a), asMulti(b));
-export function unionAll(list) { let m = []; for (const x of list) { const mx = asMulti(x); if (!mx.length) continue; m = m.length ? pc.union(m, mx) : pc.union(mx); } return m; }
+export function unionAll(list) { let m = []; for (const x of list) { const mx = asMulti(x); if (!mx.length) continue; m = m.length ? safe(pc.union, m, mx) : safe(pc.union, mx); } return m; }
 export function cleanMulti(m) { return (m || []).map(poly => poly.map(ring => { const r = []; for (const p of ring) { const q = [r3(p[0]), r3(p[1])]; if (!r.length || r[r.length - 1][0] !== q[0] || r[r.length - 1][1] !== q[1]) r.push(q); } return r; }).filter(r => r.length >= 4)).filter(p => p.length); }
 export const areaOf = m => fromMulti(m).reduce((s, p) => s + p.area_m2, 0);
 export const areaShape = s => s?.polygon ? G.area(s.polygon) - (s.holes || []).reduce((a, h) => a + G.area(h), 0) : 0;

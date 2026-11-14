@@ -1,0 +1,159 @@
+/* Planting Intelligence · studio (2026-11-14). Loaded last. One design system across Imagine → Shape → Compose → Grow
+   (tokens and rules: DESIGN.md). Shape and Compose are two modes of one desktop workspace: the same shell, the same canvas
+   rectangle, the same site drawing. The Imagine hero is not restyled here; only the top bar is shared. */
+:root { --caramel-ink: #8a5f1c; --desk: #f1ecdf; --rail-w: 64px; --insp-w: 348px; --bar-h: 46px; --status-h: 52px; }
+
+/* ---------------------------------------------------------------- top bar: the four stages as a numbered stepper */
+#stagenav { counter-reset: step; gap: 0; background: none; padding: 0; align-items: center; }
+#stagenav li { counter-increment: step; display: flex; align-items: center; }
+#stagenav li + li::before { content: ""; width: 20px; height: 1px; background: var(--line-2); margin: 0 3px; }
+#stagenav button { padding: 5px 13px 5px 5px; gap: 8px; font-size: 14px; border: 1px solid transparent; transition: background .15s var(--ease); }
+#stagenav button .dot { width: 22px; height: 22px; display: grid; place-items: center; border-radius: 50%; background: none; border: 1px solid var(--line-2); font: 500 11.5px/1 var(--sans); color: var(--ink-3); }
+#stagenav button .dot::before { content: counter(step); }
+#stagenav button.done .dot { background: var(--olive-soft); border-color: transparent; color: var(--olive-deep); }
+#stagenav button.on { background: var(--paper); border-color: var(--line); box-shadow: var(--shadow-soft); color: var(--ink); }
+#stagenav button.on .dot { background: var(--olive-deep); border-color: var(--olive-deep); color: #fff; }
+#stagenav button:not(:disabled):not(.on):hover { background: var(--paper-2); }
+#stagenav button:disabled .dot { border-style: dashed; }
+button.link { color: var(--olive-deep); font-size: 12.5px; text-decoration: underline; text-decoration-color: var(--line-2); text-underline-offset: 3px; } button.link:hover { text-decoration-color: currentColor; }
+
+/* ---------------------------------------------------------------- the site drawing (Shape and Compose share it) */
+.canvas-home { background: var(--desk); }
+.canvas-home #svg .sheet { fill: var(--paper); stroke: none; pointer-events: none; }
+.canvas-home #svg .site.studio { fill: var(--paper); stroke: var(--ink); stroke-width: 2; stroke-dasharray: none; stroke-linejoin: miter; }
+.canvas-home #svg .site.studio.inferred { stroke: var(--ink-2); stroke-width: 1.5; stroke-dasharray: 9 5; }
+.canvas-home #svg .site-grid, .canvas-home #svg .nonplant { stroke: none; pointer-events: none; }
+.canvas-home #svg .plantable.studio { fill: none; stroke: rgba(91,122,87,.6); stroke-width: 1; stroke-dasharray: 1.5 3.5; stroke-linecap: round; }
+.canvas-home #svg .bed.plan.confirmed { fill: rgba(91,122,87,.17); stroke: var(--olive-deep); stroke-width: 1.5; }
+.canvas-home #svg .bed.plan.suggested { fill: rgba(183,137,77,.11); stroke: var(--caramel); stroke-width: 1.5; stroke-dasharray: 7 4; }
+.canvas-home #svg .bed.plan.hover { stroke-width: 2.4; }
+.canvas-home #svg .bed.plan.active { stroke: var(--ink); stroke-width: 2.2; stroke-dasharray: none; }
+.canvas-home #svg .bed.plan.editing { fill: rgba(91,122,87,.2); cursor: move; }
+.canvas-home #svg .bed.plan.suggested.editing { fill: rgba(183,137,77,.18); }
+.canvas-home #svg .bed.plan.before { stroke-dasharray: 4 3; fill: rgba(39,36,31,.04); stroke: var(--ink-3); stroke-width: 1.2; }
+.canvas-home #svg .bed.plan.dimmed { opacity: .2; }
+.canvas-home #svg .bed.hint { fill: rgba(91,122,87,.1); stroke: var(--olive); stroke-width: 1.1; stroke-dasharray: 2 5; }
+.canvas-home #svg .bed-label { font-size: 11.5px; font-weight: 600; fill: var(--ink); } .canvas-home #svg .bed-label.suggested { fill: var(--caramel-ink); }
+.canvas-home #svg .bed-sub { font-size: 10px; fill: var(--ink-2); }
+.canvas-home #svg .feat-label { font-size: 10px; } .canvas-home #svg .open-label { letter-spacing: .04em; }
+.canvas-home #svg .tree { fill: rgba(59,85,56,.1); stroke: var(--olive-deep); stroke-width: 1.4; cursor: grab; }
+.canvas-home #svg.compose .tree { cursor: default; pointer-events: none; }
+.canvas-home #svg .tree-branches circle { fill: none; stroke: var(--olive-deep); stroke-width: 1; opacity: .55; pointer-events: none; }
+.canvas-home #svg .tree-centre { fill: var(--olive-deep); stroke: var(--paper); stroke-width: 1.5; }
+.canvas-home #svg .open.plan { fill: rgba(255,253,248,.3); stroke: var(--ink-3); stroke-width: 1.1; }
+.canvas-home #svg .tree.csel, .canvas-home #svg .open.csel { stroke: var(--ink); stroke-width: 2.2; }
+.canvas-home #svg .dim path { fill: none; stroke: var(--ink-3); stroke-width: 1; } .canvas-home #svg .dim text { font-size: 10.5px; font-weight: 500; fill: var(--ink-2); }
+.canvas-home #svg g.scalebar { stroke: none; } .canvas-home #svg .scalebar rect { stroke: var(--ink); stroke-width: 1; } .canvas-home #svg .scalebar rect.a { fill: var(--ink); } .canvas-home #svg .scalebar rect.b { fill: var(--paper); }
+.canvas-home #svg .scalebar text { font-size: 9.5px; fill: var(--ink-2); } .canvas-home #svg .scalebar .sb-note { fill: var(--ink-3); }
+.canvas-home #svg .compass circle { fill: var(--paper); stroke: var(--line-2); stroke-width: 1; } .canvas-home #svg .compass .north { fill: var(--ink); } .canvas-home #svg .compass line { stroke: var(--ink-3); stroke-width: 1; }
+.canvas-home #svg .compass text { font-size: 10px; font-weight: 600; fill: var(--ink-2); } .canvas-home #svg .compass.assumed circle { stroke-dasharray: 1.5 3; stroke-linecap: round; }
+.canvas-home #svg rect.handle { fill: #fff; stroke: var(--ink); stroke-width: 1.6; cursor: pointer; filter: drop-shadow(0 1px 2px rgba(39,36,31,.3)); }
+.canvas-home #svg rect.handle:hover, .canvas-home #svg rect.handle.on { fill: var(--caramel); }
+.canvas-home #svg .sketch-mark { font: 500 12px var(--sans); fill: var(--caramel-ink); }
+/* the function plan */
+.canvas-home #svg.compose .bed.plan { fill: var(--paper); stroke: var(--olive-deep); stroke-width: 1.4; stroke-dasharray: none; cursor: pointer; }
+.canvas-home #svg.compose .bed.plan.fn-none { stroke: var(--ink-3); stroke-dasharray: 2 4; fill: rgba(255,255,255,.3); }
+.canvas-home #svg.compose .bed.plan.fn-recorded:not(.fn-screen):not(.fn-ground) { stroke: var(--ink-3); stroke-dasharray: 6 4; fill: rgba(255,255,255,.4); }
+.canvas-home #svg.compose .bed.plan.hover { stroke-width: 2.4; } .canvas-home #svg.compose .bed.plan.active { stroke: var(--ink); stroke-width: 2.6; }
+.canvas-home #svg .fn-band { stroke: none; cursor: pointer; } .canvas-home #svg .fn-edge { stroke: var(--ink); stroke-width: 3.4; stroke-linecap: butt; pointer-events: none; }
+.canvas-home #svg .preview-plants { pointer-events: none; } .canvas-home #svg .fn-band.off { display: none; }
+.canvas-home #svg .bed.plan.hint { fill: rgba(91,122,87,.07); stroke: var(--olive); stroke-width: 1.1; stroke-dasharray: 2 5; stroke-linecap: round; pointer-events: none; }
+
+/* ---------------------------------------------------------------- workspace parts (any width) */
+.ws-head h2 { font: 400 22px/1 var(--display); letter-spacing: -.01em; }
+.ws-model { font: 600 13.5px var(--sans); } .ws-scale { font: 12px var(--mono); color: var(--ink-2); border: 1px solid var(--line); background: var(--ivory); border-radius: 999px; padding: 3px 10px; white-space: nowrap; }
+.ws-lens { display: flex; align-items: center; gap: 2px; min-width: 0; }
+.lens { display: inline-flex; align-items: center; gap: 5px; padding: 5px 8px; border-radius: 8px; font-size: 12.5px; color: var(--ink); white-space: nowrap; }
+.lens .ic svg { width: 16px; height: 16px; display: block; fill: none; stroke: var(--ink-3); stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; } .lens.gated .ic svg { stroke: var(--olive-deep); }
+.lens .ll { color: var(--ink-3); font-size: 12px; } .lens.unknown .lv { color: var(--ink-3); } .lens:hover, .lens-all:hover { background: var(--paper-2); }
+.lens-all { margin-left: 6px; padding: 5px 11px; border: 1px solid var(--line-2); border-radius: 999px; font-size: 12.5px; white-space: nowrap; } .lens-all small { color: var(--ink-3); font-size: 11.5px; margin-left: 2px; } .lens-all.on { background: var(--olive-deep); border-color: var(--olive-deep); color: #fff; } .lens-all.on small { color: rgba(255,255,255,.75); }
+#fn-legend { gap: 4px 16px; padding: 0; flex-wrap: nowrap; } .fl { font-size: 12.5px; white-space: nowrap; } .fl small { font-size: 11px; }
+.rb { padding: 7px 2px 6px; border-radius: 8px; font-size: 10.5px; transition: background .12s; } .rb svg { width: 20px; height: 20px; }
+.insp-h { font: 600 11px/1 var(--sans); letter-spacing: .06em; text-transform: uppercase; color: var(--ink-3); margin: 0 0 12px; }
+.insp-kind { font-size: 12px; color: var(--ink-3); margin-bottom: 3px; }
+.insp-sel > h3, .bedcard > h3, .ws-inspector .card.proposal.concept > h3 { font: 400 23px/1.15 var(--display); letter-spacing: -.01em; margin: 0 0 4px; display: block; }
+.insp-sel.none { margin-bottom: 12px; }
+.layers { margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--line); }
+.layer { margin-bottom: 14px; } .layer-h { font: 600 12.5px var(--sans); padding: 3px 0 5px; align-items: center; }
+.eye { margin-left: auto; width: 24px; height: 22px; display: inline-grid; place-items: center; border-radius: 6px; color: var(--ink-2); flex: none; } .eye svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 1.5; }
+button.eye:hover { background: var(--paper-2); } .eye.off { color: var(--ink-3); opacity: .45; }
+.lrow { font-size: 13px; padding: 6px 8px; border-top-color: var(--line); } .lrow.tog.off .ll { color: var(--ink-3); } .lrow b { font-weight: 500; }
+.layers .beds { border-top: 0; margin: 0; } .layers .beds .bedrow { display: flex; padding: 6px 8px; margin: 0 -8px; border-bottom: 0; border-top: 1px solid var(--line); }
+.layers .bedrow .fns { display: inline-flex; gap: 3px; flex: none; }
+.layer.record { border-top: 1px solid var(--line); padding-top: 8px; margin-bottom: 0; } .layer-h.link { font-weight: 500; }
+.sw.np { border: 1px solid var(--line-2); border-radius: 2px; background: repeating-linear-gradient(-45deg, rgba(39,36,31,.34) 0 1px, transparent 1px 4px); }
+.sw.dimn { border: 0; border-radius: 0; background: none; height: 7px; border-bottom: 1.5px solid var(--ink-2); box-shadow: inset 1.5px 0 0 var(--ink-2), inset -1.5px 0 0 var(--ink-2); }
+.sw.plants { border-radius: 50%; border-color: var(--olive-deep); background: var(--olive-soft); }
+.canvas-foot .sw.np { vertical-align: -2px; margin-right: 6px; } .canvas-foot .fsw { margin-right: 6px; } .canvas-foot button.link { margin-left: auto; }
+.ws-zoom .zv { min-width: 50px; text-align: center; font: 12px/1 var(--mono); color: var(--ink-2); padding: 0 4px; align-self: center; border-left: 1px solid var(--line); }
+.canvas-hint.ask { pointer-events: auto; color: var(--caramel-ink); background: var(--caramel-soft); border-color: transparent; } .canvas-hint.ask .link { color: var(--ink); margin-left: 6px; }
+.panel-h { font: 400 21px/1.15 var(--display); letter-spacing: -.01em; margin: 0 0 4px; padding-right: 30px; } .panel-sub { font-size: 12.5px; color: var(--ink-3); margin: 0 0 12px; }
+#brief-left { display: block; margin: 0; padding: 0; border: 0; }
+.ws-inspector .cand .mini { border: 1px solid var(--line); }
+.ws-inspector .card.proposal .insp-actions { margin-top: 12px; }
+
+/* Compose: one bed read as function → selection → arrangement */
+#brief-right .card.bedcard { background: none; border: 0; border-radius: 0; padding: 0; }
+.chain { list-style: none; margin: 16px 0 0; padding: 0; }
+.chain .step { position: relative; padding: 0 0 20px 36px; }
+.chain .step::before { content: ""; position: absolute; left: 11.5px; top: 28px; bottom: 4px; width: 1px; background: var(--line-2); }
+.chain .step:last-child { padding-bottom: 4px; } .chain .step:last-child::before { display: none; }
+.bedcard .chain h4.sub { font: 600 13.5px/24px var(--sans); margin: 0 0 6px; padding: 0; border: 0; display: flex; align-items: baseline; gap: 8px; } .bedcard .chain h4.sub .faint { font-weight: 400; font-size: 12px; }
+.chain h4.sub .n { position: absolute; left: 0; top: 0; width: 24px; height: 24px; border-radius: 50%; background: var(--olive-deep); color: #fff; font: 600 12px/24px var(--sans); text-align: center; }
+.chain .bfn { padding: 4px 0; font-size: 13.5px; } .chain select[data-addbedfn] { font-size: 12.5px; padding: 4px 8px; margin-top: 6px; max-width: 100%; }
+.chain .bconds { margin-top: 12px; padding-top: 10px; border-top: 1px solid var(--line); gap: 5px 14px; } .chain .bc { font-size: 12.5px; }
+.chain .picks { margin: 0 0 4px; display: grid; gap: 4px; } .chain .picks .chip { display: grid; grid-template-columns: 20px minmax(0, 1fr); column-gap: 8px; row-gap: 0; align-items: center; margin: 0; border-radius: 10px; font-size: 13.5px; padding: 6px 10px 6px 8px; } .chain .picks .chip svg { width: 20px; height: 20px; grid-row: 1 / 3; } .chain .picks .chip small { grid-column: 2; font-size: 11px; }
+.step-note { font-size: 12px; line-height: 1.45; color: var(--ink-3); margin: 6px 0 4px; }
+.chain details.cands-list { margin: 4px 0 0; border-top: 1px solid var(--line); } .chain details.cands-list > summary { font-size: 12.5px; padding: 7px 0; color: var(--ink-2); }
+.chain .cand-row { grid-template-columns: 68px minmax(0, 1fr); font-size: 13px; }
+.chain .arr { font-size: 13.5px; padding: 0 0 10px 12px; } .chain .arr > .faint { font-size: 12px; line-height: 1.45; }
+.figs { display: flex; flex-wrap: wrap; gap: 4px 18px; margin: 8px 0 6px; } .fig span { display: block; font-size: 11px; color: var(--ink-3); } .fig b { font: 500 15px/1.3 var(--sans); font-variant-numeric: tabular-nums; } .fig b small { font-weight: 400; font-size: 11.5px; color: var(--ink-3); }
+.evalrow { display: grid; grid-template-columns: 68px minmax(0, 1fr); gap: 10px; align-items: start; font-size: 12.5px; line-height: 1.45; margin: 8px 0 6px; } .evalrow .fit { margin-top: 1px; }
+.chain .picks .chip { position: relative; padding-right: 44px; } .chip .cnt { position: absolute; right: 10px; top: 50%; transform: translateY(-50%); font: 500 13px var(--sans); font-variant-numeric: tabular-nums; color: var(--olive-deep); }
+.bedcard .chain .ops { display: flex; flex-wrap: wrap; gap: 4px 14px; margin: 2px 0 0; }
+.bedcard .chain .op { background: none; padding: 0; border-radius: 0; font-size: 12px; color: var(--ink-2); display: inline-flex; align-items: center; gap: 6px; opacity: 1; }
+.bedcard .chain .op::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--olive-deep); } .bedcard .chain .op.off { color: var(--ink-3); } .bedcard .chain .op.off::before { background: none; border: 1px solid var(--ink-3); }
+#compose-beds .bedrow { display: flex; }
+
+/* mode changes: the canvas stays, the tools around it change */
+@keyframes ws-enter { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+@keyframes ws-fade { from { opacity: 0; } to { opacity: 1; } }
+.ws.enter { animation: ws-enter .42s var(--ease) both; }
+.ws.swap .ws-rail, .ws.swap .ws-inspector, .ws.swap .ws-head > *, .ws.swap .ws-status > * { animation: ws-fade .22s ease-out both; }
+
+/* ---------------------------------------------------------------- desktop: fixed-viewport workspace */
+@media (min-width: 1081px) {
+  body[data-stage="welcome"] #s-site, body[data-stage="welcome"] #s-intent, body[data-stage="welcome"] #s-gate, body[data-stage="site"] #s-intent, body[data-stage="site"] #s-gate, body[data-stage="intent"] #s-site, body[data-stage="intent"] #s-gate { display: none; }
+  body[data-stage="site"], body[data-stage="intent"] { --nav-h: 52px; }
+  body[data-stage="site"] #top, body[data-stage="intent"] #top { height: 52px; padding: 0 20px; background: var(--paper); border-bottom-color: var(--line); backdrop-filter: none; }
+  body[data-stage="site"] #top .wordmark small, body[data-stage="intent"] #top .wordmark small { display: none; }
+  body[data-stage="site"] #top .wordmark, body[data-stage="intent"] #top .wordmark { font-size: 18px; }
+  body[data-stage="intent"] { overflow: hidden; }
+  #s-intent { padding: 0; min-height: 0; }
+  body[data-stage="intent"] #s-intent { position: fixed; left: 0; right: 0; bottom: 0; top: var(--nav-h, 54px); z-index: 6; background: var(--ivory); }
+  .ws { grid-template-columns: var(--rail-w) minmax(0, 1fr) var(--insp-w); grid-template-rows: var(--bar-h) minmax(0, 1fr) var(--status-h); border-top: 0; }
+  .ws-head { gap: 12px; padding: 0 16px 0 20px; } .ws-head .ws-lens { margin-left: auto; }
+  .ws-rail { padding: 10px 6px; }
+  .ws-canvas { background: var(--desk); } .ws-canvas #site-canvas-body, .ws-canvas #compose-canvas-body { position: absolute; inset: 0; height: auto; min-height: 0; background: var(--desk); }
+  .ws-inspector { background: var(--paper); padding: 18px 18px 28px; }
+  .ws-status { padding: 0 16px 0 20px; gap: 12px; } .ws-status .btn { padding: 9px 18px; font-size: 14px; } .ws-status .btn:not(.primary) { padding: 8px 14px; font-size: 13px; }
+  .ws-canvas .canvas-hint { top: 14px; font-size: 12.5px; border-radius: 999px; padding: 6px 14px; background: var(--paper); box-shadow: var(--shadow-soft); }
+  .ws-say { width: min(560px, calc(100% - 300px)); }
+  .ws-panel { width: 400px; left: 14px; top: 14px; bottom: 80px; padding: 16px 18px; }
+  #cws-panel .brief-col { display: none; } #cws-panel.goals [data-col="goals"], #cws-panel.functions [data-col="functions"], #cws-panel.rules [data-col="rules"] { display: block; }
+  #cws-panel .vrow { grid-template-columns: minmax(0, 1fr); gap: 7px; padding: 11px 0; } #cws-panel .seg { justify-self: start; }
+  #cws-panel .fn { align-items: start; font-size: 13.5px; } #cws-panel .fn .fsw { margin-top: 4px; }
+}
+@media (min-width: 1081px) and (max-width: 1340px) {
+  :root { --insp-w: 320px; }
+  .lens .ll { display: none; } .fl small { display: none; }
+}
+@media (max-width: 1080px) {
+  .ws-lens { flex-wrap: wrap; } #fn-legend { flex-wrap: wrap; } .ws-compose .ws-status { justify-content: flex-start; }
+}
+@media (prefers-reduced-motion: reduce) { .ws.enter, .ws.swap * { animation: none !important; } }
+@media (max-width: 760px) {
+  #stagenav li + li::before { width: 8px; margin: 0 1px; } #stagenav button { padding: 4px; gap: 6px; } #stagenav button.on { padding-right: 10px; }
+  #top { overflow: hidden; } #top .wordmark { min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+  .ws-head { min-width: 0; } .ws-lens, #fn-legend { max-width: 100%; overflow-x: auto; flex-wrap: nowrap; }
+}
