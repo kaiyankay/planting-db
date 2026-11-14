@@ -1,6 +1,6 @@
 # Spatial proposal tests — 2026-11-14
 
-`tools/spatial_tests.py` against http://127.0.0.1:8770 (headless Chrome, SwiftShader WebGL). **156/156 pass.**
+`tools/spatial_tests.py` against http://localhost:8766 (headless Chrome, SwiftShader WebGL). **156/156 pass.**
 
 | test | result | detail |
 |---|---|---|
@@ -16,7 +16,7 @@
 | T·C3 text-only "right side" → direction scope with a polygon; reduce_density + preserve screen | pass | "right side" read relative to the plan as drawn (north up); the region is the outer third of the bed on that side · amount 0.25 |
 | T·C4 "here" with a drawn selection → selection scope | pass | "here" → the drawn selection |
 | T·C5 contradictory request is refused, not silently applied | pass | filling the open zone with tall plants contradicts the open-space constraint; no change is made without an explicit override |
-| T·C6 "move the taller plants away from the tree" → move_away with a resolved feature | pass | {"type":"move_away","filter":"taller","feature_id":"tree-t8w1","phrase":"tree","resolved":true} |
+| T·C6 "move the taller plants away from the tree" → move_away with a resolved feature | pass | {"type":"move_away","filter":"taller","feature_id":"tree-b8vw1","phrase":"tree","resolved":true} |
 | T·C7 overclaim classified | pass |  |
 | T·D1 every plant object has a stable id, a species from the database, a position inside the accepted bed | pass | 31 plants |
 | T·D2 no plant inside the no-plant zone, none under the locked tree | pass |  |

@@ -1,6 +1,6 @@
 # Explorer tests — 2026-11-14
 
-`tools/explorer_tests.py` on `brain/data/explorer.json` (2026-11-13, tools/build_explorer.py) against kg.json (2026-11-13), xyz.json (2026-11-13), relations.json (2026-11-02) and plants/*.json. **23/23 pass.** (no browser run; add `--browser`)
+`tools/explorer_tests.py` on `brain/data/explorer.json` (2026-11-13, tools/build_explorer.py) against kg.json (2026-11-13), xyz.json (2026-11-13), relations.json (2026-11-02) and plants/*.json. **29/29 pass.** Browser: headless Chrome at http://localhost:8766/brain/explorer/.
 
 | test | result | detail |
 |---|---|---|
@@ -27,6 +27,12 @@
 | H2 not-recorded cells are absent from the file (the interface says 'not recorded'; nothing is written for them) | pass | 40 not recorded |
 | I1 the interface names no plant, function or concept id | pass | [] |
 | J1 statistics match the file | pass | {"species": 10, "functions": 5, "function_links": 50, "attribute_cells": 230, "relations": 41, "pairs": 45, "claims": 501} |
+| K1 Screen focus: graph shows the linked species, unknown ghosts and required traits; matrix column and table columns marked | pass | species 5 · ghosts 5 · concepts 4 · column Screen · required columns ['Height bands', 'Habit', 'Leaf retention'] · first row Acer palmatum |
+| K2 matrix cell → evidence: inspector shows the use claim, the rule and the requirement check; the graph line is selected | pass | 152383 bytes |
+| K3 unknown cell → honest 'not established': verdict, missing requirements, contrary claims | pass |  |
+| K4 A/B compare: four sections; the pair's two live direct records and the retired history are listed | pass | [('1', 'Shared attributes '), ('2', 'Direct recorded relationships '), ('3', 'Potential spatial complementarity '), ('4', 'Evidence and unknowns')] |
+| K5 A/B compare with no record: the absence is stated, not filled | pass |  |
+| K6 pair in the graph: both species, a typed relation line, no line from shared traits alone | pass |  |
 
 ## Counts
 

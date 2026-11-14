@@ -11,12 +11,15 @@
 <link rel="stylesheet" href="./css/journey.css">
 <link rel="stylesheet" href="./css/workspace.css">
 <link rel="stylesheet" href="./css/studio.css">
+<link rel="stylesheet" href="../platform/css/platform.css">
+<link rel="stylesheet" href="./css/platform-studio.css">
 <script type="importmap">{ "imports": { "three": "../brain/vendor/three/three.module.js", "three/addons/": "../brain/vendor/three/examples/jsm/" } }</script>
 </head>
 <body data-stage="welcome">
 
 <nav id="top" aria-label="Design stages">
   <a class="wordmark" href="#s-welcome" data-stage-link="welcome">Planting Intelligence<small>Botanical design studio</small></a>
+  <span id="pinav"></span>
   <ol id="stagenav"></ol>
   <div class="right">
     <span id="interp" class="tag offline" title="how language is interpreted on this page">offline rules</span>
@@ -93,7 +96,7 @@
     </div>
   </section>
 </main>
-<footer class="site-foot"><div class="wrap"><span>Planting Intelligence · ARCH 540</span><a href="../brain/explorer/">Plant Knowledge Explorer (Phase 1)</a><a href="./classic.html">Classic workspace</a><a href="./tests.html">Engine tests</a><span id="foot-kb"></span></div></footer>
+<footer class="site-foot"><div class="wrap"><span>Planting Intelligence · ARCH 540</span><span id="foot-pi"></span><a href="./classic.html">Classic workspace</a><a href="./tests.html">Engine tests</a><span id="foot-kb"></span></div></footer>
 
 <!-- 4 · Grow: the same workspace shell and the same plan; the garden is the subject. The one SVG moves here from the site canvas -->
 <div id="stage" hidden>

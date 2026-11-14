@@ -1,6 +1,6 @@
 ---
 name: Planting Intelligence
-description: A botanical design studio — describe a site, shape it, compose the planting, grow the garden.
+description: A plant knowledge and design platform — a botanical design studio, a plant atlas, a knowledge explorer and the way knowledge is contributed, as one product.
 colors:
   ivory: "#f7f3ea"
   ivory-2: "#efe9db"
@@ -23,6 +23,15 @@ colors:
   desk: "#f1ecdf"
   line: "rgba(39,36,31,.12)"
   line-2: "rgba(39,36,31,.26)"
+  night: "#01020a"
+  night-glass: "rgba(5,8,20,.78)"
+  night-line: "rgba(190,205,255,.12)"
+  night-ink: "#d3d9e8"
+  night-ink-2: "#9aa3b8"
+  night-ink-3: "#6b7388"
+  night-warm: "#f4ead0"
+  night-warm-soft: "rgba(255,241,194,.16)"
+  night-warm-line: "rgba(244,234,208,.5)"
 typography:
   display:
     fontFamily: "Fraunces, Iowan Old Style, Palatino Linotype, Georgia, serif"
@@ -63,6 +72,33 @@ typography:
     fontFamily: "-apple-system, Helvetica Neue, Segoe UI, Roboto, sans-serif"
     fontSize: "10px"
     fontWeight: 400
+  page-title:
+    fontFamily: "Fraunces, Iowan Old Style, Palatino Linotype, Georgia, serif"
+    fontSize: "clamp(46px, 5.8vw, 84px)"
+    fontWeight: 400
+    lineHeight: 1
+    letterSpacing: "-0.025em"
+  species-title:
+    fontFamily: "Fraunces, Iowan Old Style, Palatino Linotype, Georgia, serif"
+    fontSize: "clamp(40px, 4.7vw, 68px)"
+    fontWeight: 400
+    lineHeight: 1.02
+    letterSpacing: "-0.02em"
+  section-title:
+    fontFamily: "Fraunces, Iowan Old Style, Georgia, serif"
+    fontSize: "27px"
+    fontWeight: 400
+    lineHeight: 1.12
+  card-title:
+    fontFamily: "Fraunces, Iowan Old Style, Georgia, serif"
+    fontSize: "21px"
+    fontWeight: 400
+    lineHeight: 1.15
+  lede:
+    fontFamily: "-apple-system, Helvetica Neue, Segoe UI, Roboto, sans-serif"
+    fontSize: "18px"
+    fontWeight: 400
+    lineHeight: 1.5
 rounded:
   mark: "2px"
   xs: "4px"
@@ -112,6 +148,20 @@ components:
     backgroundColor: "{colors.paper}"
     rounded: "{rounded.lg}"
     padding: "16px"
+  nav-link:
+    backgroundColor: "transparent"
+    textColor: "{colors.ink-2}"
+    typography: "{typography.action}"
+    padding: "0 12px"
+  nav-link-current:
+    textColor: "{colors.ink}"
+  plant-figure:
+    backgroundColor: "{colors.paper-2}"
+    rounded: "{rounded.mark}"
+  plant-card-compact:
+    backgroundColor: "{colors.paper}"
+    rounded: "{rounded.card}"
+    padding: "8px"
 ---
 
 ## Overview
@@ -123,6 +173,19 @@ the page; tools, layers and an inspector sit around it), and Grow is the same wo
 
 Imagine tells the story. Shape models the site. Compose assigns spatial functions and plants. Grow shows the result. They
 share one site drawing, one navigation and one set of controls; they do not share a layout.
+
+Since 2026-11-14 the studio is one of four destinations of a platform: **Design · Plants · Explore · Contribute**. The same
+paper, ink, type and vocabulary run through all of them, and each keeps the layout its work needs:
+
+| Destination | Register | Layout |
+|---|---|---|
+| Design | the studio above | hero, then the fixed drawing workspace |
+| Plants | a botanical atlas | editorial: a large Fraunces title, a five-column grid of photographs, long reading profiles |
+| Explore | inquiry | the Explorer's four panes (graph, matrix, table, inspector); the Neural view keeps its night sky |
+| Contribute, How it works | a plain account | the same title-left, content-right sections as a plant profile |
+
+What makes it one product is not a shared page template but four shared things: the platform bar, the tags, the plant card,
+and the fact that every page reads one knowledge snapshot and says which.
 
 ## Colors
 
@@ -165,8 +228,13 @@ Object handles on the plan are small white squares with an ink edge; mid-edge ha
 
 ## Components
 
-- **Stage stepper** (top bar): Imagine · Shape · Compose · Grow, numbered; reached stages are clickable, the current one is a
-  paper pill. It is the only global navigation.
+- **Platform bar** (every page, 52 px): the wordmark, then Design · Plants · Explore · Contribute as plain text links. The
+  current one is ink with a 2 px olive line on the bar's lower edge; nothing is filled. To the right: the way back to a design
+  in progress (an olive-edged pill, "Back to Compose · East bed", shown only when there is one), How it works, and the date of
+  the knowledge snapshot in mono. In the Neural view the bar takes the night tokens and nothing else changes.
+- **Stage stepper** (Design only, in the same bar): Imagine · Shape · Compose · Grow, numbered; reached stages are clickable,
+  the current one is a paper pill. Platform navigation is text; stages are numbered pills. Never draw one as the other.
+- **Explore switch**: Explorer | Neural view, a small paper-on-paper-2 segmented pair beside the navigation.
 - **Tool rail**: icon + 10.5 px label; the active tool is olive; panels opened from the rail are marked the same way.
 - **Inspector**: shows only what is selected. Kind (small caps) → name (Fraunces) → provenance tags → fields → "why" →
   actions. With nothing selected it shows the model itself.
@@ -186,6 +254,22 @@ Object handles on the plan are small white squares with an ink edge; mid-edge ha
 - **Steps** of a bed in Compose are an accordion: one open, the others a one-line summary.
 - **Requirements**: one row per requirement with its status as a word — met, uncertain, not met, or *estimate* where the
   engine measures without a pass mark. The page never turns an estimate into a verdict.
+- **Plant card** (Plants): a 4 : 5 photograph with square corners, the scientific name in Fraunces italic, the common name,
+  growth form and origin in small ink, "Read more" with an arrow. No box, no border, no shadow: the photograph is the card.
+  A species without a licensed photograph shows the studio's plan symbol on paper-2 and says that it is a symbol.
+- **Compact plant card** (Explorer inspector, Compose and Grow evidence, Neural card): thumbnail, scientific name, one line,
+  and the ways onward as text links (Plant profile · Knowledge graph). It is the only bordered card the platform adds.
+- **Plant profile**: photograph left with its credit in mono; name, identity, six at-a-glance fields and the actions right.
+  Below, sections with the title in the left column (Fraunces 27 px) and rows separated by hairlines in the right column.
+  A row is: field name · what is recorded · where it comes from (claims, sources, tags). A field nobody recorded stays in
+  the list, in ink-3, as "not recorded".
+- **Tags** are the same on every surface, in mono: *status* documented (solid olive edge) · derived (dashed olive) · candidate
+  (dashed caramel) · unknown (dotted); *verification* verified (olive-soft fill) · unverified (caramel-soft fill); *AI check*
+  supported by source · partially supported · conflicting evidence · not assessed, always worded as an assessment; *conflict*
+  rust-soft. Who does a step is tagged the same way: person · rule-based · from records · AI-assessed · you.
+- **Considered species** (Compose, step 2, "From the Plant Library"): one row per species the user asked for, with the
+  bed's own check as a word (in the mix · qualifies · not planted) and the reason in a sentence. Only a qualifying species
+  gets the dashed "+ Add to this bed" control every other qualifying species has.
 
 ### The site drawing
 
@@ -219,3 +303,9 @@ Nothing is drawn that the model does not hold: no terrain, no buildings, no shad
 - Don't animate for decoration: the hero plants sway; the workspace only fades between modes (≤ 220 ms) and respects
   reduced motion.
 - Don't restyle the Imagine hero to match the workspace.
+- Do put a plant fact on a page only by reading it from the knowledge snapshot; photographs and their credits are the one
+  presentation asset kept beside it (`platform/data/images.json`).
+- Do say where a number comes from: the snapshot date sits in the bar of every page and in each page's masthead.
+- Don't give Plants, Contribute or How it works stat tiles with icons, tinted cards or a second accent. Figures are set in
+  Fraunces over a hairline, in a row, with their label in small ink.
+- Don't call anything AI that a rule or a person did. "AI-assessed" is reserved for the source check.

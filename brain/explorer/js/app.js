@@ -3,6 +3,8 @@
 // same projection (brain/data/explorer.json, tools/build_explorer.py) and the same state S; a click anywhere changes S and every
 // view re-renders from it.  Nothing about the plants is written here.  The state lives in the URL hash, so a view can be shared.
 import { load } from './model.js';
+import * as PI from '../../../platform/js/platform.js';   // platform bar, cross-module links
+import * as PC from '../../../platform/js/plantcard.js';   // the shared plant card
 
 const $ = s => document.querySelector(s);
 const esc = s => String(s ?? '').replace(/[&<>"]/g, ch => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[ch]));
@@ -15,6 +17,7 @@ const S = { M: null, focus: null, a: null, b: null, inspect: null, tab: 'evidenc
     const url = new URLSearchParams(location.search).get('data') || '../data/explorer.json';
     S.M = await load(url);
     S.groups = new Set(S.M.groups.map(g => g.id));
+    PI.mountTop($('#pitop'), { active: 'explore', sub: PI.exploreSwitch('explorer'), snapshot: S.M.d }); PI.loadImages().then(i => { S.imgs = i; renderInspector(); });
     readHash(); initUi(); update();
     window.addEventListener('hashchange', () => { readHash(); update(); });
     window.explorer = { S, M: S.M, update, setFocus, setInspect, setAB, act, renderTable, graphFor: () => S.M.graphFor(S.focus, S.a, S.b) };   // for tests and the console
@@ -326,7 +329,8 @@ function relationHtml(r, full = false) {
 }
 function speciesHtml(s) {
   const M = S.M; const links = M.linksOf(s.id); const rels = M.relationsOf(s.id), retired = M.relationsOf(s.id, false).filter(r => !r.live);
-  let h = `<div class="kicker">species · ${esc(s.growth_form_label || '')} ${esc(s.growth_form_status || '')}</div><h2 class="title"><i class="sci">${esc(s.scientific_name)}</i><small>${esc((s.common_names || []).join(' · '))} · ${esc(s.family)} · ${esc(human(s.origin_status))} · ${esc(s.kpu_plant_type)} · ${s.claims.live} live claims (${s.claims.verified} verified, ${s.claims.retired} retired)</small></h2>`;
+  let h = `<div class="kicker">species · ${esc(s.growth_form_label || '')} ${esc(s.growth_form_status || '')}</div><h2 class="title"><a class="sp" href="${esc(PI.links.profile(s.id))}" title="open the Plant Profile in the Plant Library"><i class="sci">${esc(s.scientific_name)}</i></a><small>${esc((s.common_names || []).join(' · '))} · ${esc(s.family)} · ${esc(human(s.origin_status))} · ${esc(s.kpu_plant_type)} · ${s.claims.live} live claims (${s.claims.verified} verified, ${s.claims.retired} retired)</small></h2>`;
+  h += PC.miniHtml(M.d, s.id, S.imgs, { here: 'explorer', extra: `<a href="${esc(PI.links.neural(s.id))}">Neural view</a>` });
   h += `<p class="small"><span class="link" data-ab="a" data-id="${esc(s.id)}">${S.a === s.id ? 'A ✓' : 'set as A'}</span> · <span class="link" data-ab="b" data-id="${esc(s.id)}">${S.b === s.id ? 'B ✓' : 'set as B'}</span></p>`;
   h += `<h3>Spatial functions <small>${links.filter(l => l.drawn).length} linked · ${links.filter(l => !l.drawn).length} unknown</small></h3>` + links.map(l => `<div class="row" data-inspect="link=${esc(l.id)}"><div class="b">${esc(M.name(l.function))} ${tag(l.status)} ${tag(l.verification)} ${l.conflict ? tag('conflict') : ''}<div class="meta">${l.drawn ? (l.via_use_labels.length ? `use: ${esc(l.via_use_labels.join(', '))} (${esc(l.use_sources.join(', '))})` : 'inferred from traits (KG-R4), no source states this use') : esc(l.verdict)}</div></div></div>`).join('');
   h += `<h3>Growth form <small>M29</small></h3><p class="small">${esc(s.growth_form_label || 'unknown')} (${esc(s.growth_form_status || '')}) — read from the sources: ${Object.entries(s.growth_form_evidence || {}).map(([k, v]) => `<b>${esc(k)}</b> ${esc(v)}`).join(' · ') || 'no evidence listed'}</p>`;

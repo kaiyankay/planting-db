@@ -1,6 +1,6 @@
 # Design workspace tests — 2026-11-14
 
-`tools/design_tests.py` against http://127.0.0.1:8770 (headless Chrome). **199/199 pass.**
+`tools/design_tests.py` against http://localhost:8770 (headless Chrome). **199/199 pass.**
 
 | test | result | detail |
 |---|---|---|
@@ -16,7 +16,7 @@
 | T·C3 text-only "right side" → direction scope with a polygon; reduce_density + preserve screen | pass | "right side" read relative to the plan as drawn (north up); the region is the outer third of the bed on that side · amount 0.25 |
 | T·C4 "here" with a drawn selection → selection scope | pass | "here" → the drawn selection |
 | T·C5 contradictory request is refused, not silently applied | pass | filling the open zone with tall plants contradicts the open-space constraint; no change is made without an explicit override |
-| T·C6 "move the taller plants away from the tree" → move_away with a resolved feature | pass | {"type":"move_away","filter":"taller","feature_id":"tree-5lv01","phrase":"tree","resolved":true} |
+| T·C6 "move the taller plants away from the tree" → move_away with a resolved feature | pass | {"type":"move_away","filter":"taller","feature_id":"tree-57i1","phrase":"tree","resolved":true} |
 | T·C7 overclaim classified | pass |  |
 | T·D1 every plant object has a stable id, a species from the database, a position inside the accepted bed | pass | 31 plants |
 | T·D2 no plant inside the no-plant zone, none under the locked tree | pass |  |
@@ -161,13 +161,13 @@
 | J5 generated: plant objects with ids, schedule reconciles, operators named, no geometry error | pass | 38 plants · ['along_edge', 'fill_drift', 'repeat_accent'] · edge [{'zone': 'zone-screen-north-edge-bed-1', 'bed_id': 'bed-1', 'label': 'Screen along the north edge (North bed)', 'edge_length_m': 6, 'covered_m': 4.39, 'screen_row_cover_m': 4.39, 'continuity': 0.73, 'gaps': [{'edge': 0, 'from_m': 3.67, 'to_m': 5.28, 'length_m': 1.61}], 'gap_total_m': 1.61, 'target_height_m': 1.8, 'target_basis': 'heuristic default — no target height stated', 'year_round_required': False, 'year_round_basis': 'not s |
 | J5b 2D plan draws one symbol group per plant object | pass | 38 symbols for 38 plants |
 | J5c every bed of the layout is planted in the one version (multi-bed engine) | pass | [["North bed", 10], ["East bed", 19], ["West bed", 6], ["Tree island", 3]] |
-| J6 3D garden (three.js) holds one object per plant of the same version | pass | garden {'plants': 38, 'meshes': 526} · model 38 |
+| J6 3D garden (three.js) holds one object per plant of the same version | pass | garden {'plants': 38, 'meshes': 524} · model 38 |
 | J7 lasso + language: scoped command (selection, reduce_density, preserve screen), preview diff, nothing outside moved | pass | targets 24 · removed 5 |
 | J8 applied: new version with fewer plants = removed ids | pass | 33 plants, 5 removed |
-| J8b 3D garden re-synced after apply: plant count = applied version | pass | garden {'plants': 33, 'meshes': 467} · model 33 |
+| J8b 3D garden re-synced after apply: plant count = applied version | pass | garden {'plants': 33, 'meshes': 465} · model 33 |
 | J9/10 undo returns to the generated version; redo returns to the edit | pass | undo 38 · redo 33 |
 | J11 text-only reference 'move the taller plants away from the tree' resolved to a typed move_away command | pass | {"diff": {"added": [], "removed": [], "changed": [], "unchanged": ["plant-001", "plant-002", "plant-003", "plant-004", "plant-005", "plant-006", "plant-007", "plant-008", "plant-009", "plant-010", "plant-011", "plant-012", "plant-013", "plant-014", "plant-015", "plant-017", "plant-018", "plant-019", |
-| J12 export: SVG plant count = model = schedule total | pass | {"name": "12 export", "stage": "garden", "files": ["model.json", "plan.svg", "schedule.csv", "assumptions.md"], "svg_plants": 33, "model_plants": 33, "csv_total": 33, "garden": {"plants": 33, "meshes": 467}} |
+| J12 export: SVG plant count = model = schedule total | pass | {"name": "12 export", "stage": "garden", "files": ["model.json", "plan.svg", "schedule.csv", "assumptions.md"], "svg_plants": 33, "model_plants": 33, "csv_total": 33, "garden": {"plants": 33, "meshes": 465}} |
 | F1 Site page: every condition keeps its selector; wind and irrigation say they are recorded only, clay says it cannot be assessed | pass | ["soil_type", "wind", "irrigation"] |
 | F2 start: the north bed carries Screen and the first design plants a screen row | pass | {"North bed": ["z:screen@north-edge", "z:ground_cover@bed-interior"], "East bed": ["z:ground_cover@east-edge"], "West bed": ["z:ground_cover@west-edge"]} |
 | F3 removing the site-wide Screen removes it from the beds that carried it and marks the design stale | pass | {"North bed": ["z:ground_cover@bed-interior"], "East bed": ["z:ground_cover@east-edge"], "West bed": ["z:ground_cover@west-edge"]} |
@@ -200,6 +200,6 @@
 | W8 Demo B: no dimensions → a concept sketch, not to scale; the tree waits beside the plan, no size is pre-filled, Compose is closed | pass | {"mark": "Sketch from your words \u2014 not to scale, no sizes", "tray": 1, "size_fields": ["", ""]} |
 | W9 the user places the tree and gives the size: the same workspace now holds a scaled model with layout options, the tree where it was placed | pass | [["7 m", "5 m"], 3, [{"kind": "existing-tree", "status": "user-drawn", "at": [1.94, 3.4]}]] |
 | W10 Demo B continues to Compose and Grow: Confirm model accepts the suggested beds as drawn, Compose opens on the function plan, Generate places exactly what Compose showed | pass | 0 suggested → 89 plants |
-| S1 design server reachable; designs saved to designs/ | pass | llm: ANTHROPIC_API_KEY not set — offline rule parser in use · designs ['composition-demo', 'demo-a', 'demo-b', 'demo-backyard', 'proj-1050', 'proj-10wc0', 'proj-11r30', 'proj-13x0', 'proj-13xa0', 'proj-14870', 'proj-15b50', 'proj-166r0', 'proj-16pq0', 'proj-171n0', 'proj-17jw0', 'proj-17y40', 'proj-18zl0', 'proj-1c4p0', 'proj-1c6d0', 'proj-1clp0', 'proj-1clp1', 'proj-1clr0', 'proj-1dlv0', 'proj-1efj0', 'proj-1f2q0', 'proj-1fb60', 'proj-1g300', 'proj-1geo0', 'proj-1gp00', 'proj-1icy0', 'proj-1ivr |
-| S2 saved project: versions chain by parent id; current version's schedule equals its plant objects | pass | studiob: 1 versions · current v-75wp9 · 89 plants |
+| S1 design server reachable; designs saved to designs/ | pass | llm: ANTHROPIC_API_KEY not set — offline rule parser in use · designs ['demo-a', 'demo-b', 'demo-backyard', 'proj-1050', 'proj-10wc0', 'proj-11r30', 'proj-13x0', 'proj-13xa0', 'proj-14870', 'proj-15b50', 'proj-166r0', 'proj-16pq0', 'proj-171n0', 'proj-17bg0', 'proj-17jw0', 'proj-17y40', 'proj-18zl0', 'proj-1c4p0', 'proj-1c6d0', 'proj-1clp0', 'proj-1clp1', 'proj-1clr0', 'proj-1dlv0', 'proj-1efj0', 'proj-1f2q0', 'proj-1fb60', 'proj-1g2l0', 'proj-1g300', 'proj-1geo0', 'proj-1gp00', 'proj-1icy0', 'p |
+| S2 saved project: versions chain by parent id; current version's schedule equals its plant objects | pass | studiob: 1 versions · current v-1lqg9 · 89 plants |
 | S3 saved project: every plant inside its bed polygon (file, not UI) | pass |  |

@@ -3,12 +3,15 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Planting Intelligence · Plant Knowledge Explorer</title>
+<title>Knowledge Explorer · Planting Intelligence</title>
 <link rel="icon" href="data:,">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..600;1,9..144,300..600&display=swap">
+<link rel="stylesheet" href="../../platform/css/platform.css">
 <style>
   :root {
-    --bg: #f7f4ec; --panel: #fdfbf6; --panel-2: #f1ede3; --ink: #2a2723; --ink-2: #5f5a52; --ink-3: #9a948a; --line: rgba(42,39,35,.12); --line-2: rgba(42,39,35,.22);
-    --olive: #5f7f62; --olive-deep: #4a6650; --olive-soft: #dfe7dc; --sage: #8a9a80; --amber: #c08a2e; --amber-soft: #f3e4c6; --rust: #b4553a; --rust-soft: #f1dcd5; --violet: #7c6ea8;
+    --bg: #f7f3ea; --panel: #fffdf8; --panel-2: #f3eee3; --ink: #27241f; --ink-2: #5c5648; --ink-3: #716b5c; --line: rgba(39,36,31,.12); --line-2: rgba(39,36,31,.26);
+    --olive: #5b7a57; --olive-deep: #3b5538; --olive-soft: #dfe6d7; --sage: #8c9c82; --amber: #b7894d; --amber-soft: #f1e3cb; --rust: #b04f36; --rust-soft: #f2dcd4; --violet: #7a6aa3;
     --sans: -apple-system, "Helvetica Neue", "Segoe UI", Inter, Roboto, sans-serif; --mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
   }
   * { box-sizing: border-box; }
@@ -35,7 +38,8 @@
 
   /* ---- frame */
   #top { flex: none; display: flex; align-items: center; gap: 14px; padding: 9px 16px; border-bottom: 1px solid var(--line); background: var(--panel); }
-  #top h1 { font-size: 14px; white-space: nowrap; } #top h1 small { font: 10px var(--mono); color: var(--ink-3); letter-spacing: .12em; text-transform: uppercase; margin-left: 8px; }
+  #pitop { flex: none; } #top h1 { font: 400 19px/1 "Fraunces", "Iowan Old Style", Georgia, serif; letter-spacing: -.01em; white-space: nowrap; }
+  #ibody .pi-mini { margin: 2px 0 10px; } #ibody .pi-mini a { border: 0; } h2.title a.sp { color: inherit; border-bottom: 1px solid var(--line-2); } h2.title a.sp:hover { border-bottom-color: var(--olive-deep); }
   #searchbox { position: relative; width: 300px; } #search { width: 100%; }
   #results { position: absolute; left: 0; right: 0; top: 100%; margin-top: 3px; background: #fff; border: 1px solid var(--line); border-radius: 6px; box-shadow: 0 8px 26px rgba(42,39,35,.14); display: none; max-height: 320px; overflow: auto; z-index: 20; }
   #results.open { display: block; } #results div { padding: 5px 10px; cursor: pointer; display: flex; justify-content: space-between; gap: 8px; } #results div:hover, #results div.hi { background: var(--panel-2); } #results small { font: 10px var(--mono); color: var(--ink-3); }
@@ -110,8 +114,9 @@
 </style>
 </head>
 <body>
+<header id="pitop"></header>
 <div id="top">
-  <h1>Planting Intelligence <small>Plant Knowledge Explorer</small></h1>
+  <h1>Knowledge Explorer</h1>
   <div id="searchbox"><input id="search" placeholder="Search a plant, a trait, a spatial function… (/)" autocomplete="off" spellcheck="false"><div id="results"></div></div>
   <div id="fns"></div>
   <div id="stats"></div>

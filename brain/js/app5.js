@@ -14,6 +14,8 @@ import { loadGraph, classesFor, conceptsInText, candidateEdges } from './graph.j
 import { diagnose, srcLabel, fmtNum, interval } from './diagnosis.js';
 import { makeRetriever } from './retrieve.js';
 import { TYPE_COLOUR } from './model.js';
+import * as PI from '../../platform/js/platform.js';   // platform bar, cross-module links
+import * as PC from '../../platform/js/plantcard.js';   // the shared plant card
 
 const $ = s => document.querySelector(s);
 const esc = s => String(s ?? '').replace(/[&<>"]/g, ch => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[ch]));
@@ -45,6 +47,11 @@ function dir3(s) { const u = rnd(s, 1) * 2 - 1, t = rnd(s, 2) * Math.PI * 2; con
     S.diag = S.candEdges.length ? runDiag() : S.G.diagnosis;
     initHost(); buildGraph(); initUi();
     $('#loading').classList.add('gone');
+    // platform: the bar, the shared plant card (read from the same published snapshot), and a species named in the URL (#species=<slug>)
+    PI.mountTop($('#pitop'), { active: 'explore', sub: PI.exploreSwitch('neural'), tone: 'dark' });
+    Promise.all([PI.loadSnapshot(), PI.loadImages()]).then(([d, imgs]) => { S.snap = d; S.imgs = imgs; PI.mountTop($('#pitop'), { active: 'explore', sub: PI.exploreSwitch('neural'), tone: 'dark', snapshot: d }); if (S.selected?.kind === 'plant') select(S.selected); }).catch(() => { });
+    const focusFromHash = () => { const slug = new URLSearchParams(location.hash.slice(1)).get('species'); const n = slug && S.nodes.find(x => x.kind === 'plant' && x.id === PI.speciesId(slug)); if (n) setTimeout(() => select(n), 1400); };
+    focusFromHash(); addEventListener('hashchange', focusFromHash);
   } catch (e) { $('#err').textContent = `could not load: ${e.message}\n\nserve the planting-db root:  python3 -m http.server 8766  → http://localhost:8766/brain/`; console.error(e); }
 })();
 const allEdges = () => [...S.G.graph.edges, ...S.candEdges];
@@ -323,7 +330,7 @@ function cardPlant(n) {
   const G = S.G; const es = plantEdges(n.id); const d = S.diag.plants[n.id]; const gf = allEdges().find(e => e.type === 'classification' && e.plant === n.id); const byC = {};
   for (const e of es) for (const t of [e.target, e.place].filter(Boolean)) { const nn = S.nodes.find(x => x.id === t); if (!nn) continue; (byC[nn.cluster] = byC[nn.cluster] || new Map()); const m = byC[nn.cluster]; m.set(t, (m.get(t) || 0) + 1); }
   const vars = S.diag.variation.filter(x => x.plant === n.id), dis = S.diag.disagreement.filter(x => x.plant === n.id);
-  return `<h2><em>${esc(n.n.label)}</em></h2><div class="kicker">${esc((n.n.common || []).join(' · '))} · ${esc((n.n.origin_status || '').replace(/_/g, ' '))}</div>
+  return `<h2><em>${esc(n.n.label)}</em></h2><div class="kicker">${esc((n.n.common || []).join(' · '))} · ${esc((n.n.origin_status || '').replace(/_/g, ' '))}</div>${S.snap ? PC.miniHtml(S.snap, n.id, S.imgs) : ''}
   ${gf ? `<div class="row" data-id="${esc(gf.target)}">${dot('classification')}<div><span class="val">${esc(G.label(gf.target))}</span> ${stTag(gf.status)}<br><span class="meta">${esc(gf.text)}${gf.weak?.length ? ` <span class="warn">(${esc(gf.weak.join(', '))}: a use mention only)</span>` : ''}</span></div></div>` : ''}
   <p class="lead">${esc(d?.text || '')}</p>
   ${vars.length || dis.length ? `<p class="muted small">${vars.map(x => `↔ ${esc(x.text)}`).join('<br>')}${vars.length && dis.length ? '<br>' : ''}${dis.slice(0, 3).map(x => `≠ ${esc(x.text)}`).join('<br>')}${dis.length > 3 ? `<br>… ${dis.length - 3} more disagreements` : ''}</p>` : ''}
