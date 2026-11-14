@@ -1,0 +1,2075 @@
+{
+ "id": "ux",
+ "name": "Garden at Vancouver City Hall, 453 West 12th Avenue",
+ "created": "2026-11-14T20:56:39.980Z",
+ "schema": "planting-intelligence/design-project/0.1",
+ "knowledge_snapshot": {
+  "generated": "2026-11-13",
+  "generated_by": "tools/build_explorer.py",
+  "method": "M49",
+  "inputs": {
+   "kg_generated": "2026-11-13",
+   "xyz_generated": "2026-11-13",
+   "relations_updated": "2026-11-02",
+   "schema_version": "0.4.3",
+   "ontology_version": "0.2.0"
+  }
+ },
+ "conversation": [
+  {
+   "id": "msg-h5a02",
+   "time": "2026-11-14T20:56:39.992Z",
+   "role": "user",
+   "text": "I have a 6 x 4 m backyard with a tree in the northwest corner. I want privacy along the north edge and an open centre."
+  },
+  {
+   "id": "msg-h5i55",
+   "time": "2026-11-14T20:56:40.285Z",
+   "role": "ai",
+   "text": "",
+   "html": "<b>Read from what you said</b><ul><li>site set to 6 × 4 m (stated, rectangle assumed)</li><li>an existing tree in the northwest corner — sketched there (the exact spot is an estimate; drag it to where it stands)</li><li>an open area (open centre) — sketched in the middle, as you said; its extent is not stated</li><li>goals: privacy, openness</li><li>screen → north edge (privacy → Screen (blocks a view); Scrim would only filter it)</li><li>scrim → north edge (openness + privacy → Scrim as the alternative to check) — alternative to check</li></ul><b>Unknown</b> (not assumed): light; soil type and drainage.<br><b>Starting layout:</b> Planting at the edges, open centre kept — 4 planting beds proposed; adjust them on the canvas or say what should change.",
+   "mode": "interpretation: offline-parser (rules: dimensions, existing-tree, open-centre, privacy, openness)"
+  },
+  {
+   "id": "msg-h6ia6",
+   "time": "2026-11-14T20:56:41.586Z",
+   "role": "sys",
+   "text": "4 suggested beds confirmed as drawn — North bed 5.4 m², East bed 2.48 m², West bed 2.48 m², Tree island 2.1 m²"
+  }
+ ],
+ "inputs": [],
+ "location": null,
+ "site": {
+  "id": "site-1",
+  "coordinate_system": "local-meters",
+  "orientation": {
+   "north_angle_degrees": 0,
+   "basis": "assumption (north = up until stated)"
+  },
+  "scale": {
+   "status": "user-stated",
+   "known_length_m": 6,
+   "source": "conversation: \"6 x 4 m\""
+  },
+  "boundary": [
+   [
+    0,
+    0
+   ],
+   [
+    6,
+    0
+   ],
+   [
+    6,
+    4
+   ],
+   [
+    0,
+    4
+   ]
+  ],
+  "boundary_status": "user-stated",
+  "features": [
+   {
+    "locked": true,
+    "kind": "existing-tree",
+    "position_m": [
+     1,
+     3
+    ],
+    "radius_m": null,
+    "label": "existing tree",
+    "source": "conversation: \"a tree in the northwest\" — only \"northwest corner\" was said, no distance. The position is estimated by default (about 1 m in from both edges), not a measurement: drag the tree to where it stands. Canopy not stated",
+    "status": "inferred",
+    "id": "tree-h5a73"
+   },
+   {
+    "locked": true,
+    "kind": "no-plant-zone",
+    "polygon": [
+     [
+      1.8,
+      0.6
+     ],
+     [
+      4.2,
+      0.6
+     ],
+     [
+      4.2,
+      2.2
+     ],
+     [
+      1.8,
+      2.2
+     ]
+    ],
+    "label": "open (open centre)",
+    "source": "conversation: \"open centre\" — extent suggested (40 % × 40 % of the site, toward the front), not stated",
+    "status": "inferred",
+    "id": "open-h5a74"
+   }
+  ],
+  "beds": [
+   {
+    "id": "bed-1",
+    "name": "North bed",
+    "polygon": [
+     [
+      0,
+      3.1
+     ],
+     [
+      6,
+      3.1
+     ],
+     [
+      6,
+      4
+     ],
+     [
+      0,
+      4
+     ]
+    ],
+    "holes": [],
+    "status": "user-accepted",
+    "source": "proposal A · edge",
+    "goals": [],
+    "conditions_overrides": {},
+    "area_m2": 5.4,
+    "functions": [
+     {
+      "function": "z:screen",
+      "where": "north-edge",
+      "basis": "privacy → a screen band along the north edge, deep enough for a row and a staggered second row"
+     }
+    ],
+    "strategy": "edge",
+    "strategy_params": {
+     "sides": [
+      "north"
+     ],
+     "width_m": 0.9,
+     "function": "z:screen"
+    },
+    "reasoning": [
+     "privacy → a screen band along the north edge, deep enough for a row and a staggered second row"
+    ],
+    "notes": [
+     "2.12 m² lies under the canopy of existing tree (assumed 1.5 m) — planting there depends on the shade and roots, which are not recorded: treated as conditional, not excluded"
+    ],
+    "under_canopy": [
+     {
+      "tree": "tree-h5a73",
+      "label": "existing tree",
+      "m2": 2.12,
+      "radius_status": "assumed 1.5 m"
+     }
+    ],
+    "min_width_m": 0.89,
+    "proposal_id": "A",
+    "proposal_key": "A-1",
+    "confirmation": "confirmed"
+   },
+   {
+    "id": "bed-2",
+    "name": "East bed",
+    "polygon": [
+     [
+      5.2,
+      0
+     ],
+     [
+      6,
+      0
+     ],
+     [
+      6,
+      3.1
+     ],
+     [
+      5.2,
+      3.1
+     ]
+    ],
+    "holes": [],
+    "status": "user-accepted",
+    "source": "proposal A · edge",
+    "goals": [],
+    "conditions_overrides": {},
+    "area_m2": 2.48,
+    "functions": [
+     {
+      "function": "z:ground_cover",
+      "where": "east-edge",
+      "basis": "an open centre is wanted → the remaining edges get a 0.8 m ground-layer border that frames it; the middle stays open"
+     }
+    ],
+    "strategy": "edge",
+    "strategy_params": {
+     "sides": [
+      "east",
+      "west"
+     ],
+     "width_m": 0.8,
+     "function": "z:ground_cover"
+    },
+    "reasoning": [
+     "an open centre is wanted → the remaining edges get a 0.8 m ground-layer border that frames it; the middle stays open"
+    ],
+    "notes": [],
+    "under_canopy": [],
+    "min_width_m": 0.8,
+    "proposal_id": "A",
+    "proposal_key": "A-2",
+    "confirmation": "confirmed"
+   },
+   {
+    "id": "bed-3",
+    "name": "West bed",
+    "polygon": [
+     [
+      0,
+      0
+     ],
+     [
+      0.8,
+      0
+     ],
+     [
+      0.8,
+      3.1
+     ],
+     [
+      0,
+      3.1
+     ]
+    ],
+    "holes": [],
+    "status": "user-accepted",
+    "source": "proposal A · edge",
+    "goals": [],
+    "conditions_overrides": {},
+    "area_m2": 2.48,
+    "functions": [
+     {
+      "function": "z:ground_cover",
+      "where": "west-edge",
+      "basis": "an open centre is wanted → the remaining edges get a 0.8 m ground-layer border that frames it; the middle stays open"
+     }
+    ],
+    "strategy": "edge",
+    "strategy_params": {
+     "sides": [
+      "east",
+      "west"
+     ],
+     "width_m": 0.8,
+     "function": "z:ground_cover"
+    },
+    "reasoning": [
+     "an open centre is wanted → the remaining edges get a 0.8 m ground-layer border that frames it; the middle stays open"
+    ],
+    "notes": [
+     "1.15 m² lies under the canopy of existing tree (assumed 1.5 m) — planting there depends on the shade and roots, which are not recorded: treated as conditional, not excluded"
+    ],
+    "under_canopy": [
+     {
+      "tree": "tree-h5a73",
+      "label": "existing tree",
+      "m2": 1.15,
+      "radius_status": "assumed 1.5 m"
+     }
+    ],
+    "min_width_m": 0.8,
+    "proposal_id": "A",
+    "proposal_key": "A-3",
+    "confirmation": "confirmed"
+   },
+   {
+    "id": "bed-4",
+    "name": "Tree island",
+    "polygon": [
+     [
+      0.8,
+      1.52
+     ],
+     [
+      1,
+      1.5
+     ],
+     [
+      1.33,
+      1.54
+     ],
+     [
+      1.65,
+      1.65
+     ],
+     [
+      1.8,
+      1.74
+     ],
+     [
+      1.8,
+      2.2
+     ],
+     [
+      2.26,
+      2.2
+     ],
+     [
+      2.35,
+      2.35
+     ],
+     [
+      2.46,
+      2.67
+     ],
+     [
+      2.5,
+      3
+     ],
+     [
+      2.49,
+      3.1
+     ],
+     [
+      0.8,
+      3.1
+     ]
+    ],
+    "holes": [],
+    "status": "user-accepted",
+    "source": "proposal A · island",
+    "goals": [],
+    "conditions_overrides": {},
+    "area_m2": 2.1,
+    "functions": [
+     {
+      "function": "z:ground_cover",
+      "where": "bed-interior",
+      "basis": "the tree becomes a planted island (its canopy), so the ground under it is planted rather than left as a hole (its light is checked as a range under the canopy, not assumed to be shade)"
+     }
+    ],
+    "strategy": "island",
+    "strategy_params": {
+     "centre": [
+      1,
+      3
+     ],
+     "radius_m": 1.5,
+     "function": "z:ground_cover"
+    },
+    "reasoning": [
+     "the tree becomes a planted island (its canopy), so the ground under it is planted rather than left as a hole (its light is checked as a range under the canopy, not assumed to be shade)"
+    ],
+    "notes": [
+     "2.09 m² lies under the canopy of existing tree (assumed 1.5 m) — planting there depends on the shade and roots, which are not recorded: treated as conditional, not excluded"
+    ],
+    "under_canopy": [
+     {
+      "tree": "tree-h5a73",
+      "label": "existing tree",
+      "m2": 2.09,
+      "radius_status": "assumed 1.5 m"
+     }
+    ],
+    "min_width_m": 1.07,
+    "proposal_id": "A",
+    "proposal_key": "A-4",
+    "confirmation": "confirmed"
+   }
+  ],
+  "proposals": {
+   "generated": "2026-11-14T20:56:40.284Z",
+   "engine": "spatial.js (polygon-clipping booleans, metre units)",
+   "inputs_fp": "[[[0,0],[6,0],[6,4],[0,4]],[[\"existing-tree\",[1,3],null,null],[\"no-plant-zone\",null,[[1.8,0.6],[4.2,0.6],[4.2,2.2],[1.8,2.2]],null]],{\"privacy\":2,\"openness\":2},[[\"z:screen\",\"north-edge\",null],[\"z:scrim\",\"north-edge\",true]],{\"north_angle_degrees\":0,\"basis\":\"assumption (north = up until stated)\"}]",
+   "conceptual": false,
+   "site": {
+    "site_m2": 24,
+    "plantable_m2": 20.16,
+    "excluded": [
+     {
+      "id": "open-h5a74",
+      "kind": "no-plant-zone",
+      "label": "open (open centre)",
+      "clearance_m": 0
+     }
+    ],
+    "open_areas": [
+     {
+      "id": "open-h5a74",
+      "label": "open (open centre)",
+      "area_m2": 3.84,
+      "status": "inferred"
+     }
+    ],
+    "trees": [
+     {
+      "id": "tree-h5a73",
+      "label": "existing tree",
+      "centre": [
+       1,
+       3
+      ],
+      "radius": 1.5,
+      "radius_status": "assumed 1.5 m",
+      "position_status": "estimated from your words"
+     }
+    ],
+    "access_edge": {
+     "side": "south",
+     "basis": "assumed: the site is entered from the south (front) edge until you say otherwise"
+    },
+    "assumptions": [
+     "access from the south edge is an assumption — say \"the gate is on the east side\" to change it",
+     "existing tree: position estimated from your words, canopy assumed 1.5 m — drag it to where it stands"
+    ],
+    "questions": []
+   },
+   "intent": {
+    "screen_sides": [
+     "north"
+    ],
+    "wants_open": true,
+    "habitat": false,
+    "values": {
+     "privacy": 2,
+     "openness": 2
+    }
+   },
+   "candidates": [
+    {
+     "id": "A",
+     "label": "Recommended",
+     "recommended": true,
+     "summary": "Planting at the edges, open centre kept",
+     "strategies": [
+      {
+       "op": "edge",
+       "params": {
+        "sides": [
+         "north"
+        ],
+        "width_m": 0.9,
+        "function": "z:screen"
+       },
+       "basis": "privacy → a screen band along the north edge, deep enough for a row and a staggered second row",
+       "note": null,
+       "produced": 1
+      },
+      {
+       "op": "edge",
+       "params": {
+        "sides": [
+         "east",
+         "west"
+        ],
+        "width_m": 0.8,
+        "function": "z:ground_cover"
+       },
+       "basis": "an open centre is wanted → the remaining edges get a 0.8 m ground-layer border that frames it; the middle stays open",
+       "note": null,
+       "produced": 2
+      },
+      {
+       "op": "island",
+       "params": {
+        "centre": [
+         1,
+         3
+        ],
+        "radius_m": 1.5,
+        "function": "z:ground_cover"
+       },
+       "basis": "the tree becomes a planted island (its canopy), so the ground under it is planted rather than left as a hole (its light is checked as a range under the canopy, not assumed to be shade)",
+       "note": null,
+       "produced": 1
+      }
+     ],
+     "beds": [
+      {
+       "key": "A-1",
+       "polygon": [
+        [
+         0,
+         3.1
+        ],
+        [
+         6,
+         3.1
+        ],
+        [
+         6,
+         4
+        ],
+        [
+         0,
+         4
+        ]
+       ],
+       "holes": [],
+       "area_m2": 5.4,
+       "min_width_m": 0.89,
+       "functions": [
+        {
+         "function": "z:screen",
+         "where": "north-edge",
+         "basis": "privacy → a screen band along the north edge, deep enough for a row and a staggered second row"
+        }
+       ],
+       "side": "north",
+       "strategy": "edge",
+       "strategy_params": {
+        "sides": [
+         "north"
+        ],
+        "width_m": 0.9,
+        "function": "z:screen"
+       },
+       "basis": "privacy → a screen band along the north edge, deep enough for a row and a staggered second row",
+       "reasoning": [
+        "privacy → a screen band along the north edge, deep enough for a row and a staggered second row"
+       ],
+       "notes": [
+        "2.12 m² lies under the canopy of existing tree (assumed 1.5 m) — planting there depends on the shade and roots, which are not recorded: treated as conditional, not excluded"
+       ],
+       "under_canopy": [
+        {
+         "tree": "tree-h5a73",
+         "label": "existing tree",
+         "m2": 2.12,
+         "radius_status": "assumed 1.5 m"
+        }
+       ],
+       "name": "North bed"
+      },
+      {
+       "key": "A-2",
+       "polygon": [
+        [
+         5.2,
+         0
+        ],
+        [
+         6,
+         0
+        ],
+        [
+         6,
+         3.1
+        ],
+        [
+         5.2,
+         3.1
+        ]
+       ],
+       "holes": [],
+       "area_m2": 2.48,
+       "min_width_m": 0.8,
+       "functions": [
+        {
+         "function": "z:ground_cover",
+         "where": "east-edge",
+         "basis": "an open centre is wanted → the remaining edges get a 0.8 m ground-layer border that frames it; the middle stays open"
+        }
+       ],
+       "side": "east",
+       "strategy": "edge",
+       "strategy_params": {
+        "sides": [
+         "east",
+         "west"
+        ],
+        "width_m": 0.8,
+        "function": "z:ground_cover"
+       },
+       "basis": "an open centre is wanted → the remaining edges get a 0.8 m ground-layer border that frames it; the middle stays open",
+       "reasoning": [
+        "an open centre is wanted → the remaining edges get a 0.8 m ground-layer border that frames it; the middle stays open"
+       ],
+       "notes": [],
+       "under_canopy": [],
+       "name": "East bed"
+      },
+      {
+       "key": "A-3",
+       "polygon": [
+        [
+         0,
+         0
+        ],
+        [
+         0.8,
+         0
+        ],
+        [
+         0.8,
+         3.1
+        ],
+        [
+         0,
+         3.1
+        ]
+       ],
+       "holes": [],
+       "area_m2": 2.48,
+       "min_width_m": 0.8,
+       "functions": [
+        {
+         "function": "z:ground_cover",
+         "where": "west-edge",
+         "basis": "an open centre is wanted → the remaining edges get a 0.8 m ground-layer border that frames it; the middle stays open"
+        }
+       ],
+       "side": "west",
+       "strategy": "edge",
+       "strategy_params": {
+        "sides": [
+         "east",
+         "west"
+        ],
+        "width_m": 0.8,
+        "function": "z:ground_cover"
+       },
+       "basis": "an open centre is wanted → the remaining edges get a 0.8 m ground-layer border that frames it; the middle stays open",
+       "reasoning": [
+        "an open centre is wanted → the remaining edges get a 0.8 m ground-layer border that frames it; the middle stays open"
+       ],
+       "notes": [
+        "1.15 m² lies under the canopy of existing tree (assumed 1.5 m) — planting there depends on the shade and roots, which are not recorded: treated as conditional, not excluded"
+       ],
+       "under_canopy": [
+        {
+         "tree": "tree-h5a73",
+         "label": "existing tree",
+         "m2": 1.15,
+         "radius_status": "assumed 1.5 m"
+        }
+       ],
+       "name": "West bed"
+      },
+      {
+       "key": "A-4",
+       "polygon": [
+        [
+         0.8,
+         1.523
+        ],
+        [
+         1,
+         1.5
+        ],
+        [
+         1.334,
+         1.538
+        ],
+        [
+         1.651,
+         1.649
+        ],
+        [
+         1.8,
+         1.742
+        ],
+        [
+         1.8,
+         2.2
+        ],
+        [
+         2.258,
+         2.2
+        ],
+        [
+         2.351,
+         2.349
+        ],
+        [
+         2.462,
+         2.666
+        ],
+        [
+         2.5,
+         3
+        ],
+        [
+         2.489,
+         3.1
+        ],
+        [
+         0.8,
+         3.1
+        ]
+       ],
+       "holes": [],
+       "area_m2": 2.1,
+       "min_width_m": 1.07,
+       "functions": [
+        {
+         "function": "z:ground_cover",
+         "where": "bed-interior",
+         "basis": "the tree becomes a planted island (its canopy), so the ground under it is planted rather than left as a hole (its light is checked as a range under the canopy, not assumed to be shade)"
+        }
+       ],
+       "side": null,
+       "strategy": "island",
+       "strategy_params": {
+        "centre": [
+         1,
+         3
+        ],
+        "radius_m": 1.5,
+        "function": "z:ground_cover"
+       },
+       "basis": "the tree becomes a planted island (its canopy), so the ground under it is planted rather than left as a hole (its light is checked as a range under the canopy, not assumed to be shade)",
+       "reasoning": [
+        "the tree becomes a planted island (its canopy), so the ground under it is planted rather than left as a hole (its light is checked as a range under the canopy, not assumed to be shade)"
+       ],
+       "notes": [
+        "2.09 m² lies under the canopy of existing tree (assumed 1.5 m) — planting there depends on the shade and roots, which are not recorded: treated as conditional, not excluded"
+       ],
+       "under_canopy": [
+        {
+         "tree": "tree-h5a73",
+         "label": "existing tree",
+         "m2": 2.09,
+         "radius_status": "assumed 1.5 m"
+        }
+       ],
+       "name": "Tree island"
+      }
+     ],
+     "dropped": [],
+     "open_centre": {
+      "polygon": [
+       [
+        0.8,
+        0
+       ],
+       [
+        5.2,
+        0
+       ],
+       [
+        5.2,
+        3.1
+       ],
+       [
+        2.489,
+        3.1
+       ],
+       [
+        2.5,
+        3
+       ],
+       [
+        2.462,
+        2.666
+       ],
+       [
+        2.351,
+        2.349
+       ],
+       [
+        2.258,
+        2.2
+       ],
+       [
+        4.2,
+        2.2
+       ],
+       [
+        4.2,
+        0.6
+       ],
+       [
+        1.8,
+        0.6
+       ],
+       [
+        1.8,
+        1.742
+       ],
+       [
+        1.651,
+        1.649
+       ],
+       [
+        1.334,
+        1.538
+       ],
+       [
+        1,
+        1.5
+       ],
+       [
+        0.8,
+        1.523
+       ]
+      ],
+      "area_m2": 7.7
+     },
+     "metrics": {
+      "site_m2": 24,
+      "plantable_m2": 20.16,
+      "planting_m2": 12.46,
+      "open_m2": 7.7,
+      "planting_share": 0.62,
+      "beds": 4
+     },
+     "reasoning_summary": [
+      "privacy → a screen band along the north edge, deep enough for a row and a staggered second row",
+      "the centre is kept open as asked; beds frame it rather than fill it",
+      "the existing tree is kept and underplanted as an island",
+      "the south edge stays free as access (assumed)"
+     ],
+     "assumptions": [
+      "access from the south edge is an assumption — say \"the gate is on the east side\" to change it",
+      "existing tree: position estimated from your words, canopy assumed 1.5 m — drag it to where it stands"
+     ],
+     "source_constraints": [
+      {
+       "id": "fn:z:screen@north-edge",
+       "text": "screen along the north edge",
+       "from": "privacy"
+      },
+      {
+       "id": "keep-open",
+       "text": "keep open (open centre) free of plants",
+       "from": "open centre"
+      },
+      {
+       "id": "tree:tree-h5a73",
+       "text": "existing tree kept (estimated from your words; canopy assumed 1.5 m)",
+       "from": "site"
+      }
+     ],
+     "validation": {
+      "ok": true,
+      "issues": []
+     },
+     "status": "proposed"
+    },
+    {
+     "id": "B",
+     "label": "More open centre",
+     "recommended": false,
+     "summary": "Narrower screen band only; no side borders",
+     "strategies": [
+      {
+       "op": "edge",
+       "params": {
+        "sides": [
+         "north"
+        ],
+        "width_m": 0.68,
+        "function": "z:screen"
+       },
+       "basis": "privacy → a screen band along the north edge, deep enough for a row and a staggered second row — narrowed to 0.68 m: one row only",
+       "note": null,
+       "produced": 1
+      },
+      {
+       "op": "island",
+       "params": {
+        "centre": [
+         1,
+         3
+        ],
+        "radius_m": 1.5,
+        "function": "z:ground_cover"
+       },
+       "basis": "the tree becomes a planted island (its canopy), so the ground under it is planted rather than left as a hole (its light is checked as a range under the canopy, not assumed to be shade)",
+       "note": null,
+       "produced": 1
+      }
+     ],
+     "beds": [
+      {
+       "key": "B-1",
+       "polygon": [
+        [
+         0,
+         3.32
+        ],
+        [
+         6,
+         3.32
+        ],
+        [
+         6,
+         4
+        ],
+        [
+         0,
+         4
+        ]
+       ],
+       "holes": [],
+       "area_m2": 4.08,
+       "min_width_m": 0.67,
+       "functions": [
+        {
+         "function": "z:screen",
+         "where": "north-edge",
+         "basis": "privacy → a screen band along the north edge, deep enough for a row and a staggered second row — narrowed to 0.68 m: one row only"
+        }
+       ],
+       "side": "north",
+       "strategy": "edge",
+       "strategy_params": {
+        "sides": [
+         "north"
+        ],
+        "width_m": 0.68,
+        "function": "z:screen"
+       },
+       "basis": "privacy → a screen band along the north edge, deep enough for a row and a staggered second row — narrowed to 0.68 m: one row only",
+       "reasoning": [
+        "privacy → a screen band along the north edge, deep enough for a row and a staggered second row — narrowed to 0.68 m: one row only"
+       ],
+       "notes": [
+        "1.58 m² lies under the canopy of existing tree (assumed 1.5 m) — planting there depends on the shade and roots, which are not recorded: treated as conditional, not excluded"
+       ],
+       "under_canopy": [
+        {
+         "tree": "tree-h5a73",
+         "label": "existing tree",
+         "m2": 1.58,
+         "radius_status": "assumed 1.5 m"
+        }
+       ],
+       "name": "North bed"
+      },
+      {
+       "key": "B-2",
+       "polygon": [
+        [
+         0,
+         1.892
+        ],
+        [
+         0.065,
+         1.827
+        ],
+        [
+         0.349,
+         1.649
+        ],
+        [
+         0.666,
+         1.538
+        ],
+        [
+         1,
+         1.5
+        ],
+        [
+         1.334,
+         1.538
+        ],
+        [
+         1.651,
+         1.649
+        ],
+        [
+         1.8,
+         1.742
+        ],
+        [
+         1.8,
+         2.2
+        ],
+        [
+         2.258,
+         2.2
+        ],
+        [
+         2.351,
+         2.349
+        ],
+        [
+         2.462,
+         2.666
+        ],
+        [
+         2.5,
+         3
+        ],
+        [
+         2.464,
+         3.32
+        ],
+        [
+         0,
+         3.32
+        ]
+       ],
+       "holes": [],
+       "area_m2": 3.8,
+       "min_width_m": 1.75,
+       "functions": [
+        {
+         "function": "z:ground_cover",
+         "where": "bed-interior",
+         "basis": "the tree becomes a planted island (its canopy), so the ground under it is planted rather than left as a hole (its light is checked as a range under the canopy, not assumed to be shade)"
+        }
+       ],
+       "side": null,
+       "strategy": "island",
+       "strategy_params": {
+        "centre": [
+         1,
+         3
+        ],
+        "radius_m": 1.5,
+        "function": "z:ground_cover"
+       },
+       "basis": "the tree becomes a planted island (its canopy), so the ground under it is planted rather than left as a hole (its light is checked as a range under the canopy, not assumed to be shade)",
+       "reasoning": [
+        "the tree becomes a planted island (its canopy), so the ground under it is planted rather than left as a hole (its light is checked as a range under the canopy, not assumed to be shade)"
+       ],
+       "notes": [
+        "3.79 m² lies under the canopy of existing tree (assumed 1.5 m) — planting there depends on the shade and roots, which are not recorded: treated as conditional, not excluded"
+       ],
+       "under_canopy": [
+        {
+         "tree": "tree-h5a73",
+         "label": "existing tree",
+         "m2": 3.79,
+         "radius_status": "assumed 1.5 m"
+        }
+       ],
+       "name": "Tree island"
+      }
+     ],
+     "dropped": [],
+     "open_centre": {
+      "polygon": [
+       [
+        0,
+        0
+       ],
+       [
+        6,
+        0
+       ],
+       [
+        6,
+        3.32
+       ],
+       [
+        2.464,
+        3.32
+       ],
+       [
+        2.5,
+        3
+       ],
+       [
+        2.462,
+        2.666
+       ],
+       [
+        2.351,
+        2.349
+       ],
+       [
+        2.258,
+        2.2
+       ],
+       [
+        4.2,
+        2.2
+       ],
+       [
+        4.2,
+        0.6
+       ],
+       [
+        1.8,
+        0.6
+       ],
+       [
+        1.8,
+        1.742
+       ],
+       [
+        1.651,
+        1.649
+       ],
+       [
+        1.334,
+        1.538
+       ],
+       [
+        1,
+        1.5
+       ],
+       [
+        0.666,
+        1.538
+       ],
+       [
+        0.349,
+        1.649
+       ],
+       [
+        0.065,
+        1.827
+       ],
+       [
+        0,
+        1.892
+       ]
+      ],
+      "area_m2": 12.28
+     },
+     "metrics": {
+      "site_m2": 24,
+      "plantable_m2": 20.16,
+      "planting_m2": 7.88,
+      "open_m2": 12.28,
+      "planting_share": 0.39,
+      "beds": 2
+     },
+     "reasoning_summary": [
+      "the screen band is cut to one row and the side borders are dropped, so the open ground is as large as the brief allows",
+      "trade-off: less ground-layer planting and a thinner screen"
+     ],
+     "assumptions": [
+      "access from the south edge is an assumption — say \"the gate is on the east side\" to change it",
+      "existing tree: position estimated from your words, canopy assumed 1.5 m — drag it to where it stands"
+     ],
+     "source_constraints": [
+      {
+       "id": "fn:z:screen@north-edge",
+       "text": "screen along the north edge",
+       "from": "privacy"
+      },
+      {
+       "id": "keep-open",
+       "text": "keep open (open centre) free of plants",
+       "from": "open centre"
+      },
+      {
+       "id": "tree:tree-h5a73",
+       "text": "existing tree kept (estimated from your words; canopy assumed 1.5 m)",
+       "from": "site"
+      }
+     ],
+     "validation": {
+      "ok": true,
+      "issues": []
+     },
+     "status": "proposed"
+    },
+    {
+     "id": "C",
+     "label": "More planting area",
+     "recommended": false,
+     "summary": "Beds fill the plantable ground except the open area and access",
+     "strategies": [
+      {
+       "op": "edge",
+       "params": {
+        "sides": [
+         "north"
+        ],
+        "width_m": 1.13,
+        "function": "z:screen"
+       },
+       "basis": "privacy → a screen band along the north edge, deep enough for a row and a staggered second row — widened to 1.13 m for a fuller screen",
+       "note": null,
+       "produced": 1
+      },
+      {
+       "op": "island",
+       "params": {
+        "centre": [
+         1,
+         3
+        ],
+        "radius_m": 1.5,
+        "function": "z:ground_cover"
+       },
+       "basis": "the tree becomes a planted island (its canopy), so the ground under it is planted rather than left as a hole (its light is checked as a range under the canopy, not assumed to be shade)",
+       "note": null,
+       "produced": 1
+      },
+      {
+       "op": "infill",
+       "params": {
+        "keep_out": 2,
+        "function": "z:ground_cover"
+       },
+       "basis": "everything plantable except the open area and the south access strip becomes bed",
+       "note": null,
+       "produced": 2
+      }
+     ],
+     "beds": [
+      {
+       "key": "C-1",
+       "polygon": [
+        [
+         0,
+         2.87
+        ],
+        [
+         6,
+         2.87
+        ],
+        [
+         6,
+         4
+        ],
+        [
+         0,
+         4
+        ]
+       ],
+       "holes": [],
+       "area_m2": 6.78,
+       "min_width_m": 1.13,
+       "functions": [
+        {
+         "function": "z:screen",
+         "where": "north-edge",
+         "basis": "privacy → a screen band along the north edge, deep enough for a row and a staggered second row — widened to 1.13 m for a fuller screen"
+        }
+       ],
+       "side": "north",
+       "strategy": "edge",
+       "strategy_params": {
+        "sides": [
+         "north"
+        ],
+        "width_m": 1.13,
+        "function": "z:screen"
+       },
+       "basis": "privacy → a screen band along the north edge, deep enough for a row and a staggered second row — widened to 1.13 m for a fuller screen",
+       "reasoning": [
+        "privacy → a screen band along the north edge, deep enough for a row and a staggered second row — widened to 1.13 m for a fuller screen"
+       ],
+       "notes": [
+        "2.69 m² lies under the canopy of existing tree (assumed 1.5 m) — planting there depends on the shade and roots, which are not recorded: treated as conditional, not excluded"
+       ],
+       "under_canopy": [
+        {
+         "tree": "tree-h5a73",
+         "label": "existing tree",
+         "m2": 2.69,
+         "radius_status": "assumed 1.5 m"
+        }
+       ],
+       "name": "North bed"
+      },
+      {
+       "key": "C-2",
+       "polygon": [
+        [
+         0,
+         1.892
+        ],
+        [
+         0.065,
+         1.827
+        ],
+        [
+         0.349,
+         1.649
+        ],
+        [
+         0.666,
+         1.538
+        ],
+        [
+         1,
+         1.5
+        ],
+        [
+         1.334,
+         1.538
+        ],
+        [
+         1.651,
+         1.649
+        ],
+        [
+         1.8,
+         1.742
+        ],
+        [
+         1.8,
+         2.2
+        ],
+        [
+         2.258,
+         2.2
+        ],
+        [
+         2.351,
+         2.349
+        ],
+        [
+         2.462,
+         2.666
+        ],
+        [
+         2.485,
+         2.87
+        ],
+        [
+         0,
+         2.87
+        ]
+       ],
+       "holes": [],
+       "area_m2": 2.68,
+       "min_width_m": 1.34,
+       "functions": [
+        {
+         "function": "z:ground_cover",
+         "where": "bed-interior",
+         "basis": "the tree becomes a planted island (its canopy), so the ground under it is planted rather than left as a hole (its light is checked as a range under the canopy, not assumed to be shade)"
+        }
+       ],
+       "side": null,
+       "strategy": "island",
+       "strategy_params": {
+        "centre": [
+         1,
+         3
+        ],
+        "radius_m": 1.5,
+        "function": "z:ground_cover"
+       },
+       "basis": "the tree becomes a planted island (its canopy), so the ground under it is planted rather than left as a hole (its light is checked as a range under the canopy, not assumed to be shade)",
+       "reasoning": [
+        "the tree becomes a planted island (its canopy), so the ground under it is planted rather than left as a hole (its light is checked as a range under the canopy, not assumed to be shade)"
+       ],
+       "notes": [
+        "2.67 m² lies under the canopy of existing tree (assumed 1.5 m) — planting there depends on the shade and roots, which are not recorded: treated as conditional, not excluded"
+       ],
+       "under_canopy": [
+        {
+         "tree": "tree-h5a73",
+         "label": "existing tree",
+         "m2": 2.67,
+         "radius_status": "assumed 1.5 m"
+        }
+       ],
+       "name": "Tree island"
+      },
+      {
+       "key": "C-3",
+       "polygon": [
+        [
+         0,
+         0.9
+        ],
+        [
+         1.8,
+         0.9
+        ],
+        [
+         1.8,
+         1.742
+        ],
+        [
+         1.651,
+         1.649
+        ],
+        [
+         1.334,
+         1.538
+        ],
+        [
+         1,
+         1.5
+        ],
+        [
+         0.666,
+         1.538
+        ],
+        [
+         0.349,
+         1.649
+        ],
+        [
+         0.065,
+         1.827
+        ],
+        [
+         0,
+         1.892
+        ]
+       ],
+       "holes": [],
+       "area_m2": 1.27,
+       "min_width_m": 0.67,
+       "functions": [
+        {
+         "function": "z:ground_cover",
+         "where": "bed-interior",
+         "basis": "everything plantable except the open area and the south access strip becomes bed"
+        }
+       ],
+       "side": null,
+       "strategy": "infill",
+       "strategy_params": {
+        "keep_out": 2,
+        "function": "z:ground_cover"
+       },
+       "basis": "everything plantable except the open area and the south access strip becomes bed",
+       "reasoning": [
+        "everything plantable except the open area and the south access strip becomes bed"
+       ],
+       "notes": [],
+       "under_canopy": [],
+       "name": "West bed"
+      },
+      {
+       "key": "C-4",
+       "polygon": [
+        [
+         2.258,
+         2.2
+        ],
+        [
+         4.2,
+         2.2
+        ],
+        [
+         4.2,
+         0.9
+        ],
+        [
+         6,
+         0.9
+        ],
+        [
+         6,
+         2.87
+        ],
+        [
+         2.485,
+         2.87
+        ],
+        [
+         2.462,
+         2.666
+        ],
+        [
+         2.351,
+         2.349
+        ]
+       ],
+       "holes": [],
+       "area_m2": 4.75,
+       "min_width_m": 1.77,
+       "functions": [
+        {
+         "function": "z:ground_cover",
+         "where": "bed-interior",
+         "basis": "everything plantable except the open area and the south access strip becomes bed"
+        }
+       ],
+       "side": null,
+       "strategy": "infill",
+       "strategy_params": {
+        "keep_out": 2,
+        "function": "z:ground_cover"
+       },
+       "basis": "everything plantable except the open area and the south access strip becomes bed",
+       "reasoning": [
+        "everything plantable except the open area and the south access strip becomes bed"
+       ],
+       "notes": [],
+       "under_canopy": [],
+       "name": "Centre bed"
+      }
+     ],
+     "dropped": [],
+     "open_centre": {
+      "polygon": [
+       [
+        0,
+        0
+       ],
+       [
+        6,
+        0
+       ],
+       [
+        6,
+        0.9
+       ],
+       [
+        4.2,
+        0.9
+       ],
+       [
+        4.2,
+        0.6
+       ],
+       [
+        1.8,
+        0.6
+       ],
+       [
+        1.8,
+        0.9
+       ],
+       [
+        0,
+        0.9
+       ]
+      ],
+      "area_m2": 4.68
+     },
+     "metrics": {
+      "site_m2": 24,
+      "plantable_m2": 20.16,
+      "planting_m2": 15.48,
+      "open_m2": 4.68,
+      "planting_share": 0.77,
+      "beds": 4
+     },
+     "reasoning_summary": [
+      "maximises planted area; the open area and the access strip are the only ground left",
+      "trade-off: little room to move, more to maintain"
+     ],
+     "assumptions": [
+      "access from the south edge is an assumption — say \"the gate is on the east side\" to change it",
+      "existing tree: position estimated from your words, canopy assumed 1.5 m — drag it to where it stands"
+     ],
+     "source_constraints": [
+      {
+       "id": "fn:z:screen@north-edge",
+       "text": "screen along the north edge",
+       "from": "privacy"
+      },
+      {
+       "id": "keep-open",
+       "text": "keep open (open centre) free of plants",
+       "from": "open centre"
+      },
+      {
+       "id": "tree:tree-h5a73",
+       "text": "existing tree kept (estimated from your words; canopy assumed 1.5 m)",
+       "from": "site"
+      }
+     ],
+     "validation": {
+      "ok": true,
+      "issues": []
+     },
+     "status": "proposed"
+    }
+   ],
+   "recommended_id": "A",
+   "params": {
+    "screen_band_m": 1.2,
+    "side_band_m": 0.8,
+    "perimeter_band_m": 1,
+    "access_band_m": 0.9,
+    "path_clearance_m": 0.3,
+    "building_clearance_m": 0.3,
+    "min_bed_width_m": 0.5,
+    "min_bed_area_m2": 0.6,
+    "sliver_m2": 0.15,
+    "tree_island_pad_m": 0.6,
+    "small_site_m": 5,
+    "alt_min_difference": 0.12
+   },
+   "active_id": "A",
+   "stale": false,
+   "pending": null,
+   "chosen_by": "engine"
+  },
+  "history": [
+   {
+    "label": "dimensions stated",
+    "time": "2026-11-14T20:56:39.997Z",
+    "beds": [],
+    "features": []
+   },
+   {
+    "label": "accept layout",
+    "time": "2026-11-14T20:56:41.585Z",
+    "beds": [
+     {
+      "id": "bed-1",
+      "name": "North bed",
+      "polygon": [
+       [
+        0,
+        3.1
+       ],
+       [
+        6,
+        3.1
+       ],
+       [
+        6,
+        4
+       ],
+       [
+        0,
+        4
+       ]
+      ],
+      "holes": [],
+      "status": "ai-suggested",
+      "source": "proposal A · edge",
+      "goals": [],
+      "conditions_overrides": {},
+      "area_m2": 5.4,
+      "functions": [
+       {
+        "function": "z:screen",
+        "where": "north-edge",
+        "basis": "privacy → a screen band along the north edge, deep enough for a row and a staggered second row"
+       }
+      ],
+      "strategy": "edge",
+      "strategy_params": {
+       "sides": [
+        "north"
+       ],
+       "width_m": 0.9,
+       "function": "z:screen"
+      },
+      "reasoning": [
+       "privacy → a screen band along the north edge, deep enough for a row and a staggered second row"
+      ],
+      "notes": [
+       "2.12 m² lies under the canopy of existing tree (assumed 1.5 m) — planting there depends on the shade and roots, which are not recorded: treated as conditional, not excluded"
+      ],
+      "under_canopy": [
+       {
+        "tree": "tree-h5a73",
+        "label": "existing tree",
+        "m2": 2.12,
+        "radius_status": "assumed 1.5 m"
+       }
+      ],
+      "min_width_m": 0.89,
+      "proposal_id": "A",
+      "proposal_key": "A-1",
+      "confirmation": "proposed"
+     },
+     {
+      "id": "bed-2",
+      "name": "East bed",
+      "polygon": [
+       [
+        5.2,
+        0
+       ],
+       [
+        6,
+        0
+       ],
+       [
+        6,
+        3.1
+       ],
+       [
+        5.2,
+        3.1
+       ]
+      ],
+      "holes": [],
+      "status": "ai-suggested",
+      "source": "proposal A · edge",
+      "goals": [],
+      "conditions_overrides": {},
+      "area_m2": 2.48,
+      "functions": [
+       {
+        "function": "z:ground_cover",
+        "where": "east-edge",
+        "basis": "an open centre is wanted → the remaining edges get a 0.8 m ground-layer border that frames it; the middle stays open"
+       }
+      ],
+      "strategy": "edge",
+      "strategy_params": {
+       "sides": [
+        "east",
+        "west"
+       ],
+       "width_m": 0.8,
+       "function": "z:ground_cover"
+      },
+      "reasoning": [
+       "an open centre is wanted → the remaining edges get a 0.8 m ground-layer border that frames it; the middle stays open"
+      ],
+      "notes": [],
+      "under_canopy": [],
+      "min_width_m": 0.8,
+      "proposal_id": "A",
+      "proposal_key": "A-2",
+      "confirmation": "proposed"
+     },
+     {
+      "id": "bed-3",
+      "name": "West bed",
+      "polygon": [
+       [
+        0,
+        0
+       ],
+       [
+        0.8,
+        0
+       ],
+       [
+        0.8,
+        3.1
+       ],
+       [
+        0,
+        3.1
+       ]
+      ],
+      "holes": [],
+      "status": "ai-suggested",
+      "source": "proposal A · edge",
+      "goals": [],
+      "conditions_overrides": {},
+      "area_m2": 2.48,
+      "functions": [
+       {
+        "function": "z:ground_cover",
+        "where": "west-edge",
+        "basis": "an open centre is wanted → the remaining edges get a 0.8 m ground-layer border that frames it; the middle stays open"
+       }
+      ],
+      "strategy": "edge",
+      "strategy_params": {
+       "sides": [
+        "east",
+        "west"
+       ],
+       "width_m": 0.8,
+       "function": "z:ground_cover"
+      },
+      "reasoning": [
+       "an open centre is wanted → the remaining edges get a 0.8 m ground-layer border that frames it; the middle stays open"
+      ],
+      "notes": [
+       "1.15 m² lies under the canopy of existing tree (assumed 1.5 m) — planting there depends on the shade and roots, which are not recorded: treated as conditional, not excluded"
+      ],
+      "under_canopy": [
+       {
+        "tree": "tree-h5a73",
+        "label": "existing tree",
+        "m2": 1.15,
+        "radius_status": "assumed 1.5 m"
+       }
+      ],
+      "min_width_m": 0.8,
+      "proposal_id": "A",
+      "proposal_key": "A-3",
+      "confirmation": "proposed"
+     },
+     {
+      "id": "bed-4",
+      "name": "Tree island",
+      "polygon": [
+       [
+        0.8,
+        1.52
+       ],
+       [
+        1,
+        1.5
+       ],
+       [
+        1.33,
+        1.54
+       ],
+       [
+        1.65,
+        1.65
+       ],
+       [
+        1.8,
+        1.74
+       ],
+       [
+        1.8,
+        2.2
+       ],
+       [
+        2.26,
+        2.2
+       ],
+       [
+        2.35,
+        2.35
+       ],
+       [
+        2.46,
+        2.67
+       ],
+       [
+        2.5,
+        3
+       ],
+       [
+        2.49,
+        3.1
+       ],
+       [
+        0.8,
+        3.1
+       ]
+      ],
+      "holes": [],
+      "status": "ai-suggested",
+      "source": "proposal A · island",
+      "goals": [],
+      "conditions_overrides": {},
+      "area_m2": 2.1,
+      "functions": [
+       {
+        "function": "z:ground_cover",
+        "where": "bed-interior",
+        "basis": "the tree becomes a planted island (its canopy), so the ground under it is planted rather than left as a hole (its light is checked as a range under the canopy, not assumed to be shade)"
+       }
+      ],
+      "strategy": "island",
+      "strategy_params": {
+       "centre": [
+        1,
+        3
+       ],
+       "radius_m": 1.5,
+       "function": "z:ground_cover"
+      },
+      "reasoning": [
+       "the tree becomes a planted island (its canopy), so the ground under it is planted rather than left as a hole (its light is checked as a range under the canopy, not assumed to be shade)"
+      ],
+      "notes": [
+       "2.09 m² lies under the canopy of existing tree (assumed 1.5 m) — planting there depends on the shade and roots, which are not recorded: treated as conditional, not excluded"
+      ],
+      "under_canopy": [
+       {
+        "tree": "tree-h5a73",
+        "label": "existing tree",
+        "m2": 2.09,
+        "radius_status": "assumed 1.5 m"
+       }
+      ],
+      "min_width_m": 1.07,
+      "proposal_id": "A",
+      "proposal_key": "A-4",
+      "confirmation": "proposed"
+     }
+    ],
+    "features": [
+     {
+      "locked": true,
+      "kind": "existing-tree",
+      "position_m": [
+       1,
+       3
+      ],
+      "radius_m": null,
+      "label": "existing tree",
+      "source": "conversation: \"a tree in the northwest\" — only \"northwest corner\" was said, no distance. The position is estimated by default (about 1 m in from both edges), not a measurement: drag the tree to where it stands. Canopy not stated",
+      "status": "inferred",
+      "id": "tree-h5a73"
+     },
+     {
+      "locked": true,
+      "kind": "no-plant-zone",
+      "polygon": [
+       [
+        1.8,
+        0.6
+       ],
+       [
+        4.2,
+        0.6
+       ],
+       [
+        4.2,
+        2.2
+       ],
+       [
+        1.8,
+        2.2
+       ]
+      ],
+      "label": "open (open centre)",
+      "source": "conversation: \"open centre\" — extent suggested (40 % × 40 % of the site, toward the front), not stated",
+      "status": "inferred",
+      "id": "open-h5a74"
+     }
+    ]
+   }
+  ],
+  "concept": null,
+  "scratch": false,
+  "conditions": {
+   "light": {
+    "value": null,
+    "status": "unknown",
+    "source": null,
+    "note": null
+   },
+   "soil_type": {
+    "value": null,
+    "status": "unknown",
+    "source": null,
+    "note": null
+   },
+   "soil_drainage": {
+    "value": null,
+    "status": "unknown",
+    "source": null,
+    "note": null
+   },
+   "water": {
+    "value": null,
+    "status": "unknown",
+    "source": null,
+    "note": null
+   },
+   "wind": {
+    "value": null,
+    "status": "unknown",
+    "source": null,
+    "note": null
+   },
+   "irrigation": {
+    "value": null,
+    "status": "unknown",
+    "source": null,
+    "note": null
+   }
+  },
+  "values": [],
+  "notes": [
+   {
+    "kind": "existing-tree",
+    "side": "north",
+    "side_word": "northwest",
+    "corner": "northwest",
+    "evidence": "a tree in the northwest",
+    "placed": true
+   },
+   {
+    "kind": "no-plant-zone",
+    "where": "centre",
+    "where_status": "user-stated",
+    "reason": "open centre",
+    "evidence": "open centre",
+    "placed": true
+   }
+  ],
+  "bed_seq": 4
+ },
+ "brief": {
+  "provenance": "offline-parser",
+  "values": {
+   "privacy": 2,
+   "openness": 2
+  },
+  "hard_constraints": [
+   {
+    "id": "keep-tree",
+    "kind": "preserve-feature",
+    "text": "preserve the existing tree",
+    "evidence": "a tree in the northwest"
+   },
+   {
+    "id": "keep-open",
+    "kind": "no-plant-zone",
+    "text": "keep the centre open (open centre)",
+    "evidence": "open centre"
+   },
+   {
+    "id": "bed-only",
+    "kind": "bed-boundary",
+    "text": "never place plants outside accepted beds",
+    "evidence": "rule"
+   }
+  ],
+  "functions": [
+   {
+    "function": "z:screen",
+    "where": "north-edge",
+    "basis": "privacy → Screen (blocks a view); Scrim would only filter it",
+    "evidence": "privacy"
+   },
+   {
+    "function": "z:scrim",
+    "where": "north-edge",
+    "basis": "openness + privacy → Scrim as the alternative to check",
+    "evidence": "openness",
+    "alternative": true
+   }
+  ],
+  "composition": [
+   "taller layer along the screened edge",
+   "open middle, graded density toward the edge"
+  ],
+  "unknowns": [
+   "light",
+   "soil type and drainage"
+  ],
+  "evidence": [
+   {
+    "rule": "dimensions",
+    "text": "6 x 4 m",
+    "says": "site stated as 6 × 4 m"
+   },
+   {
+    "rule": "existing-tree",
+    "text": "a tree in the northwest",
+    "says": "an existing tree in the northwest corner — its species and canopy size are unknown until stated"
+   },
+   {
+    "rule": "open-centre",
+    "text": "open centre",
+    "says": "an open space in the middle (open centre) — kept open at your request, so no bed goes there"
+   },
+   {
+    "rule": "privacy",
+    "text": "privacy",
+    "says": "value: privacy"
+   },
+   {
+    "rule": "openness",
+    "text": "open",
+    "says": "value: openness"
+   }
+  ],
+  "updated": "2026-11-14T20:56:39.997Z"
+ },
+ "versions": [],
+ "current_version_id": null,
+ "redo": [],
+ "plant_seq": 0,
+ "ui": {
+  "unlocked": {
+   "welcome": true,
+   "site": true,
+   "intent": true,
+   "garden": false
+  },
+  "stage": "intent",
+  "site_fp": null,
+  "entry": {}
+ },
+ "updated": "2026-11-14T13:56:42"
+}
