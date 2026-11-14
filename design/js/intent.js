@@ -56,6 +56,8 @@ export const RULES = {
   ],
 };
 
+/** `where` of an edge function whose edge the user has not chosen yet: recorded, shown as awaiting a choice, never proposed or planted */
+export const EDGE_UNSET = 'edge-unset';
 export function findDirection(text) { const m = text.match(new RegExp(`\\b${DIR}\\b(?:\\s*(?:side|edge|half|part|end|corner|boundary|fence))?`, 'i')); if (!m) return null; const w = m[1].toLowerCase(); return { word: m[0], side: SIDE_WORD[w] || w, is_edge: /edge|boundary|fence/i.test(m[0]) }; }
 const deictic = t => /\b(here|this|these|those|selected|the (?:circled|selected) (?:area|region|part))\b/i.test(t);
 
@@ -67,12 +69,14 @@ export function interpretDescription(text) {
   // spatial functions grounded in the database's Z vocabulary; a location is attached when the sentence names one
   // the screened edge: the direction word in the clause that asks for privacy, else one elsewhere that does not belong to a site fact
   // (a tree "on the east side" does not put the screen on the east). Only a compass side sets an edge; "left / right / middle" name
-  // no compass side on their own, so the edge stays unset ('boundary') and is listed as unknown — never read as north (M55).
+  // no compass side on their own, so the edge stays unset ('edge-unset': awaiting the user's choice — nothing is proposed or planted for it) and is listed as
+  // unknown — never read as north, never spread over every edge (M55).
   if (values.privacy) {
-    const pm = text.match(RULES.values.find(r => r.id === 'privacy').pattern); const clause = (text.split(/[.;!?\n]/).find(c => c.includes(pm[0])) || text).split(/\b(?:but|while|whereas)\b/i).find(c => c.includes(pm[0])) || text;
-    let rest = text; for (const f of facts) if (f.kind === 'existing-tree' || f.kind === 'no-plant-zone') rest = rest.replace(f.evidence, ' ');
-    const d = findDirection(clause) || findDirection(rest); const compass = d && DIRECTIONS[d.side] != null; const where = compass ? `${d.side}-edge` : 'boundary';
-    if (d && !compass) unknowns.push(`which edge to screen — "${d.word.trim()}" names no compass side; choose the edge (north / south / east / west)`);
+    const pm = text.match(RULES.values.find(r => r.id === 'privacy').pattern); let rest = text; for (const f of facts) if (f.kind === 'existing-tree' || f.kind === 'no-plant-zone') rest = rest.replace(f.evidence, ' ');   // a tree's or an open area's own direction is not the screened edge, even inside the same sentence
+    const base = rest.includes(pm[0]) ? rest : text; const clause = (base.split(/[.;!?\n]/).find(c => c.includes(pm[0])) || base).split(/\b(?:but|while|whereas)\b/i).find(c => c.includes(pm[0])) || base;
+    const d = findDirection(clause) || findDirection(rest); const compass = d && DIRECTIONS[d.side] != null; const where = compass ? `${d.side}-edge` : EDGE_UNSET;
+    if (!d) unknowns.push('which edge to screen — no side was named; choose the edge (north / south / east / west): nothing is screened until then');
+    else if (!compass) unknowns.push(`which edge to screen — "${d.word.trim()}" names no compass side; choose the edge (north / south / east / west)`);
     else if (d && /back|rear|front|top|bottom/i.test(d.word)) unknowns.push(`"${d.word.trim()}" was read as ${d.side} (plan up) — correct the edge if the site faces another way`);
     functions.push({ function: 'z:screen', where, basis: 'privacy → Screen (blocks a view); Scrim would only filter it', evidence: 'privacy' }); if (values.openness) functions.push({ function: 'z:scrim', where, basis: 'openness + privacy → Scrim as the alternative to check', evidence: 'openness', alternative: true });
   }

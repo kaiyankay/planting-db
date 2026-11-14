@@ -54,7 +54,13 @@ export const FUNCTION_SUPPORT = {
 export const functionArranged = fn => !!FUNCTION_SUPPORT[fn]?.arranged;
 
 // ---------------------------------------------------------------- light under an existing canopy (M55)
-export const CANOPY_SHARE_MIN = 0.5;   // a bed counts as "under the canopy" when at least half of its area lies under tree crowns
+/** HEURISTICS — thresholds chosen by the implementer, NOT taken from a source or a claim. Kept until reviewed (methods M55); each is
+ *  named wherever it decides something (assemblage notes, version assumptions, the Compose message). */
+export const HEURISTICS = {
+  canopy_share_min: { value: 0.5, text: 'heuristic: a bed counts as "under the canopy" when at least 50 % of its area lies under existing tree crowns (threshold not from a source)' },
+  edge_share_min: { value: 0.5, text: 'heuristic: a bed counts as lying along a site edge when at least 50 % of its longest side runs on that edge (threshold not from a source)' },
+};
+export const CANOPY_SHARE_MIN = HEURISTICS.canopy_share_min.value;
 /** share of the bed's area under existing tree crowns (0.2 m sample grid), with the tree that covers most of it; null when none */
 export function canopyCover(project, bed) {
   const trees = obstaclesFor(project).filter(o => o.kind === 'tree'); if (!trees.length || !bed?.polygon) return null;
@@ -86,7 +92,7 @@ export function bedMatchesWhere(project, bed, where) {
   if (where === 'bed-interior') return true; const site = project.site.boundary; const es = edgesFor(project, bed, where); if (!site) return es.length > 0;
   const Q = bed.polygon; const longest = Math.max(...Q.map((q, i) => G.dist(q, Q[(i + 1) % Q.length])));
   const on = es.filter(e => G.distToBoundary([(e.a[0] + e.b[0]) / 2, (e.a[1] + e.b[1]) / 2], site) < 0.15).reduce((s, e) => s + G.dist(e.a, e.b), 0);
-  return on >= longest * 0.5;   // at least half the bed's longest side runs along that edge — the short end of a side border does not count
+  return on >= longest * HEURISTICS.edge_share_min.value;   // HEURISTIC (see HEURISTICS): the short end of a side border does not count
 }
 
 // ---------------------------------------------------------------- candidate assemblage per bed (reasons kept)
@@ -120,7 +126,7 @@ export function assemble(project, K, bed) {
   const notes = []; const unsupported = [...new Set(wanted)].filter(fn => !functionArranged(fn)).map(fn => ({ function: fn, label: FN_LABEL[fn] || fn, why: FUNCTION_SUPPORT[fn]?.why || 'recorded only — no arrangement rule' }));
   for (const u of unsupported) notes.push(`${bed.name}: ${u.label} is ${u.why}`);
   if (!wanted.length) notes.push(`${bed.name}: no spatial function is set for this bed or site-wide — nothing is planted here until one is chosen`);
-  if (conds.light?.canopy) notes.push(`${bed.name}: ${Math.round(conds.light.canopy.share * 100)} % under ${conds.light.canopy.label} (${conds.light.canopy.radius_status}) — light is checked as a range from ${conds.light.value || 'unknown'} to one step shadier; candidates are conditional at best`);
+  if (conds.light?.canopy) notes.push(`${bed.name}: ${Math.round(conds.light.canopy.share * 100)} % under ${conds.light.canopy.label} (${conds.light.canopy.radius_status}) — light is checked as a range from ${conds.light.value || 'unknown'} to one step shadier; candidates are conditional at best (${HEURISTICS.canopy_share_min.text})`);
   if (wantGround && !picks.ground.length) notes.push(`${bed.name}: no species in the database is linked to Ground Cover and passes the site gates — the bed interior stays unplanted`);
   if (wanted.includes('z:screen') && !picks.screen.length) notes.push(`${bed.name}: no species in the database is linked to Screen and passes the site gates — the screened edge stays unplanted`);
   if (rows.some(r => r.form === 'Tree' && r.excluded?.startsWith('a tree'))) notes.push(`${bed.name}: no new tree placed — ${rows.filter(r => r.form === 'Tree' && r.excluded?.startsWith('a tree')).map(r => r.name).join(', ')} exceed the bed at claimed mature spread`);
@@ -165,7 +171,7 @@ function generateBed(project, K, bed, seed, params, nid, existing) {
     if (g1.plant_ids.length) groups.push(g1); if (g2.plant_ids.length) groups.push(g2);
     if (!g1.plant_ids.length) unresolved.push(`${z.label}: the screen row does not fit — ${sp.map(s => `${s.name} (proxy radius ${s.proxy.radius_m} m)`).join(', ')} cannot stand inside this bed at the claimed mature spread; left unplanted`);
   }
-  for (const f of wantedFunctions(project, bed)) if (f.function === 'z:screen' && !zones.some(z => z.kind === 'edge' && z.id === `zone-screen-${f.where}-${bed.id}`)) unresolved.push(`${bed.name}: Screen is wanted along "${f.where.replace('-', ' ')}" but this bed has no edge there — no row is placed (set the edge on the bed)`);
+  for (const f of wantedFunctions(project, bed)) if (f.function === 'z:screen' && !zones.some(z => z.kind === 'edge' && z.id === `zone-screen-${f.where}-${bed.id}`)) unresolved.push(f.where === 'edge-unset' ? `${bed.name}: Screen is wanted but its edge has not been chosen — no row is placed until you choose the edge` : `${bed.name}: Screen is wanted along "${f.where.replace('-', ' ')}" but this bed has no edge there — no row is placed (set the edge on the bed)`);
   for (const u of asm.unsupported) unresolved.push(`${bed.name}: ${u.label} — ${u.why}`);
   const gp = asm.picks.ground; const wantGround = asm.wanted.includes('z:ground_cover');
   if (!wantGround) { /* Ground Cover was not asked for on this bed: no ground layer is added on the engine's own initiative */ }
@@ -199,7 +205,8 @@ export function generate(project, K, bedIds, seed = 42, params = {}) {
   for (const o of obstacles) if (o.kind === 'tree' && /assumed/.test(o.radius_status)) assumptions.push(`${o.label}: canopy radius ${o.radius} m is ${o.radius_status}`);
   assumptions.push(`plant sizes are proxies: half the claimed mature spread (one claim chosen per species, alternatives counted) — not measured plants; planting spacing is ${params.spacing_screen ?? 0.75} × (screen rows) and ${params.spacing_ground ?? 0.65} × (ground layer) the claimed mature spread, so canopies meet and overlap at maturity by design`);
   if (project.site.scale.status !== 'user-calibrated' && project.site.scale.status !== 'user-stated') assumptions.push('scale is not calibrated: positions are conceptual, quantities are not for procurement');
-  unresolved.push(...project.brief.unknowns.map(u => `unknown: ${u}`));
+  for (const f of project.brief.functions) if (!f.alternative && f.where === 'edge-unset' && !unresolved.some(u => /edge has not been chosen/.test(u))) unresolved.push(`${FN_LABEL[f.function] || f.function}: wanted, but the edge has not been chosen — nothing is planted for it; choose the edge on the Compose page`);
+  unresolved.push(...project.brief.unknowns.filter(u => !/^which edge to screen/.test(u)).map(u => `unknown: ${u}`));
   project.plant_seq = Math.max(project.plant_seq, n);
   const merged = { picks: { screen: [], ground: [], accent: [], canopy: [] }, excluded: [], not_used: [] }; for (const a of Object.values(assemblages)) { for (const k of Object.keys(merged.picks)) for (const x of a.picks[k]) if (!merged.picks[k].some(y => y.id === x.id)) merged.picks[k].push(x); for (const e of a.excluded) if (!merged.excluded.some(y => y.id === e.id)) merged.excluded.push(e); }
   merged.not_used = K.species.filter(s => !Object.values(merged.picks).flat().some(x => x.id === s.id) && !merged.excluded.some(e => e.id === s.id)).map(s => ({ id: s.id, reason: 'eligible but not needed by any zone' }));

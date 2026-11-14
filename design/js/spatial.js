@@ -121,14 +121,16 @@ export function readIntent(project, site) {
   const screenFns = b.functions.filter(f => ['z:screen', 'z:scrim'].includes(f.function) && !f.alternative);
   const screenSides = []; const constraints = [];
   for (const f of screenFns) { const m = /^(north|south|east|west)-edge$/.exec(f.where); if (m) { if (!screenSides.includes(m[1])) screenSides.push(m[1]); constraints.push({ id: `fn:${f.function}@${f.where}`, text: `${f.function.replace('z:', '')} along the ${m[1]} edge`, from: f.evidence || 'brief' }); } else if (f.where === 'boundary') constraints.push({ id: `fn:${f.function}@boundary`, text: `${f.function.replace('z:', '')} along the boundary (no side named)`, from: f.evidence || 'brief' }); }
-  const boundaryScreen = screenFns.some(f => f.where === 'boundary') && !screenSides.length;
+  const boundaryScreen = screenFns.some(f => f.where === 'boundary') && !screenSides.length;   // only when the user chose "outer boundary" themself
+  const pendingScreen = screenFns.some(f => f.where === 'edge-unset') && !screenSides.length && !boundaryScreen;
+  if (pendingScreen) constraints.push({ id: 'fn:screen@edge-unset', text: 'screen wanted — edge not chosen yet (no screen band is proposed until you choose it)', from: 'brief' });
   const keepOpen = b.hard_constraints.some(h => h.kind === 'no-plant-zone') || site.open_areas.length > 0 || (project.site.notes || []).some(n => n.kind === 'no-plant-zone');
   const wantsOpen = keepOpen || !!vals.openness;
   if (keepOpen) constraints.push({ id: 'keep-open', text: site.open_areas.length ? `keep ${site.open_areas.map(o => o.label).join(', ')} free of plants` : 'keep an open area (its extent is not stated)', from: b.hard_constraints.find(h => h.kind === 'no-plant-zone')?.evidence || 'site' });
   for (const t of site.trees) constraints.push({ id: `tree:${t.id}`, text: `${t.label} kept (${t.position_status}; canopy ${t.radius_status})`, from: 'site' });
   for (const e of site.excluded.filter(e => e.kind !== 'no-plant-zone')) constraints.push({ id: `excluded:${e.id}`, text: `${e.label} excluded with a ${e.clearance_m} m clearance`, from: 'site' });
   const habitat = !!(vals.ecology || vals.seasonal_interest || vals.maintenance_low || b.functions.some(f => f.function === 'z:ground_cover'));
-  return { values: vals, screenSides, boundaryScreen, wantsOpen, keepOpen, habitat, constraints, screenFn: screenFns[0]?.function || 'z:screen', shelter: !!vals.shelter };
+  return { values: vals, screenSides, boundaryScreen, pendingScreen, wantsOpen, keepOpen, habitat, constraints, screenFn: screenFns[0]?.function || 'z:screen', shelter: !!vals.shelter };
 }
 export function propose(project, opts = {}) {
   const P = { ...DEFAULTS, ...opts }; const site = deriveSite(project, P); const intent = readIntent(project, site);
@@ -137,7 +139,8 @@ export function propose(project, opts = {}) {
   const access = site.access_edge.side; const nonAccess = SIDES.filter(s => s !== access && site.edges[s]?.length);
   const screenSides = intent.screenSides.length ? intent.screenSides : intent.boundaryScreen ? nonAccess : [];
   const screenBasis = intent.screenSides.length ? `privacy → a ${intent.screenFn.replace('z:', '')} band along the ${screenSides.join(' and ')} edge, deep enough for a row and a staggered second row` : intent.boundaryScreen ? `privacy along the boundary, no side named → bands on every edge except the ${access} (access) edge` : null;
-  const assumptions = []; if (intent.boundaryScreen) assumptions.push(`"along the fence" named no side: every edge except the ${access} edge is screened — name the side to narrow it`);
+  const assumptions = []; if (intent.boundaryScreen) assumptions.push(`Screen was set on the outer boundary: every edge except the ${access} (access) edge gets a band`);
+  if (intent.pendingScreen) assumptions.push('privacy was asked for but no edge was named: no screen band is proposed and no screen is planted until you choose the edge (Compose → Site-wide spatial functions)');
   const keepOut = site.open_areas.map(o => C.toMulti(o.polygon)); const accessBand = site.edges[access]?.length ? C.edgeBand({ polygon: site.boundary }, site.edges[access], P.access_band_m) : [];
   const sideSides = nonAccess.filter(s => !screenSides.includes(s));
   const wScreen = bandWidthFor(site, P); const Bs = G.bbox(site.boundary); const islandR = (t, pad) => Math.min(t.radius + pad, Math.max(t.radius, 0.35 * Math.min(Bs.w, Bs.h)));   // the island never grows past about a third of the site's shorter side
@@ -186,7 +189,8 @@ function conceptualProposal(project, site, intent, inputs_fp) {
   if (intent.habitat && !intent.wantsOpen) moves.push({ op: 'edge', text: 'a continuous perimeter bed for a layered, low-upkeep ground layer; the centre left for use' });
   if (site.trees.length || (project.site.notes || []).some(n => n.kind === 'existing-tree')) moves.push({ op: 'island', text: 'the existing tree kept and underplanted as an island' });
   if (!moves.length) moves.push({ op: 'edge', text: 'a perimeter bed on every edge except the access edge (default move when no spatial wish is stated)' });
-  const questions = [...site.questions]; if (!intent.wantsOpen && !intent.screenSides.length && !intent.boundaryScreen) questions.push({ key: 'spatial', text: 'Should any part stay open (seating, play, a path), and is there an edge that needs screening?' });
+  const questions = [...site.questions]; if (intent.pendingScreen) questions.push({ key: 'screen-edge', text: 'Which edge should be screened (north / south / east / west)? No side was named, so none is assumed.' });
+  if (!intent.wantsOpen && !intent.screenSides.length && !intent.boundaryScreen && !intent.pendingScreen) questions.push({ key: 'spatial', text: 'Should any part stay open (seating, play, a path), and is there an edge that needs screening?' });
   return { generated: iso(), engine: 'spatial.js', inputs_fp, conceptual: true, site: { site_m2: null, plantable_m2: null, questions, assumptions: [] }, intent: { screen_sides: intent.screenSides, wants_open: intent.wantsOpen, habitat: intent.habitat, values: intent.values }, concept: { moves, text: 'No dimensions were given, so nothing is drawn to scale: these are the spatial moves the layout would make, in order.' }, candidates: [], recommended_id: null };
 }
 

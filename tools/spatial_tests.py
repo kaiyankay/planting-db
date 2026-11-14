@@ -9,7 +9,7 @@ recorded about the Shape → Compose → Grow flow.
   python3 -I tools/spatial_tests.py [--url http://127.0.0.1:8768]   -> eval/spatial-tests-<date>.md, exit 1 on any failure
 
   T  engine tests   every [ok]/[FAIL] line of tests.html
-  A  Demo A         "6 × 4 m backyard, tree north, privacy along the fence, ecological value, open centre for children" →
+  A  Demo A         "6 × 4 m backyard, tree north, privacy along the north fence, ecological value, open centre for children" →
                     site model (tree position estimated and labelled), ≥ 2 suggested beds, Screen band on the north edge,
                     open centre kept, three alternatives, accept → Compose (per-bed candidates) → Grow (every plant inside
                     its bed, none in the open area, plan = schedule = 3D)
