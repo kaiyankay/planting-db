@@ -60,14 +60,21 @@ export class Knowledge {
    *    uncertain  some claimed range reaches the target, but the chosen range starts below it or another claim stays below it
    *    fails      no claimed range reaches the target
    *    unknown    no height range recorded */
+  /** the claimed height ranges that apply to a bed: species-level ranges (cultivar ranges only when there are no others); when the
+   *  bed's light is known and some ranges are stated for that light, only those — the same choice sizeProxy makes for the plan */
+  applicableHeights(id, light = null) {
+    const all = this.sizeOptions(id, 'height_class').filter(o => o.max != null); const base = all.filter(o => !o.cultivars.length).length ? all.filter(o => !o.cultivars.length) : all;
+    if (light) { const want = light === 'shade' || light === 'part-shade' || light === 'partial-shade' ? /shade/i : /sun/i; const m = base.filter(o => o.conditions.some(x => want.test(x))); if (m.length) return m; }
+    return base;
+  }
   heightAgainst(id, target_m, light = null) {
-    const all = this.sizeOptions(id, 'height_class').filter(o => o.max != null); const base = all.filter(o => !o.cultivars.length); const opts = base.length ? base : all;
+    const opts = this.applicableHeights(id, light); const lightNote = opts.length && light && opts.every(o => o.conditions.length) ? ` stated for ${[...new Set(opts.flatMap(o => o.conditions))].join(', ')} (site light ${light})` : '';
     if (!opts.length) return { result: 'unknown', detail: 'no mature height range recorded for this plant', claims: [], verified: false, tallest_m: null };
     const pick = this.sizeProxy(id, 'height_class', light); const reach = opts.filter(o => o.max >= target_m), below = opts.filter(o => o.max < target_m); const tallest = Math.max(...opts.map(o => o.max));
     const rng = o => `${o.min ?? '?'}–${o.max} m`; const claims = [...new Set([pick.claim, ...reach.map(o => o.claim)].filter(Boolean))]; const verified = pick.verification === 'verified';
-    if (!reach.length) return { result: 'fails', detail: `no claimed height range reaches ${target_m} m (tallest claimed ${tallest} m; ${opts.length} range${opts.length === 1 ? '' : 's'})`, claims: opts.map(o => o.claim), verified, tallest_m: tallest };
+    if (!reach.length) return { result: 'fails', detail: `no claimed height range${lightNote} reaches ${target_m} m (tallest claimed ${tallest} m; ${opts.length} range${opts.length === 1 ? '' : 's'})`, claims: opts.map(o => o.claim), verified, tallest_m: tallest };
     if (pick.min != null && pick.min >= target_m && !below.length) return { result: 'meets', detail: `claimed mature height ${rng(pick)} (${pick.claim}) starts at or above ${target_m} m; no claimed range stays below it`, claims, verified, tallest_m: tallest };
-    return { result: 'uncertain', detail: `${reach.length} of ${opts.length} claimed height ranges reach ${target_m} m; the range used for the plan is ${rng(pick)} (${pick.claim})${below.length ? `; ${below.length} claimed range${below.length === 1 ? ' stays' : 's stay'} below it` : ''}`, claims, verified, tallest_m: tallest };
+    return { result: 'uncertain', detail: `${reach.length} of ${opts.length} claimed height ranges${lightNote} reach ${target_m} m; the range used for the plan is ${rng(pick)} (${pick.claim})${below.length ? `; ${below.length} claimed range${below.length === 1 ? ' stays' : 's stay'} below it` : ''}`, claims, verified, tallest_m: tallest };
   }
   /** leaf retention for a year-round requirement: meets (Evergreen only) · uncertain (both recorded, or nothing recorded) · fails (Deciduous only) */
   yearRound(id) {
@@ -91,7 +98,7 @@ export class Knowledge {
   }
   proxy(id, light = null) {
     const sp = this.sizeProxy(id, 'spread_class', light), ht = this.sizeProxy(id, 'height_class', light);
-    return { radius_m: sp.value_m != null ? Math.max(.15, Math.round(sp.value_m / 2 * 100) / 100) : 0.3, radius_status: sp.value_m != null ? 'proxy: half the claimed mature spread' : 'assumed 0.3 m — spread not recorded', spread: sp, height_m: ht.value_m, height_status: ht.value_m != null ? 'proxy from a claimed height range' : 'unknown', height: ht };
+    return { radius_m: sp.value_m != null ? Math.max(.15, Math.round(sp.value_m / 2 * 100) / 100) : 0.3, radius_status: sp.value_m != null ? 'proxy: half the claimed mature spread' : 'assumed 0.3 m — spread not recorded', spread: sp, height_m: ht.value_m, height_status: ht.value_m != null ? 'proxy from a claimed height range' : 'unknown', height: ht, height_max_claimed_m: (o => o.length ? Math.max(...o.map(x => x.max)) : null)(this.applicableHeights(id, light)) };
   }
 
   // ---- gate check of one species against site conditions: pass / conditional / fail / unknown, each with the claims behind it

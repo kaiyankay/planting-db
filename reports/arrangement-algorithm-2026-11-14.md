@@ -19,7 +19,7 @@ Every species gets a class per function — **meets · uncertain · fails** — 
 | evidence | function link drawn, `derived` / `documented`, no conflict → meets · link is a `candidate` (inferred from traits) or a trait claim contradicts the use → **uncertain** · no link → fails | knowledge graph link (`function_links`: status, conflict, verification) |
 | form | a tree → fails (the row operators arrange shrubs and perennials; there is no tree-placement rule) | limitation of the existing operators |
 | site | light / water / soil gates: fail → fails · pass → meets · conditional / unknown → uncertain | claims (round 1 gates) |
-| target height | every claimed height range of the species is read (species-level ranges; cultivar ranges only when there are no others). No range reaches the target → fails · the range used for the plan starts at or above it and no range stays below → meets · otherwise → uncertain · no height recorded → uncertain (missing data) | claims (`mature_height` ranges, claim ids listed) |
+| target height | every applicable claimed height range of the species is read (species-level ranges; cultivar ranges only when there are no others; when the bed's light is known and ranges are stated for that light, only those — the same ranges the plan and the evaluation use). No range reaches the target → fails · the range used for the plan starts at or above it and no range stays below → meets · otherwise → uncertain · no height recorded → uncertain (missing data) | claims (`mature_height` ranges, claim ids listed) |
 | year-round (only when required) | recorded Evergreen only → meets · Deciduous only → fails · both, or nothing → uncertain | claims (leaf retention) |
 | geometry | the bed depth behind the screened edge must hold a row: depth ≥ crown radius × (1.0 + 0.5) | crown radius from a claim; 0.5 edge tolerance is a heuristic |
 
@@ -89,7 +89,7 @@ Share of the plantable area lying under a mature ground-layer crown, each sample
 
 ## 4 · What the tests show (2026-11-14)
 
-`tools/design_tests.py` 159/159 (V1–V24 engine, G1–G8 on Demo A in the page), `spatial_tests.py` 141/141, `ux_tests.py` 41/41, `validate.py` 0 errors, survey importer 8/8.
+`tools/design_tests.py` 160/160 (V1–V24 + V4b engine, G1–G8 on Demo A in the page), `spatial_tests.py` 142/142, `ux_tests.py` 41/41, `validate.py` 0 errors, survey importer 8/8.
 
 | asked | result |
 |---|---|

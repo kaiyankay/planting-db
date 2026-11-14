@@ -1,6 +1,6 @@
 # Design workspace tests — 2026-11-14
 
-`tools/design_tests.py` against http://127.0.0.1:8768 (headless Chrome). **159/159 pass.**
+`tools/design_tests.py` against http://127.0.0.1:8768 (headless Chrome). **160/160 pass.**
 
 | test | result | detail |
 |---|---|---|
@@ -16,7 +16,7 @@
 | T·C3 text-only "right side" → direction scope with a polygon; reduce_density + preserve screen | pass | "right side" read relative to the plan as drawn (north up); the region is the outer third of the bed on that side · amount 0.25 |
 | T·C4 "here" with a drawn selection → selection scope | pass | "here" → the drawn selection |
 | T·C5 contradictory request is refused, not silently applied | pass | filling the open zone with tall plants contradicts the open-space constraint; no change is made without an explicit override |
-| T·C6 "move the taller plants away from the tree" → move_away with a resolved feature | pass | {"type":"move_away","filter":"taller","feature_id":"tree-dgni1","phrase":"tree","resolved":true} |
+| T·C6 "move the taller plants away from the tree" → move_away with a resolved feature | pass | {"type":"move_away","filter":"taller","feature_id":"tree-g11c1","phrase":"tree","resolved":true} |
 | T·C7 overclaim classified | pass |  |
 | T·D1 every plant object has a stable id, a species from the database, a position inside the accepted bed | pass | 31 plants |
 | T·D2 no plant inside the no-plant zone, none under the locked tree | pass |  |
@@ -110,6 +110,7 @@
 | T·V2 a species with no Screen link, and a tree, never qualify; a link with a conflict or a candidate link is "uncertain" at best and never counted as verified | pass | acer-palmatum:fails cercidiphyllum-japonicum:fails cornus-sericea:uncertain(conflict) gaultheria-shallon:uncertain vaccinium-ovatum:uncertain(conflict) |
 | T·V3 raising the target height narrows the candidates: 1.0 m ⊇ 1.8 m ⊇ 3.5 m ⊇ 7 m, and each loss is explained by a height claim | pass | 1.0 m [cornus-sericea,gaultheria-shallon,vaccinium-ovatum] · 1.8 m [cornus-sericea,gaultheria-shallon,vaccinium-ovatum] · 3.5 m [cornus-sericea] · 7 m [] |
 | T·V4 one species against three targets: meets → uncertain → fails, each with its claim ids | pass | Gaultheria shallon at 1.0 / 1.8 / 3.5 m: uncertain → uncertain → fails · 2 of 4 claimed height ranges reach 1.8 m; the range used for the plan is 1.2–3 m (gaultheria-shallon:mature_height:rhs01); 2 claimed ranges stay below it |
+| T·V4b where height ranges are stated for the bed light, selection reads only those, and the evaluation reads the same ones: an "uncertain" height in selection is "uncertain" (not "not met") in the evaluation | pass | shade ranges 1–1.5, 1.2–3, 1.2–3 m → selection uncertain · evaluation uncertain (possible 10 of 10 m) |
 | T·V5 a year-round requirement removes the deciduous candidates and keeps the evergreen ones; without it leaf retention is not a criterion | pass | not required [cornus-sericea,gaultheria-shallon,vaccinium-ovatum] · year-round [gaultheria-shallon,vaccinium-ovatum] · removed [cornus-sericea] |
 | T·V6 the species planted are the best class available, and a second species joins the row only when it is as good as the first | pass | gaultheria-shallon,vaccinium-ovatum (uncertain) |
 | T·V7 bed depth 0.5 m: no row fits, nothing is planted and the reason names the depth each candidate needs | pass | Screen along the north edge (North bed): no eligible species — left unplanted. North bed: no species meets the Screen requirement (target 1.8 m) — the screened edge stays unplanted (Acer palmatum — form: a tree — the row operators arrange shrubs and perennials; there is no tree-placement rule; geome |
@@ -137,13 +138,13 @@
 | J5 generated: plant objects with ids, schedule reconciles, operators named, no geometry error | pass | 38 plants · ['along_edge', 'fill_drift', 'repeat_accent'] · edge [{'zone': 'zone-screen-north-edge-bed-1', 'bed_id': 'bed-1', 'label': 'Screen along the north edge (North bed)', 'edge_length_m': 6, 'covered_m': 4.39, 'screen_row_cover_m': 4.39, 'continuity': 0.73, 'gaps': [{'edge': 0, 'from_m': 3.67, 'to_m': 5.28, 'length_m': 1.61}], 'gap_total_m': 1.61, 'target_height_m': 1.8, 'target_basis': 'heuristic default — no target height stated', 'year_round_required': False, 'year_round_basis': 'not s |
 | J5b 2D plan draws one symbol group per plant object | pass | 38 symbols for 38 plants |
 | J5c every bed of the layout is planted in the one version (multi-bed engine) | pass | [["North bed", 11], ["East bed", 19], ["West bed", 6], ["Tree island", 2]] |
-| J6 3D garden (three.js) holds one object per plant of the same version | pass | garden {'plants': 38, 'meshes': 525} · model 38 |
+| J6 3D garden (three.js) holds one object per plant of the same version | pass | garden {'plants': 38, 'meshes': 526} · model 38 |
 | J7 lasso + language: scoped command (selection, reduce_density, preserve screen), preview diff, nothing outside moved | pass | targets 24 · removed 5 |
 | J8 applied: new version with fewer plants = removed ids | pass | 33 plants, 5 removed |
-| J8b 3D garden re-synced after apply: plant count = applied version | pass | garden {'plants': 33, 'meshes': 470} · model 33 |
+| J8b 3D garden re-synced after apply: plant count = applied version | pass | garden {'plants': 33, 'meshes': 471} · model 33 |
 | J9/10 undo returns to the generated version; redo returns to the edit | pass | undo 38 · redo 33 |
 | J11 text-only reference 'move the taller plants away from the tree' resolved to a typed move_away command | pass | {"diff": {"added": [], "removed": [], "changed": [], "unchanged": ["plant-001", "plant-002", "plant-003", "plant-004", "plant-005", "plant-006", "plant-007", "plant-008", "plant-009", "plant-010", "plant-011", "plant-012", "plant-013", "plant-014", "plant-015", "plant-016", "plant-018", "plant-019", |
-| J12 export: SVG plant count = model = schedule total | pass | {"name": "12 export", "stage": "garden", "files": ["model.json", "plan.svg", "schedule.csv", "assumptions.md"], "svg_plants": 33, "model_plants": 33, "csv_total": 33, "garden": {"plants": 33, "meshes": 470}} |
+| J12 export: SVG plant count = model = schedule total | pass | {"name": "12 export", "stage": "garden", "files": ["model.json", "plan.svg", "schedule.csv", "assumptions.md"], "svg_plants": 33, "model_plants": 33, "csv_total": 33, "garden": {"plants": 33, "meshes": 471}} |
 | F1 Site page: every condition keeps its selector; wind and irrigation say they are recorded only, clay says it cannot be assessed | pass | ["soil_type", "wind", "irrigation"] |
 | F2 start: the north bed carries Screen and the first design plants a screen row | pass | {"North bed": ["z:screen@north-edge", "z:ground_cover@bed-interior"], "East bed": ["z:ground_cover@east-edge"], "West bed": ["z:ground_cover@west-edge"]} |
 | F3 removing the site-wide Screen removes it from the beds that carried it and marks the design stale | pass | {"North bed": ["z:ground_cover@bed-interior"], "East bed": ["z:ground_cover@east-edge"], "West bed": ["z:ground_cover@west-edge"]} |
@@ -161,5 +162,5 @@
 | G7 the evaluation is a geometric estimate throughout: cover ≤ edge, certain ≤ possible ≤ cover, never marked as verified performance; the drawer shows it | pass | {"status": "not met", "checks": {"continuity": "not met", "target_height": "uncertain", "year_round": "not required", "evidence": "supported"}, "covered_m": 4.39, "edge_length_m": 6, "gaps": 1, "certain": 0, "possible": 4.39, "evergreen": 4.39, "verified_performance": false, "species": ["gaultheria- |
 | G8 ground cover is reported per bed as a share of the plantable area (0–1) with the plant count | pass | [{"name": "North bed", "share": 0.11, "plantable": 4.3, "plants": 7}, {"name": "East bed", "share": 0.52, "plantable": 2.48, "plants": 19}, {"name": "West bed", "share": 0.55, "plantable": 2.38, "plants": 6}, {"name": "Tree island", "share": 0.37, "plantable": 1.23, "plants": 2}] |
 | S1 design server reachable; designs saved to designs/ | pass | llm: ANTHROPIC_API_KEY not set — offline rule parser in use · designs ['demo-a', 'demo-b', 'demo-backyard', 'proj-13x0', 'proj-166r0', 'proj-17y40', 'proj-1geo0', 'proj-1icy0', 'proj-1jj10', 'proj-1jmy0', 'proj-1jmy1', 'proj-1q4x0', 'proj-1s4w0', 'proj-1tmq0', 'proj-1xeh0', 'proj-206b0', 'proj-228p0', 'proj-26ut0', 'proj-2anz0', 'proj-2aoj1', 'proj-2cr30', 'proj-2gg20', 'proj-2lrm0', 'proj-2nza0', 'proj-2wbf0', 'proj-2yk20', 'proj-2zaq0', 'proj-31ur0', 'proj-31vj1', 'proj-3agw0', 'proj-3anl0', ' |
-| S2 saved project: versions chain by parent id; current version's schedule equals its plant objects | pass | script-r2: 5 versions · current v-e55el · 77 plants |
+| S2 saved project: versions chain by parent id; current version's schedule equals its plant objects | pass | script-r2: 5 versions · current v-gv3wl · 77 plants |
 | S3 saved project: every plant inside its bed polygon (file, not UI) | pass |  |

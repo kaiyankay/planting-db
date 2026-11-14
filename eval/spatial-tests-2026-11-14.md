@@ -1,6 +1,6 @@
 # Spatial proposal tests — 2026-11-14
 
-`tools/spatial_tests.py` against http://127.0.0.1:8768 (headless Chrome, SwiftShader WebGL). **141/141 pass.**
+`tools/spatial_tests.py` against http://127.0.0.1:8768 (headless Chrome, SwiftShader WebGL). **142/142 pass.**
 
 | test | result | detail |
 |---|---|---|
@@ -16,7 +16,7 @@
 | T·C3 text-only "right side" → direction scope with a polygon; reduce_density + preserve screen | pass | "right side" read relative to the plan as drawn (north up); the region is the outer third of the bed on that side · amount 0.25 |
 | T·C4 "here" with a drawn selection → selection scope | pass | "here" → the drawn selection |
 | T·C5 contradictory request is refused, not silently applied | pass | filling the open zone with tall plants contradicts the open-space constraint; no change is made without an explicit override |
-| T·C6 "move the taller plants away from the tree" → move_away with a resolved feature | pass | {"type":"move_away","filter":"taller","feature_id":"tree-eciz1","phrase":"tree","resolved":true} |
+| T·C6 "move the taller plants away from the tree" → move_away with a resolved feature | pass | {"type":"move_away","filter":"taller","feature_id":"tree-h3c61","phrase":"tree","resolved":true} |
 | T·C7 overclaim classified | pass |  |
 | T·D1 every plant object has a stable id, a species from the database, a position inside the accepted bed | pass | 31 plants |
 | T·D2 no plant inside the no-plant zone, none under the locked tree | pass |  |
@@ -110,6 +110,7 @@
 | T·V2 a species with no Screen link, and a tree, never qualify; a link with a conflict or a candidate link is "uncertain" at best and never counted as verified | pass | acer-palmatum:fails cercidiphyllum-japonicum:fails cornus-sericea:uncertain(conflict) gaultheria-shallon:uncertain vaccinium-ovatum:uncertain(conflict) |
 | T·V3 raising the target height narrows the candidates: 1.0 m ⊇ 1.8 m ⊇ 3.5 m ⊇ 7 m, and each loss is explained by a height claim | pass | 1.0 m [cornus-sericea,gaultheria-shallon,vaccinium-ovatum] · 1.8 m [cornus-sericea,gaultheria-shallon,vaccinium-ovatum] · 3.5 m [cornus-sericea] · 7 m [] |
 | T·V4 one species against three targets: meets → uncertain → fails, each with its claim ids | pass | Gaultheria shallon at 1.0 / 1.8 / 3.5 m: uncertain → uncertain → fails · 2 of 4 claimed height ranges reach 1.8 m; the range used for the plan is 1.2–3 m (gaultheria-shallon:mature_height:rhs01); 2 claimed ranges stay below it |
+| T·V4b where height ranges are stated for the bed light, selection reads only those, and the evaluation reads the same ones: an "uncertain" height in selection is "uncertain" (not "not met") in the evaluation | pass | shade ranges 1–1.5, 1.2–3, 1.2–3 m → selection uncertain · evaluation uncertain (possible 10 of 10 m) |
 | T·V5 a year-round requirement removes the deciduous candidates and keeps the evergreen ones; without it leaf retention is not a criterion | pass | not required [cornus-sericea,gaultheria-shallon,vaccinium-ovatum] · year-round [gaultheria-shallon,vaccinium-ovatum] · removed [cornus-sericea] |
 | T·V6 the species planted are the best class available, and a second species joins the row only when it is as good as the first | pass | gaultheria-shallon,vaccinium-ovatum (uncertain) |
 | T·V7 bed depth 0.5 m: no row fits, nothing is planted and the reason names the depth each candidate needs | pass | Screen along the north edge (North bed): no eligible species — left unplanted. North bed: no species meets the Screen requirement (target 1.8 m) — the screened edge stays unplanted (Acer palmatum — form: a tree — the row operators arrange shrubs and perennials; there is no tree-placement rule; geome |
@@ -135,7 +136,7 @@
 | A3 a Screen band on the north edge; the open centre is kept free of beds; not one inset rectangle | pass | [["North bed", 5.4, ["z:screen", "z:ground_cover"]], ["East bed", 2.48, ["z:ground_cover"]], ["West bed", 2.48, ["z:ground_cover"]], ["Tree island", 2.56, ["z:ground_cover"]]] |
 | A4 the Shape panel shows the alternatives, the reasoning, a row per bed and an Accept action | pass | {"panel_cands": 3, "explanation_lines": 4, "bed_rows": 4, "accept_button": true} |
 | A5 accept → every bed confirmed; Compose lists a card per bed with candidates | pass | {"stage": "intent", "in_garden": false, "sections": ["welcome", "site", "intent"], "nav_enabled": ["welcome", "site", "intent"], "revision_card": false, "composer_open": false, "overflow_x": 0, "inner_width": 1440, "bed_cards": 4, "candidates": 13, "functions": ["z:screen@north-edge", "z:scrim@north-edge", "z:ground_cover@bed-interior"]} |
-| A6 Grow: every bed planted, every plant inside its bed, none in the open area, plan symbols = plants = schedule, 3D = plants | pass | {"per_bed": [["North bed", 14], ["East bed", 19], ["West bed", 6], ["Tree island", 2]], "three": {"plants": 41, "meshes": 563}} |
+| A6 Grow: every bed planted, every plant inside its bed, none in the open area, plan symbols = plants = schedule, 3D = plants | pass | {"per_bed": [["North bed", 14], ["East bed", 19], ["West bed", 6], ["Tree island", 2]], "three": {"plants": 41, "meshes": 562}} |
 | B1 vague input: values read, no boundary, scale unknown, no bed polygon; proposal is conceptual with its moves and the size question | pass | {"values": {"maintenance_low": 2, "ecology": 2}, "questions": ["How big is the site? Type width \u00d7 height in metres, draw the boundary, or trace a photo and calibrate a known length.", "Should any part stay open (seating, play, a path), and is there an edge that needs screening?"]} |
 | B2 the Shape panel asks the key question and lists the conceptual moves; the canvas states that there is no geometry | pass | {"q": "How big is the site? Type width \u00d7 height in metres, draw the boundary, or trace a photo and calibrate a known length.", "moves": 1} |
 | B3 after W × H (5 × 4): beds proposed in metres, valid, with alternatives | pass | [["North bed", 5], ["East bed", 3], ["West bed", 3], ["A", "Recommended"], ["B", "Modular beds"], ["C", "More planting area"]] |
