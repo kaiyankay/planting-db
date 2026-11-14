@@ -332,3 +332,6 @@ body[data-stage="welcome"] #stagenav { min-height: 45.6953125px; }
   .canvas-empty { position: static; transform: none; width: auto; margin: 12px; } .ws-grow .ws-rail { flex-wrap: nowrap; } .pwhy li { grid-template-columns: 9px 84px minmax(0, 1fr); }
   .loc-res { grid-template-columns: 18px minmax(0, 1fr); } .loc-res .kind, .loc-res .pickit { display: none; } .loc-search { flex-wrap: wrap; }
 }
+/* the status bar stays one line: a long project name gives way first */
+.ws-status .canvas-foot { min-width: 0; } .ws-status .ws-state { flex: 0 1 auto; min-width: 0; max-width: 46ch; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; } .ws-status .canvas-foot .lg { white-space: nowrap; flex: none; } .ws-status .why-not { flex: 0 1 auto; min-width: 0; }
+@media (min-width: 1081px) and (max-width: 1340px) { #grow-why { display: none; } .ws-status .ws-state { max-width: 34ch; } }
