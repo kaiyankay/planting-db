@@ -12,6 +12,7 @@ export function newProject(name = 'Untitled backyard') {
   return {
     id: uid('proj'), name, created: now(), schema: 'planting-intelligence/design-project/0.1', knowledge_snapshot: null,
     conversation: [], inputs: [],
+    location: null,   // where the site is: { status: 'confirmed' | 'unverified', label, short, lat, lon, … } — a map position or a typed reference, never site geometry or conditions
     site: {
       id: 'site-1', coordinate_system: 'local-meters', orientation: { north_angle_degrees: 0, basis: 'assumption (north = up until stated)' },
       scale: { status: 'unknown', known_length_m: null, source: null }, boundary: null, boundary_status: 'unknown',
@@ -45,6 +46,8 @@ export function undoSite(project) { const h = project.site.history || []; const 
 export function setCondition(project, key, value, status, source, note, bedId = null) { const c = cond(value, status, source, note); if (bedId) { const b = project.site.beds.find(b => b.id === bedId); if (b) b.conditions_overrides[key] = c; } else project.site.conditions[key] = c; }
 export function effectiveConditions(project, bedId) { const b = project.site.beds.find(b => b.id === bedId); return { ...project.site.conditions, ...(b?.conditions_overrides || {}) }; }
 export function addInput(project, input) { const id = uid(input.type); project.inputs.push({ id, added: now(), ...input }); return id; }
+/** the site's location. `confirmed`: a geocoder result the user picked. `unverified`: the words the user typed, kept as a reference. */
+export function setLocation(project, loc) { project.location = loc ? { ...loc, set_at: now() } : null; project.inputs = project.inputs.filter(i => i.type !== 'address'); if (loc) addInput(project, { type: 'address', role: 'context-reference', text: loc.label, lookup_performed: loc.status === 'confirmed', note: loc.status === 'confirmed' ? `map position confirmed by the user from a ${loc.provider || 'geocoder'} result; no boundary, size or site condition comes from it` : 'typed reference, not looked up; nothing is inferred from it' }); return project.location; }
 export function say(project, role, text, extra = {}) { project.conversation.push({ id: uid('msg'), time: now(), role, text, ...extra }); }
 const r2 = v => Math.round(v * 100) / 100;
 
@@ -85,7 +88,9 @@ export function readiness(project) {
 export function siteBBox(project) { return project.site.boundary ? bbox(project.site.boundary) : null; }
 
 // ---------------------------------------------------------------- persistence
-const KEY = 'pi.design.project.v1';
+// one saved project per published copy of the app: the production site (/design/) and a preview (/studio-preview/) share an origin
+// on GitHub Pages, and a project written by one must not be opened by the other
+const KEY = (() => { const dir = (typeof location !== 'undefined' ? location.pathname : '').split('/').filter(Boolean).filter(x => !/\.html?$/.test(x)).pop() || 'design'; return dir === 'design' ? 'pi.design.project.v1' : `pi.${dir}.project.v1`; })();
 export function saveLocal(project) { try { localStorage.setItem(KEY, JSON.stringify(project)); return true; } catch { return false; } }
 export function loadLocal() { try { const s = localStorage.getItem(KEY); return s ? JSON.parse(s) : null; } catch { return null; } }
 export function clearLocal() { try { localStorage.removeItem(KEY); } catch { } }

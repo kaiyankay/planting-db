@@ -119,7 +119,7 @@ components:
 Planting Intelligence is a botanical design studio: warm paper, olive ink, one caramel accent. The home page (Imagine) is the
 brand — a large Fraunces headline, a single composer, and plant symbols drawn from the knowledge base that sway slowly. Every
 later page keeps that paper and that ink, but changes register: Shape and Compose are a desktop drawing workspace (the plan is
-the page; tools, layers and an inspector sit around it), Grow is the immersive garden.
+the page; tools, layers and an inspector sit around it), and Grow is the same workspace with the garden as its subject.
 
 Imagine tells the story. Shape models the site. Compose assigns spatial functions and plants. Grow shows the result. They
 share one site drawing, one navigation and one set of controls; they do not share a layout.
@@ -144,8 +144,9 @@ share one site drawing, one navigation and one set of controls; they do not shar
 
 ## Layout
 
-- Home: one viewport, headline and composer left, plant figure right.
-- Workspace (Shape, Compose; ≥ 1081 px): fixed viewport, no page scroll. A 48 px mode bar, a 64 px tool rail, the canvas,
+- Home: one viewport, headline and composer left, plant figure right. The composer takes words, a location, a size and an image
+  together; a source opens inside the composer under a hairline, and what was added sits under the text as a chip.
+- Workspace (Shape, Compose, Grow; ≥ 1081 px): fixed viewport, no page scroll. A 48 px mode bar, a 64 px tool rail, the canvas,
   a 340 px inspector, a 48 px status bar holding the state of the model and the single way forward. Panels scroll inside
   themselves. The canvas keeps the same rectangle and the same view in both modes, so the site never moves when the mode does.
 - Floating elements on the canvas are few and docked: the command bar (bottom centre), zoom (bottom right), layout options
@@ -171,7 +172,14 @@ Object handles on the plan are small white squares with an ink edge; mid-edge ha
   actions. With nothing selected it shows the model itself.
 - **Layers**: a list of what is on the plan; each row selects its object, each group has a visibility toggle.
 - **Command bar**: one line, "say what should change"; the last reading opens above it.
-- **Status bar**: state of the model on the left, legend in the middle, one primary action on the right.
+- **Status bar**: state of the model on the left, legend in the middle, one primary action on the right, and beside it one
+  line that says what that action does ("Confirms the 6 × 4 m outline and 4 beds as drawn").
+- **Mode bar**: the page name, then where the work stands: Shape shows Concept → Scaled model → Planting beds, Compose the
+  bed being designed and Spatial function → Plant selection → Arrangement, Grow the version and the three views.
+- **Source chip** (home) and **location chip** (Shape): a solid olive edge for a confirmed map position, a dotted ink edge
+  for a reference that was only typed. A location never carries more than its place.
+- **Requirements**: one row per requirement with its status as a word — met, uncertain, not met, or *estimate* where the
+  engine measures without a pass mark. The page never turns an estimate into a verdict.
 
 ### The site drawing
 
