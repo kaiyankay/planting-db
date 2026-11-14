@@ -9,6 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..600;1,9..144,300..600&display=swap">
 <link rel="stylesheet" href="./css/journey.css">
+<link rel="stylesheet" href="./css/workspace.css">
 <script type="importmap">{ "imports": { "three": "../brain/vendor/three/three.module.js", "three/addons/": "../brain/vendor/three/examples/jsm/" } }</script>
 </head>
 <body data-stage="welcome">
@@ -57,9 +58,11 @@
       <div class="shape-main">
         <div class="site-canvas">
           <div class="canvas-head" id="site-tools"></div>
-          <div id="site-canvas-body"><div class="canvas-hint" id="site-hint"></div></div>
+          <div id="site-canvas-body"><div class="canvas-hint" id="site-hint"></div><div id="site-preview" hidden></div></div>
           <div class="canvas-foot" id="site-foot"></div>
         </div>
+        <div class="conditions" id="site-conditions"></div>
+        <div id="site-evidence"></div>
         <div class="cta-row"><button class="btn primary big" id="to-intent">Continue to composition</button><span class="why-not" id="to-intent-why"></span></div>
       </div>
       <div class="shape-side" id="shape-side"></div>
@@ -68,10 +71,17 @@
 
   <!-- 3 · Intent -->
   <section id="s-intent" class="stage" aria-labelledby="h-intent" hidden>
-    <div class="wrap">
-      <div class="stage-head"><h2 id="h-intent">Compose the planting.</h2><p>Your words became a brief: what matters, where, and what must not change. Each confirmed bed lists its spatial function and the species that pass its site gates. Each goal says what it does to the generated planting — and when it does nothing yet.</p></div>
+    <div class="wrap compose">
+      <div class="stage-head"><h2 id="h-intent">Compose the planting.</h2><p>Every bed carries a spatial function, and the function decides what is planted there. Select a bed on the plan to see why it has that function, which site conditions apply, and which plants qualify.</p></div>
+      <div class="compose-main">
+        <div class="site-canvas fnplan">
+          <div class="canvas-head" id="fn-legend"></div>
+          <div id="compose-canvas-body"><svg id="svg3" aria-label="function plan: planting beds drawn by spatial function"></svg></div>
+          <div class="canvas-foot bedtabs" id="compose-beds"></div>
+        </div>
+        <div id="brief-right" aria-live="polite"></div>
+      </div>
       <div id="brief-left"></div>
-      <div id="brief-right"></div>
       <div class="cta-row"><button class="btn primary big" id="generate" disabled>Generate my garden</button><span class="why-not" id="generate-why"></span></div>
     </div>
   </section>

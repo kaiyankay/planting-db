@@ -1,7 +1,7 @@
 {
  "id": "demo-a",
  "name": "Demo A",
- "created": "2026-11-14T07:20:05.552Z",
+ "created": "2026-11-14T07:53:22.500Z",
  "schema": "planting-intelligence/design-project/0.1",
  "knowledge_snapshot": {
   "generated": "2026-11-13",
@@ -17,66 +17,66 @@
  },
  "conversation": [
   {
-   "id": "msg-h9ki2",
-   "time": "2026-11-14T07:20:05.554Z",
+   "id": "msg-h77o2",
+   "time": "2026-11-14T07:53:22.500Z",
    "role": "user",
    "text": "I have a 6 × 4 m backyard with a tree on the north side. I want privacy along the north fence, ecological value, and an open centre for children."
   },
   {
-   "id": "msg-h9y55",
-   "time": "2026-11-14T07:20:06.045Z",
+   "id": "msg-h77o5",
+   "time": "2026-11-14T07:53:22.500Z",
    "role": "ai",
    "text": "",
    "html": "<b>Read from what you said</b><ul><li>site set to 6 × 4 m (stated, rectangle assumed)</li><li>an existing tree on the north — its position will be estimated (and labelled so) once the site has geometry; drag it to where it stands</li><li>an open area (open centre) — kept free of beds once the site has geometry</li><li>goals: privacy, ecology, openness</li><li>screen → north edge (privacy → Screen (blocks a view); Scrim would only filter it)</li><li>scrim → north edge (openness + privacy → Scrim as the alternative to check) — alternative to check</li><li>ground cover → bed interior (habitat value → layered ground cover (design heuristic))</li></ul><b>Unknown</b> (not assumed): light; soil type and drainage; ecological performance — the database records some ecological-value claims (pollinator, bird food …) but no pollinator-interaction data; no score is possible.<br><b>Starting layout:</b> Planting at the edges, open centre kept — 4 planting beds proposed; adjust them on the canvas or say what should change.",
    "mode": "interpretation: offline-parser (rules: dimensions, existing-tree, open-centre, privacy, ecology, openness)"
   },
   {
-   "id": "msg-ha4x6",
-   "time": "2026-11-14T07:20:06.289Z",
+   "id": "msg-h77o6",
+   "time": "2026-11-14T07:53:22.500Z",
    "role": "sys",
    "text": "4 suggested beds confirmed as drawn — North bed 5.4 m², East bed 2.48 m², West bed 2.48 m², Tree island 2.56 m²"
   },
   {
-   "id": "msg-haby8",
-   "time": "2026-11-14T07:20:06.542Z",
+   "id": "msg-h77o8",
+   "time": "2026-11-14T07:53:22.500Z",
    "role": "ai",
    "text": "",
-   "html": "<b>Design v-habx7</b> — 41 plant objects, 3 species in 4 beds (12.92 m²), seed 42; operators along_edge, fill_drift, repeat_accent.<ul><li>North bed: 14 plants, 3 species · Screen, Ground cover</li><li>East bed: 19 plants, 2 species · Ground cover</li><li>West bed: 6 plants, 3 species · Ground cover</li><li>Tree island: 2 plants, 2 species · Ground cover</li><li>screen: <i>Gaultheria shallon</i> (gate unknown)</li><li>ground: <i>Arctostaphylos uva-ursi</i> (gate unknown), <i>Polystichum munitum</i> (gate unknown), <i>Gaultheria shallon</i> (gate unknown)</li><li>accent: <i>Achillea millefolium</i> (gate unknown)</li><li>excluded: <i>Acer palmatum</i>, <i>Cercidiphyllum japonicum</i>, <i>Cornus nuttallii</i>, <i>Cornus sericea</i> — reasons in Assumptions</li><li>Screen along the north edge (North bed): row cover 4.39 m of 6 m (continuity 0.73, a geometric proxy)</li><li>41 plants rest on an <b>unknown</b> site gate (conditions not stated)</li></ul>Circle an area and say what should change, or drag plants directly.",
+   "html": "<b>Design v-h77o7</b> — 41 plant objects, 3 species in 4 beds (12.92 m²), seed 42; operators along_edge, fill_drift, repeat_accent.<ul><li>North bed: 14 plants, 3 species · Screen, Ground cover</li><li>East bed: 19 plants, 2 species · Ground cover</li><li>West bed: 6 plants, 3 species · Ground cover</li><li>Tree island: 2 plants, 2 species · Ground cover</li><li>screen: <i>Gaultheria shallon</i> (gate unknown)</li><li>ground: <i>Arctostaphylos uva-ursi</i> (gate unknown), <i>Polystichum munitum</i> (gate unknown), <i>Gaultheria shallon</i> (gate unknown)</li><li>accent: <i>Achillea millefolium</i> (gate unknown)</li><li>excluded: <i>Acer palmatum</i>, <i>Cercidiphyllum japonicum</i>, <i>Cornus nuttallii</i>, <i>Cornus sericea</i> — reasons in Assumptions</li><li>Screen along the north edge (North bed): row cover 4.39 m of 6 m (continuity 0.73, a geometric proxy)</li><li>41 plants rest on an <b>unknown</b> site gate (conditions not stated)</li></ul>Circle an area and say what should change, or drag plants directly.",
    "mode": "engine: deterministic placement over the knowledge adapter (no model text)"
   },
   {
-   "id": "msg-hbul9",
-   "time": "2026-11-14T07:20:08.509Z",
+   "id": "msg-h7vk9",
+   "time": "2026-11-14T07:53:23.360Z",
    "role": "user",
    "text": "Make the north planting bed wider."
   },
   {
-   "id": "msg-hbula",
-   "time": "2026-11-14T07:20:08.509Z",
+   "id": "msg-h7vka",
+   "time": "2026-11-14T07:53:23.360Z",
    "role": "ai",
    "text": "",
    "html": "<b>Proposed change — preview, nothing applied yet.</b> Located: named &quot;North bed&quot;.<ul><li>North bed: 5.4 → 6.51 m² (narrowest 1.39 m) — wider by 0.5 m: the free edges move 0.5 m outward; the boundary, the open area and other beds hold it back</li><li class=\"warn\">1.89 m² would overlap another bed — kept out</li><li>4.67 m² of the growth fell outside the site boundary and was clipped (the bed already sits on that edge)</li></ul>Before (dashed) and after (solid) are drawn on the canvas. The current design has 14 plants in the changed bed (0 would fall outside); 3 other beds would not be touched. Apply here, then preview the updated planting in the garden.",
    "mode": "interpretation: offline-parser (rule bed_resize) · geometry: spatial engine"
   },
   {
-   "id": "msg-hbulb",
-   "time": "2026-11-14T07:20:08.509Z",
+   "id": "msg-h7vkb",
+   "time": "2026-11-14T07:53:23.360Z",
    "role": "sys",
    "text": "applied: North bed reshaped — the garden will offer an updated planting for the changed beds"
   },
   {
-   "id": "msg-hbulc",
-   "time": "2026-11-14T07:20:08.509Z",
+   "id": "msg-h7vkc",
+   "time": "2026-11-14T07:53:23.360Z",
    "role": "ai",
    "text": "",
    "html": "<b>Updated planting — preview.</b> 27 plants in 3 unchanged beds kept exactly; 11 plants regenerated for North bed. 14 removed (red), 11 added (green ring); plants in unchanged beds did not move. Apply, or keep the current version.",
    "mode": "engine: partial regeneration (changed beds only)"
   },
   {
-   "id": "msg-hbule",
-   "time": "2026-11-14T07:20:08.509Z",
+   "id": "msg-h7vke",
+   "time": "2026-11-14T07:53:23.360Z",
    "role": "sys",
-   "text": "applied as v-hbuld: 38 plants (14 removed, 11 added)"
+   "text": "applied as v-h7vkd: 38 plants (14 removed, 11 added)"
   }
  ],
  "inputs": [],
@@ -123,7 +123,7 @@
     "label": "existing tree",
     "source": "conversation: \"a tree on the north\" — position estimated from \"north\" (a quarter of the way along that edge, 1 m in), canopy not stated",
     "status": "inferred",
-    "id": "tree-h9kt3"
+    "id": "tree-h77o3"
    },
    {
     "locked": true,
@@ -149,7 +149,7 @@
     "label": "open (open centre)",
     "source": "conversation: \"open centre\" — extent suggested (40 % × 40 % of the site, toward the front), not stated",
     "status": "inferred",
-    "id": "open-h9ku4"
+    "id": "open-h77o4"
    }
   ],
   "beds": [
@@ -341,7 +341,7 @@
     ],
     "under_canopy": [
      {
-      "tree": "tree-h9kt3",
+      "tree": "tree-h77o3",
       "label": "existing tree",
       "m2": 0.82,
       "radius_status": "assumed 1.5 m"
@@ -435,7 +435,7 @@
     ],
     "under_canopy": [
      {
-      "tree": "tree-h9kt3",
+      "tree": "tree-h77o3",
       "label": "existing tree",
       "m2": 2.56,
       "radius_status": "assumed 1.5 m"
@@ -448,7 +448,7 @@
    }
   ],
   "proposals": {
-   "generated": "2026-11-14T07:20:06.042Z",
+   "generated": "2026-11-14T07:53:22.500Z",
    "engine": "spatial.js (polygon-clipping booleans, metre units)",
    "inputs_fp": "[[[0,0],[6,0],[6,4],[0,4]],[[\"existing-tree\",[1.5,3],null,null],[\"no-plant-zone\",null,[[1.8,0.6],[4.2,0.6],[4.2,2.2],[1.8,2.2]],null]],{\"privacy\":2,\"ecology\":2,\"openness\":2},[[\"z:screen\",\"north-edge\",null],[\"z:scrim\",\"north-edge\",true],[\"z:ground_cover\",\"bed-interior\",null]],{\"north_angle_degrees\":0,\"basis\":\"assumption (north = up until stated)\"}]",
    "conceptual": false,
@@ -457,7 +457,7 @@
     "plantable_m2": 20.16,
     "excluded": [
      {
-      "id": "open-h9ku4",
+      "id": "open-h77o4",
       "kind": "no-plant-zone",
       "label": "open (open centre)",
       "clearance_m": 0
@@ -465,7 +465,7 @@
     ],
     "open_areas": [
      {
-      "id": "open-h9ku4",
+      "id": "open-h77o4",
       "label": "open (open centre)",
       "area_m2": 3.84,
       "status": "inferred"
@@ -473,7 +473,7 @@
     ],
     "trees": [
      {
-      "id": "tree-h9kt3",
+      "id": "tree-h77o3",
       "label": "existing tree",
       "centre": [
        1.5,
@@ -610,7 +610,7 @@
        ],
        "under_canopy": [
         {
-         "tree": "tree-h9kt3",
+         "tree": "tree-h77o3",
          "label": "existing tree",
          "m2": 2.44,
          "radius_status": "assumed 1.5 m"
@@ -715,7 +715,7 @@
        ],
        "under_canopy": [
         {
-         "tree": "tree-h9kt3",
+         "tree": "tree-h77o3",
          "label": "existing tree",
          "m2": 0.82,
          "radius_status": "assumed 1.5 m"
@@ -804,7 +804,7 @@
        ],
        "under_canopy": [
         {
-         "tree": "tree-h9kt3",
+         "tree": "tree-h77o3",
          "label": "existing tree",
          "m2": 2.56,
          "radius_status": "assumed 1.5 m"
@@ -913,7 +913,7 @@
        "from": "open centre"
       },
       {
-       "id": "tree:tree-h9kt3",
+       "id": "tree:tree-h77o3",
        "text": "existing tree kept (estimated from your words; canopy assumed 1.5 m)",
        "from": "site"
       }
@@ -1013,7 +1013,7 @@
        ],
        "under_canopy": [
         {
-         "tree": "tree-h9kt3",
+         "tree": "tree-h77o3",
          "label": "existing tree",
          "m2": 1.79,
          "radius_status": "assumed 1.5 m"
@@ -1118,7 +1118,7 @@
        ],
        "under_canopy": [
         {
-         "tree": "tree-h9kt3",
+         "tree": "tree-h77o3",
          "label": "existing tree",
          "m2": 4.03,
          "radius_status": "assumed 1.5 m"
@@ -1241,7 +1241,7 @@
        "from": "open centre"
       },
       {
-       "id": "tree:tree-h9kt3",
+       "id": "tree:tree-h77o3",
        "text": "existing tree kept (estimated from your words; canopy assumed 1.5 m)",
        "from": "site"
       }
@@ -1351,7 +1351,7 @@
        ],
        "under_canopy": [
         {
-         "tree": "tree-h9kt3",
+         "tree": "tree-h77o3",
          "label": "existing tree",
          "m2": 3.13,
          "radius_status": "assumed 1.5 m"
@@ -1448,7 +1448,7 @@
        ],
        "under_canopy": [
         {
-         "tree": "tree-h9kt3",
+         "tree": "tree-h77o3",
          "label": "existing tree",
          "m2": 2.69,
          "radius_status": "assumed 1.5 m"
@@ -1659,7 +1659,7 @@
        "from": "open centre"
       },
       {
-       "id": "tree:tree-h9kt3",
+       "id": "tree:tree-h77o3",
        "text": "existing tree kept (estimated from your words; canopy assumed 1.5 m)",
        "from": "site"
       }
@@ -1694,13 +1694,13 @@
   "history": [
    {
     "label": "dimensions stated",
-    "time": "2026-11-14T07:20:05.564Z",
+    "time": "2026-11-14T07:53:22.500Z",
     "beds": [],
     "features": []
    },
    {
     "label": "accept layout",
-    "time": "2026-11-14T07:20:06.289Z",
+    "time": "2026-11-14T07:53:22.500Z",
     "beds": [
      {
       "id": "bed-1",
@@ -1758,7 +1758,7 @@
       ],
       "under_canopy": [
        {
-        "tree": "tree-h9kt3",
+        "tree": "tree-h77o3",
         "label": "existing tree",
         "m2": 2.44,
         "radius_status": "assumed 1.5 m"
@@ -1873,7 +1873,7 @@
       ],
       "under_canopy": [
        {
-        "tree": "tree-h9kt3",
+        "tree": "tree-h77o3",
         "label": "existing tree",
         "m2": 0.82,
         "radius_status": "assumed 1.5 m"
@@ -1967,7 +1967,7 @@
       ],
       "under_canopy": [
        {
-        "tree": "tree-h9kt3",
+        "tree": "tree-h77o3",
         "label": "existing tree",
         "m2": 2.56,
         "radius_status": "assumed 1.5 m"
@@ -1991,7 +1991,7 @@
       "label": "existing tree",
       "source": "conversation: \"a tree on the north\" — position estimated from \"north\" (a quarter of the way along that edge, 1 m in), canopy not stated",
       "status": "inferred",
-      "id": "tree-h9kt3"
+      "id": "tree-h77o3"
      },
      {
       "locked": true,
@@ -2017,13 +2017,13 @@
       "label": "open (open centre)",
       "source": "conversation: \"open centre\" — extent suggested (40 % × 40 % of the site, toward the front), not stated",
       "status": "inferred",
-      "id": "open-h9ku4"
+      "id": "open-h77o4"
      }
     ]
    },
    {
     "label": "apply: Make the north planting bed wider.",
-    "time": "2026-11-14T07:20:08.509Z",
+    "time": "2026-11-14T07:53:23.360Z",
     "beds": [
      {
       "id": "bed-1",
@@ -2081,7 +2081,7 @@
       ],
       "under_canopy": [
        {
-        "tree": "tree-h9kt3",
+        "tree": "tree-h77o3",
         "label": "existing tree",
         "m2": 2.44,
         "radius_status": "assumed 1.5 m"
@@ -2196,7 +2196,7 @@
       ],
       "under_canopy": [
        {
-        "tree": "tree-h9kt3",
+        "tree": "tree-h77o3",
         "label": "existing tree",
         "m2": 0.82,
         "radius_status": "assumed 1.5 m"
@@ -2290,7 +2290,7 @@
       ],
       "under_canopy": [
        {
-        "tree": "tree-h9kt3",
+        "tree": "tree-h77o3",
         "label": "existing tree",
         "m2": 2.56,
         "radius_status": "assumed 1.5 m"
@@ -2314,7 +2314,7 @@
       "label": "existing tree",
       "source": "conversation: \"a tree on the north\" — position estimated from \"north\" (a quarter of the way along that edge, 1 m in), canopy not stated",
       "status": "inferred",
-      "id": "tree-h9kt3"
+      "id": "tree-h77o3"
      },
      {
       "locked": true,
@@ -2340,7 +2340,7 @@
       "label": "open (open centre)",
       "source": "conversation: \"open centre\" — extent suggested (40 % × 40 % of the site, toward the front), not stated",
       "status": "inferred",
-      "id": "open-h9ku4"
+      "id": "open-h77o4"
      }
     ]
    }
@@ -2491,7 +2491,7 @@
     "says": "value: openness"
    }
   ],
-  "updated": "2026-11-14T07:20:05.564Z"
+  "updated": "2026-11-14T07:53:22.500Z"
  },
  "versions": [
   {
@@ -4341,7 +4341,7 @@
      ]
     },
     {
-     "id": "zone-open-open-h9ku4-bed-1",
+     "id": "zone-open-open-h77o4-bed-1",
      "bed_id": "bed-1",
      "kind": "open",
      "label": "open (open centre)",
@@ -4391,7 +4391,7 @@
      "priority": 2
     },
     {
-     "id": "zone-open-open-h9ku4-bed-2",
+     "id": "zone-open-open-h77o4-bed-2",
      "bed_id": "bed-2",
      "kind": "open",
      "label": "open (open centre)",
@@ -4441,7 +4441,7 @@
      "priority": 2
     },
     {
-     "id": "zone-open-open-h9ku4-bed-3",
+     "id": "zone-open-open-h77o4-bed-3",
      "bed_id": "bed-3",
      "kind": "open",
      "label": "open (open centre)",
@@ -4491,7 +4491,7 @@
      "priority": 2
     },
     {
-     "id": "zone-open-open-h9ku4-bed-4",
+     "id": "zone-open-open-h77o4-bed-4",
      "bed_id": "bed-4",
      "kind": "open",
      "label": "open (open centre)",
@@ -6528,7 +6528,7 @@
     ],
     "open_zones": [
      {
-      "id": "open-h9ku4",
+      "id": "open-h77o4",
       "area_m2": 3.84,
       "plants_inside": 0
      }
@@ -6631,8 +6631,8 @@
      }
     }
    },
-   "id": "v-habx7",
-   "created": "2026-11-14T07:20:06.541Z",
+   "id": "v-h77o7",
+   "created": "2026-11-14T07:53:22.500Z",
    "parent_version_id": null
   },
   {
@@ -8286,7 +8286,7 @@
    ],
    "zones": [
     {
-     "id": "zone-open-open-h9ku4-bed-2",
+     "id": "zone-open-open-h77o4-bed-2",
      "bed_id": "bed-2",
      "kind": "open",
      "label": "open (open centre)",
@@ -8336,7 +8336,7 @@
      "priority": 2
     },
     {
-     "id": "zone-open-open-h9ku4-bed-3",
+     "id": "zone-open-open-h77o4-bed-3",
      "bed_id": "bed-3",
      "kind": "open",
      "label": "open (open centre)",
@@ -8386,7 +8386,7 @@
      "priority": 2
     },
     {
-     "id": "zone-open-open-h9ku4-bed-4",
+     "id": "zone-open-open-h77o4-bed-4",
      "bed_id": "bed-4",
      "kind": "open",
      "label": "open (open centre)",
@@ -8559,7 +8559,7 @@
      ]
     },
     {
-     "id": "zone-open-open-h9ku4-bed-1",
+     "id": "zone-open-open-h77o4-bed-1",
      "bed_id": "bed-1",
      "kind": "open",
      "label": "open (open centre)",
@@ -10588,7 +10588,7 @@
     ],
     "open_zones": [
      {
-      "id": "open-h9ku4",
+      "id": "open-h77o4",
       "area_m2": 3.84,
       "plants_inside": 0
      }
@@ -10691,12 +10691,12 @@
      }
     }
    },
-   "id": "v-hbuld",
-   "created": "2026-11-14T07:20:08.509Z",
-   "parent_version_id": "v-habx7"
+   "id": "v-h7vkd",
+   "created": "2026-11-14T07:53:23.360Z",
+   "parent_version_id": "v-h77o7"
   }
  ],
- "current_version_id": "v-hbuld",
+ "current_version_id": "v-h7vkd",
  "redo": [],
  "plant_seq": 52,
  "ui": {
@@ -10710,5 +10710,5 @@
   "site_fp": "[[[0,0],[6,0],[6,4],[0,4]],[[\"existing-tree\",[1.5,3],null,null],[\"no-plant-zone\",null,[[1.8,0.6],[4.2,0.6],[4.2,2.2],[1.8,2.2]],null]],{\"light\":{\"value\":null,\"status\":\"unknown\",\"source\":null,\"note\":null},\"soil_type\":{\"value\":null,\"status\":\"unknown\",\"source\":null,\"note\":null},\"soil_drainage\":{\"value\":null,\"status\":\"unknown\",\"source\":null,\"note\":null},\"water\":{\"value\":null,\"status\":\"unknown\",\"source\":null,\"note\":null},\"wind\":{\"value\":null,\"status\":\"unknown\",\"source\":null,\"note\":null},\"irrigation\":{\"value\":null,\"status\":\"unknown\",\"source\":null,\"note\":null}}]",
   "geometry_ack": "[[\"bed-1\",\"[[[0,3.1],[2.99,3.1],[3,3],[2.96,2.67],[2.94,2.6],[5.2,2.6],[5.2,3.1],[6,3.1],[6,4],[0,4]],[],[[\\\"z:screen\\\",\\\"north-edge\\\"],[\\\"z:ground_cover\\\",\\\"bed-interior\\\"]]]\"],[\"bed-2\",\"[[[5.2,0],[6,0],[6,3.1],[5.2,3.1]],[],[[\\\"z:ground_cover\\\",\\\"east-edge\\\"]]]\"],[\"bed-3\",\"[[[0,0],[0.8,0],[0.8,3.1],[0,3.1]],[],[[\\\"z:ground_cover\\\",\\\"west-edge\\\"]]]\"],[\"bed-4\",\"[[[0.8,1.68],[0.85,1.65],[1.17,1.54],[1.5,1.5],[1.8,1.53],[1.8,2.2],[2.76,2.2],[2.85,2.35],[2.96,2.67],[3,3],[2.99,3.1],[0.8,3.1]],[],[[\\\"z:ground_cover\\\",\\\"bed-interior\\\"]]]\"]]"
  },
- "updated": "2026-11-14T00:20:16"
+ "updated": "2026-11-14T00:53:35"
 }
