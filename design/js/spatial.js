@@ -144,7 +144,7 @@ export function propose(project, opts = {}) {
   const keepOut = site.open_areas.map(o => C.toMulti(o.polygon)); const accessBand = site.edges[access]?.length ? C.edgeBand({ polygon: site.boundary }, site.edges[access], P.access_band_m) : [];
   const sideSides = nonAccess.filter(s => !screenSides.includes(s));
   const wScreen = bandWidthFor(site, P); const Bs = G.bbox(site.boundary); const islandR = (t, pad) => Math.min(t.radius + pad, Math.max(t.radius, 0.35 * Math.min(Bs.w, Bs.h)));   // the island never grows past about a third of the site's shorter side
-  const treeIsland = (pad, fn) => site.trees.map(t => opIsland(site, t.centre, islandR(t, pad), fn, `the tree becomes a planted island (${islandR(t, pad) > t.radius ? `its canopy plus ${G.round(islandR(t, pad) - t.radius, 1)} m` : 'its canopy'}), so the ground under it is designed as shade planting rather than left as a hole`));
+  const treeIsland = (pad, fn) => site.trees.map(t => opIsland(site, t.centre, islandR(t, pad), fn, `the tree becomes a planted island (${islandR(t, pad) > t.radius ? `its canopy plus ${G.round(islandR(t, pad) - t.radius, 1)} m` : 'its canopy'}), so the ground under it is planted rather than left as a hole (its light is checked as a range under the canopy, not assumed to be shade)`));
   const specs = [];
   // A — recommended
   {

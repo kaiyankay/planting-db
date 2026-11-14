@@ -1,15 +1,15 @@
 {
  "id": "demo-backyard",
  "name": "Demo backyard",
- "created": "2026-11-14T06:29:45.394Z",
+ "created": "2026-11-14T06:37:42.220Z",
  "schema": "planting-intelligence/design-project/0.1",
  "knowledge_snapshot": {
-  "generated": "2026-11-07",
+  "generated": "2026-11-13",
   "generated_by": "tools/build_explorer.py",
   "method": "M49",
   "inputs": {
-   "kg_generated": "2026-11-03",
-   "xyz_generated": "2026-11-03",
+   "kg_generated": "2026-11-13",
+   "xyz_generated": "2026-11-13",
    "relations_updated": "2026-11-02",
    "schema_version": "0.4.3",
    "ontology_version": "0.2.0"
@@ -17,122 +17,122 @@
  },
  "conversation": [
   {
-   "id": "msg-gu0m2",
-   "time": "2026-11-14T06:29:45.398Z",
+   "id": "msg-5mbz2",
+   "time": "2026-11-14T06:37:42.223Z",
    "role": "user",
    "text": "I have a small backyard with an old tree on the north side. I want privacy, low maintenance and some ecological value, but it should not feel closed in. The kids need the middle to play."
   },
   {
-   "id": "msg-gu0s3",
-   "time": "2026-11-14T06:29:45.404Z",
+   "id": "msg-5mc73",
+   "time": "2026-11-14T06:37:42.231Z",
    "role": "ai",
    "text": "",
    "html": "<b>Read from what you said</b><ul><li>a small site — dimensions still unknown</li><li>an existing tree on the north — its position will be estimated (and labelled so) once the site has geometry; drag it to where it stands</li><li>an open area (kids) — kept free of beds once the site has geometry</li><li>goals: privacy, maintenance low, ecology, openness</li><li>screen → edge not chosen (privacy → Screen (blocks a view); Scrim would only filter it)</li><li>scrim → edge not chosen (openness + privacy → Scrim as the alternative to check) — alternative to check</li><li>ground cover → bed interior (low maintenance → carpeting ground layer reduces open soil (design heuristic, not a database claim))</li></ul><b>Unknown</b> (not assumed): which edge to screen — &quot;middle&quot; names no compass side; choose the edge (north / south / east / west); site dimensions / scale; light; soil type and drainage; ecological performance — the database records some ecological-value claims (pollinator, bird food …) but no pollinator-interaction data; no score is possible.<br><b>Not drawn yet:</b> How big is the site? Type width × height in metres, draw the boundary, or trace a photo and calibrate a known length.",
    "mode": "interpretation: offline-parser (rules: existing-tree, open-centre, size-word, privacy, low_maintenance, ecology, openness)"
   },
   {
-   "id": "msg-gu2h4",
-   "time": "2026-11-14T06:29:45.465Z",
+   "id": "msg-5mdb4",
+   "time": "2026-11-14T06:37:42.271Z",
    "role": "sys",
    "text": "site set to 6 × 4 m (typed; a rectangle is assumed — redraw with the Site tool for another shape)"
   },
   {
-   "id": "msg-gufo7",
-   "time": "2026-11-14T06:29:45.940Z",
+   "id": "msg-5mpj7",
+   "time": "2026-11-14T06:37:42.711Z",
    "role": "ai",
    "text": "",
    "html": "<b>Starting layout</b> — Planting at the edges, open centre kept: North bed 4.8 m², East bed 2.56 m², West bed 2.56 m², Tree island 2.78 m². 2 alternatives differ in how much ground stays open. Accept, edit, or say what should change.",
    "mode": "spatial engine: site − excluded areas − clearances → beds by operation"
   },
   {
-   "id": "msg-gujl8",
-   "time": "2026-11-14T06:29:46.081Z",
+   "id": "msg-5msv8",
+   "time": "2026-11-14T06:37:42.831Z",
    "role": "sys",
    "text": "4 suggested beds confirmed as drawn — North bed 4.8 m², East bed 2.56 m², West bed 2.56 m², Tree island 2.78 m²"
   },
   {
-   "id": "msg-guop9",
-   "time": "2026-11-14T06:29:46.265Z",
+   "id": "msg-5mti9",
+   "time": "2026-11-14T06:37:42.854Z",
    "role": "user",
    "text": "Privacy along the north edge; keep the middle open; it is part shade."
   },
   {
-   "id": "msg-guora",
-   "time": "2026-11-14T06:29:46.267Z",
+   "id": "msg-5mtka",
+   "time": "2026-11-14T06:37:42.856Z",
    "role": "sys",
    "text": "Screen (north edge) set site-wide and on North bed"
   },
   {
-   "id": "msg-gussb",
-   "time": "2026-11-14T06:29:46.412Z",
+   "id": "msg-5n21b",
+   "time": "2026-11-14T06:37:43.161Z",
    "role": "ai",
    "text": "",
    "html": "<b>Read from what you said</b><ul><li>light: part-shade (stated)</li><li>an open area (keep the middle open) — kept free of beds once the site has geometry</li><li>goals: privacy, openness</li><li>screen → north edge (privacy → Screen (blocks a view); Scrim would only filter it)</li><li>scrim → north edge (openness + privacy → Scrim as the alternative to check) — alternative to check</li></ul><b>Unknown</b> (not assumed): site dimensions / scale; soil type and drainage.<br><b>Starting layout:</b> Planting at the edges, open centre kept — 4 planting beds proposed; adjust them on the canvas or say what should change.",
    "mode": "interpretation: offline-parser (rules: open-centre, light, privacy, openness)"
   },
   {
-   "id": "msg-gutld",
-   "time": "2026-11-14T06:29:46.441Z",
+   "id": "msg-5n3cd",
+   "time": "2026-11-14T06:37:43.208Z",
    "role": "ai",
    "text": "",
-   "html": "<b>Design v-gutlc</b> — 38 plant objects, 4 species in 4 beds (12.7 m²), seed 42; operators along_edge, fill_drift, repeat_accent.<ul><li>North bed: 11 plants, 4 species · Ground cover, Screen</li><li>East bed: 19 plants, 2 species · Ground cover</li><li>West bed: 6 plants, 3 species · Ground cover</li><li>Tree island: 2 plants, 2 species · Ground cover</li><li>screen: <i>Gaultheria shallon</i> (gate unknown), <i>Vaccinium ovatum</i> (gate unknown)</li><li>ground: <i>Arctostaphylos uva-ursi</i> (gate unknown), <i>Polystichum munitum</i> (gate unknown), <i>Gaultheria shallon</i> (gate unknown)</li><li>accent: <i>Achillea millefolium</i> (gate unknown)</li><li>excluded: <i>Acer palmatum</i>, <i>Cercidiphyllum japonicum</i>, <i>Cornus nuttallii</i>, <i>Cornus sericea</i> — reasons in Assumptions</li><li>Screen along the north edge (North bed): row cover 3.54 m of 6 m (continuity 0.59, a geometric proxy)</li><li>36 plants rest on an <b>unknown</b> site gate (conditions not stated)</li></ul>Circle an area and say what should change, or drag plants directly.",
+   "html": "<b>Design v-5n3cc</b> — 38 plant objects, 4 species in 4 beds (12.7 m²), seed 42; operators along_edge, fill_drift, repeat_accent.<ul><li>North bed: 11 plants, 4 species · Ground cover, Screen</li><li>East bed: 19 plants, 2 species · Ground cover</li><li>West bed: 6 plants, 3 species · Ground cover</li><li>Tree island: 2 plants, 2 species · Ground cover</li><li>screen: <i>Gaultheria shallon</i> (gate unknown), <i>Vaccinium ovatum</i> (gate unknown)</li><li>ground: <i>Arctostaphylos uva-ursi</i> (gate unknown), <i>Polystichum munitum</i> (gate unknown), <i>Gaultheria shallon</i> (gate unknown)</li><li>accent: <i>Achillea millefolium</i> (gate unknown)</li><li>excluded: <i>Acer palmatum</i>, <i>Cercidiphyllum japonicum</i>, <i>Cornus nuttallii</i>, <i>Cornus sericea</i> — reasons in Assumptions</li><li>Screen along the north edge (North bed): row cover 3.54 m of 6 m (continuity 0.59, a geometric proxy)</li><li>36 plants rest on an <b>unknown</b> site gate (conditions not stated)</li></ul>Circle an area and say what should change, or drag plants directly.",
    "mode": "engine: deterministic placement over the knowledge adapter (no model text)"
   },
   {
-   "id": "msg-gvlne",
-   "time": "2026-11-14T06:29:47.451Z",
+   "id": "msg-603ie",
+   "time": "2026-11-14T06:38:00.062Z",
    "role": "user",
    "text": "Too dense here, but keep the privacy."
   },
   {
-   "id": "msg-gvlnf",
-   "time": "2026-11-14T06:29:47.451Z",
+   "id": "msg-603if",
+   "time": "2026-11-14T06:38:00.062Z",
    "role": "ai",
    "text": "",
    "html": "<b>Proposed change — preview, nothing applied yet.</b> Scope: selection (&quot;here&quot; → the drawn selection), 23 plants inside. reduce density 25 %. Result 38 → 32 plants; nothing outside the scope changed. Red = to be removed, in every view. Apply or cancel in the card. Privacy is kept as an intent (screen-row plants untouched); screening performance is not quantified.",
    "mode": "interpretation: offline-parser (rules: reduce_density, preserve_privacy)"
   },
   {
-   "id": "msg-gvlnh",
-   "time": "2026-11-14T06:29:47.451Z",
+   "id": "msg-603ih",
+   "time": "2026-11-14T06:38:00.062Z",
    "role": "sys",
-   "text": "applied as v-gvlng: 32 plants (6 removed, 0 added)"
+   "text": "applied as v-603ig: 32 plants (6 removed, 0 added)"
   },
   {
-   "id": "msg-gvlni",
-   "time": "2026-11-14T06:29:47.451Z",
+   "id": "msg-603ii",
+   "time": "2026-11-14T06:38:00.062Z",
    "role": "sys",
-   "text": "undo → v-gutlc (38 plants)"
+   "text": "undo → v-5n3cc (38 plants)"
   },
   {
-   "id": "msg-gvlnj",
-   "time": "2026-11-14T06:29:47.451Z",
+   "id": "msg-603ij",
+   "time": "2026-11-14T06:38:00.062Z",
    "role": "sys",
-   "text": "redo → v-gvlng (32 plants)"
+   "text": "redo → v-603ig (32 plants)"
   },
   {
-   "id": "msg-gvlnk",
-   "time": "2026-11-14T06:29:47.451Z",
+   "id": "msg-603ik",
+   "time": "2026-11-14T06:38:00.062Z",
    "role": "user",
    "text": "Move the taller plants away from the tree."
   },
   {
-   "id": "msg-gvlnl",
-   "time": "2026-11-14T06:29:47.451Z",
+   "id": "msg-603il",
+   "time": "2026-11-14T06:38:00.062Z",
    "role": "ai",
    "text": "",
    "html": "<b>Proposed change — preview, nothing applied yet.</b> Scope: bed (no selection and no direction word — the whole current bed is assumed; draw a selection to narrow it), 11 plants inside. move away. Result 32 → 32 plants; nothing outside the scope changed. Red = to be removed, in every view. Apply or cancel in the card.",
    "mode": "interpretation: offline-parser (rules: move_away)"
   },
   {
-   "id": "msg-gvlnn",
-   "time": "2026-11-14T06:29:47.451Z",
+   "id": "msg-603in",
+   "time": "2026-11-14T06:38:00.062Z",
    "role": "sys",
-   "text": "applied as v-gvlnm: 32 plants (0 removed, 0 added)"
+   "text": "applied as v-603im: 32 plants (0 removed, 0 added)"
   },
   {
-   "id": "msg-gvlno",
-   "time": "2026-11-14T06:29:47.451Z",
+   "id": "msg-603io",
+   "time": "2026-11-14T06:38:00.062Z",
    "role": "sys",
    "text": "demonstration journey complete — every step above changed the model; export or keep editing"
   }
@@ -181,7 +181,7 @@
     "label": "existing tree",
     "source": "conversation: \"an old tree on the north\" — position estimated from \"north\" (a quarter of the way along that edge, 1 m in), canopy not stated",
     "status": "inferred",
-    "id": "tree-gu2h5"
+    "id": "tree-5mdh5"
    },
    {
     "locked": true,
@@ -207,7 +207,7 @@
     "label": "open (kids)",
     "source": "conversation: \"kids\" — extent suggested (40 % × 40 % of the site, toward the front), not stated",
     "status": "inferred",
-    "id": "open-gu2h6"
+    "id": "open-5mdh6"
    }
   ],
   "beds": [
@@ -269,7 +269,7 @@
     ],
     "under_canopy": [
      {
-      "tree": "tree-gu2h5",
+      "tree": "tree-5mdh5",
       "label": "existing tree",
       "m2": 2.15,
       "radius_status": "assumed 1.5 m"
@@ -386,7 +386,7 @@
     ],
     "under_canopy": [
      {
-      "tree": "tree-gu2h5",
+      "tree": "tree-5mdh5",
       "label": "existing tree",
       "m2": 0.9,
       "radius_status": "assumed 1.5 m"
@@ -460,7 +460,7 @@
      {
       "function": "z:ground_cover",
       "where": "bed-interior",
-      "basis": "the tree becomes a planted island (its canopy), so the ground under it is designed as shade planting rather than left as a hole"
+      "basis": "the tree becomes a planted island (its canopy), so the ground under it is planted rather than left as a hole (its light is checked as a range under the canopy, not assumed to be shade)"
      }
     ],
     "strategy": "island",
@@ -473,14 +473,14 @@
      "function": "z:ground_cover"
     },
     "reasoning": [
-     "the tree becomes a planted island (its canopy), so the ground under it is designed as shade planting rather than left as a hole"
+     "the tree becomes a planted island (its canopy), so the ground under it is planted rather than left as a hole (its light is checked as a range under the canopy, not assumed to be shade)"
     ],
     "notes": [
      "2.78 m² lies under the canopy of existing tree (assumed 1.5 m) — planting there depends on the shade and roots, which are not recorded: treated as conditional, not excluded"
     ],
     "under_canopy": [
      {
-      "tree": "tree-gu2h5",
+      "tree": "tree-5mdh5",
       "label": "existing tree",
       "m2": 2.78,
       "radius_status": "assumed 1.5 m"
@@ -493,7 +493,7 @@
    }
   ],
   "proposals": {
-   "generated": "2026-11-14T06:29:45.940Z",
+   "generated": "2026-11-14T06:37:42.711Z",
    "engine": "spatial.js (polygon-clipping booleans, metre units)",
    "inputs_fp": "[[[0,0],[6,0],[6,4],[0,4]],[[\"existing-tree\",[1.5,3],null,null],[\"no-plant-zone\",null,[[1.8,0.6],[4.2,0.6],[4.2,2.2],[1.8,2.2]],null]],{\"privacy\":2,\"maintenance_low\":2,\"ecology\":2,\"openness\":2},[[\"z:screen\",\"edge-unset\",null],[\"z:scrim\",\"edge-unset\",true],[\"z:ground_cover\",\"bed-interior\",null]],{\"north_angle_degrees\":0,\"basis\":\"assumption (north = up until stated)\"}]",
    "conceptual": false,
@@ -502,7 +502,7 @@
     "plantable_m2": 20.16,
     "excluded": [
      {
-      "id": "open-gu2h6",
+      "id": "open-5mdh6",
       "kind": "no-plant-zone",
       "label": "open (kids)",
       "clearance_m": 0
@@ -510,7 +510,7 @@
     ],
     "open_areas": [
      {
-      "id": "open-gu2h6",
+      "id": "open-5mdh6",
       "label": "open (kids)",
       "area_m2": 3.84,
       "status": "inferred"
@@ -518,7 +518,7 @@
     ],
     "trees": [
      {
-      "id": "tree-gu2h5",
+      "id": "tree-5mdh5",
       "label": "existing tree",
       "centre": [
        1.5,
@@ -582,7 +582,7 @@
         "radius_m": 1.5,
         "function": "z:ground_cover"
        },
-       "basis": "the tree becomes a planted island (its canopy), so the ground under it is designed as shade planting rather than left as a hole",
+       "basis": "the tree becomes a planted island (its canopy), so the ground under it is planted rather than left as a hole (its light is checked as a range under the canopy, not assumed to be shade)",
        "note": null,
        "produced": 1
       }
@@ -644,7 +644,7 @@
        ],
        "under_canopy": [
         {
-         "tree": "tree-gu2h5",
+         "tree": "tree-5mdh5",
          "label": "existing tree",
          "m2": 2.15,
          "radius_status": "assumed 1.5 m"
@@ -751,7 +751,7 @@
        ],
        "under_canopy": [
         {
-         "tree": "tree-gu2h5",
+         "tree": "tree-5mdh5",
          "label": "existing tree",
          "m2": 0.9,
          "radius_status": "assumed 1.5 m"
@@ -818,7 +818,7 @@
         {
          "function": "z:ground_cover",
          "where": "bed-interior",
-         "basis": "the tree becomes a planted island (its canopy), so the ground under it is designed as shade planting rather than left as a hole"
+         "basis": "the tree becomes a planted island (its canopy), so the ground under it is planted rather than left as a hole (its light is checked as a range under the canopy, not assumed to be shade)"
         }
        ],
        "side": null,
@@ -831,16 +831,16 @@
         "radius_m": 1.5,
         "function": "z:ground_cover"
        },
-       "basis": "the tree becomes a planted island (its canopy), so the ground under it is designed as shade planting rather than left as a hole",
+       "basis": "the tree becomes a planted island (its canopy), so the ground under it is planted rather than left as a hole (its light is checked as a range under the canopy, not assumed to be shade)",
        "reasoning": [
-        "the tree becomes a planted island (its canopy), so the ground under it is designed as shade planting rather than left as a hole"
+        "the tree becomes a planted island (its canopy), so the ground under it is planted rather than left as a hole (its light is checked as a range under the canopy, not assumed to be shade)"
        ],
        "notes": [
         "2.78 m² lies under the canopy of existing tree (assumed 1.5 m) — planting there depends on the shade and roots, which are not recorded: treated as conditional, not excluded"
        ],
        "under_canopy": [
         {
-         "tree": "tree-gu2h5",
+         "tree": "tree-5mdh5",
          "label": "existing tree",
          "m2": 2.78,
          "radius_status": "assumed 1.5 m"
@@ -949,7 +949,7 @@
        "from": "kids"
       },
       {
-       "id": "tree:tree-gu2h5",
+       "id": "tree:tree-5mdh5",
        "text": "existing tree kept (estimated from your words; canopy assumed 1.5 m)",
        "from": "site"
       }
@@ -976,7 +976,7 @@
         "radius_m": 1.5,
         "function": "z:ground_cover"
        },
-       "basis": "the tree becomes a planted island (its canopy), so the ground under it is designed as shade planting rather than left as a hole",
+       "basis": "the tree becomes a planted island (its canopy), so the ground under it is planted rather than left as a hole (its light is checked as a range under the canopy, not assumed to be shade)",
        "note": null,
        "produced": 1
       }
@@ -1081,7 +1081,7 @@
         {
          "function": "z:ground_cover",
          "where": "bed-interior",
-         "basis": "the tree becomes a planted island (its canopy), so the ground under it is designed as shade planting rather than left as a hole"
+         "basis": "the tree becomes a planted island (its canopy), so the ground under it is planted rather than left as a hole (its light is checked as a range under the canopy, not assumed to be shade)"
         }
        ],
        "side": null,
@@ -1094,16 +1094,16 @@
         "radius_m": 1.5,
         "function": "z:ground_cover"
        },
-       "basis": "the tree becomes a planted island (its canopy), so the ground under it is designed as shade planting rather than left as a hole",
+       "basis": "the tree becomes a planted island (its canopy), so the ground under it is planted rather than left as a hole (its light is checked as a range under the canopy, not assumed to be shade)",
        "reasoning": [
-        "the tree becomes a planted island (its canopy), so the ground under it is designed as shade planting rather than left as a hole"
+        "the tree becomes a planted island (its canopy), so the ground under it is planted rather than left as a hole (its light is checked as a range under the canopy, not assumed to be shade)"
        ],
        "notes": [
         "5.82 m² lies under the canopy of existing tree (assumed 1.5 m) — planting there depends on the shade and roots, which are not recorded: treated as conditional, not excluded"
        ],
        "under_canopy": [
         {
-         "tree": "tree-gu2h5",
+         "tree": "tree-5mdh5",
          "label": "existing tree",
          "m2": 5.82,
          "radius_status": "assumed 1.5 m"
@@ -1239,7 +1239,7 @@
        "from": "kids"
       },
       {
-       "id": "tree:tree-gu2h5",
+       "id": "tree:tree-5mdh5",
        "text": "existing tree kept (estimated from your words; canopy assumed 1.5 m)",
        "from": "site"
       }
@@ -1266,7 +1266,7 @@
         "radius_m": 1.5,
         "function": "z:ground_cover"
        },
-       "basis": "the tree becomes a planted island (its canopy), so the ground under it is designed as shade planting rather than left as a hole",
+       "basis": "the tree becomes a planted island (its canopy), so the ground under it is planted rather than left as a hole (its light is checked as a range under the canopy, not assumed to be shade)",
        "note": null,
        "produced": 1
       },
@@ -1381,7 +1381,7 @@
         {
          "function": "z:ground_cover",
          "where": "bed-interior",
-         "basis": "the tree becomes a planted island (its canopy), so the ground under it is designed as shade planting rather than left as a hole"
+         "basis": "the tree becomes a planted island (its canopy), so the ground under it is planted rather than left as a hole (its light is checked as a range under the canopy, not assumed to be shade)"
         }
        ],
        "side": null,
@@ -1394,16 +1394,16 @@
         "radius_m": 1.5,
         "function": "z:ground_cover"
        },
-       "basis": "the tree becomes a planted island (its canopy), so the ground under it is designed as shade planting rather than left as a hole",
+       "basis": "the tree becomes a planted island (its canopy), so the ground under it is planted rather than left as a hole (its light is checked as a range under the canopy, not assumed to be shade)",
        "reasoning": [
-        "the tree becomes a planted island (its canopy), so the ground under it is designed as shade planting rather than left as a hole"
+        "the tree becomes a planted island (its canopy), so the ground under it is planted rather than left as a hole (its light is checked as a range under the canopy, not assumed to be shade)"
        ],
        "notes": [
         "5.82 m² lies under the canopy of existing tree (assumed 1.5 m) — planting there depends on the shade and roots, which are not recorded: treated as conditional, not excluded"
        ],
        "under_canopy": [
         {
-         "tree": "tree-gu2h5",
+         "tree": "tree-5mdh5",
          "label": "existing tree",
          "m2": 5.82,
          "radius_status": "assumed 1.5 m"
@@ -1627,7 +1627,7 @@
        "from": "kids"
       },
       {
-       "id": "tree:tree-gu2h5",
+       "id": "tree:tree-5mdh5",
        "text": "existing tree kept (estimated from your words; canopy assumed 1.5 m)",
        "from": "site"
       }
@@ -1657,7 +1657,7 @@
    "active_id": "A",
    "stale": true,
    "pending": {
-    "generated": "2026-11-14T06:29:46.411Z",
+    "generated": "2026-11-14T06:37:43.161Z",
     "engine": "spatial.js (polygon-clipping booleans, metre units)",
     "inputs_fp": "[[[0,0],[6,0],[6,4],[0,4]],[[\"existing-tree\",[1.5,3],null,null],[\"no-plant-zone\",null,[[1.8,0.6],[4.2,0.6],[4.2,2.2],[1.8,2.2]],null]],{\"privacy\":2,\"maintenance_low\":2,\"ecology\":2,\"openness\":2},[[\"z:ground_cover\",\"bed-interior\",null],[\"z:screen\",\"north-edge\",null],[\"z:scrim\",\"north-edge\",true]],{\"north_angle_degrees\":0,\"basis\":\"assumption (north = up until stated)\"}]",
     "conceptual": false,
@@ -1666,7 +1666,7 @@
      "plantable_m2": 20.16,
      "excluded": [
       {
-       "id": "open-gu2h6",
+       "id": "open-5mdh6",
        "kind": "no-plant-zone",
        "label": "open (kids)",
        "clearance_m": 0
@@ -1674,7 +1674,7 @@
      ],
      "open_areas": [
       {
-       "id": "open-gu2h6",
+       "id": "open-5mdh6",
        "label": "open (kids)",
        "area_m2": 3.84,
        "status": "inferred"
@@ -1682,7 +1682,7 @@
      ],
      "trees": [
       {
-       "id": "tree-gu2h5",
+       "id": "tree-5mdh5",
        "label": "existing tree",
        "centre": [
         1.5,
@@ -1760,7 +1760,7 @@
          "radius_m": 1.5,
          "function": "z:ground_cover"
         },
-        "basis": "the tree becomes a planted island (its canopy), so the ground under it is designed as shade planting rather than left as a hole",
+        "basis": "the tree becomes a planted island (its canopy), so the ground under it is planted rather than left as a hole (its light is checked as a range under the canopy, not assumed to be shade)",
         "note": null,
         "produced": 1
        }
@@ -1820,7 +1820,7 @@
         ],
         "under_canopy": [
          {
-          "tree": "tree-gu2h5",
+          "tree": "tree-5mdh5",
           "label": "existing tree",
           "m2": 2.44,
           "radius_status": "assumed 1.5 m"
@@ -1925,7 +1925,7 @@
         ],
         "under_canopy": [
          {
-          "tree": "tree-gu2h5",
+          "tree": "tree-5mdh5",
           "label": "existing tree",
           "m2": 0.82,
           "radius_status": "assumed 1.5 m"
@@ -1992,7 +1992,7 @@
          {
           "function": "z:ground_cover",
           "where": "bed-interior",
-          "basis": "the tree becomes a planted island (its canopy), so the ground under it is designed as shade planting rather than left as a hole"
+          "basis": "the tree becomes a planted island (its canopy), so the ground under it is planted rather than left as a hole (its light is checked as a range under the canopy, not assumed to be shade)"
          }
         ],
         "side": null,
@@ -2005,16 +2005,16 @@
          "radius_m": 1.5,
          "function": "z:ground_cover"
         },
-        "basis": "the tree becomes a planted island (its canopy), so the ground under it is designed as shade planting rather than left as a hole",
+        "basis": "the tree becomes a planted island (its canopy), so the ground under it is planted rather than left as a hole (its light is checked as a range under the canopy, not assumed to be shade)",
         "reasoning": [
-         "the tree becomes a planted island (its canopy), so the ground under it is designed as shade planting rather than left as a hole"
+         "the tree becomes a planted island (its canopy), so the ground under it is planted rather than left as a hole (its light is checked as a range under the canopy, not assumed to be shade)"
         ],
         "notes": [
          "2.56 m² lies under the canopy of existing tree (assumed 1.5 m) — planting there depends on the shade and roots, which are not recorded: treated as conditional, not excluded"
         ],
         "under_canopy": [
          {
-          "tree": "tree-gu2h5",
+          "tree": "tree-5mdh5",
           "label": "existing tree",
           "m2": 2.56,
           "radius_status": "assumed 1.5 m"
@@ -2123,7 +2123,7 @@
         "from": "kids"
        },
        {
-        "id": "tree:tree-gu2h5",
+        "id": "tree:tree-5mdh5",
         "text": "existing tree kept (estimated from your words; canopy assumed 1.5 m)",
         "from": "site"
        }
@@ -2163,7 +2163,7 @@
          "radius_m": 1.5,
          "function": "z:ground_cover"
         },
-        "basis": "the tree becomes a planted island (its canopy), so the ground under it is designed as shade planting rather than left as a hole",
+        "basis": "the tree becomes a planted island (its canopy), so the ground under it is planted rather than left as a hole (its light is checked as a range under the canopy, not assumed to be shade)",
         "note": null,
         "produced": 1
        }
@@ -2223,7 +2223,7 @@
         ],
         "under_canopy": [
          {
-          "tree": "tree-gu2h5",
+          "tree": "tree-5mdh5",
           "label": "existing tree",
           "m2": 1.79,
           "radius_status": "assumed 1.5 m"
@@ -2306,7 +2306,7 @@
          {
           "function": "z:ground_cover",
           "where": "bed-interior",
-          "basis": "the tree becomes a planted island (its canopy), so the ground under it is designed as shade planting rather than left as a hole"
+          "basis": "the tree becomes a planted island (its canopy), so the ground under it is planted rather than left as a hole (its light is checked as a range under the canopy, not assumed to be shade)"
          }
         ],
         "side": null,
@@ -2319,16 +2319,16 @@
          "radius_m": 1.5,
          "function": "z:ground_cover"
         },
-        "basis": "the tree becomes a planted island (its canopy), so the ground under it is designed as shade planting rather than left as a hole",
+        "basis": "the tree becomes a planted island (its canopy), so the ground under it is planted rather than left as a hole (its light is checked as a range under the canopy, not assumed to be shade)",
         "reasoning": [
-         "the tree becomes a planted island (its canopy), so the ground under it is designed as shade planting rather than left as a hole"
+         "the tree becomes a planted island (its canopy), so the ground under it is planted rather than left as a hole (its light is checked as a range under the canopy, not assumed to be shade)"
         ],
         "notes": [
          "4.03 m² lies under the canopy of existing tree (assumed 1.5 m) — planting there depends on the shade and roots, which are not recorded: treated as conditional, not excluded"
         ],
         "under_canopy": [
          {
-          "tree": "tree-gu2h5",
+          "tree": "tree-5mdh5",
           "label": "existing tree",
           "m2": 4.03,
           "radius_status": "assumed 1.5 m"
@@ -2451,7 +2451,7 @@
         "from": "kids"
        },
        {
-        "id": "tree:tree-gu2h5",
+        "id": "tree:tree-5mdh5",
         "text": "existing tree kept (estimated from your words; canopy assumed 1.5 m)",
         "from": "site"
        }
@@ -2491,7 +2491,7 @@
          "radius_m": 1.5,
          "function": "z:ground_cover"
         },
-        "basis": "the tree becomes a planted island (its canopy), so the ground under it is designed as shade planting rather than left as a hole",
+        "basis": "the tree becomes a planted island (its canopy), so the ground under it is planted rather than left as a hole (its light is checked as a range under the canopy, not assumed to be shade)",
         "note": null,
         "produced": 1
        },
@@ -2561,7 +2561,7 @@
         ],
         "under_canopy": [
          {
-          "tree": "tree-gu2h5",
+          "tree": "tree-5mdh5",
           "label": "existing tree",
           "m2": 3.13,
           "radius_status": "assumed 1.5 m"
@@ -2636,7 +2636,7 @@
          {
           "function": "z:ground_cover",
           "where": "bed-interior",
-          "basis": "the tree becomes a planted island (its canopy), so the ground under it is designed as shade planting rather than left as a hole"
+          "basis": "the tree becomes a planted island (its canopy), so the ground under it is planted rather than left as a hole (its light is checked as a range under the canopy, not assumed to be shade)"
          }
         ],
         "side": null,
@@ -2649,16 +2649,16 @@
          "radius_m": 1.5,
          "function": "z:ground_cover"
         },
-        "basis": "the tree becomes a planted island (its canopy), so the ground under it is designed as shade planting rather than left as a hole",
+        "basis": "the tree becomes a planted island (its canopy), so the ground under it is planted rather than left as a hole (its light is checked as a range under the canopy, not assumed to be shade)",
         "reasoning": [
-         "the tree becomes a planted island (its canopy), so the ground under it is designed as shade planting rather than left as a hole"
+         "the tree becomes a planted island (its canopy), so the ground under it is planted rather than left as a hole (its light is checked as a range under the canopy, not assumed to be shade)"
         ],
         "notes": [
          "2.69 m² lies under the canopy of existing tree (assumed 1.5 m) — planting there depends on the shade and roots, which are not recorded: treated as conditional, not excluded"
         ],
         "under_canopy": [
          {
-          "tree": "tree-gu2h5",
+          "tree": "tree-5mdh5",
           "label": "existing tree",
           "m2": 2.69,
           "radius_status": "assumed 1.5 m"
@@ -2869,7 +2869,7 @@
         "from": "kids"
        },
        {
-        "id": "tree:tree-gu2h5",
+        "id": "tree:tree-5mdh5",
         "text": "existing tree kept (estimated from your words; canopy assumed 1.5 m)",
         "from": "site"
        }
@@ -2902,13 +2902,13 @@
   "history": [
    {
     "label": "site 6 × 4",
-    "time": "2026-11-14T06:29:45.458Z",
+    "time": "2026-11-14T06:37:42.271Z",
     "beds": [],
     "features": []
    },
    {
     "label": "accept layout",
-    "time": "2026-11-14T06:29:46.081Z",
+    "time": "2026-11-14T06:37:42.831Z",
     "beds": [
      {
       "id": "bed-1",
@@ -2962,7 +2962,7 @@
       ],
       "under_canopy": [
        {
-        "tree": "tree-gu2h5",
+        "tree": "tree-5mdh5",
         "label": "existing tree",
         "m2": 2.15,
         "radius_status": "assumed 1.5 m"
@@ -3079,7 +3079,7 @@
       ],
       "under_canopy": [
        {
-        "tree": "tree-gu2h5",
+        "tree": "tree-5mdh5",
         "label": "existing tree",
         "m2": 0.9,
         "radius_status": "assumed 1.5 m"
@@ -3153,7 +3153,7 @@
        {
         "function": "z:ground_cover",
         "where": "bed-interior",
-        "basis": "the tree becomes a planted island (its canopy), so the ground under it is designed as shade planting rather than left as a hole"
+        "basis": "the tree becomes a planted island (its canopy), so the ground under it is planted rather than left as a hole (its light is checked as a range under the canopy, not assumed to be shade)"
        }
       ],
       "strategy": "island",
@@ -3166,14 +3166,14 @@
        "function": "z:ground_cover"
       },
       "reasoning": [
-       "the tree becomes a planted island (its canopy), so the ground under it is designed as shade planting rather than left as a hole"
+       "the tree becomes a planted island (its canopy), so the ground under it is planted rather than left as a hole (its light is checked as a range under the canopy, not assumed to be shade)"
       ],
       "notes": [
        "2.78 m² lies under the canopy of existing tree (assumed 1.5 m) — planting there depends on the shade and roots, which are not recorded: treated as conditional, not excluded"
       ],
       "under_canopy": [
        {
-        "tree": "tree-gu2h5",
+        "tree": "tree-5mdh5",
         "label": "existing tree",
         "m2": 2.78,
         "radius_status": "assumed 1.5 m"
@@ -3197,7 +3197,7 @@
       "label": "existing tree",
       "source": "conversation: \"an old tree on the north\" — position estimated from \"north\" (a quarter of the way along that edge, 1 m in), canopy not stated",
       "status": "inferred",
-      "id": "tree-gu2h5"
+      "id": "tree-5mdh5"
      },
      {
       "locked": true,
@@ -3223,7 +3223,7 @@
       "label": "open (kids)",
       "source": "conversation: \"kids\" — extent suggested (40 % × 40 % of the site, toward the front), not stated",
       "status": "inferred",
-      "id": "open-gu2h6"
+      "id": "open-5mdh6"
      }
     ]
    }
@@ -3406,7 +3406,7 @@
     "says": "value: openness"
    }
   ],
-  "updated": "2026-11-14T06:29:46.267Z"
+  "updated": "2026-11-14T06:37:42.856Z"
  },
  "versions": [
   {
@@ -3439,12 +3439,12 @@
     }
    },
    "knowledge_snapshot": {
-    "generated": "2026-11-07",
+    "generated": "2026-11-13",
     "generated_by": "tools/build_explorer.py",
     "method": "M49",
     "inputs": {
-     "kg_generated": "2026-11-03",
-     "xyz_generated": "2026-11-03",
+     "kg_generated": "2026-11-13",
+     "xyz_generated": "2026-11-13",
      "relations_updated": "2026-11-02",
      "schema_version": "0.4.3",
      "ontology_version": "0.2.0"
@@ -4948,7 +4948,7 @@
      "basis": "site-wide function — privacy → Screen (blocks a view); Scrim would only filter it"
     },
     {
-     "id": "zone-open-open-gu2h6-bed-1",
+     "id": "zone-open-open-5mdh6-bed-1",
      "bed_id": "bed-1",
      "kind": "open",
      "label": "open (kids)",
@@ -4998,7 +4998,7 @@
      "priority": 2
     },
     {
-     "id": "zone-open-open-gu2h6-bed-2",
+     "id": "zone-open-open-5mdh6-bed-2",
      "bed_id": "bed-2",
      "kind": "open",
      "label": "open (kids)",
@@ -5048,7 +5048,7 @@
      "priority": 2
     },
     {
-     "id": "zone-open-open-gu2h6-bed-3",
+     "id": "zone-open-open-5mdh6-bed-3",
      "bed_id": "bed-3",
      "kind": "open",
      "label": "open (kids)",
@@ -5098,7 +5098,7 @@
      "priority": 2
     },
     {
-     "id": "zone-open-open-gu2h6-bed-4",
+     "id": "zone-open-open-5mdh6-bed-4",
      "bed_id": "bed-4",
      "kind": "open",
      "label": "open (kids)",
@@ -5566,13 +5566,13 @@
    },
    "assumptions": [
     "North bed: no new tree placed — Acer palmatum, Cercidiphyllum japonicum, Cornus nuttallii exceed the bed at claimed mature spread",
-    "North bed: 2.15 m² under existing tree — shade planting there is conditional (light under the canopy not recorded)",
+    "North bed: 2.15 m² under existing tree — planting there is conditional (the light under the canopy is not recorded; it is not assumed to be full shade)",
     "East bed: no new tree placed — Acer palmatum, Cercidiphyllum japonicum, Cornus nuttallii exceed the bed at claimed mature spread",
     "West bed: no new tree placed — Acer palmatum, Cercidiphyllum japonicum, Cornus nuttallii exceed the bed at claimed mature spread",
-    "West bed: 0.9 m² under existing tree — shade planting there is conditional (light under the canopy not recorded)",
+    "West bed: 0.9 m² under existing tree — planting there is conditional (the light under the canopy is not recorded; it is not assumed to be full shade)",
     "Tree island: 100 % under existing tree (canopy assumed 1.5 m — canopy not stated) — light is checked as a range from part-shade to one step shadier; candidates are conditional at best (heuristic: a bed counts as \"under the canopy\" when at least 50 % of its area lies under existing tree crowns (threshold not from a source))",
     "Tree island: no new tree placed — Acer palmatum, Cercidiphyllum japonicum, Cornus nuttallii exceed the bed at claimed mature spread",
-    "Tree island: 2.78 m² under existing tree — shade planting there is conditional (light under the canopy not recorded)",
+    "Tree island: 2.78 m² under existing tree — planting there is conditional (the light under the canopy is not recorded; it is not assumed to be full shade)",
     "existing tree: canopy radius 1.5 m is assumed 1.5 m — canopy not stated",
     "plant sizes are proxies: half the claimed mature spread (one claim chosen per species, alternatives counted) — not measured plants; planting spacing is 0.75 × (screen rows) and 0.65 × (ground layer) the claimed mature spread, so canopies meet and overlap at maturity by design"
    ],
@@ -5700,7 +5700,7 @@
     ],
     "open_zones": [
      {
-      "id": "open-gu2h6",
+      "id": "open-5mdh6",
       "area_m2": 3.84,
       "plants_inside": 0
      }
@@ -5722,8 +5722,8 @@
      "irrigation"
     ]
    },
-   "id": "v-gutlc",
-   "created": "2026-11-14T06:29:46.441Z",
+   "id": "v-5n3cc",
+   "created": "2026-11-14T06:37:43.208Z",
    "parent_version_id": null
   },
   {
@@ -5756,12 +5756,12 @@
     }
    },
    "knowledge_snapshot": {
-    "generated": "2026-11-07",
+    "generated": "2026-11-13",
     "generated_by": "tools/build_explorer.py",
     "method": "M49",
     "inputs": {
-     "kg_generated": "2026-11-03",
-     "xyz_generated": "2026-11-03",
+     "kg_generated": "2026-11-13",
+     "xyz_generated": "2026-11-13",
      "relations_updated": "2026-11-02",
      "schema_version": "0.4.3",
      "ontology_version": "0.2.0"
@@ -7061,7 +7061,7 @@
      "basis": "site-wide function — privacy → Screen (blocks a view); Scrim would only filter it"
     },
     {
-     "id": "zone-open-open-gu2h6-bed-1",
+     "id": "zone-open-open-5mdh6-bed-1",
      "bed_id": "bed-1",
      "kind": "open",
      "label": "open (kids)",
@@ -7111,7 +7111,7 @@
      "priority": 2
     },
     {
-     "id": "zone-open-open-gu2h6-bed-2",
+     "id": "zone-open-open-5mdh6-bed-2",
      "bed_id": "bed-2",
      "kind": "open",
      "label": "open (kids)",
@@ -7161,7 +7161,7 @@
      "priority": 2
     },
     {
-     "id": "zone-open-open-gu2h6-bed-3",
+     "id": "zone-open-open-5mdh6-bed-3",
      "bed_id": "bed-3",
      "kind": "open",
      "label": "open (kids)",
@@ -7211,7 +7211,7 @@
      "priority": 2
     },
     {
-     "id": "zone-open-open-gu2h6-bed-4",
+     "id": "zone-open-open-5mdh6-bed-4",
      "bed_id": "bed-4",
      "kind": "open",
      "label": "open (kids)",
@@ -7679,13 +7679,13 @@
    },
    "assumptions": [
     "North bed: no new tree placed — Acer palmatum, Cercidiphyllum japonicum, Cornus nuttallii exceed the bed at claimed mature spread",
-    "North bed: 2.15 m² under existing tree — shade planting there is conditional (light under the canopy not recorded)",
+    "North bed: 2.15 m² under existing tree — planting there is conditional (the light under the canopy is not recorded; it is not assumed to be full shade)",
     "East bed: no new tree placed — Acer palmatum, Cercidiphyllum japonicum, Cornus nuttallii exceed the bed at claimed mature spread",
     "West bed: no new tree placed — Acer palmatum, Cercidiphyllum japonicum, Cornus nuttallii exceed the bed at claimed mature spread",
-    "West bed: 0.9 m² under existing tree — shade planting there is conditional (light under the canopy not recorded)",
+    "West bed: 0.9 m² under existing tree — planting there is conditional (the light under the canopy is not recorded; it is not assumed to be full shade)",
     "Tree island: 100 % under existing tree (canopy assumed 1.5 m — canopy not stated) — light is checked as a range from part-shade to one step shadier; candidates are conditional at best (heuristic: a bed counts as \"under the canopy\" when at least 50 % of its area lies under existing tree crowns (threshold not from a source))",
     "Tree island: no new tree placed — Acer palmatum, Cercidiphyllum japonicum, Cornus nuttallii exceed the bed at claimed mature spread",
-    "Tree island: 2.78 m² under existing tree — shade planting there is conditional (light under the canopy not recorded)",
+    "Tree island: 2.78 m² under existing tree — planting there is conditional (the light under the canopy is not recorded; it is not assumed to be full shade)",
     "existing tree: canopy radius 1.5 m is assumed 1.5 m — canopy not stated",
     "plant sizes are proxies: half the claimed mature spread (one claim chosen per species, alternatives counted) — not measured plants; planting spacing is 0.75 × (screen rows) and 0.65 × (ground layer) the claimed mature spread, so canopies meet and overlap at maturity by design"
    ],
@@ -7918,7 +7918,7 @@
     ],
     "open_zones": [
      {
-      "id": "open-gu2h6",
+      "id": "open-5mdh6",
       "area_m2": 3.84,
       "plants_inside": 0
      }
@@ -7940,9 +7940,9 @@
      "irrigation"
     ]
    },
-   "id": "v-gvlng",
-   "created": "2026-11-14T06:29:47.451Z",
-   "parent_version_id": "v-gutlc"
+   "id": "v-603ig",
+   "created": "2026-11-14T06:38:00.062Z",
+   "parent_version_id": "v-5n3cc"
   },
   {
    "label": "edit: Move the taller plants away from the tree.",
@@ -7974,12 +7974,12 @@
     }
    },
    "knowledge_snapshot": {
-    "generated": "2026-11-07",
+    "generated": "2026-11-13",
     "generated_by": "tools/build_explorer.py",
     "method": "M49",
     "inputs": {
-     "kg_generated": "2026-11-03",
-     "xyz_generated": "2026-11-03",
+     "kg_generated": "2026-11-13",
+     "xyz_generated": "2026-11-13",
      "relations_updated": "2026-11-02",
      "schema_version": "0.4.3",
      "ontology_version": "0.2.0"
@@ -9279,7 +9279,7 @@
      "basis": "site-wide function — privacy → Screen (blocks a view); Scrim would only filter it"
     },
     {
-     "id": "zone-open-open-gu2h6-bed-1",
+     "id": "zone-open-open-5mdh6-bed-1",
      "bed_id": "bed-1",
      "kind": "open",
      "label": "open (kids)",
@@ -9329,7 +9329,7 @@
      "priority": 2
     },
     {
-     "id": "zone-open-open-gu2h6-bed-2",
+     "id": "zone-open-open-5mdh6-bed-2",
      "bed_id": "bed-2",
      "kind": "open",
      "label": "open (kids)",
@@ -9379,7 +9379,7 @@
      "priority": 2
     },
     {
-     "id": "zone-open-open-gu2h6-bed-3",
+     "id": "zone-open-open-5mdh6-bed-3",
      "bed_id": "bed-3",
      "kind": "open",
      "label": "open (kids)",
@@ -9429,7 +9429,7 @@
      "priority": 2
     },
     {
-     "id": "zone-open-open-gu2h6-bed-4",
+     "id": "zone-open-open-5mdh6-bed-4",
      "bed_id": "bed-4",
      "kind": "open",
      "label": "open (kids)",
@@ -9897,13 +9897,13 @@
    },
    "assumptions": [
     "North bed: no new tree placed — Acer palmatum, Cercidiphyllum japonicum, Cornus nuttallii exceed the bed at claimed mature spread",
-    "North bed: 2.15 m² under existing tree — shade planting there is conditional (light under the canopy not recorded)",
+    "North bed: 2.15 m² under existing tree — planting there is conditional (the light under the canopy is not recorded; it is not assumed to be full shade)",
     "East bed: no new tree placed — Acer palmatum, Cercidiphyllum japonicum, Cornus nuttallii exceed the bed at claimed mature spread",
     "West bed: no new tree placed — Acer palmatum, Cercidiphyllum japonicum, Cornus nuttallii exceed the bed at claimed mature spread",
-    "West bed: 0.9 m² under existing tree — shade planting there is conditional (light under the canopy not recorded)",
+    "West bed: 0.9 m² under existing tree — planting there is conditional (the light under the canopy is not recorded; it is not assumed to be full shade)",
     "Tree island: 100 % under existing tree (canopy assumed 1.5 m — canopy not stated) — light is checked as a range from part-shade to one step shadier; candidates are conditional at best (heuristic: a bed counts as \"under the canopy\" when at least 50 % of its area lies under existing tree crowns (threshold not from a source))",
     "Tree island: no new tree placed — Acer palmatum, Cercidiphyllum japonicum, Cornus nuttallii exceed the bed at claimed mature spread",
-    "Tree island: 2.78 m² under existing tree — shade planting there is conditional (light under the canopy not recorded)",
+    "Tree island: 2.78 m² under existing tree — planting there is conditional (the light under the canopy is not recorded; it is not assumed to be full shade)",
     "existing tree: canopy radius 1.5 m is assumed 1.5 m — canopy not stated",
     "plant sizes are proxies: half the claimed mature spread (one claim chosen per species, alternatives counted) — not measured plants; planting spacing is 0.75 × (screen rows) and 0.65 × (ground layer) the claimed mature spread, so canopies meet and overlap at maturity by design"
    ],
@@ -9944,7 +9944,7 @@
       {
        "type": "move_away",
        "filter": "taller",
-       "feature_id": "tree-gu2h5",
+       "feature_id": "tree-5mdh5",
        "phrase": "tree",
        "resolved": true
       }
@@ -10106,7 +10106,7 @@
     ],
     "open_zones": [
      {
-      "id": "open-gu2h6",
+      "id": "open-5mdh6",
       "area_m2": 3.84,
       "plants_inside": 0
      }
@@ -10128,12 +10128,12 @@
      "irrigation"
     ]
    },
-   "id": "v-gvlnm",
-   "created": "2026-11-14T06:29:47.451Z",
-   "parent_version_id": "v-gvlng"
+   "id": "v-603im",
+   "created": "2026-11-14T06:38:00.062Z",
+   "parent_version_id": "v-603ig"
   }
  ],
- "current_version_id": "v-gvlnm",
+ "current_version_id": "v-603im",
  "redo": [],
  "plant_seq": 38,
  "ui": {
@@ -10147,5 +10147,5 @@
   "site_fp": "[[[0,0],[6,0],[6,4],[0,4]],[[\"existing-tree\",[1.5,3],null,null],[\"no-plant-zone\",null,[[1.8,0.6],[4.2,0.6],[4.2,2.2],[1.8,2.2]],null]],{\"light\":{\"value\":\"part-shade\",\"status\":\"user-stated\",\"source\":\"conversation: \\\"part shade\\\"\",\"note\":null},\"soil_type\":{\"value\":null,\"status\":\"unknown\",\"source\":null,\"note\":null},\"soil_drainage\":{\"value\":null,\"status\":\"unknown\",\"source\":null,\"note\":null},\"water\":{\"value\":null,\"status\":\"unknown\",\"source\":null,\"note\":null},\"wind\":{\"value\":null,\"status\":\"unknown\",\"source\":null,\"note\":null},\"irrigation\":{\"value\":null,\"status\":\"unknown\",\"source\":null,\"note\":null}}]",
   "geometry_ack": "[[\"bed-1\",\"[[[0,3.2],[6,3.2],[6,4],[0,4]],[],[[\\\"z:ground_cover\\\",\\\"north-edge\\\"],[\\\"z:screen\\\",\\\"north-edge\\\"]]]\"],[\"bed-2\",\"[[[5.2,0],[6,0],[6,3.2],[5.2,3.2]],[],[[\\\"z:ground_cover\\\",\\\"east-edge\\\"]]]\"],[\"bed-3\",\"[[[0,0],[0.8,0],[0.8,3.2],[0,3.2]],[],[[\\\"z:ground_cover\\\",\\\"west-edge\\\"]]]\"],[\"bed-4\",\"[[[0.8,1.68],[0.85,1.65],[1.17,1.54],[1.5,1.5],[1.8,1.53],[1.8,2.2],[2.76,2.2],[2.85,2.35],[2.96,2.67],[3,3],[2.98,3.2],[0.8,3.2]],[],[[\\\"z:ground_cover\\\",\\\"bed-interior\\\"]]]\"]]"
  },
- "updated": "2026-11-13T23:29:53"
+ "updated": "2026-11-13T23:38:00"
 }

@@ -16,7 +16,7 @@
 | T·C3 text-only "right side" → direction scope with a polygon; reduce_density + preserve screen | pass | "right side" read relative to the plan as drawn (north up); the region is the outer third of the bed on that side · amount 0.25 |
 | T·C4 "here" with a drawn selection → selection scope | pass | "here" → the drawn selection |
 | T·C5 contradictory request is refused, not silently applied | pass | filling the open zone with tall plants contradicts the open-space constraint; no change is made without an explicit override |
-| T·C6 "move the taller plants away from the tree" → move_away with a resolved feature | pass | {"type":"move_away","filter":"taller","feature_id":"tree-ezhn1","phrase":"tree","resolved":true} |
+| T·C6 "move the taller plants away from the tree" → move_away with a resolved feature | pass | {"type":"move_away","filter":"taller","feature_id":"tree-3on51","phrase":"tree","resolved":true} |
 | T·C7 overclaim classified | pass |  |
 | T·D1 every plant object has a stable id, a species from the database, a position inside the accepted bed | pass | 36 plants |
 | T·D2 no plant inside the no-plant zone, none under the locked tree | pass |  |
@@ -113,13 +113,13 @@
 | J5 generated: plant objects with ids, schedule reconciles, operators named, no geometry error | pass | 38 plants · ['along_edge', 'fill_drift', 'repeat_accent'] · edge [{'zone': 'zone-screen-north-edge-bed-1', 'bed_id': 'bed-1', 'label': 'Screen along the north edge (North bed)', 'edge_length_m': 6, 'screen_row_cover_m': 3.54, 'continuity': 0.59, 'note': 'row cover = sum of proxy diameters over edge length — a geometric proxy for continuity, not a measured screening effect'}] |
 | J5b 2D plan draws one symbol group per plant object | pass | 38 symbols for 38 plants |
 | J5c every bed of the layout is planted in the one version (multi-bed engine) | pass | [["North bed", 11], ["East bed", 19], ["West bed", 6], ["Tree island", 2]] |
-| J6 3D garden (three.js) holds one object per plant of the same version | pass | garden {'plants': 38, 'meshes': 508} · model 38 |
+| J6 3D garden (three.js) holds one object per plant of the same version | pass | garden {'plants': 38, 'meshes': 510} · model 38 |
 | J7 lasso + language: scoped command (selection, reduce_density, preserve screen), preview diff, nothing outside moved | pass | targets 23 · removed 6 |
 | J8 applied: new version with fewer plants = removed ids | pass | 32 plants, 6 removed |
-| J8b 3D garden re-synced after apply: plant count = applied version | pass | garden {'plants': 32, 'meshes': 442} · model 32 |
+| J8b 3D garden re-synced after apply: plant count = applied version | pass | garden {'plants': 32, 'meshes': 444} · model 32 |
 | J9/10 undo returns to the generated version; redo returns to the edit | pass | undo 38 · redo 32 |
 | J11 text-only reference 'move the taller plants away from the tree' resolved to a typed move_away command | pass | {"diff": {"added": [], "removed": [], "changed": [], "unchanged": ["plant-001", "plant-002", "plant-003", "plant-004", "plant-005", "plant-006", "plant-007", "plant-008", "plant-009", "plant-010", "plant-011", "plant-012", "plant-013", "plant-014", "plant-015", "plant-016", "plant-018", "plant-019", |
-| J12 export: SVG plant count = model = schedule total | pass | {"name": "12 export", "stage": "garden", "files": ["model.json", "plan.svg", "schedule.csv", "assumptions.md"], "svg_plants": 32, "model_plants": 32, "csv_total": 32, "garden": {"plants": 32, "meshes": 442}} |
+| J12 export: SVG plant count = model = schedule total | pass | {"name": "12 export", "stage": "garden", "files": ["model.json", "plan.svg", "schedule.csv", "assumptions.md"], "svg_plants": 32, "model_plants": 32, "csv_total": 32, "garden": {"plants": 32, "meshes": 444}} |
 | F1 Site page: every condition keeps its selector; wind and irrigation say they are recorded only, clay says it cannot be assessed | pass | ["soil_type", "wind", "irrigation"] |
 | F2 start: the north bed carries Screen and the first design plants a screen row | pass | {"North bed": ["z:screen@north-edge", "z:ground_cover@bed-interior"], "East bed": ["z:ground_cover@east-edge"], "West bed": ["z:ground_cover@west-edge"]} |
 | F3 removing the site-wide Screen removes it from the beds that carried it and marks the design stale | pass | {"North bed": ["z:ground_cover@bed-interior"], "East bed": ["z:ground_cover@east-edge"], "West bed": ["z:ground_cover@west-edge"]} |
@@ -129,5 +129,5 @@
 | F7 Barrier can be recorded but is labelled not fully supported: site-wide row, bed notes and the option text | pass | {"unsupported_notes": ["z:barrier"], "bed_notes": 3} |
 | F8 recording Barrier changes no plant and is reported as unresolved | pass | {"plants": 100, "same_as_v3": true, "unresolved": ["North bed: Barrier \u2014 recorded only \u2014 there is no barrier arrangement rule yet, so nothing is placed for it", "East bed: Barrier \u2014 recorded only \u2014 there is no barrier arrangement rule yet, so nothing is placed for it", "West bed: |
 | S1 design server reachable; designs saved to designs/ | pass | llm: ANTHROPIC_API_KEY not set — offline rule parser in use · designs ['demo-a', 'demo-b', 'demo-backyard', 'proj-13x0', 'proj-166r0', 'proj-17y40', 'proj-1geo0', 'proj-1icy0', 'proj-1jj10', 'proj-1jmy0', 'proj-1jmy1', 'proj-1q4x0', 'proj-1s4w0', 'proj-1tmq0', 'proj-1xeh0', 'proj-206b0', 'proj-228p0', 'proj-26ut0', 'proj-2anz0', 'proj-2aoj1', 'proj-2cr30', 'proj-2gg20', 'proj-2nza0', 'proj-2wbf0', 'proj-2yk20', 'proj-31ur0', 'proj-31vj1', 'proj-3agw0', 'proj-3anl0', 'proj-3cg30', 'proj-3gl70', ' |
-| S2 saved project: versions chain by parent id; current version's schedule equals its plant objects | pass | script-fn: 4 versions · current v-fifxe · 100 plants |
+| S2 saved project: versions chain by parent id; current version's schedule equals its plant objects | pass | script-fn: 4 versions · current v-4buwe · 100 plants |
 | S3 saved project: every plant inside its bed polygon (file, not UI) | pass |  |

@@ -1,18 +1,18 @@
 {
- "generated": "2026-11-03",
+ "generated": "2026-11-13",
  "generated_by": "tools/build_kg.py",
  "ontology_version": "0.2.0",
  "schema_version": "0.4.3",
  "counts": {
-  "nodes": 490,
-  "edges": 2114,
+  "nodes": 491,
+  "edges": 2115,
   "concepts": 378,
   "concepts_in_use": 220,
   "architecture_nodes": 60,
   "plants": 10,
-  "claims": 614,
+  "claims": 615,
   "by_type": {
-   "claim": 1290,
+   "claim": 1291,
    "classification": 10,
    "concept": 53,
    "cultivar_of": 8,
@@ -26,7 +26,7 @@
    "taxonomy": 19
   },
   "by_status": {
-   "documented": 1810,
+   "documented": 1811,
    "derived": 211,
    "candidate": 46,
    "unknown": 47
@@ -15657,6 +15657,17 @@
    "licence_tier": null,
    "parent": "survey",
    "observer_background": "practising landscape designer; professional planting experience",
+   "url": null
+  },
+  {
+   "id": "source:survey-r15",
+   "type": "practitioner",
+   "label": "respondent 15",
+   "source_type": "practitioner",
+   "geo": "vancouver",
+   "licence_tier": null,
+   "parent": "survey",
+   "observer_background": "practising landscape designer; professional, personal-garden and studio planting experience",
    "url": null
   },
   {
@@ -40112,6 +40123,53 @@
      "cercidiphyllum-japonicum:invasive_status:iscbc01"
     ],
     "source": "iscbc"
+   }
+  },
+  {
+   "claim_id": "cercidiphyllum-japonicum:vancouver_context:sv03",
+   "plant": "plant:cercidiphyllum-japonicum",
+   "field": "vancouver_context",
+   "relation": "has",
+   "source_id": "survey-r15",
+   "source_type": "practitioner",
+   "status": "verified",
+   "confidence": 0.8,
+   "value_label": null,
+   "numbers": null,
+   "text": "Cercidiphyllum japonicum — The heart-shaped leaves are held on the stem in the most graceful way I've ever seen.",
+   "context": "Metro Vancouver, hypothetical plant list (survey d1)",
+   "conditions": [],
+   "place": "place:vancouver",
+   "time": [],
+   "cultivar": null,
+   "practitioner_meta": {
+    "basis": null,
+    "location": null,
+    "maintenance_received": null,
+    "observer_background": "practising landscape designer; professional, personal-garden and studio planting experience",
+    "site_conditions": null,
+    "season_observed": null,
+    "plant_age_years": null,
+    "completeness": "L0",
+    "citable": false,
+    "note": "d1 'why' answers carry no basis — stored as selection reasons, never cited as observations (R2)"
+   },
+   "live": true,
+   "recorded_by": "tools/survey_to_claims.py (responses-2026-11-14.csv)",
+   "id": "e:cercidiphyllum-japonicum:vancouver_context:sv03:x",
+   "type": "claim",
+   "source": "plant:cercidiphyllum-japonicum",
+   "target": null,
+   "facet": null,
+   "spanned": false,
+   "rel": "notes",
+   "kg_status": "documented",
+   "verification": "verified",
+   "basis": {
+    "claims": [
+     "cercidiphyllum-japonicum:vancouver_context:sv03"
+    ],
+    "source": "survey-r15"
    }
   },
   {
@@ -104431,6 +104489,43 @@
    "place": "place:bc",
    "time": [],
    "cultivar": null
+  },
+  "cercidiphyllum-japonicum:vancouver_context:sv03": {
+   "id": "cercidiphyllum-japonicum:vancouver_context:sv03",
+   "plant": "cercidiphyllum-japonicum",
+   "field": "vancouver_context",
+   "value": {
+    "selection_reason": "leaf appearance — how the heart-shaped leaves are held on the stem",
+    "nature": "personal aesthetic preference"
+   },
+   "value_kind": "qualitative",
+   "text": "Cercidiphyllum japonicum — The heart-shaped leaves are held on the stem in the most graceful way I've ever seen.",
+   "source_id": "survey-r15",
+   "source_type": "practitioner",
+   "context": "Metro Vancouver, hypothetical plant list (survey d1)",
+   "confidence": 0.8,
+   "status": "verified",
+   "recorded_at": "2026-11-13",
+   "recorded_by": "tools/survey_to_claims.py (responses-2026-11-14.csv)",
+   "claim_kind": "selection_reason",
+   "note": "a designer's personal aesthetic reason for choosing the plant (follows the survey-r07 precedent for aesthetic reasons). NOT a verified leaf trait, NOT a form/habit value, and NOT evidence for any spatial function (Screen, opacity). Stored as selection_reason, L0, not citable.",
+   "concepts": [],
+   "conditions": [],
+   "place": "place:vancouver",
+   "time": [],
+   "cultivar": null,
+   "practitioner_meta": {
+    "basis": null,
+    "location": null,
+    "maintenance_received": null,
+    "observer_background": "practising landscape designer; professional, personal-garden and studio planting experience",
+    "site_conditions": null,
+    "season_observed": null,
+    "plant_age_years": null,
+    "completeness": "L0",
+    "citable": false,
+    "note": "d1 'why' answers carry no basis — stored as selection reasons, never cited as observations (R2)"
+   }
   },
   "cornus-nuttallii:in_vancouver_street_tree_list:cov01": {
    "id": "cornus-nuttallii:in_vancouver_street_tree_list:cov01",

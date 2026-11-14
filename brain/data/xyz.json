@@ -1,7 +1,7 @@
 {
-"generated": "2026-11-03",
+"generated": "2026-11-13",
 "generated_by": "tools/build_xyz.py",
-"kg_generated": "2026-11-03",
+"kg_generated": "2026-11-13",
 "ontology_version": "0.2.0",
 "schema_version": "0.4.3",
 "method": "M48",
@@ -8345,7 +8345,7 @@
 "relations": 4,
 "taxonomy": 2
 },
-"n_claims": 63
+"n_claims": 64
 },
 {
 "id": "plant:cornus-nuttallii",
@@ -49579,10 +49579,10 @@
 ],
 "stats": {
 "underlying": {
-"nodes": 490,
-"edges": 2114,
+"nodes": 491,
+"edges": 2115,
 "by_type": {
-"claim": 1290,
+"claim": 1291,
 "classification": 10,
 "concept": 53,
 "cultivar_of": 8,
@@ -49596,13 +49596,13 @@
 "taxonomy": 19
 },
 "by_status": {
-"documented": 1810,
+"documented": 1811,
 "derived": 211,
 "candidate": 46,
 "unknown": 47
 },
-"claims": 614,
-"generated": "2026-11-03"
+"claims": 615,
+"generated": "2026-11-13"
 },
 "projection": {
 "nodes": 153,
