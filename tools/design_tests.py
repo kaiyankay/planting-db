@@ -55,6 +55,27 @@ else:
         mm = re.match(r"\[(ok|FAIL)\] (\S+) (.*?)(?: — (.*))?$", ln)
         if mm: test(f"T·{mm.group(2)} {mm.group(3)}", mm.group(1) == "ok", mm.group(4) or "")
     if not lines: test("T0 tests.html produced output", False, d[:300])
+    # H conceptual site model on the page (M58; ?script=concept) — runs before the journey so the journey's project is the last one saved
+    d = dom("/design/index.html?script=concept&fresh=1", 16000)
+    m = re.search(r'<pre id="script-out"[^>]*>(.*?)</pre>', d, re.S)
+    try:
+        H = (json.loads(m.group(1).replace("&lt;", "<").replace("&gt;", ">").replace("&amp;", "&").replace("&quot;", '"')) if m else {}).get("concept")
+    except Exception as ex:
+        H = None; test("H0 concept script output parses", False, repr(ex))
+    if H:
+        sk, pl, sz, sc, sd = (H[k] for k in ("sketch", "placed", "sized", "scratch", "scratch_drawn"))
+        test("H1 a vague description opens Shape on an editable sketch: outline, open area and planting hints are drawn, marked not to scale", sk["stage"] == "site" and sk["concept"] == "active" and sk["drawn_open"] == 1 and sk["hints"] >= 2 and sk["rows"] >= 3 and "not to scale" in (sk["mark"] or ""), f"{sk['mark']} · {sk['rows']} rows · {sk['hints']} hints")
+        test("H2 no site geometry in metres is written and nothing measured is shown: no boundary, features, beds, scale bar or area label; Compose and Generate stay closed", not sk["boundary"] and sk["features"] == 0 and sk["beds"] == 0 and sk["scale"] == "unknown" and sk["scalebar"] == 0 and sk["area_labels"] == 0 and sk["to_intent_disabled"] and sk["generate_disabled"] is not False, json.dumps({k: sk[k] for k in ("boundary", "features", "beds", "scale", "scalebar", "area_labels")}))
+        test("H3 the tree whose position was not said is not on the plan: it waits beside it, and the page says who drew the sketch", sk["drawn_trees"] == 0 and sk["tray"] == 1 and any(o["kind"] == "existing-tree" and not o["placed"] and o["pos_status"] == "unknown" for o in sk["objects"]) and "offline rule reader" in (sk["by"] or "") and "not an analysis of a photo" in (sk["by"] or ""), sk["by"])
+        test("H4 the evidence separates provided, inferred, suggested and unknown", sk["ev_groups"] == ["You provided", "Inferred from your words", "Suggested by the sketch", "Unknown, not guessed"], json.dumps(sk["ev_groups"]))
+        test("H5 dragging the tree onto the sketch and confirming the open area: both are recorded as the user's, still without metres", pl["drawn_trees"] == 1 and pl["tray"] == 0 and pl["tree_pos_status"] == "user-placed" and pl["open_confirmed"] and not pl["boundary"] and pl["features"] == 0, json.dumps({k: pl[k] for k in ("tree_pos_status", "open_confirmed", "features")}))
+        near = lambda a, b: all(abs(x - y) < 0.03 for x, y in zip(a, b))
+        test("H6 giving a size (8 × 5 m) turns the sketch into site geometry: tree and open area at their relative place, kept as user-drawn", sz["boundary"] and sz["size"] == [8, 5] and sz["concept"] == "converted" and sz["tree"] and near(sz["tree"]["pos"], sz["tree"]["expected"]) and sz["tree"]["status"] == "user-drawn" and sz["open"] and near(sz["open"]["corner"], sz["open"]["expected"]) and sz["open"]["status"] == "user-drawn", json.dumps({"tree": sz["tree"], "open": sz["open"]}))
+        test("H7 the formal bed proposal then runs on the sized site (layout options and beds), with a scale bar", sz["cands"] >= 2 and sz["bed_rows"] >= 2 and sz["beds"] >= 2 and sz["scalebar"] == 1 and sz["mark"] is None, f"{sz['cands']} options · {sz['bed_rows']} beds")
+        test("H8 Start from scratch: the sketch leaves the plan, the boundary tool is armed, the canvas is blank, and the sketch can be brought back", sc["before"]["concept"] == "active" and sc["concept"] == "dismissed" and sc["scratch"] and sc["tool"] == "site" and sc["canvas"] and sc["drawn_trees"] == 0 and sc["hints"] == 0 and sc["restore"], json.dumps({k: sc[k] for k in ("concept", "tool", "canvas", "restore")}))
+        test("H9 after drawing a boundary from scratch nothing read from the words is placed for the user: the tree waits beside the plan", sd["boundary"] and sd["features"] == 0 and sd["tray"] == 1 and sd["notes_placed"] == [False], json.dumps({k: sd[k] for k in ("features", "tray", "notes_placed")}))
+    else:
+        test("H0 concept script ran", False, "no concept block in #script-out")
     # J journey
     d = dom("/design/index.html?journey=1&fresh=1", 14000)
     m = re.search(r'<pre id="journey-out"[^>]*>(.*?)</pre>', d, re.S)

@@ -1,7 +1,7 @@
 {
  "id": "demo-b",
  "name": "Demo B",
- "created": "2026-11-14T07:53:24.220Z",
+ "created": "2026-11-14T08:29:45.840Z",
  "schema": "planting-intelligence/design-project/0.1",
  "knowledge_snapshot": {
   "generated": "2026-11-13",
@@ -17,28 +17,34 @@
  },
  "conversation": [
   {
-   "id": "msg-h8jgg",
-   "time": "2026-11-14T07:53:24.220Z",
+   "id": "msg-l4ogg",
+   "time": "2026-11-14T08:29:45.840Z",
    "role": "user",
    "text": "I want a low-maintenance ecological garden."
   },
   {
-   "id": "msg-h8jgh",
-   "time": "2026-11-14T07:53:24.220Z",
+   "id": "msg-l4ogh",
+   "time": "2026-11-14T08:29:45.840Z",
    "role": "ai",
    "text": "",
    "html": "<b>Read from what you said</b><ul><li>goals: maintenance low, ecology</li><li>ground cover → bed interior (low maintenance → carpeting ground layer reduces open soil (design heuristic, not a database claim))</li></ul><b>Unknown</b> (not assumed): site dimensions / scale; light; soil type and drainage; ecological performance — the database records some ecological-value claims (pollinator, bird food …) but no pollinator-interaction data; no score is possible.<br><b>Not drawn yet:</b> How big is the site? Type width × height in metres, draw the boundary, or trace a photo and calibrate a known length.",
    "mode": "interpretation: offline-parser (rules: low_maintenance, ecology)"
   },
   {
-   "id": "msg-h8jgi",
-   "time": "2026-11-14T07:53:24.220Z",
+   "id": "msg-l4ogi",
+   "time": "2026-11-14T08:29:45.840Z",
    "role": "sys",
    "text": "site set to 5 × 4 m (typed; a rectangle is assumed — redraw with the Site tool for another shape)"
   },
   {
-   "id": "msg-h8jgj",
-   "time": "2026-11-14T07:53:24.220Z",
+   "id": "msg-l4ogj",
+   "time": "2026-11-14T08:29:45.840Z",
+   "role": "sys",
+   "text": "the sketch was carried into the 5 × 4 m site: 0 objects kept at their relative place. Positions scaled from a sketch are estimates unless you placed or confirmed them."
+  },
+  {
+   "id": "msg-l4ogk",
+   "time": "2026-11-14T08:29:45.840Z",
    "role": "ai",
    "text": "",
    "html": "<b>Starting layout</b> — Perimeter planting, centre left for use: North bed 5 m², East bed 3 m², West bed 3 m². 2 alternatives differ in how much ground stays open. Accept, edit, or say what should change.",
@@ -243,7 +249,7 @@
    }
   ],
   "proposals": {
-   "generated": "2026-11-14T07:53:24.220Z",
+   "generated": "2026-11-14T08:29:45.840Z",
    "engine": "spatial.js (polygon-clipping booleans, metre units)",
    "inputs_fp": "[[[0,0],[5,0],[5,4],[0,4]],[],{\"maintenance_low\":2,\"ecology\":2},[[\"z:ground_cover\",\"bed-interior\",null]],{\"north_angle_degrees\":0,\"basis\":\"assumption (north = up until stated)\"}]",
    "conceptual": false,
@@ -797,11 +803,35 @@
   "history": [
    {
     "label": "site 5 × 4",
-    "time": "2026-11-14T07:53:24.220Z",
+    "time": "2026-11-14T08:29:45.840Z",
     "beds": [],
     "features": []
    }
   ],
+  "concept": {
+   "schema": "planting-intelligence/concept-site/0.1",
+   "status": "converted",
+   "units": "sketch — unitless, not to scale",
+   "provenance": "offline-parser",
+   "frame": {
+    "w": 100,
+    "h": 67,
+    "status": "suggested",
+    "basis": "proportions not stated — a 3 : 2 outline to correct"
+   },
+   "objects": [],
+   "seq": 0,
+   "converted": {
+    "at": "2026-11-14T08:29:45.840Z",
+    "size_m": [
+     5,
+     4
+    ],
+    "carried": 0,
+    "left_unplaced": []
+   }
+  },
+  "scratch": false,
   "conditions": {
    "light": {
     "value": null,
@@ -886,7 +916,7 @@
     "says": "value: ecology"
    }
   ],
-  "updated": "2026-11-14T07:53:24.220Z"
+  "updated": "2026-11-14T08:29:45.840Z"
  },
  "versions": [],
  "current_version_id": null,
@@ -902,5 +932,5 @@
   "stage": "site",
   "site_fp": null
  },
- "updated": "2026-11-14T00:53:35"
+ "updated": "2026-11-14T01:29:55"
 }

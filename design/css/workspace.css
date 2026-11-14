@@ -184,3 +184,21 @@ details.cands-list { margin-top: 8px; } details.cands-list > summary { font-size
   #brief-left { grid-template-columns: minmax(0, 1fr); } .bedcard > h3 { font-size: 22px; } .cand-row { grid-template-columns: 68px minmax(0, 1fr); }
   .channel { grid-template-columns: 84px minmax(0, 1fr) auto; }
 }
+
+/* ---------------------------------------------------------------- the conceptual sketch (no size yet) */
+#svg .sketch-mark { font: 500 12px var(--sans); fill: #8a5f1c; }
+#svg .bed.hint { fill: rgba(91,122,87,.1); stroke: var(--olive); stroke-width: 1.1; stroke-dasharray: 2 5; stroke-linecap: round; cursor: default; pointer-events: none; }
+#svg .tree.csel, #svg .open.csel { stroke: var(--ink); stroke-width: 2.4; }
+#svg .handle.cframe { fill: #fff; stroke: var(--caramel); stroke-width: 2; cursor: nwse-resize; }
+#svg .tray { cursor: grab; } #svg .tray .tree { fill: var(--paper); stroke: var(--ink-3); stroke-width: 1.4; stroke-dasharray: 1.5 4; stroke-linecap: round; }
+#svg .tray-t { font: 500 11.5px var(--sans); fill: var(--ink); } #svg .tray-s { font: 11px var(--sans); fill: var(--ink-3); }
+#svg .tray-ghost { fill: rgba(183,137,77,.18); stroke: var(--caramel); stroke-width: 1.6; stroke-dasharray: 5 3; pointer-events: none; }
+.card.sketch .sk-by { margin: -4px 0 10px; }
+.crow { display: grid; grid-template-columns: minmax(0, 1fr); gap: 5px; padding: 10px 8px; margin: 0 -8px; border-top: 1px solid var(--line); cursor: pointer; }
+.crow.frame { cursor: default; } .crow.sel { background: var(--paper); box-shadow: inset 3px 0 0 var(--ink); }
+.crow .cn { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; } .crow .cn b { font-weight: 600; font-size: 14px; }
+.crow .cs { display: flex; align-items: center; gap: 6px 8px; flex-wrap: wrap; font-size: 13px; } .crow .cs select { font-size: 13px; padding: 3px 6px; margin-left: 4px; }
+.crow .ca { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.hint-toggle { display: flex; align-items: center; gap: 6px; margin: 6px 0 2px; color: var(--ink-2); } .hint-toggle input { width: auto; padding: 0; }
+.card.sketch .ask { margin-top: 14px; }
+@media (max-width: 760px) { #site-canvas-body.sketching .canvas-hint { display: none; } .crow .cs select { max-width: 100%; } }

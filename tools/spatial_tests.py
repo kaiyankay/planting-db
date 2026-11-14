@@ -72,7 +72,7 @@ else:
     if B:
         sh = B["shape"]; pr = sh["proposal"]
         test("B1 vague input: values read, no boundary, scale unknown, no bed polygon; proposal is conceptual with its moves and the size question", sh["values"].get("ecology") and sh["values"].get("maintenance_low") and not sh["boundary"] and sh["scale"] == "unknown" and sh["beds"] == 0 and pr["conceptual"] and pr["candidates"] == [] and any("how big" in q.lower() for q in pr["questions"]), json.dumps({"values": sh["values"], "questions": pr["questions"]}))
-        test("B2 the Shape panel asks the key question and lists the conceptual moves; the canvas states that there is no geometry", sh["concept_panel"] and "How big" in (sh["question_text"] or "") and sh["moves"] >= 1 and "no site geometry" in sh["canvas_text"], json.dumps({"q": sh["question_text"], "moves": sh["moves"]}))
+        test("B2 the Shape panel asks the key question and lists the conceptual moves; the canvas shows a sketch marked as not to scale, and no site geometry in metres exists", sh["concept_panel"] and "How big" in (sh["question_text"] or "") and sh["moves"] >= 1 and "not to scale" in sh["canvas_text"] and sh["boundary"] is False and sh["beds"] == 0 and sh["scale"] == "unknown", json.dumps({"q": sh["question_text"], "moves": sh["moves"]}))
         sz = B["sized"]; test("B3 after W × H (5 × 4): beds proposed in metres, valid, with alternatives", sz["boundary"] and len(sz["beds"]) >= 1 and all(c["valid"] for c in sz["proposal"]["candidates"]) and sz["bed_rows"] == len(sz["beds"]) and len(sz["proposal"]["candidates"]) >= 2, json.dumps([(b["name"], b["area_m2"]) for b in sz["beds"]] + [[c["id"], c["label"]] for c in sz["proposal"]["candidates"]]))
     else:
         test("B0 demo B ran", False, "")

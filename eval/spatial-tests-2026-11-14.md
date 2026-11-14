@@ -1,6 +1,6 @@
 # Spatial proposal tests — 2026-11-14
 
-`tools/spatial_tests.py` against http://127.0.0.1:8768 (headless Chrome, SwiftShader WebGL). **142/142 pass.**
+`tools/spatial_tests.py` against http://127.0.0.1:8768 (headless Chrome, SwiftShader WebGL). **156/156 pass.**
 
 | test | result | detail |
 |---|---|---|
@@ -16,7 +16,7 @@
 | T·C3 text-only "right side" → direction scope with a polygon; reduce_density + preserve screen | pass | "right side" read relative to the plan as drawn (north up); the region is the outer third of the bed on that side · amount 0.25 |
 | T·C4 "here" with a drawn selection → selection scope | pass | "here" → the drawn selection |
 | T·C5 contradictory request is refused, not silently applied | pass | filling the open zone with tall plants contradicts the open-space constraint; no change is made without an explicit override |
-| T·C6 "move the taller plants away from the tree" → move_away with a resolved feature | pass | {"type":"move_away","filter":"taller","feature_id":"tree-h1bw1","phrase":"tree","resolved":true} |
+| T·C6 "move the taller plants away from the tree" → move_away with a resolved feature | pass | {"type":"move_away","filter":"taller","feature_id":"tree-kwsi1","phrase":"tree","resolved":true} |
 | T·C7 overclaim classified | pass |  |
 | T·D1 every plant object has a stable id, a species from the database, a position inside the accepted bed | pass | 31 plants |
 | T·D2 no plant inside the no-plant zone, none under the locked tree | pass |  |
@@ -131,14 +131,28 @@
 | T·V22 a 7 m screen: no species qualifies, the bed stays empty, and the version says why for each linked species | pass | no species could be used: Acer palmatum — form: a tree — the row operators arrange shrubs and perennials; there is no tree-placement rule; geometry: the row does not fit: crown radius 2.65 m (acer-palmatum:mature_spread:rhs01) needs 3.97 m of bed depth, the be |
 | T·V23 every arrangement parameter declares its source; both spacing factors and the default target height are heuristics, the crown radius comes from a claim | pass | 11 heuristic · 2 geometry · 1 claim |
 | T·V24 words set the requirement ("2 m high", "all year"); when nothing is said none is invented | pass | {"target_height_m":2,"target_basis":"stated: \"2 m high\"","year_round":true,"year_round_basis":"required"} |
+| T·W1 a vague description gives a sketch with objects, and no site geometry: boundary, features, beds and scale stay empty | pass | existing-tree, open-area · sketch — unitless, not to scale |
+| T·W2 a tree whose position was not said is recorded as existing, with no position | pass | it is not put on any side — {"text":null,"side":null,"status":"unknown"} |
+| T·W3 "the middle" said → the open area is user-stated in the middle; its spot is inferred and its extent suggested | pass |  |
+| T·W4 "on the north side" → relation user-stated, spot inferred in the upper part of the sketch | pass | [28,53.6] |
+| T·W5 "at the back" is read as north with the reading stated; "left" names no compass side and leaves the tree unplaced | pass | "back" read as north (plan up) · "left" names no compass side |
+| T·W6 an open area whose place was not said is drawn in the middle as a suggestion, not as something stated | pass |  |
+| T·W7 suggested planting areas are outlines with a function and a reason | pass | no area, no width, no count — north edge, east edge, west edge, under the tree |
+| T·W8 the view handed to the renderer keeps the scale unknown (no grid, no scale bar) and never touches the project | pass |  |
+| T·W9 moving a tree marks it placed by the user; changing the outline proportions keeps every object at its relative place | pass | 0.200,0.746 → 0.200,0.746 |
+| T·W10 saying which side a tree is on places it there as an estimate, to be confirmed | pass |  |
+| T·W11 with a size, the sketch becomes site geometry: each object lands at its relative place in metres | pass | tree 1.6,3.73 · open [[2.4,1.1],[5.6,1.1],[5.6,3],[2.4,3]] |
+| T·W12 what the user placed or confirmed arrives as user-drawn, with where it came from; the canopy stays unstated; the concept is closed | pass |  |
+| T·W13 an object that was never placed is not given a position by the conversion; an unconfirmed one arrives as inferred | pass | 1 carried, 1 left unplaced |
+| T·W14 start from scratch: the sketch is neither shown nor convertible | pass |  |
 | A1 site model from one sentence: 6 × 4 m stated; tree inferred with its position labelled as estimated and canopy assumed; open centre inferred | pass | {"tree": {"status": "inferred", "position": [1.5, 3], "radius": null, "estimated_label": true}, "open": {"status": "inferred", "area_m2": 3.8}} |
 | A2 spatial proposal: recommended layout A with ≥ 2 beds, all candidates valid, plantable = site − open area | pass | [{"id": "A", "label": "Recommended", "beds": 4, "planting_m2": 12.93, "open_m2": 7.23, "valid": true, "strategies": ["edge", "edge", "island"]}, {"id": "B", "label": "More open centre", "beds": 2, "planting_m2": 8.12, "open_m2": 12.04, "valid": true, "strategies": ["edge", "island"]}, {"id": "C", "label": "More planting area", "beds": 4, "planting_m2": 15.47, "open_m2": 4.69, "valid": true, "strategies": ["edge", "island", "infill"]}] |
 | A3 a Screen band on the north edge; the open centre is kept free of beds; not one inset rectangle | pass | [["North bed", 5.4, ["z:screen", "z:ground_cover"]], ["East bed", 2.48, ["z:ground_cover"]], ["West bed", 2.48, ["z:ground_cover"]], ["Tree island", 2.56, ["z:ground_cover"]]] |
 | A4 the Shape panel shows the alternatives, the reasoning, a row per bed and an Accept action | pass | {"panel_cands": 3, "explanation_lines": 4, "bed_rows": 4, "accept_button": true} |
 | A5 accept → every bed confirmed; Compose lists a card per bed with candidates | pass | {"stage": "intent", "in_garden": false, "sections": ["welcome", "site", "intent"], "nav_enabled": ["welcome", "site", "intent"], "revision_card": false, "composer_open": false, "overflow_x": 0, "inner_width": 1440, "bed_cards": 4, "candidates": 14, "functions": ["z:screen@north-edge", "z:scrim@north-edge", "z:ground_cover@bed-interior"]} |
-| A6 Grow: every bed planted, every plant inside its bed, none in the open area, plan symbols = plants = schedule, 3D = plants | pass | {"per_bed": [["North bed", 14], ["East bed", 19], ["West bed", 6], ["Tree island", 2]], "three": {"plants": 41, "meshes": 563}} |
+| A6 Grow: every bed planted, every plant inside its bed, none in the open area, plan symbols = plants = schedule, 3D = plants | pass | {"per_bed": [["North bed", 14], ["East bed", 19], ["West bed", 6], ["Tree island", 2]], "three": {"plants": 41, "meshes": 562}} |
 | B1 vague input: values read, no boundary, scale unknown, no bed polygon; proposal is conceptual with its moves and the size question | pass | {"values": {"maintenance_low": 2, "ecology": 2}, "questions": ["How big is the site? Type width \u00d7 height in metres, draw the boundary, or trace a photo and calibrate a known length.", "Should any part stay open (seating, play, a path), and is there an edge that needs screening?"]} |
-| B2 the Shape panel asks the key question and lists the conceptual moves; the canvas states that there is no geometry | pass | {"q": "How big is the site? Type width \u00d7 height in metres, draw the boundary, or trace a photo and calibrate a known length.", "moves": 1} |
+| B2 the Shape panel asks the key question and lists the conceptual moves; the canvas shows a sketch marked as not to scale, and no site geometry in metres exists | pass | {"q": "How big is the site? Type width \u00d7 height in metres, draw the boundary, or trace a photo and calibrate a known length.", "moves": 1} |
 | B3 after W × H (5 × 4): beds proposed in metres, valid, with alternatives | pass | [["North bed", 5], ["East bed", 3], ["West bed", 3], ["A", "Recommended"], ["B", "Modular beds"], ["C", "More planting area"]] |
 | C1 'Make the north planting bed wider.' → the north bed located; before / after areas; conflicts checked (tree, open area, boundary, other beds); preview card and ghost drawn; impact on the current design stated | pass | {"changes": [{"name": "North bed", "before_m2": 5.4, "after_m2": 6.51, "min_width_m": 1.39}], "conflicts": ["bed"], "impact": {"beds": [{"bed_id": "bed-1", "plants": 14, "outside_after": 0, "removed_bed": false}], "plants_affected": 14, "plants_outside_after": 0, "untouched_beds": ["bed-2", "bed-3", "bed-4"]}} |
 | C2 Apply: only the north bed changed (status edited); the other beds are byte-identical; site history grew | pass | {"applied": {"changes": ["North bed"], "added": [], "removed": []}, "north_changed": true, "others_unchanged": true, "north_area": 6.51, "status": "user-edited", "history": 3} |
