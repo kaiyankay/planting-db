@@ -173,6 +173,10 @@ export function propose(project, opts = {}) {
   const A = candidates.find(c => c.recommended) || candidates[0]; A.recommended = true;
   candidates = [A, ...candidates.filter(c => c !== A && differs(c, A, site, P))];
   for (const c of candidates) delete c.union;
+  // a site-wide function "in the bed interior" (Ground Cover from an ecology / low-maintenance goal) belongs to every proposed bed:
+  // the bed's own function list is what the planting engine reads, so it has to be complete (M55)
+  const interior = project.brief.functions.filter(f => !f.alternative && f.where === 'bed-interior');
+  for (const c of candidates) for (const b of c.beds) for (const f of interior) if (!b.functions.some(x => x.function === f.function)) b.functions = [...b.functions, { function: f.function, where: 'bed-interior', basis: `site-wide — ${f.basis}`, evidence: 'site-wide' }];
   return { generated: iso(), engine: 'spatial.js (polygon-clipping booleans, metre units)', inputs_fp, conceptual: false, site: { site_m2: site.site_m2, plantable_m2: site.plantable_m2, excluded: site.excluded.map(e => ({ id: e.id, kind: e.kind, label: e.label, clearance_m: e.clearance_m })), open_areas: site.open_areas.map(o => ({ id: o.id, label: o.label, area_m2: o.area_m2, status: o.status })), trees: site.trees, access_edge: site.access_edge, assumptions: site.assumptions, questions: site.questions }, intent: { screen_sides: screenSides, wants_open: intent.wantsOpen, habitat: intent.habitat, values: intent.values }, candidates, recommended_id: A.id, params: P };
 }
 function conceptualProposal(project, site, intent, inputs_fp) {

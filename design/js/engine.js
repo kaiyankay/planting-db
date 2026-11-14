@@ -41,11 +41,57 @@ export function placeable(p, r, bed, obstacles, site) {
   }
   return { ok: true };
 }
-const wantedFunctions = (project, bed) => (bed?.functions?.length ? bed.functions : project.brief.functions.filter(f => !f.alternative));
+const wantedFunctions = (project, bed) => (bed?.functions?.length ? bed.functions : project.brief.functions).filter(f => !f.alternative);
+/** which spatial functions the engine can turn into an arrangement today (M55). The others are recorded on the bed and reported,
+ *  never planted: no arrangement rule exists for them yet, and none is invented. */
+export const FUNCTION_SUPPORT = {
+  'z:screen': { arranged: true, operators: ['along_edge', 'stagger'] },
+  'z:ground_cover': { arranged: true, operators: ['fill_drift', 'repeat_accent'] },
+  'z:scrim': { arranged: false, why: 'recorded only — there is no rule yet for a filtering (porous) row, so nothing is placed for it' },
+  'z:ceiling_canopy': { arranged: false, why: 'recorded only — there is no tree-placement rule yet, so no canopy tree is placed' },
+  'z:barrier': { arranged: false, why: 'recorded only — there is no barrier arrangement rule yet, so nothing is placed for it' },
+};
+export const functionArranged = fn => !!FUNCTION_SUPPORT[fn]?.arranged;
+
+// ---------------------------------------------------------------- light under an existing canopy (M55)
+export const CANOPY_SHARE_MIN = 0.5;   // a bed counts as "under the canopy" when at least half of its area lies under tree crowns
+/** share of the bed's area under existing tree crowns (0.2 m sample grid), with the tree that covers most of it; null when none */
+export function canopyCover(project, bed) {
+  const trees = obstaclesFor(project).filter(o => o.kind === 'tree'); if (!trees.length || !bed?.polygon) return null;
+  const B = G.bbox(bed.polygon), shape = bedShape(bed), per = trees.map(() => 0); let n = 0, any = 0;
+  for (let y = B.miny + 0.1; y < B.maxy; y += 0.2) for (let x = B.minx + 0.1; x < B.maxx; x += 0.2) { const q = [x, y]; if (!G.pointInShape(q, shape)) continue; n++; let hit = false; trees.forEach((t, i) => { if (G.dist(q, t.centre) <= t.radius) { per[i]++; hit = true; } }); if (hit) any++; }
+  if (!n || !any) return null; const t = trees[per.indexOf(Math.max(...per))];
+  return { share: G.round(any / n), tree_id: t.id, label: t.label, radius_m: t.radius, radius_status: /assumed/.test(t.radius_status) ? `canopy ${t.radius_status}` : `canopy radius ${t.radius} m, ${t.radius_status}` };
+}
+/** the conditions a bed is checked against: the site's, the bed's own overrides, and — when the bed lies mostly under an existing
+ *  canopy and no light was stated for the bed itself — the site light marked as "under canopy" (the gate then reads it as a range
+ *  from the stated light to one step shadier, conditional at best; it is never turned into full shade). */
+export function bedConditions(project, bed) {
+  const c = effectiveConditions(project, bed?.id); if (!bed || bed.conditions_overrides?.light) return c;
+  const cov = canopyCover(project, bed); if (!cov || cov.share < CANOPY_SHARE_MIN) return c;
+  return { ...c, light: { ...c.light, canopy: cov } };
+}
+/** the bed edges a function's `where` names: '<compass>-edge' → edges facing that way (those on the site boundary when there are
+ *  any); 'boundary' → edges facing out of the site; anything else (an unknown direction, 'bed-interior') → none. Never a default side. */
+export function edgesFor(project, bed, where) {
+  const north = project.site.orientation.north_angle_degrees || 0; const site = project.site.boundary; const sc = site ? G.centroid(site) : G.centroid(bed.polygon);
+  const onBoundary = e => !site || G.distToBoundary([(e.a[0] + e.b[0]) / 2, (e.a[1] + e.b[1]) / 2], site) < 0.15; let edges;
+  if (/-edge$/.test(where || '')) { const deg = G.DIRECTIONS[where.replace('-edge', '')]; if (deg == null) return []; edges = G.edgesFacing(bed.polygon, deg, north, 50); }
+  else if (where === 'boundary') { const Q = G.ccw(bed.polygon); edges = Q.map((q, i) => ({ i, a: q, b: Q[(i + 1) % Q.length], n: G.outwardNormal(Q, i) })).filter(e => { const m = [(e.a[0] + e.b[0]) / 2, (e.a[1] + e.b[1]) / 2]; return (m[0] - sc[0]) * e.n[0] + (m[1] - sc[1]) * e.n[1] > 0; }); }
+  else return [];
+  const ob = edges.filter(onBoundary); return ob.length ? ob : edges;
+}
+/** does a site-wide function with this `where` concern this bed? (used when a site-wide function is added on the Compose page) */
+export function bedMatchesWhere(project, bed, where) {
+  if (where === 'bed-interior') return true; const site = project.site.boundary; const es = edgesFor(project, bed, where); if (!site) return es.length > 0;
+  const Q = bed.polygon; const longest = Math.max(...Q.map((q, i) => G.dist(q, Q[(i + 1) % Q.length])));
+  const on = es.filter(e => G.distToBoundary([(e.a[0] + e.b[0]) / 2, (e.a[1] + e.b[1]) / 2], site) < 0.15).reduce((s, e) => s + G.dist(e.a, e.b), 0);
+  return on >= longest * 0.5;   // at least half the bed's longest side runs along that edge — the short end of a side border does not count
+}
 
 // ---------------------------------------------------------------- candidate assemblage per bed (reasons kept)
 export function assemble(project, K, bed) {
-  const conds = effectiveConditions(project, bed.id); const prefs = { maintenance_low: !!project.brief.values.maintenance_low };
+  const conds = bedConditions(project, bed); const prefs = { maintenance_low: !!project.brief.values.maintenance_low };
   const wanted = wantedFunctions(project, bed).map(f => f.function);
   const rows = K.species.map(s => { const gate = K.gate(s.id, conds, prefs); const proxy = K.proxy(s.id, conds.light?.value); const fns = Object.fromEntries(K.d.functions.map(f => [f.id, K.functionSupport(s.id, f.id)])); return { id: s.id, name: s.scientific_name, form: s.growth_form_label, gate, proxy, fns, evergreen: K.evergreen(s.id), interest: K.interest(s.id), ecology: gate.ecology, why: [], excluded: null }; });
   const B = G.bbox(bed.polygon); const narrow = bed.min_width_m != null ? bed.min_width_m : Math.min(B.w, B.h);
@@ -59,38 +105,38 @@ export function assemble(project, K, bed) {
   const picks = { screen: [], ground: [], accent: [], canopy: [] };
   const used = new Set();
   const take = (role, list, n, why) => { for (const r of list.slice(0, n)) { if (used.has(r.id)) continue; used.add(r.id); r.role = role; r.why.push(why(r)); picks[role].push(r); } };
-  if (wanted.includes('z:screen') || wanted.includes('z:scrim')) {
-    const fn = wanted.includes('z:screen') ? 'z:screen' : 'z:scrim';
+  const wantGround = wanted.includes('z:ground_cover');
+  if (wanted.includes('z:screen')) {
+    const fn = 'z:screen';
     const list = pool.filter(r => r.fns[fn]?.drawn && r.form !== 'Tree').sort((a, b) => rank(a, fn) - rank(b, fn));
     take('screen', list, 2, r => `${FN_LABEL[fn]}: ${r.fns[fn].status}${r.fns[fn].conflict ? ' with a conflict (a trait claim contradicts the use)' : ''}${r.fns[fn].use_labels.length ? ` — recorded use: ${r.fns[fn].use_labels.join(', ')} (${r.fns[fn].use_sources.join(', ')})` : ' — inferred from traits (KG-R4), no source states the use'}; gate ${r.gate.overall}${r.evergreen?.includes('Evergreen') ? '; evergreen (holds the screen in winter — design heuristic)' : ''}`);
   }
-  { const list = pool.filter(r => r.fns['z:ground_cover']?.drawn && !used.has(r.id)).sort((a, b) => rank(a, 'z:ground_cover') - rank(b, 'z:ground_cover'));
+  if (wantGround) { const list = pool.filter(r => r.fns['z:ground_cover']?.drawn && !used.has(r.id)).sort((a, b) => rank(a, 'z:ground_cover') - rank(b, 'z:ground_cover'));
     take('ground', list, 2, r => `Ground Cover: ${r.fns['z:ground_cover'].status}${r.fns['z:ground_cover'].use_labels.length ? ` — recorded use: ${r.fns['z:ground_cover'].use_labels.join(', ')} (${r.fns['z:ground_cover'].use_sources.join(', ')})` : ' — inferred from traits (KG-R4)'}; gate ${r.gate.overall}`); }
-  if (project.brief.values.ecology || project.brief.values.seasonal_interest) {
+  if (wantGround && (project.brief.values.ecology || project.brief.values.seasonal_interest)) {   // the accent replaces ground positions, so it needs a ground layer
     const list = pool.filter(r => !used.has(r.id) && r.form !== 'Tree' && r.proxy.radius_m <= 0.6 && (r.ecology.result === 'documented' || r.interest)).sort((a, b) => GATE_RANK[a.gate.overall] - GATE_RANK[b.gate.overall] || (b.ecology.result === 'documented') - (a.ecology.result === 'documented'));
     take('accent', list, 1, r => `accent: ${r.ecology.result === 'documented' ? `ecological value recorded — ${r.ecology.detail}` : ''}${r.interest ? `${r.ecology.result === 'documented' ? '; ' : ''}interest recorded — ${r.interest.join(', ')}` : ''}; gate ${r.gate.overall}`);
   }
-  if (wanted.includes('z:ceiling_canopy')) { const list = pool.filter(r => r.fns['z:ceiling_canopy']?.drawn && !used.has(r.id)).sort((a, b) => rank(a, 'z:ceiling_canopy') - rank(b, 'z:ceiling_canopy')); take('canopy', list, 1, r => `Ceiling / Canopy: ${r.fns['z:ceiling_canopy'].status}; gate ${r.gate.overall}`); }
-  const notes = [];
+  const notes = []; const unsupported = [...new Set(wanted)].filter(fn => !functionArranged(fn)).map(fn => ({ function: fn, label: FN_LABEL[fn] || fn, why: FUNCTION_SUPPORT[fn]?.why || 'recorded only — no arrangement rule' }));
+  for (const u of unsupported) notes.push(`${bed.name}: ${u.label} is ${u.why}`);
+  if (!wanted.length) notes.push(`${bed.name}: no spatial function is set for this bed or site-wide — nothing is planted here until one is chosen`);
+  if (conds.light?.canopy) notes.push(`${bed.name}: ${Math.round(conds.light.canopy.share * 100)} % under ${conds.light.canopy.label} (${conds.light.canopy.radius_status}) — light is checked as a range from ${conds.light.value || 'unknown'} to one step shadier; candidates are conditional at best`);
+  if (wantGround && !picks.ground.length) notes.push(`${bed.name}: no species in the database is linked to Ground Cover and passes the site gates — the bed interior stays unplanted`);
   if (wanted.includes('z:screen') && !picks.screen.length) notes.push(`${bed.name}: no species in the database is linked to Screen and passes the site gates — the screened edge stays unplanted`);
   if (rows.some(r => r.form === 'Tree' && r.excluded?.startsWith('a tree'))) notes.push(`${bed.name}: no new tree placed — ${rows.filter(r => r.form === 'Tree' && r.excluded?.startsWith('a tree')).map(r => r.name).join(', ')} exceed the bed at claimed mature spread`);
-  return { rows, picks, notes, conditions: conds, prefs, wanted };
+  return { rows, picks, notes, conditions: conds, prefs, wanted, unsupported };
 }
 
 // ---------------------------------------------------------------- zones from the bed's functions (or the brief's) and its geometry
 export function zonesFor(project, bed) {
-  const north = project.site.orientation.north_angle_degrees || 0; const zones = []; const site = project.site.boundary; const sc = site ? G.centroid(site) : G.centroid(bed.polygon);
-  const onBoundary = e => !site || G.distToBoundary([(e.a[0] + e.b[0]) / 2, (e.a[1] + e.b[1]) / 2], site) < 0.15;
-  for (const f of wantedFunctions(project, bed)) {
-    if (!['z:screen', 'z:scrim'].includes(f.function) || f.alternative) continue;
-    let edges;
-    if (/-edge$/.test(f.where)) { edges = G.edgesFacing(bed.polygon, G.DIRECTIONS[f.where.replace('-edge', '')] ?? 0, north, 50); const ob = edges.filter(onBoundary); if (ob.length) edges = ob; }
-    else { const Q = G.ccw(bed.polygon); edges = Q.map((p, i) => ({ i, a: p, b: Q[(i + 1) % Q.length], n: G.outwardNormal(Q, i) })).filter(e => { const m = [(e.a[0] + e.b[0]) / 2, (e.a[1] + e.b[1]) / 2]; return (m[0] - sc[0]) * e.n[0] + (m[1] - sc[1]) * e.n[1] > 0; }); const ob = edges.filter(onBoundary); if (ob.length) edges = ob; }
-    if (!edges.length) continue;
+  const zones = []; const wanted = wantedFunctions(project, bed);
+  for (const f of wanted) {
+    if (f.function !== 'z:screen') continue;   // Screen is the only edge function with an arrangement rule (FUNCTION_SUPPORT)
+    const edges = edgesFor(project, bed, f.where); if (!edges.length) continue;
     zones.push({ id: `zone-${f.function.split(':')[1]}-${f.where}-${bed.id}`, bed_id: bed.id, kind: 'edge', function: f.function, label: `${FN_LABEL[f.function]} along the ${f.where.replace('-', ' ')} (${bed.name})`, edges: edges.map(e => ({ a: e.a, b: e.b, n: e.n })), priority: 1, basis: f.basis });
   }
   for (const feat of project.site.features) if (feat.kind === 'no-plant-zone' && feat.polygon) zones.push({ id: `zone-open-${feat.id}-${bed.id}`, bed_id: bed.id, kind: 'open', label: feat.label || 'open (no-plant) zone', polygon: feat.polygon, priority: 1 });
-  zones.push({ id: `zone-fill-${bed.id}`, bed_id: bed.id, kind: 'fill', label: `ground layer (${bed.name})`, polygon: bed.polygon, priority: 2 });
+  if (wanted.some(f => f.function === 'z:ground_cover')) zones.push({ id: `zone-fill-${bed.id}`, bed_id: bed.id, kind: 'fill', label: `ground layer (${bed.name})`, polygon: bed.polygon, priority: 2 });
   return zones;
 }
 
@@ -117,9 +163,13 @@ function generateBed(project, K, bed, seed, params, nid, existing) {
       if (depthOk && params.stagger !== false) G.alongSegment(a2, b2, spacing, r * 0.9 + spacing / 2).forEach(p => { if (ok(p, r2) && clear(p, r2)) { const o = mk(back, p, 'screen-layer', g2.id, z.id); plants.push(o); g2.plant_ids.push(o.id); } });
     });
     if (g1.plant_ids.length) groups.push(g1); if (g2.plant_ids.length) groups.push(g2);
+    if (!g1.plant_ids.length) unresolved.push(`${z.label}: the screen row does not fit — ${sp.map(s => `${s.name} (proxy radius ${s.proxy.radius_m} m)`).join(', ')} cannot stand inside this bed at the claimed mature spread; left unplanted`);
   }
-  const gp = asm.picks.ground;
-  if (gp.length) {
+  for (const f of wantedFunctions(project, bed)) if (f.function === 'z:screen' && !zones.some(z => z.kind === 'edge' && z.id === `zone-screen-${f.where}-${bed.id}`)) unresolved.push(`${bed.name}: Screen is wanted along "${f.where.replace('-', ' ')}" but this bed has no edge there — no row is placed (set the edge on the bed)`);
+  for (const u of asm.unsupported) unresolved.push(`${bed.name}: ${u.label} — ${u.why}`);
+  const gp = asm.picks.ground; const wantGround = asm.wanted.includes('z:ground_cover');
+  if (!wantGround) { /* Ground Cover was not asked for on this bed: no ground layer is added on the engine's own initiative */ }
+  else if (gp.length) {
     const B = G.bbox(bed.polygon); const rg = gp.reduce((a, s) => a + s.proxy.radius_m, 0) / gp.length; const spacing = 2 * rg * SPACING.ground / density;
     const g = { id: `group-${bed.id}-${groups.length + 1}`, bed_id: bed.id, zone_id: `zone-fill-${bed.id}`, role: 'ground', operator: 'fill_drift', params: { lattice: 'hexagonal', spacing_m: G.round(spacing), spacing_rule: `${SPACING.ground} × the mean claimed mature spread of the ground species`, jitter: 0.35, species: gp.map(s => s.id), drift_field: 'value noise', seed }, plant_ids: [] };
     const rmin = Math.min(...gp.map(s => s.proxy.radius_m)) * 0.6;
@@ -136,7 +186,7 @@ function generateBed(project, K, bed, seed, params, nid, existing) {
     ground.filter((_, i) => i % 4 === 1).slice(0, Math.max(2, Math.floor(ground.length / 5))).forEach(p => { p.species_id = ac.id; p.role = 'accent'; p.proxy_radius_m = ac.proxy.radius_m; p.proxy_source = { claim: ac.proxy.spread.claim, range_m: [ac.proxy.spread.min, ac.proxy.spread.max], status: ac.proxy.radius_status, note: ac.proxy.spread.note }; p.height_m = ac.proxy.height_m; p.height_source = { claim: ac.proxy.height.claim, range_m: [ac.proxy.height.min, ac.proxy.height.max], status: ac.proxy.height_status }; p.group_id = g.id; g.plant_ids.push(p.id); });
     if (g.plant_ids.length) groups.push(g);
   }
-  if (!plants.length && bed.area_m2 > 0) unresolved.push(`${bed.name}: no plant fitted (${bed.area_m2} m², narrowest ${bed.min_width_m ?? '?'} m)`);
+  if (!plants.length && bed.area_m2 > 0) unresolved.push(!asm.wanted.length ? `${bed.name}: left empty — no spatial function set` : !asm.wanted.some(functionArranged) ? `${bed.name}: left empty — none of its functions can be arranged yet` : `${bed.name}: no plant fitted (${bed.area_m2} m², narrowest ${bed.min_width_m ?? '?'} m)`);
   return { plants, groups, zones, asm, unresolved, obstacles };
 }
 function hashId(s) { let h = 7; for (const ch of String(s)) h = (h * 31 + ch.charCodeAt(0)) >>> 0; return h % 1000; }
@@ -172,7 +222,7 @@ export function evaluate(version, project, K) {
   const edge = version.zones.filter(z => z.kind === 'edge').map(z => { const L = z.edges.reduce((s, e) => s + G.dist(e.a, e.b), 0); const cover = P.filter(p => p.zone_id === z.id && p.role === 'screen').reduce((s, p) => s + 2 * p.proxy_radius_m, 0); return { zone: z.id, bed_id: z.bed_id, label: z.label, edge_length_m: G.round(L), screen_row_cover_m: G.round(cover), continuity: L ? Math.min(1, G.round(cover / L)) : 0, note: 'row cover = sum of proxy diameters over edge length — a geometric proxy for continuity, not a measured screening effect' }; });
   const open = project.site.features.filter(f => f.kind === 'no-plant-zone' && f.polygon).map(f => ({ id: f.id, area_m2: G.round(G.area(f.polygon)), plants_inside: P.filter(p => G.pointInPolygon(p.position_m, f.polygon)).length }));
   const gates = {}; const evidence = { pass: 0, conditional: 0, unknown: 0 };
-  for (const p of P) { const k = `${p.species_id}|${p.bed_id}`; if (!gates[k]) gates[k] = K.gate(p.species_id, effectiveConditions(project, p.bed_id), { maintenance_low: !!project.brief.values.maintenance_low }).overall; if (evidence[gates[k]] != null) evidence[gates[k]]++; }
+  for (const p of P) { const k = `${p.species_id}|${p.bed_id}`; if (!gates[k]) gates[k] = K.gate(p.species_id, bedConditions(project, bedOf(project, p.bed_id)), { maintenance_low: !!project.brief.values.maintenance_low }).overall; if (evidence[gates[k]] != null) evidence[gates[k]]++; }
   const perBed = beds.map(b => ({ bed_id: b.id, name: b.name, area_m2: b.area_m2, plants: P.filter(p => p.bed_id === b.id).length, species: new Set(P.filter(p => p.bed_id === b.id).map(p => p.species_id)).size, functions: (b.functions || []).map(f => f.function) }));
   return { bed_area_m2: G.round(beds.reduce((s, b) => s + (b.area_m2 || 0), 0)), beds: perBed, plant_count: P.length, species_count: new Set(P.map(p => p.species_id)).size, by_role: byRole, edge_zones: edge, open_zones: open, evidence_gates: evidence, cost: null, cost_note: 'no prices in the database — not computed', ecology_score: null, ecology_note: 'no pollinator-interaction data — no score; ecological-value claims are listed per species instead', unknown_conditions: Object.entries(project.site.conditions).filter(([, c]) => c.status === 'unknown').map(([k]) => k) };
 }
@@ -199,7 +249,7 @@ export function previewEdit(project, K, version, cmd) {
     } else if (op.type === 'remove_species') {
       if (!op.species_id) { refused.push(`"${op.phrase}" does not match a species in this design`); continue; } const hit = targets.filter(p => p.species_id === op.species_id && !removedIds.has(p.id)); hit.forEach(p => removedIds.add(p.id)); notes.push(`remove ${K.name(op.species_id)}: ${hit.length} plant${hit.length === 1 ? '' : 's'} inside the scope`);
     } else if (op.type === 'swap_species') {
-      if (!op.from_species_id || !op.to_species_id) { refused.push(`"${op.phrase}": one of the species names was not recognised`); continue; } const to = K.sp(op.to_species_id); const conds = effectiveConditions(project, targets[0]?.bed_id || version.bed_id); const proxy = K.proxy(to.id, conds.light?.value); const gate = K.gate(to.id, conds); if (gate.overall === 'fail') { refused.push(`${to.scientific_name} fails a site gate (${['light', 'water', 'soil'].filter(k => gate[k].result === 'fail').map(k => gate[k].detail).join('; ')}) — not swapped in`); continue; }
+      if (!op.from_species_id || !op.to_species_id) { refused.push(`"${op.phrase}": one of the species names was not recognised`); continue; } const to = K.sp(op.to_species_id); const conds = bedConditions(project, bedOf(project, targets[0]?.bed_id || version.bed_id)); const proxy = K.proxy(to.id, conds.light?.value); const gate = K.gate(to.id, conds); if (gate.overall === 'fail') { refused.push(`${to.scientific_name} fails a site gate (${['light', 'water', 'soil'].filter(k => gate[k].result === 'fail').map(k => gate[k].detail).join('; ')}) — not swapped in`); continue; }
       let n = 0; for (const p of targets) if (p.species_id === op.from_species_id && !removedIds.has(p.id)) { p.species_id = to.id; p.proxy_radius_m = proxy.radius_m; p.proxy_source = { claim: proxy.spread.claim, range_m: [proxy.spread.min, proxy.spread.max], status: proxy.radius_status, note: proxy.spread.note }; p.height_m = proxy.height_m; p.height_source = { claim: proxy.height.claim, range_m: [proxy.height.min, proxy.height.max], status: proxy.height_status }; p.origin = 'edit:swap'; n++; }
       notes.push(`swap ${K.name(op.from_species_id)} → ${to.scientific_name}: ${n} plants; gate ${gate.overall}; proxy radius ${proxy.radius_m} m`);
     } else if (op.type === 'move_away') {
@@ -225,7 +275,7 @@ export function directEdit(project, K, version, action) {
   const obstacles = obstaclesFor(project); const plants = clonePlants(version); const notes = [];
   if (action.kind === 'move') { const p = plants.find(p => p.id === action.id); if (!p) return null; if (p.locked) return { refused: 'locked object' }; const target = bedAt(project, action.to) || bedOf(project, p.bed_id); const chk = placeable(action.to, p.proxy_radius_m, target, obstacles, project.site); p.position_m = G.roundPt(action.to); if (target && target.id !== p.bed_id && chk.ok) { notes.push(`${p.id} moved from ${p.bed_id} to ${target.id}`); p.bed_id = target.id; } p.origin = 'user-moved'; notes.push(chk.ok ? `${p.id} moved to ${p.position_m.join(', ')} m` : `${p.id} moved to ${p.position_m.join(', ')} m — warning: ${chk.why}`); }
   if (action.kind === 'delete') { const i = plants.findIndex(p => p.id === action.id); if (i < 0) return null; if (plants[i].locked) return { refused: 'locked object' }; notes.push(`${plants[i].id} (${K.name(plants[i].species_id)}) deleted`); plants.splice(i, 1); }
-  if (action.kind === 'add') { const bed = bedAt(project, action.at); if (!bed) return { refused: 'outside every planting bed — add plants inside a bed' }; const sp = K.sp(action.species_id); const proxy = K.proxy(sp.id, effectiveConditions(project, bed.id).light?.value); const chk = placeable(action.at, proxy.radius_m, bed, obstacles, project.site); const o = { id: nextPlantId(project), species_id: sp.id, bed_id: bed.id, position_m: G.roundPt(action.at), proxy_radius_m: proxy.radius_m, proxy_source: { claim: proxy.spread.claim, range_m: [proxy.spread.min, proxy.spread.max], status: proxy.radius_status, note: proxy.spread.note }, height_m: proxy.height_m, height_source: { claim: proxy.height.claim, range_m: [proxy.height.min, proxy.height.max], status: proxy.height_status }, role: action.role || 'user-added', group_id: 'user', zone_id: null, locked: false, origin: 'user-added' }; plants.push(o); notes.push(chk.ok ? `${o.id} ${sp.scientific_name} added in ${bed.name}` : `${o.id} ${sp.scientific_name} added — warning: ${chk.why}`); }
+  if (action.kind === 'add') { const bed = bedAt(project, action.at); if (!bed) return { refused: 'outside every planting bed — add plants inside a bed' }; const sp = K.sp(action.species_id); const proxy = K.proxy(sp.id, bedConditions(project, bed).light?.value); const chk = placeable(action.at, proxy.radius_m, bed, obstacles, project.site); const o = { id: nextPlantId(project), species_id: sp.id, bed_id: bed.id, position_m: G.roundPt(action.at), proxy_radius_m: proxy.radius_m, proxy_source: { claim: proxy.spread.claim, range_m: [proxy.spread.min, proxy.spread.max], status: proxy.radius_status, note: proxy.spread.note }, height_m: proxy.height_m, height_source: { claim: proxy.height.claim, range_m: [proxy.height.min, proxy.height.max], status: proxy.height_status }, role: action.role || 'user-added', group_id: 'user', zone_id: null, locked: false, origin: 'user-added' }; plants.push(o); notes.push(chk.ok ? `${o.id} ${sp.scientific_name} added in ${bed.name}` : `${o.id} ${sp.scientific_name} added — warning: ${chk.why}`); }
   const v = { ...version, id: undefined, created: undefined, parent_version_id: undefined, label: `direct edit: ${action.kind}`, plant_objects: plants, groups: version.groups.map(g => ({ ...g, plant_ids: g.plant_ids.filter(id => plants.some(p => p.id === id)) })), edit_event: { kind: `direct:${action.kind}`, action, notes } };
   v.schedule = schedule(v); v.validation = validate(v, project); v.evaluation = evaluate(v, project, K);
   return { version: v, diff: versionDiff(version, v), notes };

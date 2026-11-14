@@ -80,6 +80,25 @@ else:
         s12 = st.get("12", {}); test("J12 export: SVG plant count = model = schedule total", s12.get("svg_plants") == s12.get("model_plants") == s12.get("csv_total") and s12.get("svg_plants"), json.dumps(s12))
     else:
         test("J0 journey ran", False, "no #journey-out in the DOM")
+    # F site-wide function edits on the Compose page reach the beds and the planting (M55; ?script=fn replays real clicks)
+    d = dom("/design/index.html?script=fn&fresh=1", 14000)
+    m = re.search(r'<pre id="script-out"[^>]*>(.*?)</pre>', d, re.S)
+    try:
+        F = (json.loads(m.group(1).replace("&lt;", "<").replace("&gt;", ">").replace("&amp;", "&").replace("&quot;", '"')) if m else {}).get("fn")
+    except Exception as ex:
+        F = None; test("F0 function script output parses", False, repr(ex))
+    if F:
+        has = lambda beds, fn: [n for n, fs in beds.items() if any(x.startswith(fn + "@") for x in fs)]
+        test("F1 Site page: every condition keeps its selector; wind and irrigation say they are recorded only, clay says it cannot be assessed", F.get("condition_selects") == 6 and {"wind", "irrigation", "soil_type"} <= set(F.get("unused", [])), json.dumps(F.get("unused")))
+        st0 = F["start"]; test("F2 start: the north bed carries Screen and the first design plants a screen row", has(st0["beds"], "z:screen") and F["v1"]["screen"] > 0, json.dumps(st0["beds"]))
+        rm = F["removed"]; test("F3 removing the site-wide Screen removes it from the beds that carried it and marks the design stale", not any(x.startswith("z:screen@") for x in rm["brief"]) and not has(rm["beds"], "z:screen") and rm["stale"], json.dumps(rm["beds"]))
+        test("F4 the regenerated design has no screen row (the planting follows the change)", F["v2"]["screen"] == 0 and F["v2"]["plants"] != F["v1"]["plants"], f"v1 {F['v1']['plants']} plants / {F['v1']['screen']} screen -> v2 {F['v2']['plants']} / {F['v2']['screen']}")
+        ad = F["added"]; sb = has(ad["beds"], "z:screen"); test("F5 adding a site-wide Screen on the east edge adds it only to the bed that lies along that edge, and marks the design stale", "z:screen@east-edge" in ad["brief"] and ad["stale"] and len(sb) == 1 and "East" in sb[0], json.dumps(ad["beds"]))
+        test("F6 the screen row is planted in that bed and nowhere else", F["v3"]["screen"] > 0 and F["v3"]["screen_beds"] == sb, f"beds with Screen {sb} · screen plants {F['v3']['screen']} in {F['v3']['screen_beds']}")
+        br = F["barrier"]; test("F7 Barrier can be recorded but is labelled not fully supported: site-wide row, bed notes and the option text", "z:barrier" in br["unsupported_notes"] and br["bed_notes"] > 0 and any("Barrier" in o and "recorded only" in o for o in br["option_labels"]) and has(br["beds"], "z:barrier"), json.dumps({k: br[k] for k in ("unsupported_notes", "bed_notes")}))
+        test("F8 recording Barrier changes no plant and is reported as unresolved", F["v4"]["same_as_v3"] and F["v4"]["unresolved"], json.dumps(F["v4"])[:300])
+    else:
+        test("F0 function script ran", False, "no fn block in #script-out")
     # S saved file (only when the design server is the target)
     try:
         import urllib.request

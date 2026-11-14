@@ -65,7 +65,17 @@ export function interpretDescription(text) {
   for (const r of RULES.site_facts) { const m = text.match(r.pattern); if (m) { facts.push({ ...r.make(m), rule: r.id, evidence: m[0] }); evidence.push({ rule: r.id, text: m[0], says: r.says(m) }); } }
   for (const r of RULES.values) { const m = text.match(r.pattern); if (m) { values[r.value] = Math.max(values[r.value] || 0, /\b(must|essential|most important|really|very|above all)\b/i.test(text) ? 3 : 2); evidence.push({ rule: r.id, text: m[0], says: `value: ${r.value.replace('_', ' ')}` }); } }
   // spatial functions grounded in the database's Z vocabulary; a location is attached when the sentence names one
-  if (values.privacy) { const d = findDirection(text); functions.push({ function: 'z:screen', where: d ? `${d.side}-edge` : 'boundary', basis: 'privacy → Screen (blocks a view); Scrim would only filter it', evidence: 'privacy' }); if (values.openness) functions.push({ function: 'z:scrim', where: d ? `${d.side}-edge` : 'boundary', basis: 'openness + privacy → Scrim as the alternative to check', evidence: 'openness', alternative: true }); }
+  // the screened edge: the direction word in the clause that asks for privacy, else one elsewhere that does not belong to a site fact
+  // (a tree "on the east side" does not put the screen on the east). Only a compass side sets an edge; "left / right / middle" name
+  // no compass side on their own, so the edge stays unset ('boundary') and is listed as unknown — never read as north (M55).
+  if (values.privacy) {
+    const pm = text.match(RULES.values.find(r => r.id === 'privacy').pattern); const clause = (text.split(/[.;!?\n]/).find(c => c.includes(pm[0])) || text).split(/\b(?:but|while|whereas)\b/i).find(c => c.includes(pm[0])) || text;
+    let rest = text; for (const f of facts) if (f.kind === 'existing-tree' || f.kind === 'no-plant-zone') rest = rest.replace(f.evidence, ' ');
+    const d = findDirection(clause) || findDirection(rest); const compass = d && DIRECTIONS[d.side] != null; const where = compass ? `${d.side}-edge` : 'boundary';
+    if (d && !compass) unknowns.push(`which edge to screen — "${d.word.trim()}" names no compass side; choose the edge (north / south / east / west)`);
+    else if (d && /back|rear|front|top|bottom/i.test(d.word)) unknowns.push(`"${d.word.trim()}" was read as ${d.side} (plan up) — correct the edge if the site faces another way`);
+    functions.push({ function: 'z:screen', where, basis: 'privacy → Screen (blocks a view); Scrim would only filter it', evidence: 'privacy' }); if (values.openness) functions.push({ function: 'z:scrim', where, basis: 'openness + privacy → Scrim as the alternative to check', evidence: 'openness', alternative: true });
+  }
   if (values.ecology || values.maintenance_low) functions.push({ function: 'z:ground_cover', where: 'bed-interior', basis: values.maintenance_low ? 'low maintenance → carpeting ground layer reduces open soil (design heuristic, not a database claim)' : 'habitat value → layered ground cover (design heuristic)', evidence: values.maintenance_low ? 'low maintenance' : 'ecology' });
   for (const f of facts) { if (f.kind === 'no-plant-zone') hard.push({ id: 'keep-open', kind: 'no-plant-zone', text: `keep the ${f.where} open (${f.reason})`, evidence: f.evidence }); if (f.kind === 'existing-tree') hard.push({ id: 'keep-tree', kind: 'preserve-feature', text: 'preserve the existing tree', evidence: f.evidence }); }
   hard.push({ id: 'bed-only', kind: 'bed-boundary', text: 'never place plants outside accepted beds', evidence: 'rule' });
