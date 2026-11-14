@@ -96,7 +96,7 @@ Share of the plantable area lying under a mature ground-layer crown, each sample
 | change the target height | candidates still usable: 1.0 m and 1.8 m → *Cornus sericea*, *Gaultheria shallon*, *Vaccinium ovatum*; 3.5 m → *Cornus sericea* only; 7 m → none. Each loss cites the height claims (V3, V4, G3). |
 | require year-round | *Cornus sericea* (deciduous) drops out; the two evergreen shrubs stay (V5, V17, G4). |
 | change the bed depth | 0.5 m → nothing fits, edge left empty with the depth each species needs; 0.8 m → one row of *Gaultheria* only (17 plants on 10 m); 1.0 m → one mixed row (13); 3.0 m → two rows (13 + 12) (V7, V8). Demo A north bed 0.9 → 2.6 m: 1 → 2 rows, 7 → 9 plants (G5). |
-| change size data | doubling the claimed spread of the lead species: radius 0.38 → 0.75 m, spacing 0.76 → 1.03 m, row 12 → 9, same claim id on the plants with the new range (V19). Capping all heights at 1.2 m: no species for a 1.8 m screen, each rejection cites its claim (V20). Removing a height record: uncertain, never meets (V21). |
+| change size data | doubling the claimed spread of the lead species: radius 0.38 → 0.75 m, spacing 0.76 → 1.03 m, row 13 → 9, same claim id on the plants with the new range (V19). Capping all heights at 1.2 m: no species for a 1.8 m screen, each rejection cites its claim (V20). Removing a height record: uncertain, never meets (V21). |
 | nothing suitable | empty edge, no forced planting, reasons listed (V7, V20, V22, G6). |
 | no double counting | 10 m edge: union 10 m while the diameters sum to 28 m; counting every plant twice changes nothing; removing plants opens a located gap (V14, V15). |
 
