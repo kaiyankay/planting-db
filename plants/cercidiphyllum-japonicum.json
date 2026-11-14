@@ -17,15 +17,18 @@
     "kpu_plant_type": "Tree - deciduous",
     "respondent_roles": [
       "tree",
+      "tree",
       "tree"
     ],
     "raw_names": [
       "Katsura",
-      "Katsura"
+      "Katsura",
+      "Cercidiphyllum japonicum"
     ],
     "survey_respondents": [
       "survey-r06",
-      "survey-r07"
+      "survey-r07",
+      "survey-r15"
     ],
     "origin_status": "non_native",
     "external_refs": {
@@ -44,7 +47,7 @@
     },
     "in_vancouver_street_tree_list": true,
     "prototype_role": "non-native deciduous tree; 2 survey mentions (one observed note: backyard, sweet leaf scent); large City of Vancouver street-tree record (2,647 public trees) — tests a tree whose local record is richer than its literature",
-    "survey_mentions": 2,
+    "survey_mentions": 3,
     "added": "2026-11-02",
     "added_by": "10-plant expansion (brief 2026-11-02); entity facts from the T5 extraction and the survey, see claims for evidence",
     "usda_symbol": "CEJA2",
@@ -2228,6 +2231,46 @@
       ],
       "conditions": [],
       "place": "place:bc",
+      "time": [],
+      "cultivar": null
+    },
+    {
+      "id": "cercidiphyllum-japonicum:vancouver_context:sv03",
+      "plant": "cercidiphyllum-japonicum",
+      "field": "vancouver_context",
+      "value_kind": "qualitative",
+      "value": {
+        "selection_reason": "leaf appearance — how the heart-shaped leaves are held on the stem",
+        "nature": "personal aesthetic preference"
+      },
+      "text": "Cercidiphyllum japonicum — The heart-shaped leaves are held on the stem in the most graceful way I've ever seen.",
+      "source_id": "survey-r15",
+      "source_type": "practitioner",
+      "context": "Metro Vancouver, hypothetical plant list (survey d1)",
+      "confidence": 0.8,
+      "status": "verified",
+      "recorded_at": "2026-11-13",
+      "recorded_by": "tools/survey_to_claims.py (responses-2026-11-14.csv)",
+      "claim_kind": "selection_reason",
+      "practitioner_meta": {
+        "basis": null,
+        "location": null,
+        "maintenance_received": null,
+        "observer_background": "practising landscape designer; professional, personal-garden and studio planting experience",
+        "site_conditions": null,
+        "season_observed": null,
+        "plant_age_years": null,
+        "completeness": "L0",
+        "citable": false,
+        "note": "d1 'why' answers carry no basis — stored as selection reasons, never cited as observations (R2)"
+      },
+      "survey_question": "d1",
+      "respondent_role_as_typed": "Tree",
+      "verification_scope": "statement",
+      "note": "a designer's personal aesthetic reason for choosing the plant (follows the survey-r07 precedent for aesthetic reasons). NOT a verified leaf trait, NOT a form/habit value, and NOT evidence for any spatial function (Screen, opacity). Stored as selection_reason, L0, not citable.",
+      "concepts": [],
+      "conditions": [],
+      "place": "place:vancouver",
       "time": [],
       "cultivar": null
     }

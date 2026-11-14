@@ -1,6 +1,6 @@
 {
-  "updated": "2026-11-02",
-  "note": "Keyword route for retrieval. Every name a user or respondent might type → canonical plant id. Includes every survey candidate (14 responses, 2026-11-03 export) so later additions resolve to the same ids. Entries with in_db=false are candidates only; names are kept as respondents typed them.",
+  "updated": "2026-11-13",
+  "note": "Keyword route for retrieval. Every name a user or respondent might type → canonical plant id. Includes every survey candidate (15 responses, 2026-11-14 export) so later additions resolve to the same ids. Entries with in_db=false are candidates only; names are kept as respondents typed them; taxon_review 'pending' marks an identity that has not been checked.",
   "entries": [
     {
       "id": "acer-palmatum",
@@ -501,6 +501,36 @@
         "花旗松"
       ],
       "in_db": false
+    },
+    {
+      "id": "amelanchier-autumn-brilliance",
+      "scientific": "Amelanchier 'Autumn Brilliance' (species unresolved)",
+      "names": [
+        "Amelanchier alnifolia 'Autumn Brilliance'"
+      ],
+      "taxon_review": "pending",
+      "in_db": false,
+      "note": "typed as A. alnifolia 'Autumn Brilliance'. The cultivar name 'Autumn Brilliance' is usually listed under Amelanchier × grandiflora, while A. alnifolia is the native saskatoon — the respondent may mean either. Species NOT decided; check before canonicalising."
+    },
+    {
+      "id": "miscanthus-sinensis",
+      "scientific": "Miscanthus sinensis",
+      "names": [
+        "Miscanthus sinensis 'Gracillimus'"
+      ],
+      "taxon_review": "pending",
+      "in_db": false,
+      "note": "respondent named the cultivar 'Gracillimus'; species-level id following the lavandula-angustifolia precedent. Cultivar identity not independently checked."
+    },
+    {
+      "id": "ribes-sanguineum",
+      "scientific": "Ribes sanguineum",
+      "names": [
+        "Ribes sanguinem"
+      ],
+      "taxon_review": "pending",
+      "in_db": false,
+      "note": "respondent's spelling 'sanguinem'; read as Ribes sanguineum (red-flowering currant) — a probable reading, not a confirmed identification."
     }
   ]
 }

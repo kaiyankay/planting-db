@@ -1,5 +1,5 @@
 {
-  "note": "T6/graph test set = survey e2 ('one search you would actually type') and c4 ('one thing you could not find'), VERBATIM from responses-2026-11-03.csv via tools/survey_to_claims.py (replaces the 2026-10-29 proxies, methods M16). Ids are the anonymous respondent ids.",
+  "note": "T6/graph test set = survey e2 ('one search you would actually type') and c4 ('one thing you could not find'), VERBATIM from responses-2026-11-14.csv via tools/survey_to_claims.py (replaces the 2026-10-29 proxies, methods M16). Ids are the anonymous respondent ids.",
   "queries": [
     {
       "id": "e2-r01",
@@ -100,6 +100,11 @@
       "id": "e2-r14",
       "status": "verbatim",
       "query": "evergreen"
+    },
+    {
+      "id": "e2-r15",
+      "status": "verbatim",
+      "query": "Create a list of plants that would grow well together in a full sun courtyard garden with a calming colour palette and a naturalistic character that also attracted butterflies"
     }
   ]
 }

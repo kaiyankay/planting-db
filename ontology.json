@@ -1,6 +1,6 @@
 {
  "$ontology_version": "0.2.0",
- "updated": "2026-11-03",
+ "updated": "2026-11-13",
  "generated_by": "tools/build_ontology.py",
  "note": "Concept nodes of the Planting Intelligence knowledge base. Ids are facet:slug. KPU labels verbatim. Definitions written for this file (methods M26, to confirm); terms from other vocabularies name their source in source_of_term. Rebuild with python3 -I tools/build_ontology.py. 0.2.0 (2026-11-02, M31): XYZ architecture — axis / category / facet nodes, taxon nodes, design (Z) concepts with literature sources, and typed concept relations in `relations`.",
  "dimensions": {

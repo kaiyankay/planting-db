@@ -426,8 +426,8 @@
       "geo_specificity": "vancouver",
       "questions_version": 1,
       "responses_as_of": {
-        "date": "2026-11-03",
-        "n": 14
+        "date": "2026-11-14",
+        "n": 15
       },
       "role_in_db": "parent record; individual respondents below are the citable sources",
       "export_bug": "d2 / attached_note text submitted before 2026-10-29 lost its spaces (form bug fixed in planting-survey 00ee216); wording restored by hand in data/survey/mapping-<date>.json (M21)",
@@ -717,6 +717,23 @@
       "observer_background": "practising landscape designer; professional planting experience",
       "geo_specificity": "vancouver",
       "baseline_confidence": 0.8
+    },
+    {
+      "id": "survey-r15",
+      "parent": "survey",
+      "type": "practitioner",
+      "roles": [
+        "Landscape designer or landscape architect"
+      ],
+      "experience": [
+        "Professional projects",
+        "Personal gardening",
+        "Studio or academic projects"
+      ],
+      "observer_background": "practising landscape designer; professional, personal-garden and studio planting experience",
+      "geo_specificity": "vancouver",
+      "baseline_confidence": 0.8,
+      "privacy_note": "one further self-reported role withheld from the public record (unique combination in the sample; re-identification risk)"
     }
   ]
 }

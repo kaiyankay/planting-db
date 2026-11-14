@@ -1,0 +1,61 @@
+{
+  "note": "ADDENDUM to mapping-2026-11-03.json for the one response added by the 2026-11-14 export (survey-r15). tools/survey_to_claims.py merges every mapping-<date>.json in date order, so the 14-response mapping stays in force unchanged. Keyed by anonymous respondent id and the raw name as typed; nothing here identifies a respondent. Every decision below is DRAFTED BY THE CODING AGENT 2026-11-13 AND AWAITS KAY'S APPROVAL (see reports/survey-delta-2026-11-14.md, 'Decisions for review').",
+  "export": "responses-2026-11-14.csv (15 responses, questions_version 1)",
+  "respondent_public": {
+    "note": "public-record generalisation. The respondent ticked two roles; that combination occurs once in the 15 responses and would narrow a small local professional community to very few people, so the tracked record keeps one role. baseline_confidence is computed from the answers as given (the value is the same either way: 0.8, the cap).",
+    "survey-r15": {
+      "roles": ["Landscape designer or landscape architect"],
+      "privacy_note": "one further self-reported role withheld from the public record (unique combination in the sample; re-identification risk)"
+    }
+  },
+  "restored_text": {
+    "note": "one d2 note on an out-of-DB candidate from the 14-response set lost its spaces (form bug, M21); restored here so the candidate evidence queue is readable. raw_export_text is kept on the queue entry.",
+    "survey-r04|Honey locust tree": "No idea but so pretty"
+  },
+  "d1": {
+    "survey-r15|Cercidiphyllum japonicum": [
+      {
+        "field": "vancouver_context",
+        "value_kind": "qualitative",
+        "value": {
+          "selection_reason": "leaf appearance — how the heart-shaped leaves are held on the stem",
+          "nature": "personal aesthetic preference"
+        },
+        "mapping_note": "a designer's personal aesthetic reason for choosing the plant (follows the survey-r07 precedent for aesthetic reasons). NOT a verified leaf trait, NOT a form/habit value, and NOT evidence for any spatial function (Screen, opacity). Stored as selection_reason, L0, not citable."
+      }
+    ]
+  },
+  "d2": {},
+  "candidates_not_in_db": {
+    "note": "raw names typed by survey-r15 that resolve to no plant in the database. Names are kept exactly as typed. taxon_review 'pending' = the identity below is a provisional reading used only so the name resolves to a stable id; it is not an accepted taxon decision. 'Stewartia pseudocamellia' needs no entry: it already resolves to the existing out-of-DB candidate stewartia-pseudocamellia through that entry's scientific name (second mention, not a new entity).",
+    "entries": [
+      {
+        "id": "amelanchier-autumn-brilliance",
+        "scientific": "Amelanchier 'Autumn Brilliance' (species unresolved)",
+        "names": ["Amelanchier alnifolia 'Autumn Brilliance'"],
+        "taxon_review": "pending",
+        "note": "typed as A. alnifolia 'Autumn Brilliance'. The cultivar name 'Autumn Brilliance' is usually listed under Amelanchier × grandiflora, while A. alnifolia is the native saskatoon — the respondent may mean either. Species NOT decided; check before canonicalising."
+      },
+      {
+        "id": "miscanthus-sinensis",
+        "scientific": "Miscanthus sinensis",
+        "names": ["Miscanthus sinensis 'Gracillimus'"],
+        "taxon_review": "pending",
+        "note": "respondent named the cultivar 'Gracillimus'; species-level id following the lavandula-angustifolia precedent. Cultivar identity not independently checked."
+      },
+      {
+        "id": "ribes-sanguineum",
+        "scientific": "Ribes sanguineum",
+        "names": ["Ribes sanguinem"],
+        "taxon_review": "pending",
+        "note": "respondent's spelling 'sanguinem'; read as Ribes sanguineum (red-flowering currant) — a probable reading, not a confirmed identification."
+      }
+    ]
+  },
+  "candidate_review": {
+    "note": "researcher notes attached to entries of data/survey/candidate_evidence.json (keyed by queue entry id).",
+    "cand:survey-r15:d2": {
+      "review_note": "experience-based practitioner note (basis: mixed — the respondent ticked 'A combination of these'; own design use is stated in the text). Reports lodging of large plants after heavy rain and a need for division every few years. No location, site conditions, plant age or maintenance regime recorded. An attributed anecdote — not a general characteristic of the cultivar."
+    }
+  }
+}
