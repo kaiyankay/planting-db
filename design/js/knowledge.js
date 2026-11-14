@@ -36,10 +36,9 @@ export class Knowledge {
   // ---- size proxies: one claimed range chosen deterministically, every alternative counted; never a measured fact
   sizeProxy(id, kind /* 'spread_class' | 'height_class' */, light = null) {
     const c = this.cell(id, kind); if (!c) return { value_m: null, status: 'not recorded', claim: null, alternatives: 0, note: `${kind === 'spread_class' ? 'spread' : 'height'} not recorded in the database` };
-    const seen = new Map();
-    for (const v of c.values) for (const n of v.numbers || []) { if (n.min == null && n.max == null) continue; const key = v.claims[0] + '|' + (n.min ?? '') + '|' + (n.max ?? ''); if (!seen.has(key)) seen.set(key, { claim: v.claims[0], source: v.sources[0], min: n.min, max: n.max, conditions: v.conditions || [], cultivars: v.cultivars || [], verification: v.verification }); }
-    let opts = [...seen.values()].filter(o => o.min != null && o.max != null);
-    if (!opts.length) opts = [...seen.values()];
+    const all = this.sizeOptions(id, kind);
+    let opts = all.filter(o => o.min != null && o.max != null);
+    if (!opts.length) opts = all;
     if (!opts.length) return { value_m: null, status: 'no numeric range', claim: c.claims[0] || null, alternatives: 0, note: 'claims exist but carry no usable range' };
     const byCond = opts.filter(o => !o.conditions.length); const conditioned = opts.filter(o => o.conditions.length);
     let pick = null, note = '';
@@ -47,6 +46,48 @@ export class Knowledge {
     if (!pick) { const base = (byCond.length ? byCond : opts).filter(o => !o.cultivars.length); const pool = base.length ? base : (byCond.length ? byCond : opts); pool.sort((a, b) => mid(a) - mid(b)); pick = pool[Math.floor((pool.length - 1) / 2)]; note = pool.length > 1 ? `median of ${pool.length} claimed ranges` : 'one claimed range'; if (conditioned.length && !light) note += '; other ranges depend on conditions'; }
     const v = pick.min != null && pick.max != null ? (pick.min + pick.max) / 2 : (pick.max ?? pick.min);
     return { value_m: Math.round(v * 100) / 100, min: pick.min, max: pick.max, status: 'proxy from claim', claim: pick.claim, source: pick.source, verification: pick.verification, conditions: pick.conditions, alternatives: opts.length - 1, disagreement: c.disagreement.length > 0, note };
+  }
+  /** every claimed numeric range of a size facet (one entry per claim × range), with its claim id, source, conditions, cultivars and
+   *  the verification of the value it comes from. sizeProxy picks one of these; the selection checks read all of them. */
+  sizeOptions(id, kind) {
+    const c = this.cell(id, kind); if (!c) return []; const seen = new Map();
+    for (const v of c.values) for (const n of v.numbers || []) { if (n.min == null && n.max == null) continue; const key = v.claims[0] + '|' + (n.min ?? '') + '|' + (n.max ?? ''); if (!seen.has(key)) seen.set(key, { claim: v.claims[0], source: v.sources[0], min: n.min, max: n.max, conditions: v.conditions || [], cultivars: v.cultivars || [], verification: v.verification }); }
+    return [...seen.values()];
+  }
+  /** does the species reach a target height at maturity? Judged on the CLAIMED ranges (species-level ranges when there are any,
+   *  cultivar ranges only otherwise), never on a measured plant:
+   *    meets      the chosen (proxy) range starts at or above the target and no claimed range stays below it
+   *    uncertain  some claimed range reaches the target, but the chosen range starts below it or another claim stays below it
+   *    fails      no claimed range reaches the target
+   *    unknown    no height range recorded */
+  heightAgainst(id, target_m, light = null) {
+    const all = this.sizeOptions(id, 'height_class').filter(o => o.max != null); const base = all.filter(o => !o.cultivars.length); const opts = base.length ? base : all;
+    if (!opts.length) return { result: 'unknown', detail: 'no mature height range recorded for this plant', claims: [], verified: false, tallest_m: null };
+    const pick = this.sizeProxy(id, 'height_class', light); const reach = opts.filter(o => o.max >= target_m), below = opts.filter(o => o.max < target_m); const tallest = Math.max(...opts.map(o => o.max));
+    const rng = o => `${o.min ?? '?'}–${o.max} m`; const claims = [...new Set([pick.claim, ...reach.map(o => o.claim)].filter(Boolean))]; const verified = pick.verification === 'verified';
+    if (!reach.length) return { result: 'fails', detail: `no claimed height range reaches ${target_m} m (tallest claimed ${tallest} m; ${opts.length} range${opts.length === 1 ? '' : 's'})`, claims: opts.map(o => o.claim), verified, tallest_m: tallest };
+    if (pick.min != null && pick.min >= target_m && !below.length) return { result: 'meets', detail: `claimed mature height ${rng(pick)} (${pick.claim}) starts at or above ${target_m} m; no claimed range stays below it`, claims, verified, tallest_m: tallest };
+    return { result: 'uncertain', detail: `${reach.length} of ${opts.length} claimed height ranges reach ${target_m} m; the range used for the plan is ${rng(pick)} (${pick.claim})${below.length ? `; ${below.length} claimed range${below.length === 1 ? ' stays' : 's stay'} below it` : ''}`, claims, verified, tallest_m: tallest };
+  }
+  /** leaf retention for a year-round requirement: meets (Evergreen only) · uncertain (both recorded, or nothing recorded) · fails (Deciduous only) */
+  yearRound(id) {
+    const c = this.cell(id, 'evergreen'); if (!c) return { result: 'uncertain', detail: 'leaf retention not recorded', claims: [], verified: false };
+    const ev = c.values.filter(v => /evergreen/i.test(v.label)), de = c.values.filter(v => /deciduous/i.test(v.label)); const verified = c.values.every(v => v.verification === 'verified');
+    if (ev.length && !de.length) return { result: 'meets', detail: `recorded Evergreen (${ev[0].verification})`, claims: c.claims, verified };
+    if (de.length && !ev.length) return { result: 'fails', detail: `recorded Deciduous (${de[0].verification}) — bare in winter`, claims: c.claims, verified };
+    return { result: 'uncertain', detail: ev.length ? 'recorded both Evergreen and Deciduous — sources disagree' : 'leaf retention not recorded', claims: c.claims, verified };
+  }
+  /** how far the database supports a plant for a function — kept apart from design performance:
+   *    supported  the link is drawn, derived or documented, without a conflict
+   *    uncertain  the link is only a candidate (inferred from traits, no source states the use) or a trait claim contradicts the use
+   *    none       no link
+   *  `verified` says whether the claims behind the link were verified; an unverified or conflicting link is never reported as verified performance. */
+  functionEvidence(id, fn) {
+    const l = this.functionLink(id, fn); if (!l || !l.drawn) return { result: 'none', detail: `no ${fn.replace('z:', '').replace('_', ' ')} link in the knowledge graph`, verified: false, conflict: false, status: l?.status || 'unknown', link: l?.id || null };
+    const verified = l.verification === 'verified' && !l.conflict; const base = `${l.status}${l.via_use_labels?.length ? ` from recorded use ${l.via_use_labels.join(', ')}` : ' — inferred from traits, no source states the use'} (${l.rule || 'KG'}; claims ${l.verification})`;
+    if (l.conflict) return { result: 'uncertain', detail: `${base}; a trait claim contradicts the use`, verified: false, conflict: true, status: l.status, link: l.id };
+    if (l.status === 'candidate' || l.status === 'unknown') return { result: 'uncertain', detail: base, verified: false, conflict: false, status: l.status, link: l.id };
+    return { result: 'supported', detail: base, verified, conflict: false, status: l.status, link: l.id };
   }
   proxy(id, light = null) {
     const sp = this.sizeProxy(id, 'spread_class', light), ht = this.sizeProxy(id, 'height_class', light);

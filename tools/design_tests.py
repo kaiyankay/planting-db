@@ -99,6 +99,25 @@ else:
         test("F8 recording Barrier changes no plant and is reported as unresolved", F["v4"]["same_as_v3"] and F["v4"]["unresolved"], json.dumps(F["v4"])[:300])
     else:
         test("F0 function script ran", False, "no fn block in #script-out")
+    # G round 2 on Demo A (M56; ?script=r2): the screen requirement and the bed depth are changed on the page and the design regenerated
+    d = dom("/design/index.html?script=r2&fresh=1", 20000)
+    m = re.search(r'<pre id="script-out"[^>]*>(.*?)</pre>', d, re.S)
+    try:
+        G2 = (json.loads(m.group(1).replace("&lt;", "<").replace("&gt;", ">").replace("&amp;", "&").replace("&quot;", '"')) if m else {}).get("r2")
+    except Exception as ex:
+        G2 = None; test("G0 round-2 script output parses", False, repr(ex))
+    if G2:
+        b, h35, yr, dp, h70 = (G2[k] for k in ("base", "h35", "h12_year_round", "deeper", "h70")); live = lambda x: sorted(k for k, v in x["fits"].items() if v != "fails")
+        test("G1 Demo A: a screen row is planted from the best candidate class; the page shows the target height as a heuristic default and year-round as not stated", b["screen"] > 0 and b["edge"]["status"] in ("uncertain", "met on claimed sizes", "not met") and b["requirement"]["target_height_m"] == 1.8 and "heuristic" in (b["dom"]["req"] or "") and "not stated" in (b["dom"]["req"] or "") and b["symbols"] == b["plants"], f"{b['picks']} · {b['edge']['status']} · {b['dom']['req']}")
+        test("G2 the page lists the candidates by class with the target, and every chip names its class", b["dom"]["cand"] and "target 1.8 m" in b["dom"]["cand"] and any("screen · " in c for c in b["dom"]["chips"]), f"{b['dom']['cand']} · {b['dom']['chips']}")
+        test("G3 saying '3.5 m high' marks the design stale and narrows the candidates; the row changes or stays empty with reasons", h35["stale_before"] and h35["requirement"]["target_height_m"] == 3.5 and "stated" in h35["requirement"]["target_basis"] and set(live(h35)) < set(live(b)) and (h35["picks"] != b["picks"]) and (h35["screen"] > 0 or any("Screen" in f for f in h35["findings"])), f"1.8 m {live(b)} → 3.5 m {live(h35)} · picks {b['picks']} → {h35['picks']} · screen plants {b['screen']} → {h35['screen']} · {h35['findings'][:1]}")
+        test("G4 '1.2 m high and all year': only evergreen species are in the row and the evaluation reports the evergreen cover", yr["requirement"]["year_round"] is True and yr["requirement"]["target_height_m"] == 1.2 and yr["screen"] > 0 and all(x.endswith(":evergreen") for x in yr["edge"]["species"]) and yr["edge"]["checks"]["year_round"] == "met" and "required" in (yr["dom"]["req"] or ""), f"{yr['picks']} · {yr['edge']['species']} · evergreen {yr['edge']['evergreen']} of {yr['edge']['edge_length_m']} m · {yr['dom']['req']}")
+        test("G5 making the north bed 2.6 m deep changes the arrangement: more rows or more plants, computed from the depth", dp["stale_before"] and dp["plan"]["depth_m"] > yr["plan"]["depth_m"] and (dp["rows"] > yr["rows"] or dp["screen"] != yr["screen"] or dp["picks"] != yr["picks"]), f"depth {yr['plan']['depth_m']} → {dp['plan']['depth_m']} m · rows {yr['rows']} → {dp['rows']} · screen plants {yr['screen']} → {dp['screen']} · picks {yr['picks']} → {dp['picks']} · {dp['plan']['reason']}")
+        test("G6 a 7 m screen: no species qualifies, no screen plant is drawn, and the reasons are listed", h70["screen"] == 0 and not h70["picks"] and any("no species could be used" in f for f in h70["findings"]) and h70["symbols"] == h70["plants"], f"{h70['findings'][:1]}")
+        test("G7 the evaluation is a geometric estimate throughout: cover ≤ edge, certain ≤ possible ≤ cover, never marked as verified performance; the drawer shows it", all(x["edge"] is None or (x["edge"]["covered_m"] <= x["edge"]["edge_length_m"] + 0.001 and x["edge"]["certain"] <= x["edge"]["possible"] + 0.001 <= x["edge"]["covered_m"] + 0.002 and x["edge"]["verified_performance"] is False) for x in (b, h35, yr, dp, h70)) and b["eval_html"], json.dumps(b["edge"])[:300])
+        test("G8 ground cover is reported per bed as a share of the plantable area (0–1) with the plant count", b["ground"] and all(0 < g["share"] <= 1 and g["plants"] > 0 for g in b["ground"]), json.dumps(b["ground"])[:300])
+    else:
+        test("G0 round-2 script ran", False, "no r2 block in #script-out")
     # S saved file (only when the design server is the target)
     try:
         import urllib.request

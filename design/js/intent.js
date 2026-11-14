@@ -58,6 +58,15 @@ export const RULES = {
 
 /** `where` of an edge function whose edge the user has not chosen yet: recorded, shown as awaiting a choice, never proposed or planted */
 export const EDGE_UNSET = 'edge-unset';
+/** what the words say about the screen itself: a target height ("2 m high", "at least 1.5 m") and a year-round wish. Nothing is
+ *  returned for what was not said — the engine then uses its labelled default height and does not require winter cover. */
+export function screenRequirementFromText(text) {
+  const out = {}; const h = text.match(/(\d+(?:\.\d+)?)\s*(?:m|metres?|meters?)\s*(?:high|tall|in height)\b/i) || text.match(/\b(?:at least|height of|up to|above)\s*(\d+(?:\.\d+)?)\s*(?:m|metres?|meters?)\b/i);
+  if (h) { out.target_height_m = +h[1]; out.target_basis = `stated: "${h[0].trim()}"`; }
+  const y = text.match(/\b(year[- ]round|all year|all[- ]season|every season|in winter|through (?:the )?winter|winter too|evergreen)\b/i); if (y) { out.year_round = true; out.year_round_evidence = y[0]; }
+  else { const n = text.match(/\b(summer only|only in summer|not in winter|seasonal screen)\b/i); if (n) out.year_round = false; }
+  return out;
+}
 export function findDirection(text) { const m = text.match(new RegExp(`\\b${DIR}\\b(?:\\s*(?:side|edge|half|part|end|corner|boundary|fence))?`, 'i')); if (!m) return null; const w = m[1].toLowerCase(); return { word: m[0], side: SIDE_WORD[w] || w, is_edge: /edge|boundary|fence/i.test(m[0]) }; }
 const deictic = t => /\b(here|this|these|those|selected|the (?:circled|selected) (?:area|region|part))\b/i.test(t);
 
@@ -73,12 +82,14 @@ export function interpretDescription(text) {
   // unknown — never read as north, never spread over every edge (M55).
   if (values.privacy) {
     const pm = text.match(RULES.values.find(r => r.id === 'privacy').pattern); let rest = text; for (const f of facts) if (f.kind === 'existing-tree' || f.kind === 'no-plant-zone') rest = rest.replace(f.evidence, ' ');   // a tree's or an open area's own direction is not the screened edge, even inside the same sentence
-    const base = rest.includes(pm[0]) ? rest : text; const clause = (base.split(/[.;!?\n]/).find(c => c.includes(pm[0])) || base).split(/\b(?:but|while|whereas)\b/i).find(c => c.includes(pm[0])) || base;
+    const base = rest.includes(pm[0]) ? rest : text; const clause = (base.split(/(?<!\d)\.(?!\d)|\.(?=\s|$)|[;!?\n]/).find(c => c.includes(pm[0])) || base).split(/\b(?:but|while|whereas)\b/i).find(c => c.includes(pm[0])) || base;
     const d = findDirection(clause) || findDirection(rest); const compass = d && DIRECTIONS[d.side] != null; const where = compass ? `${d.side}-edge` : EDGE_UNSET;
     if (!d) unknowns.push('which edge to screen — no side was named; choose the edge (north / south / east / west): nothing is screened until then');
     else if (!compass) unknowns.push(`which edge to screen — "${d.word.trim()}" names no compass side; choose the edge (north / south / east / west)`);
     else if (d && /back|rear|front|top|bottom/i.test(d.word)) unknowns.push(`"${d.word.trim()}" was read as ${d.side} (plan up) — correct the edge if the site faces another way`);
-    functions.push({ function: 'z:screen', where, basis: 'privacy → Screen (blocks a view); Scrim would only filter it', evidence: 'privacy' }); if (values.openness) functions.push({ function: 'z:scrim', where, basis: 'openness + privacy → Scrim as the alternative to check', evidence: 'openness', alternative: true });
+    const req = screenRequirementFromText(clause);
+    functions.push({ function: 'z:screen', where, basis: 'privacy → Screen (blocks a view); Scrim would only filter it', evidence: 'privacy', ...req });
+    if (req.target_height_m != null) evidence.push({ rule: 'screen-height', text: req.target_basis, says: `screen target height ${req.target_height_m} m` }); if (req.year_round) evidence.push({ rule: 'screen-year-round', text: req.year_round_evidence, says: 'year-round screening required' }); if (values.openness) functions.push({ function: 'z:scrim', where, basis: 'openness + privacy → Scrim as the alternative to check', evidence: 'openness', alternative: true });
   }
   if (values.ecology || values.maintenance_low) functions.push({ function: 'z:ground_cover', where: 'bed-interior', basis: values.maintenance_low ? 'low maintenance → carpeting ground layer reduces open soil (design heuristic, not a database claim)' : 'habitat value → layered ground cover (design heuristic)', evidence: values.maintenance_low ? 'low maintenance' : 'ecology' });
   for (const f of facts) { if (f.kind === 'no-plant-zone') hard.push({ id: 'keep-open', kind: 'no-plant-zone', text: `keep the ${f.where} open (${f.reason})`, evidence: f.evidence }); if (f.kind === 'existing-tree') hard.push({ id: 'keep-tree', kind: 'preserve-feature', text: 'preserve the existing tree', evidence: f.evidence }); }
