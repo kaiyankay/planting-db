@@ -1,0 +1,1674 @@
+{
+ "date": "2026-11-14",
+ "note": "offline = the rule parser (real). mock = HAND-WRITTEN answers through the real SDK path (tools/fixtures/llm_mock.json) — not a language model. live = the real model, only when a credential was present.",
+ "modes": {
+  "mock": {
+   "cases": {
+    "A": {
+     "utterance": "My backyard is 6 by 4 metres. There is an old maple in the northwest corner, and the neighbours' kitchen window looks in over the north fence, so I need privacy there. Keep the middle open.",
+     "reader": "mock",
+     "llm": "claude-opus-5-5",
+     "reason": null,
+     "tag": "MOCK model · test",
+     "provenance": "MOCK model (contract test — not a language model)",
+     "checks": {
+      "schema": "valid",
+      "accepted": 10,
+      "changed": 0,
+      "dropped": 0,
+      "rows": [
+       {
+        "result": "accepted",
+        "item": "dimensions 6 × 4 m",
+        "check": "both numbers were typed by the person",
+        "detail": ""
+       },
+       {
+        "result": "accepted",
+        "item": "existing tree · northwest",
+        "check": "quoted from the utterance; no coordinate is taken from the model — the workspace places it as an estimate",
+        "detail": ""
+       },
+       {
+        "result": "accepted",
+        "item": "open space (open middle)",
+        "check": "quoted from the utterance; its extent is a suggestion until drawn",
+        "detail": ""
+       },
+       {
+        "result": "accepted",
+        "item": "relation: neighbours' kitchen window — looks in over — the north fence",
+        "check": "recorded as a note; it moves no geometry",
+        "detail": ""
+       },
+       {
+        "result": "accepted",
+        "item": "relation: old maple — stands in — the northwest corner",
+        "check": "recorded as a note; it moves no geometry",
+        "detail": ""
+       },
+       {
+        "result": "accepted",
+        "item": "relation: privacy — is needed at — the north fence",
+        "check": "recorded as a note; it moves no geometry",
+        "detail": ""
+       },
+       {
+        "result": "accepted",
+        "item": "goal: privacy (level 2)",
+        "check": "quoted from the utterance",
+        "detail": ""
+       },
+       {
+        "result": "accepted",
+        "item": "goal: openness (level 2)",
+        "check": "quoted from the utterance",
+        "detail": ""
+       },
+       {
+        "result": "accepted",
+        "item": "z:screen → north-edge",
+        "check": "a function of the knowledge graph, quoted from the utterance; plants are chosen by the planting engine, not here",
+        "detail": ""
+       },
+       {
+        "result": "accepted",
+        "item": "constraint: keep the middle open",
+        "check": "recorded with the brief; enforced only where the spatial engine has a rule for it",
+        "detail": ""
+       }
+      ]
+     },
+     "kind": "description",
+     "model": {
+      "size": [
+       6,
+       4
+      ],
+      "scale": "user-stated",
+      "sketch": null,
+      "features": [
+       {
+        "kind": "existing-tree",
+        "status": "inferred",
+        "at": [
+         1,
+         3
+        ]
+       },
+       {
+        "kind": "no-plant-zone",
+        "status": "inferred",
+        "at": null
+       }
+      ],
+      "notes": [
+       {
+        "kind": "existing-tree",
+        "side": "north",
+        "corner": "northwest",
+        "placed": true
+       },
+       {
+        "kind": "no-plant-zone",
+        "side": null,
+        "corner": null,
+        "placed": true
+       }
+      ],
+      "conditions": {},
+      "beds": [
+       {
+        "name": "North bed",
+        "area": 5.4,
+        "status": "ai-suggested",
+        "fns": [
+         "screen@north-edge"
+        ]
+       },
+       {
+        "name": "East bed",
+        "area": 2.48,
+        "status": "ai-suggested",
+        "fns": [
+         "ground_cover@east-edge"
+        ]
+       },
+       {
+        "name": "West bed",
+        "area": 2.48,
+        "status": "ai-suggested",
+        "fns": [
+         "ground_cover@west-edge"
+        ]
+       },
+       {
+        "name": "Tree island",
+        "area": 2.1,
+        "status": "ai-suggested",
+        "fns": [
+         "ground_cover@bed-interior"
+        ]
+       }
+      ],
+      "goals": {
+       "privacy": 2,
+       "openness": 2
+      },
+      "functions": [
+       "screen@north-edge",
+       "scrim@north-edge (alternative)"
+      ],
+      "hard": [
+       "keep-tree",
+       "keep-open",
+       "bed-only",
+       "stated-1"
+      ],
+      "unknowns": [
+       "how high the screen has to be to block the kitchen window",
+       "light",
+       "soil",
+       "soil type and drainage"
+      ],
+      "relations": [
+       "neighbours' kitchen window — looks in over — the north fence",
+       "old maple — stands in — the northwest corner",
+       "privacy — is needed at — the north fence"
+      ]
+     }
+    },
+    "B": {
+     "utterance": "I have a small backyard with an old tree. I want it to feel open with some ecological value.",
+     "reader": "mock",
+     "llm": "claude-opus-5-5",
+     "reason": null,
+     "tag": "MOCK model · test",
+     "provenance": "MOCK model (contract test — not a language model)",
+     "checks": {
+      "schema": "valid",
+      "accepted": 5,
+      "changed": 0,
+      "dropped": 0,
+      "rows": [
+       {
+        "result": "accepted",
+        "item": "size word: small",
+        "check": "the word is in the utterance; no dimension is derived from it",
+        "detail": ""
+       },
+       {
+        "result": "accepted",
+        "item": "existing tree · position unknown",
+        "check": "quoted from the utterance; no coordinate is taken from the model — the workspace places it as an estimate",
+        "detail": ""
+       },
+       {
+        "result": "accepted",
+        "item": "goal: openness (level 2)",
+        "check": "quoted from the utterance",
+        "detail": ""
+       },
+       {
+        "result": "accepted",
+        "item": "goal: ecology (level 2)",
+        "check": "quoted from the utterance",
+        "detail": ""
+       },
+       {
+        "result": "accepted",
+        "item": "z:ground_cover → bed-interior",
+        "check": "a function of the knowledge graph, quoted from the utterance; plants are chosen by the planting engine, not here",
+        "detail": ""
+       }
+      ]
+     },
+     "kind": "description",
+     "model": {
+      "size": null,
+      "scale": "unknown",
+      "sketch": "active",
+      "features": [],
+      "notes": [
+       {
+        "kind": "existing-tree",
+        "side": null,
+        "corner": null,
+        "placed": false
+       }
+      ],
+      "conditions": {},
+      "beds": [],
+      "goals": {
+       "openness": 2,
+       "ecology": 2
+      },
+      "functions": [
+       "ground_cover@bed-interior"
+      ],
+      "hard": [
+       "keep-tree",
+       "bed-only"
+      ],
+      "unknowns": [
+       "the size of the yard",
+       "where the tree stands",
+       "which way is north",
+       "site dimensions / scale",
+       "light",
+       "soil type and drainage",
+       "ecological performance — the database records some ecological-value claims (pollinator, bird food …) but no pollinator-interaction data; no score is possible"
+      ],
+      "relations": []
+     }
+    },
+    "C": {
+     "utterance": "We need privacy from the house behind us but the garden should still feel open, and it only gets sun in the morning — mostly partial shade.",
+     "reader": "mock",
+     "llm": "claude-opus-5-5",
+     "reason": null,
+     "tag": "MOCK model · test",
+     "provenance": "MOCK model (contract test — not a language model)",
+     "checks": {
+      "schema": "valid",
+      "accepted": 8,
+      "changed": 2,
+      "dropped": 0,
+      "rows": [
+       {
+        "result": "accepted",
+        "item": "light: part-shade",
+        "check": "quoted from the utterance; a value of the site model's vocabulary",
+        "detail": ""
+       },
+       {
+        "result": "accepted",
+        "item": "relation: the house — overlooks from behind — the garden",
+        "check": "recorded as a note; it moves no geometry",
+        "detail": ""
+       },
+       {
+        "result": "accepted",
+        "item": "relation: sun — reaches the garden only in — the morning",
+        "check": "recorded as a note; it moves no geometry",
+        "detail": ""
+       },
+       {
+        "result": "accepted",
+        "item": "relation: openness — limits — the screen",
+        "check": "recorded as a note; it moves no geometry",
+        "detail": ""
+       },
+       {
+        "result": "accepted",
+        "item": "goal: privacy (level 2)",
+        "check": "quoted from the utterance",
+        "detail": ""
+       },
+       {
+        "result": "accepted",
+        "item": "goal: openness (level 2)",
+        "check": "quoted from the utterance",
+        "detail": ""
+       },
+       {
+        "result": "changed",
+        "item": "z:screen on the north edge",
+        "check": "a compass edge needs the word that names it",
+        "detail": "edge left unset; the workspace asks the person"
+       },
+       {
+        "result": "accepted",
+        "item": "z:screen → edge-unset",
+        "check": "a function of the knowledge graph, quoted from the utterance; plants are chosen by the planting engine, not here",
+        "detail": ""
+       },
+       {
+        "result": "changed",
+        "item": "z:scrim on the north edge",
+        "check": "a compass edge needs the word that names it",
+        "detail": "edge left unset; the workspace asks the person"
+       },
+       {
+        "result": "accepted",
+        "item": "z:scrim → edge-unset",
+        "check": "a function of the knowledge graph, quoted from the utterance; plants are chosen by the planting engine, not here",
+        "detail": ""
+       }
+      ]
+     },
+     "kind": "description",
+     "model": {
+      "size": null,
+      "scale": "unknown",
+      "sketch": "active",
+      "features": [],
+      "notes": [],
+      "conditions": {
+       "light": "part-shade"
+      },
+      "beds": [],
+      "goals": {
+       "privacy": 2,
+       "openness": 2
+      },
+      "functions": [
+       "screen@edge-unset",
+       "scrim@edge-unset (alternative)"
+      ],
+      "hard": [
+       "bed-only"
+      ],
+      "unknowns": [
+       "which edge the planting should stand on — no compass side was named; choose the edge (north / south / east / west): nothing is planted for it until then",
+       "which compass side is behind the house",
+       "the size of the garden",
+       "site dimensions / scale",
+       "soil type and drainage"
+      ],
+      "relations": [
+       "the house — overlooks from behind — the garden",
+       "sun — reaches the garden only in — the morning",
+       "openness — limits — the screen"
+      ]
+     }
+    },
+    "D": {
+     "utterance": "Make the bed along the north fence half a metre deeper, but don't let it eat into the open centre and keep the tree bed as it is.",
+     "reader": "mock",
+     "llm": "claude-opus-5-5",
+     "reason": null,
+     "tag": "MOCK model · test",
+     "provenance": "MOCK model (contract test — not a language model)",
+     "checks": {
+      "schema": "valid",
+      "accepted": 3,
+      "changed": 0,
+      "dropped": 0,
+      "rows": [
+       {
+        "result": "accepted",
+        "item": "bed edit: resize · north · deeper 0.5",
+        "check": "a typed request only: the spatial engine computes the new shape, clips it to the site, keeps it out of open space and other beds, and previews it before anything changes",
+        "detail": ""
+       },
+       {
+        "result": "accepted",
+        "item": "preserve: open centre",
+        "check": "recorded with the request; the spatial engine keeps beds out of open space, no-plant zones and other beds whatever is asked",
+        "detail": ""
+       },
+       {
+        "result": "accepted",
+        "item": "preserve: tree bed",
+        "check": "recorded with the request; the spatial engine keeps beds out of open space, no-plant zones and other beds whatever is asked",
+        "detail": ""
+       }
+      ]
+     },
+     "kind": "bed_edit_request",
+     "request": {
+      "op": "resize",
+      "target": {
+       "side": "north",
+       "tree": false,
+       "name": null
+      },
+      "direction": "deeper",
+      "amount_m": 0.5,
+      "amount_basis": "from the number in \"Make the bed along the north fence half a metre deeper\""
+     },
+     "preview": {
+      "ok": true,
+      "changes": [
+       {
+        "bed": "North bed",
+        "before_m2": 5.4,
+        "after_m2": 6.76
+       }
+      ],
+      "conflicts": [
+       "1.64 m² would overlap another bed — kept out"
+      ]
+     },
+     "beds_before": [
+      {
+       "name": "North bed",
+       "area": 5.4,
+       "status": "user-accepted",
+       "fns": [
+        "screen@north-edge"
+       ]
+      },
+      {
+       "name": "East bed",
+       "area": 2.48,
+       "status": "user-accepted",
+       "fns": [
+        "ground_cover@east-edge"
+       ]
+      },
+      {
+       "name": "West bed",
+       "area": 2.48,
+       "status": "user-accepted",
+       "fns": [
+        "ground_cover@west-edge"
+       ]
+      },
+      {
+       "name": "Tree island",
+       "area": 2.1,
+       "status": "user-accepted",
+       "fns": [
+        "ground_cover@bed-interior"
+       ]
+      }
+     ],
+     "beds_after": [
+      {
+       "name": "North bed",
+       "area": 6.76,
+       "status": "user-edited",
+       "fns": [
+        "screen@north-edge"
+       ]
+      },
+      {
+       "name": "East bed",
+       "area": 2.48,
+       "status": "user-accepted",
+       "fns": [
+        "ground_cover@east-edge"
+       ]
+      },
+      {
+       "name": "West bed",
+       "area": 2.48,
+       "status": "user-accepted",
+       "fns": [
+        "ground_cover@west-edge"
+       ]
+      },
+      {
+       "name": "Tree island",
+       "area": 2.1,
+       "status": "user-accepted",
+       "fns": [
+        "ground_cover@bed-interior"
+       ]
+      }
+     ],
+     "open_area_unchanged": true,
+     "bed_area_inside_open_m2": 0,
+     "tree_bed_unchanged": true
+    }
+   },
+   "run": {
+    "imagine": {
+     "reader": "mock",
+     "llm": "claude-opus-5-5",
+     "reason": null,
+     "tag": "MOCK model · test",
+     "provenance": null,
+     "checks": {
+      "schema": "valid",
+      "accepted": 9,
+      "changed": 0,
+      "dropped": 0,
+      "rows": [
+       {
+        "result": "accepted",
+        "item": "dimensions 6 × 4 m",
+        "check": "both numbers were typed by the person",
+        "detail": ""
+       },
+       {
+        "result": "accepted",
+        "item": "existing tree · northwest",
+        "check": "quoted from the utterance; no coordinate is taken from the model — the workspace places it as an estimate",
+        "detail": ""
+       },
+       {
+        "result": "accepted",
+        "item": "open space (open centre)",
+        "check": "quoted from the utterance; its extent is a suggestion until drawn",
+        "detail": ""
+       },
+       {
+        "result": "accepted",
+        "item": "relation: tree — stands in — the northwest corner",
+        "check": "recorded as a note; it moves no geometry",
+        "detail": ""
+       },
+       {
+        "result": "accepted",
+        "item": "relation: privacy — runs along — the north edge",
+        "check": "recorded as a note; it moves no geometry",
+        "detail": ""
+       },
+       {
+        "result": "accepted",
+        "item": "goal: privacy (level 2)",
+        "check": "quoted from the utterance",
+        "detail": ""
+       },
+       {
+        "result": "accepted",
+        "item": "goal: openness (level 2)",
+        "check": "quoted from the utterance",
+        "detail": ""
+       },
+       {
+        "result": "accepted",
+        "item": "z:screen → north-edge",
+        "check": "a function of the knowledge graph, quoted from the utterance; plants are chosen by the planting engine, not here",
+        "detail": ""
+       },
+       {
+        "result": "accepted",
+        "item": "constraint: keep the centre open",
+        "check": "recorded with the brief; enforced only where the spatial engine has a rule for it",
+        "detail": ""
+       }
+      ]
+     },
+     "stage": "site",
+     "model": {
+      "size": [
+       6,
+       4
+      ],
+      "scale": "user-stated",
+      "sketch": null,
+      "features": [
+       {
+        "kind": "existing-tree",
+        "status": "inferred",
+        "at": [
+         1,
+         3
+        ]
+       },
+       {
+        "kind": "no-plant-zone",
+        "status": "inferred",
+        "at": null
+       }
+      ],
+      "notes": [
+       {
+        "kind": "existing-tree",
+        "side": "north",
+        "corner": "northwest",
+        "placed": true
+       },
+       {
+        "kind": "no-plant-zone",
+        "side": null,
+        "corner": null,
+        "placed": true
+       }
+      ],
+      "conditions": {},
+      "beds": [
+       {
+        "name": "North bed",
+        "area": 5.4,
+        "status": "ai-suggested",
+        "fns": [
+         "screen@north-edge"
+        ]
+       },
+       {
+        "name": "East bed",
+        "area": 2.48,
+        "status": "ai-suggested",
+        "fns": [
+         "ground_cover@east-edge"
+        ]
+       },
+       {
+        "name": "West bed",
+        "area": 2.48,
+        "status": "ai-suggested",
+        "fns": [
+         "ground_cover@west-edge"
+        ]
+       },
+       {
+        "name": "Tree island",
+        "area": 2.1,
+        "status": "ai-suggested",
+        "fns": [
+         "ground_cover@bed-interior"
+        ]
+       }
+      ],
+      "goals": {
+       "privacy": 2,
+       "openness": 2
+      },
+      "functions": [
+       "screen@north-edge",
+       "scrim@north-edge (alternative)"
+      ],
+      "hard": [
+       "keep-tree",
+       "keep-open",
+       "bed-only",
+       "stated-1"
+      ],
+      "unknowns": [
+       "light",
+       "soil",
+       "soil type and drainage"
+      ],
+      "relations": [
+       "tree — stands in — the northwest corner",
+       "privacy — runs along — the north edge"
+      ]
+     }
+    },
+    "shape_words": {
+     "reader": "mock",
+     "llm": "claude-opus-5-5",
+     "reason": null,
+     "tag": "MOCK model · test",
+     "provenance": "MOCK model (contract test — not a language model)",
+     "checks": {
+      "schema": "valid",
+      "accepted": 1,
+      "changed": 0,
+      "dropped": 0,
+      "rows": [
+       {
+        "result": "accepted",
+        "item": "light: part-shade",
+        "check": "quoted from the utterance; a value of the site model's vocabulary",
+        "detail": ""
+       }
+      ]
+     },
+     "light": "part-shade"
+    },
+    "compose_words": {
+     "reader": "mock",
+     "llm": "claude-opus-5-5",
+     "reason": null,
+     "tag": "MOCK model · test",
+     "provenance": "MOCK model (contract test — not a language model)",
+     "checks": {
+      "schema": "valid",
+      "accepted": 1,
+      "changed": 0,
+      "dropped": 0,
+      "rows": [
+       {
+        "result": "accepted",
+        "item": "z:screen → edge-unset",
+        "check": "a function of the knowledge graph, quoted from the utterance; plants are chosen by the planting engine, not here",
+        "detail": ""
+       }
+      ]
+     },
+     "functions": [
+      "screen@north-edge · 2 m · year-round",
+      "scrim@north-edge (alternative)"
+     ]
+    },
+    "knowledge": {
+     "bed": "North bed",
+     "requirement": {
+      "target_height_m": 2,
+      "target_basis": "stated: \"The screen should be 2 m high and work all year\"",
+      "year_round": true,
+      "year_round_basis": "required"
+     },
+     "conditions_read": {
+      "light": "part-shade",
+      "soil_type": "unknown",
+      "soil_drainage": "unknown",
+      "water": "unknown",
+      "wind": "unknown",
+      "irrigation": "unknown"
+     },
+     "screen_candidates": [
+      {
+       "species": "acer-palmatum",
+       "fit": "fails",
+       "verified": false,
+       "claims": [
+        "acer-palmatum:mature_height:rhs01",
+        "acer-palmatum:local_mature_size:cov01",
+        "acer-palmatum:mature_height:rhs02",
+        "acer-palmatum:seasonal_interest:gpp01",
+        "acer-palmatum:seasonal_interest:mobot01",
+        "acer-palmatum:seasonal_interest:osu01",
+        "acer-palmatum:seasonal_interest:rhs01",
+        "acer-palmatum:seasonal_interest:rhs02"
+       ],
+       "reasons": [
+        "form: a tree — the row operators arrange shrubs and perennials; there is no tree-placement rule",
+        "site: site gates unknown: water unknown, soil unknown",
+        "year_round: recorded Deciduous (unverified) — bare in winter",
+        "geometry: the row does not fit: crown radius 2.65 m (acer-palmatum:mature_spread:rhs01) needs 3.97 m of bed depth, the bed has 0.9 m"
+       ]
+      },
+      {
+       "species": "achillea-millefolium",
+       "fit": "fails",
+       "verified": false,
+       "claims": [],
+       "reasons": [
+        "evidence: no screen link in the knowledge graph"
+       ]
+      },
+      {
+       "species": "arctostaphylos-uva-ursi",
+       "fit": "fails",
+       "verified": false,
+       "claims": [],
+       "reasons": [
+        "evidence: no screen link in the knowledge graph"
+       ]
+      },
+      {
+       "species": "cercidiphyllum-japonicum",
+       "fit": "fails",
+       "verified": false,
+       "claims": [
+        "cercidiphyllum-japonicum:mature_height:mobot01",
+        "cercidiphyllum-japonicum:seasonal_interest:gpp01",
+        "cercidiphyllum-japonicum:seasonal_interest:mobot01",
+        "cercidiphyllum-japonicum:seasonal_interest:osu01",
+        "cercidiphyllum-japonicum:seasonal_interest:rhs01"
+       ],
+       "reasons": [
+        "evidence: candidate — inferred from traits, no source states the use (KG-R4; claims none)",
+        "form: a tree — the row operators arrange shrubs and perennials; there is no tree-placement rule",
+        "site: site gates unknown: water unknown, soil unknown",
+        "year_round: recorded Deciduous (unverified) — bare in winter",
+        "geometry: the row does not fit: crown radius 6.48 m (cercidiphyllum-japonicum:mature_spread:mobot01) needs 9.72 m of bed depth, the bed has 0.9 m"
+       ]
+      },
+      {
+       "species": "cornus-nuttallii",
+       "fit": "fails",
+       "verified": false,
+       "claims": [],
+       "reasons": [
+        "evidence: no screen link in the knowledge graph"
+       ]
+      },
+      {
+       "species": "cornus-sericea",
+       "fit": "fails",
+       "verified": false,
+       "claims": [
+        "cornus-sericea:mature_height:rhs01",
+        "cornus-sericea:mature_height:eflora01",
+        "cornus-sericea:seasonal_interest:eflora01",
+        "cornus-sericea:seasonal_interest:gpp01",
+        "cornus-sericea:seasonal_interest:mobot01",
+        "cornus-sericea:seasonal_interest:osu01",
+        "cornus-sericea:seasonal_interest:rhs01",
+        "cornus-sericea:seasonal_interest:usdaplants01"
+       ],
+       "reasons": [
+        "evidence: derived from recorded use Hedge row, Screening (KG-R1; claims unverified); a trait claim contradicts the use",
+        "site: site gates unknown: water unknown, soil unknown",
+        "year_round: recorded Deciduous (unverified) — bare in winter",
+        "geometry: the row does not fit: crown radius 1.27 m (cornus-sericea:mature_spread:rhs01) needs 1.91 m of bed depth, the bed has 0.9 m"
+       ]
+      },
+      {
+       "species": "gaillardia-aristata",
+       "fit": "fails",
+       "verified": false,
+       "claims": [],
+       "reasons": [
+        "evidence: no screen link in the knowledge graph"
+       ]
+      },
+      {
+       "species": "gaultheria-shallon",
+       "fit": "uncertain",
+       "verified": false,
+       "claims": [
+        "gaultheria-shallon:mature_height:rhs01",
+        "gaultheria-shallon:mature_height:osu02",
+        "gaultheria-shallon:seasonal_interest:01",
+        "gaultheria-shallon:seasonal_interest:osu01",
+        "gaultheria-shallon:seasonal_interest:rhs01",
+        "gaultheria-shallon:seasonal_interest:usdaplants01"
+       ],
+       "reasons": [
+        "site: site gates unknown: water unknown, soil unknown",
+        "height: 2 of 3 claimed height ranges stated for Shade, Humus rich (site light part-shade) reach 2 m; the range used for the plan is 1–1.5 m (gaultheria-shallon:mature_height:rhs01); 1 claimed range stays below it"
+       ]
+      },
+      {
+       "species": "polystichum-munitum",
+       "fit": "fails",
+       "verified": false,
+       "claims": [],
+       "reasons": [
+        "evidence: no screen link in the knowledge graph"
+       ]
+      },
+      {
+       "species": "vaccinium-ovatum",
+       "fit": "fails",
+       "verified": false,
+       "claims": [
+        "vaccinium-ovatum:mature_height:rhs01",
+        "vaccinium-ovatum:mature_height:gpp01",
+        "vaccinium-ovatum:mature_height:eflora01",
+        "vaccinium-ovatum:seasonal_interest:01",
+        "vaccinium-ovatum:seasonal_interest:gpp01",
+        "vaccinium-ovatum:seasonal_interest:osu01",
+        "vaccinium-ovatum:seasonal_interest:rhs01",
+        "vaccinium-ovatum:seasonal_interest:usdaplants01"
+       ],
+       "reasons": [
+        "evidence: derived from recorded use Hedge row, Screening, Sheared hedge (KG-R1; claims verified); a trait claim contradicts the use",
+        "site: site gates unknown: water unknown, soil unknown",
+        "height: 3 of 5 claimed height ranges reach 2 m; the range used for the plan is 0.5–3 m (vaccinium-ovatum:mature_height:rhs01); 2 claimed ranges stay below it",
+        "geometry: the row does not fit: crown radius 0.63 m (vaccinium-ovatum:mature_spread:rhs01) needs 0.95 m of bed depth, the bed has 0.9 m"
+       ]
+      }
+     ],
+     "picks": {
+      "screen": [
+       "gaultheria-shallon · fit uncertain · gate unknown"
+      ],
+      "ground": [],
+      "accent": []
+     },
+     "excluded": [
+      "acer-palmatum: a tree whose claimed mature spread (3–7.6 m, acer-palmatum:mature_spread:rhs01) exceeds the bed (6 × 0.9 m)",
+      "cercidiphyllum-japonicum: a tree whose claimed mature spread (7.6–18.3 m, cercidiphyllum-japonicum:mature_spread:mobot01) exceeds the bed (6 × 0.9 m)",
+      "cornus-nuttallii: a tree whose claimed mature spread (3–7.6 m, cornus-nuttallii:mature_spread:mobot01) exceeds the bed (6 × 0.9 m)",
+      "cornus-sericea: claimed mature spread 2.1–3 m is wider than this 0.89 m bed allows"
+     ],
+     "verdict": "not met",
+     "inspector_species": 1
+    },
+    "grow": {
+     "stage": "garden",
+     "version": "v-5fjov",
+     "plants": 34,
+     "species": [
+      "arctostaphylos-uva-ursi × 22",
+      "gaultheria-shallon × 12"
+     ],
+     "valid": true,
+     "inside_beds": true,
+     "screen": [
+      {
+       "status": "not met",
+       "checks": {
+        "continuity": "not met",
+        "target_height": "uncertain",
+        "year_round": "met",
+        "evidence": "supported"
+       },
+       "covered_m": 4.27,
+       "edge_m": 6,
+       "target_height_m": 2,
+       "year_round_required": true,
+       "verified_performance": false
+      }
+     ],
+     "ground": [
+      {
+       "bed": "East bed",
+       "plants": 19,
+       "crown_share": 0.52,
+       "verified_performance": false
+      },
+      {
+       "bed": "West bed",
+       "plants": 4,
+       "crown_share": 0.69,
+       "verified_performance": false
+      },
+      {
+       "bed": "Tree island",
+       "plants": 4,
+       "crown_share": 0.46,
+       "verified_performance": false
+      }
+     ],
+     "unknown_conditions": [
+      "soil_type",
+      "soil_drainage",
+      "water",
+      "wind",
+      "irrigation"
+     ],
+     "same_as_compose_preview": true
+    },
+    "grow_words": {
+     "reader": "mock",
+     "llm": "claude-opus-5-5",
+     "reason": null,
+     "tag": "MOCK model · test",
+     "provenance": "MOCK model (contract test — not a language model)",
+     "checks": {
+      "schema": "valid",
+      "accepted": 2,
+      "changed": 0,
+      "dropped": 0,
+      "rows": [
+       {
+        "result": "accepted",
+        "item": "edit: reduce density",
+        "check": "a typed operation; species are resolved against the ten species of the knowledge base and applied by the planting engine as a preview",
+        "detail": ""
+       },
+       {
+        "result": "accepted",
+        "item": "preserve: z:screen",
+        "check": "recorded with the request; the spatial engine keeps beds out of open space, no-plant zones and other beds whatever is asked",
+        "detail": ""
+       }
+      ]
+     },
+     "kind": "spatial_edit_request",
+     "operations": [
+      "reduce_density 0.15"
+     ],
+     "preserve": [
+      "z:screen",
+      "existing-tree"
+     ],
+     "preview_targets": 7,
+     "refused": 0
+    }
+   },
+   "knowledge_calls": {
+    "conditionUse": 180,
+    "gate": 235,
+    "sp": 5097,
+    "cell": 3346,
+    "proxy": 212,
+    "sizeProxy": 469,
+    "sizeOptions": 726,
+    "applicableHeights": 257,
+    "functionSupport": 1052,
+    "functionLink": 1267,
+    "evergreen": 212,
+    "interest": 212,
+    "functionEvidence": 215,
+    "heightAgainst": 45,
+    "yearRound": 40,
+    "labels": 4,
+    "name": 239,
+    "common": 8
+   },
+   "readers": [
+    "mock",
+    "mock",
+    "mock",
+    "mock"
+   ],
+   "server_llm": {
+    "mode": "mock",
+    "available": true,
+    "model": "claude-opus-5-5"
+   }
+  },
+  "offline": {
+   "cases": {
+    "A": {
+     "utterance": "My backyard is 6 by 4 metres. There is an old maple in the northwest corner, and the neighbours' kitchen window looks in over the north fence, so I need privacy there. Keep the middle open.",
+     "reader": "offline",
+     "llm": null,
+     "reason": "offline rules were asked for",
+     "tag": "Offline rules",
+     "provenance": "offline-parser",
+     "checks": null,
+     "kind": "description",
+     "model": {
+      "size": [
+       6,
+       4
+      ],
+      "scale": "user-stated",
+      "sketch": null,
+      "features": [
+       {
+        "kind": "no-plant-zone",
+        "status": "inferred",
+        "at": null
+       }
+      ],
+      "notes": [
+       {
+        "kind": "no-plant-zone",
+        "side": null,
+        "corner": null,
+        "placed": true
+       }
+      ],
+      "conditions": {},
+      "beds": [
+       {
+        "name": "North bed",
+        "area": 5.4,
+        "status": "ai-suggested",
+        "fns": [
+         "screen@north-edge"
+        ]
+       },
+       {
+        "name": "East bed",
+        "area": 2.48,
+        "status": "ai-suggested",
+        "fns": [
+         "ground_cover@east-edge"
+        ]
+       },
+       {
+        "name": "West bed",
+        "area": 2.48,
+        "status": "ai-suggested",
+        "fns": [
+         "ground_cover@west-edge"
+        ]
+       }
+      ],
+      "goals": {
+       "privacy": 2,
+       "openness": 2
+      },
+      "functions": [
+       "screen@north-edge",
+       "scrim@north-edge (alternative)"
+      ],
+      "hard": [
+       "keep-open",
+       "bed-only"
+      ],
+      "unknowns": [
+       "light",
+       "soil type and drainage"
+      ],
+      "relations": []
+     }
+    },
+    "B": {
+     "utterance": "I have a small backyard with an old tree. I want it to feel open with some ecological value.",
+     "reader": "offline",
+     "llm": null,
+     "reason": "offline rules were asked for",
+     "tag": "Offline rules",
+     "provenance": "offline-parser",
+     "checks": null,
+     "kind": "description",
+     "model": {
+      "size": null,
+      "scale": "unknown",
+      "sketch": "active",
+      "features": [],
+      "notes": [
+       {
+        "kind": "existing-tree",
+        "side": null,
+        "corner": null,
+        "placed": false
+       }
+      ],
+      "conditions": {},
+      "beds": [],
+      "goals": {
+       "ecology": 2,
+       "openness": 2
+      },
+      "functions": [
+       "ground_cover@bed-interior"
+      ],
+      "hard": [
+       "keep-tree",
+       "bed-only"
+      ],
+      "unknowns": [
+       "site dimensions / scale",
+       "light",
+       "soil type and drainage",
+       "ecological performance — the database records some ecological-value claims (pollinator, bird food …) but no pollinator-interaction data; no score is possible"
+      ],
+      "relations": []
+     }
+    },
+    "C": {
+     "utterance": "We need privacy from the house behind us but the garden should still feel open, and it only gets sun in the morning — mostly partial shade.",
+     "reader": "offline",
+     "llm": null,
+     "reason": "offline rules were asked for",
+     "tag": "Offline rules",
+     "provenance": "offline-parser",
+     "checks": null,
+     "kind": "description",
+     "model": {
+      "size": null,
+      "scale": "unknown",
+      "sketch": "active",
+      "features": [],
+      "notes": [],
+      "conditions": {
+       "light": "part-shade"
+      },
+      "beds": [],
+      "goals": {
+       "privacy": 2,
+       "openness": 2
+      },
+      "functions": [
+       "screen@edge-unset",
+       "scrim@edge-unset (alternative)"
+      ],
+      "hard": [
+       "bed-only"
+      ],
+      "unknowns": [
+       "which edge to screen — no side was named; choose the edge (north / south / east / west): nothing is screened until then",
+       "site dimensions / scale",
+       "soil type and drainage"
+      ],
+      "relations": []
+     }
+    },
+    "D": {
+     "utterance": "Make the bed along the north fence half a metre deeper, but don't let it eat into the open centre and keep the tree bed as it is.",
+     "reader": "offline",
+     "llm": null,
+     "reason": "offline rules were asked for",
+     "tag": "Offline rules",
+     "provenance": "offline-parser",
+     "checks": null,
+     "kind": "description",
+     "request": null,
+     "preview": null,
+     "beds_before": [
+      {
+       "name": "North bed",
+       "area": 5.4,
+       "status": "user-accepted",
+       "fns": [
+        "screen@north-edge"
+       ]
+      },
+      {
+       "name": "East bed",
+       "area": 2.48,
+       "status": "user-accepted",
+       "fns": [
+        "ground_cover@east-edge"
+       ]
+      },
+      {
+       "name": "West bed",
+       "area": 2.48,
+       "status": "user-accepted",
+       "fns": [
+        "ground_cover@west-edge"
+       ]
+      },
+      {
+       "name": "Tree island",
+       "area": 2.1,
+       "status": "user-accepted",
+       "fns": [
+        "ground_cover@bed-interior"
+       ]
+      }
+     ],
+     "beds_after": [
+      {
+       "name": "North bed",
+       "area": 5.4,
+       "status": "user-accepted",
+       "fns": [
+        "screen@north-edge"
+       ]
+      },
+      {
+       "name": "East bed",
+       "area": 2.48,
+       "status": "user-accepted",
+       "fns": [
+        "ground_cover@east-edge"
+       ]
+      },
+      {
+       "name": "West bed",
+       "area": 2.48,
+       "status": "user-accepted",
+       "fns": [
+        "ground_cover@west-edge"
+       ]
+      },
+      {
+       "name": "Tree island",
+       "area": 2.1,
+       "status": "user-accepted",
+       "fns": [
+        "ground_cover@bed-interior"
+       ]
+      }
+     ],
+     "open_area_unchanged": true,
+     "bed_area_inside_open_m2": 0,
+     "tree_bed_unchanged": true
+    }
+   },
+   "run": {
+    "imagine": {
+     "reader": "offline",
+     "llm": null,
+     "reason": "offline rules were asked for",
+     "tag": "Offline rules",
+     "provenance": null,
+     "checks": null,
+     "stage": "site",
+     "model": {
+      "size": [
+       6,
+       4
+      ],
+      "scale": "user-stated",
+      "sketch": null,
+      "features": [
+       {
+        "kind": "existing-tree",
+        "status": "inferred",
+        "at": [
+         1,
+         3
+        ]
+       },
+       {
+        "kind": "no-plant-zone",
+        "status": "inferred",
+        "at": null
+       }
+      ],
+      "notes": [
+       {
+        "kind": "existing-tree",
+        "side": "north",
+        "corner": "northwest",
+        "placed": true
+       },
+       {
+        "kind": "no-plant-zone",
+        "side": null,
+        "corner": null,
+        "placed": true
+       }
+      ],
+      "conditions": {},
+      "beds": [
+       {
+        "name": "North bed",
+        "area": 5.4,
+        "status": "ai-suggested",
+        "fns": [
+         "screen@north-edge"
+        ]
+       },
+       {
+        "name": "East bed",
+        "area": 2.48,
+        "status": "ai-suggested",
+        "fns": [
+         "ground_cover@east-edge"
+        ]
+       },
+       {
+        "name": "West bed",
+        "area": 2.48,
+        "status": "ai-suggested",
+        "fns": [
+         "ground_cover@west-edge"
+        ]
+       },
+       {
+        "name": "Tree island",
+        "area": 2.1,
+        "status": "ai-suggested",
+        "fns": [
+         "ground_cover@bed-interior"
+        ]
+       }
+      ],
+      "goals": {
+       "privacy": 2,
+       "openness": 2
+      },
+      "functions": [
+       "screen@north-edge",
+       "scrim@north-edge (alternative)"
+      ],
+      "hard": [
+       "keep-tree",
+       "keep-open",
+       "bed-only"
+      ],
+      "unknowns": [
+       "light",
+       "soil type and drainage"
+      ],
+      "relations": []
+     }
+    },
+    "shape_words": {
+     "reader": "offline",
+     "llm": null,
+     "reason": "offline rules were asked for",
+     "tag": "Offline rules",
+     "provenance": "offline-parser",
+     "checks": null,
+     "light": "part-shade"
+    },
+    "compose_words": {
+     "reader": "offline",
+     "llm": null,
+     "reason": "offline rules were asked for",
+     "tag": "Offline rules",
+     "provenance": "offline-parser",
+     "checks": null,
+     "functions": [
+      "screen@north-edge · 2 m · year-round",
+      "scrim@north-edge (alternative)"
+     ]
+    },
+    "knowledge": {
+     "bed": "North bed",
+     "requirement": {
+      "target_height_m": 2,
+      "target_basis": "stated: \"2 m high\"",
+      "year_round": true,
+      "year_round_basis": "required"
+     },
+     "conditions_read": {
+      "light": "part-shade",
+      "soil_type": "unknown",
+      "soil_drainage": "unknown",
+      "water": "unknown",
+      "wind": "unknown",
+      "irrigation": "unknown"
+     },
+     "screen_candidates": [
+      {
+       "species": "acer-palmatum",
+       "fit": "fails",
+       "verified": false,
+       "claims": [
+        "acer-palmatum:mature_height:rhs01",
+        "acer-palmatum:local_mature_size:cov01",
+        "acer-palmatum:mature_height:rhs02",
+        "acer-palmatum:seasonal_interest:gpp01",
+        "acer-palmatum:seasonal_interest:mobot01",
+        "acer-palmatum:seasonal_interest:osu01",
+        "acer-palmatum:seasonal_interest:rhs01",
+        "acer-palmatum:seasonal_interest:rhs02"
+       ],
+       "reasons": [
+        "form: a tree — the row operators arrange shrubs and perennials; there is no tree-placement rule",
+        "site: site gates unknown: water unknown, soil unknown",
+        "year_round: recorded Deciduous (unverified) — bare in winter",
+        "geometry: the row does not fit: crown radius 2.65 m (acer-palmatum:mature_spread:rhs01) needs 3.97 m of bed depth, the bed has 0.9 m"
+       ]
+      },
+      {
+       "species": "achillea-millefolium",
+       "fit": "fails",
+       "verified": false,
+       "claims": [],
+       "reasons": [
+        "evidence: no screen link in the knowledge graph"
+       ]
+      },
+      {
+       "species": "arctostaphylos-uva-ursi",
+       "fit": "fails",
+       "verified": false,
+       "claims": [],
+       "reasons": [
+        "evidence: no screen link in the knowledge graph"
+       ]
+      },
+      {
+       "species": "cercidiphyllum-japonicum",
+       "fit": "fails",
+       "verified": false,
+       "claims": [
+        "cercidiphyllum-japonicum:mature_height:mobot01",
+        "cercidiphyllum-japonicum:seasonal_interest:gpp01",
+        "cercidiphyllum-japonicum:seasonal_interest:mobot01",
+        "cercidiphyllum-japonicum:seasonal_interest:osu01",
+        "cercidiphyllum-japonicum:seasonal_interest:rhs01"
+       ],
+       "reasons": [
+        "evidence: candidate — inferred from traits, no source states the use (KG-R4; claims none)",
+        "form: a tree — the row operators arrange shrubs and perennials; there is no tree-placement rule",
+        "site: site gates unknown: water unknown, soil unknown",
+        "year_round: recorded Deciduous (unverified) — bare in winter",
+        "geometry: the row does not fit: crown radius 6.48 m (cercidiphyllum-japonicum:mature_spread:mobot01) needs 9.72 m of bed depth, the bed has 0.9 m"
+       ]
+      },
+      {
+       "species": "cornus-nuttallii",
+       "fit": "fails",
+       "verified": false,
+       "claims": [],
+       "reasons": [
+        "evidence: no screen link in the knowledge graph"
+       ]
+      },
+      {
+       "species": "cornus-sericea",
+       "fit": "fails",
+       "verified": false,
+       "claims": [
+        "cornus-sericea:mature_height:rhs01",
+        "cornus-sericea:mature_height:eflora01",
+        "cornus-sericea:seasonal_interest:eflora01",
+        "cornus-sericea:seasonal_interest:gpp01",
+        "cornus-sericea:seasonal_interest:mobot01",
+        "cornus-sericea:seasonal_interest:osu01",
+        "cornus-sericea:seasonal_interest:rhs01",
+        "cornus-sericea:seasonal_interest:usdaplants01"
+       ],
+       "reasons": [
+        "evidence: derived from recorded use Hedge row, Screening (KG-R1; claims unverified); a trait claim contradicts the use",
+        "site: site gates unknown: water unknown, soil unknown",
+        "year_round: recorded Deciduous (unverified) — bare in winter",
+        "geometry: the row does not fit: crown radius 1.27 m (cornus-sericea:mature_spread:rhs01) needs 1.91 m of bed depth, the bed has 0.9 m"
+       ]
+      },
+      {
+       "species": "gaillardia-aristata",
+       "fit": "fails",
+       "verified": false,
+       "claims": [],
+       "reasons": [
+        "evidence: no screen link in the knowledge graph"
+       ]
+      },
+      {
+       "species": "gaultheria-shallon",
+       "fit": "uncertain",
+       "verified": false,
+       "claims": [
+        "gaultheria-shallon:mature_height:rhs01",
+        "gaultheria-shallon:mature_height:osu02",
+        "gaultheria-shallon:seasonal_interest:01",
+        "gaultheria-shallon:seasonal_interest:osu01",
+        "gaultheria-shallon:seasonal_interest:rhs01",
+        "gaultheria-shallon:seasonal_interest:usdaplants01"
+       ],
+       "reasons": [
+        "site: site gates unknown: water unknown, soil unknown",
+        "height: 2 of 3 claimed height ranges stated for Shade, Humus rich (site light part-shade) reach 2 m; the range used for the plan is 1–1.5 m (gaultheria-shallon:mature_height:rhs01); 1 claimed range stays below it"
+       ]
+      },
+      {
+       "species": "polystichum-munitum",
+       "fit": "fails",
+       "verified": false,
+       "claims": [],
+       "reasons": [
+        "evidence: no screen link in the knowledge graph"
+       ]
+      },
+      {
+       "species": "vaccinium-ovatum",
+       "fit": "fails",
+       "verified": false,
+       "claims": [
+        "vaccinium-ovatum:mature_height:rhs01",
+        "vaccinium-ovatum:mature_height:gpp01",
+        "vaccinium-ovatum:mature_height:eflora01",
+        "vaccinium-ovatum:seasonal_interest:01",
+        "vaccinium-ovatum:seasonal_interest:gpp01",
+        "vaccinium-ovatum:seasonal_interest:osu01",
+        "vaccinium-ovatum:seasonal_interest:rhs01",
+        "vaccinium-ovatum:seasonal_interest:usdaplants01"
+       ],
+       "reasons": [
+        "evidence: derived from recorded use Hedge row, Screening, Sheared hedge (KG-R1; claims verified); a trait claim contradicts the use",
+        "site: site gates unknown: water unknown, soil unknown",
+        "height: 3 of 5 claimed height ranges reach 2 m; the range used for the plan is 0.5–3 m (vaccinium-ovatum:mature_height:rhs01); 2 claimed ranges stay below it",
+        "geometry: the row does not fit: crown radius 0.63 m (vaccinium-ovatum:mature_spread:rhs01) needs 0.95 m of bed depth, the bed has 0.9 m"
+       ]
+      }
+     ],
+     "picks": {
+      "screen": [
+       "gaultheria-shallon · fit uncertain · gate unknown"
+      ],
+      "ground": [],
+      "accent": []
+     },
+     "excluded": [
+      "acer-palmatum: a tree whose claimed mature spread (3–7.6 m, acer-palmatum:mature_spread:rhs01) exceeds the bed (6 × 0.9 m)",
+      "cercidiphyllum-japonicum: a tree whose claimed mature spread (7.6–18.3 m, cercidiphyllum-japonicum:mature_spread:mobot01) exceeds the bed (6 × 0.9 m)",
+      "cornus-nuttallii: a tree whose claimed mature spread (3–7.6 m, cornus-nuttallii:mature_spread:mobot01) exceeds the bed (6 × 0.9 m)",
+      "cornus-sericea: claimed mature spread 2.1–3 m is wider than this 0.89 m bed allows"
+     ],
+     "verdict": "not met",
+     "inspector_species": 1
+    },
+    "grow": {
+     "stage": "garden",
+     "version": "v-5rg7t",
+     "plants": 34,
+     "species": [
+      "arctostaphylos-uva-ursi × 22",
+      "gaultheria-shallon × 12"
+     ],
+     "valid": true,
+     "inside_beds": true,
+     "screen": [
+      {
+       "status": "not met",
+       "checks": {
+        "continuity": "not met",
+        "target_height": "uncertain",
+        "year_round": "met",
+        "evidence": "supported"
+       },
+       "covered_m": 4.27,
+       "edge_m": 6,
+       "target_height_m": 2,
+       "year_round_required": true,
+       "verified_performance": false
+      }
+     ],
+     "ground": [
+      {
+       "bed": "East bed",
+       "plants": 19,
+       "crown_share": 0.52,
+       "verified_performance": false
+      },
+      {
+       "bed": "West bed",
+       "plants": 4,
+       "crown_share": 0.69,
+       "verified_performance": false
+      },
+      {
+       "bed": "Tree island",
+       "plants": 4,
+       "crown_share": 0.46,
+       "verified_performance": false
+      }
+     ],
+     "unknown_conditions": [
+      "soil_type",
+      "soil_drainage",
+      "water",
+      "wind",
+      "irrigation"
+     ],
+     "same_as_compose_preview": true
+    },
+    "grow_words": {
+     "reader": "offline",
+     "llm": null,
+     "reason": "offline rules were asked for",
+     "tag": "Offline rules",
+     "provenance": "offline-parser",
+     "checks": null,
+     "kind": "spatial_edit_request",
+     "operations": [
+      "reduce_density 0.15"
+     ],
+     "preserve": [
+      "z:screen",
+      "existing-tree"
+     ],
+     "preview_targets": 7,
+     "refused": 0
+    }
+   },
+   "knowledge_calls": {
+    "conditionUse": 180,
+    "gate": 235,
+    "sp": 5097,
+    "cell": 3346,
+    "proxy": 212,
+    "sizeProxy": 469,
+    "sizeOptions": 726,
+    "applicableHeights": 257,
+    "functionSupport": 1052,
+    "functionLink": 1267,
+    "evergreen": 212,
+    "interest": 212,
+    "functionEvidence": 215,
+    "heightAgainst": 45,
+    "yearRound": 40,
+    "labels": 4,
+    "name": 239,
+    "common": 8
+   },
+   "readers": [
+    "offline",
+    "offline",
+    "offline",
+    "offline"
+   ],
+   "server_llm": {
+    "mode": "mock",
+    "available": true,
+    "model": "claude-opus-5-5"
+   }
+  }
+ }
+}

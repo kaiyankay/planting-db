@@ -1,0 +1,455 @@
+{
+ "note": "HAND-WRITTEN mock answers for contract tests (tools/mock_anthropic.py). Not produced by a language model. They show what the pipeline does with an answer of this shape — including answers the rules must correct (C: a compass edge the person never named) — and say nothing about how well a real model reads these sentences.",
+ "fixtures": [
+  {
+   "id": "A",
+   "label": "clear size, orientation, tree and privacy",
+   "utterance": "My backyard is 6 by 4 metres. There is an old maple in the northwest corner, and the neighbours' kitchen window looks in over the north fence, so I need privacy there. Keep the middle open.",
+   "response": {
+    "kind": "description",
+    "reading": "A 6 by 4 m yard with a tree in the northwest corner; the view to block comes over the north fence, and the middle stays open.",
+    "description": {
+     "dimensions": {
+      "w": 6,
+      "h": 4,
+      "unit": "m",
+      "evidence": "6 by 4 metres"
+     },
+     "size_word": "",
+     "address": "",
+     "trees": [
+      {
+       "side": "north",
+       "corner": "northwest",
+       "evidence": "an old maple in the northwest corner"
+      }
+     ],
+     "open_areas": [
+      {
+       "where": "centre",
+       "reason": "open middle",
+       "position_stated": true,
+       "evidence": "Keep the middle open"
+      }
+     ],
+     "conditions": [],
+     "relations": [
+      {
+       "subject": "neighbours' kitchen window",
+       "relation": "looks in over",
+       "object": "the north fence",
+       "evidence": "the neighbours' kitchen window looks in over the north fence"
+      },
+      {
+       "subject": "old maple",
+       "relation": "stands in",
+       "object": "the northwest corner",
+       "evidence": "an old maple in the northwest corner"
+      },
+      {
+       "subject": "privacy",
+       "relation": "is needed at",
+       "object": "the north fence",
+       "evidence": "so I need privacy there"
+      }
+     ],
+     "values": [
+      {
+       "key": "privacy",
+       "level": 2,
+       "evidence": "I need privacy"
+      },
+      {
+       "key": "openness",
+       "level": 2,
+       "evidence": "Keep the middle open"
+      }
+     ],
+     "functions": [
+      {
+       "function": "z:screen",
+       "where": "north-edge",
+       "basis": "a view over the north fence into the yard → Screen on that edge",
+       "evidence": "so I need privacy there",
+       "alternative": false,
+       "target_height_m": null,
+       "year_round": "unstated"
+      }
+     ],
+     "hard_constraints": [
+      {
+       "text": "keep the middle open",
+       "evidence": "Keep the middle open"
+      }
+     ],
+     "unknowns": [
+      "how high the screen has to be to block the kitchen window",
+      "light",
+      "soil"
+     ]
+    },
+    "bed_edit": null,
+    "edit": null
+   }
+  },
+  {
+   "id": "B",
+   "label": "vague: an existing tree, no position, no size",
+   "utterance": "I have a small backyard with an old tree. I want it to feel open with some ecological value.",
+   "response": {
+    "kind": "description",
+    "reading": "A small yard with one old tree whose position was not said; the garden should feel open and have ecological value.",
+    "description": {
+     "dimensions": null,
+     "size_word": "small",
+     "address": "",
+     "trees": [
+      {
+       "side": "unknown",
+       "corner": "none",
+       "evidence": "an old tree"
+      }
+     ],
+     "open_areas": [],
+     "conditions": [],
+     "relations": [],
+     "values": [
+      {
+       "key": "openness",
+       "level": 2,
+       "evidence": "feel open"
+      },
+      {
+       "key": "ecology",
+       "level": 2,
+       "evidence": "ecological value"
+      }
+     ],
+     "functions": [
+      {
+       "function": "z:ground_cover",
+       "where": "bed-interior",
+       "basis": "ecological value → a layered ground layer",
+       "evidence": "ecological value",
+       "alternative": false,
+       "target_height_m": null,
+       "year_round": "unstated"
+      }
+     ],
+     "hard_constraints": [],
+     "unknowns": [
+      "the size of the yard",
+      "where the tree stands",
+      "which way is north"
+     ]
+    },
+    "bed_edit": null,
+    "edit": null
+   }
+  },
+  {
+   "id": "C",
+   "label": "several spatial requirements at once: privacy, openness, partial shade",
+   "utterance": "We need privacy from the house behind us but the garden should still feel open, and it only gets sun in the morning — mostly partial shade.",
+   "response": {
+    "kind": "description",
+    "reading": "Privacy is wanted toward the house behind, without closing the garden in; the site is in partial shade.",
+    "description": {
+     "dimensions": null,
+     "size_word": "",
+     "address": "",
+     "trees": [],
+     "open_areas": [],
+     "conditions": [
+      {
+       "key": "light",
+       "value": "part-shade",
+       "evidence": "mostly partial shade"
+      }
+     ],
+     "relations": [
+      {
+       "subject": "the house",
+       "relation": "overlooks from behind",
+       "object": "the garden",
+       "evidence": "privacy from the house behind us"
+      },
+      {
+       "subject": "sun",
+       "relation": "reaches the garden only in",
+       "object": "the morning",
+       "evidence": "it only gets sun in the morning"
+      },
+      {
+       "subject": "openness",
+       "relation": "limits",
+       "object": "the screen",
+       "evidence": "but the garden should still feel open"
+      }
+     ],
+     "values": [
+      {
+       "key": "privacy",
+       "level": 2,
+       "evidence": "We need privacy"
+      },
+      {
+       "key": "openness",
+       "level": 2,
+       "evidence": "should still feel open"
+      }
+     ],
+     "functions": [
+      {
+       "function": "z:screen",
+       "where": "north-edge",
+       "basis": "a view from the house behind → Screen on the back edge",
+       "evidence": "privacy from the house behind us",
+       "alternative": false,
+       "target_height_m": null,
+       "year_round": "unstated"
+      },
+      {
+       "function": "z:scrim",
+       "where": "north-edge",
+       "basis": "it should still feel open → Scrim as the lighter alternative",
+       "evidence": "should still feel open",
+       "alternative": true,
+       "target_height_m": null,
+       "year_round": "unstated"
+      }
+     ],
+     "hard_constraints": [],
+     "unknowns": [
+      "which compass side is behind the house",
+      "the size of the garden"
+     ]
+    },
+    "bed_edit": null,
+    "edit": null
+   }
+  },
+  {
+   "id": "D",
+   "label": "change one planting bed and keep the other spatial constraints",
+   "utterance": "Make the bed along the north fence half a metre deeper, but don't let it eat into the open centre and keep the tree bed as it is.",
+   "response": {
+    "kind": "bed_edit",
+    "reading": "The north bed becomes half a metre deeper; the open centre and the bed around the tree stay as they are.",
+    "description": null,
+    "edit": null,
+    "bed_edit": {
+     "op": "resize",
+     "target": {
+      "side": "north",
+      "tree": false,
+      "name": ""
+     },
+     "direction": "deeper",
+     "amount_m": 0.5,
+     "amount_word": "none",
+     "add_side": "none",
+     "add_function": "none",
+     "preserve": [
+      {
+       "type": "no_plant_zone",
+       "value": "open centre",
+       "evidence": "don't let it eat into the open centre"
+      },
+      {
+       "type": "locked_objects",
+       "value": "tree bed",
+       "evidence": "keep the tree bed as it is"
+      }
+     ],
+     "evidence": "Make the bed along the north fence half a metre deeper"
+    }
+   }
+  },
+  {
+   "id": "E",
+   "label": "Page 3: change what the planting should do",
+   "utterance": "The screen should be 2 m high and work all year.",
+   "response": {
+    "kind": "description",
+    "reading": "The screen that is already asked for should reach 2 m and hold through winter.",
+    "description": {
+     "dimensions": null,
+     "size_word": "",
+     "address": "",
+     "trees": [],
+     "open_areas": [],
+     "conditions": [],
+     "relations": [],
+     "values": [],
+     "functions": [
+      {
+       "function": "z:screen",
+       "where": "edge-unset",
+       "basis": "a requirement on the screen already in the brief",
+       "evidence": "The screen should be 2 m high and work all year",
+       "alternative": false,
+       "target_height_m": 2,
+       "year_round": "yes"
+      }
+     ],
+     "hard_constraints": [],
+     "unknowns": []
+    },
+    "bed_edit": null,
+    "edit": null
+   }
+  },
+  {
+   "id": "F",
+   "label": "Grow: a planting edit that keeps a function",
+   "utterance": "Thin out the planting a little, but keep the screen.",
+   "response": {
+    "kind": "edit",
+    "reading": "A little less dense, with the screen kept.",
+    "description": null,
+    "bed_edit": null,
+    "edit": {
+     "scope": {
+      "kind": "bed",
+      "side": "none",
+      "evidence": ""
+     },
+     "operations": [
+      {
+       "type": "reduce_density",
+       "amount": null,
+       "amount_word": "slight",
+       "species_phrase": "",
+       "to_species_phrase": "",
+       "filter": "all",
+       "feature_phrase": "",
+       "evidence": "Thin out the planting a little"
+      }
+     ],
+     "preserve": [
+      {
+       "type": "spatial_function",
+       "value": "z:screen",
+       "evidence": "keep the screen"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "id": "demoA",
+   "label": "Kay's Demo A sentence",
+   "utterance": "I have a 6 × 4 m backyard with a tree in the northwest corner. I want privacy along the north edge and an open centre.",
+   "response": {
+    "kind": "description",
+    "reading": "A 6 by 4 m backyard, a tree in the northwest corner, a screen along the north edge and an open centre.",
+    "description": {
+     "dimensions": {
+      "w": 6,
+      "h": 4,
+      "unit": "m",
+      "evidence": "6 × 4 m"
+     },
+     "size_word": "",
+     "address": "",
+     "trees": [
+      {
+       "side": "north",
+       "corner": "northwest",
+       "evidence": "a tree in the northwest corner"
+      }
+     ],
+     "open_areas": [
+      {
+       "where": "centre",
+       "reason": "open centre",
+       "position_stated": true,
+       "evidence": "an open centre"
+      }
+     ],
+     "conditions": [],
+     "relations": [
+      {
+       "subject": "tree",
+       "relation": "stands in",
+       "object": "the northwest corner",
+       "evidence": "a tree in the northwest corner"
+      },
+      {
+       "subject": "privacy",
+       "relation": "runs along",
+       "object": "the north edge",
+       "evidence": "privacy along the north edge"
+      }
+     ],
+     "values": [
+      {
+       "key": "privacy",
+       "level": 2,
+       "evidence": "I want privacy"
+      },
+      {
+       "key": "openness",
+       "level": 2,
+       "evidence": "an open centre"
+      }
+     ],
+     "functions": [
+      {
+       "function": "z:screen",
+       "where": "north-edge",
+       "basis": "privacy along an edge → Screen on that edge",
+       "evidence": "privacy along the north edge",
+       "alternative": false,
+       "target_height_m": null,
+       "year_round": "unstated"
+      }
+     ],
+     "hard_constraints": [
+      {
+       "text": "keep the centre open",
+       "evidence": "an open centre"
+      }
+     ],
+     "unknowns": [
+      "light",
+      "soil"
+     ]
+    },
+    "bed_edit": null,
+    "edit": null
+   }
+  },
+  {
+   "id": "G",
+   "label": "Page 2: a site condition in words",
+   "utterance": "The garden is in part shade.",
+   "response": {
+    "kind": "description",
+    "reading": "The site is in part shade.",
+    "bed_edit": null,
+    "edit": null,
+    "description": {
+     "dimensions": null,
+     "size_word": "",
+     "address": "",
+     "trees": [],
+     "open_areas": [],
+     "conditions": [
+      {
+       "key": "light",
+       "value": "part-shade",
+       "evidence": "in part shade"
+      }
+     ],
+     "relations": [],
+     "values": [],
+     "functions": [],
+     "hard_constraints": [],
+     "unknowns": []
+    }
+   }
+  }
+ ]
+}

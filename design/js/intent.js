@@ -70,6 +70,22 @@ export function screenRequirementFromText(text) {
 export function findDirection(text) { const m = text.match(new RegExp(`\\b${DIR}\\b(?:\\s*(?:side|edge|half|part|end|corner|boundary|fence))?`, 'i')); if (!m) return null; const w = m[1].toLowerCase(); return { word: m[0], side: SIDE_WORD[w] || w, is_edge: /edge|boundary|fence/i.test(m[0]) }; }
 const deictic = t => /\b(here|this|these|those|selected|the (?:circled|selected) (?:area|region|part))\b/i.test(t);
 
+// The parts of a brief that follow from the facts and goals by rule, whoever read the words (these rules or a live model): the
+// ground-cover function, the standing hard constraints, what is still unknown, the composition notes. Shared so both readers
+// hand the site model and the planting engine a brief of the same kind.
+export function groundCoverFromValues(values) { const functions = [];
+  if (values.ecology || values.maintenance_low) functions.push({ function: 'z:ground_cover', where: 'bed-interior', basis: values.maintenance_low ? 'low maintenance → carpeting ground layer reduces open soil (design heuristic, not a database claim)' : 'habitat value → layered ground cover (design heuristic)', evidence: values.maintenance_low ? 'low maintenance' : 'ecology' });
+  return functions[0] || null; }
+export function completeBrief(facts, values) { const hard = [], unknowns = [];
+  for (const f of facts) { if (f.kind === 'no-plant-zone') hard.push({ id: 'keep-open', kind: 'no-plant-zone', text: `keep the ${f.where} open (${f.reason})`, evidence: f.evidence }); if (f.kind === 'existing-tree') hard.push({ id: 'keep-tree', kind: 'preserve-feature', text: 'preserve the existing tree', evidence: f.evidence }); }
+  hard.push({ id: 'bed-only', kind: 'bed-boundary', text: 'never place plants outside accepted beds', evidence: 'rule' });
+  if (!facts.some(f => f.kind === 'dimensions')) unknowns.push('site dimensions / scale');
+  if (!facts.some(f => f.kind === 'condition' && f.key === 'light')) unknowns.push('light');
+  if (!facts.some(f => f.kind === 'condition' && f.key.startsWith('soil'))) unknowns.push('soil type and drainage');
+  if (values.cost_awareness) unknowns.push('budget — the database records no prices; cost cannot be computed');
+  if (values.ecology) unknowns.push('ecological performance — the database records some ecological-value claims (pollinator, bird food …) but no pollinator-interaction data; no score is possible');
+  const composition = []; if (values.privacy) composition.push('taller layer along the screened edge'); if (values.openness) composition.push('open middle, graded density toward the edge'); if (values.ecology) composition.push('layered: structure + ground cover'); if (values.seasonal_interest) composition.push('mix evergreen and seasonal interest');
+  return { hard, unknowns, composition }; }
 // ---------------------------------------------------------------- brief + site facts from a description
 export function interpretDescription(text) {
   const facts = [], values = {}, evidence = [], functions = [], hard = [], unknowns = [];
@@ -91,16 +107,9 @@ export function interpretDescription(text) {
     functions.push({ function: 'z:screen', where, basis: 'privacy → Screen (blocks a view); Scrim would only filter it', evidence: 'privacy', ...req });
     if (req.target_height_m != null) evidence.push({ rule: 'screen-height', text: req.target_basis, says: `screen target height ${req.target_height_m} m` }); if (req.year_round) evidence.push({ rule: 'screen-year-round', text: req.year_round_evidence, says: 'year-round screening required' }); if (values.openness) functions.push({ function: 'z:scrim', where, basis: 'openness + privacy → Scrim as the alternative to check', evidence: 'openness', alternative: true });
   }
-  if (values.ecology || values.maintenance_low) functions.push({ function: 'z:ground_cover', where: 'bed-interior', basis: values.maintenance_low ? 'low maintenance → carpeting ground layer reduces open soil (design heuristic, not a database claim)' : 'habitat value → layered ground cover (design heuristic)', evidence: values.maintenance_low ? 'low maintenance' : 'ecology' });
-  for (const f of facts) { if (f.kind === 'no-plant-zone') hard.push({ id: 'keep-open', kind: 'no-plant-zone', text: `keep the ${f.where} open (${f.reason})`, evidence: f.evidence }); if (f.kind === 'existing-tree') hard.push({ id: 'keep-tree', kind: 'preserve-feature', text: 'preserve the existing tree', evidence: f.evidence }); }
-  hard.push({ id: 'bed-only', kind: 'bed-boundary', text: 'never place plants outside accepted beds', evidence: 'rule' });
-  if (!facts.some(f => f.kind === 'dimensions')) unknowns.push('site dimensions / scale');
-  if (!facts.some(f => f.kind === 'condition' && f.key === 'light')) unknowns.push('light');
-  if (!facts.some(f => f.kind === 'condition' && f.key.startsWith('soil'))) unknowns.push('soil type and drainage');
-  if (values.cost_awareness) unknowns.push('budget — the database records no prices; cost cannot be computed');
-  if (values.ecology) unknowns.push('ecological performance — the database records some ecological-value claims (pollinator, bird food …) but no pollinator-interaction data; no score is possible');
-  const composition = []; if (values.privacy) composition.push('taller layer along the screened edge'); if (values.openness) composition.push('open middle, graded density toward the edge'); if (values.ecology) composition.push('layered: structure + ground cover'); if (values.seasonal_interest) composition.push('mix evergreen and seasonal interest');
-  return { provenance: 'offline-parser', facts, values, functions, hard_constraints: hard, composition, unknowns, evidence, text };
+  { const g = groundCoverFromValues(values); if (g) functions.push(g); }
+  const done = completeBrief(facts, values);
+  return { provenance: 'offline-parser', facts, values, functions, hard_constraints: done.hard, composition: done.composition, unknowns: [...unknowns, ...done.unknowns], evidence, text };
 }
 
 // ---------------------------------------------------------------- a spatial edit request from an utterance (+ selection)

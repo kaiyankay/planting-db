@@ -14,12 +14,13 @@ import * as G from './geom.js';
 import * as C from './clip.js';
 import * as SP from './spatial.js';
 import * as CM from './concept.js';
+import * as LV from './live.js';
 import { FORM_LABEL } from './plantforms.js';
 
 const $ = s => document.querySelector(s); const $$ = s => [...document.querySelectorAll(s)]; const esc = R.esc;
 const STAGES = ['welcome', 'site', 'intent', 'garden']; const STAGE_LABEL = { welcome: 'Imagine', site: 'Shape', intent: 'Compose', garden: 'Grow' };
 const S = { project: null, K: null, server: null, stage: 'welcome', mode: 'plan', pz: { x: 0, y: 0, k: 1 }, winter: false, tool: 'select', bedId: null, selection: null, scope: null, preview: null, pendingCmd: null, selectedPlant: null, selectedSpecies: null, evidenceOpen: false, draft: [], lasso: [], overlay: null, showZones: true, labels: false, drawer: null, composerOpen: false, T: null, drag: null, addSpecies: null, calib: [], seed: 42, density: 1, stagger: true, garden: null, gardenError: null, gardenLoading: null, inset: null,
-  plantable: null, showPlantable: true, layers: {}, cPanel: null, composeNone: true, previewVersion: null, previewBed: null, dry: null, bedPreview: null, bedCmd: null, editBed: null, dragVertex: null, inspectorOpen: false };
+  plantable: null, showPlantable: true, layers: {}, interp: null, reading: false, forceOffline: new URLSearchParams(location.search).get('interp') === 'offline', cPanel: null, composeNone: true, previewVersion: null, previewBed: null, dry: null, bedPreview: null, bedCmd: null, editBed: null, dragVertex: null, inspectorOpen: false };
 const VAL = { privacy: 'Privacy', openness: 'Openness and light', ecology: 'Ecological value', maintenance_low: 'Low maintenance', seasonal_interest: 'Seasonal interest', shelter: 'Shelter and quiet', cost_awareness: 'Cost awareness' };
 const VAL_EFFECT = {   // what each goal does in the engines today — shown next to the control so no slider pretends
   privacy: { on: 'a Screen band is proposed along the named edge (Shape) and planted as a row (Grow)', off: null },
@@ -99,7 +100,7 @@ function setStage(stage, { scroll = true } = {}) {
 function renderNav() {
   const u = S.project.ui.unlocked; const can = { welcome: true, site: u.site, intent: u.intent, garden: !!cur() };
   $('#stagenav').innerHTML = STAGES.map(st => `<li><button data-go="${st}" class="${S.stage === st ? 'on' : ''} ${can[st] && S.stage !== st ? 'done' : ''}" ${can[st] ? '' : 'disabled'} title="${can[st] ? STAGE_LABEL[st] : 'not reached yet'}"><span class="dot"></span><span class="label">${STAGE_LABEL[st]}</span></button></li>`).join('');
-  const live = S.server?.llm?.available; $('#interp').textContent = live ? `live model: ${S.server.llm.model}` : 'offline rules'; $('#interp').className = `tag ${live ? 'live' : 'offline'}`; $('#interp').title = S.server?.llm?.reason || 'no language model is connected: an offline rule parser reads your words (every rule is listed in js/intent.js), so phrase site facts, goals and bed changes plainly';
+  { const st = interpState(); const el = $('#interp'); el.textContent = st.label; el.className = `tag ${st.cls}`; el.title = st.title; el.dataset.mode = st.mode; }
 }
 
 // ------------------------------------------------------------------ 1 · welcome (frozen: hero, art, composer as on 2026-11-07)
@@ -121,7 +122,7 @@ function heroArt() {
 }
 function renderWelcome() {
   const p = S.project; const K = S.K; const nClaims = Object.keys(K.claims).length;
-  $('#kb-note').textContent = `${K.species.length} Metro Vancouver species · ${nClaims} sourced claims · nothing invented · words read by ${S.server?.llm?.available ? 'a live model' : 'offline rules'}`;
+  $('#kb-note').textContent = `${K.species.length} Metro Vancouver species · ${nClaims} sourced claims · nothing invented · words read by ${interpState().mode === 'live' ? 'a live language model, checked before use' : interpState().mode === 'mock' ? 'a MOCK model (test)' : 'offline rules'}`;
   $('#foot-kb').textContent = `knowledge projection ${K.snapshot.generated?.slice(0, 10) || ''}`;
   $('#welcome-inputs').innerHTML = `<button type="button" class="btn" data-input="photo" title="shown under the plan to trace by hand — no automatic recognition">${ICON.photo} Photo or sketch</button><button type="button" class="btn" data-input="draw" title="draw the site boundary on the canvas">${ICON.draw} Draw</button><button type="button" class="btn" data-input="size" title="type width × height in metres">${ICON.size} Dimensions</button><button type="button" class="btn" data-input="address" title="kept as a reference only — no map or site data service is connected">${ICON.pin} Address</button>`;
   const started = p.site.boundary || p.versions.length || p.conversation.some(m => m.role === 'user');
@@ -135,18 +136,47 @@ async function handleSay(text, { silent = false } = {}) {
   M.say(S.project, 'user', text);
   const ctx = { hasDesign: !!cur(), stage: S.stage, selection: S.selection, bedId: bed()?.id, bedPolygon: bed()?.polygon, hasOpenZone: S.project.site.features.some(f => f.kind === 'no-plant-zone'), resolveSpecies: phrase => resolveSpecies(phrase), resolveFeature: phrase => resolveFeature(phrase) };
   let kind = I.classify(text, ctx); if (/^\s*(generate|make (?:a|the) design|design it|lay it out)\b/i.test(text)) kind = 'generate';
+  const offlineKind = kind; let live = null;
+  if (kind !== 'generate') live = await readLive(text, ctx);
+  if (live) {   // business rules on the kind the model chose: an edit of plants needs a design; a claim of guaranteed performance is still refused
+    const k = live.result.kind; if (k === 'edit' && !cur()) live = fallBack(live, 'a planting edit was read, but there is no design yet');
+    else if (k === 'bed_edit' && !beds().length && live.result.bed_edit?.request.op !== 'add') live = fallBack(live, 'a bed edit was read, but there is no bed yet');
+    else if (k === 'none') live = fallBack(live, 'the model read nothing it could use in this sentence');
+    else if (offlineKind !== 'overclaim') kind = k;
+  }
   let result = null;
   if (kind === 'generate') { result = await generate(); }
-  else if (kind === 'bed_edit') result = await handleBedEdit(text, ctx);
-  else if (kind === 'edit') result = await handleEdit(text, ctx);
-  else if (kind === 'overclaim') { const d = applyDescription(text); M.say(S.project, 'ai', '', { html: `<b>I cannot guarantee that.</b> The database has no pollinator-interaction data, no prices and no site measurements, so no ecological ranking, cost or guarantee can be computed. What it can do: list species with recorded ecological-value claims and check them against the site gates you state. I have kept the goals I could read:<ul>${d.summary}</ul>`, mode: `interpretation: ${d.provenance} · rule "overclaim"` }); result = d; }
-  else result = applyDescription(text, true);
+  else if (kind === 'bed_edit') result = await handleBedEdit(text, ctx, live && live.result.kind === 'bed_edit' ? LV.bedEdit(live, text, ctx) : null, live);
+  else if (kind === 'edit') result = await handleEdit(text, ctx, live && live.result.kind === 'edit' ? LV.edit(live, text, ctx) : null, live);
+  else if (kind === 'overclaim') { const d = applyDescription(text, false, live && live.result.kind === 'description' ? LV.description(live, text) : null); M.say(S.project, 'ai', '', { html: `<b>I cannot guarantee that.</b> The database has no pollinator-interaction data, no prices and no site measurements, so no ecological ranking, cost or guarantee can be computed. What it can do: list species with recorded ecological-value claims and check them against the site gates you state. I have kept the goals I could read:<ul>${d.summary}</ul>`, mode: `interpretation: ${d.provenance} · rule "overclaim"` }); result = d; }
+  else result = applyDescription(text, true, live && live.result.kind === 'description' ? LV.description(live, text) : null, live);
+  if (result && typeof result === 'object') result.interp = S.interp;
   if (!silent) update(); return result;
 }
+/* Who reads the words. interpState(): what the top bar says — the reader that produced the LAST reading once there is one, else what
+   is connected. readLive(): ask the server's model; null means the offline rules read this sentence (and S.interp says why). */
+function interpState() {
+  const llm = S.server?.llm; const last = S.interp; const connected = !!llm?.available && !S.forceOffline;
+  if (S.reading) return { mode: 'reading', cls: 'live', label: 'reading…', title: 'the language model is reading your words' };
+  if (last?.mode === 'live') return { mode: 'live', cls: 'live', label: `Live LLM · ${last.model}`, title: `your last sentence was read by the live model and passed the checks (${last.accepted} accepted, ${last.changed} changed, ${last.dropped} dropped)` };
+  if (last?.mode === 'mock') return { mode: 'mock', cls: 'mock', label: 'MOCK model · test', title: 'a mock endpoint for contract tests answered — not a language model' };
+  if (last?.mode === 'offline' && connected) return { mode: 'offline', cls: 'offline fell', label: 'Offline rules · live model not used', title: `your last sentence was read by the offline rules: ${last.reason}` };
+  if (connected) return llm.mode === 'mock' ? { mode: 'mock', cls: 'mock', label: 'MOCK model · test', title: llm.reason } : { mode: 'live', cls: 'live', label: `Live LLM · ${llm.model}`, title: llm.reason };
+  return { mode: 'offline', cls: 'offline', label: 'Offline rules', title: S.forceOffline ? 'offline rules were asked for (?interp=offline)' : llm?.reason || 'no language model is connected: an offline rule parser reads your words (every rule is listed in js/intent.js), so phrase site facts, goals and bed changes plainly' };
+}
+const recordInterp = (text, j, extra = {}) => { S.interp = { mode: j.mode, model: j.model || null, reason: j.reason || null, accepted: j.validation?.accepted ?? null, changed: j.validation?.changed ?? null, dropped: j.validation?.dropped ?? null, ...extra }; const log = S.project.interpretations = S.project.interpretations || []; log.push({ time: new Date().toISOString(), utterance: text, stage: S.stage, ...S.interp, kind: j.result?.kind || null, validation: j.validation || null }); if (log.length > 40) log.splice(0, log.length - 40); };
+function fallBack(j, why) { S.interp = { ...S.interp, mode: 'offline', reason: why, fell_back_from: j.mode }; const log = S.project.interpretations; if (log?.length) Object.assign(log[log.length - 1], { mode: 'offline', reason: why, fell_back_from: j.mode }); return null; }
+async function readLive(text, ctx) {
+  if (S.forceOffline || !S.server?.llm?.available) { recordInterp(text, { mode: 'offline', reason: S.forceOffline ? 'offline rules were asked for' : S.server?.llm?.reason || 'no design server (static page): offline rules' }); return null; }
+  S.reading = true; document.body.classList.add('reading'); try { $('#interp').textContent = 'reading…'; } catch { /* not drawn yet */ }
+  let j; try { j = await LV.ask(text, LV.contextOf(S.project, S.K, { stage: S.stage, hasDesign: !!cur(), bedName: bed()?.name, selection: ctx.selection })); } finally { S.reading = false; document.body.classList.remove('reading'); }
+  recordInterp(text, j); return j.mode === 'offline' ? null : j;
+}
+const interpMode = (provenance, rules) => S.interp?.mode === 'offline' && S.interp.reason && S.server?.llm?.available && !S.forceOffline ? `interpretation: offline rules — the live model was not used (${S.interp.reason})${rules ? ` · ${rules}` : ''}` : `interpretation: ${provenance}${rules ? ` · ${rules}` : ''}`;
 function resolveSpecies(phrase) { const p = phrase.toLowerCase().trim(); return S.K.species.find(s => p.includes(s.scientific_name.toLowerCase()) || s.scientific_name.toLowerCase().includes(p) || (s.common_names || []).some(c => p.includes(c.toLowerCase()) || c.toLowerCase().includes(p)) || p.split(' ').some(w => w.length > 4 && s.scientific_name.toLowerCase().includes(w))) || null; }
 function resolveFeature(phrase) { const p = phrase.toLowerCase(); return S.project.site.features.find(f => (f.label || '').toLowerCase().includes(p) || p.includes((f.label || '').toLowerCase()) || (/tree/.test(p) && f.kind === 'existing-tree') || (/path|open|lawn|play|patio|centre|center|middle/.test(p) && f.kind === 'no-plant-zone')) || null; }
-function applyDescription(text, reply = false) {
-  const d = I.interpretDescription(text); const p = S.project; const lines = [];
+function applyDescription(text, reply = false, read = null, live = null) {
+  const d = read || I.interpretDescription(text); const p = S.project; const lines = [];
   for (const f of d.facts) {
     if (f.kind === 'dimensions') { M.snapshotSite(p, 'dimensions stated'); M.setBoundary(p, G.polygonFromRect(f.w, f.h), 'user-stated'); M.setScale(p, 'user-stated', Math.max(f.w, f.h), `conversation: "${f.evidence}"`); lines.push(`site set to ${f.w} × ${f.h} m (stated, rectangle assumed)`); S.pz = { x: 0, y: 0, k: 1 }; }
     else if (f.kind === 'size_word') lines.push(`a ${f.value} site — dimensions still unknown`);
@@ -156,13 +186,14 @@ function applyDescription(text, reply = false) {
   for (const f of d.facts) if (f.kind === 'existing-tree' || f.kind === 'no-plant-zone') { if (p.site.notes.some(n => n.kind === f.kind && n.evidence === f.evidence)) continue; p.site.notes.push({ kind: f.kind, side: f.side, side_word: f.side_word, ...(f.corner ? { corner: f.corner } : {}), where: f.where, where_status: f.where_status, reason: f.reason, evidence: f.evidence, placed: false }); lines.push(f.kind === 'existing-tree' ? (COMPASS4.includes(f.side) || ['middle', 'centre', 'center'].includes(f.side) ? `an existing tree ${f.corner ? `in the ${f.corner} corner` : `on the ${f.side}`} — sketched there (the exact spot is an estimate; drag it to where it stands)` : `an existing tree — its position was not stated, so it waits beside the plan until you place it`) : `an open area (${f.reason}) — sketched ${f.where_status === 'user-stated' ? 'in the middle, as you said' : 'in the middle as a suggestion'}; its extent is not stated`); }
   if (!p.site.boundary && !p.site.scratch && p.site.notes.length + Object.keys(d.values).length > 0) CM.sync(p, d.provenance);
   const b = p.brief; b.provenance = d.provenance; b.values = { ...b.values, ...d.values }; for (const f of d.functions) if (f.function === 'z:screen' && !f.alternative && (f.target_height_m != null || f.year_round != null)) { for (const x of [...b.functions, ...p.site.beds.flatMap(bd => bd.functions || [])]) if (x.function === 'z:screen' && !x.alternative) { if (f.target_height_m != null) { x.target_height_m = f.target_height_m; x.target_basis = f.target_basis; } if (f.year_round != null) x.year_round = f.year_round; } lines.push(`screen requirement: ${f.target_height_m != null ? `target height ${f.target_height_m} m` : ''}${f.target_height_m != null && f.year_round != null ? ', ' : ''}${f.year_round != null ? (f.year_round ? 'year-round' : 'not year-round') : ''}`); }
-  for (const f of d.functions) { const same = b.functions.filter(x => x.function === f.function && !!x.alternative === !!f.alternative); if (f.where === I.EDGE_UNSET) { if (same.length) continue; } else for (const x of same.filter(x => x.where === I.EDGE_UNSET)) b.functions.splice(b.functions.indexOf(x), 1); if (!b.functions.some(x => x.function === f.function && x.where === f.where)) { b.functions.push(f); if (p.site.beds.some(x => !['ai-suggested', 'rejected'].includes(x.status))) propagateFunction('add', f); } } for (const h of d.hard_constraints) if (!b.hard_constraints.some(x => x.id === h.id)) b.hard_constraints.push(h); b.composition = [...new Set([...b.composition, ...d.composition])]; b.unknowns = [...new Set([...b.unknowns, ...d.unknowns])]; b.evidence.push(...d.evidence); b.updated = new Date().toISOString();
+  for (const f of d.functions) { const same = b.functions.filter(x => x.function === f.function && !!x.alternative === !!f.alternative); if (f.where === I.EDGE_UNSET) { if (same.length) continue; } else for (const x of same.filter(x => x.where === I.EDGE_UNSET)) b.functions.splice(b.functions.indexOf(x), 1); if (!b.functions.some(x => x.function === f.function && x.where === f.where)) { b.functions.push(f); if (p.site.beds.some(x => !['ai-suggested', 'rejected'].includes(x.status))) propagateFunction('add', f); } } for (const h of d.hard_constraints) if (!b.hard_constraints.some(x => x.id === h.id)) b.hard_constraints.push(h); b.composition = [...new Set([...b.composition, ...d.composition])]; b.unknowns = [...new Set([...b.unknowns, ...d.unknowns])]; b.evidence.push(...d.evidence); if (d.relations?.length) b.relations = [...(b.relations || []), ...d.relations].slice(-24); b.updated = new Date().toISOString();
   if (Object.keys(d.values).length) lines.push(`goals: ${Object.keys(d.values).map(k => k.replace('_', ' ')).join(', ')}`); for (const f of d.functions) { const kept = f.where === I.EDGE_UNSET && p.brief.functions.find(x => x.function === f.function && !!x.alternative === !!f.alternative && x.where !== I.EDGE_UNSET); if (kept) { lines.push(`${f.function.replace('z:', '').replace('_', ' ')} → stays on the ${whereText(kept.where)} (already chosen)`); continue; } lines.push(`${f.function.replace('z:', '').replace('_', ' ')} → ${whereText(f.where)} (${f.basis})${f.alternative ? ' — alternative to check' : ''}`); }
   ensureProposal(); const ready = M.readiness(p); const prop = p.site.proposals;
   const stillUnknown = d.unknowns.filter(u => p.brief.unknowns.includes(u));   /* only what is still unknown after this message — not what the site or the brief already settles */
   const summary = lines.map(l => `<li>${esc(l)}</li>`).join('') || '<li>no site fact or goal recognised by the rules — try plainer words (privacy, low maintenance, habitat, dimensions like 6 x 4 m, shady, clay)</li>';
   const layout = prop && !prop.conceptual ? `<br><b>Starting layout:</b> ${esc(prop.candidates.find(c => c.id === prop.active_id)?.summary || '')} — ${beds().length} planting bed${beds().length === 1 ? '' : 's'} proposed; adjust them on the canvas or say what should change.` : prop?.conceptual ? `<br><b>Not drawn yet:</b> ${esc(prop.site.questions[0]?.text || 'the site needs dimensions')}` : '';
-  if (reply) M.say(S.project, 'ai', '', { html: `<b>Read from what you said</b><ul>${summary}</ul>${stillUnknown.length ? `<b>Unknown</b> (not assumed): ${esc(stillUnknown.join('; '))}.` : ''}${layout}${ready.blockers.length && !layout ? `<br><b>Before a measured design:</b> ${esc(ready.blockers.join('; '))}.` : ''}`, mode: `interpretation: ${d.provenance} (rules: ${d.evidence.map(e => e.rule).join(', ') || 'none matched'})` });
+  const liveNote = live ? `${d.reading ? `<p class="reading">${esc(d.reading)}</p>` : ''}${d.relations?.length ? `<b>Relationships read</b><ul>${d.relations.map(r => `<li>${esc(r.subject)} — ${esc(r.relation)} — ${esc(r.object)} <span class="faint">“${esc(r.evidence)}”</span></li>`).join('')}</ul>` : ''}${d.by_rule?.length ? `<p class="faint">Added by the workspace's rules, not by the model: ${esc(d.by_rule.join('; '))}.</p>` : ''}${LV.recordHtml(live, esc)}` : '';
+  if (reply) M.say(S.project, 'ai', '', { html: `<b>Read from what you said</b><ul>${summary}</ul>${liveNote}${stillUnknown.length ? `<b>Unknown</b> (not assumed): ${esc(stillUnknown.join('; '))}.` : ''}${layout}${ready.blockers.length && !layout ? `<br><b>Before a measured design:</b> ${esc(ready.blockers.join('; '))}.` : ''}`, mode: interpMode(d.provenance, `rules: ${d.evidence.map(e => e.rule).join(', ') || 'none matched'}`) });
   unlock('site'); if (beds().length) unlock('intent');
   return { ...d, summary, readiness: ready, proposal: prop };
 }
@@ -220,14 +251,14 @@ function undoShape() { const s = M.undoSite(S.project); if (!s) { M.say(S.projec
 function resetShape() { const p = S.project; const prop = p.site.proposals; if (!prop || prop.conceptual) return; M.snapshotSite(p, 'reset to proposal'); p.site.beds = []; materialize(prop.active_id || prop.recommended_id); M.say(p, 'sys', `reset: layout ${prop.active_id} as proposed (Undo brings your edits back)`); update(); }
 
 // ------------------------------------------------------------------ bed edits in words (Level 2 revision): interpret → preview → apply
-async function handleBedEdit(text, ctx) {
-  const it = I.interpretBedEdit(text, ctx); if (!it) return null;
+async function handleBedEdit(text, ctx, read = null, live = null) {
+  const it = read || I.interpretBedEdit(text, ctx); if (!it) return null;
   const pv = SP.bedEditPreview(S.project, it.request); pv.impact = SP.designImpact(cur(), pv);
   S.bedCmd = it; S.bedPreview = pv.ok ? pv : null;
-  if (!pv.ok) { M.say(S.project, 'ai', '', { html: `<b>No change made.</b> ${esc(pv.conflicts.map(c => c.text).join(' '))}`, mode: `interpretation: ${it.provenance} (rule ${it.evidence[0]?.rule})` }); if (S.stage !== 'site') { setStage('site'); } return { interpretation: it, preview: pv }; }
+  if (!pv.ok) { M.say(S.project, 'ai', '', { html: `<b>No change made.</b> ${esc(pv.conflicts.map(c => c.text).join(' '))}`, mode: interpMode(it.provenance, `rule ${it.evidence[0]?.rule}`) }); if (S.stage !== 'site') { setStage('site'); } return { interpretation: it, preview: pv }; }
   const lines = [...pv.changes.map(c => `${c.name}: ${c.before.area_m2} → ${c.after.area_m2} m² (narrowest ${c.after.min_width_m} m) — ${c.why}`), ...pv.added.map(a => `new ${a.name}: ${a.area_m2} m²`), ...pv.removed.map(r => `${r.name} removed`), ...(pv.open_area ? [`open area ${pv.open_area.before.area_m2} → ${pv.open_area.after.area_m2} m²`] : [])];
   const imp = pv.impact; const impText = imp && imp.plants_affected ? ` The current design has ${imp.plants_affected} plant${imp.plants_affected === 1 ? '' : 's'} in the changed bed${imp.beds.length === 1 ? '' : 's'} (${imp.plants_outside_after} would fall outside); ${imp.untouched_beds.length} other bed${imp.untouched_beds.length === 1 ? '' : 's'} would not be touched. Apply here, then preview the updated planting in the garden.` : '';
-  M.say(S.project, 'ai', '', { html: `<b>Proposed change — preview, nothing applied yet.</b> Located: ${esc(pv.located?.how || pv.located?.bed?.name || '')}.<ul>${lines.map(l => `<li>${esc(l)}</li>`).join('')}${pv.conflicts.map(c => `<li class="warn">${esc(c.text)}</li>`).join('')}${pv.notes.map(n => `<li>${esc(n)}</li>`).join('')}</ul>Before (dashed) and after (solid) are drawn on the canvas.${esc(impText)}`, mode: `interpretation: ${it.provenance} (rule ${it.evidence[0]?.rule}) · geometry: spatial engine` });
+  M.say(S.project, 'ai', '', { html: `<b>Proposed change — preview, nothing applied yet.</b> Located: ${esc(pv.located?.how || pv.located?.bed?.name || '')}.<ul>${lines.map(l => `<li>${esc(l)}</li>`).join('')}${pv.conflicts.map(c => `<li class="warn">${esc(c.text)}</li>`).join('')}${pv.notes.map(n => `<li>${esc(n)}</li>`).join('')}</ul>Before (dashed) and after (solid) are drawn on the canvas.${esc(impText)}${live ? `${it.notes.length ? `<ul>${it.notes.map(n => `<li class="faint">${esc(n)}</li>`).join('')}</ul>` : ''}${LV.recordHtml(live, esc)}` : ''}`, mode: `${interpMode(it.provenance, `rule ${it.evidence[0]?.rule}`)} · geometry: spatial engine` });
   if (S.stage !== 'site') setStage('site');
   return { interpretation: it, preview: pv };
 }
@@ -245,8 +276,8 @@ function applyBedPreview() {
 function discardBedPreview() { S.bedPreview = null; S.bedCmd = null; M.say(S.project, 'sys', 'bed change discarded — the layout is unchanged'); update(); }
 
 // ------------------------------------------------------------------ plant edits (language → typed command → preview), unchanged
-async function handleEdit(text, ctx) {
-  const cmd = I.interpretEdit(text, ctx); const v = cur();
+async function handleEdit(text, ctx, read = null, live = null) {
+  const cmd = read || I.interpretEdit(text, ctx); const v = cur();
   if (cmd.conflicts.length || !cmd.operations.length) { M.say(S.project, 'ai', '', { html: `<b>No change made.</b> ${esc(cmd.conflicts.join(' ') || 'I could not read an operation (reduce / increase density, remove or swap a species, move plants away from a feature).')}${cmd.operations.length ? '' : ' The design stays as it is; you can also drag, delete or add plants directly.'}`, mode: `interpretation: ${cmd.provenance}` }); S.pendingCmd = null; S.preview = null; return { cmd, preview: null }; }
   if (!cmd.scope.polygon) { cmd.scope.polygon = S.project.site.boundary || bed()?.polygon; cmd.scope.basis += ' (all beds)'; }
   const pv = E.previewEdit(S.project, S.K, v, cmd); S.pendingCmd = cmd; S.preview = pv; S.scope = { polygon: cmd.scope.polygon, basis: cmd.scope.basis };
@@ -784,7 +815,7 @@ export function planSvg(p, v) {
 }
 
 // ------------------------------------------------------------------ ui wiring
-function freshState() { Object.assign(S, { bedId: null, selection: null, scope: null, preview: null, pendingCmd: null, selectedPlant: null, selectedSpecies: null, evidenceOpen: false, overlay: null, drawer: null, composerOpen: false, mode: 'plan', pz: { x: 0, y: 0, k: 1 }, plantable: null, bedPreview: null, bedCmd: null, editBed: null, dragVertex: null, inspectorOpen: false, tool: 'select', draft: [], sel: null, conceptSel: null, wsPanel: null, cPanel: null, composeNone: true, layers: {}, previewVersion: null, previewBed: null, dry: null, candOpen: null }); if (S.garden) S.garden.framed = false; for (const st of ['site', 'intent', 'gate']) $(`#s-${st}`).hidden = true; }
+function freshState() { Object.assign(S, { bedId: null, selection: null, scope: null, preview: null, pendingCmd: null, selectedPlant: null, selectedSpecies: null, evidenceOpen: false, overlay: null, drawer: null, composerOpen: false, mode: 'plan', pz: { x: 0, y: 0, k: 1 }, plantable: null, bedPreview: null, bedCmd: null, editBed: null, dragVertex: null, inspectorOpen: false, tool: 'select', draft: [], sel: null, conceptSel: null, wsPanel: null, cPanel: null, interp: null, composeNone: true, layers: {}, previewVersion: null, previewBed: null, dry: null, candOpen: null }); if (S.garden) S.garden.framed = false; for (const st of ['site', 'intent', 'gate']) $(`#s-${st}`).hidden = true; }
 function newProject() { if (!confirm('Start a new project? The current one stays saved on the server (if running) but the local copy is replaced.')) return; M.clearLocal(); S.project = M.newProject(); ensureUi(S.project); S.project.knowledge_snapshot = S.K.snapshot; freshState(); setStage('welcome'); update(); }
 function addInput(kind) {
   if (kind === 'photo') $('#imgfile').click();
@@ -793,7 +824,7 @@ function addInput(kind) {
   else if (kind === 'size') { unlock('site'); setStage('site'); update(); setTimeout(() => ($('#qw') || $('#qw2'))?.focus(), 500); }
 }
 function initUi() {
-  $('#welcome-form').addEventListener('submit', async ev => { ev.preventDefault(); const t = $('#say0').value.trim(); if (!t) { unlock('site'); setStage('site'); update(); return; } $('#say0').value = ''; unlock('site'); await handleSay(t, { silent: true }); setStage('site'); update(); });
+  $('#welcome-form').addEventListener('submit', async ev => { ev.preventDefault(); if (S.reading) return; const t = $('#say0').value.trim(); if (!t) { unlock('site'); setStage('site'); update(); return; } $('#say0').value = ''; unlock('site'); await handleSay(t, { silent: true }); setStage('site'); update(); });
   $('#say0').addEventListener('keydown', ev => { if (ev.key === 'Enter' && (ev.metaKey || ev.ctrlKey)) { ev.preventDefault(); $('#welcome-form').requestSubmit(); } });
   $('#example').onclick = () => { $('#say0').value = EXAMPLE; $('#say0').focus(); };
   $('#newproj').onclick = newProject;
@@ -803,7 +834,7 @@ function initUi() {
   $('#imgfile').addEventListener('change', ev => { const f = ev.target.files[0]; if (!f) return; const rd = new FileReader(); rd.onload = () => { const img = new Image(); img.onload = () => { const B = S.project.site.boundary ? G.bbox(S.project.site.boundary) : { minx: 0, miny: 0, w: 8 }; const w = B.w || 8; S.overlay = { src: rd.result, x: B.minx, y: B.miny, w, h: w * img.height / img.width, opacity: .5, show: true }; M.addInput(S.project, { type: 'image', role: 'visual-reference', name: f.name, geometry_precision: 'unknown', note: 'shown under the plan for tracing; automatic recognition is not implemented — draw beds and features over it, then calibrate a known length' }); M.say(S.project, 'sys', `image "${f.name}" added as a reference overlay (${img.width}×${img.height} px). No automatic interpretation: trace the boundary, beds and features with the tools, then Calibrate two points of known distance.`); unlock('site'); if (S.stage === 'welcome') setStage('site'); S.inspectorOpen = true; update(); }; img.src = rd.result; }; rd.readAsDataURL(f); ev.target.value = ''; });
   addEventListener('scroll', () => $('#top').classList.toggle('scrolled', scrollY > 8), { passive: true });
   document.body.addEventListener('submit', async ev => {
-    if (ev.target.id === 'site-form' || ev.target.id === 'intent-form' || ev.target.id === 'gform') { ev.preventDefault(); const ta = ev.target.querySelector('textarea'); const t = ta.value; ta.value = ''; await handleSay(t); if (S.stage === 'garden') { S.composerOpen = !(S.preview && innerWidth < 760); renderGarden(); } }
+    if (ev.target.id === 'site-form' || ev.target.id === 'intent-form' || ev.target.id === 'gform') { ev.preventDefault(); if (S.reading) return; const ta = ev.target.querySelector('textarea'); const t = ta.value; ta.value = ''; await handleSay(t); if (S.stage === 'garden') { S.composerOpen = !(S.preview && innerWidth < 760); renderGarden(); } }
   });
   document.body.addEventListener('keydown', ev => { if (ev.target.tagName === 'TEXTAREA' && ev.target.id !== 'say0' && ev.key === 'Enter' && !ev.shiftKey) { ev.preventDefault(); ev.target.form?.requestSubmit(); } });
   document.body.addEventListener('toggle', ev => { if (ev.target.id === 'inspector') S.inspectorOpen = ev.target.open; }, true);
@@ -973,6 +1004,47 @@ async function runScriptBody(which, out) {
       $('#generate').click(); await tick(260); k.garden = gardenSnap(cur()); checkStop('garden');
     }
     out[which] = k;
+  }
+  if (which === 'llm') {   // M62: sentences read by the server's language model (or, with ?interp=offline, by the rules) and carried through the same site model, knowledge adapter and planting engine
+    const k = {}; const tick = (ms = 40) => new Promise(r => setTimeout(r, ms)); const until = async f => { for (let i = 0; i < 400 && !f(); i++) await tick(50); };
+    const calls = {}; for (const m of Object.getOwnPropertyNames(Object.getPrototypeOf(S.K))) if (m !== 'constructor' && typeof S.K[m] === 'function') { const f = S.K[m].bind(S.K); S.K[m] = (...a) => { calls[m] = (calls[m] || 0) + 1; return f(...a); }; }   /* every call into the knowledge adapter is counted */
+    const slug = id => String(id).split(':').pop();
+    const model = () => { const s = S.project.site; const B = s.boundary ? G.bbox(s.boundary) : null; const b = S.project.brief;
+      return { size: B && [B.w, B.h], scale: s.scale.status, sketch: s.concept?.status || null, features: s.features.map(f => ({ kind: f.kind, status: f.status, at: f.position_m || null })), notes: s.notes.map(n => ({ kind: n.kind, side: n.side || null, corner: n.corner || null, placed: !!n.placed })),
+        conditions: Object.fromEntries(Object.entries(s.conditions).filter(([, c]) => c.value).map(([key, c]) => [key, c.value])), beds: beds().map(x => ({ name: x.name, area: x.area_m2, status: x.status, fns: (x.functions || []).map(f => `${slug(f.function)}@${f.where}`) })),
+        goals: b.values, functions: b.functions.map(f => `${slug(f.function)}@${f.where}${f.alternative ? ' (alternative)' : ''}${f.target_height_m != null ? ` · ${f.target_height_m} m` : ''}${f.year_round ? ' · year-round' : ''}`), hard: b.hard_constraints.map(h => h.id), unknowns: b.unknowns, relations: (b.relations || []).map(r => `${r.subject} — ${r.relation} — ${r.object}`) }; };
+    const who = r => { const log = S.project.interpretations?.slice(-1)[0]; return { reader: S.interp?.mode, llm: S.interp?.model || null, reason: S.interp?.reason || null, tag: $('#interp').textContent, provenance: r?.provenance || r?.interpretation?.provenance || r?.cmd?.provenance || null, checks: log?.validation ? { schema: log.validation.schema, accepted: log.validation.accepted, changed: log.validation.changed, dropped: log.validation.dropped, rows: log.validation.rows } : null }; };
+    const CASES = { A: "My backyard is 6 by 4 metres. There is an old maple in the northwest corner, and the neighbours' kitchen window looks in over the north fence, so I need privacy there. Keep the middle open.", B: STUDIO_B, C: 'We need privacy from the house behind us but the garden should still feel open, and it only gets sun in the morning — mostly partial shade.', D: "Make the bed along the north fence half a metre deeper, but don't let it eat into the open centre and keep the tree bed as it is." };
+    const cases = {};
+    for (const id of ['A', 'B', 'C']) { resetProject(`LLM ${id}`, `llm-${id.toLowerCase()}`); const r = await handleSay(CASES[id], { silent: true }); setStage('site', { scroll: false }); update(); cases[id] = { utterance: CASES[id], ...who(r), kind: r?.facts ? 'description' : r?.interpretation?.kind || null, model: model() }; }
+    { resetProject('LLM D', 'llm-d'); await handleSay(STUDIO_A, { silent: true }); setStage('site', { scroll: false }); update(); acceptLayout(); const before = model(); const open = () => S.project.site.features.find(f => f.kind === 'no-plant-zone');
+      const openBefore = JSON.stringify(open()?.polygon); const r = await handleSay(CASES.D, { silent: true }); update(); const pv = r?.preview;
+      cases.D = { utterance: CASES.D, ...who(r), kind: r?.interpretation?.kind || (r?.facts ? 'description' : null), request: r?.interpretation?.request || null, preview: pv ? { ok: pv.ok, changes: pv.changes.map(c => ({ bed: c.name, before_m2: c.before.area_m2, after_m2: c.after.area_m2 })), conflicts: pv.conflicts.map(c => c.text) } : null, beds_before: before.beds };
+      if (S.bedPreview) { applyBedPreview(); update(); } const o = open();
+      Object.assign(cases.D, { beds_after: model().beds, open_area_unchanged: JSON.stringify(o?.polygon) === openBefore, bed_area_inside_open_m2: o ? G.round(beds().reduce((t, x) => t + C.overlapArea(C.toMulti(x.polygon, x.holes), C.toMulti(o.polygon)), 0)) : null, tree_bed_unchanged: JSON.stringify(before.beds.find(x => /tree/i.test(x.name))) === JSON.stringify(model().beds.find(x => /tree/i.test(x.name))) }); }
+    k.cases = cases; checkStop('cases');
+    // one run through the page: Imagine → Shape → Compose → Grow, every sentence read by the same reader
+    resetProject('LLM run', 'llm-run'); for (const m of Object.keys(calls)) delete calls[m]; const run = {};
+    $('#say0').value = STUDIO_A; $('#welcome-form').requestSubmit(); await until(() => S.stage === 'site' && !S.reading && beds().length > 0); await tick();
+    run.imagine = { ...who(null), stage: S.stage, model: model() }; if (STOP === 'shape') { S.readlogOpen = true; update(); } checkStop('shape');
+    { const r = await handleSay('The garden is in part shade.'); run.shape_words = { ...who(r), light: S.project.site.conditions.light.value }; }
+    acceptLayout(); update(); $('#to-intent').click(); await tick();
+    { const r = await handleSay('The screen should be 2 m high and work all year.'); run.compose_words = { ...who(r), functions: model().functions }; }
+    const nb = beds().find(x => (x.functions || []).some(f => f.function === 'z:screen')) || beds()[0]; $(`#compose-beds [data-selbed="${nb.id}"]`)?.click(); await tick();
+    const a = E.assemble(S.project, S.K, nb); const claimsOf = c => [...new Set(Object.values(c.checks).flatMap(x => x.claims || []))];
+    run.knowledge = { bed: nb.name, requirement: a.requirement, conditions_read: Object.fromEntries(Object.entries(a.conditions).map(([key, c]) => [key, c.value || 'unknown'])),
+      screen_candidates: (a.candidates.screen || []).map(c => ({ species: slug(c.id), fit: c.fit, verified: !!c.verified, claims: claimsOf(c).slice(0, 8), reasons: c.reasons })), picks: { screen: a.picks.screen.map(r => `${slug(r.id)} · fit ${r.cand?.fit} · gate ${r.gate.overall}`), ground: a.picks.ground.map(r => `${slug(r.id)} · gate ${r.gate.overall}`), accent: a.picks.accent.map(r => slug(r.id)) }, excluded: a.rows.filter(r => r.excluded).map(r => `${slug(r.id)}: ${r.excluded}`),
+      verdict: $('#brief-right [data-screen-verdict]')?.dataset.screenVerdict || null, inspector_species: $$('#brief-right .picks [data-species]').length };
+    checkStop('compose');
+    $('#generate').click(); await until(() => !!cur() && S.stage === 'garden'); await tick(120); const v = cur();
+    run.grow = { stage: S.stage, version: v.id, plants: v.plant_objects.length, species: v.schedule.map(r => `${slug(r.species_id)} × ${r.count}`), valid: v.validation.ok, inside_beds: v.plant_objects.every(o => { const bd = S.project.site.beds.find(x => x.id === o.bed_id); return bd && G.pointInPolygon(o.position_m, bd.polygon); }),
+      screen: v.evaluation.edge_zones.map(z => ({ status: z.status, checks: z.checks, covered_m: z.covered_m, edge_m: z.edge_length_m, target_height_m: z.target_height_m, year_round_required: z.year_round_required, verified_performance: z.verified_performance })), ground: v.evaluation.ground_cover.map(g => ({ bed: g.name, plants: g.plants, crown_share: g.ground_cover_share, verified_performance: g.verified_performance })), unknown_conditions: v.evaluation.unknown_conditions, same_as_compose_preview: S.dry?.v ? JSON.stringify(S.dry.v.plant_objects.map(o => [o.species_id, o.position_m]).sort()) === JSON.stringify(v.plant_objects.map(o => [o.species_id, o.position_m]).sort()) : null };
+    { const r = await handleSay('Thin out the planting a little, but keep the screen.'); run.grow_words = { ...who(r), kind: r?.cmd?.kind || null, operations: r?.cmd?.operations?.map(o => `${o.type}${o.amount ? ` ${o.amount.value}` : ''}`) || null, preserve: r?.cmd?.preserve?.map(p => p.value) || null, preview_targets: r?.preview?.targets?.length ?? null, refused: r?.preview?.refused?.length ?? null }; if (S.preview) cancelPreview(); }
+    k.run = run; k.knowledge_calls = { ...calls }; k.readers = S.project.interpretations.map(i => i.mode); k.server_llm = S.server?.llm ? { mode: S.server.llm.mode, available: S.server.llm.available, model: S.server.llm.model } : null; out.llm = k;
+  }
+  if (which === 'llmfail') {   // M62: the model path fails for one sentence — the rules read it, and the page says so
+    resetProject('LLM fail', 'llm-fail'); await handleSay(`${STUDIO_A} [[mock:500]]`); setStage('site', { scroll: false }); update(); const B = S.project.site.boundary ? G.bbox(S.project.site.boundary) : null;
+    out.llmfail = { reader: S.interp?.mode, reason: S.interp?.reason, tag: $('#interp').textContent, size: B && [B.w, B.h], mode_line: [...S.project.conversation].reverse().find(m => m.role === 'ai')?.mode || null };
   }
   if (which === 'corner') {   // the tree placed from a direction is a default estimate: inside the site and in the part that was named, from 6 × 4 m down to 1 × 1 m; a drag makes it the user's
     const rows = []; const svg = $('#svg'); const fire = (type, el, x, y) => el.dispatchEvent(new PointerEvent(type, { bubbles: true, clientX: x, clientY: y, button: 0, pointerId: 1 }));
