@@ -39,7 +39,11 @@ export function removeBed(project, bedId) { const i = project.site.beds.findInde
 export const activeBeds = project => project.site.beds.filter(b => b.status !== 'rejected');
 export const confirmedBeds = project => project.site.beds.filter(b => ['user-accepted', 'user-drawn', 'user-edited', 'user-calibrated'].includes(b.status));
 export const bedShape = b => ({ polygon: b.polygon, holes: b.holes || [] });
-export const bedFingerprint = b => JSON.stringify([b.polygon, b.holes || [], (b.functions || []).map(f => f.target_height_m != null || f.year_round != null ? [f.function, f.where, f.target_height_m ?? null, f.year_round ?? null] : [f.function, f.where])]);
+export const bedFingerprint = b => JSON.stringify([b.polygon, b.holes || [], (b.functions || []).map(f => f.target_height_m != null || f.year_round != null ? [f.function, f.where, f.target_height_m ?? null, f.year_round ?? null] : [f.function, f.where]), ...(b.composition ? [b.composition] : [])]);   /* a bed without a chosen composition keeps the fingerprint it always had */
+/** the arrangement chosen for one bed in Compose (js/engine.js COMPOSITION). Only what differs from the engine's default is kept, so a bed
+ *  nobody touched is planted exactly as before. `patch` is merged into what is there; a value of null or a default removes its key. */
+const COMP_DEFAULT = { pattern: 'drifts', grain: 'medium', rows: 'auto', density: 1, variation: 0 };
+export function setComposition(project, bedId, patch) { const b = project.site.beds.find(x => x.id === bedId); if (!b) return null; const c = { ...(b.composition || {}), ...patch }; for (const k of Object.keys(c)) if (c[k] == null || c[k] === COMP_DEFAULT[k] || (Array.isArray(c[k]) && !c[k].length)) delete c[k]; const keys = Object.keys(c).sort(); if (keys.length) b.composition = Object.fromEntries(keys.map(k => [k, c[k]])); else delete b.composition; return b.composition || null; }
 // site history: snapshots of beds + features for Undo / Reset on the Shape stage (capped)
 export function snapshotSite(project, label) { const h = project.site.history || (project.site.history = []); h.push({ label, time: now(), beds: JSON.parse(JSON.stringify(project.site.beds)), features: JSON.parse(JSON.stringify(project.site.features)) }); if (h.length > 30) h.shift(); }
 export function undoSite(project) { const h = project.site.history || []; const s = h.pop(); if (!s) return null; project.site.beds = s.beds; project.site.features = s.features; return s; }

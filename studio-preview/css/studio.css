@@ -336,3 +336,49 @@ body[data-stage="welcome"] #stagenav { min-height: 45.6953125px; }
 .ws-status .canvas-foot { min-width: 0; } .ws-status .ws-state { flex: 0 1 auto; min-width: 0; max-width: 46ch; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; } .ws-status .canvas-foot .lg { white-space: nowrap; flex: none; } .ws-status .why-not { flex: 0 1 auto; min-width: 0; }
 @media (min-width: 1081px) and (max-width: 1340px) { #grow-why { display: none; } .ws-status .ws-state { max-width: 34ch; } }
 .ws-inspector .cand .l { font-size: 11.5px; letter-spacing: -.02em; overflow-wrap: normal; word-break: normal; hyphens: none; } .ws-inspector .cand { padding: 5px 5px 8px; }
+
+/* ================================================================ 2026-11-15 · generative composition (M64)
+   Compose, step 3: the arrangement options of one bed. Page 2 compares bed outlines; this compares where the plants stand, so each
+   option is a strip of the bed with its real plant objects, never an outline. The drawing leads; the controls stay small below it. */
+.arrset { margin: 2px 0 14px; } .arrset h5 { margin: 0 0 6px; font: 600 12.5px/1.35 var(--sans); color: var(--ink); } .arrset h5 span { display: block; font-weight: 400; font-size: 12px; color: var(--ink-3); }
+.arropts { display: grid; gap: 6px; }
+.arropt { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 2px 10px; align-items: baseline; width: 100%; text-align: left; padding: 8px 9px 8px; border: 1.5px solid var(--line); border-radius: 8px; background: var(--paper); font-size: 12.5px; line-height: 1.4; color: var(--ink-2); transition: border-color .12s; }
+button.arropt:hover { border-color: var(--caramel); } .arropt.on { border-color: var(--ink); box-shadow: inset 0 -3px 0 var(--olive-deep); padding-bottom: 10px; }
+.arropt .strip-w { grid-column: 1 / -1; display: flex; align-items: center; gap: 8px; min-height: 30px; margin-bottom: 5px; padding: 4px; border-radius: 4px; background: var(--desk); overflow: hidden; }
+.arropt svg.strip { display: block; max-width: 100%; height: auto; flex: none; overflow: hidden; } .strip .sb { fill: var(--paper); stroke: var(--olive-deep); stroke-width: 1; } .strip .st { fill: rgba(59,85,56,.1); stroke: var(--olive-deep); stroke-width: .8; stroke-dasharray: 2 2.5; }
+.strip .sp { stroke: rgba(39,36,31,.4); stroke-width: .5; fill-opacity: .9; } .strip-n { font: 10px var(--mono); color: var(--ink-3); white-space: nowrap; }
+.arropt .al { display: flex; align-items: baseline; gap: 8px; min-width: 0; } .arropt .al b { font-weight: 600; font-size: 13px; color: var(--ink); } .arropt .chosen { font: 600 10.5px var(--sans); font-style: normal; letter-spacing: .04em; text-transform: uppercase; color: var(--olive-deep); }
+.arropt .am { text-align: right; font-variant-numeric: tabular-nums; color: var(--ink); white-space: nowrap; } .arropt .am small { color: var(--ink-3); font-size: 11px; } .arropt .am .vtag { margin-left: 2px; } .vtag.meets { background: var(--olive-soft); color: var(--olive-deep); }
+.arropt .as, .arropt .at { grid-column: 1 / -1; font-size: 12px; } .arropt .as { color: var(--ink-2); } .arropt .at { color: var(--ink-3); }
+.arropt.na { border-style: dashed; background: none; } .arropt.na .al b { color: var(--ink-2); font-weight: 500; } .arropt .nai { font: 11.5px var(--mono); font-style: normal; color: var(--caramel-ink); }
+.arr-limit { margin: 8px 0 0; padding: 8px 10px; border-radius: 6px; background: var(--caramel-soft); color: var(--ink-2); font-size: 12px; line-height: 1.45; } .arr-limit b { font-weight: 600; color: var(--ink); }
+.arrset.tunes { padding-top: 10px; border-top: 1px solid var(--line); }
+.tune { display: grid; grid-template-columns: 62px minmax(0, 1fr); gap: 2px 8px; align-items: center; padding: 5px 0; } .tune .tl { font-size: 12.5px; color: var(--ink-2); } .tune .tn { grid-column: 2; font-size: 11.5px; line-height: 1.4; color: var(--ink-3); }
+.tune .seg { display: inline-flex; justify-self: start; padding: 2px; gap: 2px; border-radius: 8px; background: var(--ivory-2); } .tune .seg button { padding: 4px 11px; border-radius: 6px; font-size: 12.5px; color: var(--ink-2); white-space: nowrap; }
+.tune .seg button:hover:not(:disabled) { color: var(--ink); background: rgba(255,253,248,.6); } .tune .seg button.on { background: var(--paper); color: var(--ink); font-weight: 500; box-shadow: 0 1px 2px rgba(39,36,31,.16); } .tune .seg button:disabled { opacity: .45; cursor: default; }
+.tune.flat .tn { color: var(--caramel-ink); } .arr-reset { display: inline-block; margin-top: 8px; } .step-note.arr-foot { margin-top: 2px; }
+.chain details.arr-detail { margin-top: 10px; } .chain details.arr-detail .arr { padding-left: 0; margin-top: 8px; }
+.canvas-hint.ghosting { color: var(--caramel-ink); background: var(--caramel-soft); border-color: transparent; }
+.pick .cnt.zero { color: var(--ink-3); font-weight: 400; } .mixx { width: 22px; height: 22px; display: grid; place-items: center; border-radius: 5px; } .mixx svg { width: 10px; height: 10px; fill: none; stroke: var(--ink-3); stroke-width: 2; stroke-linecap: round; } .mixx:hover { background: var(--rust-soft); } .mixx:hover svg { stroke: var(--rust); }
+.mixmore { display: flex; flex-wrap: wrap; gap: 5px 6px; align-items: center; margin: 8px 0 4px; padding-top: 8px; border-top: 1px solid var(--line); } .mixmore .mh { flex-basis: 100%; font-size: 12px; color: var(--ink-3); } .mixmore .mh small { color: var(--caramel-ink); margin-left: 4px; }
+.mixadd { display: inline-flex; align-items: baseline; gap: 5px; padding: 3px 9px 3px 7px; border: 1px dashed var(--line-2); border-radius: 999px; font-size: 12.5px; } .mixadd .plus { color: var(--olive-deep); font-weight: 600; } .mixadd small { font: 10.5px var(--mono); color: var(--ink-3); }
+.mixadd:hover:not(:disabled) { border-style: solid; border-color: var(--olive); background: var(--paper); } .mixadd:disabled { opacity: .5; cursor: default; } .step-note.mixnote { margin-top: 8px; }
+
+/* Compose: the three steps are an accordion — one open, the others a one-line summary — so the arrangement options are not pushed
+   below two long lists; the beds become chips once one is chosen */
+.chain .step.shut { padding-bottom: 12px; } .chain .step .step-body { margin-top: 2px; } .chain .step.shut .step-body { display: none; }
+.bedcard .chain h4.sub[role="button"] { cursor: pointer; border-radius: 6px; } .bedcard .chain h4.sub[role="button"]:hover { color: var(--olive-deep); }
+.chain h4.sub .chev { margin-left: auto; width: 7px; height: 7px; border-right: 1.5px solid var(--ink-3); border-bottom: 1.5px solid var(--ink-3); transform: rotate(45deg) translateY(-3px); flex: none; align-self: center; } .chain .step.shut h4.sub .chev { transform: rotate(-45deg); }
+.step-sum { margin: -4px 0 0; font-size: 12.5px; line-height: 1.4; color: var(--ink-2); cursor: pointer; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; } .step-sum:hover { color: var(--ink); }
+.bedtabs.compact { margin-bottom: 12px; padding-bottom: 10px; } .bedtabs.compact #compose-beds { display: flex; flex-wrap: wrap; gap: 4px; }
+.bedtabs.compact .bedrow { width: auto; padding: 3px 10px 3px 8px; border: 1px solid var(--line); border-radius: 999px; font-size: 12.5px; } .bedtabs.compact .bedrow > .small { display: none; } .bedtabs.compact .bedrow.sel { border-color: var(--olive); }
+.bedtabs.compact .bedrow .ll { gap: 6px; } .bedtabs.compact .bedrow .vtag { font-size: 10px; padding: 0 5px; }
+.arropt .at { display: none; }
+
+.arropt { display: block; min-width: 0; max-width: 100%; overflow: hidden; } .arropt .al, .arropt .am, .arropt .as { display: block; } .arropt .al { display: flex; }
+.arropt .am { text-align: left; white-space: normal; margin-top: 1px; font-size: 12.5px; } .arropt .as { margin-top: 1px; } .arropt .strip-w { margin-bottom: 7px; } .arropt svg.strip { flex: 0 1 auto; min-width: 0; }
+
+.sprow.arrrow { grid-template-columns: auto minmax(0, 1fr) auto; } .sprow.arrrow .fns { display: inline-flex; gap: 3px; } .sprow.arrrow b { font-weight: 500; font-size: 13.5px; }
+
+.arropt.na .at { display: block; margin-top: 3px; } .arropt .nai { white-space: nowrap; } .arropt.na .al { flex-wrap: wrap; gap: 2px 8px; }
+.ws-compose .ws-status .ws-state { max-width: 62ch; } .arrset h5 span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }

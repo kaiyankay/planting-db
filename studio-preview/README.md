@@ -2,7 +2,7 @@
 
 A self-contained static build of the design studio, published for review beside the production site.
 
-- built from `design/studio-ux-complete @ 87031a4 · built 2026-11-14` by `tools/build_preview.py`
+- built from `feature/generative-composition @ fa12a03 · built 2026-11-14` by `tools/build_preview.py`
 - production site: `/design/` (unchanged by this folder)
 - everything the page loads is inside this folder: `index.html`, `css/`, `js/`, `vendor/` (polygon-clipping, three.js), `data/explorer.json`
 - no server: language is read by the offline rules; the address lookup calls OpenStreetMap Nominatim from the browser
