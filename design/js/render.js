@@ -160,6 +160,17 @@ export function render2D(svg, project, version, S, K) {
 }
 
 /** a thumbnail plan of a set of beds on the site: boundary, open areas, existing trees and the beds, screened beds darker */
+/** one bed with the plants of one arrangement, as a strip: the thumbnails of the arrangement options in Compose. A bed that is taller
+ *  than wide is turned so its long side lies flat (north to the left). Crowns are drawn at their proxy radius in the species' foliage
+ *  colour — the same plant objects the plan draws, nothing schematic. */
+export function bedStrip(project, bed, plants, K, W = 276, H = 58) {
+  const B = G.bbox(bed.polygon); const turn = B.h > B.w * 1.15; const L = turn ? B.h : B.w, T = turn ? B.w : B.h; const k = Math.min(W / L, H / T); const w = G.round(L * k, 1), h = G.round(T * k, 1);
+  const P = ([x, y]) => turn ? [(B.maxy - y) * k, (x - B.minx) * k] : [(x - B.minx) * k, (B.maxy - y) * k]; const d = r => 'M' + r.map(q => P(q).map(v => v.toFixed(1)).join(' ')).join('L') + 'Z'; const light = project.site.conditions.light?.value;
+  let s = `<svg class="strip" viewBox="0 0 ${w} ${h}" width="${w}" height="${h}" role="img" aria-label="${plants.length} plants in ${esc(bed.name)}"><path d="${[bed.polygon, ...(bed.holes || [])].map(d).join('')}" fill-rule="evenodd" class="sb"/>`;
+  for (const f of project.site.features) if (f.kind === 'existing-tree') { const c = P(f.position_m); s += `<circle class="st" cx="${c[0].toFixed(1)}" cy="${c[1].toFixed(1)}" r="${((f.radius_m ?? 1.5) * k).toFixed(1)}"/>`; }
+  for (const o of plants.slice().sort((a, b) => b.proxy_radius_m - a.proxy_radius_m)) { const c = P(o.position_m); s += `<circle class="sp ${/^screen/.test(o.role) ? 'scr' : ''}" cx="${c[0].toFixed(1)}" cy="${c[1].toFixed(1)}" r="${Math.max(1.6, o.proxy_radius_m * k).toFixed(1)}" fill="${form(K, o.species_id, light).foliage}"/>`; }
+  return s + `</svg>${turn ? '<span class="strip-n" title="the bed is turned to fit: north is to the left">N ←</span>' : ''}`;
+}
 export function miniPlan(project, bedList, W = 108, H = 72) {
   const site = project.site; if (!site.boundary) return ''; const B = G.bbox(site.boundary); const k = Math.min((W - 8) / B.w, (H - 8) / B.h); const ox = (W - B.w * k) / 2, oy = (H - B.h * k) / 2;
   const P = q => [G.round(ox + (q[0] - B.minx) * k, 1), G.round(H - oy - (q[1] - B.miny) * k, 1)]; const d = (outer, holes = []) => [outer, ...(holes || [])].map(r => 'M' + r.map(q => P(q).join(' ')).join('L') + 'Z').join('');

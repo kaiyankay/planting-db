@@ -178,6 +178,12 @@ Object handles on the plan are small white squares with an ink edge; mid-edge ha
   bed being designed and Spatial function → Plant selection → Arrangement, Grow the version and the three views.
 - **Source chip** (home) and **location chip** (Shape): a solid olive edge for a confirmed map position, a dotted ink edge
   for a reference that was only typed. A location never carries more than its place.
+- **Arrangement options** (Compose, step 3): one row per option — a strip of the bed with the plant objects of that engine
+  run, the count by species, the engine's own figures. Hover holds it over the plan (the hint turns caramel: not chosen yet);
+  the chosen one carries an ink edge and an olive foot, like a chosen layout in Shape. Shape's options are bed outlines,
+  these are plants: never draw one as the other. An option that cannot stand is a dashed row with its reason, no drawing.
+  Controls sit under the options, small; a control that changes nothing in this bed says so in caramel.
+- **Steps** of a bed in Compose are an accordion: one open, the others a one-line summary.
 - **Requirements**: one row per requirement with its status as a word — met, uncertain, not met, or *estimate* where the
   engine measures without a pass mark. The page never turns an estimate into a verdict.
 

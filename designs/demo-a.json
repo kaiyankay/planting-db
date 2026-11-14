@@ -1,7 +1,7 @@
 {
  "id": "demo-a",
  "name": "Demo A",
- "created": "2026-11-14T20:48:12.643Z",
+ "created": "2026-11-14T21:34:05.691Z",
  "schema": "planting-intelligence/design-project/0.1",
  "knowledge_snapshot": {
   "generated": "2026-11-13",
@@ -17,66 +17,66 @@
  },
  "conversation": [
   {
-   "id": "msg-69t52",
-   "time": "2026-11-14T20:48:12.649Z",
+   "id": "msg-z9c2",
+   "time": "2026-11-14T21:34:05.696Z",
    "role": "user",
    "text": "I have a 6 × 4 m backyard with a tree on the north side. I want privacy along the north fence, ecological value, and an open centre for children."
   },
   {
-   "id": "msg-6a885",
-   "time": "2026-11-14T20:48:13.192Z",
+   "id": "msg-zkl5",
+   "time": "2026-11-14T21:34:06.101Z",
    "role": "ai",
    "text": "",
    "html": "<b>Read from what you said</b><ul><li>site set to 6 × 4 m (stated, rectangle assumed)</li><li>an existing tree on the north — sketched there (the exact spot is an estimate; drag it to where it stands)</li><li>an open area (open centre) — sketched in the middle, as you said; its extent is not stated</li><li>goals: privacy, ecology, openness</li><li>screen → north edge (privacy → Screen (blocks a view); Scrim would only filter it)</li><li>scrim → north edge (openness + privacy → Scrim as the alternative to check) — alternative to check</li><li>ground cover → bed interior (habitat value → layered ground cover (design heuristic))</li></ul><b>Unknown</b> (not assumed): light; soil type and drainage; ecological performance — the database records some ecological-value claims (pollinator, bird food …) but no pollinator-interaction data; no score is possible.<br><b>Starting layout:</b> Planting at the edges, open centre kept — 4 planting beds proposed; adjust them on the canvas or say what should change.",
    "mode": "interpretation: offline-parser (rules: dimensions, existing-tree, open-centre, privacy, ecology, openness)"
   },
   {
-   "id": "msg-6ad16",
-   "time": "2026-11-14T20:48:13.365Z",
+   "id": "msg-zp56",
+   "time": "2026-11-14T21:34:06.265Z",
    "role": "sys",
    "text": "4 suggested beds confirmed as drawn — North bed 5.4 m², East bed 2.48 m², West bed 2.48 m², Tree island 2.56 m²"
   },
   {
-   "id": "msg-6ar48",
-   "time": "2026-11-14T20:48:13.872Z",
+   "id": "msg-102k8",
+   "time": "2026-11-14T21:34:06.748Z",
    "role": "ai",
    "text": "",
-   "html": "<b>Design v-6ar07</b> — 41 plant objects, 3 species in 4 beds (12.92 m²), seed 42; operators along_edge, fill_drift, repeat_accent.<ul><li>North bed: 14 plants, 3 species · Screen, Ground cover</li><li>East bed: 19 plants, 2 species · Ground cover</li><li>West bed: 6 plants, 3 species · Ground cover</li><li>Tree island: 2 plants, 2 species · Ground cover</li><li>screen: <i>Gaultheria shallon</i> (gate unknown)</li><li>ground: <i>Arctostaphylos uva-ursi</i> (gate unknown), <i>Polystichum munitum</i> (gate unknown), <i>Gaultheria shallon</i> (gate unknown)</li><li>accent: <i>Achillea millefolium</i> (gate unknown)</li><li>excluded: <i>Acer palmatum</i>, <i>Cercidiphyllum japonicum</i>, <i>Cornus nuttallii</i>, <i>Cornus sericea</i> — reasons in Assumptions</li><li>Screen along the north edge (North bed): row cover 4.39 m of 6 m (continuity 0.73, a geometric proxy)</li><li>41 plants rest on an <b>unknown</b> site gate (conditions not stated)</li></ul>Circle an area and say what should change, or drag plants directly.",
+   "html": "<b>Design v-102j7</b> — 41 plant objects, 3 species in 4 beds (12.92 m²), seed 42; operators along_edge, fill_drift, repeat_accent.<ul><li>North bed: 14 plants, 3 species · Screen, Ground cover</li><li>East bed: 19 plants, 2 species · Ground cover</li><li>West bed: 6 plants, 3 species · Ground cover</li><li>Tree island: 2 plants, 2 species · Ground cover</li><li>screen: <i>Gaultheria shallon</i> (gate unknown)</li><li>ground: <i>Arctostaphylos uva-ursi</i> (gate unknown), <i>Polystichum munitum</i> (gate unknown), <i>Gaultheria shallon</i> (gate unknown)</li><li>accent: <i>Achillea millefolium</i> (gate unknown)</li><li>excluded: <i>Acer palmatum</i>, <i>Cercidiphyllum japonicum</i>, <i>Cornus nuttallii</i>, <i>Cornus sericea</i> — reasons in Assumptions</li><li>Screen along the north edge (North bed): row cover 4.39 m of 6 m (continuity 0.73, a geometric proxy)</li><li>41 plants rest on an <b>unknown</b> site gate (conditions not stated)</li></ul>Circle an area and say what should change, or drag plants directly.",
    "mode": "engine: deterministic placement over the knowledge adapter (no model text)"
   },
   {
-   "id": "msg-6bjt9",
-   "time": "2026-11-14T20:48:14.905Z",
+   "id": "msg-11449",
+   "time": "2026-11-14T21:34:08.100Z",
    "role": "user",
    "text": "Make the north planting bed wider."
   },
   {
-   "id": "msg-6bjta",
-   "time": "2026-11-14T20:48:14.905Z",
+   "id": "msg-1144a",
+   "time": "2026-11-14T21:34:08.100Z",
    "role": "ai",
    "text": "",
    "html": "<b>Proposed change — preview, nothing applied yet.</b> Located: named &quot;North bed&quot;.<ul><li>North bed: 5.4 → 6.51 m² (narrowest 1.39 m) — wider by 0.5 m: the free edges move 0.5 m outward; the boundary, the open area and other beds hold it back</li><li class=\"warn\">1.89 m² would overlap another bed — kept out</li><li>4.67 m² of the growth fell outside the site boundary and was clipped (the bed already sits on that edge)</li></ul>Before (dashed) and after (solid) are drawn on the canvas. The current design has 14 plants in the changed bed (0 would fall outside); 3 other beds would not be touched. Apply here, then preview the updated planting in the garden.",
    "mode": "interpretation: offline-parser (rule bed_resize) · geometry: spatial engine"
   },
   {
-   "id": "msg-6bjtb",
-   "time": "2026-11-14T20:48:14.905Z",
+   "id": "msg-1144b",
+   "time": "2026-11-14T21:34:08.100Z",
    "role": "sys",
    "text": "applied: North bed reshaped — the garden will offer an updated planting for the changed beds"
   },
   {
-   "id": "msg-6bjtc",
-   "time": "2026-11-14T20:48:14.905Z",
+   "id": "msg-1144c",
+   "time": "2026-11-14T21:34:08.100Z",
    "role": "ai",
    "text": "",
    "html": "<b>Updated planting — preview.</b> 27 plants in 3 unchanged beds kept exactly; 11 plants regenerated for North bed. 14 removed (red), 11 added (green ring); plants in unchanged beds did not move. Apply, or keep the current version.",
    "mode": "engine: partial regeneration (changed beds only)"
   },
   {
-   "id": "msg-6bjte",
-   "time": "2026-11-14T20:48:14.905Z",
+   "id": "msg-1144e",
+   "time": "2026-11-14T21:34:08.100Z",
    "role": "sys",
-   "text": "applied as v-6bjtd: 38 plants (14 removed, 11 added)"
+   "text": "applied as v-1144d: 38 plants (14 removed, 11 added)"
   }
  ],
  "inputs": [],
@@ -124,7 +124,7 @@
     "label": "existing tree",
     "source": "conversation: \"a tree on the north\" — only \"north\" was said, no distance. The position is estimated by default (a quarter of the way along that edge, about 1 m in), not a measurement: drag the tree to where it stands. Canopy not stated",
     "status": "inferred",
-    "id": "tree-69te3"
+    "id": "tree-z9p3"
    },
    {
     "locked": true,
@@ -150,7 +150,7 @@
     "label": "open (open centre)",
     "source": "conversation: \"open centre\" — extent suggested (40 % × 40 % of the site, toward the front), not stated",
     "status": "inferred",
-    "id": "open-69te4"
+    "id": "open-z9p4"
    }
   ],
   "beds": [
@@ -342,7 +342,7 @@
     ],
     "under_canopy": [
      {
-      "tree": "tree-69te3",
+      "tree": "tree-z9p3",
       "label": "existing tree",
       "m2": 0.82,
       "radius_status": "assumed 1.5 m"
@@ -436,7 +436,7 @@
     ],
     "under_canopy": [
      {
-      "tree": "tree-69te3",
+      "tree": "tree-z9p3",
       "label": "existing tree",
       "m2": 2.56,
       "radius_status": "assumed 1.5 m"
@@ -449,7 +449,7 @@
    }
   ],
   "proposals": {
-   "generated": "2026-11-14T20:48:13.191Z",
+   "generated": "2026-11-14T21:34:06.100Z",
    "engine": "spatial.js (polygon-clipping booleans, metre units)",
    "inputs_fp": "[[[0,0],[6,0],[6,4],[0,4]],[[\"existing-tree\",[1.5,3],null,null],[\"no-plant-zone\",null,[[1.8,0.6],[4.2,0.6],[4.2,2.2],[1.8,2.2]],null]],{\"privacy\":2,\"ecology\":2,\"openness\":2},[[\"z:screen\",\"north-edge\",null],[\"z:scrim\",\"north-edge\",true],[\"z:ground_cover\",\"bed-interior\",null]],{\"north_angle_degrees\":0,\"basis\":\"assumption (north = up until stated)\"}]",
    "conceptual": false,
@@ -458,7 +458,7 @@
     "plantable_m2": 20.16,
     "excluded": [
      {
-      "id": "open-69te4",
+      "id": "open-z9p4",
       "kind": "no-plant-zone",
       "label": "open (open centre)",
       "clearance_m": 0
@@ -466,7 +466,7 @@
     ],
     "open_areas": [
      {
-      "id": "open-69te4",
+      "id": "open-z9p4",
       "label": "open (open centre)",
       "area_m2": 3.84,
       "status": "inferred"
@@ -474,7 +474,7 @@
     ],
     "trees": [
      {
-      "id": "tree-69te3",
+      "id": "tree-z9p3",
       "label": "existing tree",
       "centre": [
        1.5,
@@ -611,7 +611,7 @@
        ],
        "under_canopy": [
         {
-         "tree": "tree-69te3",
+         "tree": "tree-z9p3",
          "label": "existing tree",
          "m2": 2.44,
          "radius_status": "assumed 1.5 m"
@@ -716,7 +716,7 @@
        ],
        "under_canopy": [
         {
-         "tree": "tree-69te3",
+         "tree": "tree-z9p3",
          "label": "existing tree",
          "m2": 0.82,
          "radius_status": "assumed 1.5 m"
@@ -805,7 +805,7 @@
        ],
        "under_canopy": [
         {
-         "tree": "tree-69te3",
+         "tree": "tree-z9p3",
          "label": "existing tree",
          "m2": 2.56,
          "radius_status": "assumed 1.5 m"
@@ -914,7 +914,7 @@
        "from": "open centre"
       },
       {
-       "id": "tree:tree-69te3",
+       "id": "tree:tree-z9p3",
        "text": "existing tree kept (estimated from your words; canopy assumed 1.5 m)",
        "from": "site"
       }
@@ -1014,7 +1014,7 @@
        ],
        "under_canopy": [
         {
-         "tree": "tree-69te3",
+         "tree": "tree-z9p3",
          "label": "existing tree",
          "m2": 1.79,
          "radius_status": "assumed 1.5 m"
@@ -1119,7 +1119,7 @@
        ],
        "under_canopy": [
         {
-         "tree": "tree-69te3",
+         "tree": "tree-z9p3",
          "label": "existing tree",
          "m2": 4.03,
          "radius_status": "assumed 1.5 m"
@@ -1242,7 +1242,7 @@
        "from": "open centre"
       },
       {
-       "id": "tree:tree-69te3",
+       "id": "tree:tree-z9p3",
        "text": "existing tree kept (estimated from your words; canopy assumed 1.5 m)",
        "from": "site"
       }
@@ -1352,7 +1352,7 @@
        ],
        "under_canopy": [
         {
-         "tree": "tree-69te3",
+         "tree": "tree-z9p3",
          "label": "existing tree",
          "m2": 3.13,
          "radius_status": "assumed 1.5 m"
@@ -1449,7 +1449,7 @@
        ],
        "under_canopy": [
         {
-         "tree": "tree-69te3",
+         "tree": "tree-z9p3",
          "label": "existing tree",
          "m2": 2.69,
          "radius_status": "assumed 1.5 m"
@@ -1660,7 +1660,7 @@
        "from": "open centre"
       },
       {
-       "id": "tree:tree-69te3",
+       "id": "tree:tree-z9p3",
        "text": "existing tree kept (estimated from your words; canopy assumed 1.5 m)",
        "from": "site"
       }
@@ -1695,13 +1695,13 @@
   "history": [
    {
     "label": "dimensions stated",
-    "time": "2026-11-14T20:48:12.657Z",
+    "time": "2026-11-14T21:34:05.706Z",
     "beds": [],
     "features": []
    },
    {
     "label": "accept layout",
-    "time": "2026-11-14T20:48:13.364Z",
+    "time": "2026-11-14T21:34:06.264Z",
     "beds": [
      {
       "id": "bed-1",
@@ -1759,7 +1759,7 @@
       ],
       "under_canopy": [
        {
-        "tree": "tree-69te3",
+        "tree": "tree-z9p3",
         "label": "existing tree",
         "m2": 2.44,
         "radius_status": "assumed 1.5 m"
@@ -1874,7 +1874,7 @@
       ],
       "under_canopy": [
        {
-        "tree": "tree-69te3",
+        "tree": "tree-z9p3",
         "label": "existing tree",
         "m2": 0.82,
         "radius_status": "assumed 1.5 m"
@@ -1968,7 +1968,7 @@
       ],
       "under_canopy": [
        {
-        "tree": "tree-69te3",
+        "tree": "tree-z9p3",
         "label": "existing tree",
         "m2": 2.56,
         "radius_status": "assumed 1.5 m"
@@ -1992,7 +1992,7 @@
       "label": "existing tree",
       "source": "conversation: \"a tree on the north\" — only \"north\" was said, no distance. The position is estimated by default (a quarter of the way along that edge, about 1 m in), not a measurement: drag the tree to where it stands. Canopy not stated",
       "status": "inferred",
-      "id": "tree-69te3"
+      "id": "tree-z9p3"
      },
      {
       "locked": true,
@@ -2018,13 +2018,13 @@
       "label": "open (open centre)",
       "source": "conversation: \"open centre\" — extent suggested (40 % × 40 % of the site, toward the front), not stated",
       "status": "inferred",
-      "id": "open-69te4"
+      "id": "open-z9p4"
      }
     ]
    },
    {
     "label": "apply: Make the north planting bed wider.",
-    "time": "2026-11-14T20:48:14.905Z",
+    "time": "2026-11-14T21:34:08.100Z",
     "beds": [
      {
       "id": "bed-1",
@@ -2082,7 +2082,7 @@
       ],
       "under_canopy": [
        {
-        "tree": "tree-69te3",
+        "tree": "tree-z9p3",
         "label": "existing tree",
         "m2": 2.44,
         "radius_status": "assumed 1.5 m"
@@ -2197,7 +2197,7 @@
       ],
       "under_canopy": [
        {
-        "tree": "tree-69te3",
+        "tree": "tree-z9p3",
         "label": "existing tree",
         "m2": 0.82,
         "radius_status": "assumed 1.5 m"
@@ -2291,7 +2291,7 @@
       ],
       "under_canopy": [
        {
-        "tree": "tree-69te3",
+        "tree": "tree-z9p3",
         "label": "existing tree",
         "m2": 2.56,
         "radius_status": "assumed 1.5 m"
@@ -2315,7 +2315,7 @@
       "label": "existing tree",
       "source": "conversation: \"a tree on the north\" — only \"north\" was said, no distance. The position is estimated by default (a quarter of the way along that edge, about 1 m in), not a measurement: drag the tree to where it stands. Canopy not stated",
       "status": "inferred",
-      "id": "tree-69te3"
+      "id": "tree-z9p3"
      },
      {
       "locked": true,
@@ -2341,7 +2341,7 @@
       "label": "open (open centre)",
       "source": "conversation: \"open centre\" — extent suggested (40 % × 40 % of the site, toward the front), not stated",
       "status": "inferred",
-      "id": "open-69te4"
+      "id": "open-z9p4"
      }
     ]
    }
@@ -2496,7 +2496,7 @@
     "says": "value: openness"
    }
   ],
-  "updated": "2026-11-14T20:48:12.657Z"
+  "updated": "2026-11-14T21:34:05.707Z"
  },
  "versions": [
   {
@@ -2509,6 +2509,7 @@
     "bed-3",
     "bed-4"
    ],
+   "compositions": {},
    "bed_fps": {
     "bed-1": "[[[0,3.1],[6,3.1],[6,4],[0,4]],[],[[\"z:screen\",\"north-edge\"],[\"z:ground_cover\",\"bed-interior\"]]]",
     "bed-2": "[[[5.2,0],[6,0],[6,3.1],[5.2,3.1]],[],[[\"z:ground_cover\",\"east-edge\"]]]",
@@ -4025,6 +4026,9 @@
      "role": "ground",
      "operator": "fill_drift",
      "params": {
+      "pattern": "drifts",
+      "pattern_label": "Naturalistic drifts",
+      "grain": "medium",
       "lattice": "hexagonal",
       "spacing_m": 0.51,
       "spacing_rule": "0.65 × the mean claimed mature spread of the ground species (0.78 m)",
@@ -4038,13 +4042,17 @@
        "uncertain",
        "uncertain"
       ],
-      "jitter": 0.35,
       "species": [
        "plant:arctostaphylos-uva-ursi",
        "plant:polystichum-munitum"
       ],
-      "drift_field": "value noise",
       "seed": 42,
+      "variation": 0,
+      "jitter": 0.35,
+      "drift_field": "value noise",
+      "drift_cell_m": 1.4,
+      "pattern_rule": "a jittered lattice (0.35 × spacing); the species follow a drift field with cells of 1.4 m (heuristic)",
+      "random": true,
       "placed": 7
      },
      "plant_ids": [
@@ -4082,6 +4090,9 @@
      "role": "ground",
      "operator": "fill_drift",
      "params": {
+      "pattern": "drifts",
+      "pattern_label": "Naturalistic drifts",
+      "grain": "medium",
       "lattice": "hexagonal",
       "spacing_m": 0.34,
       "spacing_rule": "0.65 × the mean claimed mature spread of the ground species (0.53 m)",
@@ -4095,13 +4106,17 @@
        "uncertain",
        "uncertain"
       ],
-      "jitter": 0.35,
       "species": [
        "plant:arctostaphylos-uva-ursi",
        "plant:gaultheria-shallon"
       ],
-      "drift_field": "value noise",
       "seed": 42,
+      "variation": 0,
+      "jitter": 0.35,
+      "drift_field": "value noise",
+      "drift_cell_m": 1.4,
+      "pattern_rule": "a jittered lattice (0.35 × spacing); the species follow a drift field with cells of 1.4 m (heuristic)",
+      "random": true,
       "placed": 19
      },
      "plant_ids": [
@@ -4152,6 +4167,9 @@
      "role": "ground",
      "operator": "fill_drift",
      "params": {
+      "pattern": "drifts",
+      "pattern_label": "Naturalistic drifts",
+      "grain": "medium",
       "lattice": "hexagonal",
       "spacing_m": 0.34,
       "spacing_rule": "0.65 × the mean claimed mature spread of the ground species (0.53 m)",
@@ -4165,13 +4183,17 @@
        "uncertain",
        "uncertain"
       ],
-      "jitter": 0.35,
       "species": [
        "plant:arctostaphylos-uva-ursi",
        "plant:gaultheria-shallon"
       ],
-      "drift_field": "value noise",
       "seed": 42,
+      "variation": 0,
+      "jitter": 0.35,
+      "drift_field": "value noise",
+      "drift_cell_m": 1.4,
+      "pattern_rule": "a jittered lattice (0.35 × spacing); the species follow a drift field with cells of 1.4 m (heuristic)",
+      "random": true,
       "placed": 6
      },
      "plant_ids": [
@@ -4208,6 +4230,9 @@
      "role": "ground",
      "operator": "fill_drift",
      "params": {
+      "pattern": "drifts",
+      "pattern_label": "Naturalistic drifts",
+      "grain": "medium",
       "lattice": "hexagonal",
       "spacing_m": 0.34,
       "spacing_rule": "0.65 × the mean claimed mature spread of the ground species (0.53 m)",
@@ -4221,13 +4246,17 @@
        "uncertain",
        "uncertain"
       ],
-      "jitter": 0.35,
       "species": [
        "plant:arctostaphylos-uva-ursi",
        "plant:gaultheria-shallon"
       ],
-      "drift_field": "value noise",
       "seed": 42,
+      "variation": 0,
+      "jitter": 0.35,
+      "drift_field": "value noise",
+      "drift_cell_m": 1.4,
+      "pattern_rule": "a jittered lattice (0.35 × spacing); the species follow a drift field with cells of 1.4 m (heuristic)",
+      "random": true,
       "placed": 2
      },
      "plant_ids": [
@@ -4346,7 +4375,7 @@
      ]
     },
     {
-     "id": "zone-open-open-69te4-bed-1",
+     "id": "zone-open-open-z9p4-bed-1",
      "bed_id": "bed-1",
      "kind": "open",
      "label": "open (open centre)",
@@ -4396,7 +4425,7 @@
      "priority": 2
     },
     {
-     "id": "zone-open-open-69te4-bed-2",
+     "id": "zone-open-open-z9p4-bed-2",
      "bed_id": "bed-2",
      "kind": "open",
      "label": "open (open centre)",
@@ -4446,7 +4475,7 @@
      "priority": 2
     },
     {
-     "id": "zone-open-open-69te4-bed-3",
+     "id": "zone-open-open-z9p4-bed-3",
      "bed_id": "bed-3",
      "kind": "open",
      "label": "open (open centre)",
@@ -4496,7 +4525,7 @@
      "priority": 2
     },
     {
-     "id": "zone-open-open-69te4-bed-4",
+     "id": "zone-open-open-z9p4-bed-4",
      "bed_id": "bed-4",
      "kind": "open",
      "label": "open (open centre)",
@@ -6466,6 +6495,8 @@
       "plants": 7,
       "expected_count": 6,
       "spacing_m": 0.51,
+      "pattern": "drifts",
+      "patches": null,
       "reasons": [],
       "verified_performance": false,
       "note": "geometric estimate: share of the plantable bed area under the mature crowns of the ground layer (claimed spreads, each point counted once). Not the cover a planting actually reaches, and not weed suppression."
@@ -6482,6 +6513,8 @@
       "plants": 19,
       "expected_count": 24,
       "spacing_m": 0.34,
+      "pattern": "drifts",
+      "patches": null,
       "reasons": [],
       "verified_performance": false,
       "note": "geometric estimate: share of the plantable bed area under the mature crowns of the ground layer (claimed spreads, each point counted once). Not the cover a planting actually reaches, and not weed suppression."
@@ -6498,6 +6531,8 @@
       "plants": 6,
       "expected_count": 23,
       "spacing_m": 0.34,
+      "pattern": "drifts",
+      "patches": null,
       "reasons": [],
       "verified_performance": false,
       "note": "geometric estimate: share of the plantable bed area under the mature crowns of the ground layer (claimed spreads, each point counted once). Not the cover a planting actually reaches, and not weed suppression."
@@ -6514,6 +6549,8 @@
       "plants": 2,
       "expected_count": 12,
       "spacing_m": 0.34,
+      "pattern": "drifts",
+      "patches": null,
       "reasons": [],
       "verified_performance": false,
       "note": "geometric estimate: share of the plantable bed area under the mature crowns of the ground layer (claimed spreads, each point counted once). Not the cover a planting actually reaches, and not weed suppression."
@@ -6533,7 +6570,7 @@
     ],
     "open_zones": [
      {
-      "id": "open-69te4",
+      "id": "open-z9p4",
       "area_m2": 3.84,
       "plants_inside": 0
      }
@@ -6612,6 +6649,24 @@
       "source": "heuristic",
       "note": "breaks the lattice into drifts"
      },
+     "rhythm_band": {
+      "value": 2,
+      "unit": "× spacing: length of one species band along the bed (medium grain; bold 4, fine 1)",
+      "source": "heuristic",
+      "note": "a composition choice, not a horticultural rule"
+     },
+     "patch_radius": {
+      "value": 1.7,
+      "unit": "× spacing: radius of one patch (medium grain; bold 2.4, fine 1.15)",
+      "source": "heuristic",
+      "note": "a composition choice, not a horticultural rule"
+     },
+     "patch_gap": {
+      "value": 1.1,
+      "unit": "× spacing of open ground between two patches",
+      "source": "heuristic",
+      "note": "the ground between patches is left unplanted on purpose; the cover estimate counts it as uncovered"
+     },
      "tree_keepout": {
       "value": 0.6,
       "unit": "× existing canopy radius kept free around the trunk",
@@ -6636,9 +6691,35 @@
      }
     }
    },
-   "id": "v-6ar07",
-   "created": "2026-11-14T20:48:13.868Z",
-   "parent_version_id": null
+   "id": "v-102j7",
+   "created": "2026-11-14T21:34:06.747Z",
+   "parent_version_id": null,
+   "bed_arrangements": {
+    "bed-1": {
+     "name": "North bed",
+     "arrangement": "single row + naturalistic drifts",
+     "plants": 14,
+     "composition": null
+    },
+    "bed-2": {
+     "name": "East bed",
+     "arrangement": "naturalistic drifts",
+     "plants": 19,
+     "composition": null
+    },
+    "bed-3": {
+     "name": "West bed",
+     "arrangement": "naturalistic drifts",
+     "plants": 6,
+     "composition": null
+    },
+    "bed-4": {
+     "name": "Tree island",
+     "arrangement": "naturalistic drifts",
+     "plants": 2,
+     "composition": null
+    }
+   }
   },
   {
    "label": "geometry update: North bed",
@@ -7977,6 +8058,9 @@
      "role": "ground",
      "operator": "fill_drift",
      "params": {
+      "pattern": "drifts",
+      "pattern_label": "Naturalistic drifts",
+      "grain": "medium",
       "lattice": "hexagonal",
       "spacing_m": 0.34,
       "spacing_rule": "0.65 × the mean claimed mature spread of the ground species (0.53 m)",
@@ -7990,13 +8074,17 @@
        "uncertain",
        "uncertain"
       ],
-      "jitter": 0.35,
       "species": [
        "plant:arctostaphylos-uva-ursi",
        "plant:gaultheria-shallon"
       ],
-      "drift_field": "value noise",
       "seed": 42,
+      "variation": 0,
+      "jitter": 0.35,
+      "drift_field": "value noise",
+      "drift_cell_m": 1.4,
+      "pattern_rule": "a jittered lattice (0.35 × spacing); the species follow a drift field with cells of 1.4 m (heuristic)",
+      "random": true,
       "placed": 19
      },
      "plant_ids": [
@@ -8047,6 +8135,9 @@
      "role": "ground",
      "operator": "fill_drift",
      "params": {
+      "pattern": "drifts",
+      "pattern_label": "Naturalistic drifts",
+      "grain": "medium",
       "lattice": "hexagonal",
       "spacing_m": 0.34,
       "spacing_rule": "0.65 × the mean claimed mature spread of the ground species (0.53 m)",
@@ -8060,13 +8151,17 @@
        "uncertain",
        "uncertain"
       ],
-      "jitter": 0.35,
       "species": [
        "plant:arctostaphylos-uva-ursi",
        "plant:gaultheria-shallon"
       ],
-      "drift_field": "value noise",
       "seed": 42,
+      "variation": 0,
+      "jitter": 0.35,
+      "drift_field": "value noise",
+      "drift_cell_m": 1.4,
+      "pattern_rule": "a jittered lattice (0.35 × spacing); the species follow a drift field with cells of 1.4 m (heuristic)",
+      "random": true,
       "placed": 6
      },
      "plant_ids": [
@@ -8103,6 +8198,9 @@
      "role": "ground",
      "operator": "fill_drift",
      "params": {
+      "pattern": "drifts",
+      "pattern_label": "Naturalistic drifts",
+      "grain": "medium",
       "lattice": "hexagonal",
       "spacing_m": 0.34,
       "spacing_rule": "0.65 × the mean claimed mature spread of the ground species (0.53 m)",
@@ -8116,13 +8214,17 @@
        "uncertain",
        "uncertain"
       ],
-      "jitter": 0.35,
       "species": [
        "plant:arctostaphylos-uva-ursi",
        "plant:gaultheria-shallon"
       ],
-      "drift_field": "value noise",
       "seed": 42,
+      "variation": 0,
+      "jitter": 0.35,
+      "drift_field": "value noise",
+      "drift_cell_m": 1.4,
+      "pattern_rule": "a jittered lattice (0.35 × spacing); the species follow a drift field with cells of 1.4 m (heuristic)",
+      "random": true,
       "placed": 2
      },
      "plant_ids": [
@@ -8242,6 +8344,9 @@
      "role": "ground",
      "operator": "fill_drift",
      "params": {
+      "pattern": "drifts",
+      "pattern_label": "Naturalistic drifts",
+      "grain": "medium",
       "lattice": "hexagonal",
       "spacing_m": 0.51,
       "spacing_rule": "0.65 × the mean claimed mature spread of the ground species (0.78 m)",
@@ -8255,13 +8360,17 @@
        "uncertain",
        "uncertain"
       ],
-      "jitter": 0.35,
       "species": [
        "plant:arctostaphylos-uva-ursi",
        "plant:polystichum-munitum"
       ],
-      "drift_field": "value noise",
       "seed": 42,
+      "variation": 0,
+      "jitter": 0.35,
+      "drift_field": "value noise",
+      "drift_cell_m": 1.4,
+      "pattern_rule": "a jittered lattice (0.35 × spacing); the species follow a drift field with cells of 1.4 m (heuristic)",
+      "random": true,
       "placed": 4
      },
      "plant_ids": [
@@ -8291,7 +8400,7 @@
    ],
    "zones": [
     {
-     "id": "zone-open-open-69te4-bed-2",
+     "id": "zone-open-open-z9p4-bed-2",
      "bed_id": "bed-2",
      "kind": "open",
      "label": "open (open centre)",
@@ -8341,7 +8450,7 @@
      "priority": 2
     },
     {
-     "id": "zone-open-open-69te4-bed-3",
+     "id": "zone-open-open-z9p4-bed-3",
      "bed_id": "bed-3",
      "kind": "open",
      "label": "open (open centre)",
@@ -8391,7 +8500,7 @@
      "priority": 2
     },
     {
-     "id": "zone-open-open-69te4-bed-4",
+     "id": "zone-open-open-z9p4-bed-4",
      "bed_id": "bed-4",
      "kind": "open",
      "label": "open (open centre)",
@@ -8564,7 +8673,7 @@
      ]
     },
     {
-     "id": "zone-open-open-69te4-bed-1",
+     "id": "zone-open-open-z9p4-bed-1",
      "bed_id": "bed-1",
      "kind": "open",
      "label": "open (open centre)",
@@ -10526,6 +10635,8 @@
       "plants": 19,
       "expected_count": 24,
       "spacing_m": 0.34,
+      "pattern": "drifts",
+      "patches": null,
       "reasons": [],
       "verified_performance": false,
       "note": "geometric estimate: share of the plantable bed area under the mature crowns of the ground layer (claimed spreads, each point counted once). Not the cover a planting actually reaches, and not weed suppression."
@@ -10542,6 +10653,8 @@
       "plants": 6,
       "expected_count": 23,
       "spacing_m": 0.34,
+      "pattern": "drifts",
+      "patches": null,
       "reasons": [],
       "verified_performance": false,
       "note": "geometric estimate: share of the plantable bed area under the mature crowns of the ground layer (claimed spreads, each point counted once). Not the cover a planting actually reaches, and not weed suppression."
@@ -10558,6 +10671,8 @@
       "plants": 2,
       "expected_count": 12,
       "spacing_m": 0.34,
+      "pattern": "drifts",
+      "patches": null,
       "reasons": [],
       "verified_performance": false,
       "note": "geometric estimate: share of the plantable bed area under the mature crowns of the ground layer (claimed spreads, each point counted once). Not the cover a planting actually reaches, and not weed suppression."
@@ -10574,6 +10689,8 @@
       "plants": 4,
       "expected_count": 11,
       "spacing_m": 0.51,
+      "pattern": "drifts",
+      "patches": null,
       "reasons": [],
       "verified_performance": false,
       "note": "geometric estimate: share of the plantable bed area under the mature crowns of the ground layer (claimed spreads, each point counted once). Not the cover a planting actually reaches, and not weed suppression."
@@ -10593,7 +10710,7 @@
     ],
     "open_zones": [
      {
-      "id": "open-69te4",
+      "id": "open-z9p4",
       "area_m2": 3.84,
       "plants_inside": 0
      }
@@ -10672,6 +10789,24 @@
       "source": "heuristic",
       "note": "breaks the lattice into drifts"
      },
+     "rhythm_band": {
+      "value": 2,
+      "unit": "× spacing: length of one species band along the bed (medium grain; bold 4, fine 1)",
+      "source": "heuristic",
+      "note": "a composition choice, not a horticultural rule"
+     },
+     "patch_radius": {
+      "value": 1.7,
+      "unit": "× spacing: radius of one patch (medium grain; bold 2.4, fine 1.15)",
+      "source": "heuristic",
+      "note": "a composition choice, not a horticultural rule"
+     },
+     "patch_gap": {
+      "value": 1.1,
+      "unit": "× spacing of open ground between two patches",
+      "source": "heuristic",
+      "note": "the ground between patches is left unplanted on purpose; the cover estimate counts it as uncovered"
+     },
      "tree_keepout": {
       "value": 0.6,
       "unit": "× existing canopy radius kept free around the trunk",
@@ -10696,12 +10831,12 @@
      }
     }
    },
-   "id": "v-6bjtd",
-   "created": "2026-11-14T20:48:14.905Z",
-   "parent_version_id": "v-6ar07"
+   "id": "v-1144d",
+   "created": "2026-11-14T21:34:08.100Z",
+   "parent_version_id": "v-102j7"
   }
  ],
- "current_version_id": "v-6bjtd",
+ "current_version_id": "v-1144d",
  "redo": [],
  "plant_seq": 52,
  "ui": {
@@ -10716,5 +10851,5 @@
   "entry": {},
   "geometry_ack": "[[\"bed-1\",\"[[[0,3.1],[2.99,3.1],[3,3],[2.96,2.67],[2.94,2.6],[5.2,2.6],[5.2,3.1],[6,3.1],[6,4],[0,4]],[],[[\\\"z:screen\\\",\\\"north-edge\\\"],[\\\"z:ground_cover\\\",\\\"bed-interior\\\"]]]\"],[\"bed-2\",\"[[[5.2,0],[6,0],[6,3.1],[5.2,3.1]],[],[[\\\"z:ground_cover\\\",\\\"east-edge\\\"]]]\"],[\"bed-3\",\"[[[0,0],[0.8,0],[0.8,3.1],[0,3.1]],[],[[\\\"z:ground_cover\\\",\\\"west-edge\\\"]]]\"],[\"bed-4\",\"[[[0.8,1.68],[0.85,1.65],[1.17,1.54],[1.5,1.5],[1.8,1.53],[1.8,2.2],[2.76,2.2],[2.85,2.35],[2.96,2.67],[3,3],[2.99,3.1],[0.8,3.1]],[],[[\\\"z:ground_cover\\\",\\\"bed-interior\\\"]]]\"]]"
  },
- "updated": "2026-11-14T13:48:23"
+ "updated": "2026-11-14T14:34:17"
 }
