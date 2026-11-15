@@ -1,6 +1,6 @@
 # Explorer tests — 2026-11-14
 
-`tools/explorer_tests.py` on `brain/data/explorer.json` (2026-11-13, tools/build_explorer.py) against kg.json (2026-11-13), xyz.json (2026-11-13), relations.json (2026-11-02) and plants/*.json. **29/29 pass.** Browser: headless Chrome at http://localhost:8766/brain/explorer/.
+`tools/explorer_tests.py` on `brain/data/explorer.json` (2026-11-13, tools/build_explorer.py) against kg.json (2026-11-13), xyz.json (2026-11-13), relations.json (2026-11-02) and plants/*.json. **35/35 pass.** Browser: headless Chrome at http://localhost:8766/brain/explorer/.
 
 | test | result | detail |
 |---|---|---|
@@ -27,12 +27,18 @@
 | H2 not-recorded cells are absent from the file (the interface says 'not recorded'; nothing is written for them) | pass | 40 not recorded |
 | I1 the interface names no plant, function or concept id | pass | [] |
 | J1 statistics match the file | pass | {"species": 10, "functions": 5, "function_links": 50, "attribute_cells": 230, "relations": 41, "pairs": 45, "claims": 501} |
-| K1 Screen focus: graph shows the linked species, unknown ghosts and required traits; matrix column and table columns marked | pass | species 5 · ghosts 5 · concepts 4 · column Screen · required columns ['Height bands', 'Habit', 'Leaf retention'] · first row Acer palmatum |
-| K2 matrix cell → evidence: inspector shows the use claim, the rule and the requirement check; the graph line is selected | pass | 152383 bytes |
+| K0 no focus: the start screen — search, every function and species as a way in, three questions; no graph is drawn | pass | function rows 5 · species rows 10 |
+| K1 Screen focus: the graph shows the function and its linked species only; the layers are offered, none is on; the inspector holds the function record | pass | {'species': 5, 'ghost_species': 0, 'functions': 1, 'concepts': 0} |
+| K1b layers added on purpose: required traits and the species without a link (ghosts, no line) | pass | {'species': 5, 'ghost_species': 5, 'functions': 1, 'concepts': 4} |
+| K1c the same focus in the matrix: its column is marked, one cell per species, and no other view is in the page | pass | column Screen |
+| K1d the same focus in the table: the columns the function requires are marked and a linked species comes first | pass | required columns ['Height bands', 'Habit', 'Leaf retention'] · first row Acer palmatum |
+| K2 link → evidence: inspector shows the use claim, the rule and the requirement check; the graph line is selected; the trace into a design is offered | pass | 55524 bytes |
 | K3 unknown cell → honest 'not established': verdict, missing requirements, contrary claims | pass |  |
-| K4 A/B compare: four sections; the pair's two live direct records and the retired history are listed | pass | [('1', 'Shared attributes '), ('2', 'Direct recorded relationships '), ('3', 'Potential spatial complementarity '), ('4', 'Evidence and unknowns')] |
-| K5 A/B compare with no record: the absence is stated, not filled | pass |  |
-| K6 pair in the graph: both species, a typed relation line, no line from shared traits alone | pass |  |
+| K4 A/B compare (V1 link, tab=compare): the four sections in order; the pair's two live direct records and the retired history are listed | pass | ['shared_attributes', 'direct_relations', 'spatial_complementarity', 'evidence_unknowns'] |
+| K5 A/B compare with no record: the absence is stated, not filled; nothing biological is inferred | pass |  |
+| K6 pair in the graph (V1 link): both species, a typed relation line, no line from shared traits alone | pass |  |
+| K7 species focus: its linked functions only; one knowledge group, the relation records and the functions without a link are added on request | pass | default {'species': 1, 'ghost_species': 0, 'functions': 3, 'concepts': 0} · expanded {'species': 7, 'ghost_species': 0, 'functions': 5, 'concepts': 13} · group y:environment has 13 concepts |
+| K8 a V1 deep link to one attribute cell opens the graph with the cell's claims in the inspector and the way back to the species | pass | attr:plant:gaultheria-shallon:exposure |
 
 ## Counts
 

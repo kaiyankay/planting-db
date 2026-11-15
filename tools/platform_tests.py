@@ -161,7 +161,7 @@ else:
         okf, det = True, []
         for s in ex["species"]:
             dom = chrome(P2, f"/knowledge/#species={s['slug']}", 9000); l = next(x for x in ex["function_links"] if x["species"] == s["id"] and x["function"] == "z:screen"); src = text(first(dom, r'<section class="pi-sec kn-step" id="kn-sources"[^>]*>(.*?)</section>') or "")
-            ok = len(re.findall(r'<section class="pi-sec kn-step"', dom)) == 6 and f'<span class="id">{html.escape(l["id"], quote=False)}</span>' in dom and f'aria-pressed="true" href="#species={s["slug"]}"' in dom and (("No source states that" in src) == (not l["use_claims"])) and "Could not load" not in dom
+            ok = len(re.findall(r'<section class="pi-sec kn-step"', dom)) == 6 and f'<span class="id">{html.escape(l["id"], quote=False)}</span>' in dom and f'aria-pressed="true" href="#species={s["slug"]}"' in dom and (("No source states that" in src) == (not l.get("use_claims"))) and "Could not load" not in dom
             okf &= ok; det.append(f"{s['slug']}{'' if ok else '  ✗'}")
         check("K6 every species can be followed; one without a recorded use is shown as an explicit unknown, never with an invented source", okf, " ".join(det))
 

@@ -1,6 +1,6 @@
 # Design workspace tests — 2026-11-14
 
-`tools/design_tests.py` against http://localhost:8770 (headless Chrome). **199/199 pass.**
+`tools/design_tests.py` against http://127.0.0.1:8768 (headless Chrome). **199/199 pass.**
 
 | test | result | detail |
 |---|---|---|
@@ -16,7 +16,7 @@
 | T·C3 text-only "right side" → direction scope with a polygon; reduce_density + preserve screen | pass | "right side" read relative to the plan as drawn (north up); the region is the outer third of the bed on that side · amount 0.25 |
 | T·C4 "here" with a drawn selection → selection scope | pass | "here" → the drawn selection |
 | T·C5 contradictory request is refused, not silently applied | pass | filling the open zone with tall plants contradicts the open-space constraint; no change is made without an explicit override |
-| T·C6 "move the taller plants away from the tree" → move_away with a resolved feature | pass | {"type":"move_away","filter":"taller","feature_id":"tree-57i1","phrase":"tree","resolved":true} |
+| T·C6 "move the taller plants away from the tree" → move_away with a resolved feature | pass | {"type":"move_away","filter":"taller","feature_id":"tree-kd8m1","phrase":"tree","resolved":true} |
 | T·C7 overclaim classified | pass |  |
 | T·D1 every plant object has a stable id, a species from the database, a position inside the accepted bed | pass | 31 plants |
 | T·D2 no plant inside the no-plant zone, none under the locked tree | pass |  |
@@ -200,6 +200,6 @@
 | W8 Demo B: no dimensions → a concept sketch, not to scale; the tree waits beside the plan, no size is pre-filled, Compose is closed | pass | {"mark": "Sketch from your words \u2014 not to scale, no sizes", "tray": 1, "size_fields": ["", ""]} |
 | W9 the user places the tree and gives the size: the same workspace now holds a scaled model with layout options, the tree where it was placed | pass | [["7 m", "5 m"], 3, [{"kind": "existing-tree", "status": "user-drawn", "at": [1.94, 3.4]}]] |
 | W10 Demo B continues to Compose and Grow: Confirm model accepts the suggested beds as drawn, Compose opens on the function plan, Generate places exactly what Compose showed | pass | 0 suggested → 89 plants |
-| S1 design server reachable; designs saved to designs/ | pass | llm: ANTHROPIC_API_KEY not set — offline rule parser in use · designs ['demo-a', 'demo-b', 'demo-backyard', 'proj-1050', 'proj-10wc0', 'proj-11r30', 'proj-13x0', 'proj-13xa0', 'proj-14870', 'proj-15b50', 'proj-166r0', 'proj-16pq0', 'proj-171n0', 'proj-17bg0', 'proj-17jw0', 'proj-17y40', 'proj-18zl0', 'proj-1c4p0', 'proj-1c6d0', 'proj-1clp0', 'proj-1clp1', 'proj-1clr0', 'proj-1dlv0', 'proj-1efj0', 'proj-1f2q0', 'proj-1fb60', 'proj-1g2l0', 'proj-1g300', 'proj-1geo0', 'proj-1gp00', 'proj-1icy0', 'p |
-| S2 saved project: versions chain by parent id; current version's schedule equals its plant objects | pass | studiob: 1 versions · current v-1lqg9 · 89 plants |
+| S1 design server reachable; designs saved to designs/ | pass | llm: ANTHROPIC_API_KEY not set — offline rule parser in use · designs ['demo-a', 'demo-b', 'demo-backyard', 'proj-1050', 'proj-10wc0', 'proj-11r30', 'proj-13ta0', 'proj-13x0', 'proj-13xa0', 'proj-14870', 'proj-15b50', 'proj-166r0', 'proj-16pq0', 'proj-171n0', 'proj-17bg0', 'proj-17jw0', 'proj-17y40', 'proj-18zl0', 'proj-1c4p0', 'proj-1c6d0', 'proj-1clp0', 'proj-1clp1', 'proj-1clr0', 'proj-1dlv0', 'proj-1dtv0', 'proj-1efj0', 'proj-1f2q0', 'proj-1fb60', 'proj-1g2l0', 'proj-1g300', 'proj-1geo0', 'p |
+| S2 saved project: versions chain by parent id; current version's schedule equals its plant objects | pass | studiob: 1 versions · current v-2mqm9 · 89 plants |
 | S3 saved project: every plant inside its bed polygon (file, not UI) | pass |  |
