@@ -53,6 +53,17 @@ Storage stays where it is (`plants/*.json`, `relations.json`, `ontology.json`); 
 
 One state drives everything: focusing **Screen** draws its graph, marks the matrix column, marks the table's required columns and sorts the linked species first — whichever of these is open, and switching the view keeps the selection; clicking a matrix cell opens its evidence, and the same line is selected when the graph is opened; setting A and B fills the comparison and rings the two species wherever they appear.
 
+Refinements after the 2026-11-14 critique (V3): a focus or view change is a step in the browser history (Back returns to the previous
+focus or view inside the Explorer; opening a record or a layer is not a step), a crumb before the focus leads back to the previous
+focus, and the layers opened around a record are kept for when the focus returns to it. In the graph the focus is the darkest mark
+with a ring, inner rings are turned into the gaps between the lines to the outer rings, a name stands on the far side of its node,
+and a key on the canvas lists only the line styles that are drawn (conflict in rust included). Closing the evidence panel keeps the
+drawing where it was and leaves a *Show evidence* button. A link's standing is said in words: *no link: contradicted by a recorded
+trait* / *no link: evidence missing*, *unverified · 1 claim*, *no claim to verify*; counts read "N without a link". The matrix keeps
+all five functions on screen beside the open panel at 1280 px (common name under the scientific name, sticky species column). The
+table hides the identity columns by default, tints the focused row, and marks the row and column header of the selected cell. In
+the comparison A is solid olive and B an ink outline: caramel stays the mark of candidate and unverified.
+
 ## What is never done here
 
 No value is averaged or picked as 'best'. No plant-to-plant line is drawn from shared traits (M43). No unknown function link is drawn. No candidate is promoted; no claim status changes; the AI assessment is shown beside, never instead of, verification. Retired relations are listed as history and never become live. The interface files name no plant, concept or function id (Test I).

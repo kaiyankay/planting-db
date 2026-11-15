@@ -49,3 +49,10 @@ a.btn { text-decoration: none; }
 .whyx { position: absolute; right: -4px; top: 6px; width: 28px; height: 28px; border-radius: 6px; font-size: 18px; line-height: 1; color: var(--ink-3); } .whyx:hover { background: var(--paper-2); color: var(--ink); }
 .whybox .pi-why-go { font-size: 13px; }
 #plantcard .pi-why dl > div, #cws-evidence .pi-why dl > div { grid-template-columns: 98px minmax(0, 1fr); }   /* the inspector's own measure: the longest label is "Arrangement" */
+
+/* ---- one mark per meaning, as on the platform (DESIGN.md Tags): verified is a filled tag, unverified its caramel twin; a failed fit is
+   rust, never the dotted grey that means unknown; a fit word never touches its own border */
+.tag.verified { background: var(--pi-olive-soft); border-color: transparent; color: var(--pi-olive-deep); } .tag.unverified { background: var(--pi-caramel-soft); border-color: transparent; color: var(--pi-caramel-ink); }
+.fit.fails { border-style: solid; border-color: var(--pi-rust); color: var(--pi-rust); background: none; } .pick .pn2 .fit { padding: 1px 7px; flex: none; }
+/* Compose status bar: below 1500 px the legend gives its room to the state of the plan, which is never cut */
+@media (max-width: 1500px) { .ws-compose .ws-status .canvas-foot .lg { display: none; } }

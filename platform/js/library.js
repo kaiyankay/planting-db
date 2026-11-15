@@ -52,12 +52,12 @@ function renderAtlas() {
       <span class="lib-fl">Growth form</span>
       <a class="pi-chip" role="button" aria-pressed="${!S.form}" href="${href(null, S.fn)}">All<small>${d.species.length}</small></a>
       ${forms.map(f => `<a class="pi-chip" role="button" aria-pressed="${S.form === f}" href="${href(S.form === f ? null : f, S.fn)}">${esc(f)}<small>${nForm(f)}</small></a>`).join('')}
-      <span class="lib-gap"></span><span class="lib-fl">Recorded for</span>
+      <span class="lib-gap"></span><span class="lib-fl">Linked to</span>
       ${d.functions.map(f => `<a class="pi-chip" role="button" aria-pressed="${S.fn === f.id}" href="${href(S.form, S.fn === f.id ? null : f.id)}" title="${esc(f.definition)}">${esc(f.label)}<small>${linked(f.id).length}</small></a>`).join('')}
       <span class="lib-count">${show.length} of ${d.species.length} shown</span>
     </div>
     ${des ? `<p class="lib-design"><span>Your design <b>${esc(des.name)}</b> is at ${esc(des.stage_label)}${des.plants ? `, with ${des.plants} plants of ${des.planted_species.length} species` : ''}.</span>${cons.size ? `<span>${cons.size} species being considered.</span>` : ''}<a href="${PI.links.design()}">${esc(PI.returnLabel(des))}</a></p>` : ''}
-    <div class="lib-grid">${show.map(s => PC.cardHtml(d, s.id, S.imgs, { symbol: symbolOf(s.id), note: note(s) })).join('') || `<p class="lib-empty">No species in this snapshot is both ${esc(S.form || '')} and recorded for ${esc(d.functions.find(f => f.id === S.fn)?.label || '')}. That is a gap in the records, not a statement about the plants. <a href="#">Show all</a></p>`}</div>
+    <div class="lib-grid">${show.map(s => PC.cardHtml(d, s.id, S.imgs, { symbol: symbolOf(s.id), note: note(s) })).join('') || `<p class="lib-empty">No species in this snapshot is both ${esc(S.form || '')} and linked to ${esc(d.functions.find(f => f.id === S.fn)?.label || '')}. That is a gap in the records, not a statement about the plants. <a href="#">Show all</a></p>`}</div>
     ${S.imgs?.art && Object.keys(S.imgs.art).length ? `<p class="lib-art">The illustrations are AI-generated editorial artwork. They are not botanical plates and not evidence; every name and fact on these pages is read from the knowledge snapshot. Each profile also shows a credited reference photograph.</p>` : ''}`;
 }
 
@@ -67,7 +67,7 @@ function studioHtml(s) {
   let mine = '';
   if (des?.planted_species.includes(s.id)) mine = `<p class="pi-studio-d">In your design <b>${esc(des.name)}</b> this species is planted. <a href="${PI.links.design()}">${esc(PI.returnLabel(des))}</a></p>`;
   return `<div class="pi-studio"><svg viewBox="-1.25 -1.25 2.5 2.5" role="img" aria-label="the plan symbol of ${esc(s.scientific_name)}"><g>${symbolOf(s.id) || ''}</g></svg>
-    <div><ul>${Object.entries(f.basis).map(([k, v]) => `<li><b>${esc(k.replace(/_/g, ' ').replace(/^./, c => c.toUpperCase()))}</b> ${esc(v)}</li>`).join('')}
+    <div><ul>${Object.entries(f.basis).map(([k, v]) => `<li><b>${esc(k.replace(/_/g, ' ').replace(/^./, c => c.toUpperCase()))}</b> ${esc(String(v).toLowerCase().startsWith(k.replace(/_/g, ' ') + ' ') ? String(v).slice(k.length + 1) : v)}</li>`).join('')}
       <li><b>Size used on the plan</b> crown ${p.radius_m * 2} m across${p.spread.claim ? ` from <span class="pi-src">${esc(p.spread.claim)}</span>` : ''}${p.spread.alternatives ? `, one of ${p.spread.alternatives + 1} claimed ranges` : ''}${p.height_m != null ? `; height about ${p.height_m} m` : '; height unknown'}. A proxy chosen from the claims, never a measurement.</li></ul>
       <p class="pi-studio-n">Whether it is planted is decided bed by bed in Compose: the bed's light, water and soil are checked against the recorded requirements above, then the function's own requirements (for a Screen: target height, year-round cover, room for a row). A species that fails a check is not planted, whoever asked for it.</p>${mine}</div></div>`;
 }

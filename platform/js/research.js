@@ -16,6 +16,7 @@ const KIND_CLS = { attribute: 'v', selection_reason: 's', observation: 'p', warn
   try {
     const d = await PI.loadSnapshot(); PI.mountTop($('#top'), { active: 'knowledge', section: 'research', snapshot: d }); $('#foot').innerHTML = PI.footHtml(d);
     $('#app').innerHTML = html(d); window.research = { d };
+    const cap = $('#rs-cap'), say = ev => { const t = ev.target.closest('.rs-grid td [title]'); if (t && cap) cap.textContent = t.title; }; $('.rs-grid')?.addEventListener('mouseover', say); $('.rs-grid')?.addEventListener('focusin', say);
     if (location.hash.length > 1) document.getElementById(location.hash.slice(1))?.scrollIntoView();
   } catch (e) { $('#app').innerHTML = `<p class="pi-loading">Could not load the knowledge snapshot: ${esc(e.message)}</p>`; console.error(e); }
 })();
@@ -30,7 +31,7 @@ function html(d) {
   const cells = st.attribute_cells + st.cells_not_recorded; const AT = new Map(d.attributes.map(a => [`${a.species}|${a.facet}`, a]));
   const groups = d.groups.map(g => ({ g, facets: d.facets.filter(f => f.group === g.id) }));
   const grid = `<div class="rs-grid-w"><table class="rs-grid" aria-label="Coverage of ${d.facets.length} fields for ${d.species.length} species"><thead><tr><th></th>${groups.map(x => `<th colspan="${x.facets.length}">${esc(x.g.label)}</th>`).join('')}</tr></thead><tbody>${d.species.map(s => `<tr><th><a href="${esc(PI.links.profile(s.id))}"><i>${esc(s.scientific_name)}</i></a></th>${groups.map(x => x.facets.map((f, i) => { const a = AT.get(`${s.id}|${f.id}`); const cls = !a ? 'no' : a.disagreement.length ? 'dis' : 'rec'; const t = `${s.scientific_name} · ${f.label}: ${!a ? 'not recorded' : `${plural(a.n_claims, 'claim')} from ${plural(a.n_sources, 'source')}${a.disagreement.length ? ', sources disagree' : ''}`}`; return `<td class="${i === 0 ? 'g ' : ''}">${a ? `<a class="${cls}" href="${esc(PI.links.explorer(s.id, { kind: 'attr', id: a.id }, 'table'))}" title="${esc(t)}" aria-label="${esc(t)}"></a>` : `<span class="${cls}" title="${esc(t)}"></span>`}</td>`; }).join('')).join('')}</tr>`).join('')}</tbody></table></div>
-    <p class="pi-key"><span><i class="v"></i>recorded</span><span><i class="p"></i>recorded, sources disagree</span><span><i class="n"></i>not recorded</span><span class="rs-key-n">one square per field; a recorded square opens its claims</span></p>`;
+    <p class="pi-key"><span><i class="v"></i>recorded</span><span><i class="p"></i>recorded, sources disagree</span><span><i class="n"></i>not recorded</span><span class="rs-key-n">one square per field; a recorded square opens its claims</span></p><p class="rs-cap" id="rs-cap" aria-live="polite">Point at a square to read its species and field.</p>`;
   const thin = d.facets.filter(f => f.n_species < d.species.length).sort((a, b) => a.n_species - b.n_species).slice(0, 5);
   const L = st.links_by_status; const lk = l => `<a href="${esc(PI.links.explorer(l.species, { kind: 'link', id: l.id }, 'matrix'))}"><i>${esc(SP.get(l.species).scientific_name)}</i> → ${esc(FN.get(l.function).label)}</a>`;
   const conf = d.function_links.filter(l => l.conflict);
@@ -45,7 +46,7 @@ function html(d) {
 
   <section class="pi-sec" id="why"><h2>Why practitioner knowledge</h2><p class="pi-sec-l">The two kinds of source record different things.</p>
     <div><p>A published database tells you a mature height or a hardiness zone. It rarely tells you why a designer reaches for a plant, or how it behaved in a real garden here. Those are the things a planting decision turns on, and they live with practitioners.</p>
-    <div class="rs-kinds">${kindRow('claims from published databases and open data', pub)}${kindRow(`claims from ${plural(practSources, 'practitioner')}, about ${practPlants} of ${st.species} species`, pract)}</div>
+    <div class="rs-kinds">${kindRow('claims from published databases and open data', pub)}${kindRow(`claims from ${practSources} of the ${Object.values(d.sources).filter(x => x.type === 'practitioner').length} anonymous respondents cited in this release, about ${practPlants} of ${st.species} species`, pract)}</div>
     <p>The practitioner claims are few. They are kept apart from published data, with an anonymous source id, and they are the only records of their kind in the release.</p></div></section>
 
   <section class="pi-sec" id="survey"><h2>What the survey asks</h2><p class="pi-sec-l">Fifteen questions for designers, horticulturists, students and gardeners.</p>
@@ -76,7 +77,7 @@ function html(d) {
     ${grid}
     <p>Least recorded: ${thin.map(f => `${esc(f.label.toLowerCase())} (${f.n_species} of ${st.species})`).join(', ')}.</p>
     <h3 class="pi-h3">Plants and spatial functions</h3>
-    <p>Of ${st.function_links} possible links between a species and a spatial function, ${L.derived || 0} are ${tag('derived')} from a use a source records, ${L.candidate || 0} are ${tag('candidate')} links inferred from traits, and ${L.unknown || 0} are ${tag('unknown')}.</p>
+    <p>Of ${st.function_links} possible links between a species and a spatial function, ${L.derived || 0} are ${tag('derived')} from a use a source records, ${L.candidate || 0} are ${tag('candidate')} links inferred from traits, and <span class="rs-nw">${L.unknown || 0} have ${tag('unknown', 'no link')}</span>: ${st.unknown_by_verdict?.['contradicted by traits'] || 0} because a recorded trait is outside what the function needs, ${st.unknown_by_verdict?.['evidence missing'] || 0} because a needed claim is missing.</p>
     <span class="pi-split rs-links"><i class="v" style="flex:${L.derived || 0}"></i><i class="p" style="flex:${L.candidate || 0}"></i><i class="n" style="flex:${L.unknown || 0}"></i></span>
     ${conf.length ? `<p>${plural(conf.length, 'link')} ${conf.length === 1 ? 'is' : 'are'} in conflict: a source records the use and a recorded trait contradicts it. Both are kept and shown. ${conf.map(lk).join(' · ')}</p>` : ''}
     ${st.relations_with_missing_claims?.length ? `<p class="pi-led-n">Open correction: ${plural(st.relations_with_missing_claims.length, 'plant-to-plant record')} cites a claim that is not in the database. It is flagged in the release and listed for correction.</p>` : ''}

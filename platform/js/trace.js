@@ -32,10 +32,15 @@ export const KIND = {
   engine: { label: 'Engine output', who: 'rule', says: 'What the planting engine computes for a bed: which species pass its checks, where the plants stand. A deterministic algorithm with stated spacing rules and a seed.' },
   evaluation: { label: 'Evaluation', who: 'estimate', says: 'The engine’s measurement of its own result on the model, from claimed sizes: met, uncertain, not met, or an estimate. Never a measured or verified performance.' },
 };
-const WHO = { source: 'named source', record: 'from records', person: 'person', ai: 'AI-assessed', rule: 'rule-based', you: 'you', estimate: 'estimate' };
+const WHO = { source: 'named source', respondent: 'anonymous respondent', record: 'from records', person: 'person', ai: 'AI-assessed', rule: 'rule-based', you: 'you', estimate: 'estimate' };
 export const who = k => `<span class="pi-who ${k}">${WHO[k]}</span>`;
-/** one row of the ledger: the kind of statement · the statement · where it comes from */
-export const row = (kind, body, prov = '') => `<div class="pi-led" data-kind="${kind}"><dt>${KIND[kind].label}</dt><dd>${body}</dd><dd class="pi-led-p">${who(KIND[kind].who)}${prov}</dd></div>`;
+/** one row of the ledger: the kind of statement · the statement · where it comes from. `by` names who or what made the statement;
+ *  pass null where nobody did — a row that records an absence carries no maker. */
+export const row = (kind, body, prov = '', by = KIND[kind].who) => `<div class="pi-led" data-kind="${kind}"><dt>${KIND[kind].label}</dt><dd>${body}</dd><dd class="pi-led-p">${by ? who(by) : ''}${prov}</dd></div>`;
+/** a record id set in mono, allowed to break after a colon and nowhere else */
+export const idHtml = id => `<span class="id">${esc(id).replace(/:/g, ':<wbr>')}</span>`;
+/** the engine's own sentences, tidied for reading: a claim id in brackets is dropped (the id is shown beside the row), "position(s)" is counted */
+export const tidy = t => String(t ?? '').replace(/\s*\((?:[a-z0-9-]+:[a-z_]+:[a-z0-9]+|no spread claim)\)/g, '').replace(/(\d+) position\(s\)/g, (m, n) => `${n} position${n === '1' ? '' : 's'}`);
 export const res = r => `<span class="pi-res ${esc(String(r).replace(/\s+/g, '_'))}">${esc(r)}</span>`;
 
 /** what became of one species in one bed for one function. The results are never folded into "not suitable": the first three passed
@@ -126,7 +131,7 @@ export function decide(c, fn, speciesId) {
     const all = (link?.requirements || []).filter(r => r.result !== 'met'); const unmet = all.some(r => r.strength === 'required') ? all.filter(r => r.strength === 'required') : all; const why = unmet.map(r => `${r.strength} ${r.alternative_labels.join(' or ')}${r.contrary?.length ? `: recorded ${[...new Set(r.contrary.map(x => x.target_label))].join(', ')}` : ': nothing recorded'}`).join('; ');
     return link?.verdict === 'evidence missing' ? { ...d, outcome: 'unknown', reason: `no source records it as ${label}, and a trait ${label} needs is not recorded${why ? ` (${why})` : ''}` } : { ...d, outcome: 'excluded', reason: `no source records it as ${label}, and a recorded trait is outside what ${label} needs${why ? ` (${why})` : ''}` };
   }
-  return { ...d, outcome: 'excluded', reason: failing.map(([k, v]) => v.detail.toLowerCase().startsWith(k.replace('_', ' ')) ? v.detail : `${k.replace('_', ' ')}: ${v.detail}`).join('; ') };
+  return { ...d, outcome: 'excluded', reason: failing.map(([k, v]) => tidy(v.detail)).join('; ') };
 }
 /** every species of the snapshot for this bed and function, in the order a reader needs: placed, in the mix, eligible, then the rest */
 export function decisions(c, fn) { const order = ['planted', 'not_placed', 'eligible', 'other_role', 'unknown', 'excluded', 'recorded_only', 'not_asked']; return c.K.species.map(s => decide(c, fn, s.id)).sort((a, b) => order.indexOf(a.outcome) - order.indexOf(b.outcome) || (a.rank < 0 ? 99 : a.rank) - (b.rank < 0 ? 99 : b.rank) || c.K.name(a.species).localeCompare(c.K.name(b.species))); }
@@ -204,7 +209,7 @@ export function why(c, fn, speciesId, { plant = null } = {}) {
   } else if (d.arranged && d.wanted && c.version) {
     const po = plant ? c.plants.find(o => o.id === plant) : null;
     if (fn === 'z:screen') { const pl = c.screen.plan; const ev = c.screen.evaluation;
-      lines.push(['Arrangement', pl ? `${po ? `This plant stands at ${po.position_m.join(', ')} m. ` : ''}${pl.rows === 1 ? 'One row' : `${pl.rows} rows`} along ${pl.edge_length_m} m: ${pl.expected[0] + pl.expected[1]} positions at ${pl.step_m} m, ${pl.placed[0] + pl.placed[1]} placed${pl.shortfall ? `; ${esc(pl.shortfall)}` : ''}. Spacing is ${esc(pl.spacing_rule.split(';')[0])}, a ${esc(pl.spacing_source)} of the engine.` : 'No row was placed for this bed.']);
+      lines.push(['Arrangement', pl ? `${po ? `This plant stands at ${po.position_m.join(', ')} m. ` : ''}${pl.rows === 1 ? 'One row' : `${pl.rows} rows`} along ${pl.edge_length_m} m: ${pl.expected[0] + pl.expected[1]} positions at ${pl.step_m} m, ${pl.placed[0] + pl.placed[1]} placed${pl.shortfall ? `; ${esc(tidy(pl.shortfall))}` : ''}. Spacing is ${esc(pl.spacing_rule.split(';')[0])}, a ${esc(pl.spacing_source)} of the engine.` : 'No row was placed for this bed.']);
       lines.push(['Result', ev ? `${esc(d.label)}: ${res(ev.status)}. ${esc(ev.reasons.map(r => cap(r.text)).join('. ') || 'Every check the engine can make is met on claimed sizes')}. An estimate from claimed sizes, not a verified performance.` : 'Nothing to evaluate.']);
     } else { const g = c.ground.group; const ev = c.ground.evaluation; const by = {}; for (const o of c.ground.objects) by[o.species_id] = (by[o.species_id] || 0) + 1;
       lines.push(['Arrangement', g ? `${po ? `This plant stands at ${po.position_m.join(', ')} m${po.role === 'accent' ? ', as an accent that took a ground position' : ''}. ` : ''}${esc(g.params.pattern_label)}: ${esc(g.params.pattern_rule)}. ${g.params.placed} placed of about ${g.params.expected_count} positions (${Object.entries(by).map(([id, n]) => `${n} ${esc(K.name(id))}`).join(', ')}). Spacing ${g.params.spacing_m} m, a ${esc(g.params.spacing_source)} of the engine.` : esc(cap(c.unresolved.find(u => /ground/i.test(u)) || 'No ground layer was placed in this bed.'))]);

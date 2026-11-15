@@ -112,7 +112,7 @@ export function detailHtml(d, id, imgs, ctx = {}) {
     <div class="pi-hero-t">
       <h1><i>${esc(s.scientific_name)}</i></h1>
       <p class="pi-names">${esc(s.common_names.join(' · '))}</p>
-      <p class="pi-ident">${esc(s.family)} · ${esc(s.growth_form_label)} ${tag(s.growth_form_status === 'supported' ? 'derived' : 'to_confirm', s.growth_form_status === 'supported' ? `growth form supported, ${s.growth_form_rule}` : `growth form ${s.growth_form_status}`)}</p>
+      <p class="pi-ident">${esc(s.family)} · ${esc(s.growth_form_label)} ${tag(s.growth_form_status === 'supported' ? 'derived' : 'to_confirm', s.growth_form_status === 'supported' ? 'growth form read from the sources' : `growth form ${s.growth_form_status}`)}</p>
       <dl class="pi-glance">${glance.map(([k, v]) => `<div><dt>${k}</dt><dd>${v}</dd></div>`).join('')}</dl>
       <div class="pi-actions"><a class="pi-btn primary" href="${esc(links.explorer(s.id))}">See the evidence</a><a class="pi-btn" href="${esc(links.trace(s.id))}" data-pi-go="trace">Trace it into a design</a><a class="pi-btn quiet" href="${esc(links.neural(s.id))}">Neural view</a></div>
       ${consider}
@@ -135,7 +135,7 @@ export function detailHtml(d, id, imgs, ctx = {}) {
     <dl class="pi-ev">
       <div><dt>Claims</dt><dd><b>${s.claims.live}</b> live${s.claims.retired ? `, ${s.claims.retired} retired and kept as history` : ''}</dd></div>
       <div><dt>Verified by a person</dt><dd><b>${s.claims.verified}</b> ${tag('verified')} <b>${s.claims.unverified}</b> ${tag('unverified')}<span class="pi-ev-n">A reviewer opened the source and confirmed the claim. Unverified does not mean wrong; it means nobody has checked yet.</span></dd></div>
-      <div><dt>AI source check</dt><dd>${Object.keys(AI_WORD).filter(k => byCheck[k]).map(k => `<b>${byCheck[k]}</b> ${tag(k, AI_WORD[k])}`).join(' ')}<span class="pi-ev-n">An assistant read each source against its claim. This is an assessment to help reviewers, never a verification.</span></dd></div>
+      <div><dt>AI source assessment</dt><dd>${Object.keys(AI_WORD).filter(k => byCheck[k]).map(k => `<b>${byCheck[k]}</b> ${tag(k, AI_WORD[k])}`).join(' ')}<span class="pi-ev-n">An AI assistant read the source of each of the ${cl.length} claims the fields on this page cite${cl.length !== s.claims.live ? ` (of ${s.claims.live} live claims; the others feed no field shown here)` : ''}. An assessment to help reviewers, never a verification.</span></dd></div>
       <div><dt>How lines came to exist</dt><dd>${tag('documented')} a source states it · ${tag('derived')} a recorded rule over claims · ${tag('candidate')} inferred, never promoted · ${tag('unknown')} listed as a gap</dd></div>
     </dl></section>
 

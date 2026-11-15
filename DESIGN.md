@@ -302,9 +302,18 @@ Object handles on the plan are small white squares with an ink edge; mid-edge ha
   assessment · rule-derived relationship · your site information · engine output · evaluation. A source's own words are a
   quotation in sans at 17 px, never in Fraunces. Two kinds never share a row, and a row never borrows another kind's tag.
   Where nothing is recorded the row stays and says so in bold ("No source states …"), marked "an explicit unknown".
+- **Decision chain** (Knowledge · Overview, directly under the masthead, inside the first viewport at 1440 × 900 and
+  1280 × 800): the decision as five linked nodes in one row, divided by hairlines with a drawn arrow on each divider —
+  Source → Claim → Function → Selection → Arrangement & result. A node is a small-caps step name with its Fraunces number,
+  one 600-weight line with the record's own value ("landscape use = sheared hedge"), and one ink-2 line with its standing
+  ("unverified · AI: partially supported", "Screen: not met"). Every value is read from the snapshot and the engine; an
+  absence is a node too ("No source states this use"). Each node jumps to its step. Never a row of stat tiles: no figure
+  without the record it belongs to.
 - **Decision Trace** (V3): one explanation of one decision — a species, a spatial function, a bed — in two sizes. *Full*, on
   Knowledge · Overview: the five steps (Sources → Claims → Function → Selection → Arrangement & result), each in the ledger;
-  the step list under the bar is drawn as a chain with arrows, because the order is the argument. *Compact*, in the Studio's
+  the step list under the bar is drawn as a chain with arrows, because the order is the argument, and marks the step being
+  read (ink, 600, its number in olive). The claim id of step 2 is repeated in mono in the provenance column of steps 3, 4
+  and 5 ("rests on …"): one visible token carried through. *Compact*, in the Studio's
   inspector ("Why this plant here?"): a Fraunces question, then five hairline rows — Asked · Knowledge · Selection ·
   Arrangement · Result — and one text link to the full trace. Both are rendered by `platform/js/trace.js` from the engine's
   own records; neither is ever a modal or a separate dashboard.
@@ -317,8 +326,13 @@ Object handles on the plan are small white squares with an ink edge; mid-edge ha
   the same in Library, Knowledge, Compose and Grow. Never collapsed into "not suitable" or "not planted".
 - **Estimate verdict** (Ground Cover): the Fraunces line reads "Ground Cover: an estimate, 52 %" in caramel ink, never in
   olive or rust: the engine sets no pass mark, so the page shows none.
-- **Who-tags** (mono, the same shape as the status tags): named source (solid olive edge) · from records (olive-soft fill) ·
-  person (paper-2 fill) · AI-assessed (dashed caramel) · rule-based (olive edge) · you (ink edge) · estimate (dotted caramel).
+- **Who-tags** (mono, the same shape as the status tags): named source (solid olive edge) · anonymous respondent (paper-2
+  fill) · from records (olive-soft fill) · person (paper-2 fill) · AI-assessed (dashed caramel) · rule-based (olive edge) ·
+  you (ink edge) · estimate (dotted caramel). A row that records an absence ("No source states …", "not assessed",
+  "unverified") carries no who-tag: nobody made it.
+- **No link** is never printed as the bare word "unknown": a missing function link says which kind — "no link: contradicted
+  by a recorded trait" or "no link: evidence missing" — in the tag, in counts and in the matrix. "Supported" belongs to the
+  AI source assessment only; the engine's evidence check reads meets / uncertain / fails like its other checks.
 - **Result words**: meets / met / pass / supported in olive, uncertain / conditional / unknown / proxy / heuristic in caramel
   ink, fails / not met / unmet in rust, set as 600-weight words inside tables. A result is a word, never a coloured dot.
 - **Verdict** (Knowledge step 5, as in Compose): the function and the engine's status as one Fraunces line in the status

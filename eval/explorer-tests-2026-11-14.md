@@ -32,7 +32,7 @@
 | K1b layers added on purpose: required traits and the species without a link (ghosts, no line) | pass | {'species': 5, 'ghost_species': 5, 'functions': 1, 'concepts': 4} |
 | K1c the same focus in the matrix: its column is marked, one cell per species, and no other view is in the page | pass | column Screen |
 | K1d the same focus in the table: the columns the function requires are marked and a linked species comes first | pass | required columns ['Height bands', 'Habit', 'Leaf retention'] · first row Acer palmatum |
-| K2 link → evidence: inspector shows the use claim, the rule and the requirement check; the graph line is selected; the trace into a design is offered | pass | 55524 bytes |
+| K2 link → evidence: inspector shows the use claim, the rule and the requirement check; the graph line is selected; the trace into a design is offered | pass | 59224 bytes |
 | K3 unknown cell → honest 'not established': verdict, missing requirements, contrary claims | pass |  |
 | K4 A/B compare (V1 link, tab=compare): the four sections in order; the pair's two live direct records and the retired history are listed | pass | ['shared_attributes', 'direct_relations', 'spatial_complementarity', 'evidence_unknowns'] |
 | K5 A/B compare with no record: the absence is stated, not filled; nothing biological is inferred | pass |  |

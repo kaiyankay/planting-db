@@ -29,7 +29,7 @@ const S = { d: null, imgs: null, K: null, E: null, ref: null, mine: null, c: nul
     PI.mountTop($('#top'), { active: 'knowledge', section: 'overview', snapshot: d }); $('#foot').innerHTML = PI.footHtml(d);
     window.addEventListener('hashchange', () => render(false)); document.addEventListener('click', onClick); document.addEventListener('submit', onSearch);
     window.knowledge = { S, T, render };
-    render(false); if (new URLSearchParams(location.hash.slice(1)).get('case') === 'mine') $('#kn-case')?.scrollIntoView({ block: 'start' });
+    render(false);
   } catch (e) { $('#app').innerHTML = `<p class="pi-loading">Could not load the knowledge snapshot: ${esc(e.message)}</p>`; console.error(e); }
 })();
 
@@ -60,10 +60,22 @@ function linkTo(o = {}) {
 function render(scroll = true) {
   resolve(); const d = S.d, sp = S.sp, fn = S.fn; const link = d.function_links.find(l => l.species === sp.id && l.function === fn.id);
   document.title = `Knowledge · Planting Intelligence`;
-  $('#app').innerHTML = `<div class="pi-doc kn" data-fn="${esc(fn.id)}" data-species="${esc(sp.slug)}" data-case="${esc(S.c?.origin || '')}" data-bed="${esc(S.c?.bed.id || '')}">${mast(d)}${caseHtml(sp, fn, link)}
-    <nav class="pi-toc kn-toc" aria-label="The five steps, from a source to a design"><a href="#" data-goto="kn-sources"><b>1</b> Sources</a><a href="#" data-goto="kn-claims"><b>2</b> Claims</a><a href="#" data-goto="kn-relations"><b>3</b> Function</a><a href="#" data-goto="kn-access"><b>4</b> Selection</a><a href="#" data-goto="kn-evaluation"><b>5</b> Arrangement &amp; result</a><a href="#" data-goto="kn-explore" class="kn-toc-x">Explore the records</a></nav>
-    ${sources(sp, fn, link)}${claims(sp, fn, link)}${relations(sp, fn, link)}${selection(sp, fn, link)}${arrangement(sp, fn, link)}${explore(sp, fn)}</div>`;
+  const step3 = relations(sp, fn, link);   // also prepares the pair block, shown after the five steps
+  $('#app').innerHTML = `<div class="pi-doc kn" data-fn="${esc(fn.id)}" data-species="${esc(sp.slug)}" data-case="${esc(S.c?.origin || '')}" data-bed="${esc(S.c?.bed.id || '')}">${mast(d)}${chain(sp, fn, link)}${caseHtml(sp, fn, link)}
+    <nav class="pi-toc kn-toc" aria-label="The five steps, from a source to a design"><a href="#" data-goto="kn-sources"><b>1</b> Sources</a><a href="#" data-goto="kn-claims"><b>2</b> Claims</a><a href="#" data-goto="kn-relations"><b>3</b> Function</a><a href="#" data-goto="kn-access"><b>4</b> Selection</a><a href="#" data-goto="kn-evaluation"><b>5</b> Arrangement &amp; result</a><a href="#" data-goto="kn-pair" class="kn-toc-x">Between two species</a><a href="#" data-goto="kn-explore" class="kn-toc-y">Explore the records</a></nav>
+    ${sources(sp, fn, link)}${claims(sp, fn, link)}${step3}${selection(sp, fn, link)}${arrangement(sp, fn, link)}
+    <section class="pi-sec kn-step" id="kn-pair" tabindex="-1"><h2>Between two species</h2><p class="pi-sec-l">Four different things, and only the first is a record of the pair.</p><div>${S.pairHtml || ''}</div></section>
+    ${explore(sp, fn)}</div>`;
   if (scroll) $('#kn-case')?.scrollIntoView({ block: 'start' });
+  spy();
+}
+/** the step bar under the page bar says where the reader is: the last step whose heading has passed under it */
+let spyOn = false;
+function spy() {
+  const mark = () => { const ids = ['kn-sources', 'kn-claims', 'kn-relations', 'kn-access', 'kn-evaluation']; let cur = null; for (const id of ids) { const el = document.getElementById(id); if (el && el.getBoundingClientRect().top < 160) cur = id; } const ev = document.getElementById('kn-pair'); if (ev && ev.getBoundingClientRect().top < 160) cur = null;
+    document.querySelectorAll('.kn-toc a[data-goto]').forEach(a => { if (a.dataset.goto === cur) a.setAttribute('aria-current', 'step'); else a.removeAttribute('aria-current'); }); };
+  if (!spyOn) { spyOn = true; let t = 0; addEventListener('scroll', () => { if (!t) t = requestAnimationFrame(() => { t = 0; mark(); }); }, { passive: true }); }
+  mark();
 }
 function onClick(ev) {
   const g = ev.target.closest('[data-goto]'); if (g) { ev.preventDefault(); const el = document.getElementById(g.dataset.goto); if (el) { el.scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'start' }); el.focus?.({ preventScroll: true }); } return; }
@@ -84,10 +96,26 @@ function mast(d) {
     <div><h1>What a design <em>rests on</em></h1>
       <p class="pi-lede">Planting Intelligence does not conjure a garden. Every plant it places goes back to a named source, a recorded claim and a written rule, and every result comes with what is still unknown. Pick a decision and follow it the whole way.</p>
       <div class="pi-cta"><a class="pi-btn primary" href="#" data-goto="kn-case">Follow one decision</a><a class="pi-btn" href="${PI.links.explorer()}">Explore the records yourself</a></div></div>
-    <p class="pi-prov"><b>${esc(PI.snapshotLine(d))}</b><br>${st.sources} sources · ${st.claims} claims · ${st.claims_by_status.verified || 0} verified by a person<br>${st.links_drawn} of ${st.function_links} plant-to-function links drawn · ${st.links_by_status.unknown || 0} listed as unknown</p>
+    <p class="pi-prov"><b>${esc(PI.snapshotLine(d))}</b><br>${st.sources} sources · ${st.links_drawn} of ${st.function_links} plant-to-function links drawn<br>${st.unknown_by_verdict?.['contradicted by traits'] || 0} ruled out by a recorded trait · ${st.unknown_by_verdict?.['evidence missing'] || 0} with evidence missing</p>
   </header>`;
 }
 const names = ids => ids.map(id => `<i>${esc(PC.species(S.d, id).scientific_name)}</i>`).join(' and ');
+/** the claims a function link rests on, as the same mono ids step 2 shows: one token carried through the steps */
+const restsOn = link => (link?.use_claims || []).length ? `<span>rests on</span>${link.use_claims.map(T.idHtml).join('')}` : '';
+/** the decision in five linked nodes, filled from the records: what a visitor sees before scrolling */
+function chain(sp, fn, link) {
+  const d = S.d, c = S.c, E = S.E; const uc = useClaims(link); const c0 = uc[0]; const chk = c0 ? d.evidence_checks[c0.id] : null; const isArr = T.arranged(E, fn.id); const dc = c ? T.decide(c, fn.id, sp.id) : null; const sx = c ? T.sectionOf(c, fn.id) : null;
+  const n1 = c0 ? [esc(uc.length > 1 ? `${T.sourceName(d, c0.source_id)} and ${uc.length - 1} more` : T.sourceName(d, c0.source_id)), T.isSurvey(d, c0.source_id) ? 'a practitioner’s answer; the response stays private' : chk?.excerpt ? `“${esc(chk.excerpt.length > 64 ? chk.excerpt.slice(0, 62) + '…' : chk.excerpt)}”` : 'cited, no excerpt recorded'] : ['No source states this use', 'an explicit unknown'];
+  const nv = uc.filter(x => x.status === 'verified').length;
+  const n2 = c0 ? [`${esc(human(c0.field))} = ${esc(T.valueLabels(d, c0).slice(0, 2).join(', '))}`, `${nv ? `${T.res('verified')}${uc.length > 1 ? ` ${nv} of ${uc.length}` : ''}` : T.res('unverified')}${chk ? ` · AI: ${esc(T.AI_WORD[chk.result] || human(chk.result))}` : ''}`] : ['No claim for this use', `${sp.claims.live} claims record other traits`];
+  const n3 = [`<i>${esc(sp.scientific_name)}</i> → ${esc(fn.label)}`, !link ? 'no record' : link.drawn ? `${esc(link.status)} by rule ${esc(link.rule || (link.rules || [])[0] || '')}${link.conflict ? `, ${T.res('conflict')} with a trait` : ''}` : link.verdict === 'contradicted by traits' ? 'no link: contradicted by a recorded trait' : 'no link: evidence missing'];
+  const usable = c && isArr && dc.wanted ? T.decisions(c, fn.id).filter(x => ['planted', 'not_placed', 'eligible'].includes(x.outcome)).length : 0;
+  const n4 = !c ? ['no design loaded', ''] : [T.out(dc.outcome), !isArr ? 'the engine has no arrangement rule' : !dc.wanted ? esc(dc.reason) : `${usable} of ${d.species.length} species can be used in ${esc(c.bed.name)}`];
+  let n5 = ['nothing arranged', isArr ? 'no arrangement computed' : 'recorded only'];
+  if (c && isArr && dc.wanted && c.version && sx?.evaluation) { if (fn.id === 'z:screen') { const pl = c.screen.plan; n5 = [pl ? `${pl.placed[0] + pl.placed[1]} of ${pl.expected[0] + pl.expected[1]} positions placed` : 'no row placed', `${esc(fn.label)}: ${T.res(sx.evaluation.status)}`]; } else { const g = c.ground.group; n5 = [g ? `${g.params.placed} placed, ${esc(g.params.pattern_label.toLowerCase())}` : 'no ground layer placed', `${T.res('estimate')} ${Math.round(sx.evaluation.ground_cover_share * 100)} % of the ground, no pass mark`]; } }
+  const node = (id, n, name, [a, b]) => `<li><a href="#" data-goto="${id}"><span class="kn-chain-k"><b>${n}</b>${name}</span><strong>${a}</strong><span class="kn-chain-d">${b}</span></a></li>`;
+  return `<ol class="kn-chain" aria-label="This decision, from its source to its result">${node('kn-sources', 1, 'Source', n1)}${node('kn-claims', 2, 'Claim', n2)}${node('kn-relations', 3, 'Function', n3)}${node('kn-access', 4, 'Selection', n4)}${node('kn-evaluation', 5, 'Arrangement &amp; result', n5)}</ol>`;
+}
 function caseHtml(sp, fn, link) {
   const c = S.c, d = S.d, E = S.E; const isArr = T.arranged(E, fn.id);
   const fnSw = `<div class="kn-sw"><span>Function</span>${d.functions.slice().sort((a, b) => (b.id === T.FN) - (a.id === T.FN) || T.arranged(E, b.id) - T.arranged(E, a.id)).map(f => `<a class="pi-chip" role="button" aria-pressed="${f.id === fn.id}" href="${linkTo({ fn: f.id })}" data-follow="fn" data-fn="${esc(f.id)}" title="${esc(f.definition)}">${esc(f.label)}${T.arranged(E, f.id) ? '' : '<small>recorded only</small>'}</a>`).join('')}</div>`;
@@ -115,8 +143,7 @@ function caseHtml(sp, fn, link) {
       <p class="kn-case-l">${head}</p>${about}${po}
       <p class="kn-case-m">${w ? `A ${w} × ${h} m site in ` : ''}${where}${c.said ? `, described in one sentence: “${esc(c.said)}”` : ''}.${ver}${stale}</p>${other}
       <div class="kn-sws">${fnSw}${bedSw}${spSw}</div>
-    </div></section>
-    <p class="kn-kinds">Eight kinds of statement appear below and are never merged: ${Object.values(T.KIND).map(k => `<span title="${esc(k.says)}">${esc(k.label.toLowerCase())}</span>`).join(' · ')}. <a href="${PI.links.method()}#kinds">What each one means</a></p>`;
+    </div></section>`;
 }
 
 // ---------------------------------------------------------------- 1 Sources
@@ -129,8 +156,8 @@ function sources(sp, fn, link) {
   const rows = cl.length ? cl.map(c => { const so = d.sources[c.source_id] || {}; const chk = d.evidence_checks[c.id]; const survey = so.type === 'practitioner';
     const body = survey ? `<p>A practitioner answered the project survey. The response itself stays in the survey’s protected database; what is published is the project’s paraphrase of it, in step 2.</p>`
       : chk?.excerpt ? `<blockquote>${esc(chk.excerpt)}</blockquote><p class="pi-led-n">Where on the page: ${esc(chk.locator || 'not recorded')}. The excerpt was recorded when the source was read for the check in step 2.</p>` : `<p>The source page is cited; no excerpt of it is recorded.</p>`;
-    return T.row('source', body, `<span>${T.sourceLink(d, c.source_id)}</span><span>${esc(T.SOURCE_TYPE[so.type] || human(so.type || ''))}${so.publisher && !survey ? ` · ${esc(so.publisher)}` : ''}</span>${so.licence_tier ? `<span>licence tier ${esc(so.licence_tier)}</span>` : ''}`); }).join('')
-    : T.row('source', `<p><b>No source states that <i>${esc(sp.scientific_name)}</i> can be used as a ${esc(fn.label)}.</b> ${link?.status === 'candidate' ? 'The link in step 3 is an inference from recorded traits.' : 'Whatever the database says about this pair comes from the trait check in step 3.'}</p>`, '<span>an explicit unknown</span>');
+    return T.row('source', body, `<span>${T.sourceLink(d, c.source_id)}</span><span>${esc(T.SOURCE_TYPE[so.type] || human(so.type || ''))}${so.publisher && !survey ? ` · ${esc(so.publisher)}` : ''}</span>${so.licence_tier ? `<span>licence tier ${esc(so.licence_tier)}</span>` : ''}`, survey ? 'respondent' : 'source'); }).join('')
+    : T.row('source', `<p><b>No source states that <i>${esc(sp.scientific_name)}</i> can be used as a ${esc(fn.label)}.</b> ${link?.status === 'candidate' ? 'The link in step 3 is an inference from recorded traits.' : 'Whatever the database says about this pair comes from the trait check in step 3.'}</p>`, '<span>an explicit unknown</span>', null);
   const all = `<table class="pi-table"><thead><tr><th>Source</th><th>Kind</th><th>Publisher</th><th class="n">Claims</th></tr></thead><tbody>${Object.values(d.sources).filter(s => s.type !== 'practitioner').map(s => ({ s, n: nOf(s.id) })).sort((a, b) => b.n - a.n).map(({ s, n }) => `<tr><td>${s.url ? `<a href="${esc(s.url)}" rel="noopener">${esc(s.label.split(' — ')[0])}</a>` : esc(s.label)}</td><td>${esc(T.SOURCE_TYPE[s.type] || s.type)}</td><td>${esc(s.publisher || '')}</td><td class="n">${n}</td></tr>`).join('')}<tr><td>Practitioner survey</td><td>${plural(pract.length, 'anonymous respondent')}</td><td>${esc(pract[0]?.publisher || '')}</td><td class="n">${pract.reduce((a, s) => a + nOf(s.id), 0)}</td></tr></tbody></table>`;
   return sec('kn-sources', 1, 'Sources', 'Where the knowledge comes from.',
     `<p>Knowledge enters as statements from named sources. This release cites ${d.stats.sources}: ${[['database', 'published plant database'], ['municipal', 'municipal open-data set'], ['practitioner', 'anonymous practitioner response']].filter(([k]) => byType[k]).map(([k, w]) => plural(byType[k], w)).join(', ')}${byType.model ? `, and ${plural(byType.model, 'model placeholder')} that is never counted as evidence` : ''}.</p>
@@ -144,14 +171,14 @@ function claimRows(c) {
   const ver = c.status === 'verified' ? `<p>${tag('verified')} A reviewer checked this claim against ${survey ? 'the response' : 'its source'}.</p>` : `<p>${tag('unverified')} No person has checked this claim against its source yet. Unverified is not wrong; it is unchecked.</p>`;
   const ai = chk ? `<p>${tag(chk.result, T.AI_WORD[chk.result] || human(chk.result))} ${esc(chk.explanation || '')}</p>${chk.missing_context ? `<p class="pi-led-n">Missing context: ${esc(chk.missing_context)}</p>` : ''}` : `<p>${tag('not_assessed', 'not assessed')} ${c.status === 'verified' ? 'Claims a person had already verified were not sent to the assistant.' : 'No assessment is on record for this claim.'}</p>`;
   return T.row('claim', `<p>${esc(c.text)}</p><p class="pi-led-n">${esc(human(c.field))} = ${vals.map(esc).join(' · ')}${c.conditions?.length ? ` · when ${c.conditions.map(x => esc(x.label)).join(', ')}` : ''}${c.cultivar ? ` · cv. ${esc(c.cultivar)}` : ''}</p>${more('The record as stored', `<pre class="pi-json">${esc(JSON.stringify(c, null, 1))}</pre>`)}`,
-      `<span class="id">${esc(c.id)}</span><span>${T.sourceLink(d, c.source_id)}${c.place_label ? ` · ${esc(c.place_label)}` : ''}</span><span>recorded ${esc(c.recorded_at || '')} · confidence ${esc(c.confidence)}</span>`)
-    + T.row('verification', ver, '')
-    + T.row('ai', ai, chk ? `<span>${esc(human(chk.method || ''))} · ${esc((chk.reviewed_at || '').slice(0, 10))}</span><span>never changes the claim</span>` : '');
+      `${T.idHtml(c.id)}<span>${T.sourceLink(d, c.source_id)}${c.place_label ? ` · ${esc(c.place_label)}` : ''}</span><span>recorded ${esc(c.recorded_at || '')} · confidence ${esc(c.confidence)}</span>`)
+    + T.row('verification', ver, '', c.status === 'verified' ? 'person' : null)
+    + T.row('ai', ai, chk ? `<span>${esc(human(chk.method || ''))} · ${esc((chk.reviewed_at || '').slice(0, 10))}</span><span>never changes the claim</span>` : '<span>no assessment on record</span>', chk ? 'ai' : null);
 }
 function claims(sp, fn, link) {
   const d = S.d, st = d.stats; const cl = useClaims(link); const chk = st.claims_by_check; const v = st.claims_by_status.verified || 0;
   const bar = parts => `<span class="pi-split">${parts.filter(p => p[1]).map(([cls, n]) => `<i class="${cls}" style="flex:${n}"></i>`).join('')}</span>`;
-  const body = cl.length ? `<dl class="pi-ledger">${cl.map(claimRows).join('')}</dl>` : `<dl class="pi-ledger">${T.row('claim', `<p><b>There is no claim that <i>${esc(sp.scientific_name)}</i> is used as a ${esc(fn.label)}.</b> Its ${sp.claims.live} claims record other things: size, habit, light, soil. Step 3 shows which of them the function check reads.</p>`, '<span>an explicit unknown</span>')}</dl>`;
+  const body = cl.length ? `<dl class="pi-ledger">${cl.map(claimRows).join('')}</dl>` : `<dl class="pi-ledger">${T.row('claim', `<p><b>There is no claim that <i>${esc(sp.scientific_name)}</i> is used as a ${esc(fn.label)}.</b> Its ${sp.claims.live} claims record other things: size, habit, light, soil. Step 3 shows which of them the function check reads.</p>`, '<span>an explicit unknown</span>', null)}</dl>`;
   return sec('kn-claims', 2, 'Claims &amp; attributes', 'How a statement is stored and reviewed.',
     `<p>A statement becomes a claim: one plant, one field, one value, kept with its source, place, conditions and a confidence. Two separate checks follow. A person verifies it against the source. Independently, an AI assistant has read each source and recorded whether it supports the claim, as a starting point for reviewers.</p>
     ${body}
@@ -175,16 +202,16 @@ function relations(sp, fn, link) {
   if (!link) say = '<p>No record.</p>';
   else if (link.status === 'derived') say = `<p>${tag('derived')}${tag(link.verification === 'none' ? 'none' : link.verification, link.verification === 'none' ? 'no claim to verify' : link.verification)}${link.conflict ? tag('conflict', 'a trait claim contradicts it') : ''} A source records the use <b>${esc(link.via_use_labels.join(', '))}</b>, and the ontology maps that use to ${esc(fn.label)}. The link is no stronger than the claim under it${link.verification === 'verified' ? ': a person verified a use claim' : ': no person has verified it'}.</p>`;
   else if (link.status === 'candidate') say = `<p>${tag('candidate')} No source states this use. Every trait ${esc(fn.label)} requires is met by recorded claims, so the link is an inference. It is never promoted until a source records the use.</p>`;
-  else say = `<p>${tag('unknown')} No link is drawn. ${link.verdict === 'contradicted by traits' ? `A recorded claim places the plant outside a trait ${esc(fn.label)} requires.` : `The database has no claim on a trait ${esc(fn.label)} requires. Not known is not the same as unsuitable.`}</p>`;
+  else say = `<p>${tag('unknown', link.verdict === 'contradicted by traits' ? 'no link: contradicted by a recorded trait' : 'no link: evidence missing')} ${link.verdict === 'contradicted by traits' ? `No link is drawn. A recorded claim places the plant outside a trait ${esc(fn.label)} requires, shown below with its source.` : `No link is drawn. The database has no claim on a trait ${esc(fn.label)} requires. Not known is not the same as unsuitable.`}</p>`;
   const rule = (link?.rules || []).map(r => d.rules[r] ? `<p class="pi-led-n"><b>${esc(r)}</b> ${esc(d.rules[r])}</p>` : '').join('');
   const col = d.function_links.filter(l => l.function === fn.id).sort((a, b) => ({ derived: 0, documented: 0, candidate: 1, unknown: 2 }[a.status] - { derived: 0, documented: 0, candidate: 1, unknown: 2 }[b.status]));
-  const colHtml = `<table class="pi-table"><thead><tr><th>Species</th><th>Link</th><th>Basis</th></tr></thead><tbody>${col.map(l => `<tr${l.species === sp.id ? ' class="on"' : ''}><td><a href="${linkTo({ species: SP.get(l.species).slug })}" data-follow><i>${esc(SP.get(l.species).scientific_name)}</i></a></td><td>${tag(l.status)}${l.conflict ? tag('conflict') : ''}</td><td>${l.drawn ? (l.via_use_labels?.length ? `recorded use: ${esc(l.via_use_labels.join(', '))}` : 'inferred from recorded traits') : esc(l.verdict || 'unknown')}</td></tr>`).join('')}</tbody></table>`;
+  const colHtml = `<table class="pi-table"><thead><tr><th>Species</th><th>Link</th><th>Basis</th></tr></thead><tbody>${col.map(l => `<tr${l.species === sp.id ? ' class="on"' : ''}><td><a href="${linkTo({ species: SP.get(l.species).slug })}" data-follow><i>${esc(SP.get(l.species).scientific_name)}</i></a></td><td>${l.drawn ? tag(l.status) : tag('unknown', l.verdict === 'contradicted by traits' ? 'no link: contradicted' : 'no link: no evidence')}${l.conflict ? tag('conflict') : ''}</td><td>${l.drawn ? (l.via_use_labels?.length ? `recorded use: ${esc(l.via_use_labels.join(', '))}` : 'inferred from recorded traits') : esc(l.verdict || 'unknown')}</td></tr>`).join('')}</tbody></table>`;
   // species A and species B: four things kept apart
   const { other, sameBed } = partner(sp); const pair = d.pairs.find(p => (p.a === sp.id && p.b === other.id) || (p.b === sp.id && p.a === other.id));
   const rels = (pair?.direct_relations || []).map(id => d.relations.find(r => r.id === id)).filter(Boolean); const sharedF = (pair?.attributes || []).filter(r => r.shared.length);
   const combos = pair?.complementarity?.combinations || []; const fnName = id => d.functions.find(f => f.id === id)?.label || id; const swap = pair && pair.a !== sp.id;
   const bio = rels.filter(r => ['companion', 'competes', 'facilitates', 'co_occurs_with'].includes(r.type));
-  const ab = `<h3 class="pi-h3">Between two species, four different things</h3><p>${sameBed ? `In this bed <i>${esc(sp.scientific_name)}</i> stands with <i>${esc(other.scientific_name)}</i>.` : `Take <i>${esc(sp.scientific_name)}</i> and <i>${esc(other.scientific_name)}</i>.`} What the knowledge base holds about the two together is four separate things, and only the first is a record of the pair.</p>
+  S.pairHtml = `<p>${sameBed ? `In this bed <i>${esc(sp.scientific_name)}</i> stands with <i>${esc(other.scientific_name)}</i>.` : `Take <i>${esc(sp.scientific_name)}</i> and <i>${esc(other.scientific_name)}</i>.`} What the knowledge base holds about the two together is four separate things, and only the first is a record of the pair.</p>
     <dl class="pi-ledger kn-ab">
       <div class="pi-led"><dt>Recorded relationship</dt><dd>${rels.length ? rels.map(r => `<p>${tag(r.kg_status)}${r.placeholder ? tag('candidate', 'model placeholder') : tag(r.status)} <b>${esc(human(r.type))}</b> ${esc(r.text || '')}</p>`).join('') : '<p><b>None recorded.</b> An honest absence, not evidence that the two are incompatible.</p>'}</dd><dd class="pi-led-p">${rels.length ? rels.map(r => `<span>${esc(T.sourceName(d, r.source_id))}</span>`).join('') : '<span>an explicit unknown</span>'}</dd></div>
       <div class="pi-led"><dt>Shared attributes</dt><dd><p>${plural(sharedF.length, 'field')} with a value in common${sharedF.length ? `, such as ${sharedF.slice(0, 3).map(r => `${esc(r.label)}: ${esc(r.shared.map(x => r.labels[x]).slice(0, 2).join(', '))}`).join('; ')}` : ''}. A computable overlap. Sharing growing conditions does not make two plants companions.</p></dd><dd class="pi-led-p">${T.who('record')}<span>computed from each plant’s own claims</span></dd></div>
@@ -194,11 +221,11 @@ function relations(sp, fn, link) {
     <p class="kn-go"><a href="${PI.links.compare(sp.id, other.id)}">Compare the two side by side</a></p>`;
   return sec('kn-relations', 3, 'Function', 'How traits relate to a spatial function, and species to each other.',
     `<p>${esc(fn.label)} is not a plant attribute. It is a role a planting plays: ${esc(fn.definition.charAt(0).toLowerCase() + fn.definition.slice(1))} The knowledge graph links a species to it only by a written rule, and checks the traits the role needs against the plant’s claims.</p>
-    <dl class="pi-ledger">${T.row('rule', `${say}${rule}`, `<span class="id">${esc(link?.id || '')}</span>`)}</dl>
+    <dl class="pi-ledger">${T.row('rule', `${say}${rule}`, `${link ? T.idHtml(link.id) : ''}${restsOn(link)}`, link?.drawn ? 'rule' : null)}</dl>
     ${reqs ? `<table class="pi-table kn-req"><thead><tr><th></th><th>${esc(fn.label)} needs</th><th>Recorded for <i>${esc(sp.scientific_name)}</i></th></tr></thead><tbody>${reqs}</tbody></table><p class="pi-led-n">The requirements come from the planting-design literature (${esc((fn.source_of_term || '').split(',').slice(0, 2).join(','))}), not from a plant source. A met trait is a recorded attribute; it is not yet a screen in a garden.</p>` : ''}
-    ${more(`All ${col.length} species against ${esc(fn.label)}: ${fn.n_linked} linked, ${fn.n_unknown} unknown`, colHtml)}
+    ${more(`All ${col.length} species against ${esc(fn.label)}: ${fn.n_linked} linked, ${col.filter(l => l.verdict === 'contradicted by traits').length} contradicted by a recorded trait, ${col.filter(l => !l.drawn && l.verdict !== 'contradicted by traits').length} with evidence missing`, colHtml)}
     <p class="kn-go kn-views"><span>The same records in three views</span><a href="${PI.links.explorerFocus('function', fn.id, { view: 'graph', inspect: link ? { kind: 'link', id: link.id } : null })}">Graph</a><a href="${PI.links.explorerFocus('function', fn.id, { view: 'matrix', inspect: link ? { kind: 'link', id: link.id } : null })}">Function matrix</a><a href="${PI.links.explorerFocus('function', fn.id, { view: 'table' })}">Attribute table</a></p>
-    ${ab}`);
+`);
 }
 
 
@@ -220,10 +247,10 @@ function selection(sp, fn, link) {
     <dl class="pi-ledger">${siteRow}</dl>
     <p class="kn-go">${S.E.FUNCTION_SUPPORT ? d.functions.filter(f => T.arranged(E, f.id)).map(f => `<a href="${linkTo({ fn: f.id })}" data-follow>Follow ${esc(sp.scientific_name)} as ${esc(f.label)} instead</a>`).join('') : ''}<a href="${PI.links.method()}#rules">Which functions the engine arranges</a></p>`);
   const gate = r ? ['light', 'water', 'soil'].map(k => `<tr><td>${k}</td><td>${T.res(r.gate[k].result)}</td><td>${esc(r.gate[k].detail)}</td></tr>`).join('') : '';
-  const own = cand ? Object.entries(cand.checks).filter(([k]) => k !== 'site').map(([k, v]) => `<tr><td>${esc(k === 'evidence' ? 'function' : k === 'geometry' ? 'fits' : k.replace('_', ' '))}</td><td>${T.res(v.result)}</td><td>${esc(v.detail)}</td></tr>`).join('') : '';
+  const own = cand ? Object.entries(cand.checks).filter(([k]) => k !== 'site').map(([k, v]) => `<tr><td>${esc(k === 'evidence' ? 'function' : k === 'geometry' ? 'fits' : k.replace('_', ' '))}</td><td>${T.res(v.result)}</td><td>${esc(T.tidy(v.detail))}</td></tr>`).join('') : '';
   const size = r ? `<tr><td>size</td><td><span class="pi-res estimate">proxy</span></td><td>crown ${r.proxy.radius_m * 2} m across${r.proxy.spread.claim ? `, from the claimed spread ${r.proxy.spread.min}–${r.proxy.spread.max} m` : ', spread not recorded'}${r.proxy.height.claim ? `; height ${r.proxy.height.min}–${r.proxy.height.max} m claimed` : '; height not recorded'}. One claimed range chosen by a stated rule, never a measurement.</td></tr>` : '';
   const decision = T.row('engine', `<p class="kn-outcome" data-outcome="${esc(dc.outcome)}">${T.out(dc.outcome)} ${esc(cap(dc.reason))}.</p><p class="pi-led-n">${esc(T.OUTCOME[dc.outcome].says)}</p>${dc.wanted && r ? `<table class="pi-table kn-gate"><tbody>${gate}${own}${size}</tbody></table>` : ''}`,
-    `${r?.proxy.spread.claim ? `<span class="id">${esc(r.proxy.spread.claim)}</span>` : ''}${r?.proxy.height.claim ? `<span class="id">${esc(r.proxy.height.claim)}</span>` : ''}<span>checked on this page, now</span>`);
+    `<span>checked on this page, now</span>${restsOn(link)}${r?.proxy.spread.claim || r?.proxy.height.claim ? '<span>sizes from</span>' : ''}${r?.proxy.spread.claim ? T.idHtml(r.proxy.spread.claim) : ''}${r?.proxy.height.claim ? T.idHtml(r.proxy.height.claim) : ''}`);
   // every species for this bed and function, by outcome
   const all = T.decisions(c, fn.id); const cols = CHECKS[fn.id]; const cell = (x, k) => !x.cand ? '<span class="pi-none">—</span>' : k === 'geometry' && x.cand.checks.form?.result === 'fails' ? T.res('fails') : x.cand.checks[k] ? T.res(x.cand.checks[k].result) : '<span class="pi-none">—</span>';
   const tableOf = list => `<table class="pi-table kn-cand"><thead><tr><th>Species</th>${cols.map(([, l]) => `<th>${l}</th>`).join('')}<th>Outcome</th></tr></thead><tbody>${list.map(x => { const s = PC.species(d, x.species); return `<tr${x.species === sp.id ? ' class="on"' : ''} data-species="${esc(s.slug)}" data-outcome="${esc(x.outcome)}" data-fit="${esc(x.fit || '')}"><td><a href="${linkTo({ species: s.slug })}" data-follow><i>${esc(s.scientific_name)}</i></a><span class="pi-led-n">${esc(cap(x.reason))}</span></td>${cols.map(([k]) => `<td>${cell(x, k)}</td>`).join('')}<td><b>${T.out(x.outcome)}</b></td></tr>`; }).join('')}</tbody></table>`;
@@ -258,11 +285,11 @@ function arrangement(sp, fn, link) {
   let engine, verdict, rows, limits;
   if (fn.id === 'z:screen') {
     const pl = c.screen.plan; const lead = pl ? PC.species(d, pl.lead.species_id) : null; const chk = ev.checks; const line = (name, r, text) => `<tr><td>${name}</td><td>${T.res(r)}</td><td>${text}</td></tr>`;
-    engine = `${here}${pl ? `<p>${pl.rows === 1 ? 'One row' : `${pl.rows} rows`} along the screened edge of ${pl.edge_length_m} m${lead ? `, planted with <i>${esc(lead.scientific_name)}</i>` : ''}: ${pl.expected[0] + pl.expected[1]} positions at ${pl.step_m} m, <b>${pl.placed[0] + pl.placed[1]} placed</b>${pl.shortfall ? `. ${esc(cap(pl.shortfall))}` : ''}.</p><p class="pi-led-n">Spacing: ${esc(pl.spacing_rule)}. The factor is the engine’s own ${esc(pl.spacing_source)}: the database holds no spacing claim. ${esc(cap(pl.reason))}.</p>` : `<p>No row was placed for this bed.</p>`}${T.edgeStrip(c)}<p class="kn-key"><span><i class="k-crown"></i>mature crown</span><span><i class="k-miss"></i>position dropped</span><span><i class="k-gap"></i>edge not covered</span></p>`;
+    engine = `${here}${pl ? `<p>${pl.rows === 1 ? 'One row' : `${pl.rows} rows`} along the screened edge of ${pl.edge_length_m} m${lead ? `, planted with <i>${esc(lead.scientific_name)}</i>` : ''}: ${pl.expected[0] + pl.expected[1]} positions at ${pl.step_m} m, <b>${pl.placed[0] + pl.placed[1]} placed</b>${pl.shortfall ? `. ${esc(cap(T.tidy(pl.shortfall)))}` : ''}.</p><p class="pi-led-n">Spacing: ${esc(pl.spacing_rule)}. The factor is the engine’s own ${esc(pl.spacing_source)}: the database holds no spacing claim. ${esc(cap(pl.reason))}.</p>` : `<p>No row was placed for this bed.</p>`}${T.edgeStrip(c)}<p class="kn-key"><span><i class="k-crown"></i>mature crown</span><span><i class="k-miss"></i>position dropped</span><span><i class="k-gap"></i>edge not covered</span></p>`;
     rows = line('Continuity', chk.continuity, `${ev.covered_m} m of ${ev.edge_length_m} m lies under a mature crown${ev.gaps.length ? `; ${plural(ev.gaps.length, 'gap')} of ${ev.gap_total_m} m` : ''}`)
       + line(`Height ${ev.target_height_m} m`, chk.target_height, `reached for certain on ${ev.cover_at_target_certain_m} m, possibly on ${ev.cover_at_target_possible_m} m, if the plants reach the top of their claimed ranges${/heuristic/.test(ev.target_basis) ? '. The target itself is a default; none was stated' : ''}`)
       + line('Year-round cover', chk.year_round, ev.year_round_required ? `evergreen on ${ev.cover_evergreen_m} m` : `not asked for; evergreen on ${ev.cover_evergreen_m} m`)
-      + line('Evidence', chk.evidence, ev.species.map(s => `${esc(PC.species(d, s.species_id).scientific_name)}: link ${esc(s.link_status)}${s.conflict ? ', in conflict' : ''}, ${s.link_verified ? 'verified' : 'not verified by a person'}`).join('; '));
+      + line('Evidence', chk.evidence === 'supported' ? 'meets' : chk.evidence, `${ev.species.map(s => `${esc(PC.species(d, s.species_id).scientific_name)}: link ${esc(s.link_status)}${s.conflict ? ', in conflict with a recorded trait' : ''}, ${s.link_verified ? 'verified by a person' : 'not verified by a person'}`).join('; ')}. The link is the one in step 3`);
     const bad = ev.status === 'not met', unc = ev.status === 'uncertain';
     verdict = `<div class="kn-verdict ${bad ? 'bad' : unc ? 'unc' : 'ok'}"><p class="kn-verdict-s">${esc(fn.label)}: ${esc(ev.status)}</p><ul>${ev.reasons.map(r => `<li>${esc(cap(r.text))}.</li>`).join('') || '<li>Every check the engine can make is met on claimed sizes.</li>'}</ul></div>`;
     limits = [['Whether it screens', 'The engine projects mature crowns onto the edge. It does not measure opacity, and it reports this itself: not a measured or verified screening performance.'], ['How it grows', 'Sizes are claimed mature ranges. Establishment, growth rate on this site and pruning are not modelled.']];
@@ -290,7 +317,7 @@ function arrangement(sp, fn, link) {
     `<p>The engine arranges the species that passed, then measures its own result on the model. It reports geometry and claimed sizes. A recorded attribute is not a performance: a claimed mature height does not prove a privacy screen, and a claimed spread does not prove closed ground.</p>${note}
     <dl class="pi-ledger">
       ${T.row('engine', engine, provE)}
-      ${T.row('evaluation', `${verdict}<table class="pi-table kn-eval"><tbody>${rows}</tbody></table><p class="pi-led-n">${esc(ev.note)}</p>`, provV)}
+      ${T.row('evaluation', `${verdict}<table class="pi-table kn-eval"><tbody>${rows}</tbody></table><p class="pi-led-n">${esc(ev.note)}</p>`, `${provV}${fn.id === 'z:screen' ? restsOn(link) : ''}`)}
     </dl>
     <h3 class="pi-h3">What this cannot establish</h3>
     <dl class="kn-limits">${limits.map(([k, t]) => `<div><dt>${k}</dt><dd>${t}</dd></div>`).join('')}</dl>
