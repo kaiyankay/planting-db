@@ -18,6 +18,24 @@
 
 # design/ — Planting Intelligence · Design Journey (Phase 2)
 
+## Decision Trace in the Studio (2026-11-14, Platform V3)
+
+The Studio explains its own decisions with the platform's Decision Trace (`platform/js/trace.js`), which reads the open project, the
+version on screen and the engine's `assemble` and evaluations. No planting logic is repeated here.
+
+- **Grow**: a selected plant object has the action *Why this plant here?*. It opens five lines in the inspector (Asked · Knowledge ·
+  Selection · Arrangement · Result) for that object, its bed and its function, and a link to the full trace
+  (`links.trace(species, { fn, bed, plant })`).
+- **Compose**: every species a bed's check lists (the mix, the species that also qualify, the candidates, the species asked for in
+  the Plant Library) has *Why here?* / *Why not here?*, which opens the same explanation in the evidence panel, computed on the
+  dry run. The rows of considered species use the trace's outcome words (planted · selected, not placed · eligible, not selected ·
+  excluded by a check · evidence unknown · planted for another function), one per function the bed is asked for.
+- Functions without an arrangement rule stay "recorded only" and are never asked "why here".
+- The saved view (`project.ui.view`) also keeps `whyOpen`, `cWhy` and `gen` (seed, density, second row: the run Compose previews,
+  repeated by the trace page for a design that is not generated yet). The view is saved when the page is left.
+- `?script=trace[&stop=a|b1|b2|c][&consider=<slug>,…]` replays the three journeys through the page's controls and writes what the
+  page shows, beside the engine's own figures, to `#script-out` (`trace.A`, `trace.B1`, `trace.B2`, `trace.B`, `trace.C`).
+
 ## UX redesign (2026-11-07, third brief: *Complete UI/UX Redesign & Implementation*)
 
 `index.html` is now a **journey**, not a dashboard: a document that scrolls **Imagine** (one large language field; photo / draw / dimensions / address as secondary entrances) → **Site** (what was read, as *stated · inferred or suggested · unknown* cards beside the editable plan; W × H, boundary, tree, open area, calibrate; the suggested bed is confirmed here) → **Intent** (goals with their engine effect spelled out — and *recorded only* where a goal has no placement rule — spatial functions, hard constraints, unknowns, the four operators, density · second row · seed, gate-checked candidate species) → **Generate**, which opens a fixed **Garden** stage that owns the viewport (Plan · Presentation · 3D of the same DesignVersion; a composer pill bottom-left; a revision card only while a region or a preview exists; plant card → evidence sheet; a schedule / versions / assumptions drawer; Undo · Redo · Export in the top bar; ← Site / ← Intent go back without losing anything). Stages unlock as data arrives and stay reachable in the top navigation; the wheel scrolls the page in the first three stages (⌘ / Ctrl + wheel zooms the plan) and zooms the canvas in the garden. Styles live in `css/journey.css` (warm ivory · deep olive · sage · caramel; Fraunces display with a serif fallback). The previous one-screen workspace is kept unchanged as **`classic.html`** (`js/app-classic.js`) for comparison and for anyone who wants every panel open at once.

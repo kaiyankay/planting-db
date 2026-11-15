@@ -399,7 +399,7 @@ function linkHtml(l) {
   else if (l.status === 'unknown') h += `<p>No link is drawn. ${l.verdict === 'contradicted by traits' ? `A recorded claim places <i class="sci">${esc(s.scientific_name)}</i> outside a requirement of ${esc(f.label)} — evidence against, under the conditions, cultivar and source stated below.` : `The database has no claim on a trait ${esc(f.label)} requires — not known, which is not the same as unsuitable.`} <span class="muted">No source lists the plant for this function either.</span></p>`;
   if (l.conflict) h += `<p class="warn small">Conflict: the documented use and a trait claim disagree — shown, not resolved. The use claim stays; the requirement check below names the contrary claim.</p>`;
   if (l.verification_note) h += `<p class="small faint">${esc(l.verification_note)}</p>`;
-  if (l.function === PI.TRACE_FUNCTION) h += `<p class="go"><a href="${esc(PI.links.trace(l.species))}" title="Follow this plant from its source to a bed in a design, with the engine's own evaluation">Trace this into a design</a></p>`;
+  if (PI.TRACE_FUNCTIONS.includes(l.function)) h += `<p class="go"><a href="${esc(PI.links.trace(l.species, { fn: l.function }))}" title="Follow this plant from its source to a bed in a design, with the engine's own evaluation">Trace this into a design</a></p>`;
   h += ruleHtml(l.rules);
   if (l.use_claims?.length) h += `<h3>Use claims <small>${l.use_claims.length}</small></h3>` + l.use_claims.map(claimHtml).join('');
   if (l.missing?.length) h += `<h3>Missing or contradicted</h3>` + l.missing.map(m => `<div class="reqrow"><div>${esc(m.strength)} ${esc(m.alternative_labels.join(' or '))}</div><div class="r ${esc(m.result)}">${esc(m.result)}</div></div>`).join('');

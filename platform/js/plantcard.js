@@ -10,7 +10,7 @@
 //   verification   verified · unverified                               whether a person checked the claim against its source
 //   AI check       supported by source · partially supported · conflicting evidence · not assessed
 //                                                                      an assistant's reading of the source — an assessment, not verification
-import { esc, links, slugOf, speciesId, imageUrl, artUrl, TRACE_FUNCTION } from './platform.js';
+import { esc, links, slugOf, speciesId, imageUrl, artUrl, TRACE_FUNCTIONS } from './platform.js';
 
 const IDX = new WeakMap();
 function idx(d) {
@@ -24,7 +24,7 @@ const human = s => String(s ?? '').replace(/_/g, ' ');
 const plural = (n, w, ws = w + 's') => `${n} ${n === 1 ? w : ws}`;
 export const tag = (cls, text = human(cls)) => `<span class="pi-tag ${esc(String(cls).replace(/\s+/g, '_'))}">${esc(text)}</span>`;
 const AI_WORD = { supported_by_source: 'supported by source', partially_supported: 'partially supported', conflicting_evidence: 'conflicting evidence', not_assessed: 'not assessed' };
-export const STUDIO_FUNCTIONS = ['z:screen', 'z:ground_cover'];   // the functions design/js/engine.js arranges today
+export const STUDIO_FUNCTIONS = TRACE_FUNCTIONS;   // the functions design/js/engine.js arranges today (one list, platform.js)
 
 /** the most specific recorded origin: the entity record when there is one */
 function originLabel(d, s) { const c = idx(d).AT.get(`${s.id}|origin`); if (!c) return human(s.origin_status); const v = c.values.find(v => v.entity) || c.values[0]; return v ? v.label : human(s.origin_status); }
@@ -87,7 +87,7 @@ function functionRow(d, s, f) {
   else if (l.drawn) why = `Inferred from recorded traits (rule ${esc(l.rule || 'KG-R4')}). No source states this use.`;
   else { const unmet = (l.requirements || []).filter(r => r.result !== 'met'); why = `${esc(l.verdict || 'not established')}${unmet.length ? ': ' + unmet.map(r => `needs ${esc(r.alternative_labels.join(' or '))}${r.contrary?.length ? `, recorded ${esc([...new Set(r.contrary.map(c => c.target_label))].join(', '))}` : ', nothing recorded'}`).join('; ') : ''}`; }
   const studio = STUDIO_FUNCTIONS.includes(f.id) ? (l.drawn ? 'The Garden Studio can arrange it for this function, bed by bed.' : 'The Garden Studio arranges this function, but not with this plant.') : 'Recorded only: the Garden Studio has no arrangement rule for this function yet.';
-  return `<div class="pi-fn ${l.drawn ? 'drawn' : 'gap'}"><div class="pi-fn-h"><h4><a href="${esc(links.explorer(s.id, { kind: 'link', id: l.id }))}" title="${esc(f.definition)} — open the requirement check in the Knowledge Explorer">${esc(f.label)}</a></h4>${tag(l.status)}${l.drawn ? tag(l.verification === 'none' ? 'none' : l.verification, l.verification === 'none' ? 'no claim to verify' : l.verification) : ''}${l.conflict ? tag('conflict', 'a trait claim contradicts it') : ''}</div><p>${why}</p><p class="pi-fn-s">${studio}${f.id === TRACE_FUNCTION ? ` <a href="${esc(links.trace(s.id))}" data-pi-go="trace">Follow this link into a design</a>` : ''}</p></div>`;
+  return `<div class="pi-fn ${l.drawn ? 'drawn' : 'gap'}"><div class="pi-fn-h"><h4><a href="${esc(links.explorer(s.id, { kind: 'link', id: l.id }))}" title="${esc(f.definition)} — open the requirement check in the Knowledge Explorer">${esc(f.label)}</a></h4>${tag(l.status)}${l.drawn ? tag(l.verification === 'none' ? 'none' : l.verification, l.verification === 'none' ? 'no claim to verify' : l.verification) : ''}${l.conflict ? tag('conflict', 'a trait claim contradicts it') : ''}</div><p>${why}</p><p class="pi-fn-s">${studio}${TRACE_FUNCTIONS.includes(f.id) ? ` <a href="${esc(links.trace(s.id, { fn: f.id }))}" data-pi-go="trace">${l.drawn ? 'Follow this link into a design' : 'See why it is not planted for it'}</a>` : ''}</p></div>`;
 }
 
 /** the full profile. ctx: { design, isConsidered, symbol, studio } — what the Library knows about the user's design and the Studio's drawing */

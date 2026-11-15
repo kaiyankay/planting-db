@@ -1,6 +1,6 @@
 # platform/ — the layer that makes the applications one product
 
-Methods M65, M66 · design system `DESIGN.md` · tests `tools/platform_tests.py` · build `tools/build_platform.py`.
+Methods M65, M66, M67 · design system `DESIGN.md` · tests `tools/platform_tests.py` · build `tools/build_platform.py`.
 
 Three destinations: **Design** (the Garden Studio, `design/`) · **Plants** (`plants/`) · **Knowledge** (`knowledge/`, with the
 Explorer in `brain/explorer/` and the Neural view in `brain/`).
@@ -10,8 +10,8 @@ Explorer in `brain/explorer/` and the Neural view in `brain/`).
 | `js/platform.js` | routes for both layouts, species ids, the cross-module links, the read-only look at the Studio's saved project, the list of species to consider, the platform bar and the Knowledge sub-navigation |
 | `js/plantcard.js` | Plant Card, compact card, Plant Profile — rendered from the knowledge snapshot |
 | `js/library.js` · `plants/` | the Plant Library (atlas and profiles, `#species=<slug>`) |
-| `js/trace.js` | the evidence-to-design trace: the eight kinds of statement, the case (a saved project + the Studio's engine, run in the page), the plan and edge drawings |
-| `js/overview.js` · `knowledge/` | Knowledge · Overview: one decision followed in five steps (`#species=<slug>`, `&case=mine&bed=<id>`) |
+| `js/trace.js` | the Decision Trace (M67): the case of one bed (`caseOf` over objects the caller holds, `buildCase` over a saved project), the selection decision and its eight outcome words (`decide`, `OUTCOME`), the compact explanation (`why`, `whyHtml`), the eight kinds of statement, the plan and edge drawings. Reads the Studio's engine; holds no planting rule |
+| `js/overview.js` · `knowledge/` | Knowledge · Overview: the full trace in five steps (`#fn=<function id>`, `#species=<slug>`, `&bed=<id>`, `&case=mine&bed=<id>&plant=<object id>`) |
 | `js/research.js` · `knowledge/research/` | why practitioner knowledge, the survey, what it changed, coverage, gaps and conflicts, how a release is made, how to contribute |
 | `js/method.js` · `knowledge/method/` | who or what decides, what is AI and what is not, the rules, the limits |
 | `contribute/` · `how-it-works/` | the V1 addresses: redirects to Research and Method |
@@ -19,8 +19,9 @@ Explorer in `brain/explorer/` and the Neural view in `brain/`).
 | `data/artwork.json` · `art/` | one illustration per species: AI-generated editorial artwork, not evidence; no plant fact |
 | `data/images.json` · `img/` | one reference photograph per species with author, licence and source; no plant fact |
 
-The other modules load this layer: `design/index.html` + `design/js/app.js` (bar, considered species in Compose, profile and
-trace links in Compose and Grow, the saved view, the `?open=compose` link), `brain/explorer/` (bar, plant card in the species
+The other modules load this layer: `design/index.html` + `design/js/app.js` (bar, considered species in Compose with the
+outcome words, "Why this plant here?" in Compose and Grow from `trace.js`, profile and trace links, the saved view, the
+`?open=compose` link, the `?script=trace` replay of the three journeys), `brain/explorer/` (bar, plant card in the species
 inspector, the link into the trace), `brain/index.html` + `brain/js/app5.js` (bar, plant card, `#species=<slug>`).
 
 The Knowledge overview imports the Studio's own `design/js/knowledge.js`, `engine.js` and `geom.js` and reads

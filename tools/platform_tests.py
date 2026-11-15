@@ -15,6 +15,13 @@ and in headless Chrome through one browser profile, so that pages loaded one aft
                        the Neural view carries the platform bar and reads the same snapshot date
   N  navigation        Design · Plants · Knowledge on every page; Overview · Explore · Research · Method inside Knowledge; the V1
                        addresses /contribute/ and /how-it-works/ arrive in Research and Method
+  T  decision trace    the universal trace (V3): the functions it follows are exactly the engine's arranged ones; Ground Cover is traced
+                       with the engine's pattern, plant objects and estimate, no pass mark invented; every species' outcome equals what
+                       the recorded picks and plant objects give; a recorded-only function shows no selection, arrangement or verdict
+  J  journeys          from an actual design (Studio replay ?script=trace): A a Screen plant in Grow → compact explanation → full trace of
+                       the same version and object → back with the state kept; B Ground Cover: two engine arrangements, generate, trace,
+                       change the pattern, generate, the trace follows the new version; C considered species: distinct outcomes that
+                       agree between Compose, the full trace and the engine
   K  evidence trace    the Knowledge overview: five steps on the Studio's recorded demonstration garden; the species, plant count and
                        verdict are the recorded design's; the source excerpt, claim, verification, AI assessment and link are the
                        snapshot's; the per-species results equal the engine's recorded ones (recomputed on the page); every species
@@ -92,6 +99,26 @@ for f in sorted(os.listdir(J(ROOT, "platform", "js"))) + ["../css/platform.css"]
     leak += [f"{f}: {n}" for n in names if n in s]
 check("C2 no species name is written in the platform layer's code", not leak, leak[:6])
 
+LINK = {(l["species"], l["function"]): l for l in ex["function_links"]}; SLUG = {s["slug"]: s["id"] for s in ex["species"]}
+def page_rows(dom):
+    """species id -> (outcome, fit) as the trace page prints them in its per-species tables"""
+    return {SLUG[a]: (b, c) for a, b, c in re.findall(r'<tr[^>]*data-species="([\w-]+)" data-outcome="(\w+)" data-fit="(\w*)"', dom)}
+def expected(v, bed_id, fn):
+    """the outcome of every species for a bed and a function, from a recorded version alone: its picks, its candidates' checks, its plant objects"""
+    role = {"z:screen": "screen", "z:ground_cover": "ground"}[fn]; a = v["assemblages"][bed_id]; objs = [o for o in v["plant_objects"] if o["bed_id"] == bed_id]
+    in_role = (lambda o: o["role"].startswith("screen")) if role == "screen" else (lambda o: o["role"] == "ground")
+    picks = {r: [x["id"] for x in a["picks"].get(r, [])] for r in ("screen", "ground", "accent")}; cands = {c["id"]: c for c in a["candidates"].get(role, [])}; out = {}
+    for sp in ex["species"]:
+        sid = sp["id"]; c = cands.get(sid)
+        if fn not in a["wanted"]: out[sid] = "not_asked"
+        elif sid in picks[role]: out[sid] = "planted" if any(o["species_id"] == sid and in_role(o) for o in objs) else "not_placed"
+        elif not c: out[sid] = "other_role" if any(sid in picks[r] for r in picks if r != role) else "unknown"
+        elif c["fit"] != "fails": out[sid] = "eligible"
+        elif c["checks"]["evidence"]["result"] == "fails" and LINK[(sid, fn)].get("verdict") == "evidence missing": out[sid] = "unknown"
+        else: out[sid] = "excluded"
+    return out
+
+
 if not CHROME:
     check("browser checks", False, "Chrome not found")
 else:
@@ -153,17 +180,37 @@ else:
         check("K2 source excerpt, claim text and id, human verification and AI assessment of the traced link are the snapshot's own records", okc and bool(link["use_claims"]) and f'<span class="id">{html.escape(link["id"], quote=False)}</span>' in dom and f'class="pi-tag {link["status"]}"' in dom, " ".join(det))
         kinds = re.findall(r'<div class="pi-led" data-kind="(\w+)"', dom)
         check("K3 the eight kinds of statement are separate rows: source, claim, verification, AI assessment, rule, site, engine, evaluation", [k for k in ("source", "claim", "verification", "ai", "rule", "site", "engine", "evaluation") if k in kinds] == ["source", "claim", "verification", "ai", "rule", "site", "engine", "evaluation"] and kinds.index("verification") != kinds.index("ai"), kinds)
-        tbl = " ".join(re.findall(r'<table class="pi-table kn-cand">(.*?)</table>', dom, re.S)); got = {SPN.get(text(n)): fit for n, fit in re.findall(r'<tr[^>]*><td><a [^>]*><i>(.*?)</i></a>.*?<b><span class="pi-res (\w+)">', tbl, re.S)}
-        want = {c["id"]: c["fit"] for c in rv["assemblages"][rbed["id"]]["candidates"]["screen"]}
-        check("K4 every species is checked for the bed on the page, and the results equal the ones the Studio recorded", got == want and len(got) == len(ex["species"]), {k.replace("plant:", ""): v for k, v in got.items() if want.get(k) != v} or f"{len(got)} species, identical")
+        got = page_rows(dom); want = {c["id"]: c["fit"] for c in rv["assemblages"][rbed["id"]]["candidates"]["screen"]}; exp = expected(rv, rbed["id"], "z:screen")
+        check("K4 every species is checked for the bed on the page: the checks' results equal the ones the Studio recorded, and each outcome is the one the recorded picks and plant objects give", {k: v[1] for k, v in got.items() if v[1]} == want and {k: v[0] for k, v in got.items()} == exp and len(got) == len(ex["species"]), {k.replace("plant:", ""): (v, exp.get(k), want.get(k)) for k, v in got.items() if v[0] != exp.get(k) or (v[1] and v[1] != want.get(k))} or f"{len(got)} species: {sorted(set(exp.values()))}")
         evr = text(first(dom, r'<section class="pi-sec kn-step" id="kn-evaluation"[^>]*>(.*?)</section>') or "")
         check("K5 the evaluation is the engine's: the recorded verdict, re-measured on the page with the same result, and said not to be a verified performance", f"Screen: {rev['status']}" in evr and "recomputed here: same result" in evr and "Not a measured or verified screening performance" in evr and f"{rev['covered_m']} m of {rev['edge_length_m']} m" in evr, evr[:160])
         okf, det = True, []
         for s in ex["species"]:
             dom = chrome(P2, f"/knowledge/#species={s['slug']}", 9000); l = next(x for x in ex["function_links"] if x["species"] == s["id"] and x["function"] == "z:screen"); src = text(first(dom, r'<section class="pi-sec kn-step" id="kn-sources"[^>]*>(.*?)</section>') or "")
-            ok = len(re.findall(r'<section class="pi-sec kn-step"', dom)) == 6 and f'<span class="id">{html.escape(l["id"], quote=False)}</span>' in dom and f'aria-pressed="true" href="#species={s["slug"]}"' in dom and (("No source states that" in src) == (not l.get("use_claims"))) and "Could not load" not in dom
+            ok = len(re.findall(r'<section class="pi-sec kn-step"', dom)) == 6 and f'<span class="id">{html.escape(l["id"], quote=False)}</span>' in dom and re.search(rf'aria-pressed="true" href="[^"]*" data-follow="species" data-species="{s["slug"]}"', dom) and (("No source states that" in src) == (not l.get("use_claims"))) and "Could not load" not in dom
             okf &= ok; det.append(f"{s['slug']}{'' if ok else '  ✗'}")
         check("K6 every species can be followed; one without a recorded use is shown as an explicit unknown, never with an invented source", okf, " ".join(det))
+
+        # ------------------------------------------------------------ T: the universal Decision Trace — Ground Cover, and the functions that are recorded only
+        eng = open(J(ROOT, "design", "js", "engine.js"), encoding="utf-8").read(); support = dict(re.findall(r"'(z:\w+)': \{ arranged: (true|false)", eng)); arr = sorted(k for k, v in support.items() if v == "true")
+        pj = open(J(ROOT, "platform", "js", "platform.js"), encoding="utf-8").read(); listed = sorted(re.findall(r"'(z:\w+)'", first(pj, r"export const TRACE_FUNCTIONS = \[(.*?)\]") or ""))
+        check("T1 the functions the trace follows into an arrangement are exactly the ones the engine arranges", listed == arr and len(support) == len(ex["functions"]), f"platform {listed} · engine {arr}")
+        GC = "z:ground_cover"; gbeds = [b for b in ref["site"]["beds"] if b["status"] != "rejected" and GC in rv["assemblages"].get(b["id"], {}).get("wanted", [])]; nG = lambda b: sum(1 for o in rv["plant_objects"] if o["bed_id"] == b["id"] and o["role"] == "ground")
+        gbed = sorted(gbeds, key=lambda b: -nG(b))[0]; grec = next(g for g in rv["evaluation"]["ground_cover"] if g["bed_id"] == gbed["id"]); ggrp = next(g for g in rv["groups"] if g["bed_id"] == gbed["id"] and g["role"] == "ground")
+        dom = chrome(P2, "/knowledge/#fn=z%3Aground_cover", 9000); case = text(first(dom, r'<section class="kn-case"[^>]*>(.*?)</section>') or ""); evr = text(first(dom, r'<section class="pi-sec kn-step" id="kn-evaluation"[^>]*>(.*?)</section>') or "")
+        check("T2 Ground Cover is traced on the bed of the recorded garden where it has most plants: the engine's pattern, its plant count and its estimate, re-measured with the same result and no pass mark invented", f'data-bed="{gbed["id"]}"' in dom and f"{nG(gbed)} plant" in case and ggrp["params"]["pattern_label"].lower() in case and f"{round(grec['ground_cover_share'] * 100)} %" in case and "It sets no pass mark" in case and "recomputed here: same result" in evr and "sets no threshold" in evr and f"{ggrp['params']['placed']} placed" in evr and "not met" not in text(first(dom, r'<div class="kn-verdict[^>]*>(.*?)</div>') or ""), case[:220])
+        okg, det = True, []
+        for b in gbeds:
+            dom = chrome(P2, f"/knowledge/#fn=z%3Aground_cover&bed={b['id']}", 9000); got = page_rows(dom); exp = expected(rv, b["id"], GC); ok = {k: v[0] for k, v in got.items()} == exp and len(got) == len(ex["species"])
+            okg &= ok; det.append(f"{b['name']}: " + ", ".join(f"{n} {o}" for o, n in sorted(__import__('collections').Counter(exp.values()).items())) + ("" if ok else "  ✗ " + str({k.replace('plant:', ''): (v[0], exp.get(k)) for k, v in got.items() if v[0] != exp.get(k)})))
+        check("T3 in every Ground Cover bed each species' outcome on the page (planted · selected, not placed · eligible, not selected · excluded by a check · evidence unknown · planted for another function) is the one the recorded picks and plant objects give", okg, " | ".join(det))
+        oku, det = True, []
+        for f in ex["functions"]:
+            if support.get(f["id"]) == "true": continue
+            dom = chrome(P2, f"/knowledge/#fn={f['id'].replace(':', '%3A')}", 9000); case = text(first(dom, r'<section class="kn-case"[^>]*>(.*?)</section>') or "")
+            ok = f"{f['label']} is recorded only" in case and 'class="pi-table kn-cand"' not in dom and 'class="kn-verdict' not in dom and 'kn-plan zoom' not in dom and "Nothing is arranged or evaluated" in dom and 'data-outcome="recorded_only"' in dom and len(re.findall(r'<section class="pi-sec kn-step"', dom)) == 6
+            oku &= ok; det.append(f"{f['label']}{'' if ok else '  ✗'}")
+        check("T4 a function the engine does not arrange is shown as recorded only: its knowledge is traced, and no selection table, arrangement or verdict is shown for it", oku, " ".join(det))
 
         # ------------------------------------------------------------ R: Research and Method
         dom = chrome(P2, "/knowledge/research/", 7000); sq = re.findall(r'<(?:a|span) class="(rec|dis|no)"', first(dom, r'<table class="rs-grid"[^>]*>(.*?)</table>') or ""); stt = ex["stats"]
@@ -207,13 +254,40 @@ else:
                 dom = chrome(P, f"/knowledge/#species=gaultheria-shallon&case=mine&bed={bed_id}"); case = text(first(dom, r'<section class="kn-case"[^>]*>(.*?)</section>') or "")
                 go = first(dom, r'href="([^"]*\?open=compose[^"]*)"') or ""
                 check("K8 traced in the visitor's design: the bed is theirs, and the way on is that bed in Compose", "your design Platform journey" in case and f"bed={bed_id}" in html.unescape(go) and "species=gaultheria-shallon" in html.unescape(go), case[:160])
-                dom = chrome(P, f"/?open=compose&bed={bed_id}&species=gaultheria-shallon", 12000); stage = first(dom, r'<body[^>]*data-stage="([a-z]+)"'); evp = first(dom, r'<div id="cws-evidence"[^>]*>(.*?)</div>\s*</div>') or first(dom, r'(<div id="cws-evidence".{0,1500})') or ""
-                check("K9 the link opens Compose on that bed with the species' evidence, which leads back to the trace", stage == "intent" and 'data-pi-mini="gaultheria-shallon"' in evp and "Trace this decision" in evp and f"bed={bed_id}" in html.unescape(evp), f"stage {stage} · evidence panel {len(evp)} chars")
+                dom = chrome(P, f"/?open=compose&bed={bed_id}&species=gaultheria-shallon&fn=z%3Ascreen", 12000); stage = first(dom, r'<body[^>]*data-stage="([a-z]+)"'); evp = first(dom, r'(<div id="cws-evidence".{0,12000})') or ""
+                check("K9 the link opens Compose on that bed with the species' compact explanation and record, which lead back to the full trace", stage == "intent" and 'data-pi-mini="gaultheria-shallon"' in evp and 'data-why-species="gaultheria-shallon"' in evp and 'class="pi-why-go"' in evp and f"bed={bed_id}" in html.unescape(evp), f"stage {stage} · evidence panel {len(evp)} chars")
+        # ------------------------------------------------------------ J: three journeys that start from an actual design (the Studio's own replay ?script=trace)
+        P3 = tempfile.mkdtemp(prefix="pi-trace-"); SEC = lambda dom, i: text(first(dom, rf'<section class="(?:pi-sec kn-step|kn-case)" id="{i}"[^>]*>(.*?)</section>') or "")
+        def replay(stop):
+            dom = chrome(P3, f"/?script=trace&stop={stop}", 45000); raw = first(dom, r'<pre id="script-out"[^>]*>(.*?)</pre>'); o = json.loads(html.unescape(raw)) if raw else {}; return o.get("trace") or {}, o.get("error")
+        page = lambda href: chrome(P3, "/knowledge/" + href[href.index("#"):], 9000)
+        t, err = replay("a"); A = t.get("A") or {}
+        if check("J1 Screen, from Grow: a planted object of the Screen row offers 'Why this plant here?'; its five lines carry the engine's outcome, row plan and verdict, and the garden is the one Compose previewed", bool(A) and A.get("action_offered") and A["why"]["outcome"] == "planted" and set(A["why"]["lines"]) == {"asked", "knowledge", "selection", "arrangement", "result"} and A["engine"]["status"] in A["why"]["lines"]["result"] and f"{A['engine']['placed']} placed" in A["why"]["lines"]["arrangement"] and A["preview_match"]["identical"], err or (A.get("why") or {}).get("lines")):
+            dom = page(A["why"]["href"]); case = SEC(dom, "kn-case"); evr = SEC(dom, "kn-evaluation")
+            check("J2 the full trace opened from that plant is of the same design version, bed and plant object: outcome planted, the engine's verdict re-measured with the same result", 'data-case="mine"' in dom and f'data-bed="{A["bed"]}"' in dom and 'data-fn="z:screen"' in dom and A["plant"] in case and A["version"] in case and 'class="kn-case-sp" data-outcome="planted"' in dom and f"Screen: {A['engine']['status']}" in evr and "recomputed here: same result" in evr and f"{A['engine']['covered_m']} m of {A['engine']['edge_length_m']} m" in evr, case[:200])
+            dom = chrome(P3, "/", 12000); stage = first(dom, r'<body[^>]*data-stage="([a-z]+)"'); card = first(dom, r'(<div id="plantcard"[^>]*>.*?</div>\s*<div id="grow-overview")') or ""
+            check("J3 back in Design: the same stage, the same plant selected, the explanation still open", stage == "garden" and A["plant"] in card and "data-whybox" in card and 'hidden=""' not in card[:60], f"stage {stage} · card {len(card)} chars")
+        t, err = replay("b1"); B1 = t.get("B1") or {}; dom1 = page(B1["why"]["href"]) if B1 else ""
+        t, err2 = replay("b2"); B2 = t.get("B2") or {}; Bx = t.get("B") or {}; dom2 = page(B2["why"]["href"]) if B2 else ""
+        def ground_ok(B, dom):
+            case = SEC(dom, "kn-case"); evr = SEC(dom, "kn-evaluation"); e = B["engine"]
+            return 'data-case="mine"' in dom and 'data-fn="z:ground_cover"' in dom and f'data-bed="{B["bed"]}"' in dom and B["plant"] in case and B["version"] in case and e["pattern_label"].lower() in case and f"{round(e['ground_cover_share'] * 100)} %" in case and f"{e['placed']} placed" in evr and e["pattern_label"] in evr and "recomputed here: same result" in evr and "sets no threshold" in evr
+        if check("J4 Ground Cover, in Compose: the arrangement options of one bed are different sets of plant objects from the engine, and the chosen one is generated exactly as previewed, twice", bool(B1) and bool(B2) and B1.get("distinct_options", 0) >= 2 and B1["preview_equals_version"] and B2["preview_equals_version"] and B1["preview_match"]["identical"] and B2["preview_match"]["identical"] and Bx.get("different_versions") and Bx.get("different_patterns") and Bx.get("why_names_its_pattern"), err or err2 or {k: (B.get("chosen"), B.get("version")) for k, B in (("B1", B1), ("B2", B2))}):
+            check("J5 the trace of a ground plant describes the current version: after the pattern is changed and the garden generated again, it shows the new version, pattern, plant count and estimate, not the earlier ones", ground_ok(B1, dom1) and ground_ok(B2, dom2) and B1["version"] != B2["version"] and B1["version"] not in SEC(dom2, "kn-case") and B1["engine"]["pattern_label"].lower() not in SEC(dom2, "kn-case"), f"{B1['engine']['pattern_label']} {B1['version']} {round(B1['engine']['ground_cover_share'] * 100)} % → {B2['engine']['pattern_label']} {B2['version']} {round(B2['engine']['ground_cover_share'] * 100)} %")
+        t, err = replay("c"); C = t.get("C") or {}; rows = C.get("rows") or []; WORDS = {"planted", "selected, not placed", "eligible, not selected", "excluded by a check", "evidence unknown", "planted for another function", "not asked of this bed"}
+        outs = {r["species"]: r["outcomes"][0]["outcome"] for r in rows if r.get("outcomes")}; wn = C.get("why_not") or {}
+        if check("J6 considered species, in Compose: each has its own outcome in the platform's words; an excluded one can not be added and says why, an eligible one can; the outcome agrees with the engine's own check", len(rows) >= 2 and "excluded" in outs.values() and any(o in ("eligible", "planted", "not_placed") for o in outs.values()) and all(set(x["text"].split(". ")[0:1]) and r["word"].split(" · ")[0] in WORDS for r in rows for x in r["outcomes"][:1]) and all((outs[r["species"]] == "excluded") == (r["engine"]["fit"] == "fails") for r in rows if r["engine"].get("fit")) and all(r["can_add"] == (outs[r["species"]] == "eligible") for r in rows) and wn.get("outcome") == "excluded" and "Why not" in wn.get("title", "") and "result" not in wn.get("lines", {"result": 1}), err or {k.replace("plant:", ""): v for k, v in outs.items()}):
+            okj, det = True, []
+            for r in rows:
+                slug = r["species"].replace("plant:", ""); dom = chrome(P3, f"/knowledge/#fn=z%3Aground_cover&species={slug}&case=mine&bed={C['bed_id']}", 9000); got = first(dom, r'class="kn-case-sp" data-outcome="(\w+)"'); ok = got == outs[r["species"]] and 'data-case="mine"' in dom and f'data-bed="{C["bed_id"]}"' in dom
+                okj &= ok; det.append(f"{slug}: {got}{'' if ok else '  ✗ Compose says ' + outs[r['species']]}")
+            check("J7 the full trace gives each of those species the same outcome as Compose, in the same bed of the same design", okj, " · ".join(det))
+        shutil.rmtree(P3, ignore_errors=True)
     finally:
         shutil.rmtree(P, ignore_errors=True); shutil.rmtree(P2, ignore_errors=True)
 
 if "--keep" not in sys.argv: shutil.rmtree(OUT, ignore_errors=True)
-for f in ("platform-journey.json",):   # the design server, when it is the target, writes the replay's project: never keep it
+for f in ("platform-journey.json", "script-trace.json"):   # the design server, when it is the target, writes the replay's project: never keep it
     if os.path.exists(J(ROOT, "designs", f)): os.remove(J(ROOT, "designs", f))
 passed = sum(1 for _, ok, _ in results if ok)
 os.makedirs(J(ROOT, "eval"), exist_ok=True)

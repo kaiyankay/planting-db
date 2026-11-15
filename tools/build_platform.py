@@ -104,7 +104,7 @@ rewrite("index.html", [
     ('<a href="./classic.html">Classic workspace</a><a href="./tests.html">Engine tests</a>', f'<span>Platform preview · {stamp}</span>'),
     ('<title>Planting Intelligence — imagine your garden</title>', '<title>Planting Intelligence — platform preview</title>' + NOINDEX),
 ])
-rewrite("js/app.js", [("'../brain/data/explorer.json'", "'./data/explorer.json'"), ("'../../platform/js/platform.js'", "'../platform/js/platform.js'"), ("'../../platform/js/plantcard.js'", "'../platform/js/plantcard.js'")])
+rewrite("js/app.js", [("'../brain/data/explorer.json'", "'./data/explorer.json'"), ("'../../platform/js/platform.js'", "'../platform/js/platform.js'"), ("'../../platform/js/plantcard.js'", "'../platform/js/plantcard.js'"), ("'../../platform/js/trace.js'", "'../platform/js/trace.js'")])
 
 # ---------------------------------------------------------------- the platform layer and its pages
 tree("platform/css", "platform/css"); tree("platform/js", "platform/js"); tree("platform/data", "platform/data"); tree("platform/img", "platform/img"); tree("platform/art", "platform/art")

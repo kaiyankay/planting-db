@@ -302,6 +302,21 @@ Object handles on the plan are small white squares with an ink edge; mid-edge ha
   assessment · rule-derived relationship · your site information · engine output · evaluation. A source's own words are a
   quotation in sans at 17 px, never in Fraunces. Two kinds never share a row, and a row never borrows another kind's tag.
   Where nothing is recorded the row stays and says so in bold ("No source states …"), marked "an explicit unknown".
+- **Decision Trace** (V3): one explanation of one decision — a species, a spatial function, a bed — in two sizes. *Full*, on
+  Knowledge · Overview: the five steps (Sources → Claims → Function → Selection → Arrangement & result), each in the ledger;
+  the step list under the bar is drawn as a chain with arrows, because the order is the argument. *Compact*, in the Studio's
+  inspector ("Why this plant here?"): a Fraunces question, then five hairline rows — Asked · Knowledge · Selection ·
+  Arrangement · Result — and one text link to the full trace. Both are rendered by `platform/js/trace.js` from the engine's
+  own records; neither is ever a modal or a separate dashboard.
+- **What is being followed** (Overview): three rows of chips under the decision — Function, Bed, Species — each with one
+  small-caps label. A function the engine does not arrange carries "recorded only" in mono inside its chip, and its trace
+  stops at step 3 in words: no selection table, no drawing, no verdict.
+- **Outcome words**: what became of a species in a bed, always one of: *planted* (olive) · *selected, not placed* (caramel
+  ink) · *eligible, not selected* (ink) · *excluded by a check* (rust) · *evidence unknown* (caramel ink) · *planted for
+  another function* (ink) · *recorded only* · *not asked of this bed* (ink-3). Set as 600-weight words like the result words,
+  the same in Library, Knowledge, Compose and Grow. Never collapsed into "not suitable" or "not planted".
+- **Estimate verdict** (Ground Cover): the Fraunces line reads "Ground Cover: an estimate, 52 %" in caramel ink, never in
+  olive or rust: the engine sets no pass mark, so the page shows none.
 - **Who-tags** (mono, the same shape as the status tags): named source (solid olive edge) · from records (olive-soft fill) ·
   person (paper-2 fill) · AI-assessed (dashed caramel) · rule-based (olive edge) · you (ink edge) · estimate (dotted caramel).
 - **Result words**: meets / met / pass / supported in olive, uncertain / conditional / unknown / proxy / heuristic in caramel
