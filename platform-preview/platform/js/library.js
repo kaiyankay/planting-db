@@ -57,7 +57,8 @@ function renderAtlas() {
       <span class="lib-count">${show.length} of ${d.species.length} shown</span>
     </div>
     ${des ? `<p class="lib-design"><span>Your design <b>${esc(des.name)}</b> is at ${esc(des.stage_label)}${des.plants ? `, with ${des.plants} plants of ${des.planted_species.length} species` : ''}.</span>${cons.size ? `<span>${cons.size} species being considered.</span>` : ''}<a href="${PI.links.design()}">${esc(PI.returnLabel(des))}</a></p>` : ''}
-    <div class="lib-grid">${show.map(s => PC.cardHtml(d, s.id, S.imgs, { symbol: symbolOf(s.id), note: note(s) })).join('') || `<p class="lib-empty">No species in this snapshot is both ${esc(S.form || '')} and recorded for ${esc(d.functions.find(f => f.id === S.fn)?.label || '')}. That is a gap in the records, not a statement about the plants. <a href="#">Show all</a></p>`}</div>`;
+    <div class="lib-grid">${show.map(s => PC.cardHtml(d, s.id, S.imgs, { symbol: symbolOf(s.id), note: note(s) })).join('') || `<p class="lib-empty">No species in this snapshot is both ${esc(S.form || '')} and recorded for ${esc(d.functions.find(f => f.id === S.fn)?.label || '')}. That is a gap in the records, not a statement about the plants. <a href="#">Show all</a></p>`}</div>
+    ${S.imgs?.art && Object.keys(S.imgs.art).length ? `<p class="lib-art">The illustrations are AI-generated editorial artwork. They are not botanical plates and not evidence; every name and fact on these pages is read from the knowledge snapshot. Each profile also shows a credited reference photograph.</p>` : ''}`;
 }
 
 // ---------------------------------------------------------------- profile

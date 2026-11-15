@@ -1,15 +1,16 @@
 // Plant Card and Plant Profile — the one presentation of a species, used by the Plant Library and, in its compact form, by the
 // Knowledge Explorer and the Garden Studio (Compose, Grow). Every word about a plant is read from the published knowledge
 // snapshot `d` (brain/data/explorer.json, tools/build_explorer.py): identity, attribute cells, function links, claims, evidence
-// checks, sources. This file adds wording around those records and nothing else. The photograph and its credit come from
-// platform/data/images.json, a presentation manifest that holds no plant fact.
+// checks, sources. This file adds wording around those records and nothing else. Two presentation assets stand beside them and
+// hold no plant fact: an editorial illustration (platform/data/artwork.json — AI-generated, said so wherever it is shown, never
+// read as evidence) and one credited reference photograph (platform/data/images.json). Names are always set in HTML from the snapshot.
 //
 // Three vocabularies are kept apart everywhere, with the words the snapshot uses:
 //   status         documented · derived · candidate · unknown        how a line of knowledge came to exist
 //   verification   verified · unverified                               whether a person checked the claim against its source
 //   AI check       supported by source · partially supported · conflicting evidence · not assessed
 //                                                                      an assistant's reading of the source — an assessment, not verification
-import { esc, links, slugOf, speciesId, imageUrl } from './platform.js';
+import { esc, links, slugOf, speciesId, imageUrl, artUrl, TRACE_FUNCTION } from './platform.js';
 
 const IDX = new WeakMap();
 function idx(d) {
@@ -32,14 +33,16 @@ const valueHtml = v => `<span class="pi-val">${esc(v.label)}${v.conditions?.leng
 const sourceShort = (d, sid) => { const s = d.sources[sid]; if (!s) return sid; return s.type === 'practitioner' ? `Practitioner survey, ${sid.replace('survey-r', 'respondent ')}` : s.label.split(' — ')[0]; };
 
 // ---------------------------------------------------------------- image
-/** the photograph of a species, or the fallback: the plan symbol the Studio draws from recorded claims, labelled as such */
+/** the figure of a species. Card and compact card: the illustration (falling back to the photograph, then to the Studio's plan
+ *  symbol). Profile (`size: 'full'`): the illustration as the plate, and under it the credited photograph as a factual reference. */
+const ART_NOTE = 'AI-generated editorial illustration. Not a botanical reference: no fact on this page is read from it.';
+const photoCredit = im => `Photo: ${esc(im.author)}, ${esc(im.licence)}, via Wikimedia Commons`;
 export function figureHtml(d, id, imgs, { size = 'card', symbol = null, credit = false } = {}) {
-  const s = species(d, id); const im = imgs?.images?.[s.slug];
-  if (im) {
-    const cr = `Photo: ${esc(im.author)}, ${esc(im.licence)}, via Wikimedia Commons`;
-    return `<figure class="pi-fig"><img src="${esc(imageUrl(size === 'card' ? im.card : im.file))}" alt="${esc(s.scientific_name)}${im.caption_at_source ? ` — ${esc(im.caption_at_source)}` : ''}" loading="lazy" width="${im.width}" height="${im.height}">${credit ? `<figcaption><a href="${esc(im.source_url)}" rel="noopener">${cr}</a><span>Identified as <i>${esc(s.scientific_name)}</i> on its Commons page; not verified by this project.</span></figcaption>` : ''}</figure>`;
-  }
-  return `<figure class="pi-fig pi-fig-symbol">${symbol ? `<svg viewBox="-1.25 -1.25 2.5 2.5" role="img" aria-label="plan symbol of ${esc(s.scientific_name)}"><g>${symbol}</g></svg>` : ''}<figcaption><span>No licensed photograph yet. This is the plan symbol the Garden Studio draws from the recorded growth form, spread and colour claims — not a botanical illustration.</span></figcaption></figure>`;
+  const s = species(d, id); const art = imgs?.art?.[s.slug]; const im = imgs?.images?.[s.slug];
+  const ref = im && credit ? `<div class="pi-ref"><a href="${esc(imageUrl(im.file))}" title="open the photograph"><img src="${esc(imageUrl(im.card))}" alt="Photograph: ${esc(s.scientific_name)}${im.caption_at_source ? ` — ${esc(im.caption_at_source)}` : ''}" loading="lazy"></a><p><b>Reference photograph</b><a href="${esc(im.source_url)}" rel="noopener">${photoCredit(im)}</a><span>Identified as <i>${esc(s.scientific_name)}</i> on its Commons page; not verified by this project.</span></p></div>` : '';
+  if (art) { const fig = `<figure class="pi-fig pi-art"><img src="${esc(artUrl(art.file))}" alt="Illustration of ${esc(s.scientific_name)}" loading="lazy" width="${art.width}" height="${art.height}">${credit ? `<figcaption><span>${ART_NOTE}</span></figcaption>` : ''}</figure>`; return credit ? `<div class="pi-hero-f">${fig}${ref}</div>` : fig; }
+  if (im) return `<figure class="pi-fig"><img src="${esc(imageUrl(size === 'card' ? im.card : im.file))}" alt="${esc(s.scientific_name)}${im.caption_at_source ? ` — ${esc(im.caption_at_source)}` : ''}" loading="lazy" width="${im.width}" height="${im.height}">${credit ? `<figcaption><a href="${esc(im.source_url)}" rel="noopener">${photoCredit(im)}</a><span>Identified as <i>${esc(s.scientific_name)}</i> on its Commons page; not verified by this project.</span></figcaption>` : ''}</figure>`;
+  return `<figure class="pi-fig pi-fig-symbol">${symbol ? `<svg viewBox="-1.25 -1.25 2.5 2.5" role="img" aria-label="plan symbol of ${esc(s.scientific_name)}"><g>${symbol}</g></svg>` : ''}<figcaption><span>No illustration or licensed photograph yet. This is the plan symbol the Garden Studio draws from the recorded growth form, spread and colour claims.</span></figcaption></figure>`;
 }
 
 // ---------------------------------------------------------------- Plant Card (atlas)
@@ -60,7 +63,8 @@ export function cardHtml(d, id, imgs, { symbol = null, note = '' } = {}) {
 /** names + thumbnail + the two ways onward. `extra` is appended to the actions (a module's own button). */
 export function miniHtml(d, id, imgs, { extra = '', here = null } = {}) {
   const s = species(d, id); if (!s) return ''; const im = imgs?.images?.[s.slug];
-  return `<div class="pi-mini" data-pi-mini="${esc(s.slug)}">${im ? `<img src="${esc(imageUrl(im.card))}" alt="" loading="lazy" title="Photo: ${esc(im.author)}, ${esc(im.licence)}, via Wikimedia Commons">` : ''}<div class="pi-mini-b"><div class="pi-mini-n"><i>${esc(s.scientific_name)}</i><span>${esc(s.common_names[0] || '')} · ${esc(s.growth_form_label)}</span></div><div class="pi-mini-a">${here === 'profile' ? '' : `<a href="${esc(links.profile(s.id))}" data-pi-go="profile">Plant profile</a>`}${here === 'explorer' ? '' : `<a href="${esc(links.explorer(s.id))}" data-pi-go="explorer">Knowledge graph</a>`}${extra}</div></div></div>`;
+  const art = imgs?.art?.[s.slug];
+  return `<div class="pi-mini" data-pi-mini="${esc(s.slug)}">${art ? `<img class="art" src="${esc(artUrl(art.file))}" alt="" loading="lazy" title="AI-generated illustration, not a botanical reference">` : im ? `<img src="${esc(imageUrl(im.card))}" alt="" loading="lazy" title="${photoCredit(im)}">` : ''}<div class="pi-mini-b"><div class="pi-mini-n"><i>${esc(s.scientific_name)}</i><span>${esc(s.common_names[0] || '')} · ${esc(s.growth_form_label)}</span></div><div class="pi-mini-a">${here === 'profile' ? '' : `<a href="${esc(links.profile(s.id))}" data-pi-go="profile">Plant profile</a>`}${here === 'explorer' ? '' : `<a href="${esc(links.explorer(s.id))}" data-pi-go="explorer">Evidence</a>`}${extra}</div></div></div>`;
 }
 
 // ---------------------------------------------------------------- Plant Profile
@@ -83,7 +87,7 @@ function functionRow(d, s, f) {
   else if (l.drawn) why = `Inferred from recorded traits (rule ${esc(l.rule || 'KG-R4')}). No source states this use.`;
   else { const unmet = (l.requirements || []).filter(r => r.result !== 'met'); why = `${esc(l.verdict || 'not established')}${unmet.length ? ': ' + unmet.map(r => `needs ${esc(r.alternative_labels.join(' or '))}${r.contrary?.length ? `, recorded ${esc([...new Set(r.contrary.map(c => c.target_label))].join(', '))}` : ', nothing recorded'}`).join('; ') : ''}`; }
   const studio = STUDIO_FUNCTIONS.includes(f.id) ? (l.drawn ? 'The Garden Studio can arrange it for this function, bed by bed.' : 'The Garden Studio arranges this function, but not with this plant.') : 'Recorded only: the Garden Studio has no arrangement rule for this function yet.';
-  return `<div class="pi-fn ${l.drawn ? 'drawn' : 'gap'}"><div class="pi-fn-h"><h4><a href="${esc(links.explorer(s.id, { kind: 'link', id: l.id }))}" title="${esc(f.definition)} — open the requirement check in the Knowledge Explorer">${esc(f.label)}</a></h4>${tag(l.status)}${l.drawn ? tag(l.verification === 'none' ? 'none' : l.verification, l.verification === 'none' ? 'no claim to verify' : l.verification) : ''}${l.conflict ? tag('conflict', 'a trait claim contradicts it') : ''}</div><p>${why}</p><p class="pi-fn-s">${studio}</p></div>`;
+  return `<div class="pi-fn ${l.drawn ? 'drawn' : 'gap'}"><div class="pi-fn-h"><h4><a href="${esc(links.explorer(s.id, { kind: 'link', id: l.id }))}" title="${esc(f.definition)} — open the requirement check in the Knowledge Explorer">${esc(f.label)}</a></h4>${tag(l.status)}${l.drawn ? tag(l.verification === 'none' ? 'none' : l.verification, l.verification === 'none' ? 'no claim to verify' : l.verification) : ''}${l.conflict ? tag('conflict', 'a trait claim contradicts it') : ''}</div><p>${why}</p><p class="pi-fn-s">${studio}${f.id === TRACE_FUNCTION ? ` <a href="${esc(links.trace(s.id))}" data-pi-go="trace">Follow this link into a design</a>` : ''}</p></div>`;
 }
 
 /** the full profile. ctx: { design, isConsidered, symbol, studio } — what the Library knows about the user's design and the Studio's drawing */
@@ -110,7 +114,7 @@ export function detailHtml(d, id, imgs, ctx = {}) {
       <p class="pi-names">${esc(s.common_names.join(' · '))}</p>
       <p class="pi-ident">${esc(s.family)} · ${esc(s.growth_form_label)} ${tag(s.growth_form_status === 'supported' ? 'derived' : 'to_confirm', s.growth_form_status === 'supported' ? `growth form supported, ${s.growth_form_rule}` : `growth form ${s.growth_form_status}`)}</p>
       <dl class="pi-glance">${glance.map(([k, v]) => `<div><dt>${k}</dt><dd>${v}</dd></div>`).join('')}</dl>
-      <div class="pi-actions"><a class="pi-btn primary" href="${esc(links.explorer(s.id))}">Open in the Knowledge Explorer</a><a class="pi-btn" href="${esc(links.neural(s.id))}">Neural view</a></div>
+      <div class="pi-actions"><a class="pi-btn primary" href="${esc(links.explorer(s.id))}">See the evidence</a><a class="pi-btn" href="${esc(links.trace(s.id))}" data-pi-go="trace">Trace it into a design</a><a class="pi-btn quiet" href="${esc(links.neural(s.id))}">Neural view</a></div>
       ${consider}
       <p class="pi-counts">${plural(s.claims.live, 'live claim')} from ${plural(bySource.size, 'source')} · ${s.claims.verified} verified by a person · ${plural(disagree.length, 'field')} where sources disagree · ${plural(missing.length, 'field')} not recorded</p>
     </div>
@@ -146,7 +150,7 @@ export function detailHtml(d, id, imgs, ctx = {}) {
 
   ${rels.length ? `<section class="pi-sec" id="sec-relations"><h2>Recorded with other plants</h2><p class="pi-sec-l">Only pairings someone recorded. Sharing a trait never makes two plants companions.</p><ul class="pi-rels">${rels.map(r => { const o = r.a === s.id ? r.b : r.a; const os = X.SP.get(o); return os ? `<li>${esc(human(r.type))} <a href="${esc(links.profile(o))}"><i>${esc(os.scientific_name)}</i></a> ${tag(r.kg_status)}${r.placeholder ? tag('candidate', 'model placeholder') : ''} <span class="pi-src">${esc(sourceShort(d, r.source_id))}</span></li>` : ''; }).join('')}</ul></section>` : ''}
 
-  <section class="pi-sec" id="sec-sources"><h2>Sources</h2><p class="pi-sec-l">Where the ${s.claims.live} claims come from. Facts are stored with credit; no source text or photograph is copied.</p>
+  <section class="pi-sec" id="sec-sources"><h2>Sources</h2><p class="pi-sec-l">Where the ${s.claims.live} claims come from. Facts are stored in the project's own words, with credit to the source.</p>
     <ul class="pi-sources">${[...bySource.entries()].sort((a, b) => b[1] - a[1]).map(([sid, n]) => { const so = d.sources[sid] || { label: sid }; const pract = so.type === 'practitioner'; return `<li><span class="pi-so-n">${n}</span><span class="pi-so-l">${so.url && !pract ? `<a href="${esc(so.url)}" rel="noopener">${esc(so.label)}</a>` : esc(pract ? sourceShort(d, sid) : so.label)}<small>${esc(human(so.type || ''))}${so.publisher && !pract ? ` · ${esc(so.publisher)}` : ''}${pract ? ' · anonymous response to the project survey' : ''}${so.licence_tier ? ` · licence tier ${esc(so.licence_tier)}` : ''}</small></span></li>`; }).join('')}</ul></section>
   </article>`;
 }
