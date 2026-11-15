@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Build the integrated platform as one self-contained static folder for GitHub Pages (2026-11-14, M65).
+Build the integrated platform as one self-contained static folder for GitHub Pages (2026-11-14, M65; V2 layout M66).
 
   python3 -I tools/build_platform.py [out-dir]        default out-dir: ./platform-preview
 
@@ -9,13 +9,16 @@ into one folder, in the layout the platform ships with, and rewrites the paths t
 
   <out>/                    Design      the Garden Studio (design/)               Imagine → Shape → Compose → Grow
   <out>/plants/             Plants      the Plant Library (platform/plants/)
-  <out>/explore/            Explore     the Knowledge Explorer (brain/explorer/)
-  <out>/explore/neural/     Explore     the Neural view (brain/index.html + brain/js/)
-  <out>/contribute/         Contribute  (platform/contribute/)
-  <out>/how-it-works/                   (platform/how-it-works/)
-  <out>/platform/           the platform layer: css, js, photograph credits and photographs
+  <out>/knowledge/          Knowledge   the overview: one decision traced from a source to a bed (platform/knowledge/)
+  <out>/knowledge/research/ Knowledge   Research and contribution (platform/knowledge/research/)
+  <out>/knowledge/method/   Knowledge   Method (platform/knowledge/method/)
+  <out>/explore/            Knowledge   the Explorer: graph · matrix · table · compare (brain/explorer/)
+  <out>/explore/neural/     Knowledge   the Neural view (brain/index.html + brain/js/)
+  <out>/contribute/ · <out>/how-it-works/   the V1 addresses, now redirects into Knowledge
+  <out>/platform/           the platform layer: css, js, illustrations, photograph credits and photographs
   <out>/data/               ONE knowledge snapshot for all of the above, copied from this working tree:
-                              explorer.json                          Studio · Library · Explorer · Contribute · How it works
+                              explorer.json                          Studio · Library · Knowledge (overview, Explorer, Research, Method)
+                              designs/demo-a.json                    the Studio's recorded demonstration garden: the overview's reference case
                               graph.json · diagnosis.json            Neural view
                               db/ (plants/*.json, ontology.json, relations.json, sources.json, schema.json, synonyms.json,
                                    intent_map.json, eval/queries.json)   the canonical files the Neural view reads directly
@@ -69,6 +72,19 @@ for slug, im in images.items():
         if not im.get(k): sys.exit(f"build_platform: photograph of {slug} has no {k}")
     for f in (im["file"], im["card"]):
         if not os.path.exists(J(ROOT, "platform", "img", f)): sys.exit(f"build_platform: missing platform/img/{f}")
+# illustrations: one per species or none; AI-generated and said so in the manifest; no lettering inside the image (names are set in HTML)
+art = load("platform/data/artwork.json")
+if "AI-generated" not in art.get("kind", ""): sys.exit("build_platform: platform/data/artwork.json must say that the illustrations are AI-generated")
+for slug, im in art["images"].items():
+    if slug not in slugs: sys.exit(f"build_platform: illustration for an unknown species: {slug}")
+    if im.get("lettering"): sys.exit(f"build_platform: the illustration of {slug} carries lettering — use the artwork without the title")
+    if not os.path.exists(J(ROOT, "platform", "art", im["file"])): sys.exit(f"build_platform: missing platform/art/{im['file']}")
+if set(art["images"]) - set(images): sys.exit(f"build_platform: illustrated species without a credited reference photograph: {sorted(set(art['images']) - set(images))}")
+# the reference case of the Knowledge overview: a project the Studio saved, with a planted and evaluated Screen row
+ref = load("designs/demo-a.json"); refv = next((v for v in ref.get("versions", []) if v.get("id") == ref.get("current_version_id")), None)
+if not refv or not any(z.get("kind") == "edge" and z.get("function") == "z:screen" for z in refv.get("zones", [])) or not refv.get("evaluation", {}).get("edge_zones"):
+    sys.exit("build_platform: designs/demo-a.json holds no generated and evaluated Screen row — the Knowledge overview would have no case")
+if ref.get("knowledge_snapshot", {}).get("generated") != ex["generated"]: print(f"build_platform: note — designs/demo-a.json was recorded with snapshot {ref.get('knowledge_snapshot', {}).get('generated')}, this build is {ex['generated']}; the overview re-checks it and says so")
 
 if os.path.exists(OUT): shutil.rmtree(OUT)
 os.makedirs(OUT)
@@ -79,7 +95,7 @@ tree("design/css", "css"); tree("design/js", "js", shutil.ignore_patterns("app-c
 tree("brain/vendor/three", "vendor/three"); copy("brain/vendor/3d-force-graph.min.js", "vendor/3d-force-graph.min.js")
 
 commit = git("rev-parse", "--short", "HEAD") or "unknown"; branch = git("rev-parse", "--abbrev-ref", "HEAD") or "unknown"
-dirty = "+local changes" if git("status", "--porcelain", "--", "design", "platform", "brain/explorer", "brain/js", "brain/index.html", "brain/data", "plants", "ontology.json", "relations.json", "sources.json") else ""
+dirty = "+local changes" if git("status", "--porcelain", "--", "design", "designs/demo-a.json", "platform", "brain/explorer", "brain/js", "brain/index.html", "brain/data", "plants", "ontology.json", "relations.json", "sources.json") else ""
 stamp = f"{branch} @ {commit}{dirty} · built {date.today().isoformat()} · knowledge {ex['generated']}"
 NOINDEX = '\n<meta name="robots" content="noindex">'
 rewrite("index.html", [
@@ -91,11 +107,18 @@ rewrite("index.html", [
 rewrite("js/app.js", [("'../brain/data/explorer.json'", "'./data/explorer.json'"), ("'../../platform/js/platform.js'", "'../platform/js/platform.js'"), ("'../../platform/js/plantcard.js'", "'../platform/js/plantcard.js'")])
 
 # ---------------------------------------------------------------- the platform layer and its pages
-tree("platform/css", "platform/css"); tree("platform/js", "platform/js"); tree("platform/data", "platform/data"); tree("platform/img", "platform/img")
+tree("platform/css", "platform/css"); tree("platform/js", "platform/js"); tree("platform/data", "platform/data"); tree("platform/img", "platform/img"); tree("platform/art", "platform/art")
 rewrite("platform/js/platform.js", [("const LAYOUT = 'repo';", "const LAYOUT = 'preview';")])
-for page, script in (("plants", "library.js"), ("contribute", "contribute.js"), ("how-it-works", "how.js")):
+ICON = ('<link rel="icon" href="data:,">', '<link rel="icon" href="data:,">' + NOINDEX)
+for page, script in (("plants", "library.js"), ("knowledge", "overview.js")):
     copy(f"platform/{page}/index.html", f"{page}/index.html")
-    rewrite(f"{page}/index.html", [('href="../css/platform.css"', 'href="../platform/css/platform.css"'), (f'src="../js/{script}"', f'src="../platform/js/{script}"'), ('<link rel="icon" href="data:,">', '<link rel="icon" href="data:,">' + NOINDEX)])
+    rewrite(f"{page}/index.html", [('href="../css/platform.css"', 'href="../platform/css/platform.css"'), (f'src="../js/{script}"', f'src="../platform/js/{script}"'), ICON])
+for page, script in (("research", "research.js"), ("method", "method.js")):
+    copy(f"platform/knowledge/{page}/index.html", f"knowledge/{page}/index.html")
+    rewrite(f"knowledge/{page}/index.html", [('href="../../css/platform.css"', 'href="../../platform/css/platform.css"'), (f'src="../../js/{script}"', f'src="../../platform/js/{script}"'), ICON])
+for page in ("contribute", "how-it-works"):   # the V1 addresses: a redirect into Knowledge, so an old link still arrives
+    copy(f"platform/{page}/index.html", f"{page}/index.html")
+    rewrite(f"{page}/index.html", [('href="../css/platform.css"', 'href="../platform/css/platform.css"'), ICON])
 
 # ---------------------------------------------------------------- Explore: the Knowledge Explorer and the Neural view
 copy("brain/explorer/index.html", "explore/index.html"); tree("brain/explorer/js", "explore/js")
@@ -114,16 +137,19 @@ rewrite("explore/neural/js/data.js", [("const ROOT = '..';", "const ROOT = '../.
 
 # ---------------------------------------------------------------- the one knowledge snapshot
 for f in ("explorer.json", "graph.json", "diagnosis.json"): copy(f"brain/data/{f}", f"data/{f}")
+copy("designs/demo-a.json", "data/designs/demo-a.json")
 for f in ("ontology.json", "schema.json", "sources.json", "synonyms.json", "intent_map.json", "relations.json", "eval/queries.json"): copy(f, f"data/db/{f}")
 for s in slugs: copy(f"plants/{s}.json", f"data/db/plants/{s}.json")
 
 open(J(OUT, "README.md"), "w", encoding="utf-8").write(f"""# Platform preview
 
-Planting Intelligence as one platform: Design · Plants · Explore · Contribute, built for review beside the production site.
+Planting Intelligence as one platform: Design · Plants · Knowledge, built for review beside the production site.
 
 - built from `{stamp}` by `tools/build_platform.py`
 - one knowledge snapshot for every module: `data/explorer.json` (generated {ex['generated']}, schema {ex['schema_version']}, {len(slugs)} species, {ex['stats']['claims']} claims), with `data/graph.json`, `data/diagnosis.json` and the canonical files in `data/db/` from the same pipeline run
-- `/` Garden Studio · `/plants/` Plant Library · `/explore/` Knowledge Explorer · `/explore/neural/` Neural view · `/contribute/` · `/how-it-works/`
+- `/` Garden Studio · `/plants/` Plant Library · `/knowledge/` overview (one decision traced from a source to a bed) · `/explore/` Explorer · `/explore/neural/` Neural view · `/knowledge/research/` · `/knowledge/method/` (`/contribute/` and `/how-it-works/` redirect there)
+- the overview's reference case is `data/designs/demo-a.json`, a project the Studio saved; the page re-checks it with the engine against this snapshot
+- illustrations: `platform/art/`, listed in `platform/data/artwork.json` — AI-generated editorial artwork, not evidence; names are set in HTML from the snapshot
 - photographs: `platform/img/`, credited in `platform/data/images.json` (Wikimedia Commons, CC BY / CC BY-SA / CC0)
 - the survey is a separate application and is only linked
 - `/design/` and `/studio-preview/` are not touched by this folder; the preview saves its project under its own browser-storage key

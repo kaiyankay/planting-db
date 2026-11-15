@@ -25,8 +25,11 @@ relations.json, plants/*.json) and on the interface files (brain/explorer/).
                     distinct value kept (count of values per cell = distinct concepts); disagreement flags = kg conflicts of that cell
   I  interface      the interface files name no plant, concept or function id from the database
   J  stats          the statistics block matches the file
-  K  browser        (--browser) headless Chrome: Screen focus → graph species + required traits, matrix column, table sort; cell →
-                    evidence claims; A/B pair → four sections, direct records (or the honest absence)
+  K  browser        (--browser) headless Chrome, one working view at a time: no focus → the start screen (functions, species, no graph);
+                    Screen focus → the function and its linked species only, the layers add required traits and the species without a
+                    link; the same focus in the matrix (column) and the table (required columns, sort); cell → evidence claims and the
+                    trace link; a species focus grows by knowledge group and by relation records; A/B pair → four sections, direct
+                    records (or the honest absence); V1 links (tab=compare, fk=pair, ik/ii) still land where they did
 Standard library only; nothing is written except the report.
 """
 import glob, json, os, re, subprocess, sys, tempfile
@@ -246,23 +249,41 @@ if "--browser" in sys.argv:
                 r = subprocess.run([chrome, "--headless=new", "--disable-gpu", "--no-first-run", f"--user-data-dir={td}", "--window-size=1440,900", "--virtual-time-budget=6000", "--dump-dom", base + hash_], capture_output=True, text=True, timeout=90)
                 return r.stdout
         def pick(id_, fn, link="plant:gaultheria-shallon"): return f"#fk=function&fi={id_}&ik=link&ii=link:{link}>{id_}"
+        def graph(d):
+            cls = re.findall(r'class="node species[^"]*"', d); ng = sum(1 for c in cls if 'ghost' in c)
+            return {"species": len(cls) - ng, "ghost_species": ng, "functions": len(re.findall(r'class="node function', d)), "concepts": len(re.findall(r'class="node concept', d))}
+        FOCUS = "z:screen"; linked = [l for l in LK.values() if l["function"] == FOCUS and l["drawn"]]; unknown = [l for l in LK.values() if l["function"] == FOCUS and not l["drawn"]]
         try:
-            d = dom("#fk=function&fi=z:screen")
-            cls = re.findall(r'class="node species[^"]*"', d); n_ghost = sum(1 for c in cls if 'ghost' in c); n_sp = len(cls) - n_ghost; n_co = len(re.findall(r'class="node concept', d))
-            col = re.search(r'<th class="focus"[^>]*>([^<]+)</th>', d); first = re.search(r'<table class="attr">.*?<tbody><tr[^>]*><th[^>]*><i class="sci">([^<]+)</i>', d, re.S)
-            req = re.findall(r'<th class="req[^"]*"[^>]*>([^<]+)', d)
-            test("K1 Screen focus: graph shows the linked species, unknown ghosts and required traits; matrix column and table columns marked", n_sp == 5 and n_ghost == 5 and n_co >= 3 and col and col.group(1) == "Screen" and req and first, f"species {n_sp} · ghosts {n_ghost} · concepts {n_co} · column {col and col.group(1)} · required columns {req} · first row {first and first.group(1)}")
-            d = dom(pick("z:screen", None))
-            test("K2 matrix cell → evidence: inspector shows the use claim, the rule and the requirement check; the graph line is selected", "Use claims" in d and "KG-R1" in d and "Requirement check" in d and 'class="edge' in d and " sel" in d and "Sheared hedge" in d, f"{len(d)} bytes")
-            d = dom("#fk=function&fi=z:screen&ik=link&ii=link:plant:achillea-millefolium>z:screen")
+            d = dom("")
+            test("K0 no focus: the start screen — search, every function and species as a way in, three questions; no graph is drawn", 'id="search0"' in d and len(re.findall(r'<a class="srow" ', d)) == len(FN) and len(re.findall(r'<a class="prow" ', d)) == len(SP) and len(re.findall(r'<a class="srow wide" ', d)) == 3 and 'class="node' not in d and '<div id="bar" hidden' in d, f"function rows {len(re.findall(r'<a class=.srow. ', d))} · species rows {len(re.findall(r'<a class=.prow. ', d))}")
+            d = dom(f"#fk=function&fi={FOCUS}"); g = graph(d)
+            test("K1 Screen focus: the graph shows the function and its linked species only; the layers are offered, none is on; the inspector holds the function record", g == {"species": len(linked), "ghost_species": 0, "functions": 1, "concepts": 0} and len(re.findall(r'class="layer[^"]*" data-layer="(?:traits|gaps)" aria-pressed="false"', d)) == 2 and "Requires" in d and 'class="matrix"' not in d and 'class="attr"' not in d, str(g))
+            d = dom(f"#fk=function&fi={FOCUS}&x=traits,gaps"); g = graph(d)
+            test("K1b layers added on purpose: required traits and the species without a link (ghosts, no line)", g["species"] == len(linked) and g["ghost_species"] == len(unknown) and g["concepts"] >= 3 and len(re.findall(r'data-layer="(?:traits|gaps)" aria-pressed="true"', d)) == 2, str(g))
+            d = dom(f"#fk=function&fi={FOCUS}&v=matrix")
+            col = re.search(r'<th class="focus"[^>]*>([^<]+)<', d)
+            test("K1c the same focus in the matrix: its column is marked, one cell per species, and no other view is in the page", col and col.group(1) == FN[FOCUS]["label"] and len(re.findall(r'<td class="[^"]*" data-inspect="link=', d)) == len(LK) and 'class="node' not in d and 'class="attr"' not in d, f"column {col and col.group(1)}")
+            d = dom(f"#fk=function&fi={FOCUS}&v=table")
+            first = re.search(r'<table class="attr">.*?<tbody><tr class="([^"]*)"><th[^>]*><i class="sci">([^<]+)</i>', d, re.S); req = re.findall(r'<th class="req[^"]*"[^>]*>([^<]+)', d)
+            test("K1d the same focus in the table: the columns the function requires are marked and a linked species comes first", len(req) == len(FN[FOCUS]["required_facets"]) and first and "linked" in first.group(1) and 'class="node' not in d, f"required columns {req} · first row {first and first.group(2)}")
+            d = dom(pick(FOCUS, None))
+            test("K2 link → evidence: inspector shows the use claim, the rule and the requirement check; the graph line is selected; the trace into a design is offered", "Use claims" in d and "KG-R1" in d and "Requirement check" in d and 'class="edge' in d and " sel" in d and "Sheared hedge" in d and "Trace this into a design" in d and "#species=gaultheria-shallon" in d, f"{len(d)} bytes")
+            d = dom(f"#fk=function&fi={FOCUS}&ik=link&ii=link:plant:achillea-millefolium>{FOCUS}")
             test("K3 unknown cell → honest 'not established': verdict, missing requirements, contrary claims", "No link is drawn" in d and "contradicted" in d and "contrary" in d, "")
             d = dom("#a=plant:vaccinium-ovatum&b=plant:gaultheria-shallon&tab=compare")
-            secs = re.findall(r'<h3><span class="n">(\d)</span> ([^<]+)', d)
-            test("K4 A/B compare: four sections; the pair's two live direct records and the retired history are listed", [s[0] for s in secs] == ["1", "2", "3", "4"] and "2 live · 2 retired" in d and "co listed" in d, str(secs))
-            d = dom("#a=plant:acer-palmatum&b=plant:achillea-millefolium&tab=compare")
-            test("K5 A/B compare with no record: the absence is stated, not filled", "None recorded" in d and "honest absence" in d, "")
+            secs = re.findall(r'<section class="csec" data-sec="([a-z_]+)"', d)
+            test("K4 A/B compare (V1 link, tab=compare): the four sections in order; the pair's two live direct records and the retired history are listed", secs == list(X["vocab"]["pair_sections"]) and "2 live · 2 retired" in d and "co listed" in d and 'class="node' not in d, str(secs))
+            d = dom("#a=plant:acer-palmatum&b=plant:achillea-millefolium&v=compare")
+            test("K5 A/B compare with no record: the absence is stated, not filled; nothing biological is inferred", "None recorded" in d and "honest absence" in d and "Nothing biological is inferred" in d, "")
             d = dom("#fk=pair&a=plant:vaccinium-ovatum&b=plant:gaultheria-shallon&tab=compare")
-            test("K6 pair in the graph: both species, a typed relation line, no line from shared traits alone", 'class="edge co_listed' in d and len(re.findall(r'class="node species', d)) == 2, "")
+            test("K6 pair in the graph (V1 link): both species, a typed relation line, no line from shared traits alone", 'class="edge co_listed' in d and len(re.findall(r'class="node species', d)) == 2, "")
+            sp = "plant:gaultheria-shallon"; grp = {g: len({e["concept"] for e in X["concept_links"] if e["species"] == sp and e["group"] == g}) for g in {e["group"] for e in X["concept_links"] if e["species"] == sp}}; gid = sorted(grp)[0]
+            mine = [l for l in LK.values() if l["species"] == sp]; others = {r["b"] if r["a"] == sp else r["a"] for r in RE.values() if r["live"] and sp in (r["a"], r["b"])} & set(SP)
+            g0 = graph(dom(f"#fk=species&fi={sp}")); g1 = graph(dom(f"#fk=species&fi={sp}&x={gid},relations,gaps"))
+            test("K7 species focus: its linked functions only; one knowledge group, the relation records and the functions without a link are added on request", g0 == {"species": 1, "ghost_species": 0, "functions": sum(1 for l in mine if l["drawn"]), "concepts": 0} and g1["concepts"] == grp[gid] and g1["species"] == 1 + len(others) and g1["functions"] == len(mine), f"default {g0} · expanded {g1} · group {gid} has {grp[gid]} concepts")
+            a = next(a for a in AT.values() if a["species"] == sp and a["disagreement"])
+            d = dom(f"#fk=species&fi={sp}&ik=attr&ii={a['id']}")
+            test("K8 a V1 deep link to one attribute cell opens the graph with the cell's claims in the inspector and the way back to the species", "attribute cell" in d and "Sources disagree" in d and 'data-inspect=""' in d and 'class="claim"' in d, a["id"])
             browser_log.append(f"headless Chrome at {base}")
         except Exception as ex:
             test("K0 browser run", False, repr(ex))

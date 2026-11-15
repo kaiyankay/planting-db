@@ -49,7 +49,7 @@ const ICON = { photo: '<svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" hei
   try {
     S.K = await loadKnowledge(new URLSearchParams(location.search).get('data') || '../brain/data/explorer.json');
     S.server = await M.serverStatus(); S.K.platform = PI.links;
-    $('#pinav').outerHTML = PI.navHtml('design'); $('#foot-pi').outerHTML = `<a href="${PI.links.library()}">Plant Library</a><a href="${PI.links.explorer()}">Knowledge Explorer</a><a href="${PI.links.contribute()}">Contribute</a><a href="${PI.links.how()}">How it works</a>`;
+    $('#pinav').outerHTML = PI.navHtml('design'); $('#foot-pi').outerHTML = `<a href="${PI.links.library()}">Plant Library</a><a href="${PI.links.knowledge()}">Knowledge</a><a href="${PI.links.research()}">Research</a><a href="${PI.links.method()}">Method</a>`;
     PI.loadImages().then(i => { S.imgs = i; if (S.project && S.stage !== 'welcome') update(); });
     const q = new URLSearchParams(location.search); const saved = q.get('fresh') ? null : M.loadLocal(); const view0 = saved?.ui?.view || null;
     S.project = saved || M.newProject(); ensureUi(S.project); if (!S.project.knowledge_snapshot) S.project.knowledge_snapshot = S.K.snapshot;
@@ -59,7 +59,7 @@ const ICON = { photo: '<svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" hei
     if (q.get('mode')) S.mode = q.get('mode'); if (q.get('winter')) S.winter = true; if (q.get('names')) S.labels = true;
     let stage = q.get('stage') || (saved ? S.project.ui.stage : 'welcome'); if (stage === 'garden' && !cur()) stage = cur() ? 'garden' : (S.project.ui.unlocked.intent ? 'intent' : 'welcome');
     for (const st of STAGES) if (S.project.ui.unlocked[st]) unlock(st, false);
-    setStage(stage, { scroll: false }); if (view0 && !q.get('stage') && !q.get('script') && !q.get('journey')) restoreView(view0); update(); $('#loading').classList.add('gone');
+    setStage(stage, { scroll: false }); if (view0 && !q.get('stage') && !q.get('script') && !q.get('journey')) restoreView(view0); if (q.get('open') === 'compose' && !q.get('script') && !q.get('journey')) openFromLink(q); update(); $('#loading').classList.add('gone');
     if (q.get('journey')) { try { await journey({ fast: true }); } catch (e) { if (!/journey stopped/.test(e.message)) throw e; update(); if (S.stage !== 'garden') { if (q.get('solo')) { for (const st of ['welcome', 'site', 'intent', 'gate']) $(`#s-${st}`).hidden = st !== S.stage; renderCanvas(); } else $(`#s-${S.stage}`)?.scrollIntoView({ behavior: 'auto', block: 'start' }); } } }
     if (q.get('script')) await runScript(q.get('script'));
     if (q.get('solo') && !q.get('journey')) { for (const st of ['welcome', 'site', 'intent', 'gate']) $(`#s-${st}`).hidden = st !== S.stage; renderCanvas(); }
@@ -83,6 +83,14 @@ const bedsFp = () => JSON.stringify(beds().map(b => [b.id, M.bedFingerprint(b)])
 /** where the user stands inside a stage, kept with the project so that leaving for the Plant Library or the Explorer and coming back
  *  (or reloading) reopens the same bed, step, view and selected plant — the platform's return path is simply the Design route */
 const viewNow = () => ({ bedId: S.bedId, composeNone: S.composeNone, cStep: S.cStep, cPanel: S.cPanel, mode: S.mode, selectedPlant: S.selectedPlant, selectedSpecies: S.selectedSpecies, evidenceOpen: S.evidenceOpen, drawer: S.drawer });
+/** a link from Knowledge to one bed in Compose: ?open=compose&bed=<bed id>&species=<slug>. Only a bed of the saved project and a species
+ *  of the snapshot are used; anything else leaves the project where it was left. The query is then dropped from the address, so a
+ *  reload or a return through the platform bar reopens the saved view, not the link. */
+function openFromLink(q) {
+  const bed = beds().find(b => b.id === q.get('bed')); const sp = q.get('species') ? S.K.sp(q.get('species')) : null;
+  if (bed && S.project.ui.unlocked.intent) { setStage('intent', { scroll: false }); S.bedId = bed.id; S.composeNone = false; S.cStep = 2; S.selectedSpecies = sp ? sp.id : null; S.cPanel = sp ? 'evidence' : null; }
+  history.replaceState(null, '', location.pathname + location.hash);
+}
 function restoreView(v) {
   if (v.bedId && beds().some(b => b.id === v.bedId)) { S.bedId = v.bedId; S.composeNone = !!v.composeNone; } if (v.cStep) S.cStep = v.cStep;
   if (S.stage === 'intent') { S.selectedSpecies = v.selectedSpecies && S.K.sp(v.selectedSpecies) ? v.selectedSpecies : null; S.cPanel = v.cPanel === 'evidence' && !S.selectedSpecies ? null : v.cPanel || null; }
@@ -672,7 +680,7 @@ function renderIntent() {
   $('#brief-left').innerHTML = `<div class="brief-col" data-col="goals"><h3 class="panel-h">What matters</h3><p class="panel-sub">Each goal names what it changes in the proposal today.${b.provenance ? ` Read by ${esc(b.provenance)}.` : ''}</p><div class="values">${vals}</div></div>
     <div class="brief-col" data-col="functions"><h3 class="panel-h">Functions for the whole site</h3><p class="panel-sub">A bed without its own functions follows these.</p>${fns}${addFn}<h3 class="rail-h" style="margin-top:18px">Must not change</h3>${hard}${unk ? `<h3 class="rail-h" style="margin-top:14px">Unknown, not assumed</h3>${unk}` : ''}</div>
     <div class="brief-col" data-col="rules"><h3 class="panel-h">Planting rules</h3><p class="panel-sub">Site-wide defaults for every bed. A bed’s own rows, pattern and spacing are chosen in its Arrangement step and are applied on top of these.</p><div class="ctrl"><span>density</span><input type="range" min="0.6" max="1.4" step="0.1" value="${S.density}" id="density" aria-label="planting density"><span class="mono">${S.density}×</span></div><div class="ctrl"><span>second row</span><span class="seg"><button class="${S.stagger ? 'on' : ''}" data-stagger="1">on</button><button class="${S.stagger ? '' : 'on'}" data-stagger="0">off</button></span><span class="small faint">where the bed is deep enough</span></div><div class="ctrl"><span>seed</span><input class="num" type="number" id="seed" value="${S.seed}" aria-label="random seed"><span class="small faint">same seed, same garden</span></div><p class="small faint">Spacing factors are heuristics: the plant database records no spacing. Grouping and rhythm beyond rows, drifts and a repeated accent are not implemented.</p></div>`;
-  $('#cws-evidence').innerHTML = S.cPanel === 'evidence' && S.selectedSpecies && S.K.sp(S.selectedSpecies) ? `<div class="insp-kind">Evidence · species record</div>${PC.miniHtml(S.K.d, S.selectedSpecies, S.imgs)}${R.evidenceHtml(S.selectedSpecies, S.K, p, null)}` : '';
+  $('#cws-evidence').innerHTML = S.cPanel === 'evidence' && S.selectedSpecies && S.K.sp(S.selectedSpecies) ? `<div class="insp-kind">Evidence · species record</div>${PC.miniHtml(S.K.d, S.selectedSpecies, S.imgs, { extra: `<a href="${esc(PI.links.trace(S.selectedSpecies, S.bedId))}" data-pi-go="trace" title="follow this species from its sources to this design, step by step">Trace this decision</a>` })}${R.evidenceHtml(S.selectedSpecies, S.K, p, null)}` : '';
   $('#cws-panel').className = `ws-panel ${S.cPanel ? 'open ' + S.cPanel : ''}`;
   // ---- mode bar: scale, the legend of the five functions
   const pendingScreen = b.functions.some(f => f.function === 'z:screen' && !f.alternative && f.where === I.EDGE_UNSET);
@@ -876,7 +884,7 @@ function renderEvidence() {
   const el = $('#evidence'); if (!S.evidenceOpen || S.stage !== 'garden') { el.hidden = true; return; }
   const v = cur(); const pl = S.selectedPlant && v ? ((S.preview?.version.plant_objects || v.plant_objects).find(x => x.id === S.selectedPlant) || v.plant_objects.find(x => x.id === S.selectedPlant)) : null; const sid = pl ? pl.species_id : S.selectedSpecies;
   if (!sid) { el.hidden = true; return; }
-  el.innerHTML = `<div class="insp-kind">Evidence · species record</div>${pl ? `<div class="small faint">${esc(pl.id)} · position ${pl.position_m.join(', ')} m · ${esc(pl.origin)} · ${esc(pl.bed_id)} · group ${esc(pl.group_id)} · zone ${esc(pl.zone_id || '—')}</div>` : ''}${PC.miniHtml(S.K.d, sid, S.imgs)}${R.evidenceHtml(sid, S.K, S.project, pl)}`; el.hidden = false;
+  el.innerHTML = `<div class="insp-kind">Evidence · species record</div>${pl ? `<div class="small faint">${esc(pl.id)} · position ${pl.position_m.join(', ')} m · ${esc(pl.origin)} · ${esc(pl.bed_id)} · group ${esc(pl.group_id)} · zone ${esc(pl.zone_id || '—')}</div>` : ''}${PC.miniHtml(S.K.d, sid, S.imgs, { extra: `<a href="${esc(PI.links.trace(sid, pl?.bed_id))}" data-pi-go="trace" title="follow this plant from its sources to this design, step by step">Trace this decision</a>` })}${R.evidenceHtml(sid, S.K, S.project, pl)}`; el.hidden = false;
 }
 function renderDrawer() {
   const v = cur(); const shown = S.preview ? S.preview.version : v; const dr = $('#drawer');

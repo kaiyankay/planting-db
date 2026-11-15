@@ -1,6 +1,6 @@
 ---
 name: Planting Intelligence
-description: A plant knowledge and design platform — a botanical design studio, a plant atlas, a knowledge explorer and the way knowledge is contributed, as one product.
+description: A plant knowledge and design platform — a botanical design studio, a plant atlas and the knowledge both rest on, as one product.
 colors:
   ivory: "#f7f3ea"
   ivory-2: "#efe9db"
@@ -21,6 +21,7 @@ colors:
   ink-3: "#716b5c"
   on-olive: "#ffffff"
   desk: "#f1ecdf"
+  plate: "#fdf5ee"
   line: "rgba(39,36,31,.12)"
   line-2: "rgba(39,36,31,.26)"
   night: "#01020a"
@@ -156,8 +157,20 @@ components:
   nav-link-current:
     textColor: "{colors.ink}"
   plant-figure:
-    backgroundColor: "{colors.paper-2}"
+    backgroundColor: "{colors.plate}"
     rounded: "{rounded.mark}"
+  ledger-row:
+    backgroundColor: "transparent"
+    textColor: "{colors.ink}"
+    typography: "{typography.body}"
+    padding: "15px 0 16px"
+  subnav-link:
+    backgroundColor: "transparent"
+    textColor: "{colors.ink-3}"
+    typography: "{typography.ui}"
+    padding: "0 10px"
+  subnav-link-current:
+    textColor: "{colors.ink}"
   plant-card-compact:
     backgroundColor: "{colors.paper}"
     rounded: "{rounded.card}"
@@ -174,18 +187,22 @@ the page; tools, layers and an inspector sit around it), and Grow is the same wo
 Imagine tells the story. Shape models the site. Compose assigns spatial functions and plants. Grow shows the result. They
 share one site drawing, one navigation and one set of controls; they do not share a layout.
 
-Since 2026-11-14 the studio is one of four destinations of a platform: **Design · Plants · Explore · Contribute**. The same
-paper, ink, type and vocabulary run through all of them, and each keeps the layout its work needs:
+Since 2026-11-14 (V2) the studio is one of three destinations of a platform: **Design · Plants · Knowledge**. A visitor can
+enter through any of them. The same paper, ink, type and vocabulary run through all, and each keeps the layout its work needs:
 
 | Destination | Register | Layout |
 |---|---|---|
 | Design | the studio above | hero, then the fixed drawing workspace |
-| Plants | a botanical atlas | editorial: a large Fraunces title, a five-column grid of photographs, long reading profiles |
-| Explore | inquiry | the Explorer's four panes (graph, matrix, table, inspector); the Neural view keeps its night sky |
-| Contribute, How it works | a plain account | the same title-left, content-right sections as a plant profile |
+| Plants | a botanical atlas | editorial: a large Fraunces title, a five-column grid of illustration plates, long reading profiles |
+| Knowledge · Overview | an account with its evidence open | one real decision followed in five numbered steps; title-left, content-right sections; every statement in the ledger |
+| Knowledge · Explore | inquiry | a search-first start, then ONE working view (graph, matrix, table or comparison) with the evidence inspector beside it; the Neural view keeps its night sky |
+| Knowledge · Research, Method | a plain account | the same sections as a plant profile, with a few figures and one coverage grid |
 
-What makes it one product is not a shared page template but four shared things: the platform bar, the tags, the plant card,
-and the fact that every page reads one knowledge snapshot and says which.
+What makes it one product is not a shared page template but five shared things: the platform bar, the tags, the plant card,
+the ledger, and the fact that every page reads one knowledge snapshot and says which.
+
+**Knowledge answers one question: what does a design rest on?** Its pages never show the size of the database as an
+achievement. They show how one conclusion was reached, and where it stops being known.
 
 ## Colors
 
@@ -228,13 +245,17 @@ Object handles on the plan are small white squares with an ink edge; mid-edge ha
 
 ## Components
 
-- **Platform bar** (every page, 52 px): the wordmark, then Design · Plants · Explore · Contribute as plain text links. The
-  current one is ink with a 2 px olive line on the bar's lower edge; nothing is filled. To the right: the way back to a design
-  in progress (an olive-edged pill, "Back to Compose · East bed", shown only when there is one), How it works, and the date of
-  the knowledge snapshot in mono. In the Neural view the bar takes the night tokens and nothing else changes.
+- **Platform bar** (every page, 52 px): the wordmark, then Design · Plants · Knowledge as plain text links. The current one
+  is ink with a 2 px olive line on the bar's lower edge; nothing is filled. To the right: the way back to a design in progress
+  (an olive-edged pill, "Back to Compose · East bed", shown only when there is one) and the date of the knowledge snapshot in
+  mono. In the Neural view the bar takes the night tokens and nothing else changes.
+- **Knowledge sub-navigation** (Knowledge pages only, in the same bar after a hairline): Overview · Explore · Research ·
+  Method, 13 px, ink-3; the current one is ink with a 1 px ink line. Quieter than the destinations and never a second bar on
+  desktop; under 900 px it takes its own 42 px row on reading pages.
 - **Stage stepper** (Design only, in the same bar): Imagine · Shape · Compose · Grow, numbered; reached stages are clickable,
   the current one is a paper pill. Platform navigation is text; stages are numbered pills. Never draw one as the other.
-- **Explore switch**: Explorer | Neural view, a small paper-on-paper-2 segmented pair beside the navigation.
+- **Explore switch**: Explorer | Neural view, a small paper-on-paper-2 segmented pair after the sub-navigation, on those two
+  pages only. The Explorer's own views (Graph · Matrix · Table · Compare) are switched in its toolbar, one at a time.
 - **Tool rail**: icon + 10.5 px label; the active tool is olive; panels opened from the rail are marked the same way.
 - **Inspector**: shows only what is selected. Kind (small caps) → name (Fraunces) → provenance tags → fields → "why" →
   actions. With nothing selected it shows the model itself.
@@ -254,12 +275,20 @@ Object handles on the plan are small white squares with an ink edge; mid-edge ha
 - **Steps** of a bed in Compose are an accordion: one open, the others a one-line summary.
 - **Requirements**: one row per requirement with its status as a word — met, uncertain, not met, or *estimate* where the
   engine measures without a pass mark. The page never turns an estimate into a verdict.
-- **Plant card** (Plants): a 4 : 5 photograph with square corners, the scientific name in Fraunces italic, the common name,
-  growth form and origin in small ink, "Read more" with an arrow. No box, no border, no shadow: the photograph is the card.
-  A species without a licensed photograph shows the studio's plan symbol on paper-2 and says that it is a symbol.
-- **Compact plant card** (Explorer inspector, Compose and Grow evidence, Neural card): thumbnail, scientific name, one line,
-  and the ways onward as text links (Plant profile · Knowledge graph). It is the only bordered card the platform adds.
-- **Plant profile**: photograph left with its credit in mono; name, identity, six at-a-glance fields and the actions right.
+- **Illustration plate**: the botanical illustration of a species on its own ivory (`plate`), 640 : 691, never cropped
+  (`object-fit: contain`), square corners. The artwork carries no lettering: the scientific name is set under it in Fraunces
+  italic and the common name in medium-weight sans, both read from the snapshot. The illustrations are AI-generated editorial
+  artwork and every surface that shows one at reading size says so; they are never evidence and no fact is read from them.
+- **Plant card** (Plants): the plate, the scientific name in Fraunces italic, the common name (sans, 500), growth form and
+  origin in small ink, "Read more" with an arrow. No box, no border, no shadow: the plate is the card. A species without an
+  illustration shows its photograph, and without either the studio's plan symbol, said to be a symbol.
+- **Compact plant card** (Explorer inspector, Compose and Grow evidence, Neural card): the plate as a thumbnail, scientific
+  name, one line, and the ways onward as text links (Plant profile · Evidence · Trace this decision). It is the only bordered
+  card the platform adds.
+- **Reference photograph** (profile only, under the plate): a 96 px thumbnail, the label "Reference photograph", author,
+  licence and source in mono, and the sentence that its identification is the source's, not the project's. The photograph is
+  the factual reference; the plate is the face.
+- **Plant profile**: plate left with its note and the reference photograph; name, identity, six at-a-glance fields and the actions right.
   Below, sections with the title in the left column (Fraunces 27 px) and rows separated by hairlines in the right column.
   A row is: field name · what is recorded · where it comes from (claims, sources, tags). A field nobody recorded stays in
   the list, in ink-3, as "not recorded".
@@ -267,6 +296,32 @@ Object handles on the plan are small white squares with an ink edge; mid-edge ha
   (dashed caramel) · unknown (dotted); *verification* verified (olive-soft fill) · unverified (caramel-soft fill); *AI check*
   supported by source · partially supported · conflicting evidence · not assessed, always worded as an assessment; *conflict*
   rust-soft. Who does a step is tagged the same way: person · rule-based · from records · AI-assessed · you.
+- **Ledger** (Knowledge, Method): the one layout for evidence. A row is three columns over a hairline: the *kind of statement*
+  (small caps label, 148 px) · the statement itself · where it comes from (mono, 204 px, opened by a who-tag). Eight kinds are
+  kept apart, always in this order and with these words: source statement · structured claim · human verification · AI source
+  assessment · rule-derived relationship · your site information · engine output · evaluation. A source's own words are a
+  quotation in sans at 17 px, never in Fraunces. Two kinds never share a row, and a row never borrows another kind's tag.
+  Where nothing is recorded the row stays and says so in bold ("No source states …"), marked "an explicit unknown".
+- **Who-tags** (mono, the same shape as the status tags): named source (solid olive edge) · from records (olive-soft fill) ·
+  person (paper-2 fill) · AI-assessed (dashed caramel) · rule-based (olive edge) · you (ink edge) · estimate (dotted caramel).
+- **Result words**: meets / met / pass / supported in olive, uncertain / conditional / unknown / proxy / heuristic in caramel
+  ink, fails / not met / unmet in rust, set as 600-weight words inside tables. A result is a word, never a coloured dot.
+- **Verdict** (Knowledge step 5, as in Compose): the function and the engine's status as one Fraunces line in the status
+  colour ("Screen: not met"), the reasons as a list under it, then the four checks as a table. Never softened, never hidden
+  in a disclosure.
+- **Evidence drawings**: the site plan and the screened edge unrolled, drawn with the site drawing's conventions below (heavy
+  ink edge = Screen, rust dashes = not covered, caramel dashes = assumed canopy, a dashed rust ring = a dropped position). They
+  are drawn from the saved design's plant objects and the engine's evaluation, never illustrated.
+- **Disclosure**: a text button in olive with a drawn chevron ("All 17 sources of this release", "The record as stored").
+  What it opens is a compact table or the stored JSON. The default view of every section stands without opening anything.
+- **Compact table**: hairlines only, small-caps column heads, 13.5 px; the followed species' row sits on paper.
+- **Split bar and coverage grid** (Knowledge, Research): proportions as one 8 px bar with a worded legend; coverage as one
+  17 px square per species and field (olive recorded · caramel recorded with disagreement · outlined not recorded), each
+  recorded square a link to its claims. These two are the only charts; no pies, rings or sparklines.
+- **Explorer workspace**: fixed viewport. A toolbar (search, the four views), one working view, and the evidence inspector as
+  a contextual right panel that appears with a focus or a selected record. With nothing selected the Explorer shows a start
+  screen: search first, then the five functions, the species, and three questions that open a view. In the graph a focus
+  shows its first ring only; further relationships are added one layer at a time by named toggles with counts.
 - **Considered species** (Compose, step 2, "From the Plant Library"): one row per species the user asked for, with the
   bed's own check as a word (in the mix · qualifies · not planted) and the reason in a sentence. Only a qualifying species
   gets the dashed "+ Add to this bed" control every other qualifying species has.
@@ -303,9 +358,16 @@ Nothing is drawn that the model does not hold: no terrain, no buildings, no shad
 - Don't animate for decoration: the hero plants sway; the workspace only fades between modes (≤ 220 ms) and respects
   reduced motion.
 - Don't restyle the Imagine hero to match the workspace.
-- Do put a plant fact on a page only by reading it from the knowledge snapshot; photographs and their credits are the one
-  presentation asset kept beside it (`platform/data/images.json`).
+- Do put a plant fact on a page only by reading it from the knowledge snapshot; illustrations and photographs with their
+  credits are the presentation assets kept beside it (`platform/data/artwork.json`, `platform/data/images.json`).
 - Do say where a number comes from: the snapshot date sits in the bar of every page and in each page's masthead.
-- Don't give Plants, Contribute or How it works stat tiles with icons, tinted cards or a second accent. Figures are set in
+- Do show one primary working view at a time in the Explorer, and open relationships deliberately.
+- Do let a recorded attribute stay an attribute: a claimed mature height is never worded as a working screen, and shared
+  growing conditions are never worded as companionship.
+- Don't give Plants or the Knowledge pages stat tiles with icons, tinted cards or a second accent. Figures are set in
   Fraunces over a hairline, in a row, with their label in small ink.
-- Don't call anything AI that a rule or a person did. "AI-assessed" is reserved for the source check.
+- Don't put a small-caps label above a heading. A section's number sits inside its heading, in ink-3, and only where the
+  order is itself information (the five steps).
+- Don't call anything AI that a rule or a person did. "AI-assessed" is reserved for the source check, "AI-generated" for the
+  illustrations. The platform is not presented as a live language-model system.
+- Don't letter an image. Names are HTML.

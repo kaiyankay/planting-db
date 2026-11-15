@@ -53,7 +53,15 @@ export class Model {
   // Every edge is a record of the projection: a function link (drawn only when derived or candidate), a concept link (plant → concept
   // claim line), a requirement (function → concept, literature) or a live relation record.  A ghost is a species whose link to the
   // focused function is unknown — shown without any edge.
-  graphFor(focus, a, b) {
+  // The graph starts small and is expanded on purpose: `x` is the set of layers the reader added (layersFor lists what can be added).
+  //   no focus   the functions only                      + all        every species and every drawn link
+  //   function   the function and its linked species     + traits     the traits it requires, with the linked species' claim lines to them
+  //                                                      + gaps       the species without a link (ghosts, no line)
+  //   species    the species and its linked functions    + <group id> its trait concepts of one knowledge group   (+ traits: every group)
+  //                                                      + relations  its live plant-to-plant records
+  //                                                      + gaps       the functions without a link (ghosts, no line)
+  //   concept · pair   as recorded, nothing to add
+  graphFor(focus, a, b, x = new Set()) {
     const nodes = new Map(), edges = [];
     const N = (id, kind, extra = {}) => { if (!nodes.has(id)) nodes.set(id, { id, kind, label: this.name(id), ...extra }); return nodes.get(id); };
     const E = (e) => edges.push(e);
@@ -61,27 +69,28 @@ export class Model {
     const clEdge = e => ({ id: e.id, kind: 'concept_link', rel: e.rel, source: e.species, target: e.concept, status: e.status, verification: e.verification, ref: e });
     const reqEdge = (f, r, alt) => ({ id: `${r.id}>${alt}`, kind: 'requirement', rel: 'requires_trait', source: f.id, target: alt, status: 'documented', verification: 'literature', strength: r.strength, ref: r, fn: f.id });
     const relEdge = r => ({ id: r.id, kind: 'relation', rel: r.type, source: r.a, target: r.b, status: r.kg_status, verification: r.status, placeholder: r.placeholder, ref: r });
-    if (!focus) {   // overview: the ten species, the five functions, every drawn link — the matrix as a graph
+    if (!focus) {   // the seed: the functions; with `all`, the matrix as a graph
       for (const f of this.functions) N(f.id, 'function');
-      for (const s of this.species) N(s.id, 'species');
-      for (const l of this.links) if (l.drawn) E(linkEdge(l));
-      return { nodes: [...nodes.values()], edges, center: null };
+      if (x.has('all')) { for (const s of this.species) N(s.id, 'species'); for (const l of this.links) if (l.drawn) E(linkEdge(l)); }
+      return { nodes: [...nodes.values()], edges, center: null, seed: !x.has('all') };
     }
     if (focus.kind === 'function') {
       const f = this.fn(focus.id); N(f.id, 'function', { focus: true });
       const linked = this.linksTo(f.id).filter(l => l.drawn); const linkedIds = new Set(linked.map(l => l.species));
       for (const l of linked) { N(l.species, 'species'); E(linkEdge(l)); }
-      const alts = new Set();
-      for (const r of f.requirements) for (const alt of r.alternatives) { const c = this.co(alt); if (c && !c.no_plant_reaches) { alts.add(alt); N(alt, 'concept', { strength: r.strength }); E(reqEdge(f, r, alt)); } }
-      for (const alt of alts) for (const e of this.clinksOf.get(alt) || []) if (linkedIds.has(e.species)) E(clEdge(e));
-      for (const l of this.linksTo(f.id)) if (!l.drawn) N(l.species, 'species', { ghost: true, verdict: l.verdict, link: l.id });
+      if (x.has('traits')) {
+        const alts = new Set();
+        for (const r of f.requirements) for (const alt of r.alternatives) { const c = this.co(alt); if (c && !c.no_plant_reaches) { alts.add(alt); N(alt, 'concept', { strength: r.strength }); E(reqEdge(f, r, alt)); } }
+        for (const alt of alts) for (const e of this.clinksOf.get(alt) || []) if (linkedIds.has(e.species)) E(clEdge(e));
+      }
+      if (x.has('gaps')) for (const l of this.linksTo(f.id)) if (!l.drawn) N(l.species, 'species', { ghost: true, verdict: l.verdict, link: l.id });
       return { nodes: [...nodes.values()], edges, center: f.id };
     }
     if (focus.kind === 'species') {
       const s = this.sp(focus.id); N(s.id, 'species', { focus: true });
-      for (const l of this.linksOf(s.id)) { if (l.drawn) { N(l.function, 'function'); E(linkEdge(l)); } else N(l.function, 'function', { ghost: true, verdict: l.verdict, link: l.id }); }
-      for (const e of this.clinksOf.get(s.id) || []) { N(e.concept, 'concept', { group: e.group }); E(clEdge(e)); }
-      for (const r of this.relationsOf(s.id)) { const o = r.a === s.id ? r.b : r.a; if (this.SP.has(o)) { N(o, 'species'); E(relEdge(r)); } }
+      for (const l of this.linksOf(s.id)) { if (l.drawn) { N(l.function, 'function'); E(linkEdge(l)); } else if (x.has('gaps')) N(l.function, 'function', { ghost: true, verdict: l.verdict, link: l.id }); }
+      for (const e of this.clinksOf.get(s.id) || []) if (x.has('traits') || x.has(e.group)) { N(e.concept, 'concept', { group: e.group }); E(clEdge(e)); }
+      if (x.has('relations')) for (const r of this.relationsOf(s.id)) { const o = r.a === s.id ? r.b : r.a; if (this.SP.has(o)) { N(o, 'species'); E(relEdge(r)); } }
       return { nodes: [...nodes.values()], edges, center: s.id };
     }
     if (focus.kind === 'concept') {
@@ -98,6 +107,21 @@ export class Model {
       return { nodes: [...nodes.values()], edges, center: null, pair: [a, b] };
     }
     return { nodes: [], edges: [], center: null };
+  }
+  /** the layers a reader can add to the graph of a focus, each with the number of records it would bring (0 = nothing recorded) */
+  layersFor(focus) {
+    if (!focus) return [{ key: 'all', label: 'Every species and drawn link', n: this.links.filter(l => l.drawn).length }];
+    if (focus.kind === 'function') {
+      const f = this.fn(focus.id); const alts = new Set(f.requirements.flatMap(r => r.alternatives).filter(alt => this.co(alt) && !this.co(alt).no_plant_reaches));
+      return [{ key: 'traits', label: 'Required traits', n: alts.size }, { key: 'gaps', label: 'Species without a link', n: this.linksTo(f.id).filter(l => !l.drawn).length }];
+    }
+    if (focus.kind === 'species') {
+      const cl = this.clinksOf.get(focus.id) || [];
+      return [...this.groups.map(g => ({ key: g.id, label: g.label, n: cl.filter(e => e.group === g.id).length, traits: true })),
+        { key: 'relations', label: 'Plant-to-plant records', n: this.relationsOf(focus.id).filter(r => this.SP.has(r.a === focus.id ? r.b : r.a)).length },
+        { key: 'gaps', label: 'Functions without a link', n: this.linksOf(focus.id).filter(l => !l.drawn).length }];
+    }
+    return [];
   }
 }
 function push(m, k, v) { if (!m.has(k)) m.set(k, []); m.get(k).push(v); }
