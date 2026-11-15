@@ -10,7 +10,7 @@
 //   verification   verified · unverified                               whether a person checked the claim against its source
 //   AI check       supported by source · partially supported · conflicting evidence · not assessed
 //                                                                      an assistant's reading of the source — an assessment, not verification
-import { esc, links, slugOf, speciesId, imageUrl, artUrl, TRACE_FUNCTION } from './platform.js';
+import { esc, links, slugOf, speciesId, imageUrl, artUrl, TRACE_FUNCTIONS } from './platform.js';
 
 const IDX = new WeakMap();
 function idx(d) {
@@ -24,7 +24,7 @@ const human = s => String(s ?? '').replace(/_/g, ' ');
 const plural = (n, w, ws = w + 's') => `${n} ${n === 1 ? w : ws}`;
 export const tag = (cls, text = human(cls)) => `<span class="pi-tag ${esc(String(cls).replace(/\s+/g, '_'))}">${esc(text)}</span>`;
 const AI_WORD = { supported_by_source: 'supported by source', partially_supported: 'partially supported', conflicting_evidence: 'conflicting evidence', not_assessed: 'not assessed' };
-export const STUDIO_FUNCTIONS = ['z:screen', 'z:ground_cover'];   // the functions design/js/engine.js arranges today
+export const STUDIO_FUNCTIONS = TRACE_FUNCTIONS;   // the functions design/js/engine.js arranges today (one list, platform.js)
 
 /** the most specific recorded origin: the entity record when there is one */
 function originLabel(d, s) { const c = idx(d).AT.get(`${s.id}|origin`); if (!c) return human(s.origin_status); const v = c.values.find(v => v.entity) || c.values[0]; return v ? v.label : human(s.origin_status); }
@@ -40,7 +40,7 @@ const photoCredit = im => `Photo: ${esc(im.author)}, ${esc(im.licence)}, via Wik
 export function figureHtml(d, id, imgs, { size = 'card', symbol = null, credit = false } = {}) {
   const s = species(d, id); const art = imgs?.art?.[s.slug]; const im = imgs?.images?.[s.slug];
   const ref = im && credit ? `<div class="pi-ref"><a href="${esc(imageUrl(im.file))}" title="open the photograph"><img src="${esc(imageUrl(im.card))}" alt="Photograph: ${esc(s.scientific_name)}${im.caption_at_source ? ` — ${esc(im.caption_at_source)}` : ''}" loading="lazy"></a><p><b>Reference photograph</b><a href="${esc(im.source_url)}" rel="noopener">${photoCredit(im)}</a><span>Identified as <i>${esc(s.scientific_name)}</i> on its Commons page; not verified by this project.</span></p></div>` : '';
-  if (art) { const fig = `<figure class="pi-fig pi-art"><img src="${esc(artUrl(art.file))}" alt="Illustration of ${esc(s.scientific_name)}" loading="lazy" width="${art.width}" height="${art.height}">${credit ? `<figcaption><span>${ART_NOTE}</span></figcaption>` : ''}</figure>`; return credit ? `<div class="pi-hero-f">${fig}${ref}</div>` : fig; }
+  if (art) { const fig = `<figure class="pi-fig pi-art"><img src="${esc(artUrl(art.file))}" alt="Illustration of ${esc(s.scientific_name)}" decoding="async" width="${art.width}" height="${art.height}">${credit ? `<figcaption><span>${ART_NOTE}</span></figcaption>` : ''}</figure>`; return credit ? `<div class="pi-hero-f">${fig}${ref}</div>` : fig; }
   if (im) return `<figure class="pi-fig"><img src="${esc(imageUrl(size === 'card' ? im.card : im.file))}" alt="${esc(s.scientific_name)}${im.caption_at_source ? ` — ${esc(im.caption_at_source)}` : ''}" loading="lazy" width="${im.width}" height="${im.height}">${credit ? `<figcaption><a href="${esc(im.source_url)}" rel="noopener">${photoCredit(im)}</a><span>Identified as <i>${esc(s.scientific_name)}</i> on its Commons page; not verified by this project.</span></figcaption>` : ''}</figure>`;
   return `<figure class="pi-fig pi-fig-symbol">${symbol ? `<svg viewBox="-1.25 -1.25 2.5 2.5" role="img" aria-label="plan symbol of ${esc(s.scientific_name)}"><g>${symbol}</g></svg>` : ''}<figcaption><span>No illustration or licensed photograph yet. This is the plan symbol the Garden Studio draws from the recorded growth form, spread and colour claims.</span></figcaption></figure>`;
 }
@@ -87,7 +87,7 @@ function functionRow(d, s, f) {
   else if (l.drawn) why = `Inferred from recorded traits (rule ${esc(l.rule || 'KG-R4')}). No source states this use.`;
   else { const unmet = (l.requirements || []).filter(r => r.result !== 'met'); why = `${esc(l.verdict || 'not established')}${unmet.length ? ': ' + unmet.map(r => `needs ${esc(r.alternative_labels.join(' or '))}${r.contrary?.length ? `, recorded ${esc([...new Set(r.contrary.map(c => c.target_label))].join(', '))}` : ', nothing recorded'}`).join('; ') : ''}`; }
   const studio = STUDIO_FUNCTIONS.includes(f.id) ? (l.drawn ? 'The Garden Studio can arrange it for this function, bed by bed.' : 'The Garden Studio arranges this function, but not with this plant.') : 'Recorded only: the Garden Studio has no arrangement rule for this function yet.';
-  return `<div class="pi-fn ${l.drawn ? 'drawn' : 'gap'}"><div class="pi-fn-h"><h4><a href="${esc(links.explorer(s.id, { kind: 'link', id: l.id }))}" title="${esc(f.definition)} — open the requirement check in the Knowledge Explorer">${esc(f.label)}</a></h4>${tag(l.status)}${l.drawn ? tag(l.verification === 'none' ? 'none' : l.verification, l.verification === 'none' ? 'no claim to verify' : l.verification) : ''}${l.conflict ? tag('conflict', 'a trait claim contradicts it') : ''}</div><p>${why}</p><p class="pi-fn-s">${studio}${f.id === TRACE_FUNCTION ? ` <a href="${esc(links.trace(s.id))}" data-pi-go="trace">Follow this link into a design</a>` : ''}</p></div>`;
+  return `<div class="pi-fn ${l.drawn ? 'drawn' : 'gap'}"><div class="pi-fn-h"><h4><a href="${esc(links.explorer(s.id, { kind: 'link', id: l.id }))}" title="${esc(f.definition)} — open the requirement check in the Knowledge Explorer">${esc(f.label)}</a></h4>${tag(l.status)}${l.drawn ? tag(l.verification === 'none' ? 'none' : l.verification, l.verification === 'none' ? 'no claim to verify' : l.verification) : ''}${l.conflict ? tag('conflict', 'a trait claim contradicts it') : ''}</div><p>${why}</p><p class="pi-fn-s">${studio}${TRACE_FUNCTIONS.includes(f.id) ? ` <a href="${esc(links.trace(s.id, { fn: f.id }))}" data-pi-go="trace">${l.drawn ? 'Follow this link into a design' : 'See why it is not planted for it'}</a>` : ''}</p></div>`;
 }
 
 /** the full profile. ctx: { design, isConsidered, symbol, studio } — what the Library knows about the user's design and the Studio's drawing */
@@ -112,7 +112,7 @@ export function detailHtml(d, id, imgs, ctx = {}) {
     <div class="pi-hero-t">
       <h1><i>${esc(s.scientific_name)}</i></h1>
       <p class="pi-names">${esc(s.common_names.join(' · '))}</p>
-      <p class="pi-ident">${esc(s.family)} · ${esc(s.growth_form_label)} ${tag(s.growth_form_status === 'supported' ? 'derived' : 'to_confirm', s.growth_form_status === 'supported' ? `growth form supported, ${s.growth_form_rule}` : `growth form ${s.growth_form_status}`)}</p>
+      <p class="pi-ident">${esc(s.family)} · ${esc(s.growth_form_label)} ${tag(s.growth_form_status === 'supported' ? 'derived' : 'to_confirm', s.growth_form_status === 'supported' ? 'growth form read from the sources' : `growth form ${s.growth_form_status}`)}</p>
       <dl class="pi-glance">${glance.map(([k, v]) => `<div><dt>${k}</dt><dd>${v}</dd></div>`).join('')}</dl>
       <div class="pi-actions"><a class="pi-btn primary" href="${esc(links.explorer(s.id))}">See the evidence</a><a class="pi-btn" href="${esc(links.trace(s.id))}" data-pi-go="trace">Trace it into a design</a><a class="pi-btn quiet" href="${esc(links.neural(s.id))}">Neural view</a></div>
       ${consider}
@@ -135,7 +135,7 @@ export function detailHtml(d, id, imgs, ctx = {}) {
     <dl class="pi-ev">
       <div><dt>Claims</dt><dd><b>${s.claims.live}</b> live${s.claims.retired ? `, ${s.claims.retired} retired and kept as history` : ''}</dd></div>
       <div><dt>Verified by a person</dt><dd><b>${s.claims.verified}</b> ${tag('verified')} <b>${s.claims.unverified}</b> ${tag('unverified')}<span class="pi-ev-n">A reviewer opened the source and confirmed the claim. Unverified does not mean wrong; it means nobody has checked yet.</span></dd></div>
-      <div><dt>AI source check</dt><dd>${Object.keys(AI_WORD).filter(k => byCheck[k]).map(k => `<b>${byCheck[k]}</b> ${tag(k, AI_WORD[k])}`).join(' ')}<span class="pi-ev-n">An assistant read each source against its claim. This is an assessment to help reviewers, never a verification.</span></dd></div>
+      <div><dt>AI source assessment</dt><dd>${Object.keys(AI_WORD).filter(k => byCheck[k]).map(k => `<b>${byCheck[k]}</b> ${tag(k, AI_WORD[k])}`).join(' ')}<span class="pi-ev-n">An AI assistant read the source of each of the ${cl.length} claims the fields on this page cite${cl.length !== s.claims.live ? ` (of ${s.claims.live} live claims; the others feed no field shown here)` : ''}. An assessment to help reviewers, never a verification.</span></dd></div>
       <div><dt>How lines came to exist</dt><dd>${tag('documented')} a source states it · ${tag('derived')} a recorded rule over claims · ${tag('candidate')} inferred, never promoted · ${tag('unknown')} listed as a gap</dd></div>
     </dl></section>
 

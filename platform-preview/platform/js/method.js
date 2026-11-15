@@ -24,7 +24,7 @@ function html(d, E) {
     site: 'An outline and its size; light, water and soil; what a bed is for.', engine: 'Which species pass a bed’s checks, each with its reason; where every plant stands.', evaluation: 'Met, uncertain or not met, with the reason and the stretch it concerns.',
   };
   const kinds = Object.entries(T.KIND).map(([k, v]) => `<div class="pi-led"><dt>${esc(v.label)}</dt><dd><p>${esc(v.says)}</p><p class="pi-led-n">${esc(example[k])}</p></dd><dd class="pi-led-p">${T.who(v.who)}</dd></div>`).join('');
-  const kg = Object.entries(d.rules).map(([id, text]) => `<tr><td><b>${esc(id)}</b></td><td>${esc(text)}</td></tr>`).join('');
+  const kg = Object.entries(d.rules).filter(([id]) => !/^M4\d$/.test(id)).sort((a, b) => a[0].localeCompare(b[0], 'en', { numeric: true })).map(([id, text]) => `<tr><td><b>${esc(id)}</b></td><td>${esc(text.charAt(0).toUpperCase() + text.slice(1))}.</td></tr>`).join('');   // the two projection notes (M48, M49) describe how the files are built, not how a link is drawn: they stay in methods.md
   const R = E?.ARRANGEMENT_RULES || {}; const order = { claim: 0, geometry: 1, heuristic: 2 };
   const eng = Object.entries(R).sort((a, b) => order[a[1].source] - order[b[1].source]).map(([k, r]) => `<tr><td>${esc(k.replace(/_/g, ' '))}</td><td>${r.value} ${esc(r.unit)}</td><td>${T.res(r.source)}</td></tr>`).join('');
   const nH = Object.values(R).filter(r => r.source === 'heuristic').length;
@@ -54,7 +54,7 @@ function html(d, E) {
 
   <section class="pi-sec" id="rules"><h2>The rules</h2><p class="pi-sec-l">Everything between a claim and a planted row is written down.</p>
     <div><p>A species is linked to a spatial function in one of two ways: a source records a use the ontology maps to the function (${tag('derived')}), or every trait the function requires is met by recorded claims (${tag('candidate')}, never promoted). Anything else is ${tag('unknown')} and is listed as a gap, not drawn.</p>
-    <details class="pi-more-d" open><summary>Knowledge-graph rules in this release</summary><table class="pi-table"><tbody>${kg}</tbody></table></details>
+    <details class="pi-more-d" open><summary>Knowledge-graph rules in this release</summary><table class="pi-table pi-rules"><tbody>${kg}</tbody></table></details>
     ${eng ? `<p style="margin-top:22px">The planting engine arranges ${esc(arranged.join(' and '))}. ${esc(recorded.join(', '))} are recorded and explorable but have no arrangement rule yet. Of the ${Object.keys(R).length} numbers the engine uses, ${nH} are heuristics: chosen by the implementer, backed by no source, and named wherever they decide something.</p>
     <details class="pi-more-d"><summary>Every number the planting engine uses</summary><table class="pi-table"><thead><tr><th>Rule</th><th>Value</th><th>From</th></tr></thead><tbody>${eng}</tbody></table></details>` : ''}</div></section>
 

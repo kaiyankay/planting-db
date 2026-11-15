@@ -15,9 +15,11 @@
 //   Explorer, focused  <explore>#fk=species&fi=plant:<slug>            (the Explorer's own URL state; add ik/ii for one record,
 //                                                                         v=graph|matrix|table|compare for the working view)
 //   Neural, focused    <neural>#species=<slug>
-//   Evidence trace     <knowledge>#species=<slug>[&case=mine&bed=<bed id>]   (one species followed from its source to a Screen bed:
-//                                                                         the reference garden, or a bed of the user's own design)
-//   A bed in Compose   <design>?open=compose&bed=<bed id>[&species=<slug>]   (ids are checked against the saved project; an unknown
+//   Decision trace     <knowledge>#[fn=<function id>&]species=<slug>[&case=mine&bed=<bed id>][&plant=<plant object id>]
+//                                                                        (one species followed from its sources into a bed, for a
+//                                                                         spatial function: the reference garden, or a bed and a
+//                                                                         plant object of the user's own design; fn defaults to Screen)
+//   A bed in Compose   <design>?open=compose&bed=<bed id>[&species=<slug>][&fn=<function id>]   (checked against the saved project; an unknown
 //                                                                         id is ignored and the project opens where it was left)
 //   Back to a design   <design>                                         (the Studio reopens its saved project at the stage, bed,
 //                                                                         view and selection it was left in: project.ui.view)
@@ -34,8 +36,10 @@ const PATHS = {
 export const routes = Object.fromEntries(Object.entries(PATHS).map(([k, v]) => [k, new URL(v, ROOT).href]));
 export const SURVEY_URL = 'https://kaiyankay.github.io/planting-survey/';
 export const REPO_URL = 'https://github.com/kaiyankay/planting-db';
-/** the spatial function the evidence trace follows into a design (the Knowledge overview's worked example) */
+/** the spatial function the Decision Trace opens on, and the functions it can follow into an arrangement: the ones the Studio's
+ *  engine arranges today (design/js/engine.js FUNCTION_SUPPORT — tools/platform_tests.py checks the two lists agree) */
 export const TRACE_FUNCTION = 'z:screen';
+export const TRACE_FUNCTIONS = ['z:screen', 'z:ground_cover'];
 
 export const esc = s => String(s ?? '').replace(/[&<>"]/g, ch => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[ch]));
 export const slugOf = id => String(id || '').replace(/^plant:/, '');
@@ -51,10 +55,11 @@ export const links = {
   compare: (a, b) => `${routes.explore}#${new URLSearchParams({ a: speciesId(a), b: speciesId(b), v: 'compare' })}`,
   neural: id => id ? `${routes.neural}#species=${encodeURIComponent(slugOf(id))}` : routes.neural,
   knowledge: () => routes.knowledge,
-  /** the evidence-to-design trace of one species; with a bed id, in the user's own design */
-  trace: (id, bedId) => { const p = new URLSearchParams(); if (id) p.set('species', slugOf(id)); if (bedId) { p.set('case', 'mine'); p.set('bed', bedId); } const h = p.toString(); return h ? `${routes.knowledge}#${h}` : routes.knowledge; },
-  /** a bed of the saved design, opened in Compose (optionally with one species' evidence) */
-  compose: (bedId, id) => { const p = new URLSearchParams({ open: 'compose', bed: bedId }); if (id) p.set('species', slugOf(id)); return `${routes.design}?${p}`; },
+  /** the Decision Trace of one species. `o`: a bed id (the user's own design), or { fn, bed, plant } — the spatial function, a bed of
+   *  the user's own design, one plant object of its current version */
+  trace: (id, o = null) => { const x = typeof o === 'string' ? { bed: o } : (o || {}); const p = new URLSearchParams(); if (x.fn && x.fn !== TRACE_FUNCTION) p.set('fn', x.fn); if (id) p.set('species', slugOf(id)); if (x.bed) { p.set('case', 'mine'); p.set('bed', x.bed); } if (x.plant) p.set('plant', x.plant); const h = p.toString(); return h ? `${routes.knowledge}#${h}` : routes.knowledge; },
+  /** a bed of the saved design, opened in Compose (optionally with one species' evidence, and the function it is asked about) */
+  compose: (bedId, id, fn = null) => { const p = new URLSearchParams({ open: 'compose', bed: bedId }); if (id) p.set('species', slugOf(id)); if (fn) p.set('fn', fn); return `${routes.design}?${p}`; },
   research: () => routes.research,
   method: () => routes.method,
   contribute: () => `${routes.research}#contribute`,   // V1 names, kept for the modules that still call them
