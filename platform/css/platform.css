@@ -160,10 +160,18 @@ body.pi-page main:focus { outline: none; }
 .pi-plate img { display: block; width: 100%; height: 100%; object-fit: contain; object-position: 50% 100%; filter: brightness(1.035); transition: transform .7s var(--pi-ease); }
 .pi-card .pi-art { aspect-ratio: 4 / 5; } .pi-card-link:hover .pi-plate img { transform: scale(1.03); transform-origin: 50% 100%; }
 .pi-card h3 { margin: 16px 0 0 !important; font: 600 20px/1.15 var(--pi-display); letter-spacing: -.03em; text-wrap: balance; }
-.pi-card-sci { margin: 4px 0 0; font: italic 400 14.5px/1.3 var(--pi-sans); color: var(--pi-ink-2); } .pi-card-meta { margin: 6px 0 0; font-size: 13px; line-height: 1.4; color: var(--pi-ink-3); }
+.pi-card-sci { margin: 4px 0 0; font: italic 400 14.5px/1.3 var(--pi-sans); color: var(--pi-ink-2); text-wrap: balance; }
+/* V4.1: two lines under the plate. Growth form and origin are not printed on every card: they show over the foot of the plate on
+   hover or keyboard focus (never changing the card's height), and are filters above. ?card=3 adds .pi-card-form for comparison. */
+.pi-card-f { position: relative; display: block; border-radius: var(--pi-r-md); overflow: hidden; }
+.pi-card-reveal { position: absolute; left: 0; right: 0; bottom: 0; padding: 9px 12px 10px; background: color-mix(in srgb, var(--pi-paper) 92%, transparent); border-top: 1px solid var(--pi-line); font: 12.5px/1.35 var(--pi-sans); color: var(--pi-ink-2); opacity: 0; transform: translateY(4px); transition: opacity .18s var(--pi-ease), transform .18s var(--pi-ease); pointer-events: none; }
+.pi-card-link:hover .pi-card-reveal, .pi-card-link:focus-visible .pi-card-reveal { opacity: 1; transform: none; }
+.pi-card-link { border-radius: var(--pi-r-md); } .pi-card-link:focus-visible { outline: 2px solid var(--pi-olive-deep); outline-offset: 6px; }
+.pi-card-link:hover h3 { color: var(--pi-olive-deep); }
+.pi-card-form { margin: 6px 0 0; font: 500 12.5px/1.3 var(--pi-sans); color: var(--pi-ink-3); }
+.lib-filter .lib-gap.brk { flex: 0 0 100%; width: auto; height: 0; }
+@media (hover: none) { .pi-card-reveal { display: none; } }
 .pi-card-note { margin: 8px 0 0; font-size: 13px; line-height: 1.4; color: var(--pi-olive-deep); } .pi-card-note .wait { color: var(--pi-caramel-ink); }
-.pi-more { display: inline-flex; align-items: center; gap: 6px; margin-top: auto; padding-top: 12px; font: 500 13.5px/1 var(--pi-sans); color: var(--pi-olive-deep); }
-.pi-more svg { width: 15px; height: 15px; fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; transition: transform .25s var(--pi-ease); } .pi-card-link:hover .pi-more svg { transform: translateX(4px); }
 
 /* ---- profile (V4): a calm first viewport, then four tabs; a row is a summary, its claims open under it */
 .pi-crumb { display: flex; align-items: center; gap: 16px; padding: 20px 0 16px; font-size: 14px; } .pi-crumb a { text-decoration: none; color: var(--pi-ink-2) !important; } .pi-crumb a:hover { color: var(--pi-ink) !important; } .pi-crumb .pi-pn { margin-left: auto; display: flex; gap: 24px; }
@@ -176,6 +184,26 @@ body.pi-page main:focus { outline: none; }
 .pi-ref { display: grid; grid-template-columns: 96px minmax(0, 1fr); gap: 16px; align-items: start; margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--pi-line); }
 .pi-ref img { display: block; width: 96px; height: 120px; object-fit: cover; border-radius: var(--pi-r-xs); background: var(--pi-paper-2); }
 .pi-ref p { margin: 0; font-size: 13px; line-height: 1.55; color: var(--pi-ink-3); } .pi-ref p > * { display: block; } .pi-ref b { margin-bottom: 4px; font: 600 14px/1.3 var(--pi-sans); color: var(--pi-ink); } .pi-ref a { color: var(--pi-ink-2) !important; }
+/* V4.1: the reference photograph, one click from the first viewport; it opens in a dialog with its credit */
+.pi-refbtn { display: grid; grid-template-columns: 56px minmax(0, 1fr); gap: 14px; align-items: center; width: 100%; margin-top: 14px; padding: 8px 14px 8px 8px; border: 1px solid var(--pi-line-2); border-radius: var(--pi-r-md); background: var(--pi-paper); color: var(--pi-ink); text-align: left; cursor: pointer; font: inherit; transition: border-color .15s var(--pi-ease), background .15s var(--pi-ease); }
+.pi-refbtn:hover { border-color: var(--pi-ink-2); } .pi-refbtn:focus-visible { outline: 2px solid var(--pi-olive-deep); outline-offset: 2px; }
+.pi-refbtn img { display: block; width: 56px; height: 56px; object-fit: cover; border-radius: var(--pi-r-xs); background: var(--pi-paper-2); }
+.pi-refbtn b { display: block; font: 600 14.5px/1.3 var(--pi-sans); color: var(--pi-olive-deep); } .pi-refbtn small { display: block; margin-top: 2px; font-size: 12.5px; line-height: 1.4; color: var(--pi-ink-3); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.pi-refbtn > span { min-width: 0; overflow: hidden; }
+@media (max-width: 980px) { .pi-hero-f { max-width: 400px; } }
+@media (max-width: 560px) { .pi-crumb { flex-wrap: wrap; gap: 6px 16px; } .pi-crumb .pi-pn { margin-left: 0; gap: 16px; } }
+.pi-refnone { margin: 14px 0 0; font-size: 13px; color: var(--pi-ink-3); }
+.pi-refdlg { width: min(920px, calc(100vw - 32px)); max-height: calc(100vh - 48px); padding: 0; border: 0; border-radius: var(--pi-r-md); background: var(--pi-paper); color: var(--pi-ink); box-shadow: 0 24px 80px rgba(39,36,31,.28); overflow: auto; }
+.pi-refdlg::backdrop { background: rgba(39,36,31,.5); }
+.pi-refdlg form { position: sticky; top: 0; z-index: 1; display: flex; justify-content: flex-end; height: 0; } .pi-refx { margin: 12px; height: 34px; padding: 0 14px; border: 1px solid var(--pi-line-2); border-radius: var(--pi-r-pill); background: var(--pi-paper); color: var(--pi-ink); font: 500 13.5px/1 var(--pi-sans); cursor: pointer; } .pi-refx:focus-visible { outline: 2px solid var(--pi-olive-deep); outline-offset: 2px; }
+.pi-refdlg figure { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(240px, 1fr); margin: 0; } .pi-refdlg figure > img { display: block; width: 100%; height: 100%; max-height: calc(100vh - 48px); object-fit: contain; background: var(--pi-paper-2); }
+.pi-refdlg figcaption { padding: 56px 24px 24px; } .pi-refdlg h2 { font: 600 22px/1.15 var(--pi-display); letter-spacing: -.03em; } .pi-refdlg h2 i { display: block; margin-top: 4px; font: italic 400 15px/1.3 var(--pi-sans); letter-spacing: 0; color: var(--pi-ink-2); }
+.pi-refdlg dl { margin: 18px 0 0; border-top: 1px solid var(--pi-line-2); } .pi-refdlg dl div { padding: 9px 0; border-bottom: 1px solid var(--pi-line); } .pi-refdlg dt { font: 500 12.5px/1.3 var(--pi-sans); color: var(--pi-ink-3); } .pi-refdlg dd { margin: 2px 0 0; font-size: 14.5px; line-height: 1.45; overflow-wrap: anywhere; }
+.pi-refdlg figcaption p { margin: 14px 0 0; font-size: 13px; line-height: 1.5; color: var(--pi-ink-3); }
+@media (max-width: 720px) { .pi-refdlg figure { grid-template-columns: 1fr; } .pi-refdlg figure > img { max-height: 56vh; } .pi-refdlg figcaption { padding-top: 20px; } }
+.pi-origin { margin: 10px 0 0; font-size: 14px; color: var(--pi-ink-2); } .pi-origin span { color: var(--pi-ink-3); margin-right: 4px; } .pi-origin a { color: var(--pi-ink) !important; text-decoration: underline; text-decoration-color: var(--pi-line-2); text-underline-offset: 3px; } .pi-origin + .pi-ident { margin-top: 4px; }
+.pi-differ { display: inline-block; margin-left: 2px; padding: 1px 7px 2px; border: 1px solid var(--pi-line-2); border-radius: var(--pi-r-pill); font: 500 12px/1.4 var(--pi-sans); color: var(--pi-caramel-ink) !important; text-decoration: none !important; white-space: nowrap; } .pi-differ:hover { border-color: var(--pi-caramel-ink); } .pi-differ[data-differ="functions"] { color: var(--pi-ink-3) !important; }
+.pi-size { display: block; } .pi-size + .pi-size { margin-top: 2px; }
 .pi-img-n { margin: 0; font-size: 14.5px; line-height: 1.5; color: var(--pi-ink-2); } .pi-img-n b { display: block; font-weight: 600; color: var(--pi-ink); }
 .pi-btn.quiet { border-color: transparent; background: none; color: var(--pi-ink-2); padding-left: 8px; padding-right: 8px; } .pi-btn.quiet:hover { background: none; border-color: transparent; color: var(--pi-ink); text-decoration: underline; text-underline-offset: 3px; }
 .pi-hero h1 { font: 600 clamp(40px, 4.2vw, 60px)/1 var(--pi-display); letter-spacing: -.045em; text-wrap: balance; }

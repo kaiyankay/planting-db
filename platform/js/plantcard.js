@@ -27,7 +27,7 @@ const AI_WORD = { supported_by_source: 'supported by source', partially_supporte
 export const STUDIO_FUNCTIONS = TRACE_FUNCTIONS;   // the functions design/js/engine.js arranges today (one list, platform.js)
 
 /** the most specific recorded origin: the entity record when there is one */
-function originLabel(d, s) { const c = idx(d).AT.get(`${s.id}|origin`); if (!c) return human(s.origin_status); const v = c.values.find(v => v.entity) || c.values[0]; return v ? v.label : human(s.origin_status); }
+export function originLabel(d, s) { const c = idx(d).AT.get(`${s.id}|origin`); if (!c) return human(s.origin_status); const v = c.values.find(v => v.entity) || c.values[0]; return v ? v.label : human(s.origin_status); }
 const cellValues = (d, s, facet) => { const c = idx(d).AT.get(`${s.id}|${facet}`); return c ? c.values.map(v => v.label) : null; };
 const valueHtml = v => `<span class="pi-val">${esc(v.label)}${v.conditions?.length ? ` <small>in ${esc(v.conditions.join(', ').toLowerCase())}</small>` : ''}${v.cultivars?.length ? ` <small>cv. ${esc(v.cultivars.join(', '))}</small>` : ''}</span>`;
 const sourceShort = (d, sid) => { const s = d.sources[sid]; if (!s) return sid; return s.type === 'practitioner' ? `Practitioner survey, ${sid.replace('survey-r', 'respondent ')}` : s.label.split(' — ')[0]; };
@@ -47,17 +47,20 @@ export function figureHtml(d, id, imgs, { size = 'card', symbol = null, credit =
 }
 
 // ---------------------------------------------------------------- Plant Card (atlas)
-/** V4: the common name leads (Bricolage), the scientific name follows in italic sans; every card has the same plate and the same height */
-export function cardHtml(d, id, imgs, { symbol = null, note = '' } = {}) {
-  const s = species(d, id); const X = idx(d); const fns = d.functions.map(f => X.LK.get(`${s.id}|${f.id}`)).filter(l => l && l.drawn);
-  return `<article class="pi-card" data-species="${esc(s.slug)}" data-form="${esc(s.growth_form_label)}" data-functions="${esc(fns.map(l => l.function).join(' '))}">
-    <a class="pi-card-link" href="${esc(links.profile(s.id))}" aria-label="${esc(s.common_names[0] || '')}, ${esc(s.scientific_name)}: read the profile">
-      ${figureHtml(d, id, imgs, { size: 'card', symbol })}
+/** V4.1: a quiet plate. The illustration, the common name, the scientific name in italic — nothing else by default. The recorded
+ *  growth form and origin stay in the record: they show over the foot of the plate on hover or keyboard focus, they are filters of
+ *  the atlas, and the profile states them. `form: true` (the ?card=3 comparison) adds one short growth-form word as a third line;
+ *  it is the last word of the recorded growth-form label and nothing more. The whole card is one link. */
+export const shortForm = label => { const w = String(label || '').trim().split(/\s+/).pop() || ''; return w.charAt(0).toUpperCase() + w.slice(1); };
+export function cardHtml(d, id, imgs, { symbol = null, note = '', form = false } = {}) {
+  const s = species(d, id); const X = idx(d); const fns = d.functions.map(f => X.LK.get(`${s.id}|${f.id}`)).filter(l => l && l.drawn); const origin = originLabel(d, s);
+  return `<article class="pi-card${form ? ' three' : ''}" data-species="${esc(s.slug)}" data-form="${esc(s.growth_form_label)}" data-origin="${esc(s.origin_status || '')}" data-functions="${esc(fns.map(l => l.function).join(' '))}">
+    <a class="pi-card-link" href="${esc(links.profile(s.id))}" aria-label="${esc(s.common_names[0] || '')}, ${esc(s.scientific_name)}. ${esc(s.growth_form_label)}, ${esc(origin)}. Open the profile">
+      <span class="pi-card-f">${figureHtml(d, id, imgs, { size: 'card', symbol })}<span class="pi-card-reveal" aria-hidden="true">${esc(s.growth_form_label)} · ${esc(origin)}</span></span>
       <h3>${esc(s.common_names[0] || s.scientific_name)}</h3>
       <p class="pi-card-sci"><i>${esc(s.scientific_name)}</i></p>
-      <p class="pi-card-meta">${esc(s.growth_form_label)} · ${esc(originLabel(d, s))}</p>
+      ${form ? `<p class="pi-card-form">${esc(shortForm(s.growth_form_label))}</p>` : ''}
       ${note ? `<p class="pi-card-note">${note}</p>` : ''}
-      <span class="pi-more">Read more<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h9.5M9 4.5 12.5 8 9 11.5"/></svg></span>
     </a></article>`;
 }
 
@@ -129,7 +132,20 @@ export function detailHtml(d, id, imgs, ctx = {}) {
   const bySource = new Map(); for (const c of cl) bySource.set(c.source_id, (bySource.get(c.source_id) || 0) + 1);
   const rels = (d.relations || []).filter(r => r.live && (r.a === s.id || r.b === s.id));
   const few = (facet, n = 3) => { const v = cellValues(d, s, facet); if (!v) return '<span class="pi-none">not recorded</span>'; return v.slice(0, n).map(esc).join(' · ') + (v.length > n ? ` <small>+${v.length - n}</small>` : ''); };
-  const glance = [['Growth form', esc(s.growth_form_label)], ['Leaves', few('evergreen')], ['Light', few('exposure')], ['Water', few('water')], ['Soil', few('soil')], ['Origin', esc(originLabel(d, s))]];
+  // V4.1 quick facts: growth form · size · site needs · function. A field whose sources disagree (or, for a size, whose claims state
+  // different ranges) says so and links to its row under Growth & conditions, where every source keeps its own line. Nothing is averaged.
+  const rowHref = facet => `#species=${esc(s.slug)}&tab=growth&open=${esc(facet)}`;
+  const differ = (facet, n) => `<a class="pi-differ" href="${rowHref(facet)}" data-differ="${esc(facet)}" title="open the ${n} claims, one line per source">sources differ</a>`;
+  const site = facet => { const c = X.AT.get(`${s.id}|${facet}`); return few(facet) + (c && c.disagreement.length ? ` ${differ(facet, c.n_claims)}` : ''); };
+  const sizeFact = (facet, word) => { const c = X.AT.get(`${s.id}|${facet}`); if (!c) return `<span class="pi-none">${word} not recorded</span>`;
+    const cls = c.claims.map(i => d.claims[i]).filter(Boolean); const stated = [...new Set(cls.map(x => sizeOf(x.value)).filter(Boolean))];
+    if (cls.length === 1 || stated.length <= 1) return `${word} ${esc(stated[0] || cls[0]?.text || '')}`;
+    const nums = cls.flatMap(x => { const v = x.value; return v && typeof v === 'object' && v.unit === 'm' ? [v.min, v.max, v.height_m, v.spread_m, v.typical_max_m, v.occasional_max_m].filter(n => typeof n === 'number') : []; });
+    return `${word} ${nums.length ? `${num(Math.min(...nums))} to ${num(Math.max(...nums))} m` : `${cls.length} claims`} ${differ(facet, cls.length)}`; };
+  const leaf = cellValues(d, s, 'evergreen'); const drawnFns = lks.filter(l => l.drawn).map(l => X.FN.get(l.function)?.label).filter(Boolean);
+  const glance = [['Growth form', esc(s.growth_form_label) + (s.growth_form_status === 'supported' ? '' : ` ${tag('to_confirm', `growth form ${s.growth_form_status}`)}`) + (leaf ? ` · ${leaf.slice(0, 2).map(esc).join(' / ')}` : '') + (X.AT.get(`${s.id}|evergreen`)?.disagreement.length ? ` ${differ('evergreen', X.AT.get(`${s.id}|evergreen`).n_claims)}` : '')],
+    ['Size', `<span class="pi-size">${sizeFact('height_class', 'Height')}</span><span class="pi-size">${sizeFact('spread_class', 'Spread')}</span>`], ['Spatial function', drawnFns.length ? `${drawnFns.map(esc).join(' · ')} <a class="pi-differ" href="#species=${esc(s.slug)}" data-differ="functions" title="a recorded or inferred link, provisional until a bed is checked">linked, provisional</a>` : '<span class="pi-none">no recorded link</span>'],
+    ['Light', site('exposure')], ['Water', site('water')], ['Soil', site('soil')]];
   const group = gid => { const g = d.groups.find(x => x.id === gid); return `<section class="pi-sec" id="sec-${esc(gid.replace('y:', ''))}"><h2>${esc(GROUP_TITLE[gid] || g.label)}</h2><p class="pi-sec-l">${esc(g.definition)}</p><div class="pi-facts">${d.facets.filter(f => f.group === gid).map(f => factRow(d, s, f)).join('')}</div></section>`; };
   const des = ctx.design; const on = ctx.isConsidered;
   const consider = `<div class="pi-consider" data-consider-box>${des
@@ -139,21 +155,30 @@ export function detailHtml(d, id, imgs, ctx = {}) {
   const refPhoto = im ? `<div class="pi-ref"><a href="${esc(imageUrl(im.file))}" title="open the photograph"><img src="${esc(imageUrl(im.card))}" alt="Photograph: ${esc(s.scientific_name)}${im.caption_at_source ? ` — ${esc(im.caption_at_source)}` : ''}" loading="lazy"></a><p><b>Reference photograph</b><a href="${esc(im.source_url)}" rel="noopener">${photoCredit(im)}</a><span>Identified as <i>${esc(s.scientific_name)}</i> on its Commons page; not verified by this project.</span></p></div>` : '';
   const panel = (k, html) => `<div class="pi-panel" id="tab-${k}" role="tabpanel" aria-labelledby="tabbtn-${k}"${k === tab ? '' : ' hidden'}>${html}</div>`;
   const others = s.common_names.slice(1);
+  // V4.1: the credited photograph is one click from the first viewport. It opens in a dialog with photographer, licence and source;
+  // it is a reference for the eye, never evidence for a claim.
+  const refBtn = im ? `<button type="button" class="pi-refbtn" data-refphoto aria-haspopup="dialog"><img src="${esc(imageUrl(im.card))}" alt="" loading="lazy"><span><b>View reference photo</b><small>${photoCredit(im)}</small></span></button>` : `<p class="pi-refnone">No licensed reference photograph is recorded for this species yet.</p>`;
+  const refDialog = im ? `<dialog class="pi-refdlg" data-refdialog aria-label="Reference photograph of ${esc(s.scientific_name)}"><form method="dialog"><button class="pi-refx" aria-label="Close the photograph">Close</button></form>
+    <figure><img src="${esc(imageUrl(im.file))}" alt="Photograph: ${esc(s.scientific_name)}${im.caption_at_source ? ` — ${esc(im.caption_at_source)}` : ''}" loading="lazy" width="${im.width}" height="${im.height}">
+    <figcaption><h2>${esc(s.common_names[0] || s.scientific_name)} <i>${esc(s.scientific_name)}</i></h2>
+      <dl><div><dt>Photographer</dt><dd>${esc(im.author)}</dd></div><div><dt>Licence</dt><dd>${im.licence_url ? `<a href="${esc(im.licence_url)}" rel="noopener">${esc(im.licence)}</a>` : esc(im.licence)}</dd></div><div><dt>Source</dt><dd><a href="${esc(im.source_url)}" rel="noopener">Wikimedia Commons</a></dd></div>${im.caption_at_source ? `<div><dt>Caption at source</dt><dd>${esc(im.caption_at_source)}</dd></div>` : ''}</dl>
+      <p>Identified as <i>${esc(s.scientific_name)}</i> on its Commons page; not verified by this project. A reference for the eye: no claim on this page is read from it.</p></figcaption></figure></dialog>` : '';
 
   return `<article class="pi-profile" data-species="${esc(s.slug)}">
   <header class="pi-hero">
-    ${figureHtml(d, id, imgs, { size: 'full', symbol: ctx.symbol, credit: 'note' })}
+    <div class="pi-hero-f">${figureHtml(d, id, imgs, { size: 'full', symbol: ctx.symbol, credit: 'note' })}${refBtn}</div>
     <div class="pi-hero-t">
       <h1>${esc(s.common_names[0] || s.scientific_name)}</h1>
       <p class="pi-names"><i class="pi-sci">${esc(s.scientific_name)}</i><span>${esc(s.family)}</span></p>
       ${others.length ? `<p class="pi-aka">Also recorded as ${esc(others.slice(0, 4).join(', '))}${others.length > 4 ? ` <span title="${esc(others.slice(4).join(', '))}">and ${others.length - 4} more</span>` : ''}</p>` : ''}
-      <p class="pi-ident">${esc(s.growth_form_label)} ${tag(s.growth_form_status === 'supported' ? 'derived' : 'to_confirm', s.growth_form_status === 'supported' ? 'growth form read from the sources' : `growth form ${s.growth_form_status}`)}</p>
+      <p class="pi-origin"><span>Origin</span> <a href="${rowHref('origin')}" data-differ="origin" title="open the claims behind the recorded origin">${esc(originLabel(d, s))}</a></p>
       <dl class="pi-glance">${glance.map(([k, v]) => `<div><dt>${k}</dt><dd>${v}</dd></div>`).join('')}</dl>
       ${consider}
       <div class="pi-actions"><a class="pi-btn" href="${esc(links.explorer(s.id))}">Explore in Knowledge</a><a class="pi-btn" href="${esc(links.trace(s.id))}" data-pi-go="trace">Trace it into a design</a><a class="pi-btn quiet" href="${esc(links.neural(s.id))}">3D network</a></div>
       <p class="pi-counts">${plural(s.claims.live, 'live claim')} from ${plural(bySource.size, 'source')} · ${s.claims.verified} verified by a person · ${plural(disagree.length, 'field')} where sources disagree · ${plural(missing.length, 'field')} not recorded</p>
     </div>
   </header>
+  ${refDialog}
   <nav class="pi-tabs" role="tablist" aria-label="Sections of this profile">${TABS.map(([k, l]) => `<a role="tab" id="tabbtn-${k}" href="#species=${esc(s.slug)}${k === 'design' ? '' : `&tab=${k}`}" data-tab="${k}" aria-selected="${k === tab}" aria-controls="tab-${k}">${l}${k === 'unknown' ? `<small>${missing.length + disagree.length + unknown.length}</small>` : ''}</a>`).join('')}</nav>
 
   ${panel('design', `
@@ -195,3 +220,10 @@ export function detailHtml(d, id, imgs, ctx = {}) {
   </article>`;
 }
 const GROUP_TITLE = { 'y:growth_form': 'Growth form and size', 'y:environment': 'Growing conditions', 'y:seasonal_ecological': 'Seasons and ecology', 'y:maintenance_risk': 'Maintenance and risk' };
+
+// the reference photograph dialog: one delegated listener wherever a profile is shown. <dialog> gives Esc and focus return for free.
+if (typeof document !== 'undefined') document.addEventListener('click', ev => {
+  const b = ev.target.closest?.('[data-refphoto]'); const dlg = b ? b.closest('.pi-profile')?.querySelector('[data-refdialog]') : null;
+  if (dlg) { if (dlg.showModal) dlg.showModal(); else dlg.setAttribute('open', ''); return; }
+  if (ev.target.matches?.('dialog[data-refdialog]')) ev.target.close();   // a click on the backdrop
+});
