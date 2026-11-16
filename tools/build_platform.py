@@ -108,6 +108,7 @@ rewrite("js/app.js", [("'../brain/data/explorer.json'", "'./data/explorer.json'"
 
 # ---------------------------------------------------------------- the platform layer and its pages
 tree("platform/css", "platform/css"); tree("platform/js", "platform/js"); tree("platform/data", "platform/data"); tree("platform/img", "platform/img"); tree("platform/art", "platform/art")
+tree("platform/fonts", "platform/fonts")   # V4.1 brand-type trial: Kay's own typeface, loaded only when a trial variant is on
 rewrite("platform/js/platform.js", [("const LAYOUT = 'repo';", "const LAYOUT = 'preview';")])
 ICON = ('<link rel="icon" href="data:,">', '<link rel="icon" href="data:,">' + NOINDEX)
 copy("platform/plants/index.html", "plants/index.html")
@@ -116,6 +117,9 @@ copy("platform/knowledge/trace/index.html", "knowledge/trace/index.html")   # sa
 rewrite("knowledge/trace/index.html", [('href="../../css/platform.css"', 'href="../../platform/css/platform.css"'), ('src="../../js/overview.js"', 'src="../../platform/js/overview.js"'), ICON])
 copy("platform/about/index.html", "about/index.html")
 rewrite("about/index.html", [('href="../css/platform.css"', 'href="../platform/css/platform.css"'), ('href="../css/about.css"', 'href="../platform/css/about.css"'), ('src="../js/about.js"', 'src="../platform/js/about.js"'), ICON])
+copy("platform/about/type-trial/index.html", "about/type-trial/index.html")
+rewrite("about/type-trial/index.html", [('href="../../css/platform.css"', 'href="../../platform/css/platform.css"'), ('href="../../css/about.css"', 'href="../../platform/css/about.css"'), ('href="../../css/type-trial.css"', 'href="../../platform/css/type-trial.css"'),
+                                         ('href="../../css/type-trial-page.css"', 'href="../../platform/css/type-trial-page.css"'), ('src="../../js/typetrial.js"', 'src="../../platform/js/typetrial.js"'), ICON])
 for page in ("how-it-works", "method", "contribute", "typography"):
     copy(f"platform/about/{page}/index.html", f"about/{page}/index.html")
     rewrite(f"about/{page}/index.html", [('href="../../css/platform.css"', 'href="../../platform/css/platform.css"'), ('href="../../css/about.css"', 'href="../../platform/css/about.css"'), ('src="../../js/about.js"', 'src="../../platform/js/about.js"'), ICON])

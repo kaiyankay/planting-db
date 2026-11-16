@@ -152,3 +152,35 @@ export function mountTop(el, { active, section = null, sub = '', snapshot = null
   return el;
 }
 export function footHtml(d) { return `<footer class="pi-foot"><span>Planting Intelligence · ARCH 540, UBC</span><a href="${routes.about}">About</a><a href="${routes.how}">How it works</a><a href="${routes.method}">Research &amp; Method</a><a href="${routes.contribute}">Contribute</a><a href="${REPO_URL}" rel="noopener">Source and data</a>${d ? `<span class="pi-mono">${esc(snapshotLine(d))}</span>` : ''}</footer>`; }
+
+// ---------------------------------------------------------------- V4.1 · brand-type trial (opt-in; the V4 type system is the default)
+// ?type=a|b|c turns a variant on for this tab (sessionStorage), ?type=v4 turns it off. Nothing is loaded — no stylesheet, no font —
+// unless a variant is on. See platform/css/type-trial.css for what each variant changes and platform/about/type-trial/ for the comparison.
+export const TYPE_TRIAL = { a: 'A · Wordmark', b: 'B · Wordmark + Imagine', c: 'C · Wordmark + main titles' };
+export const typeTrialUrl = new URL(LAYOUT === 'repo' ? 'platform/about/type-trial/' : 'about/type-trial/', ROOT).href;
+export function typeTrial() {
+  let asked = null, on = null;
+  try { asked = new URLSearchParams(location.search).get('type'); } catch { /* no location */ }
+  const framed = window.top !== window.self;   // the comparison page shows several variants at once: a frame never writes the tab's choice
+  try {
+    if (framed) on = asked;
+    else { if (asked !== null) { if (TYPE_TRIAL[asked]) sessionStorage.setItem('pi.type', asked); else sessionStorage.removeItem('pi.type'); } on = sessionStorage.getItem('pi.type'); }
+  } catch { on = TYPE_TRIAL[asked] ? asked : null; }   // storage blocked: the variant holds for this page only
+  if (!TYPE_TRIAL[on]) on = null;
+  const root = document.documentElement;
+  if (on) root.dataset.type = on; else delete root.dataset.type;
+  if (!on && asked === null) return null;
+  if (on && !document.querySelector('link[data-type-trial]')) { const l = document.createElement('link'); l.rel = 'stylesheet'; l.href = new URL('../css/type-trial.css', import.meta.url).href; l.dataset.typeTrial = ''; document.head.appendChild(l); }
+  if (framed || document.body?.dataset.typeTrialPage !== undefined) return on;   // the comparison page and its frames carry no switch
+  const mount = () => {
+    if (document.querySelector('.pi-typeswitch')) return;
+    if (!document.querySelector('link[data-type-trial]')) { const l = document.createElement('link'); l.rel = 'stylesheet'; l.href = new URL('../css/type-trial.css', import.meta.url).href; l.dataset.typeTrial = ''; document.head.appendChild(l); }
+    const to = k => { const u = new URL(location.href); u.searchParams.set('type', k); return u.href; };
+    const el = document.createElement('nav'); el.className = 'pi-typeswitch'; el.setAttribute('aria-label', 'Type trial');
+    el.innerHTML = `<span>Type trial</span><a href="${to('v4')}"${on ? '' : ' aria-current="true"'}>V4</a>${Object.keys(TYPE_TRIAL).map(k => `<a href="${to(k)}" title="${TYPE_TRIAL[k]}"${on === k ? ' aria-current="true"' : ''}>${k.toUpperCase()}</a>`).join('')}<a href="${typeTrialUrl}">Compare</a>`;
+    document.body.appendChild(el);
+  };
+  if (document.body) mount(); else addEventListener('DOMContentLoaded', mount, { once: true });
+  return on;
+}
+if (typeof document !== 'undefined') typeTrial();
