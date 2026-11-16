@@ -1,0 +1,65 @@
+# Explorer tests — 2026-11-16
+
+`tools/explorer_tests.py` on `brain/data/explorer.json` (2026-11-13, tools/build_explorer.py) against kg.json (2026-11-13), xyz.json (2026-11-13), relations.json (2026-11-02) and plants/*.json. **51/51 pass.** Browser: headless Chrome at http://localhost:8769/brain/explorer/.
+
+| test | result | detail |
+|---|---|---|
+| A1 ten species, ids = plants/*.json | pass | 10 · ['acer-palmatum', 'achillea-millefolium', 'arctostaphylos-uva-ursi', 'cercidiphyllum-japonicum', 'cornus-nuttallii', 'cornus-sericea', 'gaillardia-aristata', 'gaultheria-shallon', 'polystichum-munitum', 'vaccinium-ovatum'] |
+| A2 the five spatial functions | pass | ['Ceiling / Canopy', 'Ground Cover', 'Screen', 'Scrim', 'Barrier'] |
+| A3 exactly species × functions link cells, one per pair | pass | 50 cells |
+| A4 attribute cells name a species and a facet; one per (species, facet) | pass | 230 cells · 27 facets |
+| A5 ids unique across collections | pass | 876 ids |
+| B1 every referenced id exists (dangling claim references in relations.json are flagged `missing_claims`, never invented) | pass | flagged: ['rel:gaultheria-shallon:vaccinium-ovatum:m2'] |
+| C1 drawn links resolve to a use claim (derived) or a met requirement check (candidate) | pass |  |
+| C2 every attribute value names live claims or an entity record | pass |  |
+| C3 concept links cite live claims only | pass | [] |
+| C4 AI evidence checks are keyed by claim id and every check result is in the vocabulary | pass | 534 checks |
+| D1 link verification from verified use claims only; candidates never verified; status = strongest kg edge; unknown never drawn | pass |  |
+| D2 attribute verification from verified claims only | pass | [] |
+| D3 claim statuses unchanged from kg.json (nothing promoted) | pass | 501 claims |
+| D4 three vocabularies kept apart on the file | pass |  |
+| E1 50 cells = 21 xyz suited_for lines + 29 xyz gaps, same status, conflict, verification and verdict | pass | 21 drawn · 29 unknown;  |
+| E2 every function has ≥ 1 linked species and its requirements carry literature | pass | {'Ceiling / Canopy': 3, 'Ground Cover': 6, 'Screen': 5, 'Scrim': 1, 'Barrier': 6} |
+| F1 every relations.json record projected once with its status; retired = history, never drawn; placeholders flagged | pass | 41 records · 19 live · 22 retired;  |
+| F2 no live relation was derived from shared attributes alone (M43: REL-R1 companions stay retired) | pass | 20 REL-R1 records, all retired |
+| G1 45 pairs: direct / retired ids = relations.json; shared ⊆ kg; combinations only from drawn links, never same function, labelled hypothesis | pass | 45 pairs · 17 with a live record;  |
+| H1 attribute cells = xyz plant → concept lines + plant attributes; every distinct value kept; disagreement = kg conflicts | pass |  |
+| H2 not-recorded cells are absent from the file (the interface says 'not recorded'; nothing is written for them) | pass | 40 not recorded |
+| I1 the interface names no plant, function or concept id | pass | [] |
+| J1 statistics match the file | pass | {"species": 10, "functions": 5, "function_links": 50, "attribute_cells": 230, "relations": 41, "pairs": 45, "claims": 501} |
+| K0 V4.1: no focus, no view named: Knowledge opens on the Network (no start screen); the switch is Network | Matrix | Table with Network pressed; no other view is in the page and the Inspector is closed | pass | switch [('graph', 'true'), ('matrix', 'false'), ('table', 'false')] · {'species': 10, 'ghost_species': 0, 'functions': 5, 'concepts': 11} |
+| K0b the Network without a focus is the X · Y · Z overview: every species, every function, the traits the functions require; one line per drawn function link and per requirement, the plants' claim lines to those traits kept latent (no claim explosion); no line for a missing link; the three axes are named and the recorded-only functions marked | pass | {'species': 10, 'ghost_species': 0, 'functions': 5, 'concepts': 11} · links 21 · requirements 17/17 · latent 43 |
+| K0c keyboard: every node and every drawn line of the overview is a focusable button with a name (Enter opens it); the search field is in the bar | pass | 26 nodes · 38 lines |
+| K0d the table is one click away (v=table): a row for every species; it opens on the knowledge groups that hold an attribute a function requires, and every group — so all the attributes — stays reachable by its checkbox | pass | 15 of 27 columns · 4 groups |
+| K0e every attribute of the snapshot is a column when all groups are ticked (g=…) | pass |  |
+| K1 Screen focus, in place: the function, its linked species and the traits it requires are lit; the other nodes stay in their columns as context; the Expand classes, depth, Only linked, Collapse and Reset are offered; the Inspector holds the function with its linked / missing / conflict counts | pass | {'species': 5, 'function': 1, 'concept': 4} |
+| K1b a V4 link with layers (x=traits,gaps) still lands: the species without a link are marked as gaps on their nodes — no line is drawn to them — and the linked species' claim lines to the required traits are lit | pass | {'species': 5, 'function': 1, 'concept': 4} · gaps 5 |
+| K1c Only linked takes what the walk did not reach out of the picture | pass | {'species': 5, 'function': 1, 'concept': 4} |
+| K1d the same focus in the matrix: its column is marked, one cell per species, and no other view is in the page | pass | column Screen |
+| K1e the same focus in the table: the columns the function requires are marked and a linked species comes first | pass | required columns ['Height bands', 'Habit', 'Leaf retention'] · first row Acer palmatum |
+| K2 link → evidence: inspector shows the use claim, the rule and the requirement check; the graph line is selected; the trace into a design is offered | pass | 92593 bytes |
+| K3 unknown cell → honest 'not established': verdict, missing requirements, contrary claims | pass |  |
+| K4 A/B compare (V1 link, tab=compare): the four sections in order; the pair's two live direct records and the retired history are listed | pass | ['shared_attributes', 'direct_relations', 'spatial_complementarity', 'evidence_unknowns'] |
+| K5 A/B compare with no record: the absence is stated, not filled; nothing biological is inferred | pass |  |
+| K6 pair in the graph (V1 link): both species, a typed relation line, no line from shared traits alone | pass |  |
+| K7 species focus: its linked functions are lit; one knowledge group and the plant-to-plant records are added on request, and the functions without a link are marked as gaps | pass | default {'species': 1, 'function': 3, 'concept': 0} · expanded {'species': 7, 'function': 3, 'concept': 13} · group y:environment has 13 concepts |
+| K8 a V1 deep link to one attribute cell opens the graph with the cell's claims in the inspector and the way back to the species | pass | attr:plant:gaultheria-shallon:exposure |
+| K9 one focus is shared: focusing a species in the Network marks it there; switching to the matrix and the table keeps the focus, marks its row and names it in the toolbar | pass | [('graph', None, 'graph'), ('graph', 'species=plant:gaultheria-shallon', 'graph'), ('matrix', 'species=plant:gaultheria-shallon', 'matrix'), ('table', 'species=plant:gaultheria-shallon', 'table')] |
+| K10 Back and Forward restore the view and the focus step by step: table → matrix → Network with the focus → Network without it → forward again; a filter is a step too | pass | [('matrix', 'species=plant:gaultheria-shallon', 'matrix'), ('graph', 'species=plant:gaultheria-shallon', 'graph'), ('graph', None, 'graph'), ('graph', 'species=plant:gaultheria-shallon', 'graph'), ('graph', 'species=plant:gaultheria-shallon', 'graph'), ('graph', 'species=plant:gaultheria-shallon', 'graph')] · q ['zzz', ''] |
+| K11 the Trace action appears only with a species in context, opens the Decision Trace of that species, and for a function the engine does not arrange it says so and follows an arranged one | pass | [None, 'http://localhost:8769/platform/knowledge/trace/#species=gaultheria-shallon', 'http://localhost:8769/platform/knowledge/trace/#species=gaultheria-shallon', 'http://localhost:8769/platform/knowledge/trace/#species=gaultheria-shallon'] · http://localhost:8769/platform/knowledge/trace/#species=cercidiphyllum-japonicum |
+| K12 a V3 trace address at the Knowledge address is sent on to the Decision Trace with its hash | pass | 54580 bytes |
+| K13 journey A: click Screen → only its linked species remain → the salal — Screen line → the actual use claim with its source, its human verification and the AI check apart → the Plant Profile and the Design Trace are one click away | pass | lit 10 · ctx [0, 16, 0, 0] · inspector Gaultheria shallon → Screen · claim gaultheria-shallon:landscape_use:usdaplants01 |
+| K14 journey B: click salal → expand its required traits (the traits its linked functions require, two hops; no other plant is reached through a shared function) → Matrix → Table → Back, Back: the focus and the expansion are not lost | pass | required traits 10 · steps [('graph', 1, 0), ('graph', 1, 4), ('graph', 2, 14), ('matrix', 2, 0), ('table', 2, 0), ('matrix', 2, 0), ('graph', 2, 14)] |
+| K15 journey C: compare salal with another species from the Network → shared attributes, function evidence, the unknown and the conflicting kept apart → the pair is marked in the Matrix and the Table → back in the Network no line joins the two plants (none is recorded) | pass | with plant:achillea-millefolium · [('graph', 0, 0), ('graph', 0, 0), ('compare', 0, 0), ('matrix', 2, 0), ('table', 2, 0), ('graph', 0, 0)] |
+| K16 a safe threshold: an expansion that would bring more attributes than the Network keeps legible is not applied silently — its count is shown with the groups to narrow it to | pass | 32 claim-line attributes |
+| K17 a link that names records the snapshot no longer holds degrades to the overview and says so | pass |  |
+| K18 a requirement line opens its own record: the function, the trait, the literature the ontology cites, and the plants with a claim on the trait | pass | ont:requires_trait:spatial:screen>habit:dense>habit:dense |
+| K19 line classes differ by stroke pattern as well as colour (recorded use solid, inferred dashed, conflict dash-dot, requirement dotted), and a lit line carries its class in words | pass |  |
+
+## Counts
+
+- 10 species · 27 facets · 230 attribute cells (40 not recorded · 27 with a source disagreement)
+- 5 functions · 50 link cells: {'candidate': 9, 'unknown': 29, 'derived': 12} · 21 drawn · 4 with a conflict · unknown by verdict {'contradicted by traits': 26, 'evidence missing': 3} · verification {'none': 38, 'unverified': 9, 'verified': 3}
+- 41 relation records: 19 live ({'co_listed': 15, 'competes': 1, 'layered_under': 2, 'companion': 1}, 3 model placeholders) · 22 retired
+- 45 pairs · 17 with a live direct record · 44 with a complementarity hypothesis
+- 501 claims cited ({'unverified': 463, 'verified': 38}) · AI evidence checks on 534 claims ({'partially_supported': 99, 'supported_by_source': 359, 'not_assessed': 38, 'conflicting_evidence': 5}) · 17 sources
