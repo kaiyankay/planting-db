@@ -87,13 +87,22 @@ function buildTree(rec, r, h, opts = {}) {
   if (rec.accent && !rec.winter) for (let i = 0; i < 10; i++) { const a = rand() * Math.PI * 2, d = Math.sqrt(rand()) * r * .8; const dot = new THREE.Mesh(new THREE.IcosahedronGeometry(r * .07, 0), flat(rec.accent)); dot.position.set(Math.cos(a) * d, trunkH + (h - trunkH) * (0.4 + rand() * .5), Math.sin(a) * d); g.add(dot); }
   return g;
 }
+/* V4.1 · a shrub is a billowing mass, not a column. Its footprint is the crown circle of the plan (lobes reach exactly the proxy radius r
+   at the widest tier), its top is the claimed height h; between the two, tiers of lobes that keep near-round proportions, so a tall
+   narrow species reads as stacked foliage and a row of them closes the way the 2D crowns do. Silhouette, lobes and taper are illustrative. */
 function buildShrub(rec, r, h) {
-  const g = new THREE.Group(); const rand = seeded(rec.id); const n = rec.density > 1 ? 7 : 5; const mat = flat(rec.foliage), mat2 = flat(mixHex(rec.foliage, '#ffffff', .14)), mat3 = flat(mixHex(rec.foliage, '#1f2a1c', .18));
-  for (let i = 0; i < n; i++) { const a = i / n * Math.PI * 2 + rand() * .4, d = r * (0.35 + rand() * .2); const rr = r * (0.5 + rand() * .2); const m = new THREE.Mesh(new THREE.IcosahedronGeometry(rr, 1), [mat, mat2, mat3][i % 3]); m.position.set(Math.cos(a) * d, h * (0.45 + rand() * .2), Math.sin(a) * d); m.scale.set(1, h / r * .55 / (rec.upright ? .8 : 1), 1); g.add(m); }
-  const top = new THREE.Mesh(new THREE.IcosahedronGeometry(r * .55, 1), mat2); top.position.y = h * .78; top.scale.y = .7; g.add(top);
-  const base = new THREE.Mesh(new THREE.CylinderGeometry(r * .5, r * .7, h * .3, 8), mat3); base.position.y = h * .15; g.add(base);
-  if (rec.accent) for (let i = 0; i < 8; i++) { const a = rand() * Math.PI * 2, d = Math.sqrt(rand()) * r * .85; const dot = new THREE.Mesh(new THREE.IcosahedronGeometry(r * .08, 0), flat(rec.accent)); dot.position.set(Math.cos(a) * d, h * (0.5 + rand() * .45), Math.sin(a) * d); g.add(dot); }
-  return g;
+  const g = new THREE.Group(); const rand = seeded(rec.id); const mat = flat(rec.foliage), mat2 = flat(mixHex(rec.foliage, '#ffffff', .14)), mat3 = flat(mixHex(rec.foliage, '#1f2a1c', .18));
+  const tiers = Math.max(1, Math.min(4, Math.round(h / (r * 1.1)))); const perTier = h / tiers; const n0 = rec.density > 1 ? 7 : rec.density < 1 ? 5 : 6; const taper = rec.upright ? .18 : .3;
+  for (let t = 0; t < tiers; t++) {
+    const u = tiers === 1 ? 0 : t / (tiers - 1); const w = 1 - taper * Math.pow(u, 1.4); const n = Math.max(3, n0 - t); const rr = r * w * .5; const d = r * w - rr; const y = tiers === 1 ? h * .52 : h * (.2 + .56 * u);
+    const sy = Math.max(.9, Math.min(1.45, perTier * .95 / rr));
+    for (let i = 0; i < n; i++) { const a = (i + (t % 2) * .5) / n * Math.PI * 2 + (rand() - .5) * .35; const m = new THREE.Mesh(new THREE.IcosahedronGeometry(rr * (.92 + rand() * .16), 1), [mat, mat2, mat3][(i + t) % 3]); m.position.set(Math.cos(a) * d, y + (rand() - .5) * perTier * .18, Math.sin(a) * d); m.scale.y = sy; g.add(m); }
+    const core = new THREE.Mesh(new THREE.IcosahedronGeometry(r * w * .74, 1), mat3); core.position.y = y; core.scale.y = Math.max(.9, Math.min(1.6, perTier * 1.05 / (r * w * .74))); g.add(core);
+  }
+  const tr = r * (1 - taper) * .8; const top = new THREE.Mesh(new THREE.IcosahedronGeometry(tr, 1), mat2); top.position.y = h - tr * .7; top.scale.y = .7; g.add(top);
+  const skirt = new THREE.Mesh(new THREE.CylinderGeometry(r * .62, r * .78, Math.min(h * .3, r * .7), 9), mat3); skirt.position.y = Math.min(h * .3, r * .7) / 2; g.add(skirt);
+  if (rec.accent) for (let i = 0; i < 8; i++) { const a = rand() * Math.PI * 2, u = rand(); const d = r * (1 - taper * Math.pow(u, 1.4)) * (.75 + rand() * .2); const dot = new THREE.Mesh(new THREE.IcosahedronGeometry(r * .08, 0), flat(rec.accent)); dot.position.set(Math.cos(a) * d, h * (.25 + u * .65), Math.sin(a) * d); g.add(dot); }
+  g.userData.proxy = { footprint_radius_m: r, height_m: h, tiers }; return g;
 }
 function buildFern(rec, r, h) {
   const g = new THREE.Group(); const rand = seeded(rec.id); const n = 11; const mat = flat(rec.foliage), mat2 = flat(mixHex(rec.foliage, '#1f2a1c', .22));

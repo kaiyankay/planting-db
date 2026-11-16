@@ -57,9 +57,24 @@ const r2 = v => Math.round(v * 100) / 100;
 
 // ---------------------------------------------------------------- versions
 export function currentVersion(project) { return project.versions.find(v => v.id === project.current_version_id) || null; }
+/* V4.1 · what a version is. A GENERATED version is the engine's run over the design's inputs and is named by the fingerprint of those
+   inputs (`input_fp`, set by the Studio). A DERIVED version is a generated version changed afterwards — by a typed edit, by hand, or by
+   regenerating some beds only — so its plants are no longer what the engine would generate from the inputs: it carries no `input_fp`,
+   and says how it was made, from which version, and which generated inputs it descends from. Versions saved before this existed are
+   read by their `edit_event` (see `versionHow`); nothing in an older file is rewritten. */
+const HOW = { spatial_edit: 'typed edit', geometry_update: 'partial regeneration' };
+export const versionHow = v => v?.derived?.how || (v?.edit_event ? HOW[v.edit_event.kind] || (/^direct:/.test(v.edit_event.kind) ? 'manual edit' : 'edit') : null);
+export function objectsFp(version) { let h = 2166136261; const s = (version.plant_objects || []).map(o => `${o.bed_id}|${o.species_id}|${o.role}|${r2(o.position_m[0])}|${r2(o.position_m[1])}`).sort().join(';'); for (let i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 16777619) >>> 0; } return `o-${h.toString(36)}`; }
 export function commitVersion(project, version) {
+  const parent = currentVersion(project);
   version.id = version.id || uid('v'); version.created = now(); version.parent_version_id = version.parent_version_id ?? project.current_version_id;
   version.plant_objects = version.plant_objects.map(p => ({ ...p, position_m: [r2(p.position_m[0]), r2(p.position_m[1])] }));
+  version.objects_fp = objectsFp(version);
+  if (version.edit_event) {
+    const base = !parent ? null : parent.derived ? parent.derived : parent.edit_event ? { base_version_id: null, base_input_fp: null } : { base_version_id: parent.id, base_input_fp: parent.input_fp || null };
+    version.derived = { how: versionHow({ edit_event: version.edit_event }), from_version_id: parent?.id || null, from_objects_fp: parent ? parent.objects_fp || objectsFp(parent) : null, base_version_id: base?.base_version_id ?? null, base_input_fp: base?.base_input_fp ?? null };
+    delete version.input_fp; delete version.preview_match;
+  }
   version.schedule = schedule(version);
   project.versions.push(version); project.current_version_id = version.id; project.redo = []; return version;
 }

@@ -392,8 +392,19 @@ Nothing is drawn that the model does not hold: no terrain, no buildings, no shad
   instruction line, the composer with its three inputs, the primary action, two quiet secondary actions and the hero plants.
   No stage stepper, no database figures, no captions. The figures live on About · Project.
 - **Stage stepper**: appears in the bar only once the user is past Imagine.
-- **Objective panel** (Compose, per bed; listed against beds in Shape): Value → Function → Parameters → Metric → Unresolved.
-  Only Privacy → Screen and Ground continuity → Ground Cover have one. Every control is an existing engine parameter and
+- **Objective panel** (Compose, per bed; listed against beds in Shape once a layout is in use). V4.1 order, three layers:
+  (1) objective and the engine's current result, (2) the controls the engine reads, with the reason in place when one is
+  disabled, then the change note; (3) one disclosure, "N unresolved · basis, rule, what is read", holding Unresolved, Value,
+  Function, the engine rule with each number's source, and the case (design id, preview fingerprint). Nothing in layer 3 is
+  open by default. At 1280 × 800 header, result, target height and rows sit in the panel's first view.
+- **Shape inspector**: two modes, never mixed. *Choose a layout* shows the options, how the others differ from the one shown
+  and one action ("Use this layout"). *Edit beds and conditions* appears once a layout is in use; "Choose another layout"
+  goes back.
+- **Versions**: a generated version is named by its input fingerprint; a version changed afterwards says how ("typed edit",
+  "manual edit", "partial regeneration") in Grow's bar, in the change note and in the trace, and has no input fingerprint.
+- **3D shrubs**: tiers of near-round lobes whose footprint is the plan's crown circle and whose top is the claimed height;
+  labelled as proxies in the footer.
+  Only Privacy → Screen and Ground coverage → Ground Cover (V4.1: renamed from "Ground continuity"; the figure is an under-crown estimate, not connectivity) have one. Every control is an existing engine parameter and
   re-runs the engine; a **change note** says what changed in the engine's own before/after records, or "Same result" with
   the reason. Ground Cover reads "estimate N %" and never a verdict. A recorded-only function gets one line and no control.
 - **Preview line**: a dashed caramel box with a mono fingerprint (`p-…`) — "not generated yet" or "differs from version N".

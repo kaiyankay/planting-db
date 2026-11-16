@@ -43,7 +43,9 @@ body[data-stage="welcome"] #stagenav, body[data-stage="welcome"] #top .right { d
 }
 @media (min-width: 1081px) and (max-width: 1340px) {
   .ws-canvas:has(> .ws-panel.open) { --dock: 320px; } .ws-canvas:has(> .ws-panel.open.evidence), .ws-canvas:has(> #gpanel.open) { --dock: 340px; } .ws-canvas:has(> #gpanel.open.schedule), .ws-canvas:has(> #gpanel.open.versions) { --dock: 400px; }
-  .ws-canvas:has(> .ws-panel.open) .ws-say { display: none; }   /* the command bar comes back when the panel closes: at this width the plan needs the room */
+  /* V4.1: the command bar stays when a panel is docked at this width; it gives up its hint and the note of who reads it, not itself */
+  .ws-canvas:has(> .ws-panel.open) .ws-say { left: calc(var(--dock) + 12px); transform: none; width: calc(100% - var(--dock) - 180px); min-width: 0; }
+  .ws-canvas:has(> .ws-panel.open) .ws-say textarea::placeholder { color: transparent; }
 }
 #site-goals { display: none; } #ws-panel.goals #site-goals { display: block; }
 #ws-panel.goals #site-conditions, #ws-panel.goals #site-evidence, #ws-panel.goals #site-location, #ws-panel.conditions #site-goals, #ws-panel.evidence #site-goals, #ws-panel.location #site-goals { display: none; }
@@ -92,3 +94,36 @@ body[data-stage="welcome"] #stagenav, body[data-stage="welcome"] #top .right { d
 .fit.uncertain { white-space: nowrap; }
 .obj .oc .seg { flex: none; } .obj .oc .seg button { white-space: nowrap; }
 @media (min-width: 1081px) and (max-width: 1340px) { .obj dl > div { grid-template-columns: minmax(0, 1fr); gap: 2px; } .obj .oc .seg button { padding: 4px 7px; font-size: 12px; } }
+
+/* ------------------------------------------------------------------ V4.1 · objective: result → controls → what changed → details on demand */
+.obj { padding: 12px 14px 6px; }
+.obj > header { margin-bottom: 4px; }
+.obj .obj-top > div { display: block; padding: 6px 0 8px; border-top: 0; }
+.obj .obj-top > [data-obj-row="metric"] { padding-top: 0; }
+.obj .obj-top > [data-obj-row="metric"] dt { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+.obj .obj-top > [data-obj-row="metric"] dd { font-size: 14px; line-height: 1.4; }
+.obj .obj-top > [data-obj-row="metric"] dd b { font-weight: 600; }
+.obj .obj-top > [data-obj-row="parameters"] { border-top: 1px solid var(--line); padding-top: 9px; }
+.obj .obj-top > [data-obj-row="parameters"] dt { margin-bottom: 6px; padding: 0; }
+.obj .oc { margin-bottom: 8px; } .obj .oc small { -webkit-line-clamp: 2; }
+.obj-more { border-top: 1px solid var(--line); margin: 2px 0 0; }
+.obj-more > summary { cursor: pointer; padding: 7px 0; font-size: 12.5px; color: var(--ink-2); list-style: none; display: flex; align-items: baseline; gap: 4px; }
+.obj-more > summary::-webkit-details-marker { display: none; }
+.obj-more > summary::after { content: '+'; margin-left: auto; font: 500 14px/1 var(--mono); color: var(--ink-3); } .obj-more[open] > summary::after { content: '–'; }
+.obj-more > summary b { font-weight: 600; color: #8a5f1c; }
+.obj-more > summary:focus-visible { outline: 2px solid var(--olive-deep); outline-offset: 2px; border-radius: 4px; }
+.obj-more dl > div { grid-template-columns: minmax(0, 1fr); gap: 2px; }
+.obj-more .readline { margin: 6px 0 2px; }
+.obj-rules { list-style: none; margin: 0 0 4px; padding: 0 !important; } .obj-rules li { margin: 0 0 5px; } .obj-rules .src { font: 11.5px/1 var(--mono); font-style: normal; color: var(--ink-3); border: 1px solid var(--line-2); border-radius: 4px; padding: 1px 4px; }
+.obj .mono { font: 12px/1.3 var(--mono); color: var(--ink-3); }
+.chgnote { margin: 10px 0 4px; }
+
+.obj .vchecks { display: flex; flex-wrap: wrap; gap: 4px 5px; margin: 6px 0 4px; } .obj .ck { font-size: 12px; line-height: 1.5; padding: 0 6px; border-radius: 4px; background: var(--paper-2); color: var(--ink-2); white-space: nowrap; } .obj .ck b { font-weight: 600; color: var(--ink); } .obj .ck.fails b { color: var(--rust); } .obj .ck.uncertain b { color: #8a5f1c; }
+/* V4.1 · Shape: choose a layout, then edit its beds — two modes, one header that says which */
+.shape-mode { display: flex; align-items: center; gap: 7px; margin: 0 0 10px; font-size: 13.5px; } .shape-mode b { font-weight: 600; }
+.shape-mode .sm-n { flex: none; display: inline-grid; place-items: center; width: 20px; height: 20px; border-radius: 50%; background: var(--olive-deep); color: var(--paper); font: 500 12px/1 var(--sans); } .shape-mode .sm-n.done { background: var(--olive-soft); color: var(--olive-deep); }
+.shape-mode .sm-next, .shape-mode .sm-prev { font-size: 12.5px; color: var(--ink-3); } .shape-mode .sm-next { margin-left: auto; } .shape-mode .sm-prev { margin-right: 6px; }
+.layout-diff { list-style: none; margin: 0 0 10px; padding: 0; font-size: 12.5px; color: var(--ink-2); } .layout-diff li { padding: 3px 0; border-top: 1px solid var(--line); }
+.proposal[data-shape-mode="choose"] .insp-actions { align-items: center; }
+/* V4.1 · Grow: one sentence first, the rest on a click */
+.why-rest { display: inline; } .why-rest > summary { display: inline; cursor: pointer; font-size: 12.5px; font-weight: 500; color: var(--olive-deep); list-style: none; text-decoration: underline; text-underline-offset: 2px; } .why-rest > summary::-webkit-details-marker { display: none; } .why-rest[open] > summary { display: none; } .why-rest > summary:focus-visible { outline: 2px solid var(--olive-deep); outline-offset: 2px; border-radius: 3px; }
