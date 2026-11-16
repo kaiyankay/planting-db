@@ -6,9 +6,9 @@
   --olive-deep: #3b5538; --olive: #5b7a57; --olive-soft: #dfe6d7; --sage: #8c9c82; --sage-soft: #e6ebe0;
   --caramel: #b7894d; --caramel-soft: #f1e3cb; --rust: #b04f36; --rust-soft: #f2dcd4; --violet: #7a6aa3; --sky: #4b7ba0;
   --ink: #27241f; --ink-2: #5c5648; --ink-3: #716b5c; --line: rgba(39,36,31,.12); --line-2: rgba(39,36,31,.26);
-  --display: "Fraunces", "Iowan Old Style", "Palatino Linotype", Georgia, serif;
-  --sans: -apple-system, "Helvetica Neue", "Segoe UI", Roboto, sans-serif;
-  --mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  --display: "Bricolage Grotesque", "DM Sans", -apple-system, "Helvetica Neue", "Segoe UI", sans-serif;
+  --sans: "DM Sans", -apple-system, "Helvetica Neue", "Segoe UI", Roboto, sans-serif;
+  --mono: "DM Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
   --shadow: 0 14px 40px rgba(39,36,31,.14), 0 2px 6px rgba(39,36,31,.08);
   --shadow-soft: 0 6px 20px rgba(39,36,31,.08);
   --r: 14px; --ease: cubic-bezier(.2,.8,.2,1);

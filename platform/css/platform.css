@@ -9,18 +9,26 @@
   --pi-olive-deep: #3b5538; --pi-olive: #5b7a57; --pi-olive-soft: #dfe6d7; --pi-sage: #8c9c82;
   --pi-caramel: #b7894d; --pi-caramel-ink: #8a5f1c; --pi-caramel-soft: #f1e3cb; --pi-rust: #b04f36; --pi-rust-soft: #f2dcd4;
   --pi-ink: #27241f; --pi-ink-2: #5c5648; --pi-ink-3: #716b5c; --pi-line: rgba(39,36,31,.12); --pi-line-2: rgba(39,36,31,.26);
-  --pi-display: "Fraunces", "Iowan Old Style", "Palatino Linotype", Georgia, serif;
-  --pi-sans: -apple-system, "Helvetica Neue", "Segoe UI", Roboto, sans-serif;
-  --pi-mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  /* V4 type: Bricolage Grotesque speaks (headings, names of things), DM Sans works (everything operable and readable),
+     DM Mono records (ids, provenance, metrics). Bricolage has no italic: a scientific name is DM Sans italic (--pi-sci). */
+  --pi-display: "Bricolage Grotesque", "DM Sans", -apple-system, "Helvetica Neue", "Segoe UI", sans-serif;
+  --pi-sans: "DM Sans", -apple-system, "Helvetica Neue", "Segoe UI", Roboto, sans-serif;
+  --pi-mono: "DM Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  --pi-sci: italic 500 1em/1.25 var(--pi-sans);
+  --pi-t-hero: clamp(56px, 6.2vw, 96px); --pi-t-page: clamp(40px, 4.4vw, 64px); --pi-t-section: 28px; --pi-t-card: 20px;
+  --pi-t-lede: 18px; --pi-t-body: 16px; --pi-t-ui: 14px; --pi-t-small: 13px; --pi-t-mono: 12px;
+  --pi-s-1: 4px; --pi-s-2: 8px; --pi-s-3: 12px; --pi-s-4: 16px; --pi-s-5: 20px; --pi-s-6: 24px; --pi-s-8: 32px; --pi-s-12: 48px; --pi-s-16: 64px;
+  --pi-r-xs: 4px; --pi-r-sm: 6px; --pi-r-md: 8px; --pi-r-card: 10px; --pi-r-lg: 14px; --pi-r-pill: 999px;
+  --pi-rail-w: 64px; --pi-inspector-w: 340px; --pi-read-w: 1180px;
   --pi-shadow-soft: 0 6px 20px rgba(39,36,31,.08); --pi-ease: cubic-bezier(.2,.8,.2,1); --pi-top-h: 52px;
 }
 
 /* ------------------------------------------------------------------ the platform bar */
 .pi-top { position: sticky; top: 0; z-index: 40; display: flex; align-items: center; gap: 20px; height: var(--pi-top-h); padding: 0 24px; background: var(--pi-paper); border-bottom: 1px solid var(--pi-line); font: 14px/1.2 var(--pi-sans); color: var(--pi-ink); box-sizing: border-box; }
 .pi-top a { text-decoration: none; border: 0; }
-.pi-wordmark { font: 500 18px/1 var(--pi-display); letter-spacing: -.005em; color: var(--pi-ink); white-space: nowrap; }
+.pi-wordmark { font: 650 18px/1 var(--pi-display); letter-spacing: -.035em; color: var(--pi-ink); white-space: nowrap; }
 .pi-nav { display: flex; align-items: stretch; gap: 2px; height: 100%; }
-.pi-nav a { position: relative; display: flex; align-items: center; padding: 0 12px; font: 14px/1 var(--pi-sans); color: var(--pi-ink-2); white-space: nowrap; text-decoration: none; border: 0; transition: color .15s var(--pi-ease); }
+.pi-nav a { position: relative; display: flex; align-items: center; padding: 0 14px; font: 500 14px/1 var(--pi-sans); color: var(--pi-ink-2); white-space: nowrap; text-decoration: none; border: 0; transition: color .15s var(--pi-ease); }
 .pi-nav a:hover { color: var(--pi-ink); }
 .pi-nav a::after { content: ""; position: absolute; left: 12px; right: 12px; bottom: 0; height: 2px; background: var(--pi-olive-deep); transform: scaleX(0); transform-origin: left; transition: transform .22s var(--pi-ease); }
 .pi-nav a:hover::after { transform: scaleX(.35); }
@@ -39,7 +47,7 @@
 .pi-return svg { width: 14px; height: 14px; flex: none; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
 .pi-return:hover { background: var(--pi-olive-deep); color: var(--pi-paper); }
 .pi-quiet { font: 13px/1 var(--pi-sans); color: var(--pi-ink-2); white-space: nowrap; } .pi-quiet:hover, .pi-quiet[aria-current="page"] { color: var(--pi-ink); }
-.pi-snap, .pi-mono { font: 11px/1.3 var(--pi-mono); color: var(--pi-ink-3); white-space: nowrap; }
+.pi-snap, .pi-mono { font: 12px/1.3 var(--pi-mono); color: var(--pi-ink-3); white-space: nowrap; }
 .pi-top :focus-visible, .pi-mini :focus-visible, body.pi-page :focus-visible { outline: 2px solid var(--pi-olive-deep); outline-offset: 2px; border-radius: 4px; }
 @media (max-width: 1180px) { .pi-snap { display: none; } .pi-return { max-width: 190px; } }
 /* where the bar also carries the Explorer | Neural switch, the wordmark gives way before the way back to a design does */

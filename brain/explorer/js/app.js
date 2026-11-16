@@ -13,6 +13,7 @@
 import { load } from './model.js';
 import * as PI from '../../../platform/js/platform.js';   // platform bar, cross-module links
 import * as PC from '../../../platform/js/plantcard.js';   // the shared plant card
+PI.forwardLegacyTrace();   // a V3 trace address (<knowledge>#species=…) is sent on to the Decision Trace
 
 const $ = s => document.querySelector(s);
 const esc = s => String(s ?? '').replace(/[&<>"]/g, ch => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[ch]));

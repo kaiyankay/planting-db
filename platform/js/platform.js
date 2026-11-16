@@ -8,14 +8,14 @@
 //   links      the cross-module navigation contract (below)
 //   design     a read-only look at the Studio's saved project, so another module can say what the user will return to
 //   considered species the user asked the Studio to check for their design — a preference, never a planting decision
-//   top bar    Design · Plants · Knowledge, the same on every page; inside Knowledge: Overview · Explore · Research · Method
+//   top bar    Design · Plants · Knowledge · About, the same on every page (V4); inside About: Project · How it works · Research & Method · Contribute & Future
 //
 // Navigation contract
 //   Plant profile      <plants>#species=<slug>
 //   Explorer, focused  <explore>#fk=species&fi=plant:<slug>            (the Explorer's own URL state; add ik/ii for one record,
 //                                                                         v=graph|matrix|table|compare for the working view)
 //   Neural, focused    <neural>#species=<slug>
-//   Decision trace     <knowledge>#[fn=<function id>&]species=<slug>[&case=mine&bed=<bed id>][&plant=<plant object id>]
+//   Decision trace     <trace>#[fn=<function id>&]species=<slug>[&case=mine&bed=<bed id>][&plant=<plant object id>]
 //                                                                        (one species followed from its sources into a bed, for a
 //                                                                         spatial function: the reference garden, or a bed and a
 //                                                                         plant object of the user's own design; fn defaults to Screen)
@@ -30,10 +30,11 @@
 const LAYOUT = 'repo';   // tools/build_platform.py writes 'preview' into the published copy
 const ROOT = new URL('../../', import.meta.url);   // the folder that holds every module, in both layouts
 const PATHS = {
-  repo: { design: 'design/', plants: 'platform/plants/', knowledge: 'platform/knowledge/', explore: 'brain/explorer/', neural: 'brain/', research: 'platform/knowledge/research/', method: 'platform/knowledge/method/', snapshot: 'brain/data/explorer.json', images: 'platform/data/images.json', img: 'platform/img/', artwork: 'platform/data/artwork.json', art: 'platform/art/', reference: 'designs/demo-a.json' },
-  preview: { design: '', plants: 'plants/', knowledge: 'knowledge/', explore: 'explore/', neural: 'explore/neural/', research: 'knowledge/research/', method: 'knowledge/method/', snapshot: 'data/explorer.json', images: 'platform/data/images.json', img: 'platform/img/', artwork: 'platform/data/artwork.json', art: 'platform/art/', reference: 'data/designs/demo-a.json' },
+  repo: { design: 'design/', plants: 'platform/plants/', knowledge: 'brain/explorer/', explore: 'brain/explorer/', trace: 'platform/knowledge/trace/', neural: 'brain/', about: 'platform/about/', how: 'platform/about/how-it-works/', method: 'platform/about/method/', contribute: 'platform/about/contribute/', specimen: 'platform/about/typography/', snapshot: 'brain/data/explorer.json', images: 'platform/data/images.json', img: 'platform/img/', artwork: 'platform/data/artwork.json', art: 'platform/art/', reference: 'designs/demo-a.json' },
+  preview: { design: '', plants: 'plants/', knowledge: 'knowledge/', explore: 'knowledge/', trace: 'knowledge/trace/', neural: 'knowledge/neural/', about: 'about/', how: 'about/how-it-works/', method: 'about/method/', contribute: 'about/contribute/', specimen: 'about/typography/', snapshot: 'data/explorer.json', images: 'platform/data/images.json', img: 'platform/img/', artwork: 'platform/data/artwork.json', art: 'platform/art/', reference: 'data/designs/demo-a.json' },
 }[LAYOUT];
 export const routes = Object.fromEntries(Object.entries(PATHS).map(([k, v]) => [k, new URL(v, ROOT).href]));
+routes.research = routes.method;   // V2/V3 name: Research now lives in About · Research & Method
 export const SURVEY_URL = 'https://kaiyankay.github.io/planting-survey/';
 export const REPO_URL = 'https://github.com/kaiyankay/planting-db';
 /** the spatial function the Decision Trace opens on, and the functions it can follow into an arrangement: the ones the Studio's
@@ -57,14 +58,23 @@ export const links = {
   knowledge: () => routes.knowledge,
   /** the Decision Trace of one species. `o`: a bed id (the user's own design), or { fn, bed, plant } — the spatial function, a bed of
    *  the user's own design, one plant object of its current version */
-  trace: (id, o = null) => { const x = typeof o === 'string' ? { bed: o } : (o || {}); const p = new URLSearchParams(); if (x.fn && x.fn !== TRACE_FUNCTION) p.set('fn', x.fn); if (id) p.set('species', slugOf(id)); if (x.bed) { p.set('case', 'mine'); p.set('bed', x.bed); } if (x.plant) p.set('plant', x.plant); const h = p.toString(); return h ? `${routes.knowledge}#${h}` : routes.knowledge; },
+  trace: (id, o = null) => { const x = typeof o === 'string' ? { bed: o } : (o || {}); const p = new URLSearchParams(); if (x.fn && x.fn !== TRACE_FUNCTION) p.set('fn', x.fn); if (id) p.set('species', slugOf(id)); if (x.bed) { p.set('case', 'mine'); p.set('bed', x.bed); } if (x.plant) p.set('plant', x.plant); const h = p.toString(); return h ? `${routes.trace}#${h}` : routes.trace; },
   /** a bed of the saved design, opened in Compose (optionally with one species' evidence, and the function it is asked about) */
   compose: (bedId, id, fn = null) => { const p = new URLSearchParams({ open: 'compose', bed: bedId }); if (id) p.set('species', slugOf(id)); if (fn) p.set('fn', fn); return `${routes.design}?${p}`; },
-  research: () => routes.research,
+  about: () => routes.about,
+  how: () => routes.how,
   method: () => routes.method,
-  contribute: () => `${routes.research}#contribute`,   // V1 names, kept for the modules that still call them
-  how: () => routes.method,
+  contribute: () => routes.contribute,
+  research: () => routes.method,   // V2/V3 name, kept for the modules that still call it
 };
+/** V3 addresses of the Decision Trace were <knowledge>#species=… ; Knowledge is now the Explorer, so a page that sits at the Knowledge
+ *  address calls this first: a trace hash (species · fn · case · bed · plant, none of the Explorer's own keys) is sent on to the trace. */
+export function forwardLegacyTrace() {
+  const h = new URLSearchParams(location.hash.slice(1)); if (h.has('fk') || h.has('v') || h.has('a') || h.has('ik')) return false;
+  if (!(h.has('species') || h.has('fn') || h.has('case') || h.has('bed'))) return false;
+  if (new URL(routes.trace).pathname === location.pathname) return false;
+  location.replace(routes.trace + location.hash); return true;
+}
 
 // ---------------------------------------------------------------- the Studio's saved project, read only
 // design/js/model.js names its browser-storage key after the folder the Studio is served from; the same rule is applied to the
@@ -119,18 +129,22 @@ let referenceP = null;
 export function loadReference() { return referenceP || (referenceP = fetch(routes.reference, { cache: 'no-cache' }).then(r => { if (!r.ok) throw new Error(`${routes.reference}: HTTP ${r.status}`); return r.json(); })); }
 
 // ---------------------------------------------------------------- top bar
-const NAV = [['design', 'Design', 'The Garden Studio: imagine, shape, compose and grow a planting'], ['plants', 'Plants', 'The Plant Library: ten species and what is recorded about them'], ['knowledge', 'Knowledge', 'The evidence behind the designs: sources, claims, relationships, research and method']];
-const KNOW = [['overview', 'Overview', 'knowledge', 'From a source to a design decision, on one real example'], ['explore', 'Explore', 'explore', 'Graph, matrix, table and comparison over the same records'], ['research', 'Research', 'research', 'The practitioner survey, what is recorded and missing, how to contribute'], ['method', 'Method', 'method', 'Who or what decides, the rules, and the limits']];
+// V4: four destinations and nothing else in the first level. Design uses the knowledge, Plants reads it, Knowledge explores it,
+// About explains it (project · how it works · research & method · contribute & future).
+const NAV = [['design', 'Design', 'Describe a site, set what the planting should do, generate and revise it'], ['plants', 'Plants', 'Ten species and what is recorded about them'], ['knowledge', 'Knowledge', 'The records behind the designs as a table, a matrix and a network'], ['about', 'About', 'The project, how the engine works, the research method, how to contribute']];
+const ABOUT = [['project', 'Project', 'about'], ['how', 'How it works', 'how'], ['method', 'Research & Method', 'method'], ['contribute', 'Contribute & Future', 'contribute']];
 export function navHtml(active) { return `<nav class="pi-nav" aria-label="Planting Intelligence">${NAV.map(([k, l, t]) => `<a href="${routes[k]}" title="${esc(t)}"${k === active ? ' aria-current="page"' : ''}>${l}</a>`).join('')}</nav>`; }
-/** the second level, shown on every Knowledge page: one body of knowledge, four ways to read it */
-export function knowledgeNav(section) { return `<nav class="pi-subnav" aria-label="Knowledge">${KNOW.map(([k, l, r, t]) => `<a href="${routes[r]}" title="${esc(t)}"${k === section ? ' aria-current="page"' : ''}>${l}</a>`).join('')}</nav>`; }
-export function exploreSwitch(mode) { return `<div class="pi-switch" role="group" aria-label="Two ways to see the records"><a href="${routes.explore}"${mode === 'explorer' ? ' aria-current="true"' : ''} title="graph, spatial function matrix, attribute table and comparison, with the evidence behind every line">Explorer</a><a href="${routes.neural}"${mode === 'neural' ? ' aria-current="true"' : ''} title="the same claims as one three-dimensional network">Neural view</a></div>`; }
+/** the second level of About */
+export function aboutNav(section) { return `<nav class="pi-subnav" aria-label="About">${ABOUT.map(([k, l, r]) => `<a href="${routes[r]}"${k === section ? ' aria-current="page"' : ''}>${l}</a>`).join('')}</nav>`; }
+/** V3 name. Knowledge has no second level of pages any more (its views are switched inside the Explorer); kept so an older caller renders nothing. */
+export function knowledgeNav() { return ''; }
+export function exploreSwitch(mode) { return `<div class="pi-switch" role="group" aria-label="Two ways to see the records"><a href="${routes.explore}"${mode === 'explorer' ? ' aria-current="true"' : ''} title="table, spatial function matrix and network, with the evidence behind every line">Explorer</a><a href="${routes.neural}"${mode === 'neural' ? ' aria-current="true"' : ''} title="the same claims as one three-dimensional network">3D network</a></div>`; }
 export function returnChip() { const d = activeDesign(); if (!d) return ''; return `<a class="pi-return" href="${routes.design}" title="${esc(d.name)} — reopens where you left it"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M9.5 3.5 5 8l4.5 4.5"/></svg>${esc(returnLabel(d))}</a>`; }
-/** the bar of every page except the Studio (which keeps its own #top and takes navHtml into it). `section` names the Knowledge
- *  page (overview · explore · research · method) and brings the second level with it; `sub` is a module's own addition. */
+/** the bar of every page except the Studio (which keeps its own #top and takes navHtml into it). `section` names the About page
+ *  (project · how · method · contribute) and brings the second level with it; `sub` is a module's own addition (a view switch). */
 export function mountTop(el, { active, section = null, sub = '', snapshot = null, tone = 'light' } = {}) {
   el.classList.add('pi-top'); if (tone === 'dark') el.classList.add('pi-dark');
-  el.innerHTML = `<a class="pi-wordmark" href="${routes.design}">Planting Intelligence</a>${navHtml(active)}<div class="pi-sub">${active === 'knowledge' ? knowledgeNav(section) : ''}${sub}</div><div class="pi-right">${returnChip()}${snapshot ? `<span class="pi-snap" title="${esc(snapshotLine(snapshot))} — every page of the platform reads this one file">knowledge ${esc(snapshot.generated)}</span>` : ''}</div>`;
+  el.innerHTML = `<a class="pi-wordmark" href="${routes.design}">Planting Intelligence</a>${navHtml(active)}<div class="pi-sub">${active === 'about' ? aboutNav(section) : ''}${sub}</div><div class="pi-right">${returnChip()}${snapshot ? `<span class="pi-snap" title="${esc(snapshotLine(snapshot))} — every page of the platform reads this one file">knowledge ${esc(snapshot.generated)}</span>` : ''}</div>`;
   return el;
 }
-export function footHtml(d) { return `<footer class="pi-foot"><span>Planting Intelligence · ARCH 540, UBC</span><a href="${routes.knowledge}">Knowledge</a><a href="${routes.research}">Research</a><a href="${routes.method}">Method</a><a href="${REPO_URL}" rel="noopener">Source and data</a>${d ? `<span class="pi-mono">${esc(snapshotLine(d))}</span>` : ''}</footer>`; }
+export function footHtml(d) { return `<footer class="pi-foot"><span>Planting Intelligence · ARCH 540, UBC</span><a href="${routes.about}">About</a><a href="${routes.how}">How it works</a><a href="${routes.method}">Research &amp; Method</a><a href="${routes.contribute}">Contribute</a><a href="${REPO_URL}" rel="noopener">Source and data</a>${d ? `<span class="pi-mono">${esc(snapshotLine(d))}</span>` : ''}</footer>`; }
