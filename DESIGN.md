@@ -180,7 +180,7 @@ components:
 ## Overview
 
 Planting Intelligence is a botanical design studio: warm paper, olive ink, one caramel accent. The home page (Imagine) is the
-brand — a large Fraunces headline, a single composer, and plant symbols drawn from the knowledge base that sway slowly. Every
+brand — a large Bricolage headline, a single composer, and plant symbols drawn from the knowledge base that sway slowly. Every
 later page keeps that paper and that ink, but changes register: Shape and Compose are a desktop drawing workspace (the plan is
 the page; tools, layers and an inspector sit around it), and Grow is the same workspace with the garden as its subject.
 
@@ -193,7 +193,7 @@ enter through any of them. The same paper, ink, type and vocabulary run through 
 | Destination | Register | Layout |
 |---|---|---|
 | Design | the studio above | hero, then the fixed drawing workspace |
-| Plants | a botanical atlas | editorial: a large Fraunces title, a five-column grid of illustration plates, long reading profiles |
+| Plants | a botanical atlas | editorial: a large Bricolage title, a five-column grid of illustration plates, long reading profiles |
 | Knowledge · Overview | an account with its evidence open | one real decision followed in five numbered steps; title-left, content-right sections; every statement in the ledger |
 | Knowledge · Explore | inquiry | a search-first start, then ONE working view (graph, matrix, table or comparison) with the evidence inspector beside it; the Neural view keeps its night sky |
 | Knowledge · Research, Method | a plain account | the same sections as a plant profile, with a few figures and one coverage grid |
@@ -263,7 +263,7 @@ Object handles on the plan are small white squares with an ink edge; mid-edge ha
 - **Explore switch**: Explorer | Neural view, a small paper-on-paper-2 segmented pair after the sub-navigation, on those two
   pages only. The Explorer's own views (Graph · Matrix · Table · Compare) are switched in its toolbar, one at a time.
 - **Tool rail**: icon + 10.5 px label; the active tool is olive; panels opened from the rail are marked the same way.
-- **Inspector**: shows only what is selected. Kind (small caps) → name (Fraunces) → provenance tags → fields → "why" →
+- **Inspector**: shows only what is selected. Kind (small caps) → name (Bricolage) → provenance tags → fields → "why" →
   actions. With nothing selected it shows the model itself.
 - **Layers**: a list of what is on the plan; each row selects its object, each group has a visibility toggle.
 - **Command bar**: one line, "say what should change"; the last reading opens above it.
@@ -282,10 +282,10 @@ Object handles on the plan are small white squares with an ink edge; mid-edge ha
 - **Requirements**: one row per requirement with its status as a word — met, uncertain, not met, or *estimate* where the
   engine measures without a pass mark. The page never turns an estimate into a verdict.
 - **Illustration plate**: the botanical illustration of a species on its own ivory (`plate`), 640 : 691, never cropped
-  (`object-fit: contain`), square corners. The artwork carries no lettering: the scientific name is set under it in Fraunces
+  (`object-fit: contain`), square corners. The artwork carries no lettering: the scientific name is set under it in DM Sans
   italic and the common name in medium-weight sans, both read from the snapshot. The illustrations are AI-generated editorial
   artwork and every surface that shows one at reading size says so; they are never evidence and no fact is read from them.
-- **Plant card** (Plants): the plate, the scientific name in Fraunces italic, the common name (sans, 500), growth form and
+- **Plant card** (Plants): the plate, the common name in Bricolage, the scientific name in DM Sans italic under it, growth form and
   origin in small ink, "Read more" with an arrow. No box, no border, no shadow: the plate is the card. A species without an
   illustration shows its photograph, and without either the studio's plan symbol, said to be a symbol.
 - **Compact plant card** (Explorer inspector, Compose and Grow evidence, Neural card): the plate as a thumbnail, scientific
@@ -295,7 +295,7 @@ Object handles on the plan are small white squares with an ink edge; mid-edge ha
   licence and source in mono, and the sentence that its identification is the source's, not the project's. The photograph is
   the factual reference; the plate is the face.
 - **Plant profile**: plate left with its note and the reference photograph; name, identity, six at-a-glance fields and the actions right.
-  Below, sections with the title in the left column (Fraunces 27 px) and rows separated by hairlines in the right column.
+  Below, sections with the title in the left column (Bricolage 27 px) and rows separated by hairlines in the right column.
   A row is: field name · what is recorded · where it comes from (claims, sources, tags). A field nobody recorded stays in
   the list, in ink-3, as "not recorded".
 - **Tags** are the same on every surface, in mono: *status* documented (solid olive edge) · derived (dashed olive) · candidate
@@ -306,11 +306,11 @@ Object handles on the plan are small white squares with an ink edge; mid-edge ha
   (small caps label, 148 px) · the statement itself · where it comes from (mono, 204 px, opened by a who-tag). Eight kinds are
   kept apart, always in this order and with these words: source statement · structured claim · human verification · AI source
   assessment · rule-derived relationship · your site information · engine output · evaluation. A source's own words are a
-  quotation in sans at 17 px, never in Fraunces. Two kinds never share a row, and a row never borrows another kind's tag.
+  quotation in sans at 17 px, never in the display face. Two kinds never share a row, and a row never borrows another kind's tag.
   Where nothing is recorded the row stays and says so in bold ("No source states …"), marked "an explicit unknown".
 - **Decision chain** (Knowledge · Overview, directly under the masthead, inside the first viewport at 1440 × 900 and
   1280 × 800): the decision as five linked nodes in one row, divided by hairlines with a drawn arrow on each divider —
-  Source → Claim → Function → Selection → Arrangement & result. A node is a small-caps step name with its Fraunces number,
+  Source → Claim → Function → Selection → Arrangement & result. A node is a small-caps step name with its Bricolage number,
   one 600-weight line with the record's own value ("landscape use = sheared hedge"), and one ink-2 line with its standing
   ("unverified · AI: partially supported", "Screen: not met"). Every value is read from the snapshot and the engine; an
   absence is a node too ("No source states this use"). Each node jumps to its step. Never a row of stat tiles: no figure
@@ -320,7 +320,7 @@ Object handles on the plan are small white squares with an ink edge; mid-edge ha
   the step list under the bar is drawn as a chain with arrows, because the order is the argument, and marks the step being
   read (ink, 600, its number in olive). The claim id of step 2 is repeated in mono in the provenance column of steps 3, 4
   and 5 ("rests on …"): one visible token carried through. *Compact*, in the Studio's
-  inspector ("Why this plant here?"): a Fraunces question, then five hairline rows — Asked · Knowledge · Selection ·
+  inspector ("Why this plant here?"): a Bricolage question, then five hairline rows — Asked · Knowledge · Selection ·
   Arrangement · Result — and one text link to the full trace. Both are rendered by `platform/js/trace.js` from the engine's
   own records; neither is ever a modal or a separate dashboard.
 - **What is being followed** (Overview): three rows of chips under the decision — Function, Bed, Species — each with one
@@ -330,7 +330,7 @@ Object handles on the plan are small white squares with an ink edge; mid-edge ha
   ink) · *eligible, not selected* (ink) · *excluded by a check* (rust) · *evidence unknown* (caramel ink) · *planted for
   another function* (ink) · *recorded only* · *not asked of this bed* (ink-3). Set as 600-weight words like the result words,
   the same in Library, Knowledge, Compose and Grow. Never collapsed into "not suitable" or "not planted".
-- **Estimate verdict** (Ground Cover): the Fraunces line reads "Ground Cover: an estimate, 52 %" in caramel ink, never in
+- **Estimate verdict** (Ground Cover): the Bricolage line reads "Ground Cover: an estimate, 52 %" in caramel ink, never in
   olive or rust: the engine sets no pass mark, so the page shows none.
 - **Who-tags** (mono, the same shape as the status tags): named source (solid olive edge) · anonymous respondent (paper-2
   fill) · from records (olive-soft fill) · person (paper-2 fill) · AI-assessed (dashed caramel) · rule-based (olive edge) ·
@@ -341,7 +341,7 @@ Object handles on the plan are small white squares with an ink edge; mid-edge ha
   AI source assessment only; the engine's evidence check reads meets / uncertain / fails like its other checks.
 - **Result words**: meets / met / pass / supported in olive, uncertain / conditional / unknown / proxy / heuristic in caramel
   ink, fails / not met / unmet in rust, set as 600-weight words inside tables. A result is a word, never a coloured dot.
-- **Verdict** (Knowledge step 5, as in Compose): the function and the engine's status as one Fraunces line in the status
+- **Verdict** (Knowledge step 5, as in Compose): the function and the engine's status as one Bricolage line in the status
   colour ("Screen: not met"), the reasons as a list under it, then the four checks as a table. Never softened, never hidden
   in a disclosure.
 - **Evidence drawings**: the site plan and the screened edge unrolled, drawn with the site drawing's conventions below (heavy
@@ -383,6 +383,36 @@ Nothing is drawn that the model does not hold: no terrain, no buildings, no shad
 
 **A verdict is said, not only drawn.** Plant symbols on the plan look like a result. When the engine's own evaluation of a function is `not met` or `uncertain`, the plan and the inspector say so in words at the same size as the bed's name: a rust verdict block opens the bed's inspector (status, plants placed of those expected, what is uncertain), a rust tag sits on the bed and rust dashes mark the gaps on the screened edge. Rust is reserved for this; caramel dashes mean uncertain. A position that was estimated from words is written "about …, a default estimate, not measured" until the user moves it.
 
+## V4 additions (2026-11-15)
+
+- **Platform bar**: wordmark, then **Design · Plants · Knowledge · About** and nothing else in the first level. A second level
+  exists only inside About (Project · How it works · Research & Method · Contribute & Future). Knowledge has no sub-pages: its
+  views are switched inside the Explorer.
+- **Imagine**: one invitation. The first viewport holds the bar, the headline (second line in olive, never slanted), one
+  instruction line, the composer with its three inputs, the primary action, two quiet secondary actions and the hero plants.
+  No stage stepper, no database figures, no captions. The figures live on About · Project.
+- **Stage stepper**: appears in the bar only once the user is past Imagine.
+- **Objective panel** (Compose, per bed; listed against beds in Shape): Value → Function → Parameters → Metric → Unresolved.
+  Only Privacy → Screen and Ground continuity → Ground Cover have one. Every control is an existing engine parameter and
+  re-runs the engine; a **change note** says what changed in the engine's own before/after records, or "Same result" with
+  the reason. Ground Cover reads "estimate N %" and never a verdict. A recorded-only function gets one line and no control.
+- **Preview line**: a dashed caramel box with a mono fingerprint (`p-…`) — "not generated yet" or "differs from version N".
+  A generated version carries `v-…`. Compose, Grow and the Decision Trace always name which one they read; a link whose
+  fingerprint no longer matches says "This preview has changed".
+- **Docked panels**: an on-demand panel sits beside the plan, never over it.
+- **Why this plant here?** (Grow, Compose): three rows — Why selected · Why here · Does it work? — then a disclosure with the
+  five steps and a link to the full trace.
+- **Eligibility wording**: "eligible (checks pending)" / "provisionally eligible" wherever a check is uncertain. The eight
+  outcome enums are unchanged, grouped as selection result versus function support.
+- **Illustration plate**: one ground (`--pi-plate`) for all ten illustrations, same inset and baseline, by CSS only.
+- **Plant profile**: plate, common name, scientific name, six quick attributes and the actions in the first viewport; then four
+  tabs — Design relevance · Growth & conditions · Evidence & sources · Unknown & conflicting. A row is a summary that opens
+  to its claims; ranges are listed per source and never averaged.
+- **Explorer**: `Table | Matrix | Network` in the toolbar over one focus and one URL state; Compare and 3D network are
+  secondary actions; Trace appears when a species is in context. The Network without a focus is an X · Y · Z overview
+  (plants · spatial functions · the traits functions require) drawing recorded lines only.
+- **About**: reading pages; the seven method steps keep their canonical names and order.
+
 ## Do's and Don'ts
 
 - Do keep the plan as the largest thing on screen; panels serve it.
@@ -400,7 +430,7 @@ Nothing is drawn that the model does not hold: no terrain, no buildings, no shad
 - Do let a recorded attribute stay an attribute: a claimed mature height is never worded as a working screen, and shared
   growing conditions are never worded as companionship.
 - Don't give Plants or the Knowledge pages stat tiles with icons, tinted cards or a second accent. Figures are set in
-  Fraunces over a hairline, in a row, with their label in small ink.
+  Bricolage over a hairline, in a row, with their label in small ink.
 - Don't put a small-caps label above a heading. A section's number sits inside its heading, in ink-3, and only where the
   order is itself information (the five steps).
 - Don't call anything AI that a rule or a person did. "AI-assessed" is reserved for the source check, "AI-generated" for the

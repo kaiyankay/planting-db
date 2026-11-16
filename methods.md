@@ -157,6 +157,22 @@ A description without dimensions now opens Shape on a sketch instead of an empty
 
 Interface only; `concept.js`, the conversion rules and the algorithm are untouched. At desktop width the Shape page no longer scrolls: a tool rail, the plan, an inspector with layers and a status bar fill the viewport, and the same workspace carries the concept sketch, the scaled site model and the bed proposal. Properties, the reading behind a fact and its source are shown only for the selected object (`S.sel`); site conditions and the full evidence record open as panels on demand (`S.wsPanel`) instead of standing open; the size fields are empty until the user types a size. The wheel zooms the plan directly. The sketch is labelled by the interpreter that drew it ("offline rules"), not as an AI sketch. Report: `reports/shape-workspace-2026-11-14.md`; screenshots `brain/screenshots/workspace/`.
 
+## M68 — Platform V4: system redesign — four destinations, objectives wired to the engine, one case for preview and trace (2026-11-15, *to confirm*)
+
+Branch `feature/platform-v4-system-redesign`, cut from `feature/platform-integration` at 65fd289. Brief: Kay's `AGENT_MASTER_PROMPT_V4.md` (2026-11-15). **No plant record, claim, rule, gate, operator, spacing factor or evaluation changed, and no engine parameter was added.** Report: `reports/platform-v4-system-redesign-2026-11-15.md`.
+
+**Information architecture.** Design · Plants · Knowledge · About. Knowledge opens on the Explorer (Table | Matrix | Network over one focus); the Decision Trace moved to `knowledge/trace/` and V3 trace hashes are forwarded (`PI.forwardLegacyTrace`). Research and Method moved to About; the preview build writes redirects for every V1–V3 address.
+
+**Type.** Bricolage Grotesque (display), DM Sans (text; scientific names in its italic), DM Mono (provenance), as tokens.
+
+**Objectives.** A user value is shown against the function, the engine parameters and the engine's own metric for a bed. Two are supported: Privacy → Screen (target height, year-round, rows) and Ground continuity → Ground Cover (pattern; grain, spacing, variation). Each control writes an existing brief field and re-runs `E.assemble` / `E.generate`; the note under it is a diff of the engine's records. The existing heuristics (0.75 × spread screen spacing, 0.65 × ground spread, 1.8 m default target, 0.1 m sampling) are shown as heuristics on About · How it works, rendered from the engine's own tables.
+
+**One case.** New stored values, both descriptive: `version.input_fp` (a fingerprint of the inputs a generated version was computed from) and `target_basis: "stated in Compose"` on the existing target-height field. A dry run is named by the fingerprint of its inputs (`p-…`), a generated version by its id (`v-…`). `links.trace` carries `pv=` or `v=`; the Trace reads exactly that case and says "This preview has changed" when the link's fingerprint no longer matches the saved design. Versions made by a manual edit or a partial regeneration carry no fingerprint.
+
+**Agent proposals, not human decisions (to confirm by Kay):** the wording "eligible (checks pending)" / "provisionally eligible"; the objective names "Privacy → Screen" and "Ground continuity → Ground Cover"; the Table as Knowledge's default view; common name leading on plant cards and profiles; the reference photograph moved into Evidence & sources; the future directions listed on About; publishing the preview to `platform-v4-preview/` beside the V3 preview.
+
+**Observed, not changed:** stating light as shade or as full sun passes the light check for all ten species in the open beds of the demonstration garden — the gate looks lenient and should be reviewed before the condition walkthrough is used as evidence.
+
 ## M67 — Platform V3: a universal Decision Trace for the two functions the engine arranges (2026-11-14, *to confirm*)
 
 Branch `feature/platform-integration`. No plant record, rule, gate, operator or evaluation changed; no planting logic was added. M66 explained one recorded Screen decision. M67 makes the explanation a reusable, read-only layer over any saved or open design.
