@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Knowledge · Planting Intelligence</title>
-<meta name="description" content="One plant knowledge base in three connected views: a table of plants and attributes, a matrix of plants and spatial functions, and a network of the relationships between them, each with the evidence behind every cell and line.">
+<meta name="description" content="One plant knowledge base in three connected views: a network of plants, spatial functions and attributes to explore, a matrix of plants and spatial functions, and a table of exact attribute values, each with the evidence behind every line and cell.">
 <link rel="icon" href="data:,">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..700&family=DM+Sans:ital,opsz,wght@0,9..40,400..700;1,9..40,400..700&family=DM+Mono:wght@400;500&display=swap">
@@ -145,6 +145,38 @@
   .reqrow { display: grid; grid-template-columns: 1fr auto; gap: 2px 8px; font-size: 13px; padding: 7px 0; border-top: 1px solid var(--line); } .reqrow .alt { color: var(--ink-2); font-size: 12px; grid-column: 1 / -1; } .reqrow .r { font: 12px var(--mono); } .reqrow .r.met { color: var(--olive-deep); } .reqrow .r.unmet { color: var(--rust); } .reqrow .r.unknown { color: var(--amber-ink); }
   #loading { position: fixed; inset: 0; display: grid; place-items: center; color: var(--ink-3); font: 12px var(--mono); background: var(--bg); z-index: 50; } #loading.gone { display: none; } #err { color: var(--rust); white-space: pre-wrap; max-width: 600px; }
 
+  /* ---- V4.1: the Network as an evidence explorer. A focus is explored in the same three columns; what the walk did not reach steps
+     back (ctx), a missing link is a mark on the node (gap), and every class of line differs by its stroke as well as its colour. */
+  #svg .edge.derived { stroke-dasharray: none; stroke-width: 1.6; } #svg .edge.candidate { stroke-dasharray: 5 4; } #svg .edge.conflict { stroke-dasharray: 9 3 2 3; }
+  #gkey i.derived { border-top-style: solid; } #gkey i.conflict { border-top: 0; height: 2px; background: repeating-linear-gradient(90deg, var(--rust) 0 9px, transparent 9px 12px, var(--rust) 12px 14px, transparent 14px 17px); }
+  #svg.foc .node.ctx { opacity: .34; } #svg.foc .node.ctx:hover, #svg.foc .node.ctx:focus-visible { opacity: 1; } #svg.foc .edge.ctx { stroke-opacity: .07; pointer-events: none; animation: none; }
+  #svg.foc .edge.lit:not(.hit) { stroke-opacity: 1; stroke-width: 1.9; } #svg.foc .edge.lit.has_trait:not(.hit), #svg.foc .edge.lit.grows_in:not(.hit) { stroke: var(--olive); stroke-width: 1.1; stroke-opacity: .8; } #svg.foc .edge.lit.requires_trait:not(.hit) { stroke-width: 1.5; }
+  #svg.foc .edge.lit.sel:not(.hit) { stroke-width: 3.2; } #svg.foc .edge.lit.dim:not(.hit) { stroke-opacity: .28; }
+  #svg.foc.enter .node.ctx { animation: none; } #svg.foc .node.species.lit circle { fill: var(--olive-soft); stroke: var(--olive-deep); stroke-width: 2; } #svg.foc .node.concept.lit circle { fill: var(--olive-soft); stroke: var(--olive-deep); stroke-width: 1.6; } #svg.foc .node.lit text { font-weight: 600; } #svg.foc .node.lit text.subl { font-weight: 400; }
+  #svg.foc.hl .node.ctx { opacity: .2; } #svg.foc.hl .node.ctx.on { opacity: 1; }
+  #svg .node.gap circle { fill: var(--bg); stroke: var(--ink-3); stroke-width: 1.4; stroke-dasharray: 2.5 2.5; } #svg .node.gap text { fill: var(--ink-2); } #svg .node.gap text.subl { fill: var(--rust); }
+  #svg .edge.hit:focus-visible { outline: none; stroke: var(--amber-ink); stroke-opacity: .35; }
+  #svg text.elabel { font: 500 10.5px var(--mono); fill: var(--olive-deep); } #svg text.elabel.conflict { fill: var(--rust); } #svg text.elabel.sel { font-weight: 600; fill: var(--ink); }
+  #svg .edge.relation { stroke-width: 1.5; }
+  #ghead { flex-wrap: wrap; row-gap: 6px; } #ghead .layers.many { order: 3; flex-basis: 100%; } #ghead .right { order: 5; } #ghead .gtools { order: 4; display: flex; align-items: center; gap: 6px; flex-wrap: wrap; padding-bottom: 2px; }
+  .gtools .lab { font-size: 12.5px; color: var(--ink-3); margin-right: 2px; } .gtools button { padding: 5px 11px; font-size: 12.5px; } .gtools button[aria-pressed="true"] { border-color: var(--olive-deep); background: var(--olive-soft); color: var(--olive-deep); }
+  .gtools .seg { display: inline-flex; margin-right: 8px; } .gtools .seg button { border-radius: 0; margin-left: -1px; } .gtools .seg button:first-child { border-radius: 999px 0 0 999px; margin-left: 0; } .gtools .seg button:last-child { border-radius: 0 999px 999px 0; }
+  .layer.claim { border-style: dotted; }
+  #gwarn { position: absolute; left: 14px; top: 10px; z-index: 3; max-width: min(640px, calc(100% - 28px)); } #gwarn:empty { display: none; }
+  #gwarn p { margin: 0 0 8px; padding: 10px 14px; background: var(--panel); border: 1px solid var(--amber); border-radius: 10px; font-size: 13px; line-height: 1.6; color: var(--ink); box-shadow: 0 6px 20px rgba(39,36,31,.1); } #gwarn .layer { margin: 2px 2px 2px 0; border-style: solid; background: var(--panel); }
+  #crumb { flex: 1 1 0; overflow: hidden; } #crumb .c { flex: 0 1 auto; overflow: hidden; } #crumb .c i.sci { overflow: hidden; text-overflow: ellipsis; } #crumb .reset, #crumb .x { flex: none; }
+  #crumb .reset { text-decoration: none; border: 1px solid var(--line-2); border-radius: 999px; padding: 4px 11px; color: var(--ink-2); } #crumb .reset:hover { color: var(--ink); border-color: var(--ink-3); }
+  #crumb .notice { color: var(--amber-ink); background: rgba(190,140,60,.12); padding: 3px 4px 3px 10px; border-radius: 999px; }
+  #ibody .summ { display: flex; flex-wrap: wrap; gap: 6px; margin: 12px 0 10px; } #ibody .stat { display: inline-flex; align-items: baseline; gap: 5px; padding: 4px 9px; border: 1px solid var(--line); border-radius: 8px; font-size: 12px; color: var(--ink-2); background: var(--bg); } #ibody .stat b { font: 600 14px var(--sans); color: var(--ink); }
+  #ibody .stat.miss { border-style: dashed; } #ibody .stat.conf b { color: var(--rust); }
+  #ibody .next { display: flex; flex-wrap: wrap; gap: 6px; margin: 0 0 14px; } #ibody .next button, #ibody .next a, #ibody .next select { font: 500 12.5px/1.2 var(--sans); padding: 6px 11px; border: 1px solid var(--line-2); border-radius: 999px; background: var(--panel); color: var(--ink); text-decoration: none; max-width: 100%; }
+  #ibody .next button[aria-pressed="true"] { background: var(--olive-soft); border-color: var(--olive-deep); color: var(--olive-deep); } #ibody .next a { color: var(--olive-deep); border-color: var(--olive-deep); } #ibody .next a:hover { background: var(--olive-deep); color: var(--panel); }
+  #ibody dl.facts3 { margin: 10px 0 12px; display: grid; gap: 5px; font-size: 12.5px; } #ibody dl.facts3 div { display: grid; grid-template-columns: 118px 1fr; gap: 10px; } #ibody dl.facts3 dt { color: var(--ink-3); } #ibody dl.facts3 dd { margin: 0; color: var(--ink); }
+  table.matrix tr.cmp > th, table.attr tr.cmp > th { box-shadow: inset 3px 0 0 var(--amber); background: #fbf4e4; }
+  table.cmp.fev { margin-bottom: 6px; } table.cmp td.fe { cursor: pointer; } table.cmp td.fe:hover { text-decoration: underline; text-underline-offset: 3px; } table.cmp tr.sep th { text-align: left; padding-top: 14px; font: 600 12px var(--sans); letter-spacing: .04em; color: var(--ink-2); border-bottom: 1px solid var(--line-2); }
+  @media (max-width: 620px) { #svg text.cols, #svg text.elabel, #svg .node.ctx text.subl { display: none; } #gbody.xyz #gkey { font-size: 11.5px; padding: 6px 12px; border-radius: 14px; } }
+  @media (max-width: 1320px) { #crumb .c.ab i.sci { display: none; } #crumb .c.ab { flex: none; } }
+  @media (max-width: 1240px) { .gtools .lab, .layers .lab { display: none; } .layer, .gtools button { padding: 4px 9px 4px 7px; font-size: 12px; } }
   @media (max-width: 1240px) { #inspector { width: 360px; } .searchbox { width: 220px; } #acts .lbl { display: none; } }
   @media (max-width: 980px) {
     body { overflow: auto; height: auto; min-height: 100vh; } #bar { height: auto; flex-wrap: wrap; padding: 8px 12px; } .searchbox { width: 100%; order: 5; } #howbody { width: min(420px, calc(100vw - 24px)); }
@@ -165,13 +197,13 @@
 </div>
 <main id="main">
   <section id="stage">
-    <div class="view" id="v-graph" hidden><div class="vhead" id="ghead"></div><div class="vbody" id="gbody"><svg id="svg" role="img" aria-label="Network of plants, attributes and spatial functions"></svg><p id="gnote"></p><ul id="gkey" aria-label="Lines in this graph"></ul></div></div>
+    <div class="view" id="v-graph" hidden><div class="vhead" id="ghead"></div><div class="vbody" id="gbody"><svg id="svg" role="img" aria-label="Network of plants, attributes and spatial functions"></svg><div id="gwarn" role="status"></div><p id="gnote"></p><ul id="gkey" aria-label="Lines in this graph"></ul></div></div>
     <div class="view" id="v-matrix" hidden><div class="vhead" id="mhead"></div><div class="vbody" id="mbody"></div></div>
     <div class="view" id="v-table" hidden><div class="vhead" id="tcontrols"></div><div class="vbody" id="tablewrap"></div></div>
     <div class="view" id="v-compare" hidden><div class="vhead" id="chead"></div><div class="vbody" id="cbody"></div></div>
   </section>
-  <aside id="inspector" aria-label="Evidence" hidden>
-    <header><span class="l">Evidence</span><span id="isub"></span><button id="iclose" data-act="close-insp" aria-label="Close the evidence panel" title="Close (Esc)"><svg class="ic" viewBox="0 0 16 16" aria-hidden="true"><path d="m4 4 8 8M12 4l-8 8"/></svg></button></header>
+  <aside id="inspector" aria-label="Inspector" hidden>
+    <header><span class="l">Inspector</span><span id="isub"></span><button id="iclose" data-act="close-insp" aria-label="Close the evidence panel" title="Close (Esc)"><svg class="ic" viewBox="0 0 16 16" aria-hidden="true"><path d="m4 4 8 8M12 4l-8 8"/></svg></button></header>
     <div id="ibody"></div>
   </aside>
 </main>

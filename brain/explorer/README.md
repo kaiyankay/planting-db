@@ -12,6 +12,44 @@ Brief 2026-11-07 ("Plant Knowledge Explorer — Phase 1", after the desk crit); 
 - `?replay=focus:species=<id>;view:matrix;back;forward;q:<text>` is a test hook: it performs the steps and writes what the page showed after each into `<script id="replay-out">` (`tools/explorer_tests.py` K9–K11).
 - Type: Bricolage Grotesque for headings, DM Sans for everything else (scientific names in DM Sans italic), DM Mono for ids and provenance only.
 
+## V4.1 (2026-11-16): the Network as an evidence explorer
+
+Knowledge now opens on the **Network**; Matrix and Table are projections of the same selection, one click away. This is a trial default in the V4.1 preview, to confirm by Kay. The sections below describe the V4 behaviour that still holds; where they differ, this section wins.
+
+- **Overview.** X plants · Z spatial functions · Y the traits a function requires. Claim lines stay latent until a node is pointed at.
+- **Focus.** Clicking a node keeps the three columns. What a record joins to the focus is lit; the rest steps back as context. The Inspector opens docked on the right with linked / missing / conflict counts and the next actions.
+- **Expand.** The reader switches edge classes on around the focus (`model.js` `explore`, `walk`), one or two hops:
+
+  | key | class | records in this snapshot |
+  |---|---|---|
+  | `use` | recorded use (function link, status derived) | 12 |
+  | `inferred` | inferred by trait (function link, status candidate, KG-R4) | 9 |
+  | `req` | requirement, function → trait (literature) | 17 lines to 11 traits |
+  | `met`, a group id, `claims` | source claim lines, plant → attribute value: only to required traits, one knowledge group, or all | 361 |
+  | `rel` | live plant-to-plant record (`relations.json`) | 19 |
+  | `gaps` | not a line: marks the nodes with no link to the focus | n/a |
+
+  A function link with status `documented` does not occur in this snapshot. Rules of the walk: it never returns to the focus's own kind through a shared node (two plants linked to one function are not thereby related; only `rel` joins plants); a requirement is read from the function to its trait; around a plant, the claim lines are its own.
+- **Safe threshold.** `Model.SAFE = 24` attribute nodes. An expansion that would pass it is not applied: the count is shown with the knowledge groups to narrow it to.
+- **Lines.** Recorded use solid, inferred dashed, conflict dash-dot, requirement dotted, claim line thin; a lit line carries its class in words. A missing link is a dashed ring on the node with its reason, never a line.
+- **Line click.** A function link shows relation, rule, human verification and the AI source check apart, the claims with their sources, and links to the Plant Profile and the Design Trace. A requirement line (`ik=req`) shows the literature the ontology cites.
+- **Compare.** `Compare with…` in a plant's Inspector. The pair stays marked in the Network (A / B), the Matrix and the Table. The comparison adds a function-evidence table and keeps *unknown* and *in conflict* apart.
+- **Collapse / Reset.** Collapse returns to the first-order records of the focus; Reset to the overview.
+
+URL hash (all optional; V1–V4 links still land):
+
+```
+v      graph (default) | matrix | table | compare
+fk fi  focus kind and id          a b    the compared species
+e      edge classes switched on (whole set; `none`; absent = default of the focus kind)
+h      2 = two hops               only   1 = hide what the walk did not reach
+ik ii  inspected record: link · attr · concept_link · relation · req · species · function · concept
+q      species filter             g      knowledge groups shown in the table
+x      V1–V4 layers (traits · gaps · relations · group id): read, added to the default
+```
+
+Test hook: `?replay=focus:<kind>=<id>;e:<class>;hops:2;only;inspect:<kind>=<id>;cmp:<species id>;view:<v>;back;forward;q:<text>;reset`. The three acceptance journeys are K13 (A), K14 (B) and K15 (C) in `tools/explorer_tests.py`. The choice of own SVG over a graph library is argued in `eval/v4-1-knowledge-graph-choice-2026-11-16.md`.
+
 ## Run
 
 ```bash
