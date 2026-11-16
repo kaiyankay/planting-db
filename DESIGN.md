@@ -35,68 +35,68 @@ colors:
   night-warm-line: "rgba(244,234,208,.5)"
 typography:
   display:
-    fontFamily: "Fraunces, Iowan Old Style, Palatino Linotype, Georgia, serif"
+    fontFamily: "Bricolage Grotesque, DM Sans, -apple-system, Helvetica Neue, sans-serif"
     fontSize: "clamp(52px, 7.2vw, 100px)"
     fontWeight: 400
     lineHeight: 0.98
     letterSpacing: "-0.025em"
   title:
-    fontFamily: "Fraunces, Iowan Old Style, Georgia, serif"
+    fontFamily: "Bricolage Grotesque, DM Sans, -apple-system, Helvetica Neue, sans-serif"
     fontSize: "22px"
     fontWeight: 400
     lineHeight: 1.15
     letterSpacing: "-0.01em"
   body:
-    fontFamily: "-apple-system, Helvetica Neue, Segoe UI, Roboto, sans-serif"
+    fontFamily: "DM Sans, -apple-system, Helvetica Neue, Segoe UI, Roboto, sans-serif"
     fontSize: "16px"
     fontWeight: 400
     lineHeight: 1.55
   ui:
-    fontFamily: "-apple-system, Helvetica Neue, Segoe UI, Roboto, sans-serif"
+    fontFamily: "DM Sans, -apple-system, Helvetica Neue, Segoe UI, Roboto, sans-serif"
     fontSize: "13px"
     fontWeight: 400
     lineHeight: 1.45
   label:
-    fontFamily: "-apple-system, Helvetica Neue, Segoe UI, Roboto, sans-serif"
+    fontFamily: "DM Sans, -apple-system, Helvetica Neue, Segoe UI, Roboto, sans-serif"
     fontSize: "11px"
     fontWeight: 600
     letterSpacing: "0.06em"
   provenance:
-    fontFamily: "ui-monospace, SF Mono, Menlo, Consolas, monospace"
+    fontFamily: "DM Mono, ui-monospace, SF Mono, Menlo, Consolas, monospace"
     fontSize: "11.5px"
     fontWeight: 400
   action:
-    fontFamily: "-apple-system, Helvetica Neue, Segoe UI, Roboto, sans-serif"
+    fontFamily: "DM Sans, -apple-system, Helvetica Neue, Segoe UI, Roboto, sans-serif"
     fontSize: "14px"
     fontWeight: 500
   plan-label:
-    fontFamily: "-apple-system, Helvetica Neue, Segoe UI, Roboto, sans-serif"
+    fontFamily: "DM Sans, -apple-system, Helvetica Neue, Segoe UI, Roboto, sans-serif"
     fontSize: "10px"
     fontWeight: 400
   page-title:
-    fontFamily: "Fraunces, Iowan Old Style, Palatino Linotype, Georgia, serif"
+    fontFamily: "Bricolage Grotesque, DM Sans, -apple-system, Helvetica Neue, sans-serif"
     fontSize: "clamp(46px, 5.8vw, 84px)"
     fontWeight: 400
     lineHeight: 1
     letterSpacing: "-0.025em"
   species-title:
-    fontFamily: "Fraunces, Iowan Old Style, Palatino Linotype, Georgia, serif"
+    fontFamily: "Bricolage Grotesque, DM Sans, -apple-system, Helvetica Neue, sans-serif"
     fontSize: "clamp(40px, 4.7vw, 68px)"
     fontWeight: 400
     lineHeight: 1.02
     letterSpacing: "-0.02em"
   section-title:
-    fontFamily: "Fraunces, Iowan Old Style, Georgia, serif"
+    fontFamily: "Bricolage Grotesque, DM Sans, -apple-system, Helvetica Neue, sans-serif"
     fontSize: "27px"
     fontWeight: 400
     lineHeight: 1.12
   card-title:
-    fontFamily: "Fraunces, Iowan Old Style, Georgia, serif"
+    fontFamily: "Bricolage Grotesque, DM Sans, -apple-system, Helvetica Neue, sans-serif"
     fontSize: "21px"
     fontWeight: 400
     lineHeight: 1.15
   lede:
-    fontFamily: "-apple-system, Helvetica Neue, Segoe UI, Roboto, sans-serif"
+    fontFamily: "DM Sans, -apple-system, Helvetica Neue, Segoe UI, Roboto, sans-serif"
     fontSize: "18px"
     fontWeight: 400
     lineHeight: 1.5
@@ -187,7 +187,7 @@ the page; tools, layers and an inspector sit around it), and Grow is the same wo
 Imagine tells the story. Shape models the site. Compose assigns spatial functions and plants. Grow shows the result. They
 share one site drawing, one navigation and one set of controls; they do not share a layout.
 
-Since 2026-11-14 (V2) the studio is one of three destinations of a platform: **Design · Plants · Knowledge**. A visitor can
+Since V4 (2026-11-15) the studio is one of four destinations of a platform: **Design · Plants · Knowledge · About** — use the knowledge, read it, explore it, understand it. A visitor can
 enter through any of them. The same paper, ink, type and vocabulary run through all, and each keeps the layout its work needs:
 
 | Destination | Register | Layout |
@@ -215,12 +215,18 @@ achievement. They show how one conclusion was reached, and where it stops being 
 
 ## Typography
 
-- **Fraunces** is for the voice of the product: the home headline, a page's mode title, the name of the selected object.
-  Never for controls, labels or data.
-- **System sans** for everything operable: 13 px in panels, 14–15 px for buttons, 16 px for reading text.
-- **Small caps labels** (11 px, 600, +0.06em, `ink-3`) name a panel section; one per group, never stacked.
-- **Mono** is the voice of provenance: status tags, claim ids, "offline rules". If it is in mono, it is a fact about where
-  something came from.
+Since V4 (2026-11-15) three families, loaded from Google Fonts (OFL) with `display=swap`, defined once as tokens
+(`--pi-display / --pi-sans / --pi-mono` in `platform/css/platform.css`, `--display / --sans / --mono` in the Studio's `journey.css`):
+
+- **Bricolage Grotesque** (500–700, tight tracking) speaks: the home headline, page and section titles, the name of the selected
+  object, the wordmark. Never for controls, labels or data. It has no italic — never slant it.
+- **DM Sans** (400–600) works: everything operable and readable. 15–17 px reading text, 13–14 px controls and secondary text;
+  no paragraph under 12 px. **Scientific names are DM Sans italic** at the size of the text around them — readable, never an
+  ornate display line.
+- **DM Mono** (400–500) records: claim ids, provenance, status tags, metrics, small table heads. If it is in mono, it is a fact
+  about where something came from. Never for everyday text.
+- Scale tokens: `--pi-t-hero · page · section · card · lede · body · ui · small · mono`; spacing `--pi-s-*` (4 px scale), radii
+  `--pi-r-*`, panel widths `--pi-rail-w`, `--pi-inspector-w`, reading width `--pi-read-w`. The specimen is About · typography.
 
 ## Layout
 

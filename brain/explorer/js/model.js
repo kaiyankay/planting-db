@@ -54,7 +54,7 @@ export class Model {
   // claim line), a requirement (function → concept, literature) or a live relation record.  A ghost is a species whose link to the
   // focused function is unknown — shown without any edge.
   // The graph starts small and is expanded on purpose: `x` is the set of layers the reader added (layersFor lists what can be added).
-  //   no focus   the functions only                      + all        every species and every drawn link
+  //   no focus   the X · Y · Z overview: species, functions, required traits and the records between them
   //   function   the function and its linked species     + traits     the traits it requires, with the linked species' claim lines to them
   //                                                      + gaps       the species without a link (ghosts, no line)
   //   species    the species and its linked functions    + <group id> its trait concepts of one knowledge group   (+ traits: every group)
@@ -69,10 +69,18 @@ export class Model {
     const clEdge = e => ({ id: e.id, kind: 'concept_link', rel: e.rel, source: e.species, target: e.concept, status: e.status, verification: e.verification, ref: e });
     const reqEdge = (f, r, alt) => ({ id: `${r.id}>${alt}`, kind: 'requirement', rel: 'requires_trait', source: f.id, target: alt, status: 'documented', verification: 'literature', strength: r.strength, ref: r, fn: f.id });
     const relEdge = r => ({ id: r.id, kind: 'relation', rel: r.type, source: r.a, target: r.b, status: r.kg_status, verification: r.status, placeholder: r.placeholder, ref: r });
-    if (!focus) {   // the seed: the functions; with `all`, the matrix as a graph
+    if (!focus) {   // the overview (V4): the three axes of the knowledge base and every record that joins them
+      //   X  the species (ordered by growth form)        Z  the spatial functions        Y  the trait concepts a function requires
+      //   X — Z  every drawn function link               Z — Y  every requirement (literature)
+      //   X — Y  the plants' claim lines to those traits: real records, kept `latent` — drawn only for the node under the pointer
+      for (const s of this.species.slice().sort((a, b) => String(a.growth_form_label || '').localeCompare(String(b.growth_form_label || '')) || a.scientific_name.localeCompare(b.scientific_name))) N(s.id, 'species', { sub: s.growth_form_label || '' });
       for (const f of this.functions) N(f.id, 'function');
-      if (x.has('all')) { for (const s of this.species) N(s.id, 'species'); for (const l of this.links) if (l.drawn) E(linkEdge(l)); }
-      return { nodes: [...nodes.values()], edges, center: null, seed: !x.has('all') };
+      for (const l of this.links) if (l.drawn) E(linkEdge(l));
+      const alts = [];
+      for (const f of this.functions) for (const r of f.requirements) for (const alt of r.alternatives) { const c = this.co(alt); if (c && !c.no_plant_reaches) { if (!alts.includes(alt)) alts.push(alt); E(reqEdge(f, r, alt)); } }
+      alts.sort((a, b) => String(this.co(a).group || '').localeCompare(String(this.co(b).group || '')) || String(this.co(a).facet || '').localeCompare(String(this.co(b).facet || '')) || this.co(a).label.localeCompare(this.co(b).label));
+      for (const alt of alts) { N(alt, 'concept', { group: this.co(alt).group, req: true }); for (const e of this.clinksOf.get(alt) || []) E({ ...clEdge(e), latent: true }); }
+      return { nodes: [...nodes.values()], edges, center: null, xyz: true };
     }
     if (focus.kind === 'function') {
       const f = this.fn(focus.id); N(f.id, 'function', { focus: true });
@@ -110,7 +118,7 @@ export class Model {
   }
   /** the layers a reader can add to the graph of a focus, each with the number of records it would bring (0 = nothing recorded) */
   layersFor(focus) {
-    if (!focus) return [{ key: 'all', label: 'Every species and drawn link', n: this.links.filter(l => l.drawn).length }];
+    if (!focus) return [];   // the overview is complete as drawn; a focus is what gets expanded
     if (focus.kind === 'function') {
       const f = this.fn(focus.id); const alts = new Set(f.requirements.flatMap(r => r.alternatives).filter(alt => this.co(alt) && !this.co(alt).no_plant_reaches));
       return [{ key: 'traits', label: 'Required traits', n: alts.size }, { key: 'gaps', label: 'Species without a link', n: this.linksTo(f.id).filter(l => !l.drawn).length }];

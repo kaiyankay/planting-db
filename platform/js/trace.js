@@ -56,6 +56,45 @@ export const OUTCOME = {
   not_asked: { word: 'not asked of this bed', says: 'This bed was not given this function, so nothing was checked.' },
 };
 export const out = k => `<span class="pi-out ${k}">${esc(OUTCOME[k]?.word || k)}</span>`;
+/** V4: the eight outcomes answer two different questions and are shown as two groups, never as one scale of suitability.
+ *  `selection` — what the engine did with a species it could check in this bed; `support` — why there was nothing to check or plant. */
+export const OUTCOME_GROUP = { selection: { label: 'Selection result', of: ['planted', 'not_placed', 'eligible', 'other_role', 'excluded'] }, support: { label: 'Function support', of: ['unknown', 'recorded_only', 'not_asked'] } };
+export const groupOf = k => OUTCOME_GROUP.selection.of.includes(k) ? 'selection' : 'support';
+/** a species that passed is not thereby suitable: while a check of this bed is still `uncertain` (site conditions not stated, a claim
+ *  unverified or disputed) the outcome is worded as provisional. The outcome itself (the enum) does not change. */
+export const pending = d => ['planted', 'not_placed', 'eligible'].includes(d.outcome) && (d.open?.length > 0 || d.fit === 'uncertain');
+export const outWord = d => d.outcome === 'eligible' && pending(d) ? 'eligible (checks pending), not selected' : pending(d) ? `${OUTCOME[d.outcome].word} · checks pending` : OUTCOME[d.outcome]?.word || d.outcome;
+export const outD = d => `<span class="pi-out ${d.outcome}${pending(d) ? ' pending' : ''}" data-outcome-group="${groupOf(d.outcome)}">${esc(outWord(d))}</span>`;
+
+// ---------------------------------------------------------------- which arrangement is being read (V4)
+/** One short fingerprint of everything the planting engine reads from a project for an arrangement, plus the run settings (seed,
+ *  density, second row). Two cases with the same fingerprint are the same engine run. The Studio writes it on a version when it
+ *  generates (`version.input_fp`) and puts it in the link of a preview (`pv=`), so the inspector and the full trace can be shown to
+ *  read the same thing — or the page can say that the design has changed since. Built field by field so that a project read back
+ *  from storage gives the same string as the live one. */
+export function inputFp(project, gen = {}) {
+  const n = x => x ?? null; const site = project.site || {};
+  const beds = liveBeds(project).map(b => [b.id, b.polygon, b.holes || [], (b.functions || []).map(f => [f.function, n(f.where), n(f.target_height_m), n(f.year_round), !!f.alternative]), b.composition || null, b.conditions_overrides || null]);
+  const fns = (project.brief?.functions || []).map(f => [f.function, n(f.where), n(f.target_height_m), n(f.year_round), !!f.alternative]);
+  const conds = Object.entries(site.conditions || {}).sort(([a], [b]) => a < b ? -1 : 1).map(([k, c]) => [k, n(c?.value), n(c?.status)]);
+  const raw = JSON.stringify([n(site.boundary), (site.features || []).map(f => [f.kind, n(f.position_m), n(f.polygon), n(f.radius_m)]), conds, n(site.orientation), beds, fns, project.brief?.values || {}, (project.brief?.hard_constraints || []).map(c => [c.kind, n(c.text)]), n(gen.seed) ?? DRY_SEED, n(gen.density) ?? 1, gen.stagger !== false]);
+  let h1 = 0x811c9dc5, h2 = 0x1b873593; for (let i = 0; i < raw.length; i++) { const ch = raw.charCodeAt(i); h1 = Math.imul(h1 ^ ch, 0x01000193); h2 = Math.imul(h2 + ch, 0x5bd1e995) ^ (h2 >>> 13); }
+  return `p-${(h1 >>> 0).toString(36)}${(h2 >>> 0).toString(36)}`;
+}
+/** the run settings a version was generated with, as `inputFp` wants them */
+export const genOf = v => ({ seed: v?.seed, density: v?.generator?.params?.density, stagger: v?.generator?.params?.stagger });
+/** what a case reads, for a line of text: a generated version (its number in the project and its id) or a preview (its fingerprint) */
+export function refOf(project, version, { dry = false, gen = {}, asked = null } = {}) {
+  const fp = inputFp(project, dry ? gen : genOf(version)); const list = project.versions || []; const cur = list.find(v => v.id === project.current_version_id) || null;
+  if (dry || !version?.id) return { kind: 'preview', fp, asked_fp: asked?.pv || null, changed: !!asked?.pv && asked.pv !== fp, generated: cur ? { id: cur.id, n: list.indexOf(cur) + 1, same_inputs: !!cur.input_fp && cur.input_fp === inputFp(project, genOf(cur)) && cur.input_fp === fp } : null };
+  return { kind: 'version', id: version.id, n: list.findIndex(v => v.id === version.id) + 1, of: list.length, current: version.id === project.current_version_id, fp: version.input_fp || null, inputs_changed: !!version.input_fp && version.input_fp !== fp, asked_id: asked?.v || null, missing: !!asked?.v && asked.v !== version.id };
+}
+/** the same, as one sentence for the reader */
+export function refLine(ref) {
+  if (!ref) return '';
+  if (ref.kind === 'preview') return `${ref.changed ? 'This preview has changed since the link was made: the design was edited, so the page shows the preview as it is now. ' : ''}Preview ${ref.fp}, not generated${ref.generated ? (ref.generated.same_inputs ? `; version ${ref.generated.n} was generated from the same inputs` : `; it differs from generated version ${ref.generated.n} until you regenerate`) : ' yet'}.`;
+  return `${ref.missing ? 'The version named in the link is no longer in this design; the current version is shown. ' : ''}Generated version ${ref.n}${ref.of > 1 ? ` of ${ref.of}` : ''} (${ref.id})${ref.current ? '' : ', not the current one'}${ref.inputs_changed ? '. The design was edited after this version was generated: the checks are recomputed on the design as it is now' : ''}.`;
+}
 
 // ---------------------------------------------------------------- the engine, borrowed from the Studio
 let engineP = null;
@@ -76,18 +115,21 @@ export const DRY_SEED = 42;
 /** A saved project → the case. The project is cloned and never written. `origin`: 'reference' | 'mine'. A design that was never
  *  generated has no version: the engine's dry run stands in for it (`dry`), with the seed, density and row setting the Studio saved
  *  with the view (the same run Compose previews); nothing is stored. */
-export function buildCase(saved, K, E, { bedId = null, fn = FN, origin = 'reference' } = {}) {
+export function buildCase(saved, K, E, { bedId = null, fn = FN, origin = 'reference', read = null } = {}) {
   const project = clone(saved); const beds = tracedBeds(project, K, E, fn); const all = liveBeds(project); if (!all.length) return null;
-  let version = (project.versions || []).find(v => v.id === project.current_version_id) || null; let dry = false; const gen = project.ui?.view?.gen || {};
-  if (!version) { try { version = E.generate(project, K, all.map(b => b.id), gen.seed ?? DRY_SEED, { density: gen.density ?? 1, stagger: gen.stagger ?? true, id_start: 0 }); dry = true; } catch { version = null; } }
+  // V4: `read` names what the link was made from — { v: <version id> } a generated version, { pv: <fingerprint> } the Compose preview.
+  // A preview is always computed here from the saved design (never read from a stored version), so it is what Compose shows now.
+  const cur = (project.versions || []).find(v => v.id === project.current_version_id) || null; const gen = project.ui?.view?.gen || {};
+  let version = read?.pv ? null : (read?.v && (project.versions || []).find(v => v.id === read.v)) || cur; let dry = false;
+  if (!version) { try { version = E.generate(project, K, all.map(b => b.id), gen.seed ?? DRY_SEED, { density: gen.density ?? 1, stagger: gen.stagger ?? true, id_start: 0 }); dry = cur ? 'preview' : true; } catch { version = null; } }
   // the bed that was asked for; else, among the beds asked for the function, the one where the function has the most plants (the first on a tie)
   const role = ROLE[fn]; const nIn = b => version && role ? version.plant_objects.filter(o => o.bed_id === b.id && inRole(o, role)).length : 0;
   const bed = beds.find(b => b.id === bedId) || (arranged(E, fn) ? beds.slice().sort((a, b) => nIn(b) - nIn(a))[0] : all.find(b => b.id === bedId) || beds[0] || all[0]); if (!bed) return null;
-  return caseOf(project, K, E, { bed, beds, version, dry, origin });
+  return caseOf(project, K, E, { bed, beds, version, dry, origin, gen, asked: read });
 }
 /** The same case over objects the caller already holds (the Studio: its open project, its current or previewed version). Nothing is
  *  cloned or generated; `assemble` and the two evaluations are run again, and they do not write. */
-export function caseOf(project, K, E, { bed, beds = null, version = null, dry = false, origin = 'mine' }) {
+export function caseOf(project, K, E, { bed, beds = null, version = null, dry = false, origin = 'mine', gen = {}, asked = null }) {
   const asm = E.assemble(project, K, bed); const plants = version ? version.plant_objects.filter(p => p.bed_id === bed.id) : [];
   const said = (project.conversation || []).find(m => m.role === 'user' && m.text)?.text || null;
   const c = { origin, project, K, E, bed, beds: beds || [bed], asm, version, dry, plants, said, snapshot: { now: K.snapshot?.generated || null, design: version?.knowledge_snapshot?.generated || project.knowledge_snapshot?.generated || null } };
@@ -102,6 +144,7 @@ export function caseOf(project, K, E, { bed, beds = null, version = null, dry = 
   if (version && asm.wanted.includes('z:ground_cover')) { try { glive = E.evaluateGround(bed, version, project); } catch { glive = null; } }
   c.ground = { group: grp, accent: acc, objects: plants.filter(p => p.role === 'ground' || p.role === 'accent'), recorded: grec, live: glive, evaluation: glive || grec, same: !!(grec && glive && grec.ground_cover_share === glive.ground_cover_share && grec.plants === glive.plants && grec.ground_cover_m2 === glive.ground_cover_m2), composition: E.compositionOf(bed) };
   c.unresolved = version ? (version.unresolved || []).filter(u => u.includes(bed.name)) : [];
+  try { c.ref = version ? refOf(project, version, { dry: !!dry, gen, asked }) : null; } catch { c.ref = null; }
   return c;
 }
 export const sectionOf = (c, fn) => fn === 'z:screen' ? c.screen : fn === 'z:ground_cover' ? c.ground : null;
@@ -201,7 +244,7 @@ export function why(c, fn, speciesId, { plant = null } = {}) {
   const chk = d.cand ? Object.entries(d.cand.checks).map(([k, v]) => `${esc(k.replace('_', ' '))} ${res(v.result)}`).join(' · ') : '';
   const acc = plant && c.plants.find(o => o.id === plant)?.role === 'accent' ? asm.picks.accent.find(r => r.id === d.species) || null : null;   // an accent object: placed by the engine's repeat_accent operator, not selected as ground layer
   if (acc) { const g = c.ground.accent; lines.push(['Selection', `${out('planted')}. As an accent, not as ground layer: ${esc(String(acc.why?.[0] || 'a repeated accent').replace(/^accent: /, ''))}.${g ? ` Every ${esc(g.params.every)}th ground position toward ${esc(g.params.toward)} takes the accent species.` : ''}`]); }
-  else lines.push(['Selection', `${out(d.outcome)}. ${esc(cap(d.reason))}.${chk ? ` <span class="pi-why-c">${chk}</span>` : ''}`]);
+  else lines.push(['Selection', `${outD(d)}. ${esc(cap(d.reason))}.${chk ? ` <span class="pi-why-c">${chk}</span>` : ''}`]);
   const inIt = acc || d.outcome === 'planted' || d.outcome === 'not_placed';
   if (d.arranged && d.wanted && c.version && !inIt) {   // not part of the arrangement: say what stands there instead, and stop — the bed's result is not this species' result
     const got = [...new Set((sectionOf(c, fn)?.objects || []).filter(o => o.role !== 'accent').map(o => o.species_id))]; const g = fn === 'z:ground_cover' ? c.ground.group : null;
@@ -216,9 +259,37 @@ export function why(c, fn, speciesId, { plant = null } = {}) {
       lines.push(['Result', ev ? `${res('estimate')} ${Math.round(ev.ground_cover_share * 100)} % of the ${ev.plantable_m2} m² of plantable ground lies under a mature crown of the ground layer. The engine sets no pass mark, and this is not the cover a planting reaches.` : 'Nothing to evaluate.']);
     }
   } else if (d.arranged && d.wanted) lines.push(['Arrangement', 'No arrangement has been computed for this bed yet.']);
-  return { d: acc ? { ...d, outcome: 'planted', accent: true } : d, sp, lines, dry: c.dry };
+  return { d: acc ? { ...d, outcome: 'planted', accent: true } : d, sp, lines, dry: c.dry, ref: c.ref || null, short: shortOf(c, fn, d, acc, plant, lines) };
 }
-export function whyHtml(c, fn, speciesId, { plant = null, href = null, title = true } = {}) {
-  const w = why(c, fn, speciesId, { plant }); const sp = w.sp;
-  return `<div class="pi-why" data-why="${esc(w.d.outcome)}" data-why-fn="${esc(fn)}" data-why-species="${esc(sp?.slug || '')}"${plant ? ` data-why-plant="${esc(plant)}"` : ''}>${title ? `<h4>Why ${plant || w.d.outcome === 'planted' ? '' : 'not '}${plant ? 'this plant' : `<i>${esc(sp?.scientific_name || '')}</i>`} here?</h4>` : ''}<dl>${w.lines.map(([k, v]) => `<div data-why-line="${k.toLowerCase()}"><dt>${k}</dt><dd>${v}</dd></div>`).join('')}</dl>${w.dry ? `<p class="pi-why-n">${w.dry === 'preview' ? 'Read from the preview of this bed: what Generate would plant now.' : 'Read from the preview of this bed. Nothing is generated yet.'}</p>` : ''}${href ? `<a class="pi-why-go" href="${esc(href)}" data-pi-go="trace">Open the full trace: sources, claims, rules, evaluation</a>` : ''}</div>`;
+/** V4: the same explanation in three answers — Why selected · Why here · Does it work? — for the inspector. Every clause is taken
+ *  from the five lines above (the engine's records); nothing is added. The five lines stay one click away, the full trace two. */
+function shortOf(c, fn, d, acc, plant, lines) {
+  const { K, bed } = c; const dd = K.d; const l = d.link; const get = k => lines.find(x => x[0] === k)?.[1] || ''; const label = d.label; const s = [];
+  const uc = (l?.use_claims || []).map(id => dd.claims[id]).filter(Boolean); const nv = uc.filter(x => x.status === 'verified').length; const ai = [...new Set(uc.map(x => dd.evidence_checks[x.id]?.result).filter(Boolean))];
+  const basis = !l ? 'no record links it to this function' : l.status === 'derived' ? `a source records the use ${(l.via_use_labels || []).join(', ')}` : l.status === 'candidate' ? `no source states the use; its recorded traits meet what ${label} needs` : `no link is drawn (${l.verdict || 'unknown'})`;
+  const standing = uc.length ? `${nv ? `${nv} of ${plural(uc.length, 'claim')} verified by a person` : 'not verified by a person'}${ai.length ? `; AI source assessment: ${ai.map(x => AI_WORD[x] || human(x)).join(', ')}` : ''}` : '';
+  const open = (d.open || []).map(([k]) => k.replace('_', ' '));
+  if (acc) s.push(['Why selected', `${out('planted')} as an accent: ${esc(String(acc.why?.[0] || 'a repeated accent').replace(/^accent: /, ''))}.`]);
+  else if (d.outcome === 'planted' || d.outcome === 'not_placed' || d.outcome === 'eligible') s.push(['Why selected', `${outD(d)}. ${esc(cap(basis))}${standing ? ` (${esc(standing)})` : ''}. It passed this bed’s checks${open.length ? `; still uncertain: ${esc(open.join(', '))}` : ''}.`]);
+  else s.push(['Why not selected', `${outD(d)}. ${esc(cap(d.reason))}.`]);
+  const po = plant ? c.plants.find(o => o.id === plant) : null; const bfn = (bed.functions || []).find(f => f.function === fn) || c.project.brief.functions.find(f => f.function === fn && !f.alternative) || null;
+  const asked = d.wanted ? `${esc(bed.name)} is asked to be ${fn === 'z:screen' ? 'a Screen' : esc(label)}${bfn?.where && /-edge$/.test(bfn.where) && fn === 'z:screen' ? ` along its ${esc(bfn.where.replace('-edge', ''))} edge` : ''}` : esc(cap(d.reason));
+  const inIt = acc || d.outcome === 'planted' || d.outcome === 'not_placed';
+  if (!d.arranged || !d.wanted) s.push(['Why here', `${asked}.`]);
+  else if (!c.version) s.push(['Why here', `${asked}. No arrangement has been computed yet.`]);
+  else if (!inIt) s.push(['Instead', get('Instead')]);
+  else if (fn === 'z:screen') { const pl = c.screen.plan; s.push(['Why here', `${asked}. ${pl ? `${po ? `This plant is position ${po.position_m.join(', ')} m of ` : ''}${po ? (pl.rows === 1 ? 'one row' : `${pl.rows} rows`) : pl.rows === 1 ? 'One row' : `${pl.rows} rows`} along ${pl.edge_length_m} m, ${pl.placed[0] + pl.placed[1]} of ${pl.expected[0] + pl.expected[1]} positions placed at ${pl.step_m} m (a spacing heuristic of the engine).` : 'No row was placed.'}`]); }
+  else { const g = c.ground.group; s.push(['Why here', `${asked}. ${g ? `${po ? `This plant stands at ${po.position_m.join(', ')} m${po.role === 'accent' ? ', an accent on a ground position' : ''}, in ` : ''}${esc(po ? g.params.pattern_label.toLowerCase() : g.params.pattern_label)}: ${g.params.placed} placed at ${g.params.spacing_m} m (a spacing heuristic of the engine).` : 'No ground layer was placed.'}`]); }
+  if (d.arranged && d.wanted && c.version && inIt) s.push(['Does it work?', get('Result')]);
+  else if (d.arranged && d.wanted && c.version) { const ev = sectionOf(c, fn)?.evaluation; s.push(['Does the bed work?', fn === 'z:screen' ? (ev ? `${esc(label)}: ${res(ev.status)}, without this species. An estimate from claimed sizes.` : 'Nothing to evaluate.') : (ev ? `${res('estimate')} ${Math.round(ev.ground_cover_share * 100)} % of the plantable ground under mature crowns, without this species. No pass mark is set.` : 'Nothing to evaluate.')]); }
+  return s;
+}
+/** `full: false` (the default in the Studio's inspector, V4) shows the three answers and keeps the five steps in a disclosure the
+ *  caller can open (`open`); `full: true` shows the five steps only. `data-why-ref` says what was read: version:<id> or preview:<fingerprint>. */
+export function whyHtml(c, fn, speciesId, { plant = null, href = null, title = true, full = false, open = false } = {}) {
+  const w = why(c, fn, speciesId, { plant }); const sp = w.sp; const ref = w.ref; const key = s => s.toLowerCase().replace(/[^a-z]+/g, '-').replace(/-$/, '');
+  const five = `<dl class="pi-why-5">${w.lines.map(([k, v]) => `<div data-why-line="${k.toLowerCase()}"><dt>${k}</dt><dd>${v}</dd></div>`).join('')}</dl>`;
+  const three = `<dl class="pi-why-3">${w.short.map(([k, v]) => `<div data-why-short="${key(k)}"><dt>${k}</dt><dd>${v}</dd></div>`).join('')}</dl>`;
+  const read = ref ? `<p class="pi-why-n ${ref.kind}" data-why-read="${ref.kind}">${ref.kind === 'preview' ? `<b>Preview</b> <span class="id">${esc(ref.fp)}</span> · ${ref.generated ? (ref.generated.same_inputs ? `same inputs as generated version ${ref.generated.n}` : `not generated yet; differs from version ${ref.generated.n}`) : 'not generated yet'}` : `<b>Generated version ${ref.n}</b> <span class="id">${esc(ref.id)}</span>${ref.inputs_changed ? ' · the design was edited since' : ''}`}</p>` : '';
+  return `<div class="pi-why" data-why="${esc(w.d.outcome)}" data-why-fn="${esc(fn)}" data-why-species="${esc(sp?.slug || '')}"${plant ? ` data-why-plant="${esc(plant)}"` : ''}${ref ? ` data-why-ref="${ref.kind === 'preview' ? `preview:${esc(ref.fp)}` : `version:${esc(ref.id)}`}"` : ''}>${title ? `<h4>Why ${plant || w.d.outcome === 'planted' ? '' : 'not '}${plant ? 'this plant' : `<i>${esc(sp?.scientific_name || '')}</i>`} here?</h4>` : ''}${full ? five : `${three}<details class="pi-why-more" data-why-more${open ? ' open' : ''}><summary>The five steps: asked, knowledge, selection, arrangement, result</summary>${five}</details>`}${read}${href ? `<a class="pi-why-go" href="${esc(href)}" data-pi-go="trace">Open the full trace: sources, claims, rules, evaluation</a>` : ''}</div>`;
 }

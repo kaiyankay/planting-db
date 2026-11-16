@@ -48,8 +48,10 @@ function dir3(s) { const u = rnd(s, 1) * 2 - 1, t = rnd(s, 2) * Math.PI * 2; con
     initHost(); buildGraph(); initUi();
     $('#loading').classList.add('gone');
     // platform: the bar, the shared plant card (read from the same published snapshot), and a species named in the URL (#species=<slug>)
-    PI.mountTop($('#pitop'), { active: 'knowledge', section: 'explore', sub: PI.exploreSwitch('neural'), tone: 'dark' });
-    Promise.all([PI.loadSnapshot(), PI.loadImages()]).then(([d, imgs]) => { S.snap = d; S.imgs = imgs; PI.mountTop($('#pitop'), { active: 'knowledge', section: 'explore', sub: PI.exploreSwitch('neural'), tone: 'dark', snapshot: d }); if (S.selected?.kind === 'plant') select(S.selected); }).catch(() => { });
+    // the bar's switch (Table · Matrix · Network · 3D) leads back into the Explorer with the species this page was opened on
+    const inFocus = () => new URLSearchParams(location.hash.slice(1)).get('species'); const bar = snapshot => PI.mountTop($('#pitop'), { active: 'knowledge', sub: PI.exploreSwitch('neural', inFocus()), tone: 'dark', snapshot });
+    bar(null); addEventListener('hashchange', () => bar(S.snap));
+    Promise.all([PI.loadSnapshot(), PI.loadImages()]).then(([d, imgs]) => { S.snap = d; S.imgs = imgs; bar(d); if (S.selected?.kind === 'plant') select(S.selected); }).catch(() => { });
     const focusFromHash = () => { const slug = new URLSearchParams(location.hash.slice(1)).get('species'); const n = slug && S.nodes.find(x => x.kind === 'plant' && x.id === PI.speciesId(slug)); if (n) setTimeout(() => select(n), 1400); };
     focusFromHash(); addEventListener('hashchange', focusFromHash);
   } catch (e) { $('#err').textContent = `could not load: ${e.message}\n\nserve the planting-db root:  python3 -m http.server 8766  → http://localhost:8766/brain/`; console.error(e); }

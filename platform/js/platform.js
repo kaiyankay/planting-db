@@ -56,9 +56,11 @@ export const links = {
   compare: (a, b) => `${routes.explore}#${new URLSearchParams({ a: speciesId(a), b: speciesId(b), v: 'compare' })}`,
   neural: id => id ? `${routes.neural}#species=${encodeURIComponent(slugOf(id))}` : routes.neural,
   knowledge: () => routes.knowledge,
-  /** the Decision Trace of one species. `o`: a bed id (the user's own design), or { fn, bed, plant } — the spatial function, a bed of
-   *  the user's own design, one plant object of its current version */
-  trace: (id, o = null) => { const x = typeof o === 'string' ? { bed: o } : (o || {}); const p = new URLSearchParams(); if (x.fn && x.fn !== TRACE_FUNCTION) p.set('fn', x.fn); if (id) p.set('species', slugOf(id)); if (x.bed) { p.set('case', 'mine'); p.set('bed', x.bed); } if (x.plant) p.set('plant', x.plant); const h = p.toString(); return h ? `${routes.trace}#${h}` : routes.trace; },
+  /** the Decision Trace of one species. `o`: a bed id (the user's own design), or { fn, bed, plant, v, pv } — the spatial function, a
+   *  bed of the user's own design, one plant object, and what the link was made from: `v` the id of a generated version, or `pv` the
+   *  input fingerprint of a preview that is not generated (platform/js/trace.js inputFp). The trace page reads exactly that, or says
+   *  that the design has changed since. */
+  trace: (id, o = null) => { const x = typeof o === 'string' ? { bed: o } : (o || {}); const p = new URLSearchParams(); if (x.fn && x.fn !== TRACE_FUNCTION) p.set('fn', x.fn); if (id) p.set('species', slugOf(id)); if (x.bed) { p.set('case', 'mine'); p.set('bed', x.bed); } if (x.plant) p.set('plant', x.plant); if (x.v) p.set('v', x.v); else if (x.pv) p.set('pv', x.pv); const h = p.toString(); return h ? `${routes.trace}#${h}` : routes.trace; },
   /** a bed of the saved design, opened in Compose (optionally with one species' evidence, and the function it is asked about) */
   compose: (bedId, id, fn = null) => { const p = new URLSearchParams({ open: 'compose', bed: bedId }); if (id) p.set('species', slugOf(id)); if (fn) p.set('fn', fn); return `${routes.design}?${p}`; },
   about: () => routes.about,
@@ -138,7 +140,9 @@ export function navHtml(active) { return `<nav class="pi-nav" aria-label="Planti
 export function aboutNav(section) { return `<nav class="pi-subnav" aria-label="About">${ABOUT.map(([k, l, r]) => `<a href="${routes[r]}"${k === section ? ' aria-current="page"' : ''}>${l}</a>`).join('')}</nav>`; }
 /** V3 name. Knowledge has no second level of pages any more (its views are switched inside the Explorer); kept so an older caller renders nothing. */
 export function knowledgeNav() { return ''; }
-export function exploreSwitch(mode) { return `<div class="pi-switch" role="group" aria-label="Two ways to see the records"><a href="${routes.explore}"${mode === 'explorer' ? ' aria-current="true"' : ''} title="table, spatial function matrix and network, with the evidence behind every line">Explorer</a><a href="${routes.neural}"${mode === 'neural' ? ' aria-current="true"' : ''} title="the same claims as one three-dimensional network">3D network</a></div>`; }
+/** the views of Knowledge as one switch, for a page that is one of them but is not the Explorer (the 3D network): Table · Matrix ·
+ *  Network lead back into the Explorer, with the species in focus when there is one. Inside the Explorer the switch is its own toolbar. */
+export function exploreSwitch(mode, id = null) { const to = v => id ? links.explorerFocus('species', speciesId(id), { view: v }) : `${routes.explore}#v=${v}`; return mode === 'neural' ? `<div class="pi-switch" role="group" aria-label="Views of the knowledge base"><a href="${esc(to('table'))}">Table</a><a href="${esc(to('matrix'))}">Matrix</a><a href="${esc(to('graph'))}">Network</a><a href="${esc(links.neural(id))}" aria-current="true" title="the same claims as one three-dimensional network">3D</a></div>` : ''; }
 export function returnChip() { const d = activeDesign(); if (!d) return ''; return `<a class="pi-return" href="${routes.design}" title="${esc(d.name)} — reopens where you left it"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M9.5 3.5 5 8l4.5 4.5"/></svg>${esc(returnLabel(d))}</a>`; }
 /** the bar of every page except the Studio (which keeps its own #top and takes navHtml into it). `section` names the About page
  *  (project · how · method · contribute) and brings the second level with it; `sub` is a module's own addition (a view switch). */

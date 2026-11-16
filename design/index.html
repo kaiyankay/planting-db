@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Planting Intelligence — imagine your garden</title>
-<meta name="description" content="Describe a site in your own words; see how the AI shapes it into planting beds you can edit; set the design intent; generate a planting proposal from a sourced plant knowledge base; refine it with language, selection and direct edits.">
+<meta name="description" content="Describe a site in your own words, shape it into planting beds, say what the planting should do, and generate an arrangement from a sourced plant knowledge base.">
 <link rel="icon" href="data:,">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..700&family=DM+Sans:ital,opsz,wght@0,9..40,400..700;1,9..40,400..700&family=DM+Mono:wght@400;500&display=swap">
@@ -13,12 +13,13 @@
 <link rel="stylesheet" href="./css/studio.css">
 <link rel="stylesheet" href="../platform/css/platform.css">
 <link rel="stylesheet" href="./css/platform-studio.css">
+<link rel="stylesheet" href="./css/v4.css">
 <script type="importmap">{ "imports": { "three": "../brain/vendor/three/three.module.js", "three/addons/": "../brain/vendor/three/examples/jsm/" } }</script>
 </head>
 <body data-stage="welcome">
 
 <nav id="top" aria-label="Design stages">
-  <a class="wordmark" href="#s-welcome" data-stage-link="welcome">Planting Intelligence<small>Botanical design studio</small></a>
+  <a class="wordmark" href="#s-welcome" data-stage-link="welcome">Planting Intelligence</a>
   <span id="pinav"></span>
   <ol id="stagenav"></ol>
   <div class="right">
@@ -32,8 +33,8 @@
   <section id="s-welcome" class="stage" aria-labelledby="h-welcome">
     <div class="wrap">
       <div class="hero">
-        <h1 id="h-welcome">Imagine <em>your</em> garden.</h1>
-        <p class="lede">Describe your space and what you want to create. The site model, the design brief and the planting proposal grow out of your words — and every plant it places carries its sources.</p>
+        <h1 id="h-welcome">Imagine <em>your garden.</em></h1>
+        <p class="lede">Describe your space and what you want to create.</p>
         <form class="composer" id="welcome-form">
           <label class="sr" for="say0">Describe your space and what you want to create</label>
           <textarea id="say0" placeholder="I have a small backyard with an old tree. I'd like more privacy and ecological value, but still want it to feel open."></textarea>
@@ -48,11 +49,10 @@
         <div class="after">
           <button type="button" class="btn ghost small" id="example">Try the example</button>
           <button type="button" class="btn ghost small" data-input="draw" title="skip the description and draw the site outline yourself">Draw the site yourself</button>
-          <span id="kb-note"></span>
         </div>
         <div id="resume" hidden></div>
       </div>
-      <figure class="hero-art" id="hero-art" aria-label="The ten species of the knowledge base drawn with the workspace's own plant symbols"></figure>
+      <figure class="hero-art" id="hero-art" aria-label="Plants of the knowledge base, drawn with the workspace's own plant symbols"></figure>
     </div>
   </section>
 
@@ -63,7 +63,7 @@
       <nav class="ws-rail" id="site-tools" aria-label="Tools"></nav>
       <div class="ws-canvas site-canvas">
         <div id="site-canvas-body" class="canvas-home"><div class="canvas-hint" id="site-hint"></div><div id="site-preview" hidden></div><div class="canvas-empty" id="site-empty" hidden></div></div>
-        <div class="ws-panel" id="ws-panel"><button class="ws-panel-x" data-act="panel-close" aria-label="close the panel">×</button><div class="conditions" id="site-conditions"></div><div id="site-evidence"></div><div id="site-location"></div></div>
+        <div class="ws-panel" id="ws-panel"><button class="ws-panel-x" data-act="panel-close" aria-label="close the panel">×</button><div id="site-goals"></div><div class="conditions" id="site-conditions"></div><div id="site-evidence"></div><div id="site-location"></div></div>
         <div class="ws-zoom" id="ws-zoom"></div>
         <div class="ws-say" id="ws-say"></div>
       </div>

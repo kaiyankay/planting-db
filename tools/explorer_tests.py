@@ -25,11 +25,14 @@ relations.json, plants/*.json) and on the interface files (brain/explorer/).
                     distinct value kept (count of values per cell = distinct concepts); disagreement flags = kg conflicts of that cell
   I  interface      the interface files name no plant, concept or function id from the database
   J  stats          the statistics block matches the file
-  K  browser        (--browser) headless Chrome, one working view at a time: no focus → the start screen (functions, species, no graph);
-                    Screen focus → the function and its linked species only, the layers add required traits and the species without a
-                    link; the same focus in the matrix (column) and the table (required columns, sort); cell → evidence claims and the
-                    trace link; a species focus grows by knowledge group and by relation records; A/B pair → four sections, direct
-                    records (or the honest absence); V1 links (tab=compare, fk=pair, ik/ii) still land where they did
+  K  browser        (--browser) headless Chrome. V4: Knowledge opens on the table (no start screen) with the Table | Matrix | Network
+                    switch; the Network without a focus is the X · Y · Z overview (every species, function and required trait, only
+                    recorded lines); Screen focus → the function and its linked species only, the layers add required traits and
+                    the species without a link; the same focus in the matrix (column) and the table (required columns, sort); cell
+                    → evidence claims and the trace link; a species focus grows by knowledge group and by relation records; A/B
+                    pair → four sections, direct records (or the honest absence); V1 links (tab=compare, fk=pair, ik/ii) still land
+                    where they did; one focus is shared by the three views and Back / Forward restore view, focus and filter; the
+                    Trace action appears with a species in context and names an arranged function
 Standard library only; nothing is written except the report.
 """
 import glob, json, os, re, subprocess, sys, tempfile
@@ -244,10 +247,13 @@ if "--browser" in sys.argv:
     if not chrome:
         test("K0 headless Chrome found", False, "no Chrome binary; skipped")
     else:
-        def dom(hash_):
+        def dom(hash_, query=""):
             with tempfile.TemporaryDirectory() as td:
-                r = subprocess.run([chrome, "--headless=new", "--disable-gpu", "--no-first-run", f"--user-data-dir={td}", "--window-size=1440,900", "--virtual-time-budget=6000", "--dump-dom", base + hash_], capture_output=True, text=True, timeout=90)
+                r = subprocess.run([chrome, "--headless=new", "--disable-gpu", "--no-first-run", f"--user-data-dir={td}", "--window-size=1440,900", "--virtual-time-budget=6000", "--dump-dom", base + query + hash_], capture_output=True, text=True, timeout=90)
                 return r.stdout
+        def replay(steps, hash_=""):
+            m = re.search(r'<script type="application/json" id="replay-out">(.*?)</script>', dom(hash_, "?replay=" + steps), re.S)
+            return json.loads(m.group(1)) if m else []
         def pick(id_, fn, link="plant:gaultheria-shallon"): return f"#fk=function&fi={id_}&ik=link&ii=link:{link}>{id_}"
         def graph(d):
             cls = re.findall(r'class="node species[^"]*"', d); ng = sum(1 for c in cls if 'ghost' in c)
@@ -255,7 +261,13 @@ if "--browser" in sys.argv:
         FOCUS = "z:screen"; linked = [l for l in LK.values() if l["function"] == FOCUS and l["drawn"]]; unknown = [l for l in LK.values() if l["function"] == FOCUS and not l["drawn"]]
         try:
             d = dom("")
-            test("K0 no focus: the start screen — search, every function and species as a way in, three questions; no graph is drawn", 'id="search0"' in d and len(re.findall(r'<a class="srow" ', d)) == len(FN) and len(re.findall(r'<a class="prow" ', d)) == len(SP) and len(re.findall(r'<a class="srow wide" ', d)) == 3 and 'class="node' not in d and '<div id="bar" hidden' in d, f"function rows {len(re.findall(r'<a class=.srow. ', d))} · species rows {len(re.findall(r'<a class=.prow. ', d))}")
+            sw = re.findall(r'<button data-view="(\w+)" aria-pressed="(true|false)"', re.search(r'<div id="views"[^>]*>(.*?)</div>', d, re.S).group(1))
+            rows = re.findall(r'<tr class="[^"]*"><th data-focus="species=([^"]+)">', re.search(r'<table class="attr">(.*?)</table>', d, re.S).group(1) if 'class="attr"' in d else "")
+            test("K0 no focus, no view named: Knowledge opens on the table with a row for every species (no start screen); the switch is Table | Matrix | Network with Table pressed; no other view is in the page", sw == [("table", "true"), ("matrix", "false"), ("graph", "false")] and sorted(rows) == sorted(SP) and 'id="start"' not in d and 'id="search0"' not in d and 'class="node' not in d and 'class="matrix"' not in d and 'id="inspector" aria-label="Evidence" hidden' in d, f"switch {sw} · rows {len(rows)}")
+            d = dom("#v=graph"); g = graph(d); req = {a for f in FN.values() for r in f["requirements"] for a in r["alternatives"] if a in CO and not CO[a].get("no_plant_reaches")}
+            n_link = len(re.findall(r'<path class="edge suited_for [^"]*" data-ei', d)); n_req = len(re.findall(r'<path class="edge requires_trait [^"]*" data-ei', d)); lat = re.findall(r'<path class="edge (?:has_trait|grows_in) ([^"]*)" data-ei', d)
+            n_reqrec = sum(1 for f in FN.values() for r in f["requirements"] for a in r["alternatives"] if a in req)
+            test("K0b the Network without a focus is the X · Y · Z overview: every species, every function, the traits the functions require; one line per drawn function link and per requirement, the plants' claim lines to those traits kept latent; no line for a missing link; the three axes are named and the recorded-only functions marked", g == {"species": len(SP), "ghost_species": 0, "functions": len(FN), "concepts": len(req)} and n_link == sum(1 for l in LK.values() if l["drawn"]) and n_req == n_reqrec and len(lat) == sum(1 for e in CL.values() if e["concept"] in req) and all("latent" in c for c in lat) and all(f'<tspan class="ax">{ax}</tspan>' in d for ax in "XYZ") and len(re.findall(r'class="node function[^"]* rec ', d)) == len(re.findall(r'<text class="subl"[^>]*>recorded only</text>', d)) > 0, f"{g} · links {n_link} · requirements {n_req}/{n_reqrec} · latent {len(lat)}")
             d = dom(f"#fk=function&fi={FOCUS}"); g = graph(d)
             test("K1 Screen focus: the graph shows the function and its linked species only; the layers are offered, none is on; the inspector holds the function record", g == {"species": len(linked), "ghost_species": 0, "functions": 1, "concepts": 0} and len(re.findall(r'class="layer[^"]*" data-layer="(?:traits|gaps)" aria-pressed="false"', d)) == 2 and "Requires" in d and 'class="matrix"' not in d and 'class="attr"' not in d, str(g))
             d = dom(f"#fk=function&fi={FOCUS}&x=traits,gaps"); g = graph(d)
@@ -267,7 +279,7 @@ if "--browser" in sys.argv:
             first = re.search(r'<table class="attr">.*?<tbody><tr class="([^"]*)"><th[^>]*><i class="sci">([^<]+)</i>', d, re.S); req = re.findall(r'<th class="req[^"]*"[^>]*>([^<]+)', d)
             test("K1d the same focus in the table: the columns the function requires are marked and a linked species comes first", len(req) == len(FN[FOCUS]["required_facets"]) and first and "linked" in first.group(1) and 'class="node' not in d, f"required columns {req} · first row {first and first.group(2)}")
             d = dom(pick(FOCUS, None))
-            test("K2 link → evidence: inspector shows the use claim, the rule and the requirement check; the graph line is selected; the trace into a design is offered", "Use claims" in d and "KG-R1" in d and "Requirement check" in d and 'class="edge' in d and " sel" in d and "Sheared hedge" in d and "Trace this into a design" in d and "#species=gaultheria-shallon" in d, f"{len(d)} bytes")
+            test("K2 link → evidence: inspector shows the use claim, the rule and the requirement check; the graph line is selected; the trace into a design is offered", "Use claims" in d and "KG-R1" in d and "Requirement check" in d and 'class="edge' in d and " sel" in d and "Sheared hedge" in d and "Trace this into a design" in d and "#species=gaultheria-shallon" in d and re.search(r'<a class="trace" id="trace" href="[^"]*trace/#species=gaultheria-shallon"', d), f"{len(d)} bytes")
             d = dom(f"#fk=function&fi={FOCUS}&ik=link&ii=link:plant:achillea-millefolium>{FOCUS}")
             test("K3 unknown cell → honest 'not established': verdict, missing requirements, contrary claims", "No link is drawn" in d and "contradicted" in d and "contrary" in d, "")
             d = dom("#a=plant:vaccinium-ovatum&b=plant:gaultheria-shallon&tab=compare")
@@ -284,6 +296,18 @@ if "--browser" in sys.argv:
             a = next(a for a in AT.values() if a["species"] == sp and a["disagreement"])
             d = dom(f"#fk=species&fi={sp}&ik=attr&ii={a['id']}")
             test("K8 a V1 deep link to one attribute cell opens the graph with the cell's claims in the inspector and the way back to the species", "attribute cell" in d and "Sources disagree" in d and 'data-inspect=""' in d and 'class="claim"' in d, a["id"])
+            # one focus, three views, and the browser's history (V4)
+            sid = sp; steps = replay(f"focus:species={sid};view:matrix;view:graph;back;back;back;forward;q:zzz;back")
+            st = {i: (x["view"], x["focus"], x["pressed"]) for i, x in enumerate(steps)}; F = f"species={sid}"
+            test("K9 one focus is shared: focusing a species in the table keeps the table and marks its row; switching to the matrix and the Network keeps the focus, marks it there and names it in the toolbar", len(steps) == 10 and st[0] == ("table", None, "table") and st[1] == ("table", F, "table") and st[2] == ("matrix", F, "matrix") and st[3] == ("graph", F, "graph") and all(steps[i]["marked"] >= 1 and steps[i]["crumb"] == SP[sid]["scientific_name"] for i in (1, 2, 3)), str([st.get(i) for i in range(4)]))
+            test("K10 Back and Forward restore the view and the focus step by step: Network → matrix → table with the focus → table without it → forward again; a filter is a step too", len(steps) == 10 and st[4] == ("matrix", F, "matrix") and st[5] == ("table", F, "table") and st[6] == ("table", None, "table") and st[7] == ("table", F, "table") and steps[8]["q"] == "zzz" and "q=zzz" in steps[8]["hash"] and steps[9]["q"] == "" and st[9] == ("table", F, "table"), str([st.get(i) for i in range(4, 10)]) + f" · q {[x['q'] for x in steps[8:]]}")
+            arranged = [f for f in FN if any(l["function"] == f and l["drawn"] for l in LK.values())]
+            tr = [x["trace"] for x in steps]
+            d2 = dom(f"#fk=function&fi=z:scrim&v=matrix&ik=link&ii=link:plant:cercidiphyllum-japonicum>z:scrim")
+            m = re.search(r'<a class="trace" id="trace" href="([^"]*)" title="([^"]*)"', d2)
+            test("K11 the Trace action appears only with a species in context, opens the Decision Trace of that species, and for a function the engine does not arrange it says so and follows an arranged one", tr[0] is None and tr[6] is None and all(t and t.endswith(f"trace/#species={SP[sid]['slug']}") for t in (tr[1], tr[2], tr[3])) and m and "recorded only" in m.group(2) and "fn=" not in m.group(1) and "species=cercidiphyllum-japonicum" in m.group(1), f"{tr[:4]} · {m and m.group(1)}")
+            d = dom("#species=gaultheria-shallon&fn=z%3Aground_cover")
+            test("K12 a V3 trace address at the Knowledge address is sent on to the Decision Trace with its hash", 'class="pi-doc kn"' in d and 'data-species="gaultheria-shallon"' in d and 'data-fn="z:ground_cover"' in d and "Decision Trace" in d, f"{len(d)} bytes")
             browser_log.append(f"headless Chrome at {base}")
         except Exception as ex:
             test("K0 browser run", False, repr(ex))

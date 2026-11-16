@@ -38,10 +38,12 @@ function resolve() {
   const p = new URLSearchParams(location.hash.slice(1)); const d = S.d, K = S.K, E = S.E;
   let fnId = d.functions.some(f => f.id === p.get('fn')) ? p.get('fn') : T.FN; let bedId = p.get('bed'); const mineAsked = p.get('case') === 'mine' && !!S.mine;
   // a plant object named in the link fixes the bed and the function, read from the design itself
-  const cur = S.mine ? (S.mine.versions || []).find(v => v.id === S.mine.current_version_id) : null; let po = mineAsked && p.get('plant') && cur ? cur.plant_objects.find(o => o.id === p.get('plant')) || null : null;
+  // V4: the link says what it was made from — v=<version id> (Grow) or pv=<preview fingerprint> (Compose). The page reads that, never another arrangement.
+  const read = mineAsked ? (p.get('pv') ? { pv: p.get('pv') } : p.get('v') ? { v: p.get('v') } : null) : null;
+  const cur = S.mine && !read?.pv ? ((read?.v && (S.mine.versions || []).find(v => v.id === read.v)) || (S.mine.versions || []).find(v => v.id === S.mine.current_version_id)) : null; let po = mineAsked && p.get('plant') && cur ? cur.plant_objects.find(o => o.id === p.get('plant')) || null : null;
   if (po) { fnId = T.fnOfObject(po); bedId = po.bed_id; }
   let c = null;
-  if (mineAsked) c = T.buildCase(S.mine, K, E, { bedId, fn: fnId, origin: 'mine' });
+  if (mineAsked) c = T.buildCase(S.mine, K, E, { bedId, fn: fnId, origin: 'mine', read });
   if (!c && S.ref) c = T.buildCase(S.ref, K, E, { bedId, fn: fnId, origin: 'reference' });
   if (!c && S.mine) c = T.buildCase(S.mine, K, E, { fn: fnId, origin: 'mine' });
   if (po && (!c || c.origin !== 'mine' || c.bed.id !== po.bed_id)) po = null;
@@ -54,14 +56,15 @@ function linkTo(o = {}) {
   const bed = 'bed' in o ? o.bed : same ? c?.bed.id : null; const species = 'species' in o ? o.species : S.sp.slug; const plant = same && bed === c?.bed.id && species === S.sp.slug ? S.plant?.id : null;
   const p = new URLSearchParams();
   if (fn !== T.FN) p.set('fn', fn); if (species) p.set('species', species); if (mine) p.set('case', 'mine'); if (bed) p.set('bed', bed); if (plant) p.set('plant', plant);
+  if (mine && c?.origin === 'mine' && c.ref) { if (c.ref.kind === 'preview' && (c.ref.asked_fp || c.ref.generated)) p.set('pv', c.ref.fp); else if (c.ref.kind === 'version' && c.ref.asked_id && !c.ref.missing) p.set('v', c.ref.id); }   /* stay on the arrangement the reader came for */
   return `#${p}`;
 }
 
 function render(scroll = true) {
   resolve(); const d = S.d, sp = S.sp, fn = S.fn; const link = d.function_links.find(l => l.species === sp.id && l.function === fn.id);
-  document.title = `Knowledge · Planting Intelligence`;
+  document.title = `${sp.scientific_name} · ${fn.label} · Decision Trace · Planting Intelligence`;
   const step3 = relations(sp, fn, link);   // also prepares the pair block, shown after the five steps
-  $('#app').innerHTML = `<div class="pi-doc kn" data-fn="${esc(fn.id)}" data-species="${esc(sp.slug)}" data-case="${esc(S.c?.origin || '')}" data-bed="${esc(S.c?.bed.id || '')}">${mast(d)}${chain(sp, fn, link)}${caseHtml(sp, fn, link)}
+  $('#app').innerHTML = `<div class="pi-doc kn" data-fn="${esc(fn.id)}" data-species="${esc(sp.slug)}" data-case="${esc(S.c?.origin || '')}" data-bed="${esc(S.c?.bed.id || '')}">${mast(d, sp, fn, link)}${chain(sp, fn, link)}${caseHtml(sp, fn, link)}
     <nav class="pi-toc kn-toc" aria-label="The five steps, from a source to a design"><a href="#" data-goto="kn-sources"><b>1</b> Sources</a><a href="#" data-goto="kn-claims"><b>2</b> Claims</a><a href="#" data-goto="kn-relations"><b>3</b> Function</a><a href="#" data-goto="kn-access"><b>4</b> Selection</a><a href="#" data-goto="kn-evaluation"><b>5</b> Arrangement &amp; result</a><a href="#" data-goto="kn-pair" class="kn-toc-x">Between two species</a><a href="#" data-goto="kn-explore" class="kn-toc-y">Explore the records</a></nav>
     ${sources(sp, fn, link)}${claims(sp, fn, link)}${step3}${selection(sp, fn, link)}${arrangement(sp, fn, link)}
     <section class="pi-sec kn-step" id="kn-pair" tabindex="-1"><h2>Between two species</h2><p class="pi-sec-l">Four different things, and only the first is a record of the pair.</p><div>${S.pairHtml || ''}</div></section>
@@ -90,13 +93,15 @@ function onSearch(ev) {
 }
 
 // ---------------------------------------------------------------- masthead and the case
-function mast(d) {
-  const st = d.stats;
-  return `<header class="pi-mast">
-    <div><h1>What a design <em>rests on</em></h1>
-      <p class="pi-lede">Planting Intelligence does not conjure a garden. Every plant it places goes back to a named source, a recorded claim and a written rule, and every result comes with what is still unknown. Pick a decision and follow it the whole way.</p>
-      <div class="pi-cta"><a class="pi-btn primary" href="#" data-goto="kn-case">Follow one decision</a><a class="pi-btn" href="${PI.links.explorer()}">Explore the records yourself</a></div></div>
-    <p class="pi-prov"><b>${esc(PI.snapshotLine(d))}</b><br>${st.sources} sources · ${st.links_drawn} of ${st.function_links} plant-to-function links drawn<br>${st.unknown_by_verdict?.['contradicted by traits'] || 0} ruled out by a recorded trait · ${st.unknown_by_verdict?.['evidence missing'] || 0} with evidence missing</p>
+function mast(d, sp, fn, link) {
+  // V4: the trace is entered from a decision (a plant, a function, a bed), not read as an essay: a way back to the Explorer with the
+  // same focus, what the page is, and the snapshot it reads. The decision itself follows directly (the chain, then the case).
+  const back = link ? PI.links.explorerFocus('species', sp.id, { inspect: { kind: 'link', id: link.id }, view: 'matrix' }) : PI.links.explorer(sp.id);
+  return `<header class="pi-mast kn-mast">
+    <div><a class="kn-back" href="${esc(back)}" title="Back to the Explorer, on ${esc(sp.scientific_name)} and ${esc(fn.label)}"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M9.5 3.5 5 8l4.5 4.5"/></svg>Knowledge · Explorer</a>
+      <h1>Decision Trace</h1>
+      <p class="pi-lede">One decision, followed from its source to an evaluated bed: <span class="kn-path">source → claim → function → selection → arrangement → evaluation</span>.</p></div>
+    <p class="pi-prov"><b>${esc(PI.snapshotLine(d))}</b><br>${d.stats.sources} sources · ${d.stats.links_drawn} of ${d.stats.function_links} plant-to-function links drawn<br>${d.stats.unknown_by_verdict?.['contradicted by traits'] || 0} ruled out by a recorded trait · ${d.stats.unknown_by_verdict?.['evidence missing'] || 0} with evidence missing</p>
   </header>`;
 }
 const names = ids => ids.map(id => `<i>${esc(PC.species(S.d, id).scientific_name)}</i>`).join(' and ');
@@ -133,13 +138,14 @@ function caseHtml(sp, fn, link) {
   const po = S.plant ? `<p class="kn-case-po">The plant you selected, <span class="id">${esc(S.plant.id)}</span>, stands at ${S.plant.position_m.join(', ')} m${S.plant.role === 'accent' ? ' as an accent' : S.plant.role === 'screen-layer' ? ' in the second row' : ''}. It is ringed on the plan.</p>` : '';
   const ver = c.version && !c.dry ? ` Design version <span class="id">${esc(c.version.id || '')}</span>, recorded ${esc((c.version.created || '').slice(0, 10))}; checked and measured again on this page from the current snapshot${sec?.recorded ? (sec.same ? ', with the same result.' : ', and the result differs from the recorded one: the page shows the new one.') : '.'}` : c.dry ? ` Computed on this page with the seed and spacing Compose uses (seed ${esc(c.version?.seed ?? T.DRY_SEED)}); nothing is saved to your design.` : '';
   const stale = c.snapshot.design && c.snapshot.now && c.snapshot.design !== c.snapshot.now && !c.dry ? ` The design was made with the knowledge snapshot of ${esc(c.snapshot.design)}; this page reads ${esc(c.snapshot.now)}.` : '';
+  const readLine = c.origin === 'mine' && c.ref ? `<p class="kn-case-read ${c.ref.kind}${c.ref.changed || c.ref.missing || c.ref.inputs_changed ? ' changed' : ''}" data-case-read="${c.ref.kind}" data-case-ref="${esc(c.ref.kind === 'preview' ? c.ref.fp : c.ref.id)}" data-case-changed="${!!(c.ref.changed || c.ref.missing)}" data-case-inputs-changed="${!!c.ref.inputs_changed}" role="${c.ref.changed || c.ref.missing ? 'alert' : 'note'}"><b>${c.ref.kind === 'preview' ? 'Reading a preview' : `Reading generated version ${c.ref.n}`}</b> ${esc(T.refLine(c.ref))}</p>` : '';
   const other = S.mine && S.ref ? `<p class="kn-case-sw">${c.origin === 'mine' ? `<a href="${linkTo({ mine: false })}" data-follow>Use the demonstration garden instead</a>` : S.mineBeds.length ? `<a href="${linkTo({ mine: true, bed: S.mineBeds[0].id })}" data-follow>Trace this in your own design: ${esc(S.mine.name)} · ${esc(S.mineBeds[0].name)}</a>` : isArr ? `<span class="pi-none">Your design ${esc(S.mine.name)} has no bed asked to be ${esc(fn.label)}.</span>` : ''}${c.origin === 'mine' ? ` · <a href="${PI.links.design()}">${esc(PI.returnLabel() || 'Back to the design')}</a>` : ''}</p>` : '';
   const bedSw = isArr && c.beds.length > 1 ? `<div class="kn-sw"><span>Bed</span>${c.beds.map(b => `<a class="pi-chip" role="button" aria-pressed="${b.id === c.bed.id}" href="${linkTo({ bed: b.id })}" data-follow="bed" data-bed="${esc(b.id)}">${esc(b.name)}</a>`).join('')}</div>` : '';
   const spSw = `<div class="kn-sw"><span>Species</span>${d.species.map(s => { const o = T.decide(c, fn.id, s.id); return `<a class="pi-chip" role="button" aria-pressed="${s.id === sp.id}" href="${linkTo({ species: s.slug })}" data-follow="species" data-species="${esc(s.slug)}" data-outcome="${esc(o.outcome)}" title="${esc(s.common_names[0] || '')}: ${esc(T.OUTCOME[o.outcome].word)}"><i>${esc(s.scientific_name)}</i>${o.outcome === 'planted' ? '<small>planted</small>' : ''}</a>`; }).join('')}</div>`;
   const key = `<p class="kn-key"><span><i class="k-bed"></i>the bed</span>${isArr ? '<span><i class="k-crown"></i>mature crown, from a claimed spread</span>' : ''}${fn.id === 'z:screen' ? `<span><i class="k-edge"></i>screened edge</span>${c.screen.evaluation?.gaps?.length ? '<span><i class="k-gap"></i>not covered</span>' : ''}` : ''}${S.plant ? '<span><i class="k-pick"></i>the selected plant</span>' : ''}${(p.site.features || []).some(f => f.kind === 'existing-tree') ? '<span><i class="k-tree"></i>existing tree, canopy assumed</span>' : ''}</p>`;
   return `<section class="kn-case" id="kn-case" tabindex="-1">
     <div class="kn-case-d">${T.planSvg(c, { fn: fn.id, species: sp.id, plant: S.plant?.id })}${key}</div>
-    <div class="kn-case-t"><h2>The decision being followed</h2>
+    <div class="kn-case-t"><h2>The decision being followed</h2>${readLine}
       <p class="kn-case-l">${head}</p>${about}${po}
       <p class="kn-case-m">${w ? `A ${w} × ${h} m site in ` : ''}${where}${c.said ? `, described in one sentence: “${esc(c.said)}”` : ''}.${ver}${stale}</p>${other}
       <div class="kn-sws">${fnSw}${bedSw}${spSw}</div>
@@ -329,17 +335,17 @@ const r2 = n => Math.round(n * 100) / 100;
 // ---------------------------------------------------------------- ways into the records
 function explore(sp, fn) {
   const d = S.d; const L = PI.links;
-  return `<section class="pi-sec kn-step" id="kn-explore" tabindex="-1"><h2>Explore the records</h2><p class="pi-sec-l">The graph, the matrix and the table are three views of the same records, not three databases.</p><div>
+  return `<section class="pi-sec kn-step" id="kn-explore" tabindex="-1"><h2>Explore the records</h2><p class="pi-sec-l">The table, the matrix and the network are three views of the same records, not three databases.</p><div>
     <form id="kn-search" class="kn-search" role="search"><label for="kn-q">Search a plant, a spatial function or a trait</label><div><input id="kn-q" name="q" type="search" autocomplete="off" spellcheck="false" placeholder="${esc([sp.common_names[0], fn.label, fn.requirements[fn.requirements.length - 1]?.alternative_labels[0]].filter(Boolean).map(x => x.toLowerCase()).join(', '))}…"><button class="pi-btn primary" type="submit">Open</button></div><p id="kn-search-n" class="pi-led-n" aria-live="polite"></p></form>
     <h3 class="pi-h3">Start from a spatial function</h3>
     <ul class="kn-fns">${d.functions.map(f => `<li><a href="${L.explorerFocus('function', f.id)}"><b>${esc(f.label)}</b><span>${esc(f.definition)}</span><small>${f.n_linked} linked · ${f.n_unknown} unknown</small></a></li>`).join('')}</ul>
     <h3 class="pi-h3">Or choose a view</h3>
     <ul class="pi-list kn-views-l">
-      <li><a href="${L.explorer(null, null, 'graph')}"><b>Relationship graph</b></a> One plant, function or trait at the centre; you open its relationships one layer at a time.</li>
-      <li><a href="${L.explorer(null, null, 'matrix')}"><b>Spatial function matrix</b></a> ${d.species.length} species by ${d.functions.length} functions. Every cell opens its evidence; a blank is a gap, not a verdict.</li>
-      <li><a href="${L.explorer(null, null, 'table')}"><b>Attribute table</b></a> A GIS-style table of ${d.facets.length} fields per species, with every value and where sources disagree.</li>
+      <li><a href="${L.explorerFocus('species', sp.id, { view: 'table' })}"><b>Table</b></a> Plants by attributes: ${d.facets.length} fields per species, with every value and where sources disagree.</li>
+      <li><a href="${L.explorerFocus('species', sp.id, { view: 'matrix' })}"><b>Matrix</b></a> ${d.species.length} species by ${d.functions.length} spatial functions. Every cell opens its evidence; no link is a gap, not a verdict.</li>
+      <li><a href="${L.explorerFocus('species', sp.id, { view: 'graph' })}"><b>Network</b></a> Plants, attributes and spatial functions with the records that join them; a focus opens its relationships one layer at a time.</li>
       <li><a href="${L.explorer(null, null, 'compare')}"><b>Compare A and B</b></a> Two species: shared attributes, recorded relationships, spatial complementarity and unknowns, kept apart.</li>
-      <li><a href="${L.neural()}"><b>Neural view</b></a> The same claims as one immersive three-dimensional network.</li>
+      <li><a href="${L.neural(sp.id)}"><b>3D network</b></a> The same claims as one immersive three-dimensional network.</li>
     </ul>
-    <p class="kn-go"><a href="${L.research()}">Research and contribution</a><a href="${L.method()}">Method and limits</a><a href="${L.library()}">Plant Library</a></p></div></section>`;
+    <p class="kn-go"><a href="${L.method()}">Research &amp; Method</a><a href="${L.how()}">How the engine works</a><a href="${L.library()}">Plant Library</a></p></div></section>`;
 }

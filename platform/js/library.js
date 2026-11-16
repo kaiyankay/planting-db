@@ -1,6 +1,7 @@
 // Plant Library — the atlas of the species in the published knowledge snapshot and one profile per species.
 //   #                     the atlas (optionally #form=Tree&fn=z:screen)
-//   #species=<slug>       a Plant Profile
+//   #species=<slug>       a Plant Profile; &tab=design|growth|evidence|unknown picks its tab (design when absent),
+//                         &open=<facet or function id> opens one row of that tab on its claims
 // The page reads brain/data/explorer.json through platform.js and never writes to it. It borrows two things from the Garden
 // Studio so that a profile shows what the design engine does with the record: the knowledge adapter (design/js/knowledge.js:
 // size proxy, gate vocabulary) and the plan symbol (design/js/render.js). The only thing this page stores is the list of species
@@ -9,7 +10,7 @@ import * as PI from './platform.js';
 import * as PC from './plantcard.js';
 
 const $ = s => document.querySelector(s); const esc = PI.esc;
-const S = { d: null, imgs: null, K: null, R: null, form: null, fn: null };
+const S = { d: null, imgs: null, K: null, R: null, form: null, fn: null, q: '', shown: null, tab: 'design' };
 
 (async function boot() {
   try {
@@ -27,11 +28,16 @@ const symbolOf = id => { try { return S.R.symbol(S.R.form(S.K, id, null), id, 1,
 
 function route(scroll = true) {
   const p = new URLSearchParams(location.hash.slice(1)); const slug = p.get('species'); const s = slug ? PC.species(S.d, slug) : null;
-  S.form = p.get('form'); S.fn = p.get('fn');
+  S.form = p.get('form'); S.fn = p.get('fn'); const tab = PC.TABS.some(t => t[0] === p.get('tab')) ? p.get('tab') : 'design';
+  if (s && S.shown === s.slug && document.querySelector('.pi-profile')) { showTab(tab); openRow(p.get('open')); return; }   // a tab of the profile already on the page: no re-render, open rows stay open
+  S.tab = tab; S.shown = s ? s.slug : null;
   if (slug && !s) { $('#app').innerHTML = `<div class="pi-crumb"><a href="${PI.links.library()}">← Plant Library</a></div><p class="pi-loading">No species “${esc(slug)}” in this knowledge snapshot. The Library holds ${S.d.species.length} species.</p>`; return; }
   if (s) renderProfile(s); else renderAtlas();
   if (scroll) { scrollTo({ top: 0 }); $('#app').focus({ preventScroll: true }); }
+  if (s) openRow(p.get('open'));
 }
+/** #species=<slug>&tab=growth&open=<facet id | function id>: one row of the profile opened on its claims */
+function openRow(id) { if (!id) return; const el = [...document.querySelectorAll('details[data-facet], details[data-function]')].find(e => (e.dataset.facet || e.dataset.function) === id); if (!el || el.closest('[hidden]')) return; el.open = true; el.scrollIntoView({ block: 'center' }); }
 
 // ---------------------------------------------------------------- atlas
 function renderAtlas() {
@@ -42,23 +48,28 @@ function renderAtlas() {
   const show = d.species.filter(s => (!S.form || s.growth_form_label === S.form) && (!S.fn || linked(S.fn).includes(s.id)));
   const href = (form, fn) => { const p = new URLSearchParams(); if (form) p.set('form', form); if (fn) p.set('fn', fn); const h = p.toString(); return h ? `#${h}` : '#'; };
   const note = s => { const n = des?.planted_species.includes(s.id) ? `<span>planted in ${esc(des.name)}</span>` : ''; const c = cons.has(s.id) ? '<span class="wait">being considered for your design</span>' : ''; return n || c ? `${n}${n && c ? ' · ' : ''}${c}` : ''; };
+  const gridHtml = () => { const c = show.filter(s => { const q = S.q.trim().toLowerCase(); return !q || [s.scientific_name, ...s.common_names, s.family, s.growth_form_label].some(t => String(t).toLowerCase().includes(q)); });
+    return { n: c.length, html: c.map(s => PC.cardHtml(d, s.id, S.imgs, { symbol: symbolOf(s.id), note: note(s) })).join('') || `<p class="lib-empty">${S.q.trim() ? `No species in this snapshot matches “${esc(S.q.trim())}”${S.form || S.fn ? ' with these filters' : ''}.` : `No species in this snapshot is both ${esc(S.form || '')} and linked to ${esc(d.functions.find(f => f.id === S.fn)?.label || '')}.`} That is a gap in the records, not a statement about the plants. <a href="#">Show all</a></p>` }; };
+  const g = gridHtml();
   $('#app').innerHTML = `
     <header class="pi-mast">
-      <div><h1>Plant <em>Library</em></h1>
-        <p class="pi-lede">${d.species.length} species recorded for planting in Metro Vancouver. Each profile is read from the same claims the Garden Studio designs with: what the sources say, where they disagree, and what nobody has recorded yet.</p></div>
-      <p class="pi-prov"><b>${esc(PI.snapshotLine(d))}</b><br>${d.stats.attribute_cells} recorded fields · ${d.stats.cells_not_recorded} not recorded · ${d.stats.cells_with_disagreement} where sources disagree<br>${d.stats.links_drawn} of ${d.stats.function_links} plant-to-function links drawn · ${d.stats.sources} sources</p>
+      <div><h1>Plants</h1>
+        <p class="pi-lede">${d.species.length} species recorded for planting in Metro Vancouver. Read a plant first; the claims behind every line open when you want them.</p></div>
     </header>
     <div class="lib-filter" role="group" aria-label="Filter the library">
+      <label class="lib-search"><span class="sr">Search the plants</span><svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="m10.5 10.5 3 3"/></svg><input type="search" id="lib-q" placeholder="Search by name" value="${esc(S.q)}" autocomplete="off"></label>
       <span class="lib-fl">Growth form</span>
-      <a class="pi-chip" role="button" aria-pressed="${!S.form}" href="${href(null, S.fn)}">All<small>${d.species.length}</small></a>
+      <a class="pi-chip" role="button" aria-pressed="${!S.form}" href="${href(null, S.fn)}">All</a>
       ${forms.map(f => `<a class="pi-chip" role="button" aria-pressed="${S.form === f}" href="${href(S.form === f ? null : f, S.fn)}">${esc(f)}<small>${nForm(f)}</small></a>`).join('')}
       <span class="lib-gap"></span><span class="lib-fl">Linked to</span>
       ${d.functions.map(f => `<a class="pi-chip" role="button" aria-pressed="${S.fn === f.id}" href="${href(S.form, S.fn === f.id ? null : f.id)}" title="${esc(f.definition)}">${esc(f.label)}<small>${linked(f.id).length}</small></a>`).join('')}
-      <span class="lib-count">${show.length} of ${d.species.length} shown</span>
+      <span class="lib-count" id="lib-count" aria-live="polite">${g.n} of ${d.species.length} shown</span>
     </div>
     ${des ? `<p class="lib-design"><span>Your design <b>${esc(des.name)}</b> is at ${esc(des.stage_label)}${des.plants ? `, with ${des.plants} plants of ${des.planted_species.length} species` : ''}.</span>${cons.size ? `<span>${cons.size} species being considered.</span>` : ''}<a href="${PI.links.design()}">${esc(PI.returnLabel(des))}</a></p>` : ''}
-    <div class="lib-grid">${show.map(s => PC.cardHtml(d, s.id, S.imgs, { symbol: symbolOf(s.id), note: note(s) })).join('') || `<p class="lib-empty">No species in this snapshot is both ${esc(S.form || '')} and linked to ${esc(d.functions.find(f => f.id === S.fn)?.label || '')}. That is a gap in the records, not a statement about the plants. <a href="#">Show all</a></p>`}</div>
-    ${S.imgs?.art && Object.keys(S.imgs.art).length ? `<p class="lib-art">The illustrations are AI-generated editorial artwork. They are not botanical plates and not evidence; every name and fact on these pages is read from the knowledge snapshot. Each profile also shows a credited reference photograph.</p>` : ''}`;
+    <div class="lib-grid" id="lib-grid">${g.html}</div>
+    ${S.imgs?.art && Object.keys(S.imgs.art).length ? `<p class="lib-art">The illustrations are AI-generated editorial artwork. They are not botanical plates and not evidence; every name and fact on these pages is read from the knowledge snapshot. Each profile also shows a credited reference photograph.</p>` : ''}
+    <p class="lib-prov">${esc(PI.snapshotLine(d))} · ${d.stats.attribute_cells} recorded fields · ${d.stats.cells_not_recorded} not recorded · ${d.stats.cells_with_disagreement} where sources disagree · ${d.stats.sources} sources</p>`;
+  $('#lib-q').addEventListener('input', ev => { S.q = ev.target.value; const g = gridHtml(); $('#lib-grid').innerHTML = g.html; $('#lib-count').textContent = `${g.n} of ${d.species.length} shown`; });
 }
 
 // ---------------------------------------------------------------- profile
@@ -74,14 +85,20 @@ function studioHtml(s) {
 function renderProfile(s) {
   const d = S.d; const des = PI.activeDesign(); const i = d.species.indexOf(s); const prev = d.species[(i + d.species.length - 1) % d.species.length], next = d.species[(i + 1) % d.species.length];
   document.title = `${s.scientific_name} (${s.common_names[0] || ''}) · Plant Library`;
-  $('#app').innerHTML = `<div class="pi-crumb"><a href="${PI.links.library()}#">← Plant Library</a><span class="pi-pn"><a href="${PI.links.profile(prev.id)}" title="previous species">‹ <i>${esc(prev.scientific_name)}</i></a><a href="${PI.links.profile(next.id)}" title="next species"><i>${esc(next.scientific_name)}</i> ›</a></span></div>`
-    + PC.detailHtml(d, s.id, S.imgs, { design: des, isConsidered: PI.considered.has(s.id), returnLabel: PI.returnLabel(des), symbol: symbolOf(s.id), studio: studioHtml(s) })
-    + `<nav class="pi-next pi-profile" aria-label="More species"><a href="${PI.links.profile(prev.id)}"><span>Previous</span><i>${esc(prev.scientific_name)}</i></a><a href="${PI.links.profile(next.id)}"><span>Next</span><i>${esc(next.scientific_name)}</i></a></nav>`;
+  $('#app').innerHTML = `<div class="pi-crumb"><a href="${PI.links.library()}#">← Plant Library</a><span class="pi-pn"><a href="${PI.links.profile(prev.id)}" title="previous species: ${esc(prev.scientific_name)}">‹ ${esc(prev.common_names[0] || prev.scientific_name)}</a><a href="${PI.links.profile(next.id)}" title="next species: ${esc(next.scientific_name)}">${esc(next.common_names[0] || next.scientific_name)} ›</a></span></div>`
+    + PC.detailHtml(d, s.id, S.imgs, { design: des, isConsidered: PI.considered.has(s.id), returnLabel: PI.returnLabel(des), symbol: symbolOf(s.id), studio: studioHtml(s), tab: S.tab })
+    + `<nav class="pi-next pi-profile" aria-label="More species"><a href="${PI.links.profile(prev.id)}"><span>Previous</span><b>${esc(prev.common_names[0] || prev.scientific_name)}</b><i>${esc(prev.scientific_name)}</i></a><a href="${PI.links.profile(next.id)}"><span>Next</span><b>${esc(next.common_names[0] || next.scientific_name)}</b><i>${esc(next.scientific_name)}</i></a></nav>`;
 }
 
+function showTab(tab) {
+  S.tab = tab;
+  document.querySelectorAll('.pi-panel').forEach(el => { el.hidden = el.id !== `tab-${tab}`; });
+  document.querySelectorAll('.pi-tabs [role="tab"]').forEach(a => a.setAttribute('aria-selected', String(a.dataset.tab === tab)));
+}
 function onClick(ev) {
   const b = ev.target.closest('[data-consider]'); if (!b) return;
   const slug = b.dataset.consider; if (PI.considered.has(slug)) PI.considered.remove(slug); else PI.considered.add(slug);
-  const s = PC.species(S.d, slug); const y = scrollY; renderProfile(s); scrollTo({ top: y });
+  const s = PC.species(S.d, slug); const y = scrollY; const open = [...document.querySelectorAll('details[open][data-facet], details[open][data-function]')].map(e => e.dataset.facet ? `[data-facet="${e.dataset.facet}"]` : `[data-function="${e.dataset.function}"]`);
+  renderProfile(s); open.forEach(q => document.querySelector(`details${q}`)?.setAttribute('open', '')); scrollTo({ top: y });
   document.querySelector('[data-consider]')?.focus({ preventScroll: true });
 }

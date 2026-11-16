@@ -1,15 +1,19 @@
-// Planting Intelligence · Knowledge Explorer (Phase 1 brief 2026-11-07; reorganised for Platform V2, 2026-11-14).
-// One selection state, ONE working view at a time — Relationship graph · Spatial function matrix · Attribute table · A/B comparison —
-// and the Evidence inspector as a contextual panel beside it. The default entry is a start screen (search, the functions, the species,
-// three questions), never the whole graph; the graph grows only by the layers the reader adds. Every view reads the same projection
+// Planting Intelligence · Knowledge (the Explorer; Phase 1 brief 2026-11-07, Platform V2 2026-11-14, V4 2026-11-15).
+// ONE database, three views switched in one state — Table | Matrix | Network — and the Evidence inspector as a contextual panel
+// beside them. There is no start screen: Knowledge opens on the table, with real records. Every view reads the same projection
 // (brain/data/explorer.json, tools/build_explorer.py) and the same state S; a click anywhere changes S and what is on screen is
-// re-rendered from it. Nothing about the plants is written here. The state lives in the URL hash, so a view can be shared:
-//   fk, fi      the focus: species · function · concept (fi = its id) or pair (with a and b)
+// re-rendered from it. Nothing about the plants is written here. The state lives in the URL hash, so a view can be shared and
+// Back / Forward walk through it:
+//   fk, fi      the focus, shared by the three views: species · function · concept (fi = its id) or pair (with a and b)
 //   a, b        the two species of the comparison
 //   ik, ii      the inspected record: link · attr · concept_link · relation · species · function · concept
-//   v           the working view: graph | matrix | table | compare.  Without v, a focus opens the graph, `tab=compare` (the old inspector
-//               tab) opens the comparison, and nothing at all opens the start screen — so every V1 link still lands where it did.
-//   x           layers added to the graph, comma-separated: traits · gaps · relations · all · a knowledge-group id (model.js graphFor)
+//   v           the view: table | matrix | graph (the Network; `network` is read as graph) | compare (a secondary action, not a tab).
+//               Without v: a focus opens the Network (as every V1–V3 link does), `tab=compare` the comparison, a record its own
+//               view, and nothing at all the table.
+//   q           the species filter of the table and the matrix
+//   x           layers added to the Network around a focus, comma-separated: traits · gaps · relations · a knowledge-group id
+// The Network without a focus is the X · Y · Z overview (model.js graphFor): species, spatial functions, the traits the functions
+// require, and the records between them. Only records are drawn. A Trace action appears when a species is in context.
 import { load } from './model.js';
 import * as PI from '../../../platform/js/platform.js';   // platform bar, cross-module links
 import * as PC from '../../../platform/js/plantcard.js';   // the shared plant card
@@ -28,10 +32,11 @@ const IC = {
   plus: ic('<path d="M8 3.5v9M3.5 8h9"/>'), check: ic('<path d="m3.5 8.5 3 3 6-7"/>'), x: ic('<path d="m4 4 8 8M12 4l-8 8"/>'),
   swap: ic('<path d="M3 5.5h9.5M10 3l2.5 2.5L10 8M13 10.5H3.5M6 8 3.5 10.5 6 13"/>'),
   search: ic('<circle cx="7" cy="7" r="4.3"/><path d="m10.3 10.3 3.2 3.2"/>'), back: ic('<path d="M9.5 3.5 5 8l4.5 4.5"/>'),
+  trace: ic('<circle cx="3.5" cy="8" r="1.6"/><circle cx="12.5" cy="8" r="1.6"/><path d="M5.1 8h5.8M8.6 5.6 11 8l-2.4 2.4"/>'), cube: ic('<path d="M8 2 13.2 5v6L8 14 2.8 11V5L8 2Zm0 6 5.2-3M8 8v6M8 8 2.8 5"/>'),
 };
-const VIEWS = [['graph', 'Graph', 'Relationships around one focus, expanded on purpose'], ['matrix', 'Matrix', 'Every species against the spatial functions'], ['table', 'Table', 'Every attribute of every species, and what is not recorded'], ['compare', 'Compare', 'Two plants: shared attributes, recorded relations, complementarity, unknowns']];
-const VIEW_IDS = VIEWS.map(v => v[0]);
-const LAYER_KEYS = new Set(['traits', 'gaps', 'relations', 'all']);
+const VIEWS = [['table', 'Table', 'Plants × attributes: what is recorded for each plant, and what is not'], ['matrix', 'Matrix', 'Plants × spatial functions: which links rest on a recorded use, which are inferred, which are missing'], ['graph', 'Network', 'Plants (X), attributes (Y) and spatial functions (Z), and the records that join them']];
+const VIEW_IDS = [...VIEWS.map(v => v[0]), 'compare'];
+const LAYER_KEYS = new Set(['traits', 'gaps', 'relations']);
 const KIND_WORD = { species: 'Species', function: 'Spatial function', concept: 'Concept', pair: 'Pair' };
 const S = { M: null, focus: null, a: null, b: null, inspect: null, view: null, x: new Set(), inspClosed: false, q: '', sort: null, groups: new Set(), identity: false, pan: { x: 0, y: 0, k: 1 }, layout: null, layoutKey: '', imgs: null,
   push: false, hash: null, prev: null, layers: new Map() };   /* push: the next change of the address is a step the Back button returns to · prev: the focus before this one · layers: what was opened around each record */
@@ -43,14 +48,28 @@ const fkey = f => f && f.kind !== 'pair' ? `${f.kind}=${f.id}` : null;
     const url = new URLSearchParams(location.search).get('data') || '../data/explorer.json';
     S.M = await load(url);
     S.groups = new Set(S.M.groups.map(g => g.id));
-    PI.mountTop($('#pitop'), { active: 'knowledge', section: 'explore', sub: PI.exploreSwitch('explorer'), snapshot: S.M.d }); PI.loadImages().then(i => { S.imgs = i; renderInspector(); });
+    PI.mountTop($('#pitop'), { active: 'knowledge', snapshot: S.M.d }); PI.loadImages().then(i => { S.imgs = i; renderInspector(); });
     readHash(); initUi(); update();
     const onNav = () => { const h = location.hash || ''; if (h === S.hash) return; const was = S.focus; readHash(); if (fkey(was) && fkey(S.focus) && fkey(was) !== fkey(S.focus)) S.prev = was; update(); };   // Back / Forward, or an address typed by hand
     window.addEventListener('hashchange', onNav); window.addEventListener('popstate', onNav);
-    window.explorer = { S, M: S.M, update, setFocus, setInspect, setAB, setView, toggleLayer, act, renderTable, graphFor: () => S.M.graphFor(S.focus, S.a, S.b, S.x) };   // for tests and the console
+    window.explorer = { S, M: S.M, update, setFocus, setInspect, setAB, setView, toggleLayer, act, renderTable, traceContext, graphFor: () => S.M.graphFor(S.focus, S.a, S.b, S.x) };   // for tests and the console
     $('#loading').classList.add('gone');
+    const rp = new URLSearchParams(location.search).get('replay'); if (rp) replay(rp);
   } catch (e) { $('#err').textContent = `could not load: ${e.message}\n\nserve the planting-db root:  python3 -m http.server 8766  → http://localhost:8766/brain/explorer/`; console.error(e); }
 })();
+
+/** for tests (tools/explorer_tests.py): ?replay=focus:species=<id>;view:matrix;back;forward;q:<text> walks the page through real
+ *  state changes and history steps, and leaves what the page showed after each one in <script id="replay-out"> */
+async function replay(steps) {
+  const out = []; const snap = step => out.push({ step, hash: location.hash, view: S.view, focus: fkey(S.focus), q: S.q, pressed: document.querySelector('#views button[aria-pressed="true"]')?.dataset.view || null, crumb: $('#crumb .c b')?.textContent || null, marked: document.querySelectorAll('#stage .view:not([hidden]) tr.focus, #stage .view:not([hidden]) .node.focus').length, trace: $('#trace')?.getAttribute('href') || null });
+  snap('start');
+  for (const st of steps.split(';')) {
+    const [k, ...r] = st.split(':'); const v = r.join(':');
+    if (k === 'view') setView(v); else if (k === 'focus') { const [fk, ...fi] = v.split('='); setFocus(fk === 'none' ? null : fk, fi.join('=')); } else if (k === 'back') history.back(); else if (k === 'forward') history.forward(); else if (k === 'q') { S.q = v; S.push = true; update(); }
+    await new Promise(res => setTimeout(res, 200)); snap(st);
+  }
+  const el = document.createElement('script'); el.type = 'application/json'; el.id = 'replay-out'; el.textContent = JSON.stringify(out); document.body.append(el);
+}
 
 // ------------------------------------------------------------------ state ↔ url
 function readHash() {
@@ -62,8 +81,9 @@ function readHash() {
   const ik = p.get('ik'), ii = p.get('ii');
   S.inspect = ik && ii && inspectable(ik, ii) ? { kind: ik, id: ii } : null;
   S.x = new Set((p.get('x') || '').split(',').filter(k => LAYER_KEYS.has(k) || M.GR.has(k))); if (fkey(S.focus)) S.layers.set(fkey(S.focus), new Set(S.x));
-  const v = p.get('v');
-  S.view = VIEW_IDS.includes(v) ? v : S.focus ? 'graph' : p.get('tab') === 'compare' ? 'compare' : S.inspect ? viewForRecord(S.inspect) : null;
+  const v = p.get('v') === 'network' ? 'graph' : p.get('v');
+  S.view = VIEW_IDS.includes(v) ? v : S.focus ? 'graph' : p.get('tab') === 'compare' ? 'compare' : S.inspect ? viewForRecord(S.inspect) : 'table';
+  S.q = p.get('q') || ''; const tq = $('#tq'); if (tq && tq.value !== S.q) tq.value = S.q;
   S.inspClosed = false;
 }
 /** a record named in the URL without a focus or a view: the view it belongs to (a graph record brings its own focus) */
@@ -78,32 +98,34 @@ function writeHash() {
   if (S.focus) { p.set('fk', S.focus.kind); if (S.focus.id) p.set('fi', S.focus.id); }
   if (S.a) p.set('a', S.a); if (S.b) p.set('b', S.b);
   if (S.inspect) { p.set('ik', S.inspect.kind); p.set('ii', S.inspect.id); }
-  if (S.view && !(S.view === 'graph' && S.focus)) p.set('v', S.view);   // a focus alone opens the graph, as every V1 link does
+  if (!(S.view === 'graph' && S.focus) && !(S.view === 'table' && !S.focus && !S.inspect)) p.set('v', S.view);   // a focus alone opens the Network, as every V1–V3 link does; nothing at all is the table
+  if (S.q.trim()) p.set('q', S.q.trim());
   if (S.x.size) p.set('x', [...S.x].join(','));
   const h = p.toString() ? '#' + p.toString() : location.pathname + location.search; if ((location.hash || location.pathname + location.search) !== h) history[S.push && S.hash !== null ? 'pushState' : 'replaceState'](null, '', h);
   S.push = false; S.hash = location.hash || '';
 }
 function inspectable(kind, id) { const M = S.M; return kind === 'link' ? M.LK.has(id) : kind === 'attr' ? M.AT.has(id) : kind === 'concept_link' ? M.CL.has(id) : kind === 'relation' ? M.RE.has(id) : kind === 'species' ? M.SP.has(id) : kind === 'function' ? M.FN.has(id) : kind === 'concept' ? M.CO.has(id) : false; }
-/** focus a record. From the start screen and from the comparison the graph opens; in the matrix and the table the view stays and marks it. */
+/** focus a record. The focus is shared: the table, the matrix and the Network keep their view and mark it; from the comparison the Network opens. */
 function setFocus(kind, id) {
   const was = S.focus; if (fkey(was)) S.layers.set(fkey(was), new Set(S.x));   // what was opened around a record is kept for when the focus returns to it
   S.focus = kind ? { kind, id } : null; if (fkey(was) && fkey(S.focus) && fkey(was) !== fkey(S.focus)) S.prev = was; else if (!S.focus) S.prev = null;
-  if (kind !== 'pair') S.inspect = null; S.x = new Set(S.layers.get(fkey(S.focus)) || []); S.inspClosed = false; if (kind && (kind === 'pair' || S.view === null || S.view === 'compare')) S.view = 'graph'; S.push = true; update();
+  if (kind !== 'pair') S.inspect = null; S.x = new Set(S.layers.get(fkey(S.focus)) || []); S.inspClosed = false; if (kind && (kind === 'pair' || S.view === 'compare')) S.view = 'graph'; S.push = true; update();
 }
 function setInspect(kind, id) { S.inspect = kind ? { kind, id } : null; S.inspClosed = false; update(); }
-function setView(v) { S.view = VIEW_IDS.includes(v) ? v : null; if (S.view === 'compare' && !S.a && S.focus?.kind === 'species' && S.focus.id !== S.b) S.a = S.focus.id; S.inspClosed = false; S.push = true; update(); }
+function setView(v) { S.view = VIEW_IDS.includes(v) ? v : 'table'; if (S.focus?.kind === 'pair' && S.view !== 'graph' && S.view !== 'compare') S.focus = null; if (S.view === 'compare' && !S.a && S.focus?.kind === 'species' && S.focus.id !== S.b) S.a = S.focus.id; S.inspClosed = false; S.push = true; update(); }
 function toggleLayer(k) { if (S.x.has('traits') && S.M.GR.has(k)) { S.x.delete('traits'); for (const g of S.M.groups) if (g.id !== k) S.x.add(g.id); } else if (S.x.has(k)) S.x.delete(k); else S.x.add(k); if (fkey(S.focus)) S.layers.set(fkey(S.focus), new Set(S.x)); update(); }   // `traits` on a species means every group: taking one group off leaves the others
 function setAB(which, id) { if (which === 'a') { if (S.b === id) S.b = S.a; S.a = S.a === id ? null : id; } else { if (S.a === id) S.a = S.b; S.b = S.b === id ? null : id; } if (S.focus?.kind === 'pair' && !(S.a && S.b)) S.focus = null; update(); }
 function pick(which, v) { if (which === 'a') { if (v && v === S.b) S.b = S.a; S.a = v; } else { if (v && v === S.a) S.a = S.b; S.b = v; } if (S.focus?.kind === 'pair' && !(S.a && S.b)) S.focus = null; update(); }
-const inspectorOpen = () => S.view !== null && !S.inspClosed && !!(S.inspect || (S.focus && S.view !== 'compare'));
+const inspectorOpen = () => !S.inspClosed && !!(S.inspect || (S.focus && S.view !== 'compare'));
 function update() {
   writeHash(); renderFrame(); renderInspector();   // the panel is shown or hidden first, so the working view measures the rectangle it will really have
-  if (S.view === null) renderStart(); else if (S.view === 'graph') renderGraph(); else if (S.view === 'matrix') renderMatrix(); else if (S.view === 'table') renderTable(); else renderCompare();
+  if (S.view === 'graph') renderGraph(); else if (S.view === 'matrix') renderMatrix(); else if (S.view === 'table') renderTable(); else renderCompare();
 }
 
 // ------------------------------------------------------------------ ui wiring
 function initUi() {
   $('#views').innerHTML = VIEWS.map(([k, l, t]) => `<button data-view="${k}" aria-pressed="false" title="${esc(t)}">${IC[k]}<span>${l}</span></button>`).join('');
+  document.body.addEventListener('keydown', ev => { if ((ev.key === 'Enter' || ev.key === ' ') && ev.target.closest?.('#svg .node')) { ev.preventDefault(); ev.target.closest('.node').dispatchEvent(new MouseEvent('click', { bubbles: true })); } });
   $('#howbody').innerHTML = howHtml();
   document.body.addEventListener('click', ev => {
     if (!ev.target.closest('#how')) $('#how').open = false;
@@ -120,7 +142,7 @@ function initUi() {
   wireSearch($('#search'), $('#results'));
   document.addEventListener('keydown', ev => {
     const typing = ['INPUT', 'SELECT', 'TEXTAREA'].includes(ev.target.tagName);
-    if (ev.key === '/' && !typing) { (S.view === null ? $('#search0') : $('#search'))?.focus(); ev.preventDefault(); return; }
+    if (ev.key === '/' && !typing) { $('#search')?.focus(); ev.preventDefault(); return; }
     if (ev.key !== 'Escape' || typing) return;
     if ($('#how').open) $('#how').open = false;
     else if (inspectorOpen()) act('close-insp');
@@ -128,7 +150,7 @@ function initUi() {
   });
   initGraphInteraction();
 }
-/** the same search on the start screen and in the toolbar: species, functions and the concepts a plant reaches; Enter focuses the hit */
+/** the search of the toolbar: species, functions and the concepts a plant reaches; Enter focuses the hit */
 function wireSearch(inp, res) {
   let hi = -1, cur = [];
   const show = () => { const q = inp.value.trim(); res.innerHTML = cur.length ? cur.map((n, i) => `<div class="${i === hi ? 'hi' : ''}" data-i="${i}"><span>${n.kind === 'species' ? `<i class="sci">${esc(n.label)}</i>` : esc(n.label)}${n.sub ? ` <span class="faint">· ${esc(n.sub)}</span>` : ''}</span><small>${esc(n.kind)}</small></div>`).join('') : q.length >= 2 ? `<div class="none">Nothing in this snapshot matches “${esc(q)}”. Try part of a plant name, a trait or a spatial function.</div>` : ''; res.classList.toggle('open', cur.length > 0 || q.length >= 2); };
@@ -139,14 +161,13 @@ function wireSearch(inp, res) {
   res.addEventListener('mousedown', ev => { const d = ev.target.closest('[data-i]'); if (d) { ev.preventDefault(); go(+d.dataset.i); } });
 }
 function act(a, id) {
-  if (a === 'home') { S.focus = null; S.inspect = null; S.view = null; S.x = new Set(); S.prev = null; S.push = true; update(); }
-  else if (a === 'everything') { S.focus = null; S.inspect = null; S.view = 'graph'; S.x = new Set(['all']); S.prev = null; S.push = true; update(); }
+  if (a === 'home') { S.focus = null; S.inspect = null; S.view = 'table'; S.x = new Set(); S.prev = null; S.push = true; update(); }
   else if (a === 'back-focus') { if (S.prev) setFocus(S.prev.kind, S.prev.id); }
   else if (a === 'swap') { [S.a, S.b] = [S.b, S.a]; update(); }
   else if (a === 'pair') { if (S.a && S.b) setFocus('pair'); }
   else if (a === 'pick-a' || a === 'pick-b') pick(a.slice(-1), $(`#sel-${a.slice(-1)}`)?.value || null);
   else if (a === 'clear-ab') { S.a = S.b = null; if (S.focus?.kind === 'pair') S.focus = null; update(); }
-  else if (a === 'tq') { S.q = $('#tq').value; renderTable(); }
+  else if (a === 'tq') { S.q = $('#tq').value; update(); }
   else if (a === 'tg') { const g = id; if (S.groups.has(g)) S.groups.delete(g); else S.groups.add(g); if (S.view === 'compare') renderCompare(); else renderTable(); }
   else if (a === 'tident') { S.identity = !S.identity; renderTable(); }
   else if (a === 'tsort') { S.sort = S.sort === id ? null : id; renderTable(); }
@@ -156,46 +177,35 @@ function act(a, id) {
 }
 
 // ------------------------------------------------------------------ frame: which pane is on screen, the toolbar, what is focused
+/** the decision a Trace would follow, when one is in context: a species (the focus, or the species of the inspected link) and the
+ *  spatial function to follow it for — the inspected link's or the focused function when the engine arranges it, else Screen */
+function traceContext() {
+  const M = S.M, i = S.inspect, f = S.focus; const l = i?.kind === 'link' ? M.LK.get(i.id) : null;
+  const sp = l ? l.species : f?.kind === 'species' ? f.id : i?.kind === 'species' ? i.id : i?.kind === 'attr' ? M.AT.get(i.id).species : i?.kind === 'concept_link' ? M.CL.get(i.id).species : null; if (!sp) return null;
+  const want = l ? l.function : f?.kind === 'function' ? f.id : null; const fn = want && PI.TRACE_FUNCTIONS.includes(want) ? want : PI.TRACE_FUNCTION;
+  return { species: sp, fn, asked: want, href: PI.links.trace(sp, { fn }) };
+}
 function renderFrame() {
-  const M = S.M; const start = S.view === null;
-  $('#bar').hidden = start; $('#start').hidden = !start; $('#stage').hidden = start;
+  const M = S.M;
   for (const k of VIEW_IDS) $(`#v-${k}`).hidden = S.view !== k;
   document.querySelectorAll('#views button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.view === S.view)));
   const f = S.focus; const nm = id => `<i class="sci">${esc(M.name(id))}</i>`; let h = ''; const pv = S.prev && f && f.kind !== 'pair' && fkey(S.prev) !== fkey(f) && inspectable(S.prev.kind, S.prev.id) ? S.prev : null;
   if (pv) h += `<button class="back" data-act="back-focus" title="Back to ${esc(M.name(pv.id))}, with what was opened around it">${IC.back}${pv.kind === 'species' ? nm(pv.id) : esc(M.name(pv.id))}</button>`;
   if (f && f.kind !== 'pair') h += `<span class="c">${KIND_WORD[f.kind]} <b data-act="open-insp" title="Show its record">${f.kind === 'species' ? nm(f.id) : esc(M.name(f.id))}</b><button class="x" data-focus="none" aria-label="Clear the focus" title="Clear the focus">${IC.x}</button></span>`;
   if (S.inspClosed && f && S.view !== 'compare') h += `<button class="showev" data-act="open-insp" title="Open the evidence panel again">Show evidence</button>`;
-  if (S.a || S.b) h += `<span class="c">${S.a ? `${tag('A')}${nm(S.a)}` : ''}${S.b ? ` ${tag('B')}${nm(S.b)}` : ''}${S.a && S.b && S.view !== 'compare' ? ` <span class="link" data-view="compare">Compare</span>` : ''}<button class="x" data-act="clear-ab" aria-label="Clear A and B" title="Clear A and B">${IC.x}</button></span>`;
+  if (S.a || S.b) h += `<span class="c">${S.a ? `${tag('A')}${nm(S.a)}` : ''}${S.b ? ` ${tag('B')}${nm(S.b)}` : ''}<button class="x" data-act="clear-ab" aria-label="Clear A and B" title="Clear A and B">${IC.x}</button></span>`;
   $('#crumb').innerHTML = h;
-  document.title = `${f && f.kind !== 'pair' ? M.name(f.id) + ' · ' : ''}Explore · Knowledge · Planting Intelligence`;
-}
-function renderStart() {
-  const el = $('#start'); if (el.dataset.built) return; el.dataset.built = '1';
-  const M = S.M, st = M.stats; const by = st.links_by_status;
-  el.innerHTML = `<div class="start">
-    <h1>Explore the <em>records</em></h1>
-    <p class="lede">Search a plant, a trait or a spatial function, or start from one of the lists. One view is open at a time, and the claims, sources and rules behind whatever you select appear beside it.</p>
-    <div class="searchbox">${IC.search}<input id="search0" type="search" placeholder="Search a plant, a trait, a spatial function" aria-label="Search a plant, a trait or a spatial function" autocomplete="off" spellcheck="false"><kbd>/</kbd><div class="results" id="results0"></div></div>
-    <p class="prov">${st.species} species · ${st.functions} spatial functions · ${st.claims} claims from ${st.sources} sources, ${st.claims_by_status.verified || 0} verified by a person · snapshot ${esc(M.d.generated)}</p>
-    <div class="ways">
-      <div class="f"><h2>Start from a spatial function</h2>${M.functions.map(f => `<a class="srow" href="#" data-focus="function=${esc(f.id)}"><b>${esc(f.label)}</b><span>${esc(f.definition)}</span><small>${f.n_linked} linked · ${f.n_unknown} without a link</small></a>`).join('')}</div>
-      <div class="p"><h2>or from a plant</h2>${M.species.map(s => `<a class="prow" href="#" data-focus="species=${esc(s.id)}"><i>${esc(s.scientific_name)}</i><span>${esc((s.common_names || [])[0] || '')}</span></a>`).join('')}</div>
-      <div class="q"><h2>or from a question</h2>
-        <a class="srow wide" href="#" data-view="table"><b>Where do the sources disagree, and what has nobody recorded?</b><small>Table · ${st.cells_with_disagreement} fields in disagreement · ${st.cells_not_recorded} not recorded</small></a>
-        <a class="srow wide" href="#" data-view="matrix"><b>Which links to a function rest on a recorded use, and which are only inferred or unknown?</b><small>Matrix · ${by.derived || 0} from a use · ${by.candidate || 0} inferred · ${by.unknown || 0} without a link (${st.unknown_by_verdict?.['contradicted by traits'] || 0} contradicted, ${st.unknown_by_verdict?.['evidence missing'] || 0} no evidence)</small></a>
-        <a class="srow wide" href="#" data-view="compare"><b>What do two plants share, and what is actually recorded between them?</b><small>Compare · ${st.pairs} pairs · ${st.pairs_with_direct} with a direct record</small></a>
-      </div>
-    </div>
-    <p class="every">The graph opens with one focus and grows only when you add to it. To see all ${st.links_drawn} drawn links at once, <a href="#" data-act="everything">open the full graph</a>.</p>
-  </div>`;
-  wireSearch($('#search0'), $('#results0'));
+  // secondary actions: the Decision Trace when a species is in context, the comparison, the same records in three dimensions
+  const t = traceContext(); const fsp = t?.species || (f?.kind === 'species' ? f.id : null);
+  $('#acts').innerHTML = `${t ? `<a class="trace" id="trace" href="${esc(t.href)}" title="Follow ${esc(M.name(t.species))} from its sources to a bed of a design, for ${esc(M.name(t.fn))}: source → claim → function → selection → arrangement → evaluation${t.asked && t.asked !== t.fn ? ` (${esc(M.name(t.asked))} is recorded only: the engine does not arrange it)` : ''}">${IC.trace}<span>Trace</span><span class="lbl">· ${esc(M.name(t.fn))}</span></a>` : ''}<button data-view="compare" aria-pressed="${S.view === 'compare'}" title="Compare two plants: shared attributes, recorded relations, complementarity, unknowns">${IC.compare}<span class="lbl">Compare</span></button><a href="${esc(PI.links.neural(fsp))}" title="The same claims as one three-dimensional network${fsp ? `, opened on ${esc(M.name(fsp))}` : ''}">${IC.cube}<span class="lbl">3D network</span></a>`;
+  document.title = `${f && f.kind !== 'pair' ? M.name(f.id) + ' · ' : ''}Knowledge · Planting Intelligence`;
 }
 function howHtml() {
   const M = S.M, v = M.vocab.status;
-  return `<h3>Lines in the graph</h3><div class="lg"><p><i></i><b>documented</b> ${esc(v.documented)}</p><p><i class="derived"></i><b>derived</b> ${esc(v.derived)}</p><p><i class="candidate"></i><b>candidate</b> ${esc(v.candidate)}</p><p><i class="unknown"></i><b>unknown</b> ${esc(v.unknown)}</p><p><i class="conflict"></i><b>conflict</b> a recorded use and a trait claim disagree; the line is drawn in rust and both records are kept</p><p><i class="rel"></i><b>plant-to-plant record</b> only what relations.json holds; sharing a trait never draws a line between two plants</p><p><i class="trait"></i><b>trait line</b> a claim about the plant reaches a concept</p></div>
+  return `<h3>One database, three views</h3><p><b>Table</b> plants × attributes. <b>Matrix</b> plants × spatial functions. <b>Network</b> plants (X), attributes (Y) and spatial functions (Z) with the records that join them. Claims, sources, verification and the AI source check are the evidence under all three: they open beside the view for whatever you select. The selected plant, function or attribute stays selected when you switch, and Back returns to where you were.</p><h3>Lines in the Network</h3><div class="lg"><p><i></i><b>documented</b> ${esc(v.documented)}</p><p><i class="derived"></i><b>derived</b> ${esc(v.derived)}</p><p><i class="candidate"></i><b>candidate</b> ${esc(v.candidate)}</p><p><i class="unknown"></i><b>unknown</b> ${esc(v.unknown)}</p><p><i class="conflict"></i><b>conflict</b> a recorded use and a trait claim disagree; the line is drawn in rust and both records are kept</p><p><i class="rel"></i><b>plant-to-plant record</b> only what relations.json holds; sharing a trait never draws a line between two plants</p><p><i class="trait"></i><b>trait line</b> a claim about the plant reaches a concept</p></div>
     <h3>Three separate statements on every record</h3><p><b>Status</b> ${tag('documented')} ${tag('derived')} ${tag('candidate')} ${tag('unknown')} what kind of knowledge a line is.</p><p><b>Verification</b> ${tag('verified')} ${tag('unverified')} ${tag('none')} whether a person verified a supporting claim. ${M.stats.claims_by_status.verified || 0} of ${M.stats.claims} claims are verified; a ✓ in the matrix or the table marks one.</p><p><b>AI source check</b> ${tag('supported_by_source')} ${tag('partially_supported')} ${tag('conflicting_evidence')} an assessment by the review pipeline, shown apart. It never verifies anything.</p>
-    <h3>What is never done here</h3><p>No value is averaged or picked as best: a field shows every claim. No unknown link is drawn: it is listed as a gap, with its requirement check and the reason (contradicted by a recorded trait, or no evidence). Retired plant-to-plant records are listed as history. Nothing is promoted, and exploring changes no record.</p>
-    <h3>Working with it</h3><p>Click a name or a node to focus it, a line or a cell for its evidence. The graph grows only by the layers you add. Switching the view keeps the selection. <b>/</b> search · <b>Esc</b> close the evidence, then clear the focus.</p>
+    <h3>What is never done here</h3><p>No value is averaged or picked as best: a field shows every claim. No missing link is drawn: it is listed as a gap, with its requirement check and the reason (contradicted by a recorded trait, or no evidence). Retired plant-to-plant records are listed as history. Nothing is promoted, and exploring changes no record.</p>
+    <h3>Working with it</h3><p>Click a name or a node to focus it, a line or a cell for its evidence. Around a focus the Network grows only by the layers you add. <b>Trace</b> follows a plant in context from its sources into a bed of a design. <b>/</b> search · <b>Esc</b> close the evidence, then clear the focus.</p>
     <h3>Data</h3><p class="mono">brain/data/explorer.json · ${esc(M.d.generated)} · ${esc(M.d.generated_by)} · ${esc(M.d.method)}<br>inputs: ${esc(M.d.inputs.join(', '))}</p>`;
 }
 
@@ -206,6 +216,12 @@ const R_OF = n => n.focus ? 15 : n.kind === 'function' ? 11 : n.kind === 'specie
  *  focus (the full graph, a pair) a small force layout spreads the nodes. Records without a link stand in a row underneath, unconnected. */
 function layout(g, W, H) {
   const nodes = g.nodes.map(n => ({ ...n })); const byId = new Map(nodes.map(n => [n.id, n]));
+  if (g.xyz) {   // the overview: three columns in the order of the argument — a plant (X) is linked to a function (Z), which requires traits (Y)
+    const top = 96, bot = H - (W < 1000 ? 108 : 78), col = { species: W * (W < 1000 ? .3 : .27), function: W * .5, concept: W * (W < 1000 ? .68 : .71) };
+    const put = (kind, inset) => { const ks = nodes.filter(n => n.kind === kind); const a = top + (bot - top) * inset, b = bot - (bot - top) * inset; ks.forEach((nd, i) => { nd.x = col[kind]; nd.y = ks.length === 1 ? (a + b) / 2 : a + (b - a) * (i / (ks.length - 1)); }); };
+    put('species', 0); put('function', .1); put('concept', 0);
+    return { nodes, byId, xyz: true, col };
+  }
   const ghosts = nodes.filter(n => n.ghost), real = nodes.filter(n => !n.ghost);
   const strip = ghosts.length ? 96 : 0; const cx = W / 2, cy = (H - strip) / 2 + 8, RX = Math.max(120, Math.min(W * 0.42, W / 2 - 104)), RY = Math.max(90, (H - strip) * 0.37), R = (RX + RY) / 2;
   ghosts.forEach((nd, i) => { nd.x = 70 + (W - 140) * ((i + .5) / ghosts.length); nd.y = H - 46; nd.fixed = true; });
@@ -227,13 +243,13 @@ function layout(g, W, H) {
     }
     return { nodes, byId, cy, radial: true };
   }
-  const ringOf = n => n.kind === 'function' ? (g.seed ? .55 : .42) : 1;
+  const ringOf = n => n.kind === 'function' ? .42 : 1;
   for (const k of ['function', 'species', 'concept']) {
     const ks = real.filter(n => n.kind === k && !n.focus).sort((a, b) => k === 'concept' ? String(a.group || '').localeCompare(String(b.group || '')) || a.label.localeCompare(b.label) : 0); const n = ks.length;
     ks.forEach((nd, i) => { const a = (i / Math.max(1, n)) * Math.PI * 2 + (k === 'species' ? .3 : k === 'concept' ? .9 : -Math.PI / 2); const r = ringOf(nd); nd.x = cx + Math.cos(a) * RX * r; nd.y = cy + Math.sin(a) * RY * r; nd.vx = nd.vy = 0; });
   }
   if (g.pair) { const [a, b] = g.pair; for (const id of [a, b]) { const n = byId.get(id); n.y = cy; n.fixed = true; n.vx = n.vy = 0; } byId.get(a).x = cx - RX * .5; byId.get(b).x = cx + RX * .5; }
-  if (!g.pair) return { nodes, byId };   // the functions alone, or every species around them: two rings, placed by rule
+  if (!g.pair) return { nodes, byId };
   const edges = g.edges.filter(e => byId.has(e.source) && byId.has(e.target)).map(e => ({ s: byId.get(e.source), t: byId.get(e.target), rel: e.rel }));
   const rest = e => e.rel === 'suited_for' ? R * .8 : e.rel === 'requires_trait' ? R * .6 : e.rel === 'has_trait' || e.rel === 'grows_in' ? R * .55 : R * .75;
   const N = real.length;
@@ -264,21 +280,33 @@ function initGraphInteraction() {
   svg.addEventListener('wheel', ev => { ev.preventDefault(); const r = svg.getBoundingClientRect(); const mx = ev.clientX - r.left, my = ev.clientY - r.top; const k0 = S.pan.k, k1 = Math.max(.4, Math.min(3, k0 * (ev.deltaY < 0 ? 1.12 : .89))); S.pan.x = mx - (mx - S.pan.x) * k1 / k0; S.pan.y = my - (my - S.pan.y) * k1 / k0; S.pan.k = k1; applyView(); }, { passive: false });
   const tip = $('#tip');
   svg.addEventListener('mousemove', ev => { const t = ev.target.closest('[data-tip]'); if (!t) { tip.style.display = 'none'; return; } tip.innerHTML = t.dataset.tip; tip.style.display = 'block'; tip.style.left = `${Math.min(ev.clientX + 14, innerWidth - 340)}px`; tip.style.top = `${ev.clientY + 12}px`; });
-  svg.addEventListener('mouseleave', () => { tip.style.display = 'none'; });
+  svg.addEventListener('mouseleave', () => { tip.style.display = 'none'; light(null); });
+  // a node under the pointer (or the keyboard focus) lights its own records: the lines that meet it and, in the overview, the lines
+  // among what it reaches — so a plant shows its functions, the traits it is recorded with, and which requirements those meet
+  let lit = null;
+  const light = id => {
+    if (id === lit) return; lit = id; svg.classList.toggle('hl', !!id); svg.querySelectorAll('.on').forEach(el => el.classList.remove('on')); const g = S.g; if (!id || !g) return;
+    const on = new Set([id]), E = new Set(); g.edges.forEach((e, i) => { if (e.source === id || e.target === id) { E.add(i); on.add(e.source); on.add(e.target); } });
+    if (g.xyz) g.edges.forEach((e, i) => { if (on.has(e.source) && on.has(e.target)) E.add(i); });
+    svg.querySelectorAll('[data-ei]').forEach(el => { if (E.has(+el.dataset.ei)) el.classList.add('on'); }); svg.querySelectorAll('.node[data-id]').forEach(el => { if (on.has(el.dataset.id)) el.classList.add('on'); });
+  };
+  svg.addEventListener('mouseover', ev => { const n = ev.target.closest('.node[data-id]'); light(n && !n.classList.contains('ghost') ? n.dataset.id : null); });
+  svg.addEventListener('focusin', ev => { const n = ev.target.closest('.node[data-id]'); light(n ? n.dataset.id : null); }); svg.addEventListener('focusout', () => light(null));
   new ResizeObserver(() => { if (S.view === 'graph') drawGraph(); }).observe($('#gbody'));
 }
 function applyView() { const g = $('#svg g.view'); if (g) g.setAttribute('transform', `translate(${S.pan.x},${S.pan.y}) scale(${S.pan.k})`); }
 function renderGraph() {
   const M = S.M, f = S.focus; const g = M.graphFor(f, S.a, S.b, S.x); const layers = M.layersFor(f);
   const real = g.nodes.filter(n => !n.ghost).length, ghosts = g.nodes.length - real;
-  const title = !f ? 'Relationship graph' : f.kind === 'pair' ? `<i class="sci">${esc(M.name(S.a))}</i> and <i class="sci">${esc(M.name(S.b))}</i>` : f.kind === 'species' ? `<i class="sci">${esc(M.name(f.id))}</i>` : esc(M.name(f.id));
-  const sub = !f && g.seed ? `${M.functions.length} spatial functions` : f?.kind === 'pair' ? 'what both reach, the functions of each, direct records' : `${plural(real, 'node')} · ${plural(g.edges.length, 'line')}${ghosts ? ` · ${ghosts} without a link` : ''}`;
+  const nk = k => g.nodes.filter(n => n.kind === k).length, ek = k => g.edges.filter(e => e.kind === k).length;
+  const title = !f ? 'Plants, attributes and spatial functions' : f.kind === 'pair' ? `<i class="sci">${esc(M.name(S.a))}</i> and <i class="sci">${esc(M.name(S.b))}</i>` : f.kind === 'species' ? `<i class="sci">${esc(M.name(f.id))}</i>` : esc(M.name(f.id));
+  const sub = !f ? `Every line is a record: ${ek('link')} function links, ${ek('requirement')} requirements, ${ek('concept_link')} claim lines. Point at a node to light its records, click it to focus it. No line means no link is recorded, not “unsuitable”.` : f?.kind === 'pair' ? 'what both reach, the functions of each, direct records' : `${plural(real, 'node')} · ${plural(g.edges.length, 'line')}${ghosts ? ` · ${ghosts} without a link` : ''}`;
   const on = l => S.x.has(l.key) || (!!l.traits && S.x.has('traits'));
   const many = layers.length > 3; const short = l => !many ? l.label : l.traits ? l.label.split(/\s+/)[0] : l.key === 'relations' ? 'Plant records' : l.key === 'gaps' ? 'Without a link' : l.label;
   const btn = l => `<button class="layer" data-layer="${esc(l.key)}" aria-pressed="${on(l)}" title="${esc(l.label)}${l.n ? '' : ': nothing recorded to add'}" ${l.n ? '' : 'disabled'}>${on(l) ? IC.check : IC.plus}${esc(short(l))}<small>${l.n}</small></button>`;
   const traits = layers.filter(l => l.traits), other = layers.filter(l => !l.traits);
   $('#ghead').innerHTML = `<h2>${title}</h2><span class="sub" id="gsub">${esc(sub)}</span>${layers.length ? `<div class="layers ${layers.length > 3 ? 'many' : ''}" role="group" aria-label="Add to the graph">${traits.length ? `<span class="lab">Add traits</span>${traits.map(btn).join('')}<span class="gap"></span>` : `<span class="lab">Add</span>`}${other.map(btn).join('')}</div>` : ''}<div class="right"><button data-act="fit" title="Reset pan and zoom">Fit</button></div>`;
-  $('#gnote').textContent = f?.kind === 'pair' ? `Small circles are the ${g.nodes.filter(n => n.kind === 'concept').length} concepts both plants reach; hover one for its name. A line joins the two plants only where a relation was recorded.` : !f && g.seed ? 'Click a function to see the species linked to it. Nothing else is drawn until you ask for it.' : f && !g.edges.length && !ghosts ? `Nothing is linked to ${M.name(f.id)} in the default view. Add a layer above to see what is recorded.` : 'Click a node to focus it, a line for its evidence. Drag to pan, scroll to zoom.';
+  $('#gnote').textContent = f?.kind === 'pair' ? `Small circles are the ${g.nodes.filter(n => n.kind === 'concept').length} concepts both plants reach; hover one for its name. A line joins the two plants only where a relation was recorded.` : !f ? '' : f && !g.edges.length && !ghosts ? `Nothing is linked to ${M.name(f.id)} in the default view. Add a layer above to see what is recorded.` : 'Click a node to focus it, a line for its evidence. Drag to pan, scroll to zoom.';
   drawGraph(g);
 }
 /** the line styles that are in this graph, and nothing else */
@@ -289,7 +317,7 @@ function keyHtml(g) {
   if (links.some(e => e.status === 'candidate' && !e.conflict)) k.push(['candidate', 'link inferred from traits']);
   if (links.some(e => e.conflict)) k.push(['conflict', 'link in conflict with a trait claim']);
   if (E.some(e => e.kind === 'requirement')) k.push(['req', 'trait the function requires']);
-  if (E.some(e => e.kind === 'concept_link')) k.push(['trait', 'claim line to a trait']);
+  if (E.some(e => e.kind === 'concept_link')) k.push(['trait', g.xyz ? 'claim line to a trait, lit with its node' : 'claim line to a trait']);
   if (E.some(e => e.kind === 'relation' && e.status !== 'candidate')) k.push(['rel', 'plant-to-plant record']);
   if (E.some(e => e.kind === 'relation' && e.status === 'candidate')) k.push(['relc', 'placeholder between plants, not evidence']);
   if (g.nodes.some(n => n.ghost)) k.push(['ghost', 'no link: listed as a gap']);
@@ -300,54 +328,71 @@ function drawGraph(g = S.M.graphFor(S.focus, S.a, S.b, S.x)) {
   const reserve = S.inspClosed && S.focus && S.focus.kind !== 'pair' && innerWidth > 980 ? (innerWidth <= 1240 ? 360 : 400) : 0;   // the evidence panel was closed: the drawing keeps the rectangle it had beside it, so nothing moves
   const W = Math.max(300, Wfull - reserve); $('#gkey').innerHTML = keyHtml(g);
   const key = `${S.focus?.kind}|${S.focus?.id}|${S.a}|${S.b}|${[...S.x].sort().join(',')}|${Math.round(W)}x${Math.round(H)}`;
-  if (S.layoutKey !== key) { S.layout = layout(g, W, H); S.layoutKey = key; S.pan = { x: 0, y: 0, k: 1 }; }
-  const L = S.layout; const sel = S.inspect;
+  const fresh = S.layoutKey !== key; S.g = g;
+  if (fresh) { S.layout = layout(g, W, H); S.layoutKey = key; S.pan = { x: 0, y: 0, k: 1 }; }
+  const L = S.layout; const sel = S.inspect; $('#gbody').classList.toggle('xyz', !!L.xyz);
+  const geo = (a, b) => L.xyz ? `d="M${a.x},${a.y} C${(a.x + b.x) / 2},${a.y} ${(a.x + b.x) / 2},${b.y} ${b.x},${b.y}"` : `x1="${a.x}" y1="${a.y}" x2="${b.x}" y2="${b.y}"`; const EL = L.xyz ? 'path' : 'line';
   const edgeSel = e => sel && ((sel.kind === 'link' && e.kind === 'link' && sel.id === e.id) || (sel.kind === 'concept_link' && e.kind === 'concept_link' && sel.id === e.id) || (sel.kind === 'relation' && e.kind === 'relation' && sel.id === e.id));
   const inspectOf = e => e.kind === 'link' ? `link=${e.id}` : e.kind === 'concept_link' ? `concept_link=${e.id}` : e.kind === 'relation' ? `relation=${e.id}` : e.kind === 'requirement' ? `function=${e.fn}` : '';
   const edgeTip = e => { const a = M.name(e.source), b = M.name(e.target); return `${esc(a)} <span class="m">${esc(human(e.rel))}</span> ${esc(b)}<div class="m">${esc(e.status)}${e.conflict ? ' · conflict' : ''} · ${esc(e.verification)}${e.strength ? ` · ${esc(e.strength)}` : ''}${e.placeholder ? ' · model placeholder' : ''} — click for evidence</div>`; };
   let h = `<g class="view" transform="translate(${S.pan.x},${S.pan.y}) scale(${S.pan.k})">`;
-  for (const e of g.edges) {
-    const a = L.byId.get(e.source), b = L.byId.get(e.target); if (!a || !b) continue;
-    const cls = `edge ${esc(e.rel)} ${esc(e.status)} ${e.kind === 'relation' ? 'relation' : ''} ${e.conflict ? 'conflict' : ''} ${edgeSel(e) ? 'sel' : ''} ${sel && !edgeSel(e) && sel.kind !== 'species' && sel.kind !== 'function' && sel.kind !== 'concept' ? 'dim' : ''}`;
-    h += `<line class="${cls}" x1="${a.x}" y1="${a.y}" x2="${b.x}" y2="${b.y}"></line><line class="edge hit" x1="${a.x}" y1="${a.y}" x2="${b.x}" y2="${b.y}" data-inspect="${esc(inspectOf(e))}" data-tip="${esc(edgeTip(e))}"></line>`;
+  g.edges.forEach((e, ei) => {
+    const a = L.byId.get(e.source), b = L.byId.get(e.target); if (!a || !b) return;
+    const cls = `edge ${esc(e.rel)} ${esc(e.status)} ${e.kind === 'relation' ? 'relation' : ''} ${e.conflict ? 'conflict' : ''} ${e.latent && !edgeSel(e) ? 'latent' : ''} ${edgeSel(e) ? 'sel' : ''} ${sel && !edgeSel(e) && sel.kind !== 'species' && sel.kind !== 'function' && sel.kind !== 'concept' ? 'dim' : ''}`;
+    h += `<${EL} class="${cls}" data-ei="${ei}" style="--i:${ei}" ${geo(a, b)}></${EL}>${e.latent ? '' : `<${EL} class="edge hit" ${geo(a, b)} data-inspect="${esc(inspectOf(e))}" data-tip="${esc(edgeTip(e))}"></${EL}>`}`;
+  });
+  if (L.xyz) {   // the three axes, named once above their columns
+    const nY = g.nodes.filter(n => n.kind === 'concept').length; const hd = (x, anchor, ax, name, sub) => `<text class="colh" x="${x}" y="40" text-anchor="${anchor}"><tspan class="ax">${ax}</tspan> · ${name}</text><text class="cols" x="${x}" y="59" text-anchor="${anchor}">${sub}</text>`;
+    h += hd(L.col.species + 10, 'end', 'X', 'Plants', 'species, with their growth form') + hd(L.col.function, 'middle', 'Z', 'Spatial functions', 'what a planting does in space') + hd(L.col.concept - 10, 'start', 'Y', 'Attributes', `the ${nY} traits a function requires${W < 1000 ? '' : `, of ${M.concepts.filter(c => !c.no_plant_reaches).length} recorded values`}`);
   }
   let labels = '';   // relation labels are drawn over the nodes, two thirds of the way out from the focus, clear of the inner ring
   for (const e of g.edges) { if (e.kind !== 'relation') continue; const a = L.byId.get(e.source), b = L.byId.get(e.target); if (!a || !b) continue; const from = b.focus && !a.focus ? b : a, to = from === a ? b : a; const t = a.focus !== b.focus ? .66 : .5;
     labels += `<text class="elabel" x="${from.x + (to.x - from.x) * t}" y="${from.y + (to.y - from.y) * t - 4}" text-anchor="middle">${esc(human(e.rel))}${e.placeholder ? ' (placeholder)' : ''}</text>`; }
+  let ni = 0;
   for (const n of L.nodes) {
-    const r = R_OF(n); const cls = `node ${n.kind} ${n.focus ? 'focus' : ''} ${n.ghost ? 'ghost' : ''} ${S.a === n.id ? 'a' : ''} ${S.b === n.id ? 'b' : ''}`;
+    const recOnly = n.kind === 'function' && !PI.TRACE_FUNCTIONS.includes(n.id);   // the Studio's engine does not arrange it: its knowledge is recorded, nothing is planted for it
+    const r = R_OF(n); const cls = `node ${n.kind} ${n.focus ? 'focus' : ''} ${n.ghost ? 'ghost' : ''} ${recOnly ? 'rec' : ''} ${n.req ? 'req' : ''} ${S.a === n.id ? 'a' : ''} ${S.b === n.id ? 'b' : ''}`;
     const dense = L.nodes.length > 28 && n.kind === 'concept'; const mute = dense && !!g.pair;   // a pair's many shared concepts are named on hover
     const up = L.radial && !n.focus && !n.ghost && n.y < L.cy - 8;   // around a focus a name stands on the far side of its node, so its own line does not strike it through
     const below = dense ? 10 : n.kind === 'concept' ? 12 : 14; const ly = up ? n.y - r - 6 : n.y + r + (n.focus ? 19 : below);
-    const label = mute ? '' : n.kind === 'species' ? `<text x="${n.x}" y="${ly}" text-anchor="middle" font-size="12.5" font-style="italic">${esc(n.label)}</text>` : `<text x="${n.x}" y="${ly}" text-anchor="middle" font-size="${n.kind === 'function' ? 12.5 : dense ? 9.5 : 11}">${esc(dense && n.label.length > 26 ? n.label.slice(0, 24) + '…' : n.label)}</text>`;
-    const tipText = n.kind === 'species' ? `<i>${esc(n.label)}</i><div class="m">species · ${(M.sp(n.id).common_names || [])[0] ? esc(M.sp(n.id).common_names[0]) + ' · ' : ''}${M.sp(n.id).claims.live} live claims${n.ghost ? ` · ${esc(n.verdict)} for the focused function — no link drawn` : ''}</div>` : n.kind === 'function' ? `${esc(n.label)}<div class="m">spatial function · ${M.fn(n.id).n_linked} linked · ${M.fn(n.id).n_unknown} without a link${n.ghost ? ` · ${esc(n.verdict)} for the focused species — no link drawn` : ''}</div>` : `${esc(n.label)}<div class="m">${esc(M.co(n.id)?.facet_label || 'concept')} · ${M.co(n.id)?.n_species ?? 0} species</div>`;
+    const cut = (t, w) => { const m = Math.max(10, Math.floor(w / 6.4)); return t.length > m ? t.slice(0, m - 1) + '…' : t; };
+    const label = L.xyz ? (n.kind === 'species' ? `<text x="${n.x - r - 9}" y="${n.y + 1}" text-anchor="end" font-size="13.5" font-style="italic" font-weight="500">${esc(n.label)}</text><text class="subl" x="${n.x - r - 9}" y="${n.y + 15}" text-anchor="end">${esc((n.sub || '').toLowerCase())}</text>`
+      : n.kind === 'function' ? `<text x="${n.x}" y="${n.y + r + 16}" text-anchor="middle" font-size="13.5">${esc(n.label)}</text><text class="subl" x="${n.x}" y="${n.y + r + 30}" text-anchor="middle">${recOnly ? 'recorded only' : 'arranged in Design'}</text>`
+      : `<text x="${n.x + r + 9}" y="${n.y + 1}" text-anchor="start" font-size="13">${esc(cut(n.label, W - n.x - 24))}</text><text class="subl" x="${n.x + r + 9}" y="${n.y + 15}" text-anchor="start">${esc((M.co(n.id)?.facet_label || '').toLowerCase())}</text>`)
+      : mute ? '' : n.kind === 'species' ? `<text x="${n.x}" y="${ly}" text-anchor="middle" font-size="12.5" font-style="italic">${esc(n.label)}</text>` : `<text x="${n.x}" y="${ly}" text-anchor="middle" font-size="${n.kind === 'function' ? 12.5 : dense ? 9.5 : 11}">${esc(dense && n.label.length > 26 ? n.label.slice(0, 24) + '…' : n.label)}</text>`;
+    const tipText = recOnly && !n.ghost ? `${esc(n.label)}<div class="m">spatial function · ${M.fn(n.id).n_linked} linked · ${M.fn(n.id).n_unknown} without a link · recorded only: the Studio's engine does not arrange it</div>` : n.kind === 'species' ? `<i>${esc(n.label)}</i><div class="m">species · ${(M.sp(n.id).common_names || [])[0] ? esc(M.sp(n.id).common_names[0]) + ' · ' : ''}${M.sp(n.id).claims.live} live claims${n.ghost ? ` · ${esc(n.verdict)} for the focused function — no link drawn` : ''}</div>` : n.kind === 'function' ? `${esc(n.label)}<div class="m">spatial function · ${M.fn(n.id).n_linked} linked · ${M.fn(n.id).n_unknown} without a link${n.ghost ? ` · ${esc(n.verdict)} for the focused species — no link drawn` : ''}</div>` : `${esc(n.label)}<div class="m">${esc(M.co(n.id)?.facet_label || 'concept')} · ${M.co(n.id)?.n_species ?? 0} species</div>`;
     const ab = S.a === n.id ? `<text x="${n.x + r + 3}" y="${n.y - r - 2}" font-size="9.5" font-weight="700" style="fill:var(--olive-deep)">A</text>` : S.b === n.id ? `<text x="${n.x + r + 3}" y="${n.y - r - 2}" font-size="9.5" font-weight="700" style="fill:var(--ink)">B</text>` : '';
-    h += `<g class="${cls}" ${n.ghost ? `data-inspect="link=${esc(n.link)}"` : `data-focus="${n.kind}=${esc(n.id)}"`} data-tip="${esc(tipText)}">${n.focus ? `<circle class="halo" cx="${n.x}" cy="${n.y}" r="${r + 5}"></circle>` : ''}<circle cx="${n.x}" cy="${n.y}" r="${r}"></circle>${label}${ab}</g>`;
+    h += `<g class="${cls}" tabindex="0" role="button" aria-label="${esc(n.label)}, ${n.kind === 'function' ? 'spatial function' : n.kind === 'concept' ? 'attribute' : 'species'}${n.ghost ? ', no link' : ''}" data-id="${esc(n.id)}" style="--i:${ni++}" ${n.ghost ? `data-inspect="link=${esc(n.link)}"` : `data-focus="${n.kind}=${esc(n.id)}"`} data-tip="${esc(tipText)}">${n.focus ? `<circle class="halo" cx="${n.x}" cy="${n.y}" r="${r + 5}"></circle>` : ''}<circle cx="${n.x}" cy="${n.y}" r="${r}"></circle>${label}${ab}</g>`;
   }
   h += labels;
   if (L.nodes.some(n => n.ghost)) h += `<text class="elabel" x="${W / 2}" y="${H - 80}" text-anchor="middle">no link drawn to ${esc(M.name(S.focus.id))} — click one for its requirement check</text>`;
   h += `</g>`;
-  svg.setAttribute('viewBox', `0 0 ${Wfull} ${H}`); svg.innerHTML = h;
+  svg.setAttribute('viewBox', `0 0 ${Wfull} ${H}`); svg.innerHTML = h; svg.classList.remove('hl');
+  if (fresh) { svg.classList.add('enter'); clearTimeout(S.enterT); S.enterT = setTimeout(() => svg.classList.remove('enter'), 1600); }
 }
 
 // ------------------------------------------------------------------ matrix
-const cellWord = l => l.status === 'derived' ? 'use' : l.status === 'candidate' ? 'traits' : l.status === 'documented' ? 'stated' : l.verdict === 'contradicted by traits' ? 'contradicted' : 'no evidence';
+const cellWord = l => l.status === 'derived' ? 'recorded use' : l.status === 'candidate' ? 'inferred from traits' : l.status === 'documented' ? 'stated' : l.verdict === 'contradicted by traits' ? 'no link · contradicted' : 'no link · evidence missing';
+/** the same standing in the matrix cell: the word, and for a missing link the reason on its own line — never a bare blank */
+const cellHtml = l => l.drawn ? esc(l.status === 'candidate' ? 'inferred' : cellWord(l)) : `no link<small>${l.verdict === 'contradicted by traits' ? 'contradicted' : 'evidence missing'}</small>`;
+const rowsFor = () => { const q = S.q.trim().toLowerCase(); return S.M.species.filter(s => !q || [s.scientific_name, ...(s.common_names || []), s.family, s.growth_form_label].join(' ').toLowerCase().includes(q)); };
 function renderMatrix() {
   const M = S.M; const ff = S.focus?.kind === 'function' ? S.focus.id : null, fs = S.focus?.kind === 'species' ? S.focus.id : null;
-  $('#mhead').innerHTML = `<h2>Spatial function matrix</h2><span class="sub">${M.species.length} species × ${M.functions.length} functions. A cell opens its evidence; it is not a suitability score, and “without a link” is not “unsuitable”.</span><span class="scrollcue">Scroll sideways for the other functions.</span>`;
+  const mrows = rowsFor();
+  $('#mhead').innerHTML = `<h2>Plants × spatial functions</h2><span class="sub">${mrows.length === M.species.length ? `${M.species.length} species` : `${mrows.length} of ${M.species.length} species (filter “${esc(S.q.trim())}”)`} × ${M.functions.length} functions. A cell opens its evidence. It is not a suitability score: no link is not “unsuitable”.</span><span class="scrollcue">Scroll sideways for the other functions.</span>`;
   const gapsOf = f => { const u = M.linksTo(f.id).filter(l => !l.drawn); const c = u.filter(l => l.verdict === 'contradicted by traits').length; return `${c} contradicted by a recorded trait, ${u.length - c} with no evidence`; };
-  let h = `<table class="matrix"><thead><tr><th>species</th>${M.functions.map(f => `<th class="${ff === f.id ? 'focus' : ''}" data-focus="function=${esc(f.id)}" title="${esc(f.definition)} Without a link: ${esc(gapsOf(f))}.">${esc(f.label)}<small><span>${f.n_linked} linked</span><span>${f.n_unknown} without a link</span></small></th>`).join('')}</tr></thead><tbody>`;
-  for (const s of M.species) {
+  let h = `<table class="matrix"><thead><tr><th>species</th>${M.functions.map(f => `<th class="${ff === f.id ? 'focus' : ''}" data-focus="function=${esc(f.id)}" title="${esc(f.definition)} Without a link: ${esc(gapsOf(f))}.">${esc(f.label)}<small><span>${f.n_linked} linked · ${f.n_unknown} without</span>${PI.TRACE_FUNCTIONS.includes(f.id) ? '<span class="eng" title="The Studio\'s engine arranges plants for this function and evaluates the result">arranged in Design</span>' : '<span class="rec" title="The knowledge is recorded; the Studio\'s engine does not arrange or evaluate plants for this function">recorded only</span>'}</small></th>`).join('')}</tr></thead><tbody>`;
+  for (const s of mrows) {
     const linked = ff && M.link(s.id, ff).drawn;
     h += `<tr class="${fs === s.id ? 'focus' : ''} ${linked ? 'linked' : ''}"><th data-focus="species=${esc(s.id)}"><i class="sci">${esc(s.scientific_name)}</i><span class="cn">${esc((s.common_names || [])[0] || '')}</span>${S.a === s.id ? ` ${tag('A')}` : ''}${S.b === s.id ? ` ${tag('B')}` : ''}</th>`;
     for (const f of M.functions) {
       const l = M.link(s.id, f.id); const selc = S.inspect?.kind === 'link' && S.inspect.id === l.id;
-      h += `<td class="${ff === f.id || fs === s.id ? 'focus' : ''} ${selc ? 'sel' : ''}" data-inspect="link=${esc(l.id)}" title="${esc(cellTitle(l))}"><span class="cell ${esc(l.status)} ${l.conflict ? 'conflict' : ''} ${l.verdict === 'contradicted by traits' ? 'contradicted' : ''}">${esc(cellWord(l))}${l.verification === 'verified' ? ` <span class="v">✓${l.n_verified}</span>` : ''}</span>${l.conflict ? '<span class="cf">conflict</span>' : ''}</td>`;
+      h += `<td class="${ff === f.id || fs === s.id ? 'focus' : ''} ${selc ? 'sel' : ''}" data-inspect="link=${esc(l.id)}" title="${esc(cellTitle(l))}"><span class="cell ${esc(l.status)} ${l.conflict ? 'conflict' : ''} ${l.verdict === 'contradicted by traits' ? 'contradicted' : ''}">${cellHtml(l)}${l.verification === 'verified' ? ` <span class="v">✓${l.n_verified}</span>` : ''}</span>${l.conflict ? '<span class="cf">conflict</span>' : ''}</td>`;
     }
     h += `</tr>`;
   }
   h += `</tbody></table>`;
-  h += `<div id="mlegend"><p><b>use</b> derived: a source records a use the ontology maps to the function (KG-R1).</p><p><b>traits</b> candidate: every required trait is met by claims, but no source states the use (KG-R4).</p><p><b>contradicted</b> no link: a recorded trait lies outside a requirement.</p><p><b>no evidence</b> no link: no claim on a required trait. Not known is not the same as unsuitable.</p><p><b>conflict</b> a documented use and a trait claim disagree; both are kept.</p><p><b>✓n</b> n use claims verified by a person. Status and verification are separate.</p></div>`;
+  h += `<div id="mlegend"><p><b>recorded use</b> derived: a source records a use the ontology maps to the function (KG-R1).</p><p><b>inferred</b> candidate: every required trait is met by claims, but no source states the use (KG-R4).</p><p><b>no link</b> contradicted: a recorded trait lies outside a requirement of the function.</p><p><b>no link</b> evidence missing: no claim on a required trait. Not known is not the same as unsuitable.</p><p><b>conflict</b> a documented use and a trait claim disagree; both are kept.</p><p><b>✓n</b> n use claims verified by a person. Status and verification are separate.</p><p><b>recorded only</b> the function's knowledge is recorded, but the Studio's engine does not arrange plants for it.</p></div>`;
   $('#mbody').innerHTML = h; const mb = $('#mbody'); $('#v-matrix').classList.toggle('scrolls', mb.scrollWidth > mb.clientWidth + 2);
 }
 function cellTitle(l) { const M = S.M; return `${M.name(l.species)} → ${M.name(l.function)}: ${l.status}${l.conflict ? ' · conflict' : ''}${l.verdict ? ` · ${l.verdict}` : ''} · ${l.verification}${l.via_use_labels?.length ? ` · use: ${l.via_use_labels.join(', ')}` : ''} — click for the evidence`; }
@@ -356,26 +401,27 @@ function cellTitle(l) { const M = S.M; return `${M.name(l.species)} → ${M.name
 function renderTable() {
   const M = S.M; const ff = S.focus?.kind === 'function' ? M.fn(S.focus.id) : null, fs = S.focus?.kind === 'species' ? S.focus.id : null;
   const req = new Set(ff ? ff.required_facets : []);
-  if (!$('#tq')) { $('#tcontrols').innerHTML = `<h2>Attribute table</h2><input id="tq" type="search" placeholder="Filter species" aria-label="Filter species" style="width:150px"><label title="growth form, family, origin, plant type and claim counts"><input type="checkbox" ${S.identity ? 'checked' : ''} data-act="tident">Identity</label><span class="tgroups" role="group" aria-label="Knowledge groups shown">` + M.groups.map(g => `<label><input type="checkbox" ${S.groups.has(g.id) ? 'checked' : ''} data-act="tg" data-id="${esc(g.id)}">${esc(g.label)}</label>`).join('') + `</span><span class="sub" id="thint"></span>`; $('#tq').addEventListener('input', () => { S.q = $('#tq').value; renderTable(); }); }
-  $('#thint').textContent = `${M.facets.filter(f => S.groups.has(f.group)).length} of ${M.facets.length} attributes shown. The table scrolls sideways; the species stay in place. ` + (ff ? `Columns ${ff.label} requires are marked; linked species come first.` : 'A cell opens its claims; a column header sorts by the number of values.');
+  if (!$('#tq')) { $('#tcontrols').innerHTML = `<h2>Plants × attributes</h2><input id="tq" type="search" placeholder="Filter plants" aria-label="Filter plants by name, family or growth form" value="${esc(S.q)}" style="width:150px"><label title="growth form, family, origin, plant type and claim counts"><input type="checkbox" ${S.identity ? 'checked' : ''} data-act="tident">Family &amp; origin</label><span class="tgroups" role="group" aria-label="Knowledge groups shown">` + M.groups.map(g => `<label><input type="checkbox" ${S.groups.has(g.id) ? 'checked' : ''} data-act="tg" data-id="${esc(g.id)}">${esc(g.label)}</label>`).join('') + `</span><span class="sub" id="thint"></span>`; $('#tq').addEventListener('input', () => { S.q = $('#tq').value; writeHash(); renderTable(); }); }
+  $('#thint').textContent = `${M.facets.filter(f => S.groups.has(f.group)).length} of ${M.facets.length} attributes shown; the table scrolls sideways and the plants stay in place. A cell opens its claims, sources and their standing. ` + (ff ? `Columns ${ff.label} requires are marked; linked plants come first.` : 'A column header sorts by the number of values.');
   const selA = S.inspect?.kind === 'attr' ? M.AT.get(S.inspect.id) : null;   // the selected cell marks its row and its column header, so it can be found again after scrolling
   const cols = M.facets.filter(f => S.groups.has(f.group));
-  const q = S.q.trim().toLowerCase();
-  let rows = M.species.filter(s => !q || [s.scientific_name, ...(s.common_names || []), s.family].join(' ').toLowerCase().includes(q));
+  let rows = rowsFor();
   const rank = { derived: 0, documented: 0, candidate: 1, unknown: 2 };
   if (ff) rows = rows.slice().sort((a, b) => { const la = M.link(a.id, ff.id), lb = M.link(b.id, ff.id); return rank[la.status] - rank[lb.status] || (la.verdict === 'evidence missing') - (lb.verdict === 'evidence missing') || a.scientific_name.localeCompare(b.scientific_name); });
   if (S.sort) rows = rows.slice().sort((a, b) => (M.attr(b.id, S.sort)?.n_values || 0) - (M.attr(a.id, S.sort)?.n_values || 0));
   const groupsRow = []; let last = null;
   for (const f of cols) { if (f.group !== last) { groupsRow.push({ g: f.group, n: 1 }); last = f.group; } else groupsRow[groupsRow.length - 1].n++; }
-  let h = `<table class="attr"><thead><tr class="groups"><th colspan="1"></th>${S.identity ? '<th colspan="5">identity</th>' : ''}${groupsRow.map(x => `<th colspan="${x.n}">${esc(M.GR.get(x.g).label)}</th>`).join('')}</tr><tr class="cols"><th>Species</th>${S.identity ? '<th title="read from the sources (rule M29)">Growth form</th><th>Family</th><th>Origin</th><th>KPU type</th><th>Claims</th>' : ''}${cols.map(f => `<th class="${req.has(f.id) ? 'req' : ''} ${S.sort === f.id ? 'sorted' : ''} ${selA?.facet === f.id ? 'selcol' : ''}" data-act="tsort" data-id="${esc(f.id)}" title="${esc(f.definition || f.label)} · ${f.policy === 'node' ? 'concept facet' : 'numeric / categorical attribute'} · ${f.gate ? 'gate field (survey c1)' : 'compare field'}">${esc(f.label)}${f.gate ? ' <span class="g">gate</span>' : ''}</th>`).join('')}</tr></thead><tbody>`;
+  let h = `<table class="attr"><thead><tr class="groups"><th colspan="1"></th><th colspan="${S.identity ? 5 : 1}">identity</th>${groupsRow.map(x => `<th colspan="${x.n}">${esc(M.GR.get(x.g).label)}</th>`).join('')}</tr><tr class="cols"><th>Plant</th><th title="read from the sources (rule M29)">Growth form</th>${S.identity ? '<th>Family</th><th>Origin</th><th>KPU type</th><th>Claims</th>' : ''}${cols.map(f => `<th class="${req.has(f.id) ? 'req' : ''} ${S.sort === f.id ? 'sorted' : ''} ${selA?.facet === f.id ? 'selcol' : ''}" data-act="tsort" data-id="${esc(f.id)}" title="${esc(f.definition || f.label)} · ${f.policy === 'node' ? 'concept facet' : 'numeric / categorical attribute'} · ${f.gate ? 'gate field (survey c1)' : 'compare field'}">${esc(f.label)}${f.gate ? ' <span class="g">gate</span>' : ''}</th>`).join('')}</tr></thead><tbody>`;
   for (const s of rows) {
     const l = ff ? M.link(s.id, ff.id) : null;
     h += `<tr class="${fs === s.id ? 'focus' : ''} ${l ? (l.drawn ? 'linked' : 'unknown-fn') : ''} ${selA?.species === s.id ? 'selrow' : ''}"><th data-focus="species=${esc(s.id)}"><i class="sci">${esc(s.scientific_name)}</i>${S.a === s.id ? ` ${tag('A')}` : ''}${S.b === s.id ? ` ${tag('B')}` : ''}${l ? `<span class="st">${esc(cellWord(l))}${l.conflict ? ' · conflict' : ''}</span>` : ''}</th>`;
-    if (S.identity) h += `<td class="ident" data-inspect="species=${esc(s.id)}">${esc(s.growth_form_label || '—')}${s.growth_form_status && s.growth_form_status !== 'supported' ? ` <small class="faint">${esc(human(s.growth_form_status))}</small>` : ''}</td><td class="ident">${esc(s.family || '—')}</td><td class="ident">${esc(human(s.origin_status) || '—')}</td><td class="ident">${esc(s.kpu_plant_type || '—')}</td><td class="ident">${s.claims.live} live · ${s.claims.verified} verified · ${s.claims.retired} retired</td>`;
+    h += `<td class="ident" data-inspect="species=${esc(s.id)}" title="Growth form, read from the sources (rule M29) — click for the plant's record">${esc(s.growth_form_label || 'not recorded')}${s.growth_form_status && s.growth_form_status !== 'supported' ? ` <small class="faint">${esc(human(s.growth_form_status))}</small>` : ''}</td>`;
+    if (S.identity) h += `<td class="ident">${esc(s.family || '—')}</td><td class="ident">${esc(human(s.origin_status) || '—')}</td><td class="ident">${esc(s.kpu_plant_type || '—')}</td><td class="ident">${s.claims.live} live · ${s.claims.verified} verified · ${s.claims.retired} retired</td>`;
     for (const f of cols) {
       const a = M.attr(s.id, f.id); const selc = S.inspect?.kind === 'attr' && S.inspect.id === a?.id;
       if (!a) { h += `<td class="nr ${req.has(f.id) ? 'req' : ''}">not recorded</td>`; continue; }
-      const vals = a.values.slice(0, 3).map(v => `<span class="v">${esc(v.label)}<small> ${v.claims.length || (v.entity ? 'e' : '')}${v.conditions.length ? '·c' : ''}</small></span>`).join('') + (a.values.length > 3 ? `<span class="v faint">+${a.values.length - 3}</span>` : '');
+      const short = t => t.length > 30 ? t.slice(0, 28) + '…' : t;   // a concise value in the cell; every value, claim and source is in the inspector
+      const vals = a.values.slice(0, 2).map(v => esc(short(v.label))).join(' · ') + (a.values.length > 2 ? ` <span class="more">+${a.values.length - 2}</span>` : '');
       h += `<td class="${req.has(f.id) ? 'req' : ''} ${selc ? 'sel' : ''}" data-inspect="attr=${esc(a.id)}" title="${esc(a.values.map(v => v.label).join(' · '))} — ${a.n_values} values · ${a.n_claims} claims · ${a.n_sources} sources · ${esc(a.verification)}${a.disagreement.length ? ' · sources disagree' : ''}">${vals}${a.verification === 'verified' ? ` <span class="ver">✓</span>` : ''}${a.disagreement.length ? ` <span class="dis">disagree ${a.disagreement.length}</span>` : ''}${a.variation.length ? ` <span class="dis cond">by condition</span>` : ''}</td>`;
     }
     h += `</tr>`;
@@ -493,7 +539,7 @@ function relationHtml(r, full = false) {
 function speciesHtml(s) {
   const M = S.M; const links = M.linksOf(s.id); const rels = M.relationsOf(s.id), retired = M.relationsOf(s.id, false).filter(r => !r.live);
   let h = head(`<a class="sp" href="${esc(PI.links.profile(s.id))}" title="open the Plant Profile in the Plant Library"><i class="sci">${esc(s.scientific_name)}</i></a>`, `species · ${esc(s.growth_form_label || '')}${s.growth_form_status && s.growth_form_status !== 'supported' ? ` (growth form ${esc(human(s.growth_form_status))})` : ''}`, `${esc((s.common_names || []).join(' · '))} · ${esc(s.family)} · ${esc(human(s.origin_status))} · ${esc(s.kpu_plant_type)} · ${s.claims.live} live claims (${s.claims.verified} verified, ${s.claims.retired} retired)`);
-  h += PC.miniHtml(M.d, s.id, S.imgs, { here: 'explorer', extra: `<a href="${esc(PI.links.neural(s.id))}">Neural view</a>` });
+  h += PC.miniHtml(M.d, s.id, S.imgs, { here: 'explorer', extra: `<a href="${esc(PI.links.neural(s.id))}">3D network</a>` });
   h += `<p class="small">Compare: <span class="link" data-ab="a" data-id="${esc(s.id)}">${S.a === s.id ? 'A ✓' : 'set as A'}</span> · <span class="link" data-ab="b" data-id="${esc(s.id)}">${S.b === s.id ? 'B ✓' : 'set as B'}</span>${S.a && S.b ? ` · <span class="link" data-view="compare">open the comparison</span>` : ''}</p>`;
   const gapWhy = l => (l.missing || []).map(m => `${esc(m.strength)} ${esc(m.alternative_labels.join(' or '))} ${esc(m.result)}`).join('; ') || 'open the requirement check';
   h += `<h3>Spatial functions <small>${links.filter(l => l.drawn).length} linked · ${links.filter(l => !l.drawn).length} without a link</small></h3>` + links.map(l => `<div class="row" data-inspect="link=${esc(l.id)}"><div class="b">${esc(M.name(l.function))} ${stTag(l)} ${l.drawn ? verTag(l) : ''} ${l.conflict ? tag('conflict') : ''}<div class="meta">${l.drawn ? (l.via_use_labels.length ? `use: ${esc(l.via_use_labels.join(', '))} (${esc(l.use_sources.join(', '))})` : 'inferred from traits (KG-R4), no source states this use') : gapWhy(l)}</div></div></div>`).join('');
