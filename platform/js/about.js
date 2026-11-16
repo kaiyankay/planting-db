@@ -1,7 +1,9 @@
 // Planting Intelligence · About (V4, 2026-11-15). One module for the About pages; the page is named by <body data-about>:
 //
 //   project      why the project exists, what the ten-species prototype can and cannot do, the figures of the release
-//   how          what the planting engine computes, followed on the Studio's recorded reference garden (designs/demo-a.json)
+//   how          what the planting engine computes: one switchable figure computed on the recorded reference garden
+//                (designs/demo-a.json) — input & site, evidence & eligibility, composition & arrangement, evaluation — with the
+//                written rules, sources, heuristics and limits in expanders below it (V4.1)
 //   method       the seven steps by which the knowledge base is built, with one real claim carried through
 //   contribute   the practitioner survey, how a contribution becomes a reviewed claim, what works today and what is research
 //   typography   the type specimen
@@ -31,6 +33,10 @@ const TITLE = { project: 'About', how: 'How it works', method: 'Research & Metho
 })();
 
 function wire() {
+  wireStage();
+  // an expander named by the address opens (and a link to one opens it)
+  const openHash = () => { const el = location.hash.length > 1 && document.getElementById(location.hash.slice(1)); if (el?.tagName === 'DETAILS') { el.open = true; el.scrollIntoView(); } };
+  openHash(); window.addEventListener('hashchange', openHash);
   const cap = $('#ab-cap'); const say = ev => { const t = ev.target.closest('.ab-grid td [title]'); if (t && cap) cap.textContent = t.title; };
   $('.ab-grid')?.addEventListener('mouseover', say); $('.ab-grid')?.addEventListener('focusin', say);
   // the section list marks the section being read
@@ -108,6 +114,129 @@ async function project(d) {
   </div>`;
 }
 
+// ---------------------------------------------------------------- How it works: the computed figure (V4.1)
+// One saved garden (the reference project) in four views. Every count, length, status and species below is read at page load from
+// `engine.js` through `trace.js` (assemble, generate, evaluateScreen, evaluateGround); nothing is typed in. The arrangement view re-runs
+// `E.generate` with one existing parameter changed (the ground-layer pattern of one bed). State lives in the address: ?view= &pattern= &fn=.
+const VIEWS = [['site', 'Input &amp; site'], ['eligibility', 'Evidence &amp; eligibility'], ['arrangement', 'Composition &amp; arrangement'], ['evaluation', 'Evaluation']];
+let ST = null;
+const fold = (id, title, sub, body) => `<details class="ab-fold" id="${id}"><summary><span>${title}</span>${sub ? `<em>${sub}</em>` : ''}</summary><div class="ab-fold-b">${body}</div></details>`;
+const r2 = n => Math.round(n * 100) / 100;
+const areaOf = poly => r2(Math.abs(poly.reduce((a, q, i) => { const n = poly[(i + 1) % poly.length]; return a + q[0] * n[1] - n[0] * q[1]; }, 0)) / 2);
+const boxOf = poly => { const xs = poly.map(q => q[0]), ys = poly.map(q => q[1]); return { x0: Math.min(...xs), x1: Math.max(...xs), y0: Math.min(...ys), y1: Math.max(...ys) }; };
+const liveBeds = p => (p.site.beds || []).filter(b => b.status !== 'rejected' && Array.isArray(b.polygon));
+const common = (K, id) => K.sp(id)?.common_names?.[0] || K.name(id);
+
+/** the whole site in plan, from a project and (optionally) a version's plant objects.
+ *  plants: 'none' | 'all'; hot: bed ids drawn stronger; screen: a case whose screened edge and uncovered stretches are drawn; shares: bed id → text */
+function stagePlan(proj, version, { plants = 'none', hot = [], screen = null, shares = null, label = '' } = {}) {
+  const B = proj.site.boundary; if (!B) return ''; const S = boxOf(B); const m = 0.5; const X = x => r2(x - S.x0 + m), Y = y => r2(S.y1 - y + m); const pts = poly => poly.map(q => `${X(q[0])},${Y(q[1])}`).join(' ');
+  const W = r2(S.x1 - S.x0 + 2 * m), H = r2(S.y1 - S.y0 + 2 * m);
+  let h = `<polygon class="pl-site" points="${pts(B)}"/>`;
+  for (const f of proj.site.features || []) if (f.kind === 'no-plant-zone' && f.polygon) { const b = boxOf(f.polygon); h += `<polygon class="pl-open" points="${pts(f.polygon)}"/><text class="st-t dim" x="${X((b.x0 + b.x1) / 2)}" y="${Y((b.y0 + b.y1) / 2)}" text-anchor="middle">kept open</text>`; }
+  for (const b of liveBeds(proj)) h += `<polygon class="pl-bed${hot.includes(b.id) ? ' on' : ''}" points="${pts(b.polygon)}"/>`;
+  for (const f of proj.site.features || []) if (f.kind === 'existing-tree' && f.position_m) h += `<circle class="pl-tree" cx="${X(f.position_m[0])}" cy="${Y(f.position_m[1])}" r="${f.radius_m ?? 1.5}"/><circle class="pl-trunk" cx="${X(f.position_m[0])}" cy="${Y(f.position_m[1])}" r=".09"/>`;
+  if (plants === 'all' && version) {
+    const of = o => `cx="${X(o.position_m[0])}" cy="${Y(o.position_m[1])}" r="${o.proxy_radius_m}"`;
+    for (const o of version.plant_objects) if (o.role === 'ground') h += `<circle class="pl-ground st-g${hot.includes(o.bed_id) ? ' on' : ''}" ${of(o)}/>`;
+    for (const o of version.plant_objects) if (o.role === 'accent') h += `<circle class="pl-crown accent" ${of(o)}/>`;
+    for (const o of version.plant_objects) if (/^screen/.test(o.role)) h += `<circle class="pl-crown" ${of(o)}/><circle class="pl-stem" cx="${X(o.position_m[0])}" cy="${Y(o.position_m[1])}" r=".04"/>`;
+  }
+  if (screen?.screen.zone) for (const [i, e] of screen.screen.zone.edges.entries()) {
+    const len = Math.hypot(e.b[0] - e.a[0], e.b[1] - e.a[1]) || 1; const at = t => [e.a[0] + (e.b[0] - e.a[0]) * t / len, e.a[1] + (e.b[1] - e.a[1]) * t / len];
+    h += `<line class="pl-edge" x1="${X(e.a[0])}" y1="${Y(e.a[1])}" x2="${X(e.b[0])}" y2="${Y(e.b[1])}"/>`;
+    if (plants === 'all') for (const g of (screen.screen.evaluation?.gaps || []).filter(g => g.edge === i)) { const a = at(g.from_m), b = at(g.to_m); h += `<line class="pl-gap-u" x1="${X(a[0])}" y1="${Y(a[1])}" x2="${X(b[0])}" y2="${Y(b[1])}"/><line class="pl-gap" x1="${X(a[0])}" y1="${Y(a[1])}" x2="${X(b[0])}" y2="${Y(b[1])}"/><text class="st-t gap" x="${X((a[0] + b[0]) / 2)}" y="${r2(Y((a[1] + b[1]) / 2) - .12)}" text-anchor="middle">${g.length_m} m open</text>`; }
+  }
+  // bed names (and, in the evaluation view, the estimate of each ground layer), set inside the bed where it is widest
+  for (const b of liveBeds(proj)) { const bb = boxOf(b.polygon); const tall = (bb.y1 - bb.y0) > 1.6 * (bb.x1 - bb.x0); const cx = X((bb.x0 + bb.x1) / 2), cy = Y((bb.y0 + bb.y1) / 2); const t = shares?.[b.id] ? `${b.name} · ${shares[b.id]}` : b.name;
+    h += `<text class="st-t bed${plants === 'all' ? ' over' : ''}" x="${cx}" y="${r2(cy + .06)}" text-anchor="middle"${tall ? ` transform="rotate(-90 ${cx} ${cy})"` : ''}>${esc(t)}</text>`; }
+  h += `<g class="pl-dim"><line x1="${X(S.x0)}" y1="${r2(H - .2)}" x2="${X(S.x1)}" y2="${r2(H - .2)}"/><text x="${r2(W / 2)}" y="${r2(H - .02)}" text-anchor="middle">${r2(S.x1 - S.x0)} m</text><text x="${r2(W - .1)}" y=".3" text-anchor="end">N ↑</text></g>`;
+  return `<svg class="kn-plan st-plan" viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(label)}">${h}</svg>`;
+}
+const KEYS = { bed: '<span><i class="k-bed"></i>planting bed</span>', crown: '<span><i class="k-crown"></i>Screen plant, mature crown from a claimed spread</span>', ground: '<span><i class="k-gl"></i>ground-layer plant</span>', accent: '<span><i class="k-accent"></i>accent</span>', edge: '<span><i class="k-edge"></i>screened edge</span>', gap: '<span><i class="k-gap"></i>not covered</span>', tree: '<span><i class="k-tree"></i>existing tree, estimated crown</span>' };
+const key = (...ks) => `<p class="kn-key">${ks.map(k => KEYS[k]).join('')}</p>`;
+const caseFor = fn => { if (fn === 'z:screen') return ST.c; const run = ST.gc?.runs.find(r => r.saved) || ST.gc?.runs[0]; return T.buildCase(ST.ref, ST.K, ST.E, { fn, bedId: ST.gc?.bed.id, origin: 'reference' }) || run?.c; };
+
+function caseLine() {
+  const { c, ref, d, fp } = ST; const v = c.version; const L = PI.links;
+  return `<span><b>${esc(ref.name || ref.id)}</b>, a garden saved by the Studio</span><span>${c.dry ? 'no saved arrangement: the engine’s own run' : `version <span class="ab-id">${esc(v.id)}</span> “${esc(v.label || '')}”`}</span><span>seed ${esc(v?.seed)}</span><span>knowledge ${esc(c.snapshot.design || d.generated)}</span><span>${v?.input_fp ? `fingerprint <span class="ab-id">${esc(v.input_fp)}</span>` : `no fingerprint was stored with this version${fp ? `; its inputs read now give <span class="ab-id">${esc(fp)}</span>` : ''}`}</span><span class="ab-case-n">This is not the garden of the Studio’s guided example. That one has its tree and north bed drawn differently, so its plants and its Screen result differ from these.</span><a href="${esc(L.trace(SALAL, { fn: 'z:screen' }))}">Full trace of this garden’s Screen decision</a>`;
+}
+
+function stageHtml() {
+  const { c, ref, K, E, gc, view } = ST; const v = c.version; const proj = c.project; const ev = c.screen.evaluation; const pl = c.screen.plan; const beds = liveBeds(proj);
+  const wantedOf = b => { try { return E.assemble(proj, K, b).wanted; } catch { return []; } }; const FNL = new Map(ST.d.functions.map(f => [f.id, f.label]));
+  if (view === 'site') {
+    const brief = ref.brief || {}; const conds = Object.entries(ref.site?.conditions || {}); const unk = conds.filter(([, x]) => !x || x.status === 'unknown'); const S = boxOf(proj.site.boundary);
+    return `<figure class="ab-fig">${stagePlan(proj, null, { hot: [], label: `Plan of the ${r2(S.x1 - S.x0)} by ${r2(S.y1 - S.y0)} metre site with ${beds.length} planting beds, before any plant is placed` })}${key('bed', 'tree')}</figure>
+    <div class="ab-pan"><h3>What was said, and what was not</h3>
+      ${c.said ? `<blockquote class="ab-said sm">${esc(c.said)}</blockquote>` : ''}
+      <p>Offline rules read ${(brief.functions || []).filter(f => !f.alternative).length} spatial functions and ${(brief.hard_constraints || []).length} constraints from it. The beds are the Studio’s proposal, as accepted or edited.</p>
+      <table class="pi-table st-tab"><thead><tr><th>Bed</th><th>Asked to be</th><th class="n">Area</th></tr></thead><tbody>${beds.map(b => `<tr><td>${esc(b.name)}</td><td>${wantedOf(b).map(f => esc(FNL.get(f) || f)).join(', ') || '—'}</td><td class="n">${areaOf(b.polygon)} m²</td></tr>`).join('')}</tbody></table>
+      <p class="st-unk"><b>${unk.length} of ${conds.length} site conditions unknown</b>${unk.length ? `: ${unk.map(([k]) => esc(T.human(k))).join(', ')}` : ''}. Nothing is assumed for them; a check that needs one comes back uncertain.</p>
+      <p class="st-more"><a href="#intent">How the sentence is read</a></p></div>`;
+  }
+  if (view === 'eligibility') {
+    const fn = ST.fn; const cc = caseFor(fn) || c; const all = ST.all[fn] || (ST.all[fn] = T.decisions(cc, fn)); const lab = FNL.get(fn) || fn;
+    const ok = all.filter(x => x.cand && x.cand.fit !== 'fails'); const pend = ok.filter(x => T.pending(x)); const n = k => all.filter(x => x.outcome === k).length;
+    return `<figure class="ab-fig">${stagePlan(proj, null, { hot: [cc.bed.id], screen: fn === 'z:screen' ? cc : null, label: `Plan of the site with the ${cc.bed.name} marked: the bed the ${all.length} species are checked for` })}${key('bed', ...(fn === 'z:screen' ? ['edge'] : []), 'tree')}</figure>
+    <div class="ab-pan"><h3>${all.length} species checked for one bed</h3>
+      <div class="st-seg" role="group" aria-label="Which bed and function">${[['z:screen', c], ...(gc ? [['z:ground_cover', caseFor('z:ground_cover')]] : [])].map(([f, x]) => `<button type="button" data-fn="${f}" aria-pressed="${f === fn}">${esc(FNL.get(f) || f)} · ${esc(x.bed.name)}</button>`).join('')}</div>
+      <p class="st-sum"><b>${ok.length}</b> pass the engine’s checks${pend.length ? `, <b>${pend.length}</b> of them with a check still uncertain` : ''} · <b>${n('excluded')}</b> excluded · <b>${n('unknown')}</b> evidence unknown${n('other_role') ? ` · <b>${n('other_role')}</b> used for another function in this bed` : ''}</p>
+      <ul class="st-list">${all.map(x => `<li><a href="${esc(PI.links.trace(x.species, { fn }))}"><span class="st-n">${esc(common(K, x.species))} ${sci(K.name(x.species))}</span>${T.outD(x)}<span class="st-why">${esc(cap(T.tidy(x.reason)))}</span></a></li>`).join('')}</ul>
+      <p class="ab-note">Passing a check is not a recommendation for ${esc(lab)}. “Evidence unknown” is a missing record, not a verdict on the plant.</p>
+      <p class="st-more"><a href="#checks">The checks, on one real claim</a></p></div>`;
+  }
+  if (view === 'arrangement') {
+    const run = gc?.runs.find(r => r.key === ST.pattern) || null; const vv = run ? run.version : v; const pp = run ? run.proj : proj; const bedId = gc?.bed.id; const inBed = o => o.bed_id === bedId && (o.role === 'ground' || o.role === 'accent');
+    const objs = vv ? vv.plant_objects : []; const by = {}; for (const o of objs.filter(inBed)) by[o.species_id] = (by[o.species_id] || 0) + 1; const nBed = objs.filter(inBed).length; const nSaved = v ? v.plant_objects.filter(inBed).length : 0;
+    const share = run ? run.share : (c.version?.evaluation?.ground_cover || []).find(g => g.bed_id === bedId)?.ground_cover_share ?? null; const savedShare = (v?.evaluation?.ground_cover || []).find(g => g.bed_id === bedId)?.ground_cover_share ?? null;
+    const sc = objs.filter(o => /^screen/.test(o.role)); const picks = role => (c.asm.picks[role] || []).map(p => esc(common(K, p.id))).join(', ') || 'none';
+    const opt = (k, l, t) => `<label><input type="radio" name="st-pattern" value="${k}"${ST.pattern === k ? ' checked' : ''}><span><b>${l}</b>${t ? `<em>${t}</em>` : ''}</span></label>`;
+    return `<figure class="ab-fig">${stagePlan(pp, vv, { plants: 'all', hot: bedId ? [bedId] : [], screen: run ? null : c, label: `Plan of the site with ${objs.length} plant objects${run ? `, the ${gc.bed.name} generated as ${run.label}` : ' as saved'}` })}${key('crown', 'ground', 'accent', 'tree')}</figure>
+    <div class="ab-pan"><h3>${objs.length} plant objects${run ? ', generated just now' : ', as saved'}</h3>
+      <p>Screen row: ${picks('screen')}${pl ? `, ${pl.placed[0] + pl.placed[1]} of ${pl.expected[0] + pl.expected[1]} positions at ${pl.step_m} m` : ''}. Ground layer: ${picks('ground')}${c.asm.picks.accent?.length ? `, with ${picks('accent')} as accents` : ''}.</p>
+      ${gc ? `<fieldset class="st-opt"><legend>Ground-layer pattern of the ${esc(gc.bed.name)}</legend>
+        ${opt('saved', 'As saved', v ? `version ${esc(v.id)}` : '')}${gc.runs.map(r => opt(r.key, esc(r.label), r.saved ? 'the saved pattern, generated again' : '')).join('')}</fieldset>
+      <table class="pi-table st-tab"><tbody>
+        <tr><td>Plants in the ${esc(gc.bed.name)}</td><td class="n"><b>${nBed}</b>${run ? ` <span class="st-d">saved: ${nSaved}</span>` : ''}</td></tr>
+        ${Object.entries(by).sort((a, b) => b[1] - a[1]).map(([id, n]) => `<tr><td class="st-in">${esc(common(K, id))}</td><td class="n">${n}</td></tr>`).join('')}
+        <tr><td>Ground under a mature crown, an estimate</td><td class="n"><b>${share != null ? pct(share) : 'not measured'}</b>${run && savedShare != null ? ` <span class="st-d">saved: ${pct(savedShare)}</span>` : ''}</td></tr>
+        <tr><td>Screen plants</td><td class="n">${sc.length}${run && v ? ` <span class="st-d">saved: ${v.plant_objects.filter(o => /^screen/.test(o.role)).length}</span>` : ''}</td></tr>
+      </tbody></table>
+      <p class="ab-note">${run ? `The whole garden was generated again by the engine with seed ${esc(gc.seed)} and only this pattern set${run.saved ? '. The saved version was last changed by a geometry update of one bed, so a full run can differ from it' : ''}. Nothing is stored.` : `Choose a pattern: the engine runs again in your browser and the plan and the counts change.`}${pl?.reason ? ` Screen: ${esc(pl.reason)}.` : ''}</p>` : ''}
+      <p class="st-more"><a href="#arrangement">Spacing and row rules</a> <a href="#ground">The three patterns side by side</a></p></div>`;
+  }
+  // evaluation: the saved version, measured on the model
+  const gcs = v?.evaluation?.ground_cover || []; const shares = Object.fromEntries(gcs.map(g => [g.bed_id, pct(g.ground_cover_share)])); const evc = ev ? Object.entries(ev.checks) : [];
+  return `<figure class="ab-fig">${stagePlan(proj, v, { plants: 'all', hot: [c.bed.id], screen: c, shares, label: `Plan of the site as evaluated: the screened edge with ${ev?.gaps?.length || 0} uncovered stretch${ev?.gaps?.length === 1 ? '' : 'es'}, and the estimate of each ground layer` })}${key('crown', 'edge', 'gap', 'ground')}${T.edgeStrip(c)}</figure>
+  <div class="ab-pan"><h3>Measured on the model, not in a garden</h3>
+    ${ev ? `<p class="st-verdict ${esc(String(ev.status).replace(/\s+/g, '_'))}">Screen: ${esc(ev.status)}</p>
+    <p><b>${ev.covered_m} of ${ev.edge_length_m} m covered</b> by a mature crown along the ${esc(c.bed.name)}’s screened edge${ev.gaps?.length ? `; ${ev.gaps.map(g => `${g.length_m} m`).join(' and ')} left open` : ''}. Target height ${ev.target_height_m} m (${esc(ev.target_basis)}).</p>
+    <ul class="st-checks">${evc.map(([k, x]) => `<li>${esc(cap(T.human(k)))} ${T.res(x)}</li>`).join('')}</ul>` : '<p>No Screen was evaluated in this garden.</p>'}
+    ${gcs.length ? `<h4>Ground Cover: an estimate, with no pass mark</h4><ul class="st-checks">${gcs.map(g => `<li>${esc(g.name)} <span class="pi-res estimate">${pct(g.ground_cover_share)} of ${g.plantable_m2} m²</span></li>`).join('')}</ul>
+    <p class="ab-note">The share of plantable ground under the mature crowns of the ground layer, at claimed spreads. The engine sets no threshold, so it is never met or not met, and it says nothing about habitat or connectivity.</p>` : ''}
+    <p class="st-more"><a href="#evaluation">Every reason and check</a> <a href="${esc(PI.links.trace(SALAL, { fn: 'z:screen' }))}">Open the full trace</a></p></div>`;
+}
+
+function wireStage() {
+  const root = $('#figure'); if (!root || !ST) return; const panel = $('#ab-stage-b'); const tabs = [...root.querySelectorAll('[role="tab"]')];
+  const sync = (focus = false) => {
+    for (const t of tabs) { const on = t.dataset.view === ST.view; t.setAttribute('aria-selected', on); t.tabIndex = on ? 0 : -1; if (on && focus) t.focus(); }
+    panel.setAttribute('aria-labelledby', `ab-tab-${ST.view}`); panel.innerHTML = stageHtml();
+    const q = new URLSearchParams(location.search); q.set('view', ST.view); if (ST.pattern !== 'saved') q.set('pattern', ST.pattern); else q.delete('pattern'); if (ST.fn === 'z:ground_cover') q.set('fn', 'ground'); else q.delete('fn');
+    history.replaceState(null, '', `${location.pathname}?${q}${location.hash}`);
+  };
+  root.addEventListener('click', ev => {
+    const t = ev.target.closest('[role="tab"]'); if (t) { ST.view = t.dataset.view; sync(); return; }
+    const f = ev.target.closest('[data-fn]'); if (f) { ST.fn = f.dataset.fn; sync(); panel.querySelector(`[data-fn="${ST.fn}"]`)?.focus(); }
+  });
+  root.querySelector('[role="tablist"]').addEventListener('keydown', ev => {
+    const i = tabs.findIndex(t => t.dataset.view === ST.view); const to = ev.key === 'ArrowRight' ? (i + 1) % tabs.length : ev.key === 'ArrowLeft' ? (i + tabs.length - 1) % tabs.length : ev.key === 'Home' ? 0 : ev.key === 'End' ? tabs.length - 1 : -1;
+    if (to < 0) return; ev.preventDefault(); ST.view = tabs[to].dataset.view; sync(true);
+  });
+  root.addEventListener('change', ev => { if (ev.target.name === 'st-pattern') { ST.pattern = ev.target.value; sync(); panel.querySelector('input[name="st-pattern"]:checked')?.focus(); } });
+}
+
 // ---------------------------------------------------------------- How it works
 async function how(d) {
   const [eng, ref] = await Promise.all([T.loadEngine(), PI.loadReference()]); const E = eng.E; const K = new eng.Knowledge(d); const L = PI.links;
@@ -129,18 +258,20 @@ async function how(d) {
   const KEY = ['screen_target_height', 'screen_spacing', 'ground_spacing', 'size_proxy', 'row_inset', 'area_sample']; const rest = Object.keys(R).filter(k => !KEY.includes(k));
   const nH = Object.values(R).filter(r => r.source === 'heuristic').length;
   const stage = (n, id, name, value, standing) => `<a href="#${id}"><span><b>${n}</b>${name}</span><strong>${value}</strong><em>${standing}</em></a>`;
-  return `<div class="ab">
-  ${mast('What the engine actually computes.', 'Five stages take a described site to an evaluated planting. Each one is a written rule or a record you can open. This page follows them on the Studio’s recorded reference garden, with the engine re-run in your browser.',
-    `<p class="ab-prov">Reference garden: <b>${esc(ref.name || 'Demo A')}</b>, saved by the Studio (designs/demo-a.json)${c.dry ? '<br>no saved arrangement found: the engine’s own run is shown' : ''}<br>engine: design/js/engine.js, run on <b>knowledge ${esc(d.generated)}</b><br>nothing here is a live language model</p>`)}
-  <nav class="ab-chain" aria-label="The five stages, on the reference garden">
-    ${stage(1, 'intent', 'Intent &amp; site', `${(brief.functions || []).filter(f => !f.alternative).length} functions read from one sentence`, `${conds.length - known.length} of ${conds.length} site conditions unknown`)}
-    ${stage(2, 'checks', 'Eligibility &amp; evidence', `${nOut('planted') + nOut('not_placed') + nOut('eligible')} of ${all.length} species pass for Screen`, `${nOut('excluded')} excluded by a check, ${nOut('unknown')} evidence unknown`)}
-    ${stage(3, 'composition', 'Plant composition', `${esc(K.name(SALAL))} for the row`, `mix of ${c.asm.picks.ground.length} for the ground layer`)}
-    ${stage(4, 'arrangement', 'Spatial arrangement', `${placed}${expected != null ? ` of ${expected}` : ''} positions planted`, pl ? `${pl.rows === 1 ? 'one row' : `${pl.rows} rows`} at ${pl.step_m} m` : 'row along the screened edge')}
-    ${stage(5, 'evaluation', 'Evaluation &amp; revision', ev ? `Screen: ${esc(ev.status)}` : 'not evaluated', ev ? `${ev.covered_m} of ${ev.edge_length_m} m covered` : '')}
-  </nav>
+  const fp = (() => { try { return T.inputFp(c.project, T.genOf(c.version)); } catch { return null; } })();
+  ST = { d, ref, K, E, c, gc, fp, all: { 'z:screen': all }, view: 'site', pattern: 'saved', fn: 'z:screen' };
+  const q = new URLSearchParams(location.search); if (VIEWS.some(v => v[0] === q.get('view'))) ST.view = q.get('view'); if (gc?.runs.some(r => r.key === q.get('pattern'))) ST.pattern = q.get('pattern'); if (q.get('fn') === 'ground' && gc) ST.fn = 'z:ground_cover';
+  return `<div class="ab ab-how">
+  ${mast('What the engine actually computes.', 'One recorded garden, computed again in your browser. Switch the view to follow it from what was said to what was measured.',
+    `<p class="ab-prov">engine: design/js/engine.js, run on <b>knowledge ${esc(d.generated)}</b><br>read through platform/js/trace.js<br>nothing here is a live language model</p>`)}
+  <section class="ab-stage" id="figure" aria-label="The reference garden, computed in four views">
+    <div class="ab-tabs" role="tablist" aria-label="What to look at">${VIEWS.map(([k, l], i) => `<button type="button" role="tab" id="ab-tab-${k}" data-view="${k}" aria-controls="ab-stage-b" aria-selected="${k === ST.view}" tabindex="${k === ST.view ? 0 : -1}"><b>${i + 1}</b>${l}</button>`).join('')}</div>
+    <div class="ab-stage-b" id="ab-stage-b" role="tabpanel" aria-labelledby="ab-tab-${ST.view}" tabindex="0">${stageHtml()}</div>
+    <p class="ab-case">${caseLine()}</p>
+  </section>
+  <h2 class="ab-below">The rules behind each view</h2>
 
-  ${sec('intent', '<b>1</b> Intent &amp; site', 'What you say and draw. Anything not stated stays unknown.', `
+  ${fold('intent', 'Intent &amp; site', 'What you say and draw. Anything not stated stays unknown.', `
     ${said ? `<blockquote class="ab-said">${esc(said)}</blockquote><p class="ab-by">${T.who('you')} the sentence the reference garden was started with</p>` : ''}
     <p>Offline rules read the sentence. They look for dimensions, existing trees, open areas and a short list of wishes, and they name the rule behind each reading. No language model is connected to this public preview.</p>
     <table class="pi-table"><thead><tr><th>Spatial function</th><th>Where</th><th>Why the rules proposed it</th><th>Engine</th></tr></thead><tbody>${fnRows}</tbody></table>
@@ -148,7 +279,7 @@ async function how(d) {
     <div class="ab-unk"><h3>Left unknown, not assumed</h3><ul>${conds.map(([k, v]) => `<li>${esc(cap(T.human(k)))} <span class="pi-res ${v?.status === 'unknown' ? 'unknown' : 'met'}">${esc(v?.status === 'unknown' ? 'unknown' : v?.value ?? v?.status)}</span></li>`).join('')}</ul>
     <p class="ab-note">A check that needs an unknown condition comes back <b>uncertain</b>, never passed.</p></div>`)}
 
-  ${sec('checks', '<b>2</b> Eligibility &amp; evidence checks', 'Every species is checked for the bed. The reason is kept either way.', `
+  ${fold('checks', 'Eligibility &amp; evidence checks', 'Every species is checked for the bed. The reason is kept either way.', `
     <p>The ${esc(c.bed.name)} is asked to be a Screen${req?.target_height_m ? ` of ${req.target_height_m} m (${esc(req.target_basis || '')})` : ''}. The engine checks each species for evidence of the function, the height, and the site conditions. Here is ${sci(sp.scientific_name)}:</p>
     <dl class="pi-ledger ab-led">
       ${it.claim ? T.row('source', `<blockquote>${esc(it.check?.excerpt || it.claim.text)}</blockquote><p class="pi-led-n">${esc(T.sourceName(d, it.claim.source_id))}${it.check?.locator ? `, ${esc(it.check.locator.split(':')[0].toLowerCase())}` : ''}</p>`, T.sourceLink(d, it.claim.source_id), 'source') : ''}
@@ -162,7 +293,7 @@ async function how(d) {
       <table class="pi-table ab-out"><thead><tr><th>Species</th><th>Outcome</th><th>Reason</th></tr></thead><tbody>${outRows}</tbody></table>
       <p class="ab-note">“Eligible” means the engine’s checks passed or are pending on unknown site conditions. It is not a horticultural recommendation. “Evidence unknown” means a record is missing, which is not the same as unsuitable.</p></details>`)}
 
-  ${sec('composition', '<b>3</b> Plant composition', 'Which of the species that qualify are used.', `
+  ${fold('composition', 'Plant composition', 'Which of the species that qualify are used.', `
     <p>From the species that pass, the engine takes the best-ranked for each role: at most ${E.COMPOSITION.max_species.screen} for a Screen row and ${E.COMPOSITION.max_species.ground} for a ground layer. You can replace its mix in Compose with any species that qualifies for the bed. A species you ask for is still checked; one that fails is not planted.</p>
     <table class="pi-table"><thead><tr><th>Role in the ${esc(c.bed.name)}</th><th>Mix</th><th>Outcome for ${sci(sp.scientific_name)}</th></tr></thead><tbody>
       <tr><td>Screen row</td><td>${picks('screen')}</td><td>${T.out(dc.outcome)} <span class="ab-q">${esc(T.tidy(dc.reason))}</span></td></tr>
@@ -171,7 +302,7 @@ async function how(d) {
     </tbody></table>
     <p class="ab-by">${T.who('rule')} ranking and mix: engine.js <span class="ab-id">assemble</span> · ${T.who('you')} any change to the mix</p>`)}
 
-  ${sec('arrangement', '<b>4</b> Spatial arrangement', 'Where each plant stands, by named operators and stated spacing.', `
+  ${fold('arrangement', 'Spatial arrangement', 'Where each plant stands, by named operators and stated spacing.', `
     <div class="ab-draw"><div>${T.planSvg(c, { fn: 'z:screen', species: SALAL })}<p class="kn-key"><span><i class="k-bed"></i>planting bed</span><span><i class="k-crown"></i>mature crown, from a claimed spread</span><span><i class="k-edge"></i>screened edge</span><span><i class="k-gap"></i>not covered</span><span><i class="k-tree"></i>existing tree, estimated</span></p></div>
     <div>${pl ? `<p>${pl.rows === 1 ? 'One row' : `${pl.rows} rows`} along the ${pl.edge_length_m} m edge: ${expected} positions at ${pl.step_m} m, <b>${placed} planted</b>.${pl.shortfall ? ` ${esc(cap(T.tidy(pl.shortfall)))}.` : ''}</p>
       <p>Spacing: ${esc(pl.spacing_rule)}. ${T.res(pl.spacing_source)}</p>
@@ -179,7 +310,7 @@ async function how(d) {
       <p class="ab-note">Crowns are drawn at half the claimed mature spread. They are size proxies with their claim id on every plant object, not a picture of how the plants will grow.</p></div></div>
     <p class="ab-by">${T.who('rule')} operators ${(sup['z:screen']?.operators || []).map(o => `<span class="ab-id">${esc(o)}</span>`).join(' ')} · seeded and deterministic: the same input gives the same garden</p>`)}
 
-  ${sec('evaluation', '<b>5</b> Evaluation &amp; revision', 'The engine measures its own result on the model, and says so when it falls short.', `
+  ${fold('evaluation', 'Evaluation &amp; revision', 'The engine measures its own result on the model, and says so when it falls short.', `
     ${ev ? `<p class="ab-verdict ${esc(String(ev.status).replace(/\s+/g, '_'))}">Screen: ${esc(ev.status)}</p>
     <ul class="ab-reasons">${(ev.reasons || []).map(r => `<li>${T.res(r.kind === 'unmet' ? 'not met' : r.kind)} ${esc(cap(r.text))}</li>`).join('')}</ul>
     ${T.edgeStrip(c)}
@@ -189,13 +320,13 @@ async function how(d) {
     <p>A result is where revision starts. In Compose you can state the target height, require year-round cover, change the row, or choose other species that qualify; the engine runs again and the plan, the schedule and this evaluation change together. If a change gives the same result, the page says why.</p>
     ${go([L.trace(SALAL, { fn: 'z:screen' }), 'The full trace of this decision'], [L.design(), 'Open the Studio'])}`)}
 
-  ${sec('ground', 'A second example: Ground Cover', 'A pattern is a real instruction to the engine. Its result is an estimate with no pass mark.', gc ? `
+  ${fold('ground', 'Ground Cover patterns, side by side', 'A pattern is a real instruction to the engine. Its result is an estimate with no pass mark.', gc ? `
     <p>The ${esc(gc.bed.name)} of the same garden, generated three times with only the pattern changed. Each run gives a different set of plant objects, and the estimate is measured again.</p>
     <div class="ab-runs">${gc.runs.map(r => `<figure>${r.svg}<figcaption><b>${esc(r.label)}</b><span>${esc(cap(r.text))}</span><span class="ab-run-n">${r.plants} plants${r.species.length ? `: ${r.species.map(([id, n]) => `${n} ${esc(K.sp(id)?.common_names?.[0] || K.name(id))}`).join(', ')}` : ''}</span><span class="ab-est">Ground Cover: an estimate, ${r.share != null ? pct(r.share) : 'not measured'}</span></figcaption></figure>`).join('')}</div>
     <p class="ab-note">The share is the part of the plantable bed area under the mature crowns of the ground layer, at claimed spreads, on a ${R.area_sample.value} m grid. The engine sets no threshold for it, so no page calls it met or not met. Clustered patches leave ground open on purpose, and the estimate counts that ground as uncovered.</p>
     <p class="ab-by">${T.who('rule')} operators ${gc.runs.map(r => `<span class="ab-id">${esc(r.operator)}</span>`).join(' ')} · ${T.who('estimate')} engine.js <span class="ab-id">evaluateGround</span></p>` : '<p>The reference garden holds no Ground Cover bed to demonstrate.</p>')}
 
-  ${sec('who', 'Who or what decides', 'Five kinds of work, kept apart on every page.', `
+  ${fold('who', 'Who or what decides', 'Five kinds of work, kept apart on every page.', `
     <table class="pi-table ab-who"><thead><tr><th>Kind</th><th>What it is here</th><th>What it is not</th></tr></thead><tbody>
       <tr><td>${T.who('you')}<b>Human input</b></td><td>The outline, the beds, the stated conditions, what each bed is for, the species you ask to consider, the arrangement you keep.</td><td>Never overridden silently. Never assumed where you said nothing.</td></tr>
       <tr><td>${T.who('rule')}<b>Offline rule</b></td><td>Reading your sentence, proposing beds, the knowledge-graph rules, the checks, the arrangement operators, the evaluation. Deterministic and written down.</td><td>Not a language model. Not learned from data.</td></tr>
@@ -205,12 +336,12 @@ async function how(d) {
     </tbody></table>
     <p class="ab-note">The Plant Library’s illustrations are AI-generated editorial artwork. They are not evidence, and no fact is read from them.</p>`)}
 
-  ${sec('rules', 'The numbers the engine uses', 'Heuristics with their provenance, not scientific performance claims.', `
+  ${fold('rules', 'The numbers the engine uses', 'Heuristics with their provenance, not scientific performance claims.', `
     <table class="pi-table ab-rules"><thead><tr><th>Rule</th><th>Value</th><th>From</th><th>Note</th></tr></thead><tbody>${KEY.filter(k => R[k]).map(k => ruleRow(k, R[k])).join('')}</tbody></table>
     <details class="pi-more-d"><summary>The other ${rest.length + Object.keys(E.HEURISTICS).length} numbers</summary><table class="pi-table ab-rules"><tbody>${rest.map(k => ruleRow(k, R[k])).join('')}${Object.entries(E.HEURISTICS).map(([k, h]) => `<tr><td>${esc(cap(T.human(k)))}</td><td class="ab-val">${h.value}</td><td>${T.res('heuristic')}</td><td>${esc(cap(h.text.replace(/^heuristic: /, '')))}</td></tr>`).join('')}</tbody></table></details>
     <p class="ab-by">read from design/js/engine.js: <span class="ab-id">ARRANGEMENT_RULES</span> <span class="ab-id">HEURISTICS</span> · “claim” is read from the database, “geometry” follows from the shapes, “heuristic” was chosen by the implementer</p>`)}
 
-  ${sec('functions', 'Arranged, or recorded only', 'The knowledge base records five spatial functions. The engine arranges two.', `
+  ${fold('functions', 'Arranged, or recorded only', 'The knowledge base records five spatial functions. The engine arranges two.', `
     <table class="pi-table"><thead><tr><th>Spatial function</th><th>Engine</th><th>What you get</th></tr></thead><tbody>
       ${arr.map(f => `<tr><td><b>${esc(f.label)}</b></td><td>${T.res('arranged')}</td><td>Plant objects by ${(sup[f.id].operators || []).map(o => `<span class="ab-id">${esc(o)}</span>`).join(' ')}; ${f.id === 'z:screen' ? 'covered edge length against the asked length, with a status' : 'an estimate of covered ground, no status'}.</td></tr>`).join('')}
       ${rec.map(f => `<tr><td><b>${esc(f.label)}</b></td><td><span class="pi-out recorded_only">recorded only</span></td><td>${esc(cap((sup[f.id]?.why || 'no arrangement rule').replace(/^recorded only — /, '')))}. No plant is placed and no metric is shown.</td></tr>`).join('')}
@@ -231,9 +362,9 @@ function groundRuns(ref, K, E) {
       const version = E.generate(proj, K, all, seed, { density: 1, stagger: true, id_start: 0 }); const c = T.caseOf(proj, K, E, { bed, version, dry: true, origin: 'reference' });
       const objs = version.plant_objects.filter(o => o.bed_id === bed.id && (o.role === 'ground' || o.role === 'accent')); const by = {}; for (const o of objs) by[o.species_id] = (by[o.species_id] || 0) + 1;
       const g = c.ground.evaluation;
-      return { key, label: p.label, text: p.text, operator: c.ground.group?.operator || p.operator, plants: objs.length, species: Object.entries(by).sort((a, b) => b[1] - a[1]), share: g?.ground_cover_share ?? null, svg: T.planSvg(c, { fn: 'z:ground_cover', zoom: true }) };
+      return { key, proj, version, c, bedId: bed.id, saved: E.compositionOf(bed0).pattern === key, label: p.label, text: p.text, operator: c.ground.group?.operator || p.operator, plants: objs.length, species: Object.entries(by).sort((a, b) => b[1] - a[1]), share: g?.ground_cover_share ?? null, svg: T.planSvg(c, { fn: 'z:ground_cover', zoom: true }) };
     });
-    return { bed: bed0, runs };
+    return { bed: bed0, seed, savedN: n(bed0) + (cur ? cur.plant_objects.filter(o => o.bed_id === bed0.id && o.role === 'accent').length : 0), runs };
   } catch (e) { console.error(e); return null; }
 }
 
