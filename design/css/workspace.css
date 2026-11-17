@@ -168,7 +168,7 @@ details.cands-list { margin-top: 8px; } details.cands-list > summary { font-size
   .cond-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } .cond { border-bottom: 1px solid var(--line); } .cond:nth-child(3n) { border-right: 0; } .cond:nth-child(3n+1) { padding-left: 0; } .cond:nth-last-child(-n+3) { border-bottom: 0; }
   #brief-left { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 28px; }
 }
-@media (max-width: 1080px) {
+@media (max-width: 1000px) {
   #s-site .wrap.shape { grid-template-columns: minmax(0, 1fr); } .compose-main { grid-template-columns: minmax(0, 1fr); } .fnplan { position: static; }
   /* one column: the plan, then the layout options and beds, then conditions and evidence */
   #s-site .shape-main { display: contents; } #s-site .site-canvas { order: 1; } #s-site .shape-side { order: 2; } #s-site .conditions { order: 3; margin-top: 0; } #site-evidence { order: 4; margin-top: 0; } #s-site .shape-main > .cta-row { order: 5; margin-top: 0; }
@@ -246,7 +246,7 @@ details.cands-list { margin-top: 8px; } details.cands-list > summary { font-size
 .ws-state { font-size: 13px; color: var(--ink-2); margin-right: 18px; }
 .canvas-hint[hidden] { display: none; }
 
-@media (min-width: 1081px) {
+@media (min-width: 1001px) {
   body[data-stage="site"] { overflow: hidden; }
   #s-site { padding: 0; min-height: 0; }
   body[data-stage="site"] #s-site { position: fixed; left: 0; right: 0; bottom: 0; top: var(--nav-h, 66px); z-index: 6; background: var(--ivory); }
@@ -271,7 +271,7 @@ details.cands-list { margin-top: 8px; } details.cands-list > summary { font-size
   .ws-status { grid-area: status; display: flex; align-items: center; gap: 14px; padding: 0 20px; border-top: 1px solid var(--line); background: var(--paper); }
   .ws-status .canvas-foot { border: 0; padding: 0; flex: 1; flex-wrap: nowrap; } .ws-status .why-not { font-size: 12.5px; color: var(--ink-3); } .ws-status #to-intent { padding: 8px 18px; font-size: 14px; }
 }
-@media (max-width: 1080px) {
+@media (max-width: 1000px) {
   .ws { padding: 0 16px; } .ws-head { display: flex; flex-wrap: wrap; gap: 8px 12px; align-items: baseline; margin-bottom: 12px; } #site-lede { flex-basis: 100%; }
   .ws-rail { display: flex; gap: 4px; overflow-x: auto; padding: 6px 0; } .ws-rail .rb { width: 62px; flex: none; } .rsep { width: 1px; height: auto; margin: 4px 2px; }
   .ws-canvas { margin-bottom: 12px; } .ws-zoom, .ws-say { margin: 10px 0; } .ws-panel-x { display: none; } .ws-panel > div { margin-bottom: 12px; }

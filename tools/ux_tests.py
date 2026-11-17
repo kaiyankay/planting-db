@@ -127,7 +127,7 @@ else:
         R = k["R"]
         test(f"{lab} · R1 a recorded-only function (Scrim) gets no control, no plant and no figure, and says so", "z:scrim" in R["functions"] and R["objective"] and R["objective"]["status"] == "recorded only" and R["objective"]["controls"] == 0 and R["objective"]["figures"] == 0 and R["zones_for_it"] == 0 and R["roles_in_bed"] == ["ground"] and R["removed"], json.dumps(R))
         V = k["V"]; g = V["grow"]; c = V["compose"]
-        test(f"{lab} · V1 Grow reads a generated version: the plant card answers Why selected / Why here / Does it work?, keeps the five steps one click away, and its link to the full trace carries the version id; one set of plant objects", g["why"]["ref"] == f"version:{V['version']['id']}" and f"v={V['version']['id']}" in g["why"]["href"] and g["why"]["three"] == ["why-selected", "why-here", "does-it-work"] and g["why"]["five_available"] == 5 and not g["why"]["five_open"] and g["bar"] == "version" and g["bar_version"] == V["version"]["id"] and g["schedule_total"] == V["version"]["objects"] and V["version"]["same_as_preview"] and g["overview_hidden"] and g["canvas"]["w"] >= 0.6 * g["canvas"]["of"], json.dumps(g))
+        test(f"{lab} · V1 Grow reads a generated version: the plant card answers Why selected / Why here / Does it work?, keeps the five steps one click away, and its link to the full trace carries the version id; one set of plant objects (V4.2: the card sits inside the inspector, whose summary and Change… stay in view)", g["why"]["ref"] == f"version:{V['version']['id']}" and f"v={V['version']['id']}" in g["why"]["href"] and g["why"]["three"] == ["why-selected", "why-here", "does-it-work"] and g["why"]["five_available"] == 5 and not g["why"]["five_open"] and g["bar"] == "version" and g["bar_version"] == V["version"]["id"] and g["schedule_total"] == V["version"]["objects"] and V["version"]["same_as_preview"] and not g["overview_hidden"] and g["canvas"]["w"] >= 0.6 * g["canvas"]["of"], json.dumps(g))
         test(f"{lab} · V2 a bed changed after generating and not regenerated: Compose names the preview by its fingerprint, says it differs from the version, and the explanation and its link to the full trace carry that same fingerprint, never the stale version", c["before"]["same"] is True and c["read"] == {"kind": "preview", "fp": c["fp"], "same": "false"} and c["fp"] != c["version_input_fp"] and c["why"]["ref"] == f"preview:{c['fp']}" and f"pv={c['fp']}" in c["why"]["href"] and "v=" + c["version_still"] not in c["why"]["href"] and c["preview_differs_from_version"] and "differs from version" in (c["why"]["read"] or ""), json.dumps({x: c[x] for x in ("fp", "version_input_fp", "read", "why")}))
         test(f"{lab} · V3 the evidence panel is docked beside the plan, never over it", c["panel"]["open"] and not c["panel"]["covers_plan"], json.dumps(c["panel"]))
 
@@ -158,6 +158,108 @@ else:
         if size == (1280, 800):
             cb = k["cmdbar"]
             test(f"{lab} · L1 at 1280 × 800 with a panel docked the command bar stays on the canvas, beside the panel and inside the window", cb["panel_open"] and cb["bar_shown"] and cb["bar_left"] >= cb["panel_right"] - 1 and cb["bar_right"] <= cb["canvas_right"] + 1 and cb["bar_width"] >= 220, json.dumps(cb))
+    # ---- V4.2 (2026-11-16): the stepper measured as boxes (the user's screenshot showed "1gine", "2ape": a numbered dot drawn over its label), Grow's
+    # inspector and action menu, the 3D label scope, and derived versions read back, undone and returned to. ?script=v42 drives the page's own controls.
+    for size in ((1440, 900), (1280, 800), (1024, 768)) if not ONLY_SHOTS else ():
+        g3 = size == (1440, 900)
+        lab = f"V4.2 {size[0]}×{size[1]}"; out = block(chrome(f"/design/index.html?script=v42&fresh=1{'&g3=1' if g3 else ''}", (size[0], size[1] + 87), 90000 if g3 else 45000), "script-out") or {}; k = out.get("v42") or {}
+        if not k or out.get("error") or "regenerated" not in k:
+            test(f"{lab} · the V4.2 script ran", False, str(out.get("error") or out)[:300]); continue
+        test(f"{lab} · viewport is the named size", k["inner"] == [size[0], size[1]], k["inner"])
+        w = k["welcome"]; test(f"{lab} · B1 Imagine carries no stepper", w["shown"] is False and not w["doc_overflow"], json.dumps({"shown": w["shown"]}))
+        for st, name in (("site", "Shape"), ("intent", "Compose"), ("garden", "Grow")):
+            b = k[st]; steps = b["steps"]; vis = [x for x in steps if x["label"]]
+            test(f"{lab} · B2 {name}: no dot touches a label, no step touches its neighbour, the stepper clears the platform links and New project, nothing is sliced or clipped, the page does not scroll sideways",
+                 b["shown"] and b["overlaps"] == [] and all(x["label_whole"] and x["dot_inside"] and x["dot_round"] and x["dot"] for x in steps) and b["in_window"] and b["new_project_in_window"] and b["bar_clips"] != "hidden" and not b["doc_overflow"],
+                 json.dumps({"overlaps": b["overlaps"], "boxes": [[x["text"], x["dot"], x["label"]] for x in steps], "new_project": b["new_project"], "clips": b["bar_clips"]}))
+            want = "compact" if size[0] <= 1240 else "full"
+            test(f"{lab} · B3 {name}: the {want} mode — {'only the current step is labelled, the others keep their names for assistive technology' if want == 'compact' else 'four whole labels'}",
+                 b["mode"] == want and ([x["text"] for x in vis] == ([name] if want == "compact" else ["Imagine", "Shape", "Compose", "Grow"])) and all(x["name"] and x["text"] in x["name"] for x in steps) and [x["dot_text"] for x in steps] == ["1", "2", "3", "4"],
+                 json.dumps({"mode": b["mode"], "labels": [x["text"] for x in vis], "names": [x["name"] for x in steps]}))
+            cur = [x for x in steps if x["state"] == "current"]; fut = [x for x in steps if x["state"] == "future"]; done = [x for x in steps if x["state"] == "done"]
+            test(f"{lab} · B4 {name}: three states told apart — one current step (aria-current, filled dot), done steps, future steps (dashed dot, lighter); a keyboard focus ring is drawn",
+                 b["current"] == [name] and len(cur) == 1 and cur[0]["aria_current"] == "step" and all(x["aria_current"] is None for x in steps if x["state"] != "current") and all(x["dot_border"] == "dashed" for x in fut) and all(x["dot_border"] == "solid" for x in cur + done)
+                 and len({cur[0]["dot_bg"]} | {x["dot_bg"] for x in done} | {x["dot_bg"] for x in fut}) == (1 + (1 if done else 0) + (1 if fut else 0)) and all(x["colour"] != cur[0]["colour"] for x in fut) and b["focus_ring"] is True,
+                 json.dumps({"current": b["current"], "states": [x["state"] for x in steps], "ring": b["focus_ring"], "dots": [x["dot_bg"] for x in steps]}))
+        c = k["compose"]
+        test(f"{lab} · D1 Compose: the objective opens on its result and its controls; the result, the controls, the command bar and Generate are inside the window; the canvas says it is a preview; the status bar repeats no verdict; no seed or fingerprint in view",
+             c["rows"][:2] == ["metric", "parameters"] and c["metric_in_window"] and all(c["controls_in_window"]) and c["command_bar_in_window"] and c["generate_in_window"] and c["read"] == "preview" and "not generated" in c["hint"] and c["foot_verdicts_shown"] == 0 and c["leaks"] is None and not c["doc_overflow"], json.dumps(c))
+        g = k["grow"]; s0 = g["site"]; e = s0["engine"]; ver = g["version"]
+        unmet = [z for z in e["zones"] if z[1] != "met"]
+        test(f"{lab} · G1 Grow says the design once: version and how it was made, then plants, species and beds; no seed, id or fingerprint in view; the old 'Change it' link list is gone",
+             s0["kind"] == "Version 1 of 1 · generated" and s0["meta"] == f"{ver['objects']} plants · {ver['species']} species · {ver['beds']} beds" and s0["leaks"] is None and s0["change_list"] == 0 and s0["action_button"] and s0["in_window"], json.dumps({k2: s0[k2] for k2 in ("kind", "meta", "leaks", "change_list")}))
+        test(f"{lab} · G2 nothing selected: at most four evaluations — every Screen that is not met or uncertain, the ground cover of all beds as one estimate with its range, and the site conditions the plants rest on; the rest is folded, not removed",
+             s0["scope"] == "site" and len(s0["reqs"]) <= 4 and sum(1 for r in s0["reqs"] if "Screen" in r["text"]) == min(2, len(e["zones"])) and all(any(r["cls"] != "meets" and "Screen" in r["text"] for r in s0["reqs"]) for _ in unmet[:1])
+             and (len(e["ground"]) < 2 or any(f"{min(x[1] for x in e['ground'])} to {max(x[1] for x in e['ground'])} %" in r["text"] and r["cls"] == "estimate" for r in s0["reqs"])) and (not e["unknown_gates"] or any(r["cls"] == "uncertain" and "not stated" in r["text"] for r in s0["reqs"]))
+             and [f[0] for f in s0["folded"]] == ["beds", "plants", "assumptions"] and not any(f[1] for f in s0["folded"]), json.dumps({"reqs": s0["reqs"], "engine": e}))
+        bd = g["bed"]
+        test(f"{lab} · G3 one bed picked: the inspector is about that bed — its name, its plants and arrangement, its own function result first; what is uncertain stays in view",
+             bd["scope"] == bd["id"] and bd["title"] == bd["name"] and bd["meta"].startswith(f"{bd['plants_in_bed']} plants") and all(bd["name"] in r["text"] or "not stated" in r["text"] for r in bd["reqs"]) and bd["reqs"] and bd["name"] in bd["reqs"][0]["text"]
+             and bd["uncertain_rows"] >= (1 if e["unknown_gates"] else 0) + sum(1 for z in e["zones"] if z[0] == bd["id"] and z[1] == "uncertain"), json.dumps({"title": bd["title"], "meta": bd["meta"], "reqs": bd["reqs"]}))
+        pl = g["plant"]
+        test(f"{lab} · G4 a plant clicked: its name, then Why selected / Why here / Does it work in view; sizes, position and the object id one click deeper; sources and the profile offered",
+             pl["card"] and pl["name"] == pl["expect"] and [r["key"] for r in pl["why_rows"]] == ["why-selected", "why-here", "does-it-work"] and all(r["shown"] for r in pl["why_rows"]) and pl["facts_open"] is False and not pl["id_in_view"] and pl["evidence_actions"] == 2, json.dumps(pl))
+        m = k["menu"]; keep = m["before"]; same = lambda x: all(x[q] == keep[q] for q in ("stage", "mode", "plant", "bed", "version"))
+        test(f"{lab} · M1 Change… is a small menu of four tasks; it opens with the focus on its first item; Escape or a click elsewhere closes it, gives the focus back and leaves the garden, its view and its selection as they were",
+             m["opened"]["open"] and m["opened"]["items"] == ["chg-compose", "chg-site", "chg-words", "regen-ask"] and m["opened"]["expanded"] == "true" and m["opened"]["focus"] == "chg-compose" and m["opened"]["in_window"]
+             and not m["escaped"]["open"] and m["escaped"]["focus"] == "chg-btn" and same(m["escaped"]) and not m["clicked_away"]["open"] and same(m["clicked_away"]), json.dumps({"opened": m["opened"], "escaped": m["escaped"]}))
+        test(f"{lab} · M2 each task goes where it says: Edit this planting → Compose on the same bed, at its arrangement; Change the site → Shape; Say a change → the command bar, scoped to the bed's own plants; coming back, the version, the view, the bed and the selected plant are the same",
+             m["compose"]["stage"] == "intent" and m["compose"]["bed"] == keep["bed"] and m["compose"]["step"] == 3 and same(m["compose"]["back"]) and m["site"]["stage"] == "site" and same(m["site"]["back"])
+             and m["words"]["focus"] == "say3" and m["words"]["selection"] and m["words"]["selection"]["inside"] == m["words"]["selection"]["in_bed"] > 0 and same(m["words"]), json.dumps({"compose": m["compose"], "site": m["site"], "words": m["words"]}))
+        rg = k["regenerated"]; rs = m["regen_same"]
+        test(f"{lab} · M3 Regenerate asks first and says what a new run would change: nothing when the inputs are the same (cancelled: no version is made); from an edited version, how many plant objects differ and that the edits are not carried over; confirmed, a new generated version is added and every earlier one is kept",
+             rs["shown"] and rs["same"] == "true" and rs["versions"] == 1 and not m["regen_cancel"]["confirm"] and m["regen_cancel"]["versions"] == 1 and same(m["regen_cancel"])
+             and rg["said"]["shown"] and rg["said"]["same"] == "false" and (rg["said"]["gone"] + rg["said"]["add"]) > 0 and "not carried over" in rg["said"]["text"] and rg["versions_after"] == rg["versions_before"] + 1 and rg["kept"] and rg["how"] is None and rg["input_fp"] and rg["confirm_closed"] and rg["reload"]["id"] == rg["id"],
+             json.dumps({"same": rs["text"], "derived": rg["said"], "after": [rg["versions_before"], rg["versions_after"], rg["how"]]}))
+        d = k["derived"]; gen = d["generated"]
+        def derived_ok(x, how, parent):
+            return (x["how"] == how and x["input_fp"] is None and x["derived"] and x["derived"]["from_version_id"] == parent and x["derived"]["base_version_id"] == gen["id"] and how in x["bar"] and x["bar_how"] == how and how in x["kind"] and x["ref_derived"] and x["ref_derived"]["how"] == how
+                    and x["reload"]["id"] == x["id"] and x["reload"]["how"] == how and x["reload"]["input_fp"] is None and x["reload"]["derived"] == x["derived"] and x["back"]["id"] == x["id"] and x["back"]["how"] == how and how in x["back"]["bar"])
+        test(f"{lab} · V1 a generated version reads as generated, on the page and from storage", gen["how"] is None and gen["input_fp"] and gen["bar_how"] == "generated" and gen["reload"]["input_fp"] == gen["input_fp"] and gen["reload"]["how"] is None, json.dumps(gen)[:300])
+        ty, mn, pa, ur = d["typed"], d["manual"], d["partial"], d["undo_redo"]
+        test(f"{lab} · V2 a typed edit and a manual edit each make a version that says how it was made — in Grow's bar, in the inspector and in the trace line — with no input fingerprint; the mark survives a reload from storage and leaving Grow and coming back",
+             ty["previewed"] and derived_ok(ty, "typed edit", gen["id"]) and derived_ok(mn, "manual edit", ty["id"]), json.dumps({"typed": [ty["bar"], ty["reload"]["how"], ty["back"]["how"]], "manual": [mn["bar"], mn["reload"]["how"], mn["back"]["how"]]}))
+        test(f"{lab} · V3 undo returns to the typed edit (still marked, also in storage); redo returns to the manual edit",
+             ur["undo"]["id"] == ty["id"] and ur["undo"]["how"] == "typed edit" and ur["undo_reload"]["id"] == ty["id"] and ur["undo_reload"]["how"] == "typed edit" and ur["redo"]["id"] == mn["id"] and ur["redo"]["how"] == "manual edit" and ur["redo_reload"]["id"] == mn["id"], json.dumps({"undo": ur["undo"]["bar"], "redo": ur["redo"]["bar"]}))
+        test(f"{lab} · V4 partial regeneration in the browser: a bed is reshaped in Shape, Grow says the planting areas changed and keeps the old version until asked; the preview replants that bed only; applied, the version is marked partial regeneration, the other beds' plants are untouched; reload, undo, redo and leaving Grow keep the mark",
+             pa["stale"]["bed_changed"] and pa["stale"]["applied"] and pa["stale"]["offered"] and pa["stale"]["still"]["id"] == mn["id"] and pa["preview"] and pa["preview"]["added"] > 0 and derived_ok(pa, "partial regeneration", mn["id"]) and pa["other_beds_untouched"] and not pa["banner_after"]
+             and pa["undo"]["id"] == mn["id"] and pa["undo"]["how"] == "manual edit" and pa["redo"]["id"] == pa["id"] and pa["redo"]["how"] == "partial regeneration" and pa["redo_reload"]["how"] == "partial regeneration", json.dumps({"banner": pa["stale"]["banner"], "preview": pa["preview"], "bar": pa["bar"], "undo": pa["undo"]["bar"], "redo": pa["redo"]["bar"]}))
+        if g3:
+            L = k.get("labels") or {}
+            if "scopes" not in L: test(f"{lab} · L the 3D view started", False, json.dumps(L)[:300])
+            else:
+                sc = L["scopes"]; n = L["plants"]
+                test(f"{lab} · L1 the 3D view has a Labels scope (Off · Hover · Selected · Bed · Species), Selected by default; the Names toggle is gone", L["control"] == ["off", "hover", "selected", "bed", "species"] and L["default_scope"] == "selected" and not L["names_toggle"] and L["proxy_note"], json.dumps({q: L[q] for q in ("control", "default_scope", "names_toggle")}))
+                test(f"{lab} · L2 in every scope: no name sprite on any plant, never more than one callout, one tooltip element and one legend; every one of the {n} plant objects is still drawn",
+                     all(v["state"]["sprites"] == 0 and v["callouts"] <= 1 and v["callout_elements"] == 1 and v["tips"] == 1 and v["legends"] <= 1 and v["meshes"] == n and v["state"]["plants"] == n and v["name_elements"] <= 2 for v in sc.values()), json.dumps({q: [v["state"]["sprites"], v["callouts"], v["legends"], v["meshes"], v["name_elements"]] for q, v in sc.items()}))
+                test(f"{lab} · L3 Off: nothing is named, not even under the pointer. Hover: one tooltip for the plant under the pointer, gone when the pointer leaves, no callout",
+                     sc["off"]["callouts"] == 0 and not sc["off"]["tip_shown"] and sc["hover"]["callouts"] == 0 and sc["hover"]["tip_shown"] and sc["hover"]["tip_plant"] == sc["hover"]["under_pointer"] and not sc["hover"]["tip_after_leave"], json.dumps({q: [sc[q]["callouts"], sc[q]["tip_shown"], sc[q]["tip_plant"], sc[q]["under_pointer"]] for q in ("off", "hover")}))
+                test(f"{lab} · L4 Selected: one callout on the clicked plant, with the name the inspector shows; Bed: its bed outlined and named once; Species: the other species faded (none removed) and the species named once",
+                     sc["selected"]["callouts"] == 1 and sc["selected"]["inspector"] and sc["selected"]["inspector"] in (sc["selected"]["state"]["callout_text"] or "") and sc["selected"]["state"]["dimmed"] == 0
+                     and sc["bed"]["state"]["bed_outline"] and (sc["bed"]["legend"] or {}).get("kind") == "bed" and sc["species"]["state"]["dimmed"] > 0 and sc["species"]["state"]["dimmed"] < n and (sc["species"]["legend"] or {}).get("kind") == "species" and not sc["selected"]["state"]["bed_outline"],
+                     json.dumps({"selected": sc["selected"]["state"], "bed": sc["bed"]["legend"], "species": [sc["species"]["state"]["dimmed"], sc["species"]["legend"]]}))
+                cm, ck = L["camera"], L["click"]
+                test(f"{lab} · L5 turning the camera moves the same single callout with its plant and it rests when the camera rests; a click on another plant moves the callout and the inspector to that plant; the Plan view carries no callout",
+                     cm["same_element"] and cm["moved"] and cm["steady_when_still"] and cm["still_one"] == 1 and ck["picked"] and ck["same"] and ck["callout_for"] == ck["selected"] and ck["callouts"] == 1 and ck["inspector"] == ck["expect"] and ck["expect"] in (ck["callout_text"] or "") and L["plan_view"]["callouts"] == 0 and not L["plan_view"]["control"], json.dumps({"camera": cm, "click": ck, "plan": L["plan_view"]}))
+    if not ONLY_SHOTS:   # phone width: the stepper is compact, nothing overlaps, the page does not scroll sideways (headless Chrome clamps the window near 500 px; the real width is reported)
+        out = block(chrome("/design/index.html?script=v42&fresh=1&stop=shape", (390, 844 + 87), 20000), "script-out") or {}; k = out.get("v42") or {}; b = k.get("site")
+        if not b: test("V4.2 phone · the script reached Shape", False, str(out)[:300])
+        else: test(f"V4.2 phone {k['inner'][0]}×{k['inner'][1]} · B5 the stepper is compact and whole: no overlap, inside the window, no sideways scroll", b["shown"] and b["mode"] == "compact" and b["overlaps"] == [] and b["in_window"] and not b["doc_overflow"] and all(x["dot_inside"] and x["label_whole"] for x in b["steps"]), json.dumps({"overlaps": b["overlaps"], "boxes": [[x["text"], x["dot"], x["label"]] for x in b["steps"]], "overflow": b["doc_overflow"]}))
+    if not ONLY_SHOTS:   # the double-row case as a design the Studio saved (designs/demo-c.json, written by ?script=v41&saveas=demo-c through the design server)
+        pth = os.path.join(ROOT, "designs", "demo-c.json")
+        if not os.path.exists(pth): test("V4.2 · X1 the double-row example is a saved design", False, "designs/demo-c.json is missing")
+        else:
+            d = json.load(open(pth, encoding="utf-8")); v = next((x for x in d["versions"] if x["id"] == d["current_version_id"]), None) or {}
+            rows = [z["row_plans"][0]["rows"] for z in v.get("zones", []) if z.get("kind") == "edge" and z.get("row_plans")]; objs = v.get("plant_objects", []); scr = [o for o in objs if o["role"].startswith("screen")]
+            test("V4.2 · X1 the double-row example is a design the Studio saved: one generated version with its seed and input fingerprint, a staggered second row among its plant objects, its schedule counting exactly those objects",
+                 d["id"] == "demo-c" and len(d["versions"]) == 1 and v.get("seed") is not None and v.get("input_fp") and not v.get("derived") and rows == [2] and any(o["role"] == "screen-layer" for o in scr) and sum(r["count"] for r in v.get("schedule", [])) == len(objs) and not d.get("ui", {}).get("example"),
+                 json.dumps({"id": d["id"], "version": v.get("id"), "seed": v.get("seed"), "rows": rows, "objects": len(objs), "screen": len(scr)}))
+            before = open(pth, "rb").read(); dom = chrome("/design/index.html?example=double-row&stage=intent", (1280, 887), 12000) or ""
+            tag = re.search(r'<button[^>]*rows(?:&quot;|"):(?:&quot;|")double[^>]*>', dom); tag = tag.group(0) if tag else ""; in_compose = 'data-stage="intent"' in dom; same_file = open(pth, "rb").read() == before
+            test("V4.2 · X2 ?example=double-row opens that design in Compose on its Screen bed, with both row choices offered and the double row chosen; the example file itself is not rewritten",
+                 in_compose and tag and 'aria-checked="true"' in tag and "disabled" not in tag and f"{len(scr)} plants" in dom and same_file, f"in Compose {in_compose}; double-row control {tag[:160]}; file unchanged {same_file}")
+            for f in ("proj-example-double-row.json",):
+                if os.path.exists(os.path.join(ROOT, "designs", f)): os.remove(os.path.join(ROOT, "designs", f))
     # the demonstration journey (same 12 steps as tools/design_tests.py) records the stage at every step
     dom = None if ONLY_SHOTS else chrome("/design/index.html?journey=1&fresh=1", (1440, 900), 16000)
     J = block(dom, "journey-out") if dom else None

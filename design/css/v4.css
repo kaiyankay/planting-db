@@ -12,12 +12,9 @@
 /* ------------------------------------------------------------------ the bar: four destinations; the stepper only inside the workflow */
 #top { gap: 20px; }
 body[data-stage="welcome"] #stagenav, body[data-stage="welcome"] #top .right { display: none; }
-#stagenav { margin: 0 0 0 auto; } #top .right { margin-left: 4px; }
-:is(#stagenav, #gnav) button { padding: 4px 10px 4px 4px; gap: 6px; font-size: 13px; }
-:is(#stagenav, #gnav) button .dot { width: 20px; height: 20px; }
-:is(#stagenav, #gnav) li + li::before { width: 12px; margin: 0 2px; }
+#top .right { margin-left: 4px; }   /* the stepper itself: v42.css */
 #interp { font: 12px/1 var(--mono); }
-@media (max-width: 1340px) { #top { gap: 12px; } #top .pi-nav a { padding: 0 10px; } :is(#stagenav, #gnav) button:not(.on) .label { display: none; } :is(#stagenav, #gnav) button:not(.on) { padding: 4px; } }
+@media (max-width: 1340px) { #top { gap: 12px; } #top .pi-nav a { padding: 0 10px; } }
 @media (max-width: 1180px) { #interp { display: none; } }
 
 /* ------------------------------------------------------------------ Imagine: one invitation */
@@ -29,7 +26,7 @@ body[data-stage="welcome"] #stagenav, body[data-stage="welcome"] #top .right { d
 /* ------------------------------------------------------------------ workspace: nothing floats over the plan */
 /* An on-demand panel (goals, functions, conditions, evidence, schedule…) is a docked column on the left of the canvas: the plan
    keeps the rest and re-fits itself, so the drawing is never covered. */
-@media (min-width: 1081px) {
+@media (min-width: 1001px) {
   .ws-canvas { --dock: 0px; }
   .ws-canvas:has(> .ws-panel.open) { --dock: 360px; }
   .ws-canvas:has(> .ws-panel.open.evidence), .ws-canvas:has(> #gpanel.open) { --dock: 400px; }
@@ -41,7 +38,7 @@ body[data-stage="welcome"] #stagenav, body[data-stage="welcome"] #top .right { d
   .ws-canvas:has(> .ws-panel.open) .ws-say { width: min(380px, calc(100% - var(--dock) - 350px)); }
   .ws-canvas:has(> .ws-panel.open) .scalebar-w { display: none; }
 }
-@media (min-width: 1081px) and (max-width: 1340px) {
+@media (min-width: 1001px) and (max-width: 1340px) {
   .ws-canvas:has(> .ws-panel.open) { --dock: 320px; } .ws-canvas:has(> .ws-panel.open.evidence), .ws-canvas:has(> #gpanel.open) { --dock: 340px; } .ws-canvas:has(> #gpanel.open.schedule), .ws-canvas:has(> #gpanel.open.versions) { --dock: 400px; }
   /* V4.1: the command bar stays when a panel is docked at this width; it gives up its hint and the note of who reads it, not itself */
   .ws-canvas:has(> .ws-panel.open) .ws-say { left: calc(var(--dock) + 12px); transform: none; width: calc(100% - var(--dock) - 180px); min-width: 0; }
@@ -87,13 +84,13 @@ body[data-stage="welcome"] #stagenav, body[data-stage="welcome"] #top .right { d
 .chgnote h6 { margin: 8px 0 2px; font: 600 12.5px/1.3 var(--sans); } .chgnote ul { margin: 0; padding-left: 16px; } .chgnote li { margin: 2px 0; } .chgnote p { margin: 6px 0 0; } .chg-unk { color: #8a5f1c; } .chg-n { font-size: 12px; color: var(--ink-3); }
 
 /* ------------------------------------------------------------------ Grow: a compact plant card; the garden summary waits behind it */
-#plantcard:not([hidden]) ~ #grow-overview { display: none; }
+/* V4.2: the plant card sits inside the overview (see v42.css); the overview is no longer hidden while a plant is selected */
 .grow-side #plantcard { border-bottom: 0; margin-bottom: 0; padding-bottom: 0; }
 #plantcard .whybox { margin-top: 12px; } #plantcard .pi-why-3 > div, #cws-evidence .pi-why-3 > div { grid-template-columns: 98px minmax(0, 1fr); }
 #plantcard .insp-actions { margin-top: 12px; } #plantcard .insp-tip { margin-top: 12px; font-size: 12.5px; color: var(--ink-3); }
 .fit.uncertain { white-space: nowrap; }
 .obj .oc .seg { flex: none; } .obj .oc .seg button { white-space: nowrap; }
-@media (min-width: 1081px) and (max-width: 1340px) { .obj dl > div { grid-template-columns: minmax(0, 1fr); gap: 2px; } .obj .oc .seg button { padding: 4px 7px; font-size: 12px; } }
+@media (min-width: 1001px) and (max-width: 1340px) { .obj dl > div { grid-template-columns: minmax(0, 1fr); gap: 2px; } .obj .oc .seg button { padding: 4px 7px; font-size: 12px; } }
 
 /* ------------------------------------------------------------------ V4.1 · objective: result → controls → what changed → details on demand */
 .obj { padding: 12px 14px 6px; }

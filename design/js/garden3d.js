@@ -15,7 +15,11 @@ const flat = (hex, extra = {}) => new THREE.MeshStandardMaterial({ color: col(he
 
 export class Garden {
   constructor(container, { K, onSelect, onHover }) {
-    this.el = container; this.K = K; this.onSelect = onSelect; this.onHover = onHover; this.key = null; this.plantMeshes = new Map(); this.labelSprites = []; this.hover = null;
+    this.el = container; this.K = K; this.onSelect = onSelect; this.onHover = onHover; this.key = null; this.plantMeshes = new Map(); this.hover = null;
+    /* V4.2 · names: the view never draws a name per plant. At most ONE callout (the selected plant) is shown, a DOM element placed from the
+       plant's projected position each frame; hover uses the page's single tooltip; Bed and Species scopes emphasise geometry and are named once,
+       in the page's legend. */
+    this.callout = document.createElement('div'); this.callout.className = 'g3-callout'; this.callout.hidden = true; this.callout.setAttribute('role', 'status'); (container.parentElement || container).appendChild(this.callout); this.calloutFor = null; this.calloutXY = null; this.scope = 'selected'; this.dimmed = 0;
     const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false, powerPreference: 'default', failIfMajorPerformanceCaveat: false }); renderer.setPixelRatio(Math.min(2, window.devicePixelRatio || 1)); renderer.shadowMap.enabled = true; renderer.shadowMap.type = THREE.PCFSoftShadowMap; renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 1.05; renderer.setClearColor(0xf6f4ee, 1);
     container.appendChild(renderer.domElement); this.renderer = renderer;
     this.scene = new THREE.Scene(); this.scene.fog = new THREE.Fog(0xf6f4ee, 22, 60);
@@ -30,11 +34,24 @@ export class Garden {
     renderer.domElement.addEventListener('pointerup', e => { if (!this.down || Math.hypot(e.clientX - this.down[0], e.clientY - this.down[1]) > 4) return; const id = this.pick(e); this.onSelect?.(id); });
     renderer.domElement.addEventListener('pointermove', e => { const id = this.pick(e); if (id !== this.hover) { this.hover = id; renderer.domElement.style.cursor = id ? 'pointer' : ''; this.onHover?.(id, e); } });
     this.ro = new ResizeObserver(() => this.resize()); this.ro.observe(container); this.resize();
-    this.running = true; const loop = () => { if (!this.running) return; this.controls.update(); if (this.visible) this.renderer.render(this.scene, this.camera); requestAnimationFrame(loop); }; loop();
+    this.running = true; const loop = () => { if (!this.running) return; this.controls.update(); if (this.visible) { this.renderer.render(this.scene, this.camera); this.placeCallout(); } requestAnimationFrame(loop); }; loop();
     this.visible = true;
   }
   resize() { const w = this.el.clientWidth || 800, h = this.el.clientHeight || 500; this.renderer.setSize(w, h, false); this.renderer.domElement.style.width = '100%'; this.renderer.domElement.style.height = '100%'; this.camera.aspect = w / h; this.camera.updateProjectionMatrix(); }
-  setVisible(v) { this.visible = v; this.el.style.display = v ? 'block' : 'none'; if (v) { this.resize(); this.renderer.render(this.scene, this.camera); } }
+  setVisible(v) { this.visible = v; this.el.style.display = v ? 'block' : 'none'; if (v) { this.resize(); this.renderer.render(this.scene, this.camera); this.placeCallout(); } else this.callout.hidden = true; }
+  /** draw once now and place the callout (the render loop does this every frame; a caller that moved the camera itself may ask for it) */
+  refresh() { if (this.visible) { this.renderer.render(this.scene, this.camera); this.placeCallout(); } }
+  /** where a plant object's top is on the canvas, in CSS pixels of the canvas box (null when behind the camera) */
+  screenOf(id) { const g = this.plantMeshes.get(id); if (!g) return null; const v = g.position.clone(); v.y = (g.userData.top ?? .5) + .12; v.project(this.camera); if (v.z > 1) return null; const w = this.el.clientWidth, h = this.el.clientHeight; return [(v.x + 1) / 2 * w, (1 - v.y) / 2 * h]; }
+  /** the one callout follows its plant; it is moved only when the projected position changes by a pixel, so a still camera never repaints it */
+  placeCallout() {
+    const c = this.callout; if (!this.calloutFor || !this.visible) { if (!c.hidden) c.hidden = true; this.calloutXY = null; return; }
+    const xy = this.screenOf(this.calloutFor); if (!xy) { if (!c.hidden) c.hidden = true; return; }
+    const x = Math.round(xy[0]), y = Math.round(xy[1]); if (c.hidden) c.hidden = false; if (this.calloutXY && this.calloutXY[0] === x && this.calloutXY[1] === y) return; this.calloutXY = [x, y];
+    const w = this.el.clientWidth; const cw = c.offsetWidth, ch = c.offsetHeight; const left = Math.max(6, Math.min(w - cw - 6, x - 19)); c.style.transform = `translate(${left}px, ${Math.max(6, y - ch - 10)}px)`;
+  }
+  /** what the label scope is drawing now (read by the page's tests): never more than one callout, never a sprite per plant */
+  labelState() { return { scope: this.scope, sprites: this.overlay.children.filter(o => o.isSprite).length, callouts: this.callout.hidden ? 0 : 1, callout_for: this.calloutFor, callout_text: this.callout.hidden ? null : this.callout.textContent, dimmed: this.dimmed, plants: this.plantMeshes.size, bed_outline: !!this.overlay.children.find(o => o.userData.bedMark) }; }
   pick(e) { const r = this.renderer.domElement.getBoundingClientRect(); this.pointer.set(((e.clientX - r.left) / r.width) * 2 - 1, -((e.clientY - r.top) / r.height) * 2 + 1); this.ray.setFromCamera(this.pointer, this.camera); const hits = this.ray.intersectObjects(this.plants.children, true); for (const h of hits) { let o = h.object; while (o && !o.userData.plantId) o = o.parent; if (o?.userData.plantId) return o.userData.plantId; } return null; }
   stats() { return { plants: this.plantMeshes.size, meshes: this.scene.children.reduce((n, c) => n + countMeshes(c), 0) }; }
   focus(id) { const g = this.plantMeshes.get(id); if (!g) return; const p = g.position.clone(); this.controls.target.copy(p); }
@@ -45,14 +62,20 @@ export class Garden {
     const siteKey = JSON.stringify([project.site.boundary, project.site.beds.map(b => [b.polygon, b.holes, b.status]), project.site.features]);
     if (this.siteKey !== siteKey) { this.siteKey = siteKey; this.buildStatic(project); if (!this.framed) { this.frame(project); this.framed = true; } }
     const plants = S.preview ? S.preview.version.plant_objects : (version?.plant_objects || []); const removed = S.preview ? S.preview.diff.removed : []; const added = new Set(S.preview?.diff.added || []); const targets = new Set(S.preview?.targets || []);
-    const key = JSON.stringify([version?.id, plants.map(p => [p.id, p.species_id, p.position_m]), removed, [...added], [...targets], S.winter, S.labels, S.selectedPlant, project.site.conditions.light?.value]);
+    const scope = S.labelScope || 'selected'; const selObj = S.selectedPlant ? plants.find(p => p.id === S.selectedPlant) : null; const spFocus = scope === 'species' ? (selObj?.species_id || S.focusSpecies || null) : null; const bedFocus = scope === 'bed' ? (selObj?.bed_id || S.growBed || null) : null;
+    const key = JSON.stringify([version?.id, plants.map(p => [p.id, p.species_id, p.position_m]), removed, [...added], [...targets], S.winter, scope, spFocus, bedFocus, S.selectedPlant, project.site.conditions.light?.value]);
     if (key === this.key) return; this.key = key;
-    clear(this.plants); clear(this.overlay); this.plantMeshes.clear();
+    clear(this.plants); clear(this.overlay); this.plantMeshes.clear(); this.dimmed = 0;
     const light = project.site.conditions.light?.value;
-    for (const p of plants) { const f = form(this.K, p.species_id, light); const g = buildPlant(f, p, { winter: S.winter }); g.position.copy(toV(p.position_m)); g.userData.plantId = p.id; this.plants.add(g); this.plantMeshes.set(p.id, g); if (added.has(p.id)) ring(this.overlay, p, 0x44604a, .9); else if (targets.has(p.id)) ring(this.overlay, p, 0xc08a2e, .7); if (S.selectedPlant === p.id) ring(this.overlay, p, 0x2a2723, 1, .08); if (S.labels) this.overlay.add(label(this.K.name(p.species_id), toV(p.position_m, (p.height_m ?? .5) + .35))); }
+    for (const p of plants) { const f = form(this.K, p.species_id, light); const g = buildPlant(f, p, { winter: S.winter }); g.position.copy(toV(p.position_m)); g.userData.plantId = p.id; this.plants.add(g); this.plantMeshes.set(p.id, g); if (added.has(p.id)) ring(this.overlay, p, 0x44604a, .9); else if (targets.has(p.id)) ring(this.overlay, p, 0xc08a2e, .7); g.userData.top = topOf(g); if (S.selectedPlant === p.id) { ring(this.overlay, p, 0x2a2723, 1, .08, .1); ring(this.overlay, p, 0xc08a2e, .95, .085, .05, .12); }
+      if (spFocus && p.species_id !== spFocus) { dim(g); this.dimmed++; } else if (spFocus) ring(this.overlay, p, 0x2a2723, .55, .05, .03); }
+    /* Bed scope: the bed's outline is drawn once, raised and doubled; every plant stays as it is */
+    if (bedFocus) { const b = project.site.beds.find(x => x.id === bedFocus); if (b) { for (const y of [.11, .125, .14]) { const l = outline(b.polygon, 0x2a2723, y); l.userData.bedMark = true; this.overlay.add(l); } const wash = shapeMesh(b.polygon, new THREE.MeshBasicMaterial({ color: 0xc08a2e, transparent: true, opacity: .16, depthWrite: false }), .1, 0, b.holes); wash.userData.bedMark = true; this.overlay.add(wash); } }
+    /* the one callout: the selected plant, in every scope but Off and Hover */
+    this.scope = scope; this.calloutFor = selObj && scope !== 'off' && scope !== 'hover' && this.plantMeshes.has(selObj.id) ? selObj.id : null; this.calloutXY = null;
+    if (this.calloutFor) { const bd = project.site.beds.find(x => x.id === selObj.bed_id); const common = this.K.common?.(selObj.species_id); this.callout.innerHTML = `<b>${common ? `${escT(common)} · ` : ''}<i>${escT(this.K.name(selObj.species_id))}</i></b><span>${escT(String(selObj.role || '').replace('screen-layer', 'screen, second row'))}${bd ? ` · ${escT(bd.name)}` : ''}</span>`; } else this.callout.hidden = true;
     if (S.preview && version) for (const id of removed) { const p = version.plant_objects.find(q => q.id === id); if (!p) continue; const f = form(this.K, p.species_id, light); const g = buildPlant(f, p, { winter: S.winter, ghost: true }); g.position.copy(toV(p.position_m)); this.overlay.add(g); }
-    if (S.selectedPlant && this.plantMeshes.has(S.selectedPlant) === false && S.labels === false) { /* nothing */ }
-    if (this.visible) this.renderer.render(this.scene, this.camera);
+    if (this.visible) { this.renderer.render(this.scene, this.camera); this.placeCallout(); }
   }
   buildStatic(project) {
     clear(this.static); const site = project.site; const pts = [...(site.boundary || []), ...site.beds.flatMap(b => b.polygon)]; const B = pts.length ? G.bbox(pts) : { minx: 0, miny: 0, maxx: 8, maxy: 6, w: 8, h: 6 };
@@ -130,7 +153,13 @@ function shapeMesh(polygon, material, y = 0, thickness = 0, holes = []) {
   const m = new THREE.Mesh(geo, material); m.rotation.x = -Math.PI / 2; m.position.y = y; return m;
 }
 function outline(polygon, color, y) { const pts = polygon.map(p => toV(p, y)); pts.push(pts[0].clone()); return new THREE.Line(new THREE.BufferGeometry().setFromPoints(pts), new THREE.LineBasicMaterial({ color })); }
-function ring(group, p, color, opacity, y = .03) { const m = new THREE.Mesh(new THREE.RingGeometry(p.proxy_radius_m * 1.05, p.proxy_radius_m * 1.05 + .06, 40), new THREE.MeshBasicMaterial({ color, transparent: true, opacity, side: THREE.DoubleSide })); m.rotation.x = -Math.PI / 2; m.position.copy(toV(p.position_m, y)); group.add(m); }
+function ring(group, p, color, opacity, y = .03, width = .06, gap = 0) { const r0 = p.proxy_radius_m * 1.05 + gap; const m = new THREE.Mesh(new THREE.RingGeometry(r0, r0 + width, 48), new THREE.MeshBasicMaterial({ color, transparent: true, opacity, side: THREE.DoubleSide })); m.rotation.x = -Math.PI / 2; m.position.copy(toV(p.position_m, y)); group.add(m); }
+const escT = t => String(t ?? '').replace(/[&<>"]/g, ch => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[ch]));
+/* the height of a built plant (its bounding box top), for the callout's anchor */
+function topOf(g) { const b = new THREE.Box3().setFromObject(g); return Number.isFinite(b.max.y) ? b.max.y : .5; }
+/* a plant that is context in the Species scope: still there, same place and size, drawn faint */
+function dim(g) { g.traverse(o => { if (o.material) { o.material = o.material.clone(); o.material.transparent = true; o.material.opacity = .22; o.material.depthWrite = false; o.castShadow = false; } }); }
+/* one sprite for a site feature (the existing tree) — never used for plants */
 function label(text, pos) {
   const px = 40, pad = 10, dpr = 2; const cv = document.createElement('canvas'); const ctx = cv.getContext('2d'); ctx.font = `italic 500 ${px}px -apple-system, Helvetica Neue, Segoe UI, sans-serif`; const w = Math.ceil(ctx.measureText(text).width) + pad * 2, hh = px + pad * 2; cv.width = w * dpr; cv.height = hh * dpr; ctx.scale(dpr, dpr); ctx.font = `italic 500 ${px}px -apple-system, Helvetica Neue, Segoe UI, sans-serif`; ctx.textBaseline = 'middle'; ctx.textAlign = 'center'; ctx.fillStyle = 'rgba(253,251,247,.85)'; ctx.beginPath(); ctx.roundRect(0, 0, w, hh, 10); ctx.fill(); ctx.fillStyle = '#2a2723'; ctx.fillText(text, w / 2, hh / 2);
   const tex = new THREE.CanvasTexture(cv); tex.colorSpace = THREE.SRGBColorSpace; const sp = new THREE.Sprite(new THREE.SpriteMaterial({ map: tex, transparent: true, depthTest: false })); const s = .32; sp.scale.set(s * w / hh, s, 1); sp.position.copy(pos); return sp;

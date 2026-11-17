@@ -7,7 +7,7 @@
 #top .pi-nav { height: 34px; align-self: center; margin-left: -4px; flex: none; }
 #top .pi-nav a { font-size: 14px; } #top .pi-nav a::after { bottom: 2px; }
 #top a.wordmark { flex: none; }
-@media (min-width: 1081px) {
+@media (min-width: 1001px) {
   body:is([data-stage="site"], [data-stage="intent"], [data-stage="garden"]) #top .pi-nav { height: 52px; align-self: stretch; }
   body:is([data-stage="site"], [data-stage="intent"], [data-stage="garden"]) #top .pi-nav a::after { bottom: 0; }
 }

@@ -72,11 +72,7 @@ table.t { border-collapse: collapse; width: 100%; font-size: 13.5px; } table.t t
 #top.scrolled { border-bottom-color: var(--line); }
 #top .wordmark { font: 500 20px/1 var(--display); letter-spacing: -.005em; color: var(--ink); text-decoration: none; white-space: nowrap; }
 #top .wordmark small { display: block; font: 11px var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--ink-3); margin-top: 4px; }
-#stagenav { display: flex; gap: 4px; list-style: none; margin: 0 auto; padding: 4px; background: var(--paper-2); border-radius: 999px; }
-#stagenav button { font-size: 14px; padding: 8px 16px; border-radius: 999px; color: var(--ink-2); display: flex; align-items: center; gap: 8px; }
-#stagenav button .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--line-2); }
-#stagenav button.done .dot { background: var(--olive); } #stagenav button.on { background: var(--paper); color: var(--ink); box-shadow: var(--shadow-soft); } #stagenav button.on .dot { background: var(--olive-deep); }
-#stagenav button:disabled { color: var(--ink-3); cursor: default; }
+/* the stepper: one contract, in v42.css */
 #top .right { display: flex; gap: 8px; align-items: center; }
 
 /* ---- stage sections */
@@ -192,12 +188,12 @@ table.t { border-collapse: collapse; width: 100%; font-size: 13.5px; } table.t t
 footer.site-foot { padding: 40px 0 60px; font-size: 13px; color: var(--ink-3); } footer.site-foot .wrap { display: flex; gap: 18px; flex-wrap: wrap; }
 
 /* ---- responsive */
-@media (max-width: 1080px) {
+@media (max-width: 1000px) {
   #s-welcome .wrap { grid-template-columns: 1fr; gap: 24px; } .hero-art { max-height: 46vh; aspect-ratio: 16 / 10; order: -1; }
   #s-site .wrap.shape, #s-intent .wrap { grid-template-columns: 1fr; gap: 24px; }
 }
 @media (max-width: 760px) {
-  #top { padding: 10px 12px; gap: 8px; } #top .wordmark { font-size: 17px; } #top .wordmark small { display: none; } #stagenav { margin: 0 0 0 auto; padding: 3px; } #stagenav button { padding: 6px 9px; font-size: 13px; } #stagenav button .label { display: none; } #stagenav button.on .label { display: inline; } #top .right { display: none; }
+  #top { padding: 10px 12px; gap: 8px; } #top .wordmark { font-size: 17px; } #top .wordmark small { display: none; } #top .right { display: none; }
   #s-welcome .wrap, #s-site .wrap.shape, #s-intent .wrap, #s-gate .wrap { grid-template-columns: minmax(0, 1fr); } .hero, .hero-art, .read, .site-canvas { min-width: 0; max-width: 100%; }
   .wrap { padding: 0 16px; } .stage { padding: 56px 0 72px; } .hero h1 { font-size: clamp(42px, 13vw, 60px); }
   .composer textarea { font-size: 16px; min-height: 96px; }
@@ -257,7 +253,7 @@ details.more { margin-top: 8px; } details.more > summary { font-size: 13px; } de
 #svg .handle { fill: var(--paper); stroke: var(--olive-deep); stroke-width: 1.6; cursor: grab; } #svg .handle:hover, #svg .handle.on { fill: var(--caramel); stroke: var(--ink); } #svg .handle.mid { fill: transparent; stroke: var(--olive); stroke-dasharray: 2 2; opacity: .8; cursor: copy; }
 #svg .bed[data-bed] { cursor: pointer; }
 #svg .tree, #svg .tree-centre { cursor: grab; }
-@media (max-width: 1080px) { #s-site .wrap.shape { grid-template-columns: 1fr; } }
+@media (max-width: 1000px) { #s-site .wrap.shape { grid-template-columns: 1fr; } }
 /* a preview banner and the revision card must not collide on a narrow desktop */
 /* the canvas hint sits bottom-right so it never covers a feature label at the top of the plan */
 .canvas-hint { left: auto; right: 14px; top: auto; bottom: 36px; }

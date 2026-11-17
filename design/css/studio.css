@@ -4,21 +4,7 @@
 :root { --caramel-ink: #8a5f1c; --desk: #f1ecdf; --rail-w: 64px; --insp-w: 348px; --bar-h: 46px; --status-h: 52px; }
 
 /* ---------------------------------------------------------------- top bar: the four stages as a numbered stepper */
-:is(#stagenav, #gnav) { counter-reset: step; gap: 0; background: none; padding: 0; align-items: center; }
-:is(#stagenav, #gnav) li { counter-increment: step; display: flex; align-items: center; }
-:is(#stagenav, #gnav) li + li::before { content: ""; width: 20px; height: 1px; background: var(--line-2); margin: 0 3px; }
-:is(#stagenav, #gnav) button { padding: 5px 13px 5px 5px; gap: 8px; font-size: 14px; border: 1px solid transparent; transition: background .15s var(--ease); }
-:is(#stagenav, #gnav) button .dot { width: 22px; height: 22px; display: grid; place-items: center; border-radius: 50%; background: none; border: 1px solid var(--line-2); font: 500 11.5px/1 var(--sans); color: var(--ink-3); }
-:is(#stagenav, #gnav) button .dot::before { content: counter(step); }
-:is(#stagenav, #gnav) button.done .dot { background: var(--olive-soft); border-color: transparent; color: var(--olive-deep); }
-:is(#stagenav, #gnav) button.on { background: var(--paper); border-color: var(--line); box-shadow: var(--shadow-soft); color: var(--ink); }
-:is(#stagenav, #gnav) button.on .dot { background: var(--olive-deep); border-color: var(--olive-deep); color: #fff; }
-:is(#stagenav, #gnav) button:not(:disabled):not(.on):hover { background: var(--paper-2); }
-:is(#stagenav, #gnav) button:disabled .dot { border-style: dashed; }
-/* the same stepper on the garden stage's own top bar */
-#gnav { display: flex; list-style: none; margin: 0 0 0 14px; padding: 0; } #gnav button { font-size: 13.5px; border-radius: 999px; color: var(--ink-2); display: flex; align-items: center; }
-#gnav button .dot { width: 20px; height: 20px; font-size: 11px; } #gnav li + li::before { width: 12px; }
-@media (max-width: 1180px) { #gnav button:not(.on) .label { display: none; } #gnav button:not(.on) { padding-right: 5px; } }
+/* the stepper: one contract, in v42.css */
 button.link { color: var(--olive-deep); font-size: 12.5px; text-decoration: underline; text-decoration-color: var(--line-2); text-underline-offset: 3px; } button.link:hover { text-decoration-color: currentColor; }
 
 /* ---------------------------------------------------------------- the site drawing (Shape and Compose share it) */
@@ -125,7 +111,7 @@ button.eye:hover { background: var(--paper-2); } .eye.off { color: var(--ink-3);
 .ws.swap .ws-rail, .ws.swap .ws-inspector, .ws.swap .ws-head > *, .ws.swap .ws-status > * { animation: ws-fade .22s ease-out both; }
 
 /* ---------------------------------------------------------------- desktop: fixed-viewport workspace */
-@media (min-width: 1081px) {
+@media (min-width: 1001px) {
   body[data-stage="welcome"] #s-site, body[data-stage="welcome"] #s-intent, body[data-stage="welcome"] #s-gate, body[data-stage="site"] #s-intent, body[data-stage="site"] #s-gate, body[data-stage="intent"] #s-site, body[data-stage="intent"] #s-gate { display: none; }
   body[data-stage="site"], body[data-stage="intent"] { --nav-h: 52px; }
   body[data-stage="site"] #top, body[data-stage="intent"] #top { height: 52px; padding: 0 20px; background: var(--paper); border-bottom-color: var(--line); backdrop-filter: none; }
@@ -148,16 +134,15 @@ button.eye:hover { background: var(--paper-2); } .eye.off { color: var(--ink-3);
   #cws-panel .vrow { grid-template-columns: minmax(0, 1fr); gap: 7px; padding: 11px 0; } #cws-panel .seg { justify-self: start; }
   #cws-panel .fn { align-items: start; font-size: 13.5px; } #cws-panel .fn .fsw { margin-top: 4px; }
 }
-@media (min-width: 1081px) and (max-width: 1340px) {
+@media (min-width: 1001px) and (max-width: 1340px) {
   :root { --insp-w: 320px; }
   .lens.unknown { display: none; } .fl small { display: none; }
 }
-@media (max-width: 1080px) {
+@media (max-width: 1000px) {
   .ws-lens { flex-wrap: wrap; } #fn-legend { flex-wrap: wrap; } .ws-compose .ws-status { justify-content: flex-start; }
 }
 @media (prefers-reduced-motion: reduce) { .ws.enter, .ws.swap * { animation: none !important; } }
 @media (max-width: 760px) {
-  :is(#stagenav, #gnav) li + li::before { width: 8px; margin: 0 1px; } :is(#stagenav, #gnav) button { padding: 4px; gap: 6px; } :is(#stagenav, #gnav) button.on { padding-right: 10px; }
   #top { overflow: hidden; } #top .wordmark { min-width: 0; overflow: hidden; text-overflow: ellipsis; }
   .ws-head { min-width: 0; } .ws-lens, #fn-legend { max-width: 100%; overflow-x: auto; flex-wrap: nowrap; }
 }
@@ -183,10 +168,8 @@ button.eye:hover { background: var(--paper-2); } .eye.off { color: var(--ink-3);
 .ground-key { display: grid; gap: 5px; padding: 7px 0 8px; border-top: 1px solid var(--line); font-size: 12.5px; color: var(--ink-2); } .ground-key > span { display: grid; grid-template-columns: 12px auto minmax(0, 1fr); gap: 8px; align-items: baseline; } .ground-key .sw { align-self: center; } .ground-key small { font-size: 12px; color: var(--ink-3); text-align: right; }
 .canvas-foot .sw.openk, .canvas-foot .sw.free { vertical-align: -2px; margin-right: 6px; }
 .canvas-home #svg .open-sub { font-size: 9px; fill: var(--ink-3); letter-spacing: .02em; }
-@media (min-width: 1081px) and (max-width: 1340px) { #compose-foot .lg, #site-foot .lg[title] { display: none; } .canvas-foot .lg { white-space: nowrap; } #generate-why, #to-intent-why { max-width: 300px; } }   /* at 1280 the status bar keeps to one line: the function key is already in the mode bar */
+@media (min-width: 1001px) and (max-width: 1340px) { #compose-foot .lg, #site-foot .lg[title] { display: none; } .canvas-foot .lg { white-space: nowrap; } #generate-why, #to-intent-why { max-width: 300px; } }   /* at 1280 the status bar keeps to one line: the function key is already in the mode bar */
 /* the Imagine page is frozen: its top bar keeps the height it had before the stepper (74.695 px on desktop), so the hero below it does not move by a pixel */
-body[data-stage="welcome"] #stagenav { min-height: 45.6953125px; }
-@media (max-width: 760px) { body[data-stage="welcome"] #stagenav { min-height: 38.15px; } }
 
 /* ================================================================ 2026-11-14 · complete journey (M63)
    Imagine: the composer takes words, a location, a size and an image together. Sources that were added sit under the text as
@@ -245,11 +228,11 @@ body[data-stage="welcome"] #stagenav { min-height: 45.6953125px; }
 .arr-ic { width: 15px; height: 15px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; margin-right: -3px; }
 .ws-status .why-not b { font-weight: 600; color: var(--ink-2); } .ws-status .why-not { line-height: 1.35; text-align: right; }
 #site-location { font-size: 14px; padding-right: 22px; } #site-location .src-head h3 { font: 400 21px/1.15 var(--display); letter-spacing: -.01em; }
-@media (min-width: 1081px) {
+@media (min-width: 1001px) {
   .ws-panel.conditions #site-evidence, .ws-panel.conditions #site-location, .ws-panel.evidence #site-conditions, .ws-panel.evidence #site-location, .ws-panel.location #site-conditions, .ws-panel.location #site-evidence { display: none; }
   .ws-panel.location { bottom: auto; max-height: calc(100% - 100px); }
 }
-@media (min-width: 1081px) and (max-width: 1340px) { .ws-phase li:not(.on) .pd { display: none; } .ws-phase li + li::before { width: 10px; margin: 0 7px; } .ctx-loc small { display: none; } .ctx-loc .t { max-width: 18ch; } }
+@media (min-width: 1001px) and (max-width: 1340px) { .ws-phase li:not(.on) .pd { display: none; } .ws-phase li + li::before { width: 10px; margin: 0 7px; } .ctx-loc small { display: none; } .ctx-loc .t { max-width: 18ch; } }
 .insp-ai .kn { margin: 0; padding: 0; } .ws-inspector .cand .l { font-size: 12px; letter-spacing: -.01em; overflow-wrap: anywhere; } .ws-inspector .cand { padding: 6px 6px 8px; min-width: 0; }
 
 /* ---- Compose: which bed, then function → plants → arrangement; requirements said as met / uncertain / not met */
@@ -282,7 +265,7 @@ body[data-stage="welcome"] #stagenav { min-height: 45.6953125px; }
 .reqbox .reqs { margin-top: 4px; } .reqbox .verdict { margin-top: 12px; }
 
 /* ---- Grow: the same workspace shell as Shape and Compose. The garden is the subject; nothing floats over the middle of it. */
-@media (min-width: 1081px) {
+@media (min-width: 1001px) {
   body[data-stage="garden"] { --nav-h: 52px; }
   body[data-stage="garden"] #top { position: fixed; left: 0; right: 0; top: 0; z-index: 31; height: 52px; padding: 0 20px; background: var(--paper); border-bottom-color: var(--line); backdrop-filter: none; }
   body[data-stage="garden"] #top .wordmark small { display: none; } body[data-stage="garden"] #top .wordmark { font-size: 18px; }
@@ -314,18 +297,18 @@ body[data-stage="welcome"] #stagenav { min-height: 45.6953125px; }
 .ws-grow details.readlog .log { max-height: 320px; } .ws-grow .glog .msg { font-size: 13px; }
 .dm { display: inline-block; width: 11px; height: 11px; border-radius: 50%; vertical-align: -1px; margin-right: 6px; } .dm.rm { border: 1.6px dashed var(--rust); background: rgba(176,79,54,.12); } .dm.add { border: 2.4px solid var(--olive-deep); }
 .btn.ghost.danger { border-color: transparent; }
-@media (min-width: 1081px) and (max-width: 1340px) { #gtop .vlabel { display: none; } .viewseg button { padding: 5px 11px; } }
-@media (max-width: 1080px) { #stage { top: 0; overflow: auto; } .ws-grow { padding-top: 12px; } .ws-grow .ws-canvas { height: 62vh; position: relative; } .ws-grow #garden-canvas-body { position: absolute; inset: 0; } #banner { position: static; transform: none; max-width: none; margin: 8px 0; flex-wrap: wrap; } .viewseg { margin-left: 0; } }
+@media (min-width: 1001px) and (max-width: 1340px) { #gtop .vlabel { display: none; } .viewseg button { padding: 5px 11px; } }
+@media (max-width: 1000px) { #stage { top: 0; overflow: auto; } .ws-grow { padding-top: 12px; } .ws-grow .ws-canvas { height: 62vh; position: relative; } .ws-grow #garden-canvas-body { position: absolute; inset: 0; } #banner { position: static; transform: none; max-width: none; margin: 8px 0; flex-wrap: wrap; } .viewseg { margin-left: 0; } }
 .insp-ai .reqs, .insp-ai .chg { padding: 0; margin-left: 0; } .step-note.lead { margin: -2px 0 8px; }
-@media (min-width: 1081px) { .ws-panel { bottom: 104px; } #gpanel.schedule { width: min(780px, calc(100% - 28px)); } }
+@media (min-width: 1001px) { .ws-panel { bottom: 104px; } #gpanel.schedule { width: min(780px, calc(100% - 28px)); } }
 .canvas-home #svg .site.present { fill: #dfe5d0; stroke: #8f9a80; stroke-width: 1.2; } .ws-grow #garden-canvas-body { background: var(--desk); }
 .kn li { grid-template-columns: 92px minmax(0, 1fr) auto; } .kn .tag { justify-self: end; } .insp-actions.sk-alt { margin: 10px 0 14px; }
 .loc-results { max-height: 204px; }
 .composer:has(.source-panel:not([hidden])) textarea { min-height: 64px; } .composer textarea { transition: min-height .2s var(--ease); }
-@media (min-width: 1081px) and (max-width: 1340px) { .ws-inspector .cand .l { font-size: 12px; letter-spacing: -.02em; overflow-wrap: normal; } .ws-inspector .cand { padding: 5px 5px 8px; } }
+@media (min-width: 1001px) and (max-width: 1340px) { .ws-inspector .cand .l { font-size: 12px; letter-spacing: -.02em; overflow-wrap: normal; } .ws-inspector .cand { padding: 5px 5px 8px; } }
 
 /* narrow screens are a fallback this round: the new bars wrap instead of pushing the page sideways */
-@media (max-width: 1080px) {
+@media (max-width: 1000px) {
   .ws-head { flex-wrap: wrap; row-gap: 8px; } .ws-phase { flex-wrap: wrap; row-gap: 4px; } .ws-phase li + li::before { width: 8px; margin: 0 6px; } .ws-phase .pd { display: none; }
   .ws-context { margin-left: 0; max-width: 100%; } .ctx-loc .t { max-width: 16ch; } .ws-compose .ws-phase.seq { margin-left: 0; }
   #gtop { flex-wrap: wrap; row-gap: 8px; } #gtop .gopts, #gtop .right { flex-wrap: wrap; } .ws-status { flex-wrap: wrap; } .ws-status .why-not { text-align: left; }
@@ -334,7 +317,7 @@ body[data-stage="welcome"] #stagenav { min-height: 45.6953125px; }
 }
 /* the status bar stays one line: a long project name gives way first */
 .ws-status .canvas-foot { min-width: 0; } .ws-status .ws-state { flex: 0 1 auto; min-width: 0; max-width: 46ch; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; } .ws-status .canvas-foot .lg { white-space: nowrap; flex: none; } .ws-status .why-not { flex: 0 1 auto; min-width: 0; }
-@media (min-width: 1081px) and (max-width: 1340px) { #grow-why { display: none; } .ws-status .ws-state { max-width: 34ch; } }
+@media (min-width: 1001px) and (max-width: 1340px) { #grow-why { display: none; } .ws-status .ws-state { max-width: 34ch; } }
 .ws-inspector .cand .l { font-size: 12px; letter-spacing: -.02em; overflow-wrap: normal; word-break: normal; hyphens: none; } .ws-inspector .cand { padding: 5px 5px 8px; }
 
 /* ================================================================ 2026-11-15 · generative composition (M64)
