@@ -11,6 +11,8 @@
 //   user-placed   moved or drawn by the user in the sketch
 // Any interpreter — the offline rule parser or a live model returning the same fact structure — feeds the same builder.
 
+import * as C from './clip.js';
+
 export const FRAME_W = 100;
 const COMPASS = ['north', 'south', 'east', 'west'];
 const CENTRE = ['middle', 'centre', 'center'];
@@ -66,8 +68,22 @@ export function remove(c, id) { const i = c.objects.findIndex(x => x.id === id);
 export function setFrame(c, w, h, by = 'user-placed') {
   const f = c.frame; const nw = Math.max(30, Math.min(160, w)), nh = Math.max(30, Math.min(160, h)); const sx = nw / f.w, sy = nh / f.h;
   for (const o of c.objects) { if (o.pos) o.pos = [r1(o.pos[0] * sx), r1(o.pos[1] * sy)]; if (o.polygon) o.polygon = o.polygon.map(p => [r1(p[0] * sx), r1(p[1] * sy)]); }
-  c.frame = { w: r1(nw), h: r1(nh), status: by, basis: by === 'user-placed' ? 'proportions adjusted by you in the sketch' : f.basis };
+  c.frame = { w: r1(nw), h: r1(nh), status: by, basis: by === 'user-placed' ? 'proportions adjusted by you in the sketch' : f.basis, ...(f.outline ? { outline: f.outline.map(p => [r1(p[0] * sx), r1(p[1] * sy)]) } : {}) };
 }
+// ---------------------------------------------------------------- an outline that is not a rectangle (V4.2) — still unitless
+/** the sketch outline: the corners the user shaped, or the frame rectangle. Sketch units, never metres. */
+export const outlineOf = c => c.frame.outline?.length >= 3 ? c.frame.outline.map(p => [p[0], p[1]]) : [[0, 0], [c.frame.w, 0], [c.frame.w, c.frame.h], [0, c.frame.h]];
+/** store an edited outline. The frame becomes its bounding box (objects keep their place relative to the outline); nothing is measured. */
+export function setOutline(c, ring) {
+  const xs = ring.map(p => p[0]), ys = ring.map(p => p[1]); const minx = Math.min(...xs), miny = Math.min(...ys); const w = Math.max(...xs) - minx, h = Math.max(...ys) - miny;
+  const sh = p => [r1(p[0] - minx), r1(p[1] - miny)]; const out = ring.map(sh);
+  for (const o of c.objects) { if (o.pos) o.pos = sh(o.pos); if (o.polygon) o.polygon = o.polygon.map(sh); }
+  const rect = out.length === 4 && out.every(p => (p[0] === 0 || p[0] === r1(w)) && (p[1] === 0 || p[1] === r1(h)));
+  c.frame = { w: r1(w), h: r1(h), status: 'user-placed', basis: 'outline shaped by you in the sketch — proportions only, no size', ...(rect ? {} : { outline: out }) };
+  return c.frame;
+}
+/** the sketch outline carried to a stated size: the same corners in the same order, stretched to w × h metres. null for a plain rectangle. */
+export function outlineMetres(c, w, h) { const f = c?.frame; if (!f?.outline || f.outline.length < 3) return null; const r2 = v => Math.round(v * 100) / 100; return f.outline.map(p => [r2(p[0] / f.w * w), r2(p[1] / f.h * h)]); }
 
 // ---------------------------------------------------------------- suggested planting areas (diagram only: no width in metres, no area)
 /** bands and rings that show WHERE planting is suggested, from the same intent the bed proposal reads. Drawn, never measured. */
@@ -90,7 +106,8 @@ export function viewProject(project, hintBeds = []) {
   const features = c.objects.filter(o => o.pos || o.polygon).map(o => o.kind === 'existing-tree'
     ? { id: o.id, kind: 'existing-tree', position_m: o.pos, radius_m: o.r, label: 'existing tree', status: o.confirmed || o.pos_status === 'user-placed' ? 'user-drawn' : 'inferred', concept_label: `existing tree · ${posWord(o)}`, concept: true }
     : { id: o.id, kind: 'no-plant-zone', polygon: o.polygon, label: o.label, status: o.confirmed || o.pos_status === 'user-placed' ? 'user-drawn' : 'inferred', concept_label: `${o.label} · ${o.confirmed || o.pos_status === 'user-placed' ? posWord(o) : 'extent suggested'}`, concept: true });
-  return { site: { boundary: [[0, 0], [f.w, 0], [f.w, f.h], [0, f.h]], boundary_status: f.status === 'user-placed' ? 'sketch-adjusted' : 'suggested', features, beds: hintBeds, scale: { status: 'unknown' }, orientation: project.site.orientation, conditions: project.site.conditions } };
+  const outline = outlineOf(c); if (f.outline) hintBeds = hintBeds.flatMap(b => { try { const parts = C.fromMulti(C.intersection(C.toMulti(b.polygon, b.holes), C.toMulti(outline)), 1).sort((x, y) => y.area_m2 - x.area_m2); return parts.length ? [{ ...b, polygon: parts[0].polygon.map(p => [r1(p[0]), r1(p[1])]), holes: parts[0].holes }] : []; } catch { return []; } });   /* a suggested band is drawn only where the shaped outline has ground */
+  return { site: { boundary: outline, boundary_status: f.status === 'user-placed' ? 'sketch-adjusted' : 'suggested', features, beds: hintBeds, scale: { status: 'unknown' }, orientation: project.site.orientation, conditions: project.site.conditions } };
 }
 export const unplaced = c => c.objects.filter(o => !o.pos && !o.polygon);
 

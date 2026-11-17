@@ -86,6 +86,41 @@ else:
     else:
         test("C0 demo C ran", False, "")
 
+# ---------------------------------------------------------------- V4.2 · an irregular site (design/js/boundary.js, ?script=v42shape)
+#  X  the site outline is real project geometry: a sketch outline is shaped without any metre, area or count appearing, and arrives in
+#     metres with the same corners once a size is said; on a measured site a corner is trimmed, two corners make an L, a keep-out sits
+#     in the inner corner; beds in the way are previewed, never clipped silently; refused outlines say why; undo restores; the engine
+#     plants inside the irregular outline; the saved file reads back identical; a later trim marks the arrangement as made for an older outline.
+if CHROME:
+    X = (block(dom("/design/index.html?script=v42shape&fresh=1", 40000), "script-out") or {})
+    if X.get("error") or "v42shape" not in X: test("X0 the irregular-site replay ran without error", False, (X.get("error") or "no record")[:400])
+    else:
+        k = X["v42shape"]; a = k["sketch"]; b = k["metric"]; js = json.dumps
+        test("X1 a sketch outline is shaped as a sketch: a notch adds two corners to the unitless outline, no boundary in metres exists, and neither the editor nor the inspector shows a length or an area",
+             a["concept"] and a["began"] and a["corners1"] == a["corners0"] + 2 and a["still_concept"] and a["boundary_after"] is None and len(a["frame"].get("outline") or []) == a["corners1"] and not a["metric_text_while_editing"] and not a["metric_text_in_sketch"] and a["versions"] == 0, js({x: a[x] for x in ("corners0", "corners1", "still_concept", "metric_text_while_editing", "metric_text_in_sketch")}))
+        m = a["metric"]; test("X2 a stated size turns the shaped sketch into metres with the same corners: the outline fills 8 × 6 m, encloses less than the rectangle, the tree is inside it and every proposed bed lies inside it",
+             a["same_topology"] and m["corners"] == a["corners1"] and abs(m["bbox"]["w"] - 8) < .02 and abs(m["bbox"]["h"] - 6) < .02 and 0 < m["area_m2"] < 48 and m["tree_inside"] and len(m["beds"]) >= 2 and all(x["inside"] for x in m["beds"]), js({"corners": m["corners"], "area": m["area_m2"], "status": m["status"], "beds": len(m["beds"])}))
+        r = b["rect"]; t = b["trim"]; rv = b["review"]
+        test("X3 trimming a corner makes a five-cornered working outline with its handles on the plan, and the first Apply only opens a review: the beds in the way are named with their area before and after, and the project is untouched",
+             len(r["boundary"]) == 4 and t["corners"] == 5 and t["page"]["handles"] == 5 and rv["opened"] and not rv["applied"] and rv["boundary_unchanged"] and rv["beds_unchanged"] and len(rv["impact"]["beds"]) >= 1 and all(x["confirmed"] and x["after_m2"] < x["before_m2"] for x in rv["impact"]["beds"]) and rv["impact"]["lost_m2"] > 0, js(rv["impact"]))
+        test("X4 Keep editing and Cancel change nothing: the outline and every bed are as they were", b["kept_editing"]["session"] and not b["kept_editing"]["review"] and b["kept_editing"]["boundary_unchanged"] and not b["cancelled"]["session"] and b["cancelled"]["boundary_unchanged"] and b["cancelled"]["beds_unchanged"], js([b["kept_editing"], b["cancelled"]]))
+        pg = b["pentagon"]; test("X5 applying after the review writes the pentagon to the project (user-drawn), clips the beds to it, and records one undo step",
+             pg["applied"] and pg["corners"] == 5 and pg["area_m2"] < r["area_m2"] and pg["status"] == "user-drawn" and all(x["inside"] for x in pg["beds"]) and pg["history"] >= 1, js({"area": [r["area_m2"], pg["area_m2"]], "beds": [(x["name"], x["area_m2"], x["status"]) for x in pg["beds"]]}))
+        l = b["lshape"]; test("X6 two added corners and a dragged one make an L: a concave outline of more corners and less area, every bed still inside it; the session's Undo and Redo step through the same edits",
+             l["applied"] and l["corners"] == pg["corners"] + 2 and l["area_m2"] < pg["area_m2"] and l["concave"] >= 1 and all(x["inside"] for x in l["beds"]) and b["session_undo"]["corners"] < b["l_edit"]["corners"] and b["session_undo"]["redo_available"] == 2 and b["session_redo"]["same"], js({"corners": l["corners"], "area": l["area_m2"], "undo": b["session_undo"], "redo": b["session_redo"]}))
+        ko = b["keepout"]; test("X7 a keep-out in the inner corner lies inside the outline and the beds stay inside the outline", len(ko["zone"]) >= 1 and all(z["inside"] for z in ko["zone"]) and all(x["inside"] for x in ko["beds"]), js(ko["zone"]))
+        rf = b["refused"]; test("X8 outlines that cannot be a site are refused with a reason a person can act on — one that crosses itself, one with two corners, one with no area, one that would leave the existing tree outside — a third corner cannot be deleted, and the project is unchanged",
+             not rf["crossing"]["ok"] and any("cross" in x for x in rf["crossing"]["reasons"]) and rf["crossing"]["apply_disabled"] and rf["crossing"]["alert"] and not rf["two_corners"]["ok"] and "3 corners" in rf["two_corners"]["reasons"][0] and not rf["zero_area"]["ok"] and rf["zero_area"]["reasons"] and rf["cannot_delete_below_three"] and rf["unchanged"] and not rf["tree_outside"]["ok"] and "tree" in rf["tree_outside"]["reasons"][0] and rf["tree_outside"]["boundary_unchanged"], js({x: rf[x] for x in ("crossing", "two_corners", "zero_area", "tree_outside")}))
+        test("X9 the Shape page's own Undo takes an applied outline back with the beds it clipped, and applying it again gives the same outline", b["site_undo"]["boundary_back_to_pentagon"] and b["site_redo"]["applied"] and b["site_redo"]["same"], js([b["site_undo"], b["site_redo"]]))
+        g = b["generated"]; test("X10 the engine plants the irregular site: every plant object stands inside the outline and inside its own bed, none in the keep-out", bool(g) and g["plants"] > 0 and g["all_inside_outline"] and g["all_in_their_bed"] and g["in_keep_out"] == 0 and not g["stale"], js({x: g[x] for x in ("plants", "all_inside_outline", "all_in_their_bed", "in_keep_out")} if g else {}))
+        test("X11 the design read back from its exported text and from browser storage has the identical outline, beds, zones and plant positions", b["reload"]["export_identical"] and b["reload"]["local_identical"] and b["reload"]["corners"] == l["corners"], js(b["reload"]))
+        st = b["stale"]; test("X12 a further trim after generating does not touch the plants: the version is kept, the review names the planting, and Grow says the arrangement was made for other ground",
+             st["applied"] and st["version_kept"] and st["review_named_planting"] and (st["geometry_stale"] or st["plants_outside_outline"] >= 0) and bool(st["banner"]), js(st))
+        dp = k.get("depth") or {}; en = dp.get("engine") or {}; of = dp.get("offered") or {}
+        test("X14 Screen depth is computed, not promised: the band's basis no longer says a second row fits; where the engine's row plan says it does not, Compose gives the depth that plan needs for this bed and offers a preview of a deeper bed — taking the offer opens a preview in Shape and changes nothing until applied",
+             bool(dp) and not dp["promises_second_row"] and "one row" in dp["basis"] and dp["double_disabled"] is True and en.get("feasible") is False and dp["need_m"] == en.get("needs_depth_m") and abs(dp["by_m"] - (en["needs_depth_m"] - en["depth_m"])) < 0.1001 and str(en["needs_depth_m"]) in (dp["offer"] or "") and of.get("stage") == "site" and of.get("preview") and of.get("bed_unchanged") and of["change"] and of["change"][0]["after_m2"] > of["change"][0]["before_m2"], js({"basis": dp.get("basis"), "engine": en, "offer": dp.get("offer"), "offered": of}))
+        test("X13 the page never scrolls sideways during the replay", k["overflow_x"] <= 0, js(k["inner"]))
+
 ok = sum(1 for _, p, _ in results if p); n = len(results)
 lines = [f"# Spatial proposal tests — {TODAY}", "", f"`tools/spatial_tests.py` against {URL} (headless Chrome, SwiftShader WebGL). **{ok}/{n} pass.**", "", "| test | result | detail |", "|---|---|---|"] + [f"| {a} | {'pass' if p else '**FAIL**'} | {d.replace('|', '/')} |" for a, p, d in results]
 out_path = os.path.join(ROOT, f"eval/spatial-tests-{TODAY}.md")
