@@ -12,6 +12,23 @@ Brief 2026-11-07 ("Plant Knowledge Explorer — Phase 1", after the desk crit); 
 - `?replay=focus:species=<id>;view:matrix;back;forward;q:<text>` is a test hook: it performs the steps and writes what the page showed after each into `<script id="replay-out">` (`tools/explorer_tests.py` K9–K11).
 - Type: Bricolage Grotesque for headings, DM Sans for everything else (scientific names in DM Sans italic), DM Mono for ids and provenance only.
 
+## V4.2 (2026-11-16): one action, one focus
+
+Nothing in the data or the model changed; what changed is what the page shows at each step. Every visual state is written by the renderers from the one page state (`S` in `js/app.js`), never toggled on an element.
+
+- **Overview.** Plant ↔ function lines lead; requirement lines are the second layer (38 % stroke). The legend lists only the line types drawn.
+- **Focus.** One hop stays at full strength; every other node falls to 26 % and every other line to 6 %, and all of them stay clickable and in the tab order.
+- **A line.** The inspected line is the thickest and its two ends are marked (`.node.end`). The Inspector's first screen is relation → meaning → *Where the evidence stands* (relation, source claim, human verification, AI source check as four rows) → the claim that carries it → Plant Profile / trace. Rules, all claims, the requirement check and the ids are under **See source & rule**; the stored record is under **Advanced: raw record (JSON)**, closed.
+- **Expand.** What a step adds fades in (220 ms; off under `prefers-reduced-motion`) and keeps a dashed amber ring until the next step (`S.fresh`); plants and functions do not move. An expansion past `Model.SAFE` says “Too many attributes (n)”, adds nothing, and highlights the groups to choose from.
+- **A and B.** A is a ring, B a dashed square (shape as well as tone). With both set and nothing focused, what neither plant reaches steps back. No line joins the two without a record in `relations.json`.
+- **Matrix.** The selected column, the A / B rows and the inspected cell keep their strength; other cells fall to 50 % (30 % when a filter excludes them) and stay buttons. `All cells | Linked | Conflicts | No link` (`mf=`). Each row has A / B buttons; with both set, a summary beside the matrix gives the two plants across the five functions in words and offers **Compare selected**.
+- **Table.** An attribute table: pinned species column and header, 40 px rows, read-only. A cell shows one or two values in full and `+n values` in words, plus `sources differ` / `by condition`. **Columns** lists every attribute by group (`g=`, `hc=`; kept in `localStorage` as `pi.kn.table`); **Only selected** (`to=1`); header click sorts (`ts=`); **Export CSV**. A click marks the row and the column and opens the Record Inspector: each distinct value with source, scope, human verification and AI check. A cell without a record opens as *not recorded* (`ik=nr&ii=<species>~<facet>`). Arrow keys move, Home / End jump, Enter opens, Escape closes.
+- **Inspector.** 400 px, 340 px up to 1320 px wide; from 1100 px down it slides over the view and closes with its button or Escape.
+
+Address, added: `mf` matrix filter · `hc` hidden table columns · `ts` table sort · `to=1` only selected rows · `ik=nr`. Everything from V1–V4.1 still lands.
+
+Replay steps, added (`?replay=`): `mf:<k>` · `tg:<group>` · `tc:<facet>` · `tsort:<facet>` · `tonly` · `ab:a=<id>` / `ab:b=<id>` · `cell:<tablewrap|mbody>=<row>,<col>` · `key:<KeyboardEvent.key>` · `collapse` · `close-insp`. Each step also records measured values (opacities, the selected line's width, which cell holds the keyboard).
+
 ## V4.1 (2026-11-16): the Network as an evidence explorer
 
 Knowledge now opens on the **Network**; Matrix and Table are projections of the same selection, one click away. This is a trial default in the V4.1 preview, to confirm by Kay. The sections below describe the V4 behaviour that still holds; where they differ, this section wins.
