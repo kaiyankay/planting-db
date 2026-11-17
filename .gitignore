@@ -39,3 +39,7 @@ designs/proj-*.json
 designs/script-*.json
 .claude/skills/impeccable/scripts/bin/
 .impeccable/
+
+# Local builds of the platform preview (tools/build_platform.py, tools/platform_tests.py)
+_platform_test/
+_pp/

@@ -9,7 +9,7 @@ import * as G from './geom.js';
 import * as C from './clip.js';
 
 export const DEFAULTS = {
-  screen_band_m: 1.2,      // a Screen row + a staggered second row (engine spacing) needs about two crown radii of depth
+  screen_band_m: 1.2,      // room for ONE Screen row. A staggered second row needs more than this for the species recorded today (the engine's row plan says how much, per bed) — never promised here
   side_band_m: 0.8,        // ground-layer border that frames an open centre
   perimeter_band_m: 1.0,   // habitat / low-maintenance perimeter when no open centre is asked for
   access_band_m: 0.9,      // kept free along the access edge (front / south by assumption) so the site can be entered
@@ -138,7 +138,7 @@ export function propose(project, opts = {}) {
   if (!site.boundary || !site.plantable.length) return conceptualProposal(project, site, intent, inputs_fp);
   const access = site.access_edge.side; const nonAccess = SIDES.filter(s => s !== access && site.edges[s]?.length);
   const screenSides = intent.screenSides.length ? intent.screenSides : intent.boundaryScreen ? nonAccess : [];
-  const screenBasis = intent.screenSides.length ? `privacy → a ${intent.screenFn.replace('z:', '')} band along the ${screenSides.join(' and ')} edge, deep enough for a row and a staggered second row` : intent.boundaryScreen ? `privacy along the boundary, no side named → bands on every edge except the ${access} (access) edge` : null;
+  const screenBasis = intent.screenSides.length ? `privacy → a ${intent.screenFn.replace('z:', '')} band along the ${screenSides.join(' and ')} edge, sized for one row of screening plants (a second, staggered row needs a deeper bed: Compose says how deep for the plants chosen)` : intent.boundaryScreen ? `privacy along the boundary, no side named → bands on every edge except the ${access} (access) edge` : null;
   const assumptions = []; if (intent.boundaryScreen) assumptions.push(`Screen was set on the outer boundary: every edge except the ${access} (access) edge gets a band`);
   if (intent.pendingScreen) assumptions.push('privacy was asked for but no edge was named: no screen band is proposed and no screen is planted until you choose the edge (Compose → Site-wide spatial functions)');
   const keepOut = site.open_areas.map(o => C.toMulti(o.polygon)); const accessBand = site.edges[access]?.length ? C.edgeBand({ polygon: site.boundary }, site.edges[access], P.access_band_m) : [];

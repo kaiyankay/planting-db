@@ -3,14 +3,17 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Planting Intelligence · Neural Brain v5</title>
+<title>3D network · Knowledge · Planting Intelligence</title>
 <link rel="icon" href="data:,">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..700&family=DM+Sans:ital,opsz,wght@0,9..40,400..700;1,9..40,400..700&family=DM+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="../platform/css/platform.css">
 <style>
   :root {
     --bg: #01020a; --ink: #d3d9e8; --ink-dim: #818a9f; --ink-faint: #4d5468;
     --glass: rgba(5, 8, 20, 0.78); --line: rgba(190, 205, 255, 0.10);
     --practitioner: #ffa94d; --database: #5ad1ff; --municipal: #6ff2b0; --model: #6d7384; --candidate: #ff5fb4; --plant: #fff1c2;
-    --mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace; --sans: -apple-system, "Helvetica Neue", "Segoe UI", Roboto, sans-serif;
+    --mono: "DM Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace; --sans: "DM Sans", -apple-system, "Helvetica Neue", "Segoe UI", Roboto, sans-serif;
   }
   * { box-sizing: border-box; }
   html, body { margin: 0; height: 100%; background: var(--bg); color: var(--ink); font: 13px/1.45 var(--sans); overflow: hidden; }
@@ -33,7 +36,8 @@
   .lbl.lit { color: #fff; font-size: 11px; } .lbl.lit small { color: #c8cfdf; }
   .lbl.source { font-size: 10.5px; color: #9fb8d8; }
 
-  #hud { position: fixed; inset: 0; pointer-events: none; }
+  #pitop { position: fixed; left: 0; right: 0; top: 0; z-index: 50; } #hud { position: fixed; inset: 52px 0 0 0; pointer-events: none; }
+  #card .pi-mini { margin: 4px 0 10px; background: rgba(255,255,255,.05); border-color: var(--line); color: var(--ink); } #card .pi-mini-n i { color: #f4ead0; } #card .pi-mini-n span { color: var(--ink-dim); } #card .pi-mini-a a { color: #9fd3ff; border: 0; text-decoration-color: rgba(159,211,255,.4); }
   #hud > * { pointer-events: auto; }
   #brand { position: absolute; left: 20px; top: 16px; max-width: 520px; }
   #brand h1 { margin: 0; font-size: 15px; font-weight: 500; letter-spacing: .02em; color: #f4ead0; }
@@ -89,15 +93,16 @@
 <script src="./vendor/3d-force-graph.min.js"></script>
 </head>
 <body>
+<header id="pitop"></header>
 <div id="graph"></div>
 <div id="labels"></div>
 <div id="hud">
   <header id="brand">
-    <h1>Neural Brain <small>v5 · planting intelligence · <a href="./v4/">v4</a> · <a href="./v3/">v3</a> · <a href="./v2/">v2</a> · <a href="./v1/">v1</a> · <a href="https://github.com/kaiyankay/planting-db" target="_blank" rel="noopener">source</a></small></h1>
+    <h1>3D network <small>the same claims as one network</small></h1>
     <div id="stats">loading…</div>
     <div id="state"></div>
   </header>
-  <div id="askbar"><input id="ask-input" placeholder="ask the store… e.g. evergreen shade-tolerant hedge for North Vancouver"><button id="ask-run">Ask</button><button id="btn-grow">+ Observation</button></div>
+  <div id="askbar"><input id="ask-input" placeholder="ask the store… e.g. evergreen shade-tolerant hedge for North Vancouver"><button id="ask-run">Ask</button><button id="btn-grow" hidden>+ Observation</button></div>
   <div id="asknote">retrieval preview · not a full AI trace</div>
   <nav id="clusters"></nav>
   <div id="legend"></div>

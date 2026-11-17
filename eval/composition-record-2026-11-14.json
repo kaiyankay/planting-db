@@ -1,0 +1,433 @@
+{
+ "source": "http://127.0.0.1:8770/design/index.html?fresh=1&script=compose",
+ "sentence": "I have a 6 × 4 m backyard with a tree in the northwest corner. I want privacy along the north edge and an open centre.",
+ "seed": 42,
+ "beds": [
+  {
+   "name": "North bed",
+   "area_m2": 5.4,
+   "functions": [
+    "z:screen"
+   ]
+  },
+  {
+   "name": "East bed",
+   "area_m2": 2.48,
+   "functions": [
+    "z:ground_cover"
+   ]
+  },
+  {
+   "name": "West bed",
+   "area_m2": 2.48,
+   "functions": [
+    "z:ground_cover"
+   ]
+  },
+  {
+   "name": "Tree island",
+   "area_m2": 2.1,
+   "functions": [
+    "z:ground_cover"
+   ]
+  }
+ ],
+ "features": [
+  "existing tree",
+  "open (open centre)"
+ ],
+ "A": {
+  "bed": "East bed",
+  "options": [
+   {
+    "option": "Naturalistic drifts",
+    "chosen": true,
+    "plants": 19,
+    "species": {
+     "Arctostaphylos uva-ursi": 19
+    },
+    "spacing_m": 0.34,
+    "pattern_rule": "a jittered lattice (0.35 × spacing); the species follow a drift field with cells of 1.4 m (heuristic)",
+    "ground_cover_share": 0.52,
+    "screen": null,
+    "other_beds_unchanged": true,
+    "first_positions": [
+     "Arctostaphylos uva-ursi @ 5.43, 0.16",
+     "Arctostaphylos uva-ursi @ 5.7, 0.21",
+     "Arctostaphylos uva-ursi @ 5.53, 0.41",
+     "Arctostaphylos uva-ursi @ 5.41, 0.83"
+    ]
+   },
+   {
+    "option": "Rhythmic rows",
+    "chosen": false,
+    "plants": 26,
+    "species": {
+     "Arctostaphylos uva-ursi": 24,
+     "Gaultheria shallon": 2
+    },
+    "spacing_m": {
+     "Arctostaphylos uva-ursi": 0.2,
+     "Gaultheria shallon": 0.49
+    },
+    "pattern_rule": "4 bands of 0.78 m across the bed's long side (2 × the mean spacing, fitted to the bed — heuristic), the 2 species in turn; inside a band a square grid at 0.65 × that species' claimed mature spread, no jitter",
+    "ground_cover_share": 0.81,
+    "screen": null,
+    "other_beds_unchanged": true,
+    "first_positions": [
+     "Arctostaphylos uva-ursi @ 5.31, 0.19",
+     "Arctostaphylos uva-ursi @ 5.5, 0.19",
+     "Arctostaphylos uva-ursi @ 5.7, 0.19",
+     "Arctostaphylos uva-ursi @ 5.89, 0.19"
+    ]
+   },
+   {
+    "option": "Clustered patches",
+    "chosen": false,
+    "plants": 16,
+    "species": {
+     "Arctostaphylos uva-ursi": 13,
+     "Gaultheria shallon": 3
+    },
+    "spacing_m": {
+     "Arctostaphylos uva-ursi": 0.2,
+     "Gaultheria shallon": 0.49
+    },
+    "pattern_rule": "2 patches of radius 0.59 m (1.7 × the mean spacing) with at least 0.38 m of open ground between them (heuristics); one species per patch, taken in turn, at 0.65 × its own claimed mature spread",
+    "ground_cover_share": 0.67,
+    "screen": null,
+    "other_beds_unchanged": true,
+    "first_positions": [
+     "Arctostaphylos uva-ursi @ 5.35, 0.2",
+     "Arctostaphylos uva-ursi @ 5.53, 0.2",
+     "Arctostaphylos uva-ursi @ 5.72, 0.21",
+     "Arctostaphylos uva-ursi @ 5.43, 0.38"
+    ]
+   }
+  ],
+  "distinct_sets_of_plant_objects": 3,
+  "of": 3,
+  "eligible_species": [
+   "Arctostaphylos uva-ursi",
+   "Gaultheria shallon",
+   "Polystichum munitum",
+   "Achillea millefolium",
+   "Gaillardia aristata"
+  ],
+  "controls": [
+   {
+    "control": "density",
+    "effect_here": true,
+    "note": "now 0.34 m between stems — a factor on the engine’s spacing heuristic, not a rule from a source"
+   },
+   {
+    "control": "grain",
+    "effect_here": true,
+    "note": "size of the drifts each species forms"
+   },
+   {
+    "control": "variation",
+    "effect_here": true,
+    "note": "Another roll of the same rules for this bed — chance, not a different planting strategy."
+   }
+  ],
+  "held_over_plan": {
+   "option": "Rhythmic rows",
+   "symbols_on_plan": 26,
+   "hint": "Holding “Rhythmic rows” over East bed — not chosen yet",
+   "stored_composition": null
+  },
+  "chosen": {
+   "option": "Clustered patches",
+   "stored_on_bed": {
+    "pattern": "patches"
+   },
+   "preview_plants": 16,
+   "other_beds_same_as_before": true,
+   "controls": [
+    {
+     "control": "density",
+     "effect_here": true,
+     "note": "now 0.2 m / 0.49 m between stems — a factor on the engine’s spacing heuristic, not a rule from a source"
+    },
+    {
+     "control": "grain",
+     "effect_here": true,
+     "note": "size of the patches"
+    },
+    {
+     "control": "variation",
+     "effect_here": true,
+     "note": "Another roll of the same rules for this bed — chance, not a different planting strategy."
+    }
+   ]
+  }
+ },
+ "B": {
+  "bed": "North bed",
+  "options": [
+   {
+    "option": "Single row",
+    "chosen": true,
+    "plants": 7,
+    "species": {
+     "Gaultheria shallon": 7
+    },
+    "spacing_m": 0.57,
+    "pattern_rule": "one row; the second row is switched off",
+    "ground_cover_share": null,
+    "screen": {
+     "status": "not met",
+     "covered_m": 4.27,
+     "edge_m": 6,
+     "placed": 7,
+     "expected": 10
+    },
+    "other_beds_unchanged": true,
+    "first_positions": [
+     "Gaultheria shallon @ 5.66, 3.62",
+     "Gaultheria shallon @ 5.07, 3.62",
+     "Gaultheria shallon @ 4.48, 3.62",
+     "Gaultheria shallon @ 3.89, 3.62"
+    ]
+   },
+   {
+    "option": "Staggered double row",
+    "applicable": false,
+    "why": "A second row needs 1.33 m of bed depth behind the edge; this bed has 0.9 m. Deepen the bed in Shape to make room for it."
+   }
+  ],
+  "spacing_options": [
+   {
+    "spacing": "Open",
+    "plants": 5,
+    "spacing_m": 0.71,
+    "covered_m": 3.76,
+    "status": "not met"
+   },
+   {
+    "spacing": "Standard",
+    "plants": 7,
+    "spacing_m": 0.57,
+    "covered_m": 4.27,
+    "status": "not met"
+   },
+   {
+    "spacing": "Close",
+    "plants": 8,
+    "spacing_m": 0.46,
+    "covered_m": 4.1,
+    "status": "not met"
+   }
+  ],
+  "limit": "What no option changes: 3 positions of the row cannot be planted — they fall in the ground kept free around the existing tree (0.6 × its canopy). The tree’s position or canopy, or the bed, would have to change.",
+  "mix": "Only Gaultheria shallon qualifies for the screen row in this bed, so there is no mix to choose.",
+  "controls": [
+   {
+    "control": "density",
+    "effect_here": true,
+    "note": "now 0.57 m between stems — a factor on the engine’s spacing heuristic, not a rule from a source"
+   },
+   {
+    "control": "variation",
+    "effect_here": false,
+    "note": "No effect on a row: its positions follow from the edge and the spacing, with no chance in them."
+   }
+  ]
+ },
+ "C": {
+  "version": "v-5gja8",
+  "stage": "garden",
+  "plants": 31,
+  "per_bed": [
+   {
+    "bed": "North bed",
+    "arrangement": "single row",
+    "preview_plants": 7,
+    "generated_plants": 7,
+    "identical_species_role_position": true,
+    "same_as_engine_default": true,
+    "species": {
+     "Gaultheria shallon": 7
+    }
+   },
+   {
+    "bed": "East bed",
+    "arrangement": "clustered patches",
+    "preview_plants": 16,
+    "generated_plants": 16,
+    "identical_species_role_position": true,
+    "same_as_engine_default": false,
+    "species": {
+     "Arctostaphylos uva-ursi": 13,
+     "Gaultheria shallon": 3
+    }
+   },
+   {
+    "bed": "West bed",
+    "arrangement": "naturalistic drifts",
+    "preview_plants": 4,
+    "generated_plants": 4,
+    "identical_species_role_position": true,
+    "same_as_engine_default": true,
+    "species": {
+     "Gaultheria shallon": 4
+    }
+   },
+   {
+    "bed": "Tree island",
+    "arrangement": "naturalistic drifts",
+    "preview_plants": 4,
+    "generated_plants": 4,
+    "identical_species_role_position": true,
+    "same_as_engine_default": true,
+    "species": {
+     "Gaultheria shallon": 1,
+     "Arctostaphylos uva-ursi": 3
+    }
+   }
+  ],
+  "preview_match_on_version": {
+   "compared": 31,
+   "preview_count": 31,
+   "identical": true,
+   "what": "bed, species, role and position of every plant object, Compose preview against this version"
+  },
+  "symbols_drawn_in_grow": 31,
+  "schedule_total": 31,
+  "schedule": [
+   "Arctostaphylos uva-ursi × 16",
+   "Gaultheria shallon × 15"
+  ],
+  "ground_evaluation": [
+   {
+    "bed": "East bed",
+    "pattern": "patches",
+    "plants": 16,
+    "ground_cover_share": 0.67
+   },
+   {
+    "bed": "West bed",
+    "pattern": "drifts",
+    "plants": 4,
+    "ground_cover_share": 0.69
+   },
+   {
+    "bed": "Tree island",
+    "pattern": "drifts",
+    "plants": 4,
+    "ground_cover_share": 0.46
+   }
+  ],
+  "screen_evaluation": [
+   {
+    "status": "not met",
+    "covered_m": 4.27,
+    "edge_m": 6
+   }
+  ],
+  "valid": true,
+  "every_plant_inside_its_bed": true,
+  "sample": [
+   {
+    "id": "plant-008",
+    "species": "Arctostaphylos uva-ursi",
+    "role": "ground",
+    "position_m": [
+     5.35,
+     0.2
+    ],
+    "in_preview": true
+   },
+   {
+    "id": "plant-009",
+    "species": "Arctostaphylos uva-ursi",
+    "role": "ground",
+    "position_m": [
+     5.53,
+     0.2
+    ],
+    "in_preview": true
+   },
+   {
+    "id": "plant-010",
+    "species": "Arctostaphylos uva-ursi",
+    "role": "ground",
+    "position_m": [
+     5.72,
+     0.21
+    ],
+    "in_preview": true
+   },
+   {
+    "id": "plant-011",
+    "species": "Arctostaphylos uva-ursi",
+    "role": "ground",
+    "position_m": [
+     5.43,
+     0.38
+    ],
+    "in_preview": true
+   },
+   {
+    "id": "plant-012",
+    "species": "Arctostaphylos uva-ursi",
+    "role": "ground",
+    "position_m": [
+     5.63,
+     0.38
+    ],
+    "in_preview": true
+   }
+  ]
+ },
+ "again": {
+  "back_in": "Compose",
+  "bed": "East bed",
+  "chosen": "Rhythmic rows",
+  "version": "v-5hb2b",
+  "parent": "v-5gja8",
+  "per_bed": [
+   {
+    "bed": "North bed",
+    "same_plants_as_previous_version": true,
+    "plants": [
+     7,
+     7
+    ]
+   },
+   {
+    "bed": "East bed",
+    "same_plants_as_previous_version": false,
+    "plants": [
+     16,
+     26
+    ]
+   },
+   {
+    "bed": "West bed",
+    "same_plants_as_previous_version": true,
+    "plants": [
+     4,
+     4
+    ]
+   },
+   {
+    "bed": "Tree island",
+    "same_plants_as_previous_version": true,
+    "plants": [
+     4,
+     4
+    ]
+   }
+  ],
+  "preview_match_on_version": {
+   "compared": 41,
+   "preview_count": 41,
+   "identical": true,
+   "what": "bed, species, role and position of every plant object, Compose preview against this version"
+  },
+  "identical_to_preview": true,
+  "versions": 2
+ }
+}

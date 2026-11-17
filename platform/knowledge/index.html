@@ -1,0 +1,15 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Knowledge · Planting Intelligence</title>
+<link rel="icon" href="data:,">
+</head>
+<body>
+<p>Knowledge opens on the Explorer. <a href="../../brain/explorer/">Explorer</a> · <a href="./trace/">Decision Trace</a></p>
+<script type="module">
+import { routes, forwardLegacyTrace } from '../js/platform.js';
+if (!forwardLegacyTrace()) location.replace(routes.explore + location.hash);
+</script>
+</body>
+</html>

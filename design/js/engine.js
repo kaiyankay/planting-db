@@ -80,12 +80,30 @@ export const ARRANGEMENT_RULES = {
   stagger_clearance: { value: 0.9, unit: '× inner-row crown radius between the inner row and the inner bed edge', source: 'heuristic' },
   neighbour_clearance: { value: 0.6, unit: '× sum of two crown radii: least distance between stems', source: 'heuristic' },
   ground_jitter: { value: 0.35, unit: '× spacing (seeded)', source: 'heuristic', note: 'breaks the lattice into drifts' },
+  rhythm_band: { value: 2, unit: '× spacing: length of one species band along the bed (medium grain; bold 4, fine 1)', source: 'heuristic', note: 'a composition choice, not a horticultural rule' },
+  patch_radius: { value: 1.7, unit: '× spacing: radius of one patch (medium grain; bold 2.4, fine 1.15)', source: 'heuristic', note: 'a composition choice, not a horticultural rule' },
+  patch_gap: { value: 1.1, unit: '× spacing of open ground between two patches', source: 'heuristic', note: 'the ground between patches is left unplanted on purpose; the cover estimate counts it as uncovered' },
   tree_keepout: { value: 0.6, unit: '× existing canopy radius kept free around the trunk', source: 'heuristic' },
   screen_target_height: { value: 1.8, unit: 'm, used only when no target height is stated', source: 'heuristic', note: 'a standing eye-level default; state the height to replace it' },
   gap_report_min: { value: 0.05, unit: 'm: shortest uncovered stretch reported as a gap', source: 'heuristic', note: 'below the 1 cm × 5 drawing precision' },
   area_sample: { value: 0.1, unit: 'm sample grid for plantable area and cover', source: 'geometry' },
 };
 const RV = k => ARRANGEMENT_RULES[k].value;
+/** COMPOSITION (methods M64) — what the user may choose for one bed in Compose. Every option is an instruction to the operators below;
+ *  none of them changes which species qualify, the spacing rule, the clearances or the obstacles. A bed without a composition is planted
+ *  with the defaults (drifts · medium · rows as the site rule says · density 1 · variation 0), exactly as before this existed. */
+export const COMPOSITION = {
+  patterns: {
+    drifts: { label: 'Naturalistic drifts', operator: 'fill_drift', text: 'a loose lattice; the species change in soft-edged drifts' },
+    rhythm: { label: 'Rhythmic rows', operator: 'fill_rhythm', text: 'a regular lattice along the bed; the species repeat in even bands' },
+    patches: { label: 'Clustered patches', operator: 'fill_patch', text: 'one-species clusters with open ground left between them' },
+  },
+  rows: { single: { label: 'Single row', text: 'one row along the screened edge' }, double: { label: 'Staggered double row', text: 'a second row behind the first, set in the gaps' } },
+  grain: { bold: { label: 'Bold', cell: 2.2, band: 4, patch: 2.4 }, medium: { label: 'Medium', cell: 1.4, band: RV('rhythm_band'), patch: RV('patch_radius') }, fine: { label: 'Fine', cell: 0.7, band: 1, patch: 1.15 } },
+  density: [{ id: 0.8, label: 'Open' }, { id: 1, label: 'Standard' }, { id: 1.25, label: 'Close' }],
+  max_species: { ground: 3, screen: 2 },
+};
+export const compositionOf = bed => { const c = bed?.composition || {}; return { pattern: COMPOSITION.patterns[c.pattern] ? c.pattern : 'drifts', grain: COMPOSITION.grain[c.grain] ? c.grain : 'medium', rows: COMPOSITION.rows[c.rows] ? c.rows : 'auto', density: c.density > 0 ? +c.density : 1, variation: Number.isInteger(c.variation) && c.variation > 0 ? c.variation : 0, ground_species: Array.isArray(c.ground_species) ? c.ground_species : null, screen_species: Array.isArray(c.screen_species) ? c.screen_species : null, custom: !!bed?.composition }; };
 /** what a Screen function asks for. A target height that was not stated falls back to the heuristic default and says so; a year-round
  *  requirement that was not stated is NOT assumed (winter cover is then reported, not required). */
 export function screenRequirement(fns) {
@@ -113,7 +131,7 @@ export function rowPlan({ depth_m, edge_length_m, r_lead, r_alt = r_lead, r_inne
 }
 const FIT_RANK = { meets: 0, uncertain: 1, fails: 9 };
 const fitOf = checks => { const rs = Object.values(checks).map(c => c.result); return rs.includes('fails') ? 'fails' : rs.every(r => r === 'meets') ? 'meets' : 'uncertain'; };
-const siteCheck = r => r.gate.overall === 'fail' ? { result: 'fails', detail: `fails a site gate: ${['light', 'water', 'soil'].filter(k => r.gate[k].result === 'fail').map(k => r.gate[k].detail).join('; ')}` } : r.gate.overall === 'pass' ? { result: 'meets', detail: 'passes the light, water and soil gates' } : { result: 'uncertain', detail: `site gates ${r.gate.overall}: ${['light', 'water', 'soil'].filter(k => r.gate[k].result !== 'pass').map(k => `${k} ${r.gate[k].result}`).join(', ')}` };
+const siteCheck = r => r.gate.overall === 'fail' ? { result: 'fails', detail: `fails a site gate: ${['light', 'water', 'soil'].filter(k => r.gate[k].result === 'fail').map(k => r.gate[k].detail).join('; ')}` } : r.gate.overall === 'pass' ? { result: 'meets', detail: 'passes the light, water and soil gates' } : { result: 'uncertain', detail: `site gates ${r.gate.overall}: ${['light', 'water', 'soil'].filter(k => r.gate[k].result !== 'pass').map(k => `${k} ${r.gate[k].result}${r.gate[k].result === 'conditional' ? ` (${r.gate[k].detail})` : ''}`).join(', ')}` };
 const evidenceCheck = e => ({ result: e.result === 'supported' ? 'meets' : e.result === 'none' ? 'fails' : 'uncertain', detail: e.detail, verified: e.verified, conflict: e.conflict, link: e.link });
 const candidate = (r, checks, extra = {}) => { const fit = fitOf(checks); return { id: r.id, name: r.name, fit, checks, reasons: Object.entries(checks).filter(([, c]) => c.result !== 'meets').map(([k, c]) => `${k}: ${c.detail}`), verified: Object.values(checks).every(c => c.verified !== false), proxy_radius_m: r.proxy.radius_m, ...extra }; };
 /** share of the bed's area under existing tree crowns (0.2 m sample grid), with the tree that covers most of it; null when none */
@@ -166,24 +184,28 @@ export function assemble(project, K, bed) {
   const picks = { screen: [], ground: [], accent: [], canopy: [] };
   const used = new Set();
   const take = (role, list, n, why) => { for (const r of list.slice(0, n)) { if (used.has(r.id)) continue; used.add(r.id); r.role = role; r.why.push(why(r)); picks[role].push(r); } };
-  const wantGround = wanted.includes('z:ground_cover'); const candidates = { screen: [], ground: [] }; let requirement = null;
+  const wantGround = wanted.includes('z:ground_cover'); const candidates = { screen: [], ground: [] }; let requirement = null; const comp = compositionOf(bed); const eligible = { screen: [], ground: [] };
+  const mix = (role, ok, auto) => { const want = comp[`${role}_species`]; const mine = want ? want.map(id => ok.find(r => r.id === id)).filter(Boolean).slice(0, COMPOSITION.max_species[role]) : []; return mine.length ? mine : auto; };   /* a chosen species that no longer qualifies is dropped; an empty choice falls back to the engine's own */
   const byFit = (a, b, fn) => FIT_RANK[a.cand.fit] - FIT_RANK[b.cand.fit] || rank(a, fn) - rank(b, fn);
   if (wanted.includes('z:screen')) {
     // Screen: every species is checked against the requirement (target height, year-round), the evidence for the function, the site
     // and the bed depth behind the screened edge; 'fails' is never planted, 'uncertain' may be planted and is reported as such
     requirement = screenRequirement(wantedFunctions(project, bed)); const edges = wantedFunctions(project, bed).filter(f => f.function === 'z:screen').flatMap(f => edgesFor(project, bed, f.where));
-    const depth = edges.length ? Math.min(...edges.map(e => edgeDepth(bed, e))) : null;
+    /* V4.3 · the depth is read stretch by stretch. Before, the shallowest stretch decided for the whole bed, so a short chamfered corner (0.25 m deep at its taper) ruled out every species on a 6.5 m edge that is 1.2 m deep. Generation already plans each stretch on its own. */
+    const stretches = edges.map(e => ({ len: G.dist(e.a, e.b), depth: edgeDepth(bed, e) })); const totalLen = G.round(stretches.reduce((t, x) => t + x.len, 0)); const depth = stretches.length ? Math.max(...stretches.map(x => x.depth)) : null;
     for (const r of rows) {
       const ev = K.functionEvidence(r.id, 'z:screen'); const checks = { evidence: evidenceCheck(ev) };
       if (ev.result !== 'none') {
         if (r.form === 'Tree') checks.form = { result: 'fails', detail: 'a tree — the row operators arrange shrubs and perennials; there is no tree-placement rule' };
         checks.site = siteCheck(r); const h = K.heightAgainst(r.id, requirement.target_height_m, conds.light?.value); checks.height = { result: h.result === 'unknown' ? 'uncertain' : h.result, detail: h.detail, verified: h.verified, claims: h.claims };
         if (requirement.year_round) { const y = K.yearRound(r.id); checks.year_round = { result: y.result, detail: y.detail, verified: y.verified, claims: y.claims }; }
-        if (depth != null) { const need = G.round(r.proxy.radius_m * (RV('row_inset') + RV('edge_tolerance'))); checks.geometry = depth >= need ? { result: 'meets', detail: `a row fits: needs ${need} m of bed depth, has ${depth} m` } : { result: 'fails', detail: `the row does not fit: crown radius ${r.proxy.radius_m} m (${r.proxy.spread.claim || 'no spread claim'}) needs ${need} m of bed depth, the bed has ${depth} m` }; }
+        if (depth != null) { const need = G.round(r.proxy.radius_m * (RV('row_inset') + RV('edge_tolerance'))); const fitS = stretches.filter(x => x.depth >= need), shortS = stretches.filter(x => x.depth < need); const fitLen = G.round(fitS.reduce((t, x) => t + x.len, 0));
+          checks.geometry = fitS.length ? { result: 'meets', detail: shortS.length ? `a row fits on ${fitLen} m of the ${totalLen} m edge: needs ${need} m of bed depth, has ${G.round(Math.max(...fitS.map(x => x.depth)))} m there; ${G.round(totalLen - fitLen)} m of the edge is only ${G.round(Math.min(...shortS.map(x => x.depth)))} m deep and stays without a row` : `a row fits: needs ${need} m of bed depth, has ${G.round(Math.min(...fitS.map(x => x.depth)))} m`, fits_m: fitLen, edge_m: totalLen } : { result: 'fails', detail: `the row does not fit: crown radius ${r.proxy.radius_m} m (${r.proxy.spread.claim || 'no spread claim'}) needs ${need} m of bed depth, the bed has ${depth} m` }; }
       }
       r.cand = candidate(r, checks, { function: 'z:screen' }); candidates.screen.push(r.cand);
     }
-    const ok = rows.filter(r => r.cand.fit !== 'fails').sort((a, b) => byFit(a, b, 'z:screen')); const chosen = ok.length ? [ok[0], ...ok.slice(1, 2).filter(x => x.cand.fit === ok[0].cand.fit)] : [];   // a second species only when it is as good as the first
+    const ok = rows.filter(r => r.cand.fit !== 'fails').sort((a, b) => byFit(a, b, 'z:screen')); const chosen = mix('screen', ok, ok.length ? [ok[0], ...ok.slice(1, 2).filter(x => x.cand.fit === ok[0].cand.fit)] : []);   // a second species only when it is as good as the first — or when the user chose it among those that qualify
+    eligible.screen = ok.map(r => r.id);
     take('screen', chosen, 2, r => `Screen (${r.cand.fit}${r.cand.fit === 'uncertain' ? ' — ' + r.cand.reasons.join('; ') : ''}): target ${requirement.target_height_m} m (${requirement.target_basis})${requirement.year_round ? ', year-round' : ''}; ${r.cand.checks.height.detail}; evidence ${r.cand.checks.evidence.detail}; ${r.cand.checks.site.detail}`);
   }
   if (wantGround) {
@@ -193,7 +215,8 @@ export function assemble(project, K, bed) {
       r.gcand = candidate(r, checks, { function: 'z:ground_cover' }); candidates.ground.push(r.gcand);
     }
     const ok = rows.filter(r => r.gcand && r.gcand.fit !== 'fails').sort((a, b) => FIT_RANK[a.gcand.fit] - FIT_RANK[b.gcand.fit] || rank(a, 'z:ground_cover') - rank(b, 'z:ground_cover'));
-    take('ground', ok, 2, r => `Ground Cover (${r.gcand.fit}${r.gcand.fit === 'uncertain' ? ' — ' + r.gcand.reasons.join('; ') : ''}): evidence ${r.gcand.checks.evidence.detail}; ${r.gcand.checks.site.detail}; spread ${r.proxy.spread.min ?? '?'}–${r.proxy.spread.max ?? '?'} m (${r.proxy.spread.claim || 'not recorded'})`);
+    eligible.ground = ok.map(r => r.id);
+    take('ground', mix('ground', ok, ok.slice(0, 2)), COMPOSITION.max_species.ground, r => `Ground Cover (${r.gcand.fit}${r.gcand.fit === 'uncertain' ? ' — ' + r.gcand.reasons.join('; ') : ''}): evidence ${r.gcand.checks.evidence.detail}; ${r.gcand.checks.site.detail}; spread ${r.proxy.spread.min ?? '?'}–${r.proxy.spread.max ?? '?'} m (${r.proxy.spread.claim || 'not recorded'})`);
   }
   if (wantGround && (project.brief.values.ecology || project.brief.values.seasonal_interest)) {   // the accent replaces ground positions, so it needs a ground layer
     const list = pool.filter(r => !used.has(r.id) && r.form !== 'Tree' && r.proxy.radius_m <= 0.6 && (r.ecology.result === 'documented' || r.interest)).sort((a, b) => GATE_RANK[a.gate.overall] - GATE_RANK[b.gate.overall] || (b.ecology.result === 'documented') - (a.ecology.result === 'documented'));
@@ -207,7 +230,7 @@ export function assemble(project, K, bed) {
   if (wantGround && !picks.ground.length) notes.push(`${bed.name}: no Ground Cover species can be used — the bed interior stays unplanted (${whyNone(candidates.ground)})`);
   if (wanted.includes('z:screen') && !picks.screen.length) notes.push(`${bed.name}: no species meets the Screen requirement (target ${requirement.target_height_m} m${requirement.year_round ? ', year-round' : ''}) — the screened edge stays unplanted (${whyNone(candidates.screen)})`);
   if (rows.some(r => r.form === 'Tree' && r.excluded?.startsWith('a tree'))) notes.push(`${bed.name}: no new tree placed — ${rows.filter(r => r.form === 'Tree' && r.excluded?.startsWith('a tree')).map(r => r.name).join(', ')} exceed the bed at claimed mature spread`);
-  return { rows, picks, notes, conditions: conds, prefs, wanted, unsupported, candidates, requirement };
+  return { rows, picks, notes, conditions: conds, prefs, wanted, unsupported, candidates, requirement, eligible, composition: comp };
 }
 
 // ---------------------------------------------------------------- zones from the bed's functions (or the brief's) and its geometry
@@ -225,7 +248,8 @@ export function zonesFor(project, bed) {
 
 // ---------------------------------------------------------------- generation (one bed → plants; many beds → one version)
 function generateBed(project, K, bed, seed, params, nid, existing) {
-  const density = params.density ?? 1; const rand = G.rng(seed + hashId(bed.id)); const noise = G.valueNoise(seed + 7 + hashId(bed.id), params.drift_cell ?? 1.4);
+  const comp = compositionOf(bed); const grain = COMPOSITION.grain[comp.grain]; const vseed = seed + comp.variation * 7919;   /* variation: another roll of the same rules for this bed only */
+  const density = (params.density ?? 1) * comp.density; const rand = G.rng(vseed + hashId(bed.id)); const noise = G.valueNoise(vseed + 7 + hashId(bed.id), params.drift_cell ?? grain.cell);
   const SPACING = { screen: params.spacing_screen ?? 0.75, ground: params.spacing_ground ?? 0.65 };
   const obstacles = obstaclesFor(project); const asm = assemble(project, K, bed); const zones = zonesFor(project, bed);
   const plants = [], groups = [], unresolved = []; const shape = bedShape(bed);
@@ -238,7 +262,7 @@ function generateBed(project, K, bed, seed, params, nid, existing) {
     const g1 = { id: `group-${bed.id}-${groups.length + 1}`, bed_id: bed.id, zone_id: z.id, role: 'screen', operator: 'along_edge', params: { spacing: `${SPACING.screen} × claimed mature spread`, spacing_source: ARRANGEMENT_RULES.screen_spacing.source, inset: 'proxy radius', species: sp.map(s => s.id), alternate: sp.length > 1, fit: sp.map(s => s.cand?.fit) }, plant_ids: [] };
     const g2 = { id: `group-${bed.id}-${groups.length + 2}`, bed_id: bed.id, zone_id: z.id, role: 'screen-layer', operator: 'stagger', params: { offset: `${RV('stagger_offset')} × radius inward`, offset_source: ARRANGEMENT_RULES.stagger_offset.source, species: [back.id] }, plant_ids: [] };
     z.edges.forEach((e, ei) => {
-      const alt = sp.length > 1 ? sp[1] : lead; const plan = rowPlan({ depth_m: edgeDepth(bed, e), edge_length_m: G.dist(e.a, e.b), r_lead: r, r_alt: alt.proxy.radius_m, r_inner: r2, density, stagger: params.stagger !== false, spacing_factor: SPACING.screen }); const rmax = Math.max(r, alt.proxy.radius_m); const n0 = [g1.plant_ids.length, g2.plant_ids.length];
+      const alt = sp.length > 1 ? sp[1] : lead; const plan = rowPlan({ depth_m: edgeDepth(bed, e), edge_length_m: G.dist(e.a, e.b), r_lead: r, r_alt: alt.proxy.radius_m, r_inner: r2, density, stagger: comp.rows === 'single' ? false : comp.rows === 'double' ? true : params.stagger !== false, spacing_factor: SPACING.screen }); const rmax = Math.max(r, alt.proxy.radius_m); const n0 = [g1.plant_ids.length, g2.plant_ids.length];
       const len = G.dist(e.a, e.b) || 1; const at = (t, d) => [e.a[0] + (e.b[0] - e.a[0]) * t / len - e.n[0] * d, e.a[1] + (e.b[1] - e.a[1]) * t / len - e.n[1] * d];
       plan.row1_t.forEach((t, i) => { const s = i % 2 === 0 ? lead : alt; const p = at(t, s.proxy.radius_m * RV('row_inset')); if (ok(p, s.proxy.radius_m) && clear(p, s.proxy.radius_m)) { const o = mk(s, p, 'screen', g1.id, z.id); plants.push(o); g1.plant_ids.push(o.id); } });
       const off = rmax * RV('row_inset') + r2 * RV('stagger_offset'); plan.row2_t.forEach(t => { const p = at(t, off); if (ok(p, r2) && clear(p, r2)) { const o = mk(back, p, 'screen-layer', g2.id, z.id); plants.push(o); g2.plant_ids.push(o.id); } });
@@ -248,6 +272,7 @@ function generateBed(project, K, bed, seed, params, nid, existing) {
     });
     g1.params.row_plans = z.row_plans; if (g1.plant_ids.length) groups.push(g1); if (g2.plant_ids.length) groups.push(g2);
     if (!g1.plant_ids.length) unresolved.push(`${z.label}: the screen row does not fit — ${z.row_plans.map(pl => pl.reason).join('; ')}; left unplanted`);
+    else for (const pl of z.row_plans) if (!pl.rows) unresolved.push(`${z.label}: no row on a ${pl.edge_length_m} m stretch of the edge — ${pl.reason}; that stretch is left unplanted`);   /* V4.3 · a stretch that cannot take a row is said, not silently skipped */
   }
   for (const f of wantedFunctions(project, bed)) if (f.function === 'z:screen' && !zones.some(z => z.kind === 'edge' && z.id === `zone-screen-${f.where}-${bed.id}`)) unresolved.push(f.where === 'edge-unset' ? `${bed.name}: Screen is wanted but its edge has not been chosen — no row is placed until you choose the edge` : `${bed.name}: Screen is wanted along "${f.where.replace('-', ' ')}" but this bed has no edge there — no row is placed (set the edge on the bed)`);
   for (const u of asm.unsupported) unresolved.push(`${bed.name}: ${u.label} — ${u.why}`);
@@ -256,11 +281,38 @@ function generateBed(project, K, bed, seed, params, nid, existing) {
   else if (gp.length) {
     const B = G.bbox(bed.polygon); const rg = gp.reduce((a, s) => a + s.proxy.radius_m, 0) / gp.length; const spacing = 2 * rg * SPACING.ground / density;
     const free = freeArea(project, bed, obstacles, plants.filter(q => /^screen/.test(q.role)));
-    const g = { id: `group-${bed.id}-${groups.length + 1}`, bed_id: bed.id, zone_id: `zone-fill-${bed.id}`, role: 'ground', operator: 'fill_drift', params: { lattice: 'hexagonal', spacing_m: G.round(spacing), spacing_rule: `${SPACING.ground} × the mean claimed mature spread of the ground species (${G.round(2 * rg)} m)${density !== 1 ? ` ÷ density ${density}` : ''}`, spacing_source: ARRANGEMENT_RULES.ground_spacing.source, plantable_m2: free.plantable_m2, area_for_ground_m2: free.free_m2, area_basis: free.basis, expected_count: Math.round(free.free_m2 / (spacing * spacing * Math.sqrt(3) / 2)), expected_note: 'lattice estimate: area ÷ one hexagonal cell; the placed count is lower because stems keep their distance from the bed edge and from each other after the jitter', fit: gp.map(s => s.gcand?.fit), jitter: 0.35, species: gp.map(s => s.id), drift_field: 'value noise', seed }, plant_ids: [] };
-    const rmin = Math.min(...gp.map(s => s.proxy.radius_m)) * 0.6;
-    const pts = G.hexGrid(B, spacing, 0.35, rand).filter(p => G.pointInShape(p, shape) && G.distToShapeEdge(p, shape) >= rmin);
-    const thr = gp.length > 1 ? 0.5 : 2;
-    for (const p of pts) { const s = gp.length > 1 && noise(p[0], p[1]) > thr ? gp[1] : gp[0]; if (ok(p, s.proxy.radius_m) && clear(p, s.proxy.radius_m)) { const o = mk(s, p, 'ground', g.id, g.zone_id); plants.push(o); g.plant_ids.push(o.id); } }
+    const pattern = comp.pattern; const PT = COMPOSITION.patterns[pattern]; const cell = spacing * spacing * Math.sqrt(3) / 2;
+    const g = { id: `group-${bed.id}-${groups.length + 1}`, bed_id: bed.id, zone_id: `zone-fill-${bed.id}`, role: 'ground', operator: PT.operator, params: { pattern, pattern_label: PT.label, grain: comp.grain, lattice: 'hexagonal', spacing_m: G.round(spacing), spacing_rule: `${SPACING.ground} × the mean claimed mature spread of the ground species (${G.round(2 * rg)} m)${density !== 1 ? ` ÷ density ${G.round(density)}` : ''}`, spacing_source: ARRANGEMENT_RULES.ground_spacing.source, plantable_m2: free.plantable_m2, area_for_ground_m2: free.free_m2, area_basis: free.basis, expected_count: Math.round(free.free_m2 / cell), expected_note: 'lattice estimate: area ÷ one hexagonal cell; the placed count is lower because stems keep their distance from the bed edge and from each other', fit: gp.map(s => s.gcand?.fit), species: gp.map(s => s.id), seed, variation: comp.variation }, plant_ids: [] };
+    const rmin = Math.min(...gp.map(s => s.proxy.radius_m)) * 0.6; const inside = p => G.pointInShape(p, shape) && G.distToShapeEdge(p, shape) >= rmin; const n = gp.length;
+    const put = (p, s) => { if (ok(p, s.proxy.radius_m) && clear(p, s.proxy.radius_m)) { const o = mk(s, p, 'ground', g.id, g.zone_id); plants.push(o); g.plant_ids.push(o.id); return true; } return false; };
+    // Rhythm and patches set each species out on its own lattice — 0.65 × that species' claimed mature spread, the same factor as the drift
+    // rule — because a band or a patch holds one species only. (Drifts keep one lattice at the mean spread: the species share it.)
+    const sOf = sp => 2 * sp.proxy.radius_m * SPACING.ground / density; const insideOf = (p, sp) => G.pointInShape(p, shape) && G.distToShapeEdge(p, shape) >= sp.proxy.radius_m * 0.6;
+    const bySpecies = Object.fromEntries(gp.map(sp => [sp.id, G.round(sOf(sp))]));
+    if (pattern === 'rhythm') {
+      // bands of equal length across the bed's long side, one species per band in turn; inside a band a square grid, centred, no jitter
+      const ax = B.w >= B.h ? 0 : 1; const u0 = ax ? B.miny : B.minx, uL = ax ? B.h : B.w, v0 = ax ? B.minx : B.miny, vL = ax ? B.w : B.h; const band = grain.band * spacing; const nb = Math.max(1, Math.round(uL / band)); const bl = uL / nb; let expected = 0;
+      for (let k = 0; k < nb; k++) { const sp = gp[k % n], d = sOf(sp); const nu = Math.max(1, Math.floor((bl - d) / d + 1e-6) + 1), nv = Math.max(1, Math.floor((vL - d) / d + 1e-6) + 1); const us = u0 + k * bl + (bl - (nu - 1) * d) / 2, vs = v0 + (vL - (nv - 1) * d) / 2;
+        for (let i = 0; i < nu; i++) for (let j = 0; j < nv; j++) { const u = us + i * d, v = vs + j * d; const p = ax ? [v, u] : [u, v]; if (!insideOf(p, sp)) continue; expected++; put(p, sp); } }
+      Object.assign(g.params, { lattice: 'square, per band', jitter: 0, axis: ax ? 'north–south' : 'east–west', band_m: G.round(bl), bands: nb, spacing_by_species: bySpecies, expected_count: expected, expected_note: 'grid points inside the bed, band by band; the placed count is lower where a point is too close to an edge, an obstacle or a neighbour', pattern_rule: `${nb} band${nb === 1 ? '' : 's'} of ${G.round(bl)} m across the bed's long side (${grain.band} × the mean spacing, fitted to the bed — heuristic)${n > 1 ? `, the ${n} species in turn` : ', one species'}; inside a band a square grid at ${SPACING.ground} × that species' claimed mature spread, no jitter`, random: false });
+    } else if (pattern === 'patches') {
+      // one-species clusters with open ground between them: patch centres are taken along the bed, each at least (2 × patch radius + gap)
+      // from the others; around a centre the species stands on its own lattice inside the patch radius; nothing is placed between patches
+      const Rp = grain.patch * spacing, gap = RV('patch_gap') * spacing, C = 2 * Rp + gap; const ax = B.w >= B.h ? 0 : 1; const small = gp.reduce((m, x) => x.proxy.radius_m < m.proxy.radius_m ? x : m, gp[0]);
+      const cand = G.hexGrid(B, spacing / 2, 0.15, rand).filter(p => insideOf(p, small) && ok(p, small.proxy.radius_m));   /* a finer grid for the centres, so a large species finds the middle of a narrow bed */
+      const order = cand.map(p => ({ p, k: p[ax] + (rand() - .5) * C * 0.5 })).sort((x, y) => x.k - y.k); const centres = [], owner = []; let turn = Math.floor(rand() * n);
+      const stands = (p, sp) => insideOf(p, sp) && ok(p, sp.proxy.radius_m) && clear(p, sp.proxy.radius_m);
+      for (const { p } of order) { if (!centres.every(c => G.dist(c, p) >= C)) continue; for (let t = 0; t < n; t++) { const sp = gp[(turn + t) % n]; if (stands(p, sp)) { centres.push(p); owner.push(sp); turn = (turn + t + 1) % n; break; } } }   /* the species take turns; one that cannot stand at this centre gives its turn to the next */
+      let expected = 0;
+      centres.forEach((c, ci) => { const sp = owner[ci], d = sOf(sp), dy = d * Math.sqrt(3) / 2, m = Math.ceil(Rp / dy) + 1;
+        for (let j = -m; j <= m; j++) for (let i = -m; i <= m; i++) { const q = [c[0] + i * d + (Math.abs(j) % 2 ? d / 2 : 0), c[1] + j * dy]; if (G.dist(q, c) > Rp) continue; const p = i || j ? [q[0] + (rand() - .5) * 0.15 * d, q[1] + (rand() - .5) * 0.15 * d] : q; if (!insideOf(p, sp)) continue; expected++; put(p, sp); } });
+      Object.assign(g.params, { lattice: 'hexagonal, per patch', jitter: 0.15, patches: centres.length, patch_radius_m: G.round(Rp), patch_gap_m: G.round(gap), spacing_by_species: bySpecies, expected_count: expected, expected_note: 'lattice points that fall inside a patch; the ground between patches is left open on purpose', pattern_rule: `${centres.length} patch${centres.length === 1 ? '' : 'es'} of radius ${G.round(Rp)} m (${grain.patch} × the mean spacing) with at least ${G.round(gap)} m of open ground between them (heuristics); one species per patch${n > 1 ? ', taken in turn' : ''}, at ${SPACING.ground} × its own claimed mature spread`, random: true });
+    } else {
+      const pts = G.hexGrid(B, spacing, 0.35, rand).filter(inside);
+      const thr = n > 1 ? 0.5 : 2; const cut = [0.42, 0.58];   /* three species: the drift field is cut in three (value noise gathers around 0.5, so the cuts are close to it) */
+      for (const p of pts) { const v = n > 1 ? noise(p[0], p[1]) : 0; const s = n === 2 ? (v > thr ? gp[1] : gp[0]) : n > 2 ? gp[v < cut[0] ? 0 : v < cut[1] ? 1 : 2] : gp[0]; put(p, s); }
+      Object.assign(g.params, { jitter: 0.35, drift_field: 'value noise', drift_cell_m: params.drift_cell ?? grain.cell, expected_note: 'lattice estimate: area ÷ one hexagonal cell; the placed count is lower because stems keep their distance from the bed edge and from each other after the jitter', pattern_rule: `a jittered lattice (0.35 × spacing)${n > 1 ? `; the species follow a drift field with cells of ${params.drift_cell ?? grain.cell} m (heuristic)` : ''}`, random: true });
+    }
     g.params.placed = g.plant_ids.length; if (g.plant_ids.length) groups.push(g); else unresolved.push(`${bed.name}: the ground layer does not fit — no position is free at ${G.round(spacing)} m spacing in ${free.free_m2} m²`);
   } else unresolved.push(asm.notes.find(n => /no Ground Cover species can be used/.test(n)) || `${bed.name}: no Ground Cover species can be used — the bed interior stays unplanted`);
   const ac = asm.picks.accent[0];
@@ -268,7 +320,10 @@ function generateBed(project, K, bed, seed, params, nid, existing) {
     const open = zones.find(z => z.kind === 'open'); const ref = open ? G.centroid(open.polygon) : [G.bbox(bed.polygon).minx + G.bbox(bed.polygon).w / 2, G.bbox(bed.polygon).miny];
     const ground = plants.filter(p => p.role === 'ground').sort((a, b) => G.dist(a.position_m, ref) - G.dist(b.position_m, ref));
     const g = { id: `group-${bed.id}-${groups.length + 1}`, bed_id: bed.id, zone_id: `zone-fill-${bed.id}`, role: 'accent', operator: 'repeat_accent', params: { every: 4, toward: open ? 'the open zone' : 'the front edge', species: [ac.id] }, plant_ids: [] };
-    ground.filter((_, i) => i % 4 === 1).slice(0, Math.max(2, Math.floor(ground.length / 5))).forEach(p => { p.species_id = ac.id; p.role = 'accent'; p.proxy_radius_m = ac.proxy.radius_m; p.proxy_source = { claim: ac.proxy.spread.claim, range_m: [ac.proxy.spread.min, ac.proxy.spread.max], status: ac.proxy.radius_status, note: ac.proxy.spread.note }; p.height_m = ac.proxy.height_m; p.height_source = { claim: ac.proxy.height.claim, range_m: [ac.proxy.height.min, ac.proxy.height.max], status: ac.proxy.height_status }; p.group_id = g.id; g.plant_ids.push(p.id); });
+    /* V4.3 · an accent takes over a ground position, but its own crown radius may be larger than the ground plant's. The position is kept only if the accent passes the very check validate() runs (placeable, with the accent's radius); otherwise it stays a ground plant. */
+    let skipped = 0;
+    ground.filter((_, i) => i % 4 === 1).slice(0, Math.max(2, Math.floor(ground.length / 5))).forEach(p => { if (!placeable(p.position_m, ac.proxy.radius_m, bed, obstacles, project.site).ok) { skipped++; return; } p.species_id = ac.id; p.role = 'accent'; p.proxy_radius_m = ac.proxy.radius_m; p.proxy_source = { claim: ac.proxy.spread.claim, range_m: [ac.proxy.spread.min, ac.proxy.spread.max], status: ac.proxy.radius_status, note: ac.proxy.spread.note }; p.height_m = ac.proxy.height_m; p.height_source = { claim: ac.proxy.height.claim, range_m: [ac.proxy.height.min, ac.proxy.height.max], status: ac.proxy.height_status }; p.group_id = g.id; g.plant_ids.push(p.id); });
+    g.params.skipped = skipped; if (skipped) g.params.skipped_note = `${skipped} accent position${skipped === 1 ? '' : 's'} not used: at the accent's crown radius (${ac.proxy.radius_m} m) the plant would stand too close to the bed edge or an obstacle; the ground plant stays there`;
     if (g.plant_ids.length) groups.push(g);
   }
   if (!plants.length && bed.area_m2 > 0) unresolved.push(!asm.wanted.length ? `${bed.name}: left empty — no spatial function set` : !asm.wanted.some(functionArranged) ? `${bed.name}: left empty — none of its functions can be arranged yet` : `${bed.name}: no plant fitted (${bed.area_m2} m², narrowest ${bed.min_width_m ?? '?'} m)`);
@@ -291,7 +346,7 @@ export function generate(project, K, bedIds, seed = 42, params = {}) {
   const ids = asList(bedIds); const beds = ids.map(id => bedOf(project, id)).filter(Boolean); if (!beds.length) throw new Error('no bed');
   let n = params.id_start ?? project.plant_seq; const nid = () => `plant-${String(++n).padStart(3, '0')}`;
   const plants = [], groups = [], zones = [], assumptions = [], unresolved = []; const assemblages = {}; const obstacles = obstaclesFor(project);
-  for (const bed of beds) { const r = generateBed(project, K, bed, seed, params, nid, plants); plants.push(...r.plants); groups.push(...r.groups); zones.push(...r.zones); unresolved.push(...r.unresolved); assemblages[bed.id] = { picks: Object.fromEntries(Object.entries(r.asm.picks).map(([k, v]) => [k, v.map(x => ({ id: x.id, why: x.why, gate: x.gate.overall, proxy_radius_m: x.proxy.radius_m, fit: (k === 'screen' ? x.cand : k === 'ground' ? x.gcand : null)?.fit || null }))])), excluded: r.asm.rows.filter(x => x.excluded).map(x => ({ id: x.id, reason: x.excluded })), not_used: r.asm.rows.filter(x => !x.excluded && !x.role).map(x => ({ id: x.id, reason: 'eligible but not needed by any zone' })), wanted: r.asm.wanted, notes: r.asm.notes, candidates: r.asm.candidates, requirement: r.asm.requirement }; assumptions.push(...r.asm.notes); for (const u of bed.under_canopy || []) assumptions.push(`${bed.name}: ${u.m2} m² under ${u.label} — planting there is conditional (the light under the canopy is not recorded; it is not assumed to be full shade)`); }
+  for (const bed of beds) { const r = generateBed(project, K, bed, seed, params, nid, plants); plants.push(...r.plants); groups.push(...r.groups); zones.push(...r.zones); unresolved.push(...r.unresolved); assemblages[bed.id] = { picks: Object.fromEntries(Object.entries(r.asm.picks).map(([k, v]) => [k, v.map(x => ({ id: x.id, why: x.why, gate: x.gate.overall, proxy_radius_m: x.proxy.radius_m, fit: (k === 'screen' ? x.cand : k === 'ground' ? x.gcand : null)?.fit || null }))])), excluded: r.asm.rows.filter(x => x.excluded).map(x => ({ id: x.id, reason: x.excluded })), not_used: r.asm.rows.filter(x => !x.excluded && !x.role).map(x => ({ id: x.id, reason: 'eligible but not needed by any zone' })), wanted: r.asm.wanted, notes: r.asm.notes, candidates: r.asm.candidates, requirement: r.asm.requirement }; assumptions.push(...r.asm.notes); { const c = r.asm.composition; const gg = r.groups.find(x => x.role === 'ground'); if (c.custom) assumptions.push(`${bed.name}: arrangement chosen in Compose — ${[gg ? `${gg.params.pattern_label.toLowerCase()} (${gg.params.pattern_rule})` : null, c.rows !== 'auto' ? COMPOSITION.rows[c.rows].label.toLowerCase() : null, c.density !== 1 ? `spacing ÷ ${c.density}` : null, c.variation ? `variation ${c.variation} (another roll of the same rules, not a different strategy)` : null, c.ground_species || c.screen_species ? 'plant mix chosen among the species that qualify' : null].filter(Boolean).join('; ')}. A composition choice, not a verified planting strategy.`); } for (const u of bed.under_canopy || []) assumptions.push(`${bed.name}: ${u.m2} m² under ${u.label} — planting there is conditional (the light under the canopy is not recorded; it is not assumed to be full shade)`); }
   for (const o of obstacles) if (o.kind === 'tree' && /assumed/.test(o.radius_status)) assumptions.push(`${o.label}: canopy radius ${o.radius} m is ${o.radius_status}`);
   assumptions.push(`plant sizes are proxies: half the claimed mature spread (one claim chosen per species, alternatives counted) — not measured plants; planting spacing is ${params.spacing_screen ?? 0.75} × (screen rows) and ${params.spacing_ground ?? 0.65} × (ground layer) the claimed mature spread, so canopies meet and overlap at maturity by design — both factors are heuristics (the database holds no spacing claim; see ARRANGEMENT_RULES)`);
   if (project.site.scale.status !== 'user-calibrated' && project.site.scale.status !== 'user-stated') assumptions.push('scale is not calibrated: positions are conceptual, quantities are not for procurement');
@@ -300,7 +355,7 @@ export function generate(project, K, bedIds, seed = 42, params = {}) {
   project.plant_seq = Math.max(project.plant_seq, n);
   const merged = { picks: { screen: [], ground: [], accent: [], canopy: [] }, excluded: [], not_used: [] }; for (const a of Object.values(assemblages)) { for (const k of Object.keys(merged.picks)) for (const x of a.picks[k]) if (!merged.picks[k].some(y => y.id === x.id)) merged.picks[k].push(x); for (const e of a.excluded) if (!merged.excluded.some(y => y.id === e.id)) merged.excluded.push(e); }
   merged.not_used = K.species.filter(s => !Object.values(merged.picks).flat().some(x => x.id === s.id) && !merged.excluded.some(e => e.id === s.id)).map(s => ({ id: s.id, reason: 'eligible but not needed by any zone' }));
-  const version = { label: params.label || `generated (seed ${seed})`, seed, bed_id: beds[0].id, bed_ids: beds.map(b => b.id), bed_fps: Object.fromEntries(beds.map(b => [b.id, bedFingerprint(b)])), generator: { operators: [...new Set(groups.map(g => g.operator))], density: params.density ?? 1, params: { ...params, id_start: params.id_start ?? (n - plants.length) } }, knowledge_snapshot: K.snapshot, geometry_precision: project.site.scale.status === 'unknown' ? 'conceptual' : `approximate (${project.site.scale.status})`, plant_objects: plants, groups, zones, assemblage: merged, assemblages, assumptions, unresolved, edit_event: null };
+  const version = { label: params.label || `generated (seed ${seed})`, seed, bed_id: beds[0].id, bed_ids: beds.map(b => b.id), compositions: Object.fromEntries(beds.filter(b => b.composition).map(b => [b.id, JSON.parse(JSON.stringify(b.composition))])), bed_fps: Object.fromEntries(beds.map(b => [b.id, bedFingerprint(b)])), generator: { operators: [...new Set(groups.map(g => g.operator))], density: params.density ?? 1, params: { ...params, id_start: params.id_start ?? (n - plants.length) } }, knowledge_snapshot: K.snapshot, geometry_precision: project.site.scale.status === 'unknown' ? 'conceptual' : `approximate (${project.site.scale.status})`, plant_objects: plants, groups, zones, assemblage: merged, assemblages, assumptions, unresolved, edit_event: null };
   version.schedule = schedule(version); version.validation = validate(version, project); version.evaluation = evaluate(version, project, K);
   return version;
 }
@@ -357,11 +412,11 @@ export function evaluateScreen(z, plants, K, project) {
 export function evaluateGround(bed, version, project) {
   const P = version.plant_objects.filter(p => p.bed_id === bed.id); const ground = P.filter(p => p.role === 'ground' || p.role === 'accent'); const free = freeArea(project, bed, obstaclesFor(project), P.filter(p => /^screen/.test(p.role)));
   const a = RV('area_sample') ** 2; let g = 0, any = 0; for (const pt of free.points) { const cg = ground.some(p => G.dist(pt.q, p.position_m) <= p.proxy_radius_m); if (cg) g++; if (cg || pt.taken) any++; }
-  const grp = (version.groups || []).find(x => x.bed_id === bed.id && x.operator === 'fill_drift'); const reasons = [];
+  const grp = (version.groups || []).find(x => x.bed_id === bed.id && x.role === 'ground'); const reasons = [];
   if (!ground.length) reasons.push({ kind: 'unmet', text: 'no ground-layer plant is placed in this bed' });
   if (ground.some(p => /assumed/.test(p.proxy_source?.status || ''))) reasons.push({ kind: 'missing-data', text: 'a ground species has no recorded spread — its crown radius is an assumed 0.3 m' });
   const share = free.plantable_m2 ? G.round(g * a / free.plantable_m2) : 0;
-  return { bed_id: bed.id, name: bed.name, bed_m2: free.bed_m2, plantable_m2: free.plantable_m2, area_for_ground_m2: free.free_m2, ground_cover_m2: G.round(g * a), ground_cover_share: share, any_crown_share: free.plantable_m2 ? G.round(any * a / free.plantable_m2) : 0, plants: ground.length, expected_count: grp?.params?.expected_count ?? null, spacing_m: grp?.params?.spacing_m ?? null, reasons, verified_performance: false,
+  return { bed_id: bed.id, name: bed.name, bed_m2: free.bed_m2, plantable_m2: free.plantable_m2, area_for_ground_m2: free.free_m2, ground_cover_m2: G.round(g * a), ground_cover_share: share, any_crown_share: free.plantable_m2 ? G.round(any * a / free.plantable_m2) : 0, plants: ground.length, expected_count: grp?.params?.expected_count ?? null, spacing_m: grp?.params?.spacing_m ?? null, pattern: grp?.params?.pattern || null, patches: grp?.params?.patches ?? null, reasons, verified_performance: false,
     note: 'geometric estimate: share of the plantable bed area under the mature crowns of the ground layer (claimed spreads, each point counted once). Not the cover a planting actually reaches, and not weed suppression.' };
 }
 export function evaluate(version, project, K) {

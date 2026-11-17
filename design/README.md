@@ -1,5 +1,15 @@
 # Design workspace — read `../HANDOFF.md` first
 
+**2026-11-14 — Review fixes (methods M61).** Compose opens on the whole function plan and states the engine's verdict on a Screen that is `not met` or `uncertain` (inspector block, tag and gaps on the plan, bed list, status bar). The hatch now means a true no-plant zone only; open space the user asked for and ground with no bed yet have their own marks. A tree placed from a direction is a default estimate (inset min(1 m, ¼ of the site)), said to be one, until dragged. Replay `?script=corner` covers the small sites.
+
+**2026-11-14 — Studio integration (methods M60, desktop).** Shape and Compose are two modes of one workspace (`css/studio.css`, loaded last; design system in `/DESIGN.md`): the one plan (`#svg`) moves between `#site-canvas-body` and `#compose-canvas-body` and keeps its view. `render.js` draws it as a site drawing (dimension lines, scale bar, hatch where beds may not go; `S.layers` toggles). Compose reads a bed as function → selection → arrangement and draws it from `dryRun()` — `E.generate` run without committing — so the preview equals what Generate places. Replays: `?script=studioA`, `?script=studioB` (+ `&stop=…`); screenshots `sh tools/studio_shots.sh`. Report `reports/studio-integration-2026-11-14.md`.
+
+**2026-11-14 — Shape is a fixed-viewport workspace (methods M59, desktop).** Tool rail · plan · inspector + layers · status bar, no page scroll; properties only for the selected object (`S.sel`); Conditions and Evidence open on demand (`S.wsPanel`); no pre-filled size; wheel zooms the plan. Below 1080 px a simple stacked page remains. Report: `../reports/shape-workspace-2026-11-14.md`.
+
+**2026-11-14 — Conceptual site model (methods M58).** A description without dimensions opens Shape on an editable sketch (`js/concept.js`, `project.site.concept`): unitless, never metres, each part marked user-stated / inferred / suggested / unknown; a tree with no stated position waits beside the plan. W × H, the longest side, or a drawn boundary converts it to site geometry (relative positions kept, user edits kept) and the bed proposal runs. *Start from scratch* gives a blank plan. Report: `../reports/concept-site-model-2026-11-14.md`; replay `?script=concept&fresh=1[&stop=sketch|placed|sized|scratch]`.
+
+**2026-11-14 — Shape and Compose as workspaces (methods M57).** `css/workspace.css` (after `journey.css`). Shape: the site model first, layout options as thumbnail plans (hover to compare on the model), a conditions strip that says which conditions the plant gates read, evidence in four groups, the bed-change preview docked on the plan. Compose: a function plan (`#svg3`, beds hatched by function) with bed tabs and an inspector for the selected bed (functions and why, conditions there, row and area arithmetic, candidates by class). Imagine, Grow, data and algorithm unchanged. Report: `../reports/ux-page2-page3-2026-11-14.md`.
+
 **2026-11-14 — Round 2: knowledge-based arrangement (methods M56).** Engine only. Screen and Ground Cover candidates are classed *meets · uncertain · fails* (function-link evidence, site gates, target height on the claimed ranges, year-round when required, bed depth); rows, spacing and counts are computed per edge (`engine.js rowPlan`), the ground layer from its plantable area; the evaluation projects crowns on the edge and takes the union (gaps located, target height certain / possible, evergreen cover) and estimates ground cover geometrically — never reported as verified performance. Every parameter names its source (`ARRANGEMENT_RULES`: claim · geometry · heuristic; all spacing factors are heuristics). Say "screen 2 m high, all year" to set the requirement. Rules: `../reports/arrangement-algorithm-2026-11-14.md`; tests V1–V24, G1–G8 (`?script=r2`).
 
 **2026-11-14 — Logic repair, round 1 (methods M55).** No workflow or interface redesign. Soil and drainage are gated by dimension and read *unknown* when the database cannot express the site value (clay, loam, poorly drained no longer fail every plant); a bed mostly under an existing canopy is checked against a light *range*, never rewritten to shade; left / right / middle or no named side leave the Screen edge **unset, awaiting the user's choice** (no band proposed, no row planted); a bed is planted only for the functions it carries — **Screen** and **Ground Cover** are arranged, **Scrim · Canopy · Barrier are recorded only** (`engine.js FUNCTION_SUPPORT`) and labelled so; site-wide function edits on Compose reach the beds; wind / irrigation are labelled "recorded only". The two 50 % thresholds (under-canopy share, bed-along-edge share) are labelled heuristics (`engine.js HEURISTICS`). Regression tests R1–R29 (`js/tests.js`) and F1–F8 (`../tools/design_tests.py`, `?script=fn`).
@@ -7,6 +17,24 @@
 **2026-11-08 — Spatial proposal (brief 'Phase 2 Spatial Intelligence & Planting Bed Generation').** The journey is Describe (Imagine, frozen) → **Shape your space** (site model + AI planting-bed proposal on one canvas: `js/spatial.js` over `js/clip.js` / `vendor/polygon-clipping`; accept · reject · reshape · draw · say what should change → preview → Apply) → Compose (per-bed functions and candidates) → Grow (one version over all beds; partial regeneration after a geometry change). Tests: `python3 -I ../tools/spatial_tests.py` (87), `../tools/design_tests.py` (89), `../tools/ux_tests.py` (41); screenshots `../brain/screenshots/spatial/` via `sh ../tools/shots.sh`; report `../reports/spatial-proposal-2026-11-08.md`. Scripted replays for tests and screenshots: `index.html?script=demoA|demoB|demoC|demos&fresh=1[&stop=shape|intent|garden|three|preview|applied|intent2|banner|geom|garden2|drawer|three2|sized][&solo=1]`.
 
 # design/ — Planting Intelligence · Design Journey (Phase 2)
+
+## Decision Trace in the Studio (2026-11-14, Platform V3)
+
+The Studio explains its own decisions with the platform's Decision Trace (`platform/js/trace.js`), which reads the open project, the
+version on screen and the engine's `assemble` and evaluations. No planting logic is repeated here.
+
+- **Grow**: a selected plant object has the action *Why this plant here?*. It opens five lines in the inspector (Asked · Knowledge ·
+  Selection · Arrangement · Result) for that object, its bed and its function, and a link to the full trace
+  (`links.trace(species, { fn, bed, plant })`).
+- **Compose**: every species a bed's check lists (the mix, the species that also qualify, the candidates, the species asked for in
+  the Plant Library) has *Why here?* / *Why not here?*, which opens the same explanation in the evidence panel, computed on the
+  dry run. The rows of considered species use the trace's outcome words (planted · selected, not placed · eligible, not selected ·
+  excluded by a check · evidence unknown · planted for another function), one per function the bed is asked for.
+- Functions without an arrangement rule stay "recorded only" and are never asked "why here".
+- The saved view (`project.ui.view`) also keeps `whyOpen`, `cWhy` and `gen` (seed, density, second row: the run Compose previews,
+  repeated by the trace page for a design that is not generated yet). The view is saved when the page is left.
+- `?script=trace[&stop=a|b1|b2|c][&consider=<slug>,…]` replays the three journeys through the page's controls and writes what the
+  page shows, beside the engine's own figures, to `#script-out` (`trace.A`, `trace.B1`, `trace.B2`, `trace.B`, `trace.C`).
 
 ## UX redesign (2026-11-07, third brief: *Complete UI/UX Redesign & Implementation*)
 

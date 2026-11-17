@@ -53,7 +53,15 @@ export class Model {
   // Every edge is a record of the projection: a function link (drawn only when derived or candidate), a concept link (plant → concept
   // claim line), a requirement (function → concept, literature) or a live relation record.  A ghost is a species whose link to the
   // focused function is unknown — shown without any edge.
-  graphFor(focus, a, b) {
+  // The graph starts small and is expanded on purpose: `x` is the set of layers the reader added (layersFor lists what can be added).
+  //   no focus   the X · Y · Z overview: species, functions, required traits and the records between them
+  //   function   the function and its linked species     + traits     the traits it requires, with the linked species' claim lines to them
+  //                                                      + gaps       the species without a link (ghosts, no line)
+  //   species    the species and its linked functions    + <group id> its trait concepts of one knowledge group   (+ traits: every group)
+  //                                                      + relations  its live plant-to-plant records
+  //                                                      + gaps       the functions without a link (ghosts, no line)
+  //   concept · pair   as recorded, nothing to add
+  graphFor(focus, a, b, x = new Set(), opts = {}) {
     const nodes = new Map(), edges = [];
     const N = (id, kind, extra = {}) => { if (!nodes.has(id)) nodes.set(id, { id, kind, label: this.name(id), ...extra }); return nodes.get(id); };
     const E = (e) => edges.push(e);
@@ -61,35 +69,20 @@ export class Model {
     const clEdge = e => ({ id: e.id, kind: 'concept_link', rel: e.rel, source: e.species, target: e.concept, status: e.status, verification: e.verification, ref: e });
     const reqEdge = (f, r, alt) => ({ id: `${r.id}>${alt}`, kind: 'requirement', rel: 'requires_trait', source: f.id, target: alt, status: 'documented', verification: 'literature', strength: r.strength, ref: r, fn: f.id });
     const relEdge = r => ({ id: r.id, kind: 'relation', rel: r.type, source: r.a, target: r.b, status: r.kg_status, verification: r.status, placeholder: r.placeholder, ref: r });
-    if (!focus) {   // overview: the ten species, the five functions, every drawn link — the matrix as a graph
+    if (!focus) {   // the overview (V4): the three axes of the knowledge base and every record that joins them
+      //   X  the species (ordered by growth form)        Z  the spatial functions        Y  the trait concepts a function requires
+      //   X — Z  every drawn function link               Z — Y  every requirement (literature)
+      //   X — Y  the plants' claim lines to those traits: real records, kept `latent` — drawn only for the node under the pointer
+      for (const s of this.species.slice().sort((a, b) => String(a.growth_form_label || '').localeCompare(String(b.growth_form_label || '')) || a.scientific_name.localeCompare(b.scientific_name))) N(s.id, 'species', { sub: s.growth_form_label || '' });
       for (const f of this.functions) N(f.id, 'function');
-      for (const s of this.species) N(s.id, 'species');
       for (const l of this.links) if (l.drawn) E(linkEdge(l));
-      return { nodes: [...nodes.values()], edges, center: null };
+      const alts = [];
+      for (const f of this.functions) for (const r of f.requirements) for (const alt of r.alternatives) { const c = this.co(alt); if (c && !c.no_plant_reaches) { if (!alts.includes(alt)) alts.push(alt); E(reqEdge(f, r, alt)); } }
+      alts.sort((a, b) => String(this.co(a).group || '').localeCompare(String(this.co(b).group || '')) || String(this.co(a).facet || '').localeCompare(String(this.co(b).facet || '')) || this.co(a).label.localeCompare(this.co(b).label));
+      for (const alt of alts) { N(alt, 'concept', { group: this.co(alt).group, req: true }); for (const e of this.clinksOf.get(alt) || []) E({ ...clEdge(e), latent: true }); }
+      return { nodes: [...nodes.values()], edges, center: null, xyz: true };
     }
-    if (focus.kind === 'function') {
-      const f = this.fn(focus.id); N(f.id, 'function', { focus: true });
-      const linked = this.linksTo(f.id).filter(l => l.drawn); const linkedIds = new Set(linked.map(l => l.species));
-      for (const l of linked) { N(l.species, 'species'); E(linkEdge(l)); }
-      const alts = new Set();
-      for (const r of f.requirements) for (const alt of r.alternatives) { const c = this.co(alt); if (c && !c.no_plant_reaches) { alts.add(alt); N(alt, 'concept', { strength: r.strength }); E(reqEdge(f, r, alt)); } }
-      for (const alt of alts) for (const e of this.clinksOf.get(alt) || []) if (linkedIds.has(e.species)) E(clEdge(e));
-      for (const l of this.linksTo(f.id)) if (!l.drawn) N(l.species, 'species', { ghost: true, verdict: l.verdict, link: l.id });
-      return { nodes: [...nodes.values()], edges, center: f.id };
-    }
-    if (focus.kind === 'species') {
-      const s = this.sp(focus.id); N(s.id, 'species', { focus: true });
-      for (const l of this.linksOf(s.id)) { if (l.drawn) { N(l.function, 'function'); E(linkEdge(l)); } else N(l.function, 'function', { ghost: true, verdict: l.verdict, link: l.id }); }
-      for (const e of this.clinksOf.get(s.id) || []) { N(e.concept, 'concept', { group: e.group }); E(clEdge(e)); }
-      for (const r of this.relationsOf(s.id)) { const o = r.a === s.id ? r.b : r.a; if (this.SP.has(o)) { N(o, 'species'); E(relEdge(r)); } }
-      return { nodes: [...nodes.values()], edges, center: s.id };
-    }
-    if (focus.kind === 'concept') {
-      const c = this.co(focus.id); N(c.id, 'concept', { focus: true });
-      for (const e of this.clinksOf.get(c.id) || []) { N(e.species, 'species'); E(clEdge(e)); }
-      for (const fid of c.required_by || []) { const f = this.fn(fid); N(fid, 'function'); const r = f.requirements.find(r => r.alternatives.includes(c.id)); if (r) E(reqEdge(f, r, c.id)); }
-      return { nodes: [...nodes.values()], edges, center: c.id };
-    }
+    if (focus.kind !== 'pair') return this.explore(focus, x, opts);
     if (focus.kind === 'pair' && a && b) {
       const p = this.pair(a, b); N(a, 'species', { focus: true }); N(b, 'species', { focus: true });
       for (const cid of p?.shared_concepts || []) { N(cid, 'concept'); for (const e of this.clinksOf.get(cid) || []) if (e.species === a || e.species === b) E(clEdge(e)); }
@@ -98,6 +91,76 @@ export class Model {
       return { nodes: [...nodes.values()], edges, center: null, pair: [a, b] };
     }
     return { nodes: [], edges: [], center: null };
+  }
+  // ------------------------------------------------------------------ V4.1: a focus is explored in place, in the same X · Y · Z columns
+  // The record graph has five edge classes, each a kind of record of the projection (classesIn() counts them):
+  //   use       species — function    a function link that rests on a recorded use (status derived or documented)
+  //   inferred  species — function    a function link inferred from traits (status candidate, KG-R4)
+  //   req       function — concept    a requirement of the function (literature)
+  //   claim     species — concept     a claim line; opened as `met` (only to traits a function requires), one knowledge group, or `claims` (all)
+  //   rel       species — species     a live plant-to-plant record of relations.json
+  // explore() walks from the focus over the classes the reader switched on, 1 or 2 hops. A walk never returns to the focus's own kind
+  // through a shared hub: two plants linked to one function, or reaching one trait, are not thereby related (only `rel` joins plants).
+  // Nothing is drawn that is not a record; a missing function link is a `gap` mark on the node, never a line.
+  static SAFE = 24;   // the most attribute nodes the Y column keeps legible; an expansion that would pass it is not applied, and says so
+  reqAlts() { if (!this._req) { this._req = new Set(); for (const f of this.functions) for (const r of f.requirements) for (const alt of r.alternatives) { const c = this.co(alt); if (c && !c.no_plant_reaches) this._req.add(alt); } } return this._req; }
+  reqEdges() { if (!this._re) { this._re = []; this.RQ = new Map(); for (const f of this.functions) for (const r of f.requirements) for (const alt of r.alternatives) if (this.reqAlts().has(alt)) { const e = { id: `${r.id}>${alt}`, kind: 'requirement', rel: 'requires_trait', cls: 'req', source: f.id, target: alt, status: 'documented', verification: 'literature', strength: r.strength, ref: r, fn: f.id }; this._re.push(e); this.RQ.set(e.id, e); } } return this._re; }
+  req(id) { this.reqEdges(); return this.RQ.get(id); }
+  liveRelations() { return this.relations.filter(r => r.live && this.SP.has(r.a) && this.SP.has(r.b)); }
+  /** every edge class with the number of records the snapshot holds for it (0 = the class is not in this snapshot) */
+  classesIn() {
+    return [{ key: 'use', label: 'Recorded use', n: this.links.filter(l => l.drawn && l.status !== 'candidate').length }, { key: 'inferred', label: 'Inferred by trait', n: this.links.filter(l => l.drawn && l.status === 'candidate').length },
+      { key: 'req', label: 'Requirement', n: this.reqEdges().length }, { key: 'claims', label: 'Source claim', n: this.clinks.length }, { key: 'rel', label: 'Plant-to-plant record', n: this.liveRelations().length }];
+  }
+  defaultX(kind) { return kind === 'concept' ? ['use', 'inferred', 'req', 'claims'] : kind === 'function' ? ['use', 'inferred', 'req'] : ['use', 'inferred']; }
+  /** the edges of the classes in `keys`, as [edge, a, b] */
+  edgesOf(keys) {
+    const out = []; const E = (e, cls) => out.push({ ...e, cls });
+    const linkEdge = l => ({ id: l.id, kind: 'link', rel: 'suited_for', source: l.species, target: l.function, status: l.status, conflict: l.conflict, verification: l.verification, ref: l });
+    const clEdge = e => ({ id: e.id, kind: 'concept_link', rel: e.rel, source: e.species, target: e.concept, status: e.status, verification: e.verification, ref: e });
+    for (const l of this.links) if (l.drawn) { const c = l.status === 'candidate' ? 'inferred' : 'use'; if (keys.has(c)) E(linkEdge(l), c); }
+    if (keys.has('req')) for (const e of this.reqEdges()) out.push(e);
+    const req = this.reqAlts();
+    for (const e of this.clinks) { const k = keys.has('claims') ? 'claims' : keys.has(e.group) ? e.group : keys.has('met') && req.has(e.concept) ? 'met' : null; if (k) E(clEdge(e), k); }
+    if (keys.has('rel')) for (const r of this.liveRelations()) E({ id: r.id, kind: 'relation', rel: r.type, source: r.a, target: r.b, status: r.kg_status, verification: r.status, placeholder: r.placeholder, ref: r }, 'rel');
+    return out;
+  }
+  walk(focus, keys, hops) {
+    // around a plant, the claim lines are its own: a plant reached through a plant record does not bring its traits along
+    const edges = this.edgesOf(keys).filter(e => !(focus.kind === 'species' && e.kind === 'concept_link' && e.source !== focus.id)); const hop = new Map([[focus.id, 0]]); let front = [focus.id];
+    for (let h = 1; h <= hops; h++) { const next = []; for (const u of front) for (const e of edges) { const v = e.source === u ? e.target : e.target === u ? e.source : null; if (!v || hop.has(v)) continue; if (this.kindOf(v) === focus.kind && e.cls !== 'rel') continue; if (e.cls === 'req' && u === e.target && u !== focus.id) continue;   /* a requirement is read from the function to its trait: a trait a plant has does not reach the functions that ask for it */ hop.set(v, h); next.push(v); } front = next; }
+    // drawn: the records the walk went along, the claim lines and requirements among what it reached — but not a function link or a
+    // plant record between two nodes of the same depth (a partner's own functions are its affair, one step further out)
+    const flat = e => hop.get(e.source) === hop.get(e.target) && (e.cls === 'use' || e.cls === 'inferred' || (e.cls === 'rel' && focus.kind === 'species'));
+    return { hop, edges: edges.filter(e => hop.has(e.source) && hop.has(e.target) && !flat(e)) };
+  }
+  /** the graph of one focus. `x` the classes switched on, opts.hops 1 | 2, opts.only drops what the walk did not reach.
+   *  → nodes (lit: reached · ctx: the rest of the overview, for orientation · gap: no link to the focus, marked on request),
+   *    edges (records between reached nodes), blocked (expansions not applied because they pass SAFE, with how to narrow them) */
+  explore(focus, x = new Set(), { hops = 1, only = false } = {}) {
+    const keys = new Set(), blocked = []; const order = ['use', 'inferred', 'req', 'rel', 'met', ...this.groups.map(g => g.id), 'claims'];
+    const nCo = w => [...w.hop.keys()].filter(id => this.CO.has(id) && id !== focus.id).length;
+    for (const k of order) { if (!x.has(k)) continue; const w = this.walk(focus, new Set([...keys, k]), hops); const n = nCo(w); if (n > Model.SAFE) blocked.push({ key: k, label: k === 'claims' ? 'All claim lines' : this.GR.get(k)?.label || k, n, narrow: k === 'claims' ? this.groups.map(g => ({ key: g.id, label: g.label, n: nCo(this.walk(focus, new Set([...keys, g.id]), hops)) })).filter(g => g.n && g.n <= Model.SAFE) : [] }); else keys.add(k); }
+    const w = this.walk(focus, keys, hops); const nodes = new Map(); const req = this.reqAlts();
+    const N = (id, kind, extra = {}) => { const hop = w.hop.get(id); nodes.set(id, { id, kind, label: this.name(id), lit: hop !== undefined, hop, focus: id === focus.id, ...extra }); };
+    const gapOf = id => { if (!x.has('gaps')) return null; const l = focus.kind === 'function' && this.SP.has(id) ? this.link(id, focus.id) : focus.kind === 'species' && this.FN.has(id) ? this.link(focus.id, id) : null; return l && !l.drawn ? { gap: true, verdict: l.verdict, link: l.id } : null; };
+    for (const s of this.species.slice().sort((a, b) => String(a.growth_form_label || '').localeCompare(String(b.growth_form_label || '')) || a.scientific_name.localeCompare(b.scientific_name))) { const g = gapOf(s.id); if (w.hop.has(s.id) || g || !only) N(s.id, 'species', { sub: s.growth_form_label || '', ...(g || {}) }); }
+    for (const f of this.functions) { const g = gapOf(f.id); if (w.hop.has(f.id) || g || !only) N(f.id, 'function', g || {}); }
+    const lit = [...w.hop.keys()].filter(id => this.CO.has(id)); const ctx = only || lit.length + req.size > Model.SAFE ? [] : [...req].filter(id => !w.hop.has(id));
+    const cs = [...lit, ...ctx].sort((a, b) => String(this.co(a).group || '').localeCompare(String(this.co(b).group || '')) || String(this.co(a).facet || '').localeCompare(String(this.co(b).facet || '')) || this.co(a).label.localeCompare(this.co(b).label));
+    for (const id of cs) N(id, 'concept', { group: this.co(id).group, req: req.has(id) });
+    const context = only ? [] : this.edgesOf(new Set(['use', 'inferred', 'req'])).filter(e => !w.edges.some(o => o.id === e.id) && nodes.has(e.source) && nodes.has(e.target)).map(e => ({ ...e, ctx: true }));
+    return { nodes: [...nodes.values()], edges: [...w.edges, ...context], center: focus.id, xyz: true, focus, keys, hops, blocked };
+  }
+  /** what can be switched on around a focus: each class with the number of records it would bring at this depth (0 = nothing recorded) */
+  layersFor(focus, hops = 1) {
+    if (!focus || focus.kind === 'pair') return [];
+    const n = (k, deep) => this.walk(focus, new Set([k, 'use', 'inferred', 'req']), deep ? 2 : hops).edges.filter(e => e.cls === k).length;
+    const L = (key, label, extra = {}) => ({ key, label, n: n(key, extra.deep), ...extra, deep: !!extra.deep && hops < 2 });
+    const gaps = focus.kind === 'function' ? this.linksTo(focus.id).filter(l => !l.drawn).length : focus.kind === 'species' ? this.linksOf(focus.id).filter(l => !l.drawn).length : 0;
+    if (focus.kind === 'function') return [L('use', 'Recorded use'), L('inferred', 'Inferred by trait'), L('req', 'Required traits'), L('met', 'Claims on required'), L('rel', 'Plant records', { deep: true }), { key: 'gaps', label: 'Species without a link', n: gaps, mark: true }];
+    if (focus.kind === 'species') return [L('use', 'Recorded use'), L('inferred', 'Inferred by trait'), L('req', 'Required traits', { deep: true }), L('met', 'Claims on required'), ...this.groups.map(g => L(g.id, g.label, { traits: true, short: g.label.split(/[\s&]+/)[0] })), L('claims', 'All claim lines', { traits: true }), L('rel', 'Plant records'), { key: 'gaps', label: 'Functions without a link', n: gaps, mark: true }];
+    return [L('claims', 'Claim lines'), L('req', 'Required by')];
   }
 }
 function push(m, k, v) { if (!m.has(k)) m.set(k, []); m.get(k).push(v); }
