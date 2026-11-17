@@ -153,12 +153,11 @@ export function mountTop(el, { active, section = null, sub = '', snapshot = null
 }
 export function footHtml(d) { return `<footer class="pi-foot"><span>Planting Intelligence · ARCH 540, UBC</span><a href="${routes.about}">About</a><a href="${routes.how}">How it works</a><a href="${routes.method}">Research &amp; Method</a><a href="${routes.contribute}">Contribute</a><a href="${routes.data}">Sources &amp; data</a></footer>`; }   // V4.2: snapshot figures live on Sources & data, not in every footer
 
-// ---------------------------------------------------------------- brand type (V4.3: variant B is the preview's default direction)
-// The preview sets the wordmark and the Imagine headline in the brand face (variant b). ?type=a|c tries another variant for this tab,
-// ?type=v4 shows the earlier system, ?type=b returns to the default. The comparison switch is a review tool: it is mounted only on a
+// ---------------------------------------------------------------- brand-type trial (internal; the V4.2 type system is the default)
+// ?type=a|b|c tries a variant for this tab, ?type=v4 leaves it. No font or trial stylesheet loads unless a variant is on. The comparison switch is a review tool: it is mounted only on a
 // page opened with ?type=…, never in the ordinary interface. See platform/css/type-trial.css and platform/about/type-trial/.
 export const TYPE_TRIAL = { a: 'A · Wordmark', b: 'B · Wordmark + Imagine', c: 'C · Wordmark + main titles' };
-export const TYPE_DEFAULT = 'b';
+export const TYPE_DEFAULT = 'v4';   // the V4.2 type system; nct127 is an internal trial, loaded only by ?type=a|b|c
 export const typeTrialUrl = new URL(LAYOUT === 'repo' ? 'platform/about/type-trial/' : 'about/type-trial/', ROOT).href;
 export function typeTrial() {
   let asked = null, on = TYPE_DEFAULT;
