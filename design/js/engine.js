@@ -191,14 +191,16 @@ export function assemble(project, K, bed) {
     // Screen: every species is checked against the requirement (target height, year-round), the evidence for the function, the site
     // and the bed depth behind the screened edge; 'fails' is never planted, 'uncertain' may be planted and is reported as such
     requirement = screenRequirement(wantedFunctions(project, bed)); const edges = wantedFunctions(project, bed).filter(f => f.function === 'z:screen').flatMap(f => edgesFor(project, bed, f.where));
-    const depth = edges.length ? Math.min(...edges.map(e => edgeDepth(bed, e))) : null;
+    /* V4.3 · the depth is read stretch by stretch. Before, the shallowest stretch decided for the whole bed, so a short chamfered corner (0.25 m deep at its taper) ruled out every species on a 6.5 m edge that is 1.2 m deep. Generation already plans each stretch on its own. */
+    const stretches = edges.map(e => ({ len: G.dist(e.a, e.b), depth: edgeDepth(bed, e) })); const totalLen = G.round(stretches.reduce((t, x) => t + x.len, 0)); const depth = stretches.length ? Math.max(...stretches.map(x => x.depth)) : null;
     for (const r of rows) {
       const ev = K.functionEvidence(r.id, 'z:screen'); const checks = { evidence: evidenceCheck(ev) };
       if (ev.result !== 'none') {
         if (r.form === 'Tree') checks.form = { result: 'fails', detail: 'a tree — the row operators arrange shrubs and perennials; there is no tree-placement rule' };
         checks.site = siteCheck(r); const h = K.heightAgainst(r.id, requirement.target_height_m, conds.light?.value); checks.height = { result: h.result === 'unknown' ? 'uncertain' : h.result, detail: h.detail, verified: h.verified, claims: h.claims };
         if (requirement.year_round) { const y = K.yearRound(r.id); checks.year_round = { result: y.result, detail: y.detail, verified: y.verified, claims: y.claims }; }
-        if (depth != null) { const need = G.round(r.proxy.radius_m * (RV('row_inset') + RV('edge_tolerance'))); checks.geometry = depth >= need ? { result: 'meets', detail: `a row fits: needs ${need} m of bed depth, has ${depth} m` } : { result: 'fails', detail: `the row does not fit: crown radius ${r.proxy.radius_m} m (${r.proxy.spread.claim || 'no spread claim'}) needs ${need} m of bed depth, the bed has ${depth} m` }; }
+        if (depth != null) { const need = G.round(r.proxy.radius_m * (RV('row_inset') + RV('edge_tolerance'))); const fitS = stretches.filter(x => x.depth >= need), shortS = stretches.filter(x => x.depth < need); const fitLen = G.round(fitS.reduce((t, x) => t + x.len, 0));
+          checks.geometry = fitS.length ? { result: 'meets', detail: shortS.length ? `a row fits on ${fitLen} m of the ${totalLen} m edge: needs ${need} m of bed depth, has ${G.round(Math.max(...fitS.map(x => x.depth)))} m there; ${G.round(totalLen - fitLen)} m of the edge is only ${G.round(Math.min(...shortS.map(x => x.depth)))} m deep and stays without a row` : `a row fits: needs ${need} m of bed depth, has ${G.round(Math.min(...fitS.map(x => x.depth)))} m`, fits_m: fitLen, edge_m: totalLen } : { result: 'fails', detail: `the row does not fit: crown radius ${r.proxy.radius_m} m (${r.proxy.spread.claim || 'no spread claim'}) needs ${need} m of bed depth, the bed has ${depth} m` }; }
       }
       r.cand = candidate(r, checks, { function: 'z:screen' }); candidates.screen.push(r.cand);
     }
@@ -270,6 +272,7 @@ function generateBed(project, K, bed, seed, params, nid, existing) {
     });
     g1.params.row_plans = z.row_plans; if (g1.plant_ids.length) groups.push(g1); if (g2.plant_ids.length) groups.push(g2);
     if (!g1.plant_ids.length) unresolved.push(`${z.label}: the screen row does not fit — ${z.row_plans.map(pl => pl.reason).join('; ')}; left unplanted`);
+    else for (const pl of z.row_plans) if (!pl.rows) unresolved.push(`${z.label}: no row on a ${pl.edge_length_m} m stretch of the edge — ${pl.reason}; that stretch is left unplanted`);   /* V4.3 · a stretch that cannot take a row is said, not silently skipped */
   }
   for (const f of wantedFunctions(project, bed)) if (f.function === 'z:screen' && !zones.some(z => z.kind === 'edge' && z.id === `zone-screen-${f.where}-${bed.id}`)) unresolved.push(f.where === 'edge-unset' ? `${bed.name}: Screen is wanted but its edge has not been chosen — no row is placed until you choose the edge` : `${bed.name}: Screen is wanted along "${f.where.replace('-', ' ')}" but this bed has no edge there — no row is placed (set the edge on the bed)`);
   for (const u of asm.unsupported) unresolved.push(`${bed.name}: ${u.label} — ${u.why}`);
@@ -317,7 +320,10 @@ function generateBed(project, K, bed, seed, params, nid, existing) {
     const open = zones.find(z => z.kind === 'open'); const ref = open ? G.centroid(open.polygon) : [G.bbox(bed.polygon).minx + G.bbox(bed.polygon).w / 2, G.bbox(bed.polygon).miny];
     const ground = plants.filter(p => p.role === 'ground').sort((a, b) => G.dist(a.position_m, ref) - G.dist(b.position_m, ref));
     const g = { id: `group-${bed.id}-${groups.length + 1}`, bed_id: bed.id, zone_id: `zone-fill-${bed.id}`, role: 'accent', operator: 'repeat_accent', params: { every: 4, toward: open ? 'the open zone' : 'the front edge', species: [ac.id] }, plant_ids: [] };
-    ground.filter((_, i) => i % 4 === 1).slice(0, Math.max(2, Math.floor(ground.length / 5))).forEach(p => { p.species_id = ac.id; p.role = 'accent'; p.proxy_radius_m = ac.proxy.radius_m; p.proxy_source = { claim: ac.proxy.spread.claim, range_m: [ac.proxy.spread.min, ac.proxy.spread.max], status: ac.proxy.radius_status, note: ac.proxy.spread.note }; p.height_m = ac.proxy.height_m; p.height_source = { claim: ac.proxy.height.claim, range_m: [ac.proxy.height.min, ac.proxy.height.max], status: ac.proxy.height_status }; p.group_id = g.id; g.plant_ids.push(p.id); });
+    /* V4.3 · an accent takes over a ground position, but its own crown radius may be larger than the ground plant's. The position is kept only if the accent passes the very check validate() runs (placeable, with the accent's radius); otherwise it stays a ground plant. */
+    let skipped = 0;
+    ground.filter((_, i) => i % 4 === 1).slice(0, Math.max(2, Math.floor(ground.length / 5))).forEach(p => { if (!placeable(p.position_m, ac.proxy.radius_m, bed, obstacles, project.site).ok) { skipped++; return; } p.species_id = ac.id; p.role = 'accent'; p.proxy_radius_m = ac.proxy.radius_m; p.proxy_source = { claim: ac.proxy.spread.claim, range_m: [ac.proxy.spread.min, ac.proxy.spread.max], status: ac.proxy.radius_status, note: ac.proxy.spread.note }; p.height_m = ac.proxy.height_m; p.height_source = { claim: ac.proxy.height.claim, range_m: [ac.proxy.height.min, ac.proxy.height.max], status: ac.proxy.height_status }; p.group_id = g.id; g.plant_ids.push(p.id); });
+    g.params.skipped = skipped; if (skipped) g.params.skipped_note = `${skipped} accent position${skipped === 1 ? '' : 's'} not used: at the accent's crown radius (${ac.proxy.radius_m} m) the plant would stand too close to the bed edge or an obstacle; the ground plant stays there`;
     if (g.plant_ids.length) groups.push(g);
   }
   if (!plants.length && bed.area_m2 > 0) unresolved.push(!asm.wanted.length ? `${bed.name}: left empty — no spatial function set` : !asm.wanted.some(functionArranged) ? `${bed.name}: left empty — none of its functions can be arranged yet` : `${bed.name}: no plant fitted (${bed.area_m2} m², narrowest ${bed.min_width_m ?? '?'} m)`);

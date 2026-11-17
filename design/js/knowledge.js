@@ -43,7 +43,7 @@ const WATER = { dry: ['dry', 'wide range'], average: ['average', 'wide range'], 
 //   anything else (plant silent on that dimension, or no species records the wanted label: clay, loam, poorly drained) -> unknown
 const SOIL_DIM = { texture: /clay|sand|loam|rocky|gravel/i, ph: /acid|alkalin/i, drainage: /drain|waterlog|boggy/i };
 const SOIL_WANT = { clay: { dim: 'texture', want: ['Clay'] }, sandy: { dim: 'texture', want: ['Sandy', 'Rocky or gravelly or dry'] }, gravelly: { dim: 'texture', want: ['Rocky or gravelly or dry'] }, loam: { dim: 'texture', want: ['Loam'] }, acidic: { dim: 'ph', want: ['Acidic'] }, alkaline: { dim: 'ph', want: ['Alkaline'] }, 'well-drained': { dim: 'drainage', want: ['Well-drained'] }, 'poorly-drained': { dim: 'drainage', want: ['Poorly drained', 'Poorly-drained'] }, boggy: { dim: 'drainage', want: ['Poorly drained', 'Poorly-drained'] }, waterlogged: { dim: 'drainage', want: ['Poorly drained', 'Poorly-drained'] } };
-const SHADIER = { 'full-sun': 'part-shade', 'part-shade': 'shade', 'partial-shade': 'shade', shade: 'shade' };
+const SHADIER = { 'full-sun': 'part-shade', 'part-shade': 'shade', 'partial-shade': 'shade', shade: 'shade', 'filtered-shade': 'deep-shade', 'deep-shade': 'deep-shade' };
 /** site conditions the gates read; everything else on the Site page is recorded only (shown as such in the interface) */
 export const GATED_CONDITIONS = ['light', 'water', 'soil_type', 'soil_drainage'];
 
@@ -72,7 +72,7 @@ export class Knowledge {
     if (!opts.length) return { value_m: null, status: 'no numeric range', claim: c.claims[0] || null, alternatives: 0, note: 'claims exist but carry no usable range' };
     const byCond = opts.filter(o => !o.conditions.length); const conditioned = opts.filter(o => o.conditions.length);
     let pick = null, note = '';
-    if (light && conditioned.length) { const want = light === 'shade' || light === 'part-shade' || light === 'partial-shade' ? /shade/i : /sun/i; const m = conditioned.find(o => o.conditions.some(x => want.test(x))); if (m) { pick = m; note = `range stated for ${m.conditions.join(', ')} (site light: ${light})`; } }
+    if (light && conditioned.length) { const want = /shade/.test(light) ? /shade/i : /sun/i; const m = conditioned.find(o => o.conditions.some(x => want.test(x))); if (m) { pick = m; note = `range stated for ${m.conditions.join(', ')} (site light: ${light})`; } }
     if (!pick) { const base = (byCond.length ? byCond : opts).filter(o => !o.cultivars.length); const pool = base.length ? base : (byCond.length ? byCond : opts); pool.sort((a, b) => mid(a) - mid(b)); pick = pool[Math.floor((pool.length - 1) / 2)]; note = pool.length > 1 ? `median of ${pool.length} claimed ranges` : 'one claimed range'; if (conditioned.length && !light) note += '; other ranges depend on conditions'; }
     const v = pick.min != null && pick.max != null ? (pick.min + pick.max) / 2 : (pick.max ?? pick.min);
     return { value_m: Math.round(v * 100) / 100, min: pick.min, max: pick.max, status: 'proxy from claim', claim: pick.claim, source: pick.source, verification: pick.verification, conditions: pick.conditions, alternatives: opts.length - 1, disagreement: c.disagreement.length > 0, note };
@@ -94,7 +94,7 @@ export class Knowledge {
    *  bed's light is known and some ranges are stated for that light, only those — the same choice sizeProxy makes for the plan */
   applicableHeights(id, light = null) {
     const all = this.sizeOptions(id, 'height_class').filter(o => o.max != null); const base = all.filter(o => !o.cultivars.length).length ? all.filter(o => !o.cultivars.length) : all;
-    if (light) { const want = light === 'shade' || light === 'part-shade' || light === 'partial-shade' ? /shade/i : /sun/i; const m = base.filter(o => o.conditions.some(x => want.test(x))); if (m.length) return m; }
+    if (light) { const want = /shade/.test(light) ? /shade/i : /sun/i; const m = base.filter(o => o.conditions.some(x => want.test(x))); if (m.length) return m; }
     return base;
   }
   heightAgainst(id, target_m, light = null) {
@@ -231,6 +231,13 @@ export class Knowledge {
     // never rank a species above one whose light evidence is clean. `conditional` outranks `unknown` in the engine, so with water or
     // soil still unknown such a species would otherwise be preferred to a clean one; there it stays at `unknown`, as it was before.
     const evidenceOnly = out.light.result === 'conditional' && out.light.site?.state === 'stated' && !out.light.canopy; out.light.evidence_only = evidenceOnly;
+    /* V4.3 · one plain kind and one short reason per light result, so a page can say WHY beside the status without printing the whole detail.
+       mismatch = the plant records no such light (the only kind that excludes) · site-unknown / no-record = nothing to compare ·
+       evidence-qualified = a match, but every claim behind it carries a qualifier · site-vague / site-assumed / canopy = the site side is open. */
+    { const L = out.light, ev = L.evidence, st = ev?.standing; const q = (ev?.qualifiers || [])[0];
+      L.kind = L.result === 'fail' ? 'mismatch' : L.result === 'unknown' ? (L.canopy ? 'canopy' : 'site-unknown') : L.result === 'not recorded' ? 'no-record' : L.result === 'pass' ? 'match' : L.canopy ? 'canopy' : L.site?.state === 'assumed' ? 'site-assumed' : L.site && L.site.precise === false ? 'site-vague' : 'evidence-qualified';
+      L.short = { mismatch: 'no matching light recorded', 'site-unknown': 'site light not stated', 'no-record': 'no light record for this plant', match: 'light matches', canopy: 'under a tree: light is a range', 'site-assumed': 'site light is assumed, not stated', 'site-vague': '“shade” is not precise: filtered or deep?', 'evidence-qualified': `light matches with a qualifier${q ? `: ${q}` : ''}` }[L.kind];
+      L.standing_text = st ? `${st.claims} claim${st.claims === 1 ? '' : 's'} from ${st.sources} source${st.sources === 1 ? '' : 's'}; ${st.human_verified} checked by a person${st.ai_check ? `; AI source check: ${Object.entries(st.ai_check).filter(([, n]) => n).map(([k, n]) => `${n} ${k.replace(/_/g, ' ')}`).join(', ') || 'none run'}` : ''}${st.disagreements ? `; ${st.disagreements} recorded disagreement${st.disagreements === 1 ? '' : 's'}` : ''}. An AI source check is a reading aid, not a verification.` : null; }
     const othersOpen = ['water', 'soil'].some(k => out[k].result !== 'pass' && out[k].result !== 'conditional'), othersCond = ['water', 'soil'].some(k => out[k].result === 'conditional');
     out.overall = hard.includes('fail') ? 'fail' : hard.includes('conditional') ? (evidenceOnly && !othersCond && othersOpen ? 'unknown' : 'conditional') : hard.every(r => r === 'pass') ? 'pass' : 'unknown';
     return out;

@@ -119,6 +119,25 @@ if CHROME:
         dp = k.get("depth") or {}; en = dp.get("engine") or {}; of = dp.get("offered") or {}
         test("X14 Screen depth is computed, not promised: the band's basis no longer says a second row fits; where the engine's row plan says it does not, Compose gives the depth that plan needs for this bed and offers a preview of a deeper bed — taking the offer opens a preview in Shape and changes nothing until applied",
              bool(dp) and not dp["promises_second_row"] and "one row" in dp["basis"] and dp["double_disabled"] is True and en.get("feasible") is False and dp["need_m"] == en.get("needs_depth_m") and abs(dp["by_m"] - (en["needs_depth_m"] - en["depth_m"])) < 0.1001 and str(en["needs_depth_m"]) in (dp["offer"] or "") and of.get("stage") == "site" and of.get("preview") and of.get("bed_unchanged") and of["change"] and of["change"][0]["after_m2"] > of["change"][0]["before_m2"], js({"basis": dp.get("basis"), "engine": en, "offer": dp.get("offer"), "offered": of}))
+        # ---- V4.3 P0
+        ins = l.get("inspector") or {}; cu = ins.get("current") or {}
+        test("X15 after the outline is cut to an L the Shape inspector prints the areas of the outline as it is now (site, plantable, beds) and names the earlier proposal's figure only as such",
+             bool(ins) and f'{cu.get("plantable_m2")} m² plantable' in ins["text"] and f'{cu.get("site_m2")} m² site' in ins["text"] and f'{cu.get("bed_m2")} m² in' in ins["text"] and (not ins["stale"] or ins["proposal_plantable_m2"] == cu.get("plantable_m2") or (str(ins["proposal_plantable_m2"]) not in ins["text"] and "earlier outline" in (ins["was"] or ""))), js(ins))
+        sc = (g or {}).get("screen") or []
+        test("X16 on the trimmed outline the Screen bed is planted along its straight north stretch; the short chamfered stretch that is too shallow is left open and said so; no plant fails validation",
+             len(sc) == 1 and sc[0]["placed"] > 0 and sc[0]["errors"] == 0 and 0 < sc[0]["covered_m"] < sc[0]["edge_length_m"] and any(x["rows"] == 0 and x["placed"][0] == 0 for x in sc[0]["stretches"]) and any(x["rows"] >= 1 and x["placed"][0] > 0 for x in sc[0]["stretches"]) and any("stretch" in u for u in sc[0]["said"]), js(sc))
+        v43 = k.get("v43") or {}; sn = v43.get("snap") or {}; rm = v43.get("remove") or {}
+        test("X17 corners snap to 5 cm by default and the editor offers a switch: with it off the same drag lands to the millimetre",
+             sn.get("offered") and sn.get("on_by_default") and abs(sn["on"][0] * 20 - round(sn["on"][0] * 20)) < 1e-6 and abs(sn["off"][0] * 20 - round(sn["off"][0] * 20)) > 1e-3, js(sn))
+        test("X18 an outline that would leave a bed too small does not remove it in passing: the review names the bed with its area and the minimum, Apply is disabled and commit is refused until the user ticks the removal; then it applies, and Undo brings the bed back",
+             rm.get("review_first") and rm.get("refused_without_tick") and rm.get("east") in (rm.get("named") or []) and rm.get("apply_disabled") and rm.get("beds_unchanged") and "would be removed" in (rm.get("warning") or "") and "smallest bed" in (rm.get("warning") or "") and rm.get("applied") and rm.get("bed_gone") and rm.get("undo_restores"), js(rm))
+        lt = k.get("light") or {}; vals = [o["value"] for o in lt.get("options", [])]
+        fl = lt.get("filtered") or {}; dpz = lt.get("deep") or {}; vg = lt.get("vague") or {}
+        test("X19 the Site page offers filtered shade and deep shade beside full sun, part shade and the vague word; the chosen word is stored as stated",
+             vals == ["", "full-sun", "part-shade", "filtered-shade", "deep-shade", "shade"] and (lt.get("stored") or {}).get("value") == "filtered-shade" and (lt.get("stored") or {}).get("status") == "user-stated", js(lt.get("options")))
+        test("X20 the kinds stay apart: a precise word excludes only where no such light is recorded (mismatch), the vague word excludes nothing and reads site-vague, and Compose prints a short reason beside every selected plant whose light is conditional",
+             set(fl.get("excluded", [])) == {"achillea-millefolium", "arctostaphylos-uva-ursi"} and len(dpz.get("excluded", [])) == 7 and vg.get("excluded") == [] and any("site-vague" in v for v in vg.get("light", {}).values()) and all(v.endswith("mismatch") for kx, v in fl.get("light", {}).items() if kx in fl["excluded"])
+             and all(any(w["kind"] == pk["kind"] for w in vg["why"]) for pk in vg.get("picks", []) if pk["light"] == "conditional") and (len(vg.get("why", [])) > 0 or not any(pk["light"] == "conditional" for pk in vg.get("picks", []))), js({"filtered": fl.get("excluded"), "deep": dpz.get("excluded"), "vague_why": vg.get("why"), "vague_picks": vg.get("picks")}))
         test("X13 the page never scrolls sideways during the replay", k["overflow_x"] <= 0, js(k["inner"]))
 
 ok = sum(1 for _, p, _ in results if p); n = len(results)
