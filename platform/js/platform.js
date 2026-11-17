@@ -148,36 +148,39 @@ export function returnChip() { const d = activeDesign(); if (!d) return ''; retu
  *  (project · how · method · contribute) and brings the second level with it; `sub` is a module's own addition (a view switch). */
 export function mountTop(el, { active, section = null, sub = '', snapshot = null, tone = 'light' } = {}) {
   el.classList.add('pi-top'); if (tone === 'dark') el.classList.add('pi-dark');
-  el.innerHTML = `<a class="pi-wordmark" href="${routes.design}">Planting Intelligence</a>${navHtml(active)}<div class="pi-sub">${active === 'about' ? aboutNav(section) : ''}${sub}</div><div class="pi-right">${returnChip()}${snapshot ? `<span class="pi-snap" title="${esc(snapshotLine(snapshot))} — every page of the platform reads this one file">knowledge ${esc(snapshot.generated)}</span>` : ''}</div>`;
+  el.innerHTML = `<a class="pi-wordmark" href="${routes.design}">Planting Intelligence</a>${navHtml(active)}<div class="pi-sub">${active === 'about' ? aboutNav(section) : ''}${sub}</div><div class="pi-right">${returnChip()}</div>`;
   return el;
 }
 export function footHtml(d) { return `<footer class="pi-foot"><span>Planting Intelligence · ARCH 540, UBC</span><a href="${routes.about}">About</a><a href="${routes.how}">How it works</a><a href="${routes.method}">Research &amp; Method</a><a href="${routes.contribute}">Contribute</a><a href="${routes.data}">Sources &amp; data</a></footer>`; }   // V4.2: snapshot figures live on Sources & data, not in every footer
 
-// ---------------------------------------------------------------- V4.1 · brand-type trial (opt-in; the V4 type system is the default)
-// ?type=a|b|c turns a variant on for this tab (sessionStorage), ?type=v4 turns it off. Nothing is loaded — no stylesheet, no font —
-// unless a variant is on. See platform/css/type-trial.css for what each variant changes and platform/about/type-trial/ for the comparison.
+// ---------------------------------------------------------------- brand type (V4.3: variant B is the preview's default direction)
+// The preview sets the wordmark and the Imagine headline in the brand face (variant b). ?type=a|c tries another variant for this tab,
+// ?type=v4 shows the earlier system, ?type=b returns to the default. The comparison switch is a review tool: it is mounted only on a
+// page opened with ?type=…, never in the ordinary interface. See platform/css/type-trial.css and platform/about/type-trial/.
 export const TYPE_TRIAL = { a: 'A · Wordmark', b: 'B · Wordmark + Imagine', c: 'C · Wordmark + main titles' };
+export const TYPE_DEFAULT = 'b';
 export const typeTrialUrl = new URL(LAYOUT === 'repo' ? 'platform/about/type-trial/' : 'about/type-trial/', ROOT).href;
 export function typeTrial() {
-  let asked = null, on = null;
+  let asked = null, on = TYPE_DEFAULT;
   try { asked = new URLSearchParams(location.search).get('type'); } catch { /* no location */ }
   const framed = window.top !== window.self;   // the comparison page shows several variants at once: a frame never writes the tab's choice
+  const valid = k => k === 'v4' || !!TYPE_TRIAL[k];
   try {
-    if (framed) on = asked;
-    else { if (asked !== null) { if (TYPE_TRIAL[asked]) sessionStorage.setItem('pi.type', asked); else sessionStorage.removeItem('pi.type'); } on = sessionStorage.getItem('pi.type'); }
-  } catch { on = TYPE_TRIAL[asked] ? asked : null; }   // storage blocked: the variant holds for this page only
-  if (!TYPE_TRIAL[on]) on = null;
+    if (framed) on = valid(asked) ? asked : TYPE_DEFAULT;
+    else { if (asked !== null) { if (valid(asked) && asked !== TYPE_DEFAULT) sessionStorage.setItem('pi.type', asked); else sessionStorage.removeItem('pi.type'); } const kept = sessionStorage.getItem('pi.type'); on = valid(kept) ? kept : TYPE_DEFAULT; }
+  } catch { on = valid(asked) ? asked : TYPE_DEFAULT; }   // storage blocked: the choice holds for this page only
+  if (on === 'v4') on = null;
   const root = document.documentElement;
   if (on) root.dataset.type = on; else delete root.dataset.type;
-  if (!on && asked === null) return null;
-  if (on && !document.querySelector('link[data-type-trial]')) { const l = document.createElement('link'); l.rel = 'stylesheet'; l.href = new URL('../css/type-trial.css', import.meta.url).href; l.dataset.typeTrial = ''; document.head.appendChild(l); }
-  if (framed || document.body?.dataset.typeTrialPage !== undefined) return on;   // the comparison page and its frames carry no switch
+  const sheet = () => { if (!document.querySelector('link[data-type-trial]')) { const l = document.createElement('link'); l.rel = 'stylesheet'; l.href = new URL('../css/type-trial.css', import.meta.url).href; l.dataset.typeTrial = ''; document.head.appendChild(l); } };
+  if (on) sheet();
+  if (asked === null || framed || document.body?.dataset.typeTrialPage !== undefined) return on;   // the switch shows only when a variant was asked for by URL
   const mount = () => {
     if (document.querySelector('.pi-typeswitch')) return;
-    if (!document.querySelector('link[data-type-trial]')) { const l = document.createElement('link'); l.rel = 'stylesheet'; l.href = new URL('../css/type-trial.css', import.meta.url).href; l.dataset.typeTrial = ''; document.head.appendChild(l); }
+    sheet();
     const to = k => { const u = new URL(location.href); u.searchParams.set('type', k); return u.href; };
-    const el = document.createElement('nav'); el.className = 'pi-typeswitch'; el.setAttribute('aria-label', 'Type trial');
-    el.innerHTML = `<span>Type trial</span><a href="${to('v4')}"${on ? '' : ' aria-current="true"'}>V4</a>${Object.keys(TYPE_TRIAL).map(k => `<a href="${to(k)}" title="${TYPE_TRIAL[k]}"${on === k ? ' aria-current="true"' : ''}>${k.toUpperCase()}</a>`).join('')}<a href="${typeTrialUrl}">Compare</a>`;
+    const el = document.createElement('nav'); el.className = 'pi-typeswitch'; el.setAttribute('aria-label', 'Type comparison');
+    el.innerHTML = `<span>Type</span><a href="${to('v4')}"${on ? '' : ' aria-current="true"'}>V4</a>${Object.keys(TYPE_TRIAL).map(k => `<a href="${to(k)}" title="${TYPE_TRIAL[k]}"${on === k ? ' aria-current="true"' : ''}>${k.toUpperCase()}</a>`).join('')}<a href="${typeTrialUrl}">Compare</a>`;
     document.body.appendChild(el);
   };
   if (document.body) mount(); else addEventListener('DOMContentLoaded', mount, { once: true });

@@ -101,9 +101,12 @@ NOINDEX = '\n<meta name="robots" content="noindex">'
 rewrite("index.html", [
     ('"three": "../brain/vendor/three/three.module.js", "three/addons/": "../brain/vendor/three/examples/jsm/"', '"three": "./vendor/three/three.module.js", "three/addons/": "./vendor/three/examples/jsm/"'),
     ('href="../platform/css/platform.css"', 'href="./platform/css/platform.css"'),
-    ('<a href="./classic.html">Classic workspace</a><a href="./tests.html">Engine tests</a>', f'<span>Platform preview · {stamp}</span>'),
+    ('<a href="./classic.html">Classic workspace</a><a href="./tests.html">Engine tests</a>', '<span>Platform preview</span>'),
     ('<title>Planting Intelligence — imagine your garden</title>', '<title>Planting Intelligence — platform preview</title>' + NOINDEX),
 ])
+copy("design/specimens.html", "specimens.html")   # V4.3: the ten plant forms beside the V4.2 proxies; linked from the internal report only
+rewrite("specimens.html", [('"three": "../brain/vendor/three/three.module.js", "three/addons/": "../brain/vendor/three/examples/jsm/"', '"three": "./vendor/three/three.module.js", "three/addons/": "./vendor/three/examples/jsm/"'), ('href="../platform/css/platform.css"', 'href="./platform/css/platform.css"'), ('</title>', '</title>' + NOINDEX)])
+rewrite("js/specimens.js", [("'../brain/data/explorer.json'", "'./data/explorer.json'")])
 rewrite("js/app.js", [("'../brain/data/explorer.json'", "'./data/explorer.json'"), ("'../../platform/js/platform.js'", "'../platform/js/platform.js'"), ("'../../platform/js/plantcard.js'", "'../platform/js/plantcard.js'"), ("'../../platform/js/trace.js'", "'../platform/js/trace.js'")])
 
 # ---------------------------------------------------------------- the platform layer and its pages

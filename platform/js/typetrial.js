@@ -90,7 +90,7 @@ function fit() { for (const p of document.querySelectorAll('.tt-port')) { const 
     const status = await fontStatus(); const sec = (id, h, sub, body) => `<section class="ab-sec wide" id="${id}"><div class="ab-sec-h"><h2>${h}</h2><p>${sub}</p></div><div class="ab-sec-b">${body}</div></section>`;
     $('#app').innerHTML = `<div class="ab tt">
       <header class="ab-mast"><div><h1>Brand type trial.</h1><p class="ab-lede">Kay’s own typeface, tried in three places against the V4 type system. Text stays DM Sans, records stay DM Mono, scientific names stay italic. Nothing here is the default yet.</p></div>
-        <div class="ab-mast-s"><p class="ab-prov">V4.1 trial · 2026-11-16<br>default: <b>V4 type system</b>, unchanged<br>variants: <span class="ab-id">?type=a · b · c</span> on any page, <span class="ab-id">?type=v4</span> to leave<br>agent proposal, awaiting Kay’s choice</p></div></header>
+        <div class="ab-mast-s"><p class="ab-prov">Type comparison<br>this preview: <b>variant B</b> (wordmark and the Imagine headline)<br>compare on any page: <span class="ab-id">?type=v4 · a · b · c</span></p></div></header>
       ${sec('compare', 'On the real pages', 'The published V4 page beside one variant. Choose the variant, the page and the window size.', `<div id="tt-compare">${compare()}</div>`)}
       ${sec('specimen', 'Spacing, long labels, fallbacks', 'Left: the trial face. Right: the same words in Bricolage Grotesque as V4 sets them.', specimen(d))}
       ${sec('face', 'The typeface file', 'What the file itself says, and how it is served.', facts(status))}
