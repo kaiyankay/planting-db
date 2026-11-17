@@ -140,8 +140,12 @@ export function detailHtml(d, id, imgs, ctx = {}) {
   const sizeFact = (facet, word) => { const c = X.AT.get(`${s.id}|${facet}`); if (!c) return `<span class="pi-none">${word} not recorded</span>`;
     const cls = c.claims.map(i => d.claims[i]).filter(Boolean); const stated = [...new Set(cls.map(x => sizeOf(x.value)).filter(Boolean))];
     if (cls.length === 1 || stated.length <= 1) return `${word} ${esc(stated[0] || cls[0]?.text || '')}`;
-    const nums = cls.flatMap(x => { const v = x.value; return v && typeof v === 'object' && v.unit === 'm' ? [v.min, v.max, v.height_m, v.spread_m, v.typical_max_m, v.occasional_max_m].filter(n => typeof n === 'number') : []; });
-    return `${word} ${nums.length ? `${num(Math.min(...nums))} to ${num(Math.max(...nums))} m` : `${cls.length} claims`} ${differ(facet, cls.length)}`; };
+    // V4.2: sources that state different sizes are shown as two attributed statements (the smallest and the largest stated), never merged
+    // into one span that would read as a mature size; the link opens every claim, one line per source.
+    const top = v => v && typeof v === 'object' && v.unit === 'm' ? Math.max(...[v.max, v.height_m, v.spread_m, v.typical_max_m].filter(n => typeof n === 'number'), -1) : -1;
+    const by = cls.map(x => ({ t: sizeOf(x.value), n: top(x.value), src: sourceShort(d, x.source_id) })).filter(x => x.t && x.n >= 0).sort((a, b) => a.n - b.n); const lo = by[0], hi = by[by.length - 1]; const short = t => t.length > 26 ? `${t.slice(0, 25).trimEnd()}…` : t;
+    const line = (k, x) => `<span class="pi-size-s"><small>${k}</small> ${esc(x.t)} <small title="${esc(x.src)}">${esc(short(x.src))}</small></span>`;
+    return `${word} ${differ(facet, cls.length)}${lo && hi && lo !== hi ? `${line('smallest stated', lo)}${line('largest stated', hi)}` : `<span class="pi-size-s">${cls.length} claims</span>`}`; };
   const leaf = cellValues(d, s, 'evergreen'); const drawnFns = lks.filter(l => l.drawn).map(l => X.FN.get(l.function)?.label).filter(Boolean);
   const glance = [['Growth form', esc(s.growth_form_label) + (s.growth_form_status === 'supported' ? '' : ` ${tag('to_confirm', `growth form ${s.growth_form_status}`)}`) + (leaf ? ` · ${leaf.slice(0, 2).map(esc).join(' / ')}` : '') + (X.AT.get(`${s.id}|evergreen`)?.disagreement.length ? ` ${differ('evergreen', X.AT.get(`${s.id}|evergreen`).n_claims)}` : '')],
     ['Size', `<span class="pi-size">${sizeFact('height_class', 'Height')}</span><span class="pi-size">${sizeFact('spread_class', 'Spread')}</span>`], ['Spatial function', drawnFns.length ? `${drawnFns.map(esc).join(' · ')} <a class="pi-differ" href="#species=${esc(s.slug)}" data-differ="functions" title="a recorded or inferred link, provisional until a bed is checked">linked, provisional</a>` : '<span class="pi-none">no recorded link</span>'],

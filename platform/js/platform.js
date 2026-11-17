@@ -30,8 +30,8 @@
 const LAYOUT = 'repo';   // tools/build_platform.py writes 'preview' into the published copy
 const ROOT = new URL('../../', import.meta.url);   // the folder that holds every module, in both layouts
 const PATHS = {
-  repo: { design: 'design/', plants: 'platform/plants/', knowledge: 'brain/explorer/', explore: 'brain/explorer/', trace: 'platform/knowledge/trace/', neural: 'brain/', about: 'platform/about/', how: 'platform/about/how-it-works/', method: 'platform/about/method/', contribute: 'platform/about/contribute/', specimen: 'platform/about/typography/', snapshot: 'brain/data/explorer.json', images: 'platform/data/images.json', img: 'platform/img/', artwork: 'platform/data/artwork.json', art: 'platform/art/', reference: 'designs/demo-a.json' },
-  preview: { design: '', plants: 'plants/', knowledge: 'knowledge/', explore: 'knowledge/', trace: 'knowledge/trace/', neural: 'knowledge/neural/', about: 'about/', how: 'about/how-it-works/', method: 'about/method/', contribute: 'about/contribute/', specimen: 'about/typography/', snapshot: 'data/explorer.json', images: 'platform/data/images.json', img: 'platform/img/', artwork: 'platform/data/artwork.json', art: 'platform/art/', reference: 'data/designs/demo-a.json' },
+  repo: { design: 'design/', plants: 'platform/plants/', knowledge: 'brain/explorer/', explore: 'brain/explorer/', trace: 'platform/knowledge/trace/', neural: 'brain/', about: 'platform/about/', how: 'platform/about/how-it-works/', method: 'platform/about/method/', contribute: 'platform/about/contribute/', data: 'platform/about/data/', specimen: 'platform/about/typography/', snapshot: 'brain/data/explorer.json', images: 'platform/data/images.json', img: 'platform/img/', artwork: 'platform/data/artwork.json', art: 'platform/art/', reference: 'designs/demo-a.json' },
+  preview: { design: '', plants: 'plants/', knowledge: 'knowledge/', explore: 'knowledge/', trace: 'knowledge/trace/', neural: 'knowledge/neural/', about: 'about/', how: 'about/how-it-works/', method: 'about/method/', contribute: 'about/contribute/', data: 'about/data/', specimen: 'about/typography/', snapshot: 'data/explorer.json', images: 'platform/data/images.json', img: 'platform/img/', artwork: 'platform/data/artwork.json', art: 'platform/art/', reference: 'data/designs/demo-a.json' },
 }[LAYOUT];
 export const routes = Object.fromEntries(Object.entries(PATHS).map(([k, v]) => [k, new URL(v, ROOT).href]));
 routes.research = routes.method;   // V2/V3 name: Research now lives in About · Research & Method
@@ -134,7 +134,7 @@ export function loadReference() { return referenceP || (referenceP = fetch(route
 // V4: four destinations and nothing else in the first level. Design uses the knowledge, Plants reads it, Knowledge explores it,
 // About explains it (project · how it works · research & method · contribute & future).
 const NAV = [['design', 'Design', 'Describe a site, set what the planting should do, generate and revise it'], ['plants', 'Plants', 'Ten species and what is recorded about them'], ['knowledge', 'Knowledge', 'The records behind the designs as a table, a matrix and a network'], ['about', 'About', 'The project, how the engine works, the research method, how to contribute']];
-const ABOUT = [['project', 'Project', 'about'], ['how', 'How it works', 'how'], ['method', 'Research & Method', 'method'], ['contribute', 'Contribute & Future', 'contribute']];
+const ABOUT = [['project', 'Project', 'about'], ['how', 'How it works', 'how'], ['method', 'Research & Method', 'method'], ['contribute', 'Contribute & Future', 'contribute'], ['data', 'Sources & data', 'data']];
 export function navHtml(active) { return `<nav class="pi-nav" aria-label="Planting Intelligence">${NAV.map(([k, l, t]) => `<a href="${routes[k]}" title="${esc(t)}"${k === active ? ' aria-current="page"' : ''}>${l}</a>`).join('')}</nav>`; }
 /** the second level of About */
 export function aboutNav(section) { return `<nav class="pi-subnav" aria-label="About">${ABOUT.map(([k, l, r]) => `<a href="${routes[r]}"${k === section ? ' aria-current="page"' : ''}>${l}</a>`).join('')}</nav>`; }
@@ -151,7 +151,7 @@ export function mountTop(el, { active, section = null, sub = '', snapshot = null
   el.innerHTML = `<a class="pi-wordmark" href="${routes.design}">Planting Intelligence</a>${navHtml(active)}<div class="pi-sub">${active === 'about' ? aboutNav(section) : ''}${sub}</div><div class="pi-right">${returnChip()}${snapshot ? `<span class="pi-snap" title="${esc(snapshotLine(snapshot))} — every page of the platform reads this one file">knowledge ${esc(snapshot.generated)}</span>` : ''}</div>`;
   return el;
 }
-export function footHtml(d) { return `<footer class="pi-foot"><span>Planting Intelligence · ARCH 540, UBC</span><a href="${routes.about}">About</a><a href="${routes.how}">How it works</a><a href="${routes.method}">Research &amp; Method</a><a href="${routes.contribute}">Contribute</a><a href="${REPO_URL}" rel="noopener">Source and data</a>${d ? `<span class="pi-mono">${esc(snapshotLine(d))}</span>` : ''}</footer>`; }
+export function footHtml(d) { return `<footer class="pi-foot"><span>Planting Intelligence · ARCH 540, UBC</span><a href="${routes.about}">About</a><a href="${routes.how}">How it works</a><a href="${routes.method}">Research &amp; Method</a><a href="${routes.contribute}">Contribute</a><a href="${routes.data}">Sources &amp; data</a></footer>`; }   // V4.2: snapshot figures live on Sources & data, not in every footer
 
 // ---------------------------------------------------------------- V4.1 · brand-type trial (opt-in; the V4 type system is the default)
 // ?type=a|b|c turns a variant on for this tab (sessionStorage), ?type=v4 turns it off. Nothing is loaded — no stylesheet, no font —

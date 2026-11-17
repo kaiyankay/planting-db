@@ -51,14 +51,16 @@
 .pi-top :focus-visible, .pi-mini :focus-visible, body.pi-page :focus-visible { outline: 2px solid var(--pi-olive-deep); outline-offset: 2px; border-radius: 4px; }
 @media (max-width: 1180px) { .pi-snap { display: none; } .pi-return { max-width: 190px; } }
 /* where the bar also carries the Explorer | Neural switch, the wordmark gives way before the way back to a design does */
-@media (max-width: 1100px) { .pi-top { gap: 14px; } .pi-sub { gap: 12px; } .pi-top:has(.pi-switch) .pi-wordmark { font-size: 0; } .pi-top:has(.pi-switch) .pi-wordmark::before { content: "PI"; font: 500 17px/1 var(--pi-display); } }
+/* V4.2: About has five sub-pages; between the wide bar and the wrapped one the sub-navigation shrinks and scrolls inside the bar, so the bar never widens the page */
+@media (max-width: 1280px) { .pi-about .pi-sub { flex: 0 1 auto; min-width: 0; overflow-x: auto; scrollbar-width: none; } .pi-about .pi-subnav a { padding: 0 8px; } .pi-about .pi-snap { display: none; } }
+@media (max-width: 1100px) { .pi-top { gap: 14px; } .pi-sub { gap: 12px; } .pi-top:has(.pi-switch) .pi-wordmark, body.pi-page .pi-top:has(.pi-switch) a.pi-wordmark { font-size: 0; } .pi-top:has(.pi-switch) .pi-wordmark::before { content: "PI"; font: 500 17px/1 var(--pi-display); } }
 @media (max-width: 900px) {
   .pi-top { gap: 10px; padding: 0 12px; overflow-x: auto; } .pi-nav a { padding: 0 8px; } .pi-sub { flex: none; } .pi-subnav { padding-left: 8px; } .pi-subnav a { padding: 0 7px; } .pi-quiet { display: none; } .pi-return { max-width: 150px; }
   /* reading pages: the second level takes its own row under the bar instead of crowding it */
   body.pi-page .pi-top { flex-wrap: wrap; height: auto; overflow: visible; row-gap: 0; } body.pi-page .pi-top > .pi-wordmark, body.pi-page .pi-top > .pi-right { height: var(--pi-top-h); display: flex; align-items: center; } body.pi-page .pi-top > .pi-nav { height: var(--pi-top-h); }
   body.pi-page .pi-sub:not(:empty) { order: 5; flex: 0 0 calc(100% + 24px); height: 42px; margin: 0 -12px; padding: 0 12px; border-top: 1px solid var(--pi-line); overflow-x: auto; } body.pi-page .pi-subnav { padding-left: 0; border-left: 0; } body.pi-page .pi-subnav a:first-child { padding-left: 0; } body.pi-page .pi-subnav a:first-child[aria-current="page"]::after { left: 0; }
 }
-@media (max-width: 560px) { .pi-wordmark { font-size: 0; } .pi-wordmark::before { content: "PI"; font: 500 17px/1 var(--pi-display); } .pi-return { font-size: 0; gap: 0; padding: 7px 8px; } .pi-return svg { width: 16px; height: 16px; } }
+@media (max-width: 560px) { .pi-wordmark, body.pi-page .pi-top a.pi-wordmark { font-size: 0; } .pi-wordmark::before { content: "PI"; font: 500 17px/1 var(--pi-display); } .pi-return { font-size: 0; gap: 0; padding: 7px 8px; } .pi-return svg { width: 16px; height: 16px; } }
 /* the Neural view keeps its night sky; the bar takes its glass */
 .pi-top.pi-dark { background: rgba(5,8,20,.78); backdrop-filter: blur(12px); border-bottom-color: rgba(190,205,255,.12); color: #d3d9e8; }
 .pi-dark .pi-subnav { border-left-color: rgba(190,205,255,.12); } .pi-dark .pi-subnav a { color: #6b7388; } .pi-dark .pi-subnav a:hover, .pi-dark .pi-subnav a[aria-current="page"] { color: #f4ead0; } .pi-dark .pi-subnav a[aria-current="page"]::after { background: #f4ead0; }
@@ -100,6 +102,7 @@
 .pi-why-3 > div > dt { letter-spacing: .04em; } .pi-why-more { margin-top: 8px; } .pi-why-more > summary { cursor: pointer; font-size: 12.5px; font-weight: 500; color: var(--pi-olive-deep); padding: 4px 0; } .pi-why-more[open] > summary { margin-bottom: 6px; }
 .pi-out.pending { color: var(--pi-caramel-ink); }
 .kn-case-read { margin: 0 0 14px; padding: 8px 12px; font-size: 13.5px; line-height: 1.5; color: var(--pi-ink-2); border-left: 3px solid var(--pi-olive-deep); background: var(--pi-paper); max-width: 66ch; }
+.kn-case-read p { margin: 0; } .kn-case-read.derived { border-left: 3px double var(--pi-caramel); } .kn-case-ids { margin-top: 6px; font-size: 12.5px; color: var(--pi-ink-3); } .kn-case-ids summary { cursor: pointer; width: fit-content; } .kn-case-ids summary:focus-visible { outline: 2px solid var(--pi-olive-deep); outline-offset: 2px; } .kn-case-ids p { margin-top: 4px; overflow-wrap: anywhere; }
 .kn-case-read.preview { border-left: 3px dashed var(--pi-caramel); } .kn-case-read b { color: var(--pi-ink); } .kn-case-read.changed { border-left-color: var(--pi-rust); border-left-style: solid; color: var(--pi-ink); }
 .pi-why-go { display: inline-block; margin-top: 10px; font-weight: 500; color: var(--pi-olive-deep); text-decoration: underline; text-decoration-color: rgba(59,85,56,.35); text-underline-offset: 3px; border: 0; } .pi-why-go:hover { text-decoration-color: currentColor; }
 
@@ -144,6 +147,20 @@ body.pi-page main:focus { outline: none; }
 .lib-art { margin: 0; padding-top: 16px; border-top: 1px solid var(--pi-line); font-size: 13px; line-height: 1.55; color: var(--pi-ink-3); max-width: 96ch; }
 .lib-prov { margin: 8px 0 72px; font: 12px/1.6 var(--pi-mono); color: var(--pi-ink-3); }
 .lib-empty { grid-column: 1 / -1; padding: 40px 0; color: var(--pi-ink-2); }
+/* V4.2 atlas: the plants lead. One line, a search and a Filters button in the masthead; the filter groups open as a tray; choices show as one row of chips. */
+.pi-library .lib-mast { grid-template-columns: minmax(0, 1fr) auto; align-items: end; gap: 24px 40px; padding: 36px 0 20px; } .pi-library .lib-mast .pi-lede { margin-top: 10px; font-size: 16px; }
+.lib-bar { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; } .lib-bar .lib-search { margin-right: 0; } .lib-bar .lib-count { margin-left: 6px; }
+.lib-fbtn { display: inline-flex; align-items: center; gap: 8px; min-height: 38px; padding: 0 16px; border: 1px solid var(--pi-line-2); border-radius: var(--pi-r-pill); background: var(--pi-paper); color: var(--pi-ink); font: 500 14px/1 var(--pi-sans); cursor: pointer; }
+.lib-fbtn svg { width: 15px; height: 15px; fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; } .lib-fbtn small { display: inline-grid; place-items: center; min-width: 18px; height: 18px; padding: 0 5px; border-radius: 999px; background: var(--pi-olive-deep); color: #fff; font: 600 11px/1 var(--pi-sans); }
+.lib-fbtn:hover, .lib-fbtn[aria-expanded="true"] { border-color: var(--pi-olive-deep); } .lib-fbtn:focus-visible, .lib-on:focus-visible, .lib-clear:focus-visible { outline: 2px solid var(--pi-olive-deep); outline-offset: 2px; }
+.lib-tray { display: grid; grid-template-columns: repeat(3, minmax(0, auto)); justify-content: start; gap: 16px 48px; padding: 16px 0 18px; border-top: 1px solid var(--pi-line); } .lib-tray[hidden] { display: none; }
+.lib-fg .lib-fl { display: block; margin: 0 0 8px; font: 600 12px/1.3 var(--pi-sans); letter-spacing: .05em; text-transform: uppercase; color: var(--pi-ink-3); } .lib-fg > div { display: flex; flex-wrap: wrap; gap: 6px; }
+.lib-active { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin: 0; padding: 10px 0; border-top: 1px solid var(--pi-line); font-size: 13px; }
+.lib-on { display: inline-flex; align-items: center; gap: 6px; padding: 5px 10px 5px 12px; border-radius: var(--pi-r-pill); background: var(--pi-olive-soft); color: var(--pi-olive-deep) !important; font-weight: 500; text-decoration: none !important; } .lib-on small { font: 400 12px var(--pi-sans); color: var(--pi-ink-2); } .lib-on span[aria-hidden] { font-size: 15px; line-height: 1; opacity: .7; } .lib-on:hover span[aria-hidden] { opacity: 1; }
+.lib-clear { margin-left: 4px; color: var(--pi-ink-2) !important; }
+.pi-library .lib-grid { padding-top: 24px; } .pi-library .lib-art { margin-bottom: 56px; } .pi-size-s { display: block; margin-top: 2px; font-size: 13px; line-height: 1.35; } .pi-glance dd .pi-size-s small { color: var(--pi-ink-3); font: 12px/1.35 var(--pi-sans); } .pi-size + .pi-size { margin-top: 8px; }
+@media (max-width: 900px) { .pi-library .lib-mast { grid-template-columns: 1fr; padding-top: 28px; } .lib-tray { grid-template-columns: 1fr; gap: 14px; } }
+@media (max-width: 600px) { .lib-bar .lib-search { flex: 1 1 100%; margin: 0; } .lib-bar .lib-count { margin-left: auto; } }
 @media (max-width: 1400px) { .lib-filter .lib-gap { flex: 0 0 100%; width: auto; height: 0; } }
 @media (max-width: 1180px) { .lib-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
 @media (max-width: 900px) { .lib-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } .pi-mast { grid-template-columns: 1fr; gap: 24px; padding-top: 44px; } }

@@ -1,5 +1,5 @@
 // Plant Library — the atlas of the species in the published knowledge snapshot and one profile per species.
-//   #                     the atlas (optionally #form=Tree&fn=z:screen&origin=non_native); ?card=3 adds a short growth-form line to the cards
+//   #                     the atlas (optionally #form=Tree&fn=z:screen&origin=non_native — the Filters tray writes these); ?card=3 adds a short growth-form line to the cards
 //   #species=<slug>       a Plant Profile; &tab=design|growth|evidence|unknown picks its tab (design when absent),
 //                         &open=<facet or function id> opens one row of that tab on its claims
 // The page reads brain/data/explorer.json through platform.js and never writes to it. It borrows two things from the Garden
@@ -10,7 +10,7 @@ import * as PI from './platform.js';
 import * as PC from './plantcard.js';
 
 const $ = s => document.querySelector(s); const esc = PI.esc;
-const S = { d: null, imgs: null, K: null, R: null, form: null, fn: null, origin: null, q: '', shown: null, tab: 'design' };
+const S = { d: null, imgs: null, K: null, R: null, form: null, fn: null, origin: null, q: '', shown: null, tab: 'design', tray: false };
 const CARD3 = new URLSearchParams(location.search).get('card') === '3';   // V4.1 comparison: a third, one-word growth-form line
 
 (async function boot() {
@@ -51,29 +51,36 @@ function renderAtlas() {
   const href = (form, fn, origin = S.origin) => { const p = new URLSearchParams(); if (form) p.set('form', form); if (fn) p.set('fn', fn); if (origin) p.set('origin', origin); const h = p.toString(); return h ? `#${h}` : '#'; };
   const note = s => { const n = des?.planted_species.includes(s.id) ? `<span>planted in ${esc(des.name)}</span>` : ''; const c = cons.has(s.id) ? '<span class="wait">being considered for your design</span>' : ''; return n || c ? `${n}${n && c ? ' · ' : ''}${c}` : ''; };
   const gridHtml = () => { const c = show.filter(s => { const q = S.q.trim().toLowerCase(); return !q || [s.scientific_name, ...s.common_names, s.family, s.growth_form_label].some(t => String(t).toLowerCase().includes(q)); });
-    return { n: c.length, html: c.map(s => PC.cardHtml(d, s.id, S.imgs, { symbol: symbolOf(s.id), note: note(s), form: CARD3 })).join('') || `<p class="lib-empty">${S.q.trim() ? `No species in this snapshot matches “${esc(S.q.trim())}”${S.form || S.fn || S.origin ? ' with these filters' : ''}.` : 'No species in this snapshot matches all of these filters.'} That is a gap in the records, not a statement about the plants. <a href="#">Show all</a></p>` }; };
+    return { n: c.length, html: c.map(s => PC.cardHtml(d, s.id, S.imgs, { symbol: symbolOf(s.id), note: note(s), form: CARD3 })).join('') || `<p class="lib-empty">${S.q.trim() ? `No species in this snapshot matches “${esc(S.q.trim())}”${S.form || S.fn || S.origin ? ' with these filters' : ''}.` : 'No species in this snapshot matches all of these filters.'} That is a gap in the records, not a statement about the plants. <a href="#">Show all ${d.species.length} plants</a></p>` }; };
   const g = gridHtml();
+  // V4.2: the plants lead. One line, a search and a Filters button; the three filter groups live in a tray that opens on request, and
+  // what is chosen shows as one row of chips. A choice in one group never drops a choice in another (each link carries all three).
+  const active = [S.form && ['Growth form', S.form, href(null, S.fn)], S.fn && ['Linked to', d.functions.find(f => f.id === S.fn)?.label || S.fn, href(S.form, null)], S.origin && ['Origin', oLabel(S.origin), href(S.form, S.fn, null)]].filter(Boolean);
   $('#app').innerHTML = `
-    <header class="pi-mast">
+    <header class="pi-mast lib-mast">
       <div><h1>Plants</h1>
-        <p class="pi-lede">${d.species.length} species recorded for planting in Metro Vancouver. Read a plant first; the claims behind every line open when you want them.</p></div>
+        <p class="pi-lede">${d.species.length} species recorded for planting in Metro Vancouver. Open one to read it.</p></div>
+      <div class="lib-bar" role="group" aria-label="Find a plant">
+        <label class="lib-search"><span class="sr">Search the plants</span><svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="m10.5 10.5 3 3"/></svg><input type="search" id="lib-q" placeholder="Search by name" value="${esc(S.q)}" autocomplete="off"></label>
+        <button type="button" class="lib-fbtn" id="lib-fbtn" aria-expanded="${S.tray}" aria-controls="lib-tray"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2 4h12M4.5 8h7M7 12h2"/></svg>Filters${active.length ? `<small>${active.length}</small>` : ''}</button>
+        <span class="lib-count" id="lib-count" aria-live="polite">${g.n} of ${d.species.length} shown</span>
+      </div>
     </header>
-    <div class="lib-filter" role="group" aria-label="Filter the library">
-      <label class="lib-search"><span class="sr">Search the plants</span><svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="m10.5 10.5 3 3"/></svg><input type="search" id="lib-q" placeholder="Search by name" value="${esc(S.q)}" autocomplete="off"></label>
-      <span class="lib-fl">Growth form</span>
-      <a class="pi-chip" role="button" aria-pressed="${!S.form}" href="${href(null, S.fn)}">All</a>
-      ${forms.map(f => `<a class="pi-chip" role="button" aria-pressed="${S.form === f}" href="${href(S.form === f ? null : f, S.fn)}">${esc(f)}<small>${nForm(f)}</small></a>`).join('')}
-      <span class="lib-gap brk"></span><span class="lib-fl">Linked to</span>
-      ${d.functions.map(f => `<a class="pi-chip" role="button" aria-pressed="${S.fn === f.id}" href="${href(S.form, S.fn === f.id ? null : f.id)}" title="${esc(f.definition)}">${esc(f.label)}<small>${linked(f.id).length}</small></a>`).join('')}
-      <span class="lib-gap brk"></span><span class="lib-fl">Origin</span>
-      ${origins.map(o => `<a class="pi-chip" role="button" data-origin="${esc(o)}" aria-pressed="${S.origin === o}" href="${href(S.form, S.fn, S.origin === o ? null : o)}">${esc(oLabel(o))}<small>${nOrigin(o)}</small></a>`).join('')}
-      <span class="lib-count" id="lib-count" aria-live="polite">${g.n} of ${d.species.length} shown</span>
+    <div class="lib-tray" id="lib-tray" role="group" aria-label="Filter the library"${S.tray ? '' : ' hidden'}>
+      <div class="lib-fg"><span class="lib-fl" id="lf-form">Growth form</span><div role="group" aria-labelledby="lf-form">
+        ${forms.map(f => `<a class="pi-chip" role="button" aria-pressed="${S.form === f}" href="${href(S.form === f ? null : f, S.fn)}">${esc(f)}<small>${nForm(f)}</small></a>`).join('')}</div></div>
+      <div class="lib-fg"><span class="lib-fl" id="lf-fn">Linked to a spatial function</span><div role="group" aria-labelledby="lf-fn">
+        ${d.functions.map(f => `<a class="pi-chip" role="button" aria-pressed="${S.fn === f.id}" href="${href(S.form, S.fn === f.id ? null : f.id)}" title="${esc(f.definition)}">${esc(f.label)}<small>${linked(f.id).length}</small></a>`).join('')}</div></div>
+      <div class="lib-fg"><span class="lib-fl" id="lf-origin">Origin</span><div role="group" aria-labelledby="lf-origin">
+        ${origins.map(o => `<a class="pi-chip" role="button" data-origin="${esc(o)}" aria-pressed="${S.origin === o}" href="${href(S.form, S.fn, S.origin === o ? null : o)}">${esc(oLabel(o))}<small>${nOrigin(o)}</small></a>`).join('')}</div></div>
     </div>
+    ${active.length ? `<p class="lib-active" id="lib-active"><span class="sr">Filters in use:</span>${active.map(([k, l, h]) => `<a class="lib-on" href="${h}" title="remove this filter"><small>${esc(k)}</small>${esc(l)}<span aria-hidden="true">×</span><span class="sr"> (remove)</span></a>`).join('')}<a class="lib-clear" href="#">Clear all</a></p>` : ''}
     ${des ? `<p class="lib-design"><span>Your design <b>${esc(des.name)}</b> is at ${esc(des.stage_label)}${des.plants ? `, with ${des.plants} plants of ${des.planted_species.length} species` : ''}.</span>${cons.size ? `<span>${cons.size} species being considered.</span>` : ''}<a href="${PI.links.design()}">${esc(PI.returnLabel(des))}</a></p>` : ''}
     <div class="lib-grid${CARD3 ? ' three' : ''}" id="lib-grid">${g.html}</div>
-    ${S.imgs?.art && Object.keys(S.imgs.art).length ? `<p class="lib-art">The illustrations are AI-generated editorial artwork. They are not botanical plates and not evidence; every name and fact on these pages is read from the knowledge snapshot. Each profile links to a credited reference photograph.</p>` : ''}
-    <p class="lib-prov">${esc(PI.snapshotLine(d))} · ${d.stats.attribute_cells} recorded fields · ${d.stats.cells_not_recorded} not recorded · ${d.stats.cells_with_disagreement} where sources disagree · ${d.stats.sources} sources</p>`;
+    <p class="lib-art">${S.imgs?.art && Object.keys(S.imgs.art).length ? 'The illustrations are AI-generated editorial artwork, not evidence. ' : ''}Plant facts link to their sources. <a href="${PI.routes.data}">Sources &amp; data</a></p>`;
   $('#lib-q').addEventListener('input', ev => { S.q = ev.target.value; const g = gridHtml(); $('#lib-grid').innerHTML = g.html; $('#lib-count').textContent = `${g.n} of ${d.species.length} shown`; });
+  $('#lib-fbtn').addEventListener('click', () => { S.tray = !S.tray; $('#lib-tray').hidden = !S.tray; $('#lib-fbtn').setAttribute('aria-expanded', String(S.tray)); if (S.tray) $('#lib-tray a')?.focus(); });
+  $('#lib-tray').addEventListener('keydown', ev => { if (ev.key === 'Escape') { S.tray = false; $('#lib-tray').hidden = true; $('#lib-fbtn').setAttribute('aria-expanded', 'false'); $('#lib-fbtn').focus(); } else if (ev.key === ' ' && ev.target.matches('a[role="button"]')) { ev.preventDefault(); ev.target.click(); } });
 }
 
 // ---------------------------------------------------------------- profile

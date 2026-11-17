@@ -198,3 +198,44 @@
   .ab .pi-table { display: block; overflow-x: auto; }
 }
 @media (prefers-reduced-motion: reduce) { .ab-ways a, .ab-ways a::after, .ab-grid td a, .ab-chain a { transition: none; } }
+
+/* ================================================================ V4.2 — fewer words, one figure per page, a read mode for the engine */
+/* ---- Project: a thesis, two ways in, one diagram */
+.ab-hero { grid-template-columns: minmax(0, 1fr); padding: 72px 0 28px; } .ab-hero h1 { max-width: 20ch; } .ab-hero .ab-lede { max-width: 62ch; }
+.ab .ab-enter { display: flex; flex-wrap: wrap; gap: var(--pi-s-3); margin-top: var(--pi-s-6); max-width: none; }
+.ab-project .ab-sec { padding: 44px 0; } .ab-project .ab-sec-h p:empty { display: none; }
+/* ---- figures drawn in code (Project, Research & Method) */
+.ab .ab-cover { margin: 0 0 var(--pi-s-8); padding: var(--pi-s-5) var(--pi-s-5) var(--pi-s-4); border: 1px solid var(--pi-line); border-radius: 12px; background: var(--pi-paper); overflow-x: auto; }
+.ab .ab-cover.plain { margin-bottom: 0; } .ab-cover .cv { display: block; width: 100%; min-width: 880px; height: auto; }
+.ab-cover figcaption { margin-top: var(--pi-s-3); font-size: var(--pi-t-small); line-height: 1.5; color: var(--pi-ink-3); max-width: 96ch; } .ab-cover figcaption a { font-weight: 500; white-space: nowrap; }
+.cv text { font-family: var(--pi-sans); fill: var(--pi-ink); }
+.cv .cv-h { font: 600 12px var(--pi-sans); letter-spacing: .12em; fill: var(--pi-olive-deep); }
+.cv .cv-k { font: 500 10.5px var(--pi-mono); letter-spacing: .08em; fill: var(--pi-ink-3); }
+.cv .cv-t { font: 600 15px var(--pi-sans); } .cv .cv-t.sm { font-size: 13.5px; }
+.cv .cv-s { font: 13px var(--pi-sans); fill: var(--pi-ink-2); } .cv .cv-id { font: 10.5px var(--pi-mono); fill: var(--pi-ink-3); }
+.cv .cv-name { font: 600 13px var(--pi-sans); } .cv .cv-num { font: 600 14px var(--pi-display); fill: var(--pi-olive-deep); } .cv .cv-big { font: 600 44px var(--pi-display); letter-spacing: -.04em; fill: var(--pi-olive-deep); }
+.cv .cv-box, .cv .cv-chip { fill: var(--pi-bg, #f6f3eb); stroke: var(--pi-line-2); stroke-width: 1; } .cv .cv-chip { fill: var(--pi-olive-soft); stroke: none; }
+.cv .cv-box.open { stroke: var(--pi-caramel, #b9773b); stroke-dasharray: 5 4; fill: none; } .cv .cv-box.mute { stroke-dasharray: 2 4; fill: none; } .cv .cv-box.mute ~ text { fill: var(--pi-ink-3); } .cv .cv-box.in { stroke: var(--pi-olive-deep); stroke-width: 1.5; }
+.cv .cv-rule { stroke: var(--pi-line-2); stroke-width: 1; fill: none; } .cv .cv-arrow { stroke: var(--pi-olive-deep); stroke-width: 1.5; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+.cv .cv-path { stroke: var(--pi-line-2); stroke-width: 2; fill: none; } .cv .cv-path.v { stroke: var(--pi-olive); stroke-width: 4; stroke-linecap: round; opacity: .55; }
+.cv .cv-node { fill: var(--pi-paper); stroke: var(--pi-line-2); stroke-width: 1.5; } .cv .cv-node.v { fill: var(--pi-olive-soft); stroke: var(--pi-olive-deep); } .cv .cv-drop { stroke: var(--pi-line-2); stroke-dasharray: 2 3; }
+.cv .cv-line { stroke: var(--pi-olive-deep); stroke-width: 2; fill: none; } .cv .cv-line.dash { stroke: var(--pi-caramel, #b9773b); stroke-dasharray: 7 5; } .cv .cv-line.dot { stroke: var(--pi-ink-3); stroke-dasharray: 2 4; stroke-width: 1.5; }
+/* ---- Research & Method: the step text is one paragraph; the release figures open on request */
+.ab-method .ab-step-b > p { max-width: 58ch; } .ab .ab-step-d { margin-top: var(--pi-s-3); } .ab-step-d > summary { font-size: var(--pi-t-small); color: var(--pi-ink-2); } .ab .ab-step-d .ab-today { margin-top: var(--pi-s-2); font-size: var(--pi-t-ui); }
+.ab-method #layers, .ab-method #values { padding-bottom: 40px; }
+/* ---- How it works: which result is read, and a quieter panel */
+.ab-read { display: flex; flex-wrap: wrap; align-items: center; gap: 8px var(--pi-s-4); padding: var(--pi-s-3) 0; }
+.ab-read-seg { flex: none; padding: 3px; border: 1px solid var(--pi-line-2); border-radius: 999px; background: var(--pi-paper); gap: 0; } .ab-read-seg button { border: 0; padding: 7px 14px; } .ab-read-seg button:disabled { opacity: .45; cursor: default; }
+.ab-read-t { font-size: var(--pi-t-ui); color: var(--pi-ink-2); } .ab-read-t b { font-weight: 600; color: var(--pi-ink); }
+.ab-stage[data-read="recomputed"] .ab-fig .st-plan { box-shadow: 0 0 0 1.5px var(--pi-caramel, #b9773b), var(--pi-shadow-soft); }
+.ab-tabs button { opacity: .62; transition: opacity .15s; } .ab-tabs button:hover, .ab-tabs button:focus-visible { opacity: 1; } .ab-tabs button[aria-selected="true"] { opacity: 1; background: linear-gradient(to top, var(--pi-olive-soft), transparent 70%); }
+.ab .st-read { font: 500 11px/1 var(--pi-mono); letter-spacing: .08em; text-transform: uppercase; color: var(--pi-ink-3); } .ab-stage[data-read="recomputed"] .st-read { color: var(--pi-caramel-ink, #8a5a2b); }
+.ab .st-m { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--pi-s-4); margin: 0; padding: var(--pi-s-3) 0; border-top: 1px solid var(--pi-line-2); border-bottom: 1px solid var(--pi-line); }
+.st-m dd { margin: 0; font: 600 28px/1.1 var(--pi-display); letter-spacing: -.035em; color: var(--pi-ink); } .st-m dd .st-d { display: block; margin: 4px 0 0; letter-spacing: 0; } .st-m dt { margin-top: 4px; font-size: 13px; line-height: 1.35; color: var(--pi-ink-2); }
+.st-list.tight a { align-items: center; padding: 5px 0; } .st-list.tight .st-n { font-weight: 400; }
+.ab .st-ev { display: inline-flex; align-items: center; padding: 8px 14px; border: 1px solid var(--pi-olive-deep); border-radius: 999px; font-weight: 500; text-decoration: none; color: var(--pi-olive-deep); } .ab .st-ev:hover { background: var(--pi-olive-soft); }
+.ab .ab-case { display: block; } .ab-case > span { display: block; max-width: 96ch; font: var(--pi-t-small)/1.5 var(--pi-sans); color: var(--pi-ink-2); } .ab-case > a { display: inline-block; margin: 6px var(--pi-s-5) 0 0; font: 500 var(--pi-t-small) var(--pi-sans); }
+.ab-case-d { display: inline-block; margin-top: 6px; vertical-align: top; } .ab-case-d > summary { cursor: pointer; font: var(--pi-t-small) var(--pi-sans); color: var(--pi-ink-3); } .ab-case-d p { margin-top: 6px; font: var(--pi-t-mono)/1.6 var(--pi-mono); color: var(--pi-ink-3); max-width: 110ch; }
+/* ---- Sources & data */
+.ab-data .ab-figs { margin-bottom: var(--pi-s-4); } .ab-links i.c { background: var(--pi-rust); }
+@media (max-width: 700px) { .ab-hero { padding-top: 40px; } .ab .ab-cover { padding: var(--pi-s-3); } .ab .st-m { grid-template-columns: 1fr 1fr; } .ab-read-seg { width: 100%; } .ab-read-seg button { flex: 1; } }

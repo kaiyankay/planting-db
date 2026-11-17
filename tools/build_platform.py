@@ -120,7 +120,7 @@ rewrite("about/index.html", [('href="../css/platform.css"', 'href="../platform/c
 copy("platform/about/type-trial/index.html", "about/type-trial/index.html")
 rewrite("about/type-trial/index.html", [('href="../../css/platform.css"', 'href="../../platform/css/platform.css"'), ('href="../../css/about.css"', 'href="../../platform/css/about.css"'), ('href="../../css/type-trial.css"', 'href="../../platform/css/type-trial.css"'),
                                          ('href="../../css/type-trial-page.css"', 'href="../../platform/css/type-trial-page.css"'), ('src="../../js/typetrial.js"', 'src="../../platform/js/typetrial.js"'), ICON])
-for page in ("how-it-works", "method", "contribute", "typography"):
+for page in ("how-it-works", "method", "contribute", "data", "typography"):
     copy(f"platform/about/{page}/index.html", f"about/{page}/index.html")
     rewrite(f"about/{page}/index.html", [('href="../../css/platform.css"', 'href="../../platform/css/platform.css"'), ('href="../../css/about.css"', 'href="../../platform/css/about.css"'), ('src="../../js/about.js"', 'src="../../platform/js/about.js"'), ICON])
 
@@ -161,6 +161,7 @@ rewrite("knowledge/neural/js/data.js", [("const ROOT = '..';", "const ROOT = '..
 # ---------------------------------------------------------------- the one knowledge snapshot
 for f in ("explorer.json", "graph.json", "diagnosis.json"): copy(f"brain/data/{f}", f"data/{f}")
 copy("designs/demo-a.json", "data/designs/demo-a.json")
+copy("designs/demo-c.json", "data/designs/demo-c.json")   # V4.2: the 8 × 6 m double-row example, written by the engine through ?script=v41&saveas=demo-c
 for f in ("ontology.json", "schema.json", "sources.json", "synonyms.json", "intent_map.json", "relations.json", "eval/queries.json"): copy(f, f"data/db/{f}")
 for s in slugs: copy(f"plants/{s}.json", f"data/db/plants/{s}.json")
 
