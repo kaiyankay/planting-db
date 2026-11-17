@@ -4,6 +4,10 @@ Build the integrated platform as one self-contained static folder for GitHub Pag
 
   python3 -I tools/build_platform.py [out-dir]        default out-dir: ./platform-preview
 
+  Publishing (2026-11-17): the public site is the repository kaiyankay/planting-intelligence. Build into a scratch folder,
+  copy its contents over that repository's files (keep its README.md, package.json, package-lock.json, tools/, a2/,
+  video.html; the build's README.md becomes BUILD.md) and push; https://kaiyankay.github.io/planting-intelligence/
+
 GitHub Pages serves `main`; the platform is developed on a branch. This script copies every public module from the working tree
 into one folder, in the layout the platform ships with, and rewrites the paths that differ from the repository layout:
 
@@ -102,8 +106,8 @@ NOINDEX = ''
 rewrite("index.html", [
     ('"three": "../brain/vendor/three/three.module.js", "three/addons/": "../brain/vendor/three/examples/jsm/"', '"three": "./vendor/three/three.module.js", "three/addons/": "./vendor/three/examples/jsm/"'),
     ('href="../platform/css/platform.css"', 'href="./platform/css/platform.css"'),
-    ('<a href="./classic.html">Classic workspace</a><a href="./tests.html">Engine tests</a>', '<span>Platform preview</span>'),
-    ('<title>Planting Intelligence — imagine your garden</title>', '<title>Planting Intelligence — platform preview</title>' + NOINDEX),
+    ('<a href="./classic.html">Classic workspace</a><a href="./tests.html">Engine tests</a>', '<span>V4.3</span>'),
+    ('<title>Planting Intelligence — imagine your garden</title>', '<title>Planting Intelligence — imagine your garden</title>' + NOINDEX),
 ])
 copy("design/specimens.html", "specimens.html")   # V4.3: the ten plant forms beside the V4.2 proxies; linked from the internal report only
 rewrite("specimens.html", [('"three": "../brain/vendor/three/three.module.js", "three/addons/": "../brain/vendor/three/examples/jsm/"', '"three": "./vendor/three/three.module.js", "three/addons/": "./vendor/three/examples/jsm/"'), ('href="../platform/css/platform.css"', 'href="./platform/css/platform.css"'), ('</title>', '</title>' + NOINDEX)])
