@@ -1,13 +1,27 @@
 # Planting Intelligence — Local Planting Knowledge Database (prototype v0.2 · 10 plants)
 
-> **Current version (2026-11-17): Planting Intelligence V4.3 — <https://kaiyankay.github.io/planting-db/platform-v4-3-preview/>**
-> (short link: <https://kaiyankay.github.io/planting-db/>). Source branch: `feature/platform-v4-3-visual-intelligence`.
+> **Website (V4.3, final): <https://kaiyankay.github.io/planting-intelligence/>**
 >
-> - This repository is the one home of the project: knowledge base, design engine and the web platform.
-> - The practitioner survey lives in its own repository, [planting-survey](https://github.com/kaiyankay/planting-survey).
-> - [planting-intelligence](https://github.com/kaiyankay/planting-intelligence) is the October A2 prototype, superseded by this repository.
-> - Earlier previews (`studio-preview/`, `platform-preview/`, `platform-v4…v4-2-preview/`) now forward to V4.3; earlier branches are kept as `archive/*` tags.
-> - The sections below are the project log, oldest prototypes included; their links are history, not the current version.
+> | Repository | Role |
+> |---|---|
+> | [planting-intelligence](https://github.com/kaiyankay/planting-intelligence) | the published website (generated build of `platform/`, `design/`, `brain/explorer/` from here) |
+> | **planting-db** (this one) | knowledge base, design engine, platform source, build tools, tests, reports |
+> | [planting-survey](https://github.com/kaiyankay/planting-survey) | the anonymous practitioner survey (separate application) |
+>
+> **Folder map**
+>
+> | Path | What it is |
+> |---|---|
+> | `plants/` `ontology.json` `relations.json` `sources.json` `schema.json` `synonyms.json` `intent_map.json` | the knowledge base (stays at the root: the tools and the brain/ pages read these paths) |
+> | `platform/` | the website's platform layer: Plants, Knowledge, About, Decision Trace |
+> | `design/` `designs/` | the Garden Studio (Imagine → Shape → Compose → Grow) and recorded designs |
+> | `brain/` | knowledge graph projections and the 3D network / Explorer views |
+> | `tools/` | pipeline, build scripts (`build_platform.py` builds the website) and tests |
+> | `reports/` `research/` `review/` `eval/` `inputs/` `data/` `viz/` | reports, research notes, verification workbench, evaluation, inputs, data exports |
+> | `HANDOFF.md` `PROPOSALS.md` `methods.md` `principles.md` `DESIGN.md` | project brief, decision log, method log, principles, design system (read by the brain/ pages, so they stay at the root) |
+>
+> The old preview addresses (`/planting-db/platform-v4-3-preview/` and earlier) forward to the website. Earlier branches are kept as
+> `archive/*` tags. The sections below are the project log; their links are history, not the current version.
 
 ARCH 540 Assignment 2 · UBC MLA · schema 0.4.3 (concept ids, ontology.json 0.2.0) · 2026-11-03 · **verification workbench** (`review/README.md`, `reports/verification-workbench-2026-11-03.md`) · **ten plants** (3 from 2026-10-29 + 7 survey-nominated plants added 2026-11-02 through the seven-step method — `reports/methodology-report-2026-11-02.md`)
 

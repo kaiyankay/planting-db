@@ -2,15 +2,15 @@
 <html lang="en"><head><meta charset="utf-8">
 <title>Not found · Planting Intelligence</title>
 <script>
-// Old preview addresses (retired 2026-11-17) forward to the same page in the current version.
+// The previews that used to live here (studio-preview, platform-preview, platform-v4…v4-3-preview) were retired on 2026-11-17.
+// Their addresses forward to the same page on the public site, kaiyankay.github.io/planting-intelligence/.
 (function () {
-  var base = '/planting-db/', cur = 'platform-v4-3-preview/';
-  var m = location.pathname.match(/^\/planting-db\/(studio-preview|platform-preview|platform-v4-preview|platform-v4-1-preview|platform-v4-2-preview)\/(.*)$/);
-  if (m) location.replace(base + cur + (m[1] === 'studio-preview' ? '' : m[2]) + location.search + location.hash);
+  var site = 'https://kaiyankay.github.io/planting-intelligence/';
+  var m = location.pathname.match(/^\/planting-db\/(studio-preview|platform-preview|platform-v4-preview|platform-v4-[123]-preview)\/?(.*)$/);
+  if (m) location.replace(site + (m[1] === 'studio-preview' ? '' : m[2]) + location.search + location.hash);
 })();
 </script>
 </head><body>
 <p>Page not found.</p>
-<p>The current version of Planting Intelligence is at
-<a href="/planting-db/platform-v4-3-preview/">kaiyankay.github.io/planting-db/platform-v4-3-preview/</a>.</p>
+<p>Planting Intelligence is at <a href="https://kaiyankay.github.io/planting-intelligence/">kaiyankay.github.io/planting-intelligence</a>.</p>
 </body></html>

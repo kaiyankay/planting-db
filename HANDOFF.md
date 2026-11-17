@@ -95,7 +95,7 @@ planting-db/
 ├── brain/                      Neural Brain v5 — the store as one 3D network (js/app5.js); v4–v1 archived in brain/v4 v3 v2 v1 (index.html, js/app4.js, js/graph.js, js/diagnosis.js, data/graph.json + diagnosis.json from tools/build_graph.py); v3, v2, v1 archived in brain/v3 v2 v1
 ├── research/brain-research.md  mechanism log for the demo
 ├── PROPOSALS.md                schema proposals not applied: disputed rule, grounding
-└── report-2026-10-31.md        overnight report
+└── reports/report-2026-10-31.md overnight report
 ```
 
 Inputs: survey `responses-*.csv`, `survey-analysis-*.json`, `plant_candidates-*.json` exported from the survey app at kaiyankay.github.io/planting-survey go in `inputs/survey/`. Not present on this machine as of 2026-10-29.

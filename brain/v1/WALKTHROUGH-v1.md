@@ -30,7 +30,7 @@ Start: `cd planting-db && python3 -m http.server 8766`, open <http://localhost:8
 
 ## Steps you cannot experience yet (marked, not skipped)
 
-- The query buttons carry *proxy* wordings reconstructed from `intent_map.json`; the verbatim survey sentences arrive with T4 (export blocked: see `report-2026-10-31.md`).
+- The query buttons carry *proxy* wordings reconstructed from `intent_map.json`; the verbatim survey sentences arrive with T4 (export blocked: see `reports/report-2026-10-31.md`).
 - No model composes an answer; what you see is retrieval order and attribution strings, which is why the banner says preview.
 - The two shrubs' `local mature size` and *Acer*'s `ecological value` / `toxicity` stay empty rings; filling them is review and sourcing work, not a demo feature.
 - Review itself (marking verified / disputed) is not in the demo by design; the dim rings remind you that 129 claims are waiting in `review/`.
