@@ -1113,7 +1113,7 @@ function renderDrawer() {
 function renderCanvas() {
   const svg = $('#svg'); const v = cur();
   if (S.stage === 'garden' && S.mode === 'garden') {
-    svg.style.display = 'none'; $('#gl').style.display = 'block';
+    svg.style.display = 'none'; $('#gl').style.display = 'block'; renderAlgoLegend(null);   // the Algorithm layer switch and legend belong to that view only
     if (!S.garden && !S.gardenError) { if (!S.gardenLoading) { S.gardenLoading = import('./garden3d.js').then(({ Garden }) => { S.garden = new Garden($('#gl'), { K: S.K, onSelect: id => { S.selectedPlant = id; renderPlantCard(); renderEvidence(); if (S.garden) S.garden.sync(S.project, cur(), S); }, onHover: (id, e) => hoverTip(id, e) }); S.garden.sync(S.project, cur(), S); }).catch(e => { S.gardenError = e.message; renderCanvas(); }); } }
     else if (S.garden) { S.garden.setVisible(true); S.garden.sync(S.project, v, S); }
     if (S.gardenError) $('#gl').innerHTML = `<div class="note warn" style="margin:120px auto;max-width:520px">The 3D garden could not start: ${esc(S.gardenError)}. WebGL is needed; the plan and presentation stay fully usable.</div>`;
@@ -1647,7 +1647,7 @@ async function runScriptBody(which, out) {
       if (STOP === 'four-algo') await settle(); checkStop('four-algo');
       await view('plan'); k.four.plan = { ...read(), marks: $$('#svg g.plant').length, ring: $$('#svg g.plant.sel').length, algo_legend_hidden: $('#algo-legend')?.hidden !== false, layer_control: !!$('#algo-bar:not([hidden]) [data-algolayer]') }; checkStop('four-plan');
       await view('present'); k.four.present = { ...read(), marks: $$('#svg g.plant').length, ring: $$('#svg g.plant.sel').length }; checkStop('four-present');
-      if (q.get('g3')) { await view('garden'); k.four.three = { ...read(), stats: S.garden ? S.garden.stats() : { error: S.gardenError || 'not started' } }; checkStop('four-3d'); }
+      if (q.get('g3')) { await view('garden'); k.four.three = { ...read(), stats: S.garden ? S.garden.stats() : { error: S.gardenError || 'not started' }, algo_legend_hidden: $('#algo-legend')?.hidden !== false, layer_control: !!$('#algo-bar:not([hidden]) [data-algolayer]') }; checkStop('four-3d'); }
       await view('algo'); await view('plan'); history.back(); await tick(250); k.four.back = { mode: S.mode, on: $('#viewbar button.on')?.dataset.mode || null, hash: location.hash, selected: S.selectedPlant };
       document.dispatchEvent(new KeyboardEvent('keydown', { key: '1', bubbles: true })); await tick(120); const k1 = S.mode; document.dispatchEvent(new KeyboardEvent('keydown', { key: '2', bubbles: true })); await tick(120); k.four.keys = { one: k1, two: S.mode };
       { const bedEl = $(`#svg .av-bed[data-growbed="${east().id}"]`); bedEl.focus({ preventScroll: true }); document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true })); await tick(150); k.four.keyboard = { bed_focusable: bedEl.getAttribute('tabindex') === '0', grow_bed: S.growBed, expect: east().id, inspector_names_bed: ($('#grow-overview')?.textContent || '').includes(east().name), plants_tabbable_in_bed: $$(`#svg g.av-plant[tabindex="0"]`).length, plants_in_bed: v.plant_objects.filter(o => o.bed_id === east().id).length, focus_kept: document.activeElement?.dataset?.growbed === east().id };
