@@ -106,7 +106,7 @@ _users = sorted(os.path.relpath(J(d, f), OUT) for d, _, fs in os.walk(OUT) for f
 check("TY2 one stylesheet names the brand typeface (type-trial.css); no page hard-codes it", _users == ["platform/css/type-trial.css"], _users)
 check("TY3 the trial changes display type only: it sets no text or record family, and forbids synthesised weights and styles", not re.search(r"--(pi-)?(sans|mono|display)\s*:", _tc) and "font-synthesis: none" in _tc and "font-weight: 100 900" in _tc)
 _pj = open(J(OUT, "platform", "js", "platform.js"), encoding="utf-8").read()
-check("TY4 V4.3: variant B is the default, ?type=v4|a|c is a tab-only choice (sessionStorage), the comparison switch mounts only on a page opened with ?type=, and the comparison page is in the build", "TYPE_DEFAULT = 'b'" in _pj and "sessionStorage.removeItem('pi.type')" in _pj and "if (asked === null || framed" in _pj and os.path.exists(J(OUT, "about", "type-trial", "index.html")))
+check("TY4 the V4.2 type system is the default, ?type=v4|a|c is a tab-only choice (sessionStorage), the comparison switch mounts only on a page opened with ?type=, and the comparison page is in the build", "TYPE_DEFAULT = 'v4'" in _pj and "sessionStorage.removeItem('pi.type')" in _pj and "if (asked === null || framed" in _pj and os.path.exists(J(OUT, "about", "type-trial", "index.html")))
 check("TY5 no page puts the knowledge-snapshot date in the top bar", 'class="pi-snap"' not in _pj)
 
 LINK = {(l["species"], l["function"]): l for l in ex["function_links"]}; SLUG = {s["slug"]: s["id"] for s in ex["species"]}

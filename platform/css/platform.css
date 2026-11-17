@@ -1,4 +1,3 @@
-@import url("type-trial.css");   /* brand face for the wordmark and the Imagine headline; rules apply only under html[data-type] */
 /* Planting Intelligence · platform styles (2026-11-14). Loaded by every public surface. The tokens are DESIGN.md's, prefixed so
    they can sit beside a module's own variables (the Studio's journey.css, the Explorer's and the Neural view's inline styles).
    Two kinds of rules live here:
