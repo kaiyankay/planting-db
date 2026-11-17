@@ -1,0 +1,16 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<title>Not found · Planting Intelligence</title>
+<script>
+// Old preview addresses (retired 2026-11-17) forward to the same page in the current version.
+(function () {
+  var base = '/planting-db/', cur = 'platform-v4-3-preview/';
+  var m = location.pathname.match(/^\/planting-db\/(studio-preview|platform-preview|platform-v4-preview|platform-v4-1-preview|platform-v4-2-preview)\/(.*)$/);
+  if (m) location.replace(base + cur + (m[1] === 'studio-preview' ? '' : m[2]) + location.search + location.hash);
+})();
+</script>
+</head><body>
+<p>Page not found.</p>
+<p>The current version of Planting Intelligence is at
+<a href="/planting-db/platform-v4-3-preview/">kaiyankay.github.io/planting-db/platform-v4-3-preview/</a>.</p>
+</body></html>
