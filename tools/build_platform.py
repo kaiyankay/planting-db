@@ -97,7 +97,8 @@ tree("brain/vendor/three", "vendor/three"); copy("brain/vendor/3d-force-graph.mi
 commit = git("rev-parse", "--short", "HEAD") or "unknown"; branch = git("rev-parse", "--abbrev-ref", "HEAD") or "unknown"
 dirty = "+local changes" if git("status", "--porcelain", "--", "design", "designs/demo-a.json", "platform", "brain/explorer", "brain/js", "brain/index.html", "brain/data", "plants", "ontology.json", "relations.json", "sources.json") else ""
 stamp = f"{branch} @ {commit}{dirty} · built {date.today().isoformat()} · knowledge {ex['generated']}"
-NOINDEX = '\n<meta name="robots" content="noindex">'
+# 2026-11-17: the V4.3 preview is the public version, so it is no longer hidden from search engines and reading tools
+NOINDEX = ''
 rewrite("index.html", [
     ('"three": "../brain/vendor/three/three.module.js", "three/addons/": "../brain/vendor/three/examples/jsm/"', '"three": "./vendor/three/three.module.js", "three/addons/": "./vendor/three/examples/jsm/"'),
     ('href="../platform/css/platform.css"', 'href="./platform/css/platform.css"'),
