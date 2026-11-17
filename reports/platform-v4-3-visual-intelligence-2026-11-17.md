@@ -84,7 +84,21 @@ Stepper measured at the CSS widths that 80 / 90 / 110 / 125 % zoom give a 1440 w
 
 ## 9. Tests
 
-See §9 table in the hand-off message and `eval/*-tests-2026-11-17.md`; all five suites were run after the last code change.
+All five suites run one after another on the integrated tree, twice; the second run is after the last code change (`f120d54`).
+
+| Suite | V4.2 | V4.3 |
+|---|---|---|
+| platform | 66/66 | 67/67 |
+| design | 216/216 | 224/224 |
+| spatial | 187/187 | 201/201 |
+| ux | 179/179 | 218/218 |
+| explorer (browser) | 60/60 | 68/68 |
+
+Reports: `eval/*-tests-2026-11-17.md`. Adjusted existing checks: platform E2 (no snapshot date in the bar), TY2/TY4 (B default);
+ux H2 (accepts the brand face on Imagine); explorer K0d, K0e, K1e, K19, K24–K26 (new default columns and markup).
+Found in a real browser on the published preview and fixed before the final run: the Algorithm layer switch and legend stayed over
+the 3D garden. The published Knowledge sheet and the specimen page were opened in a real browser (GPU) and render.
+Headless 3D garden captures `51` (summer) and `53` (Species scope) came back blank repeatedly and are absent; `51b` and `52` stand in.
 
 ## 10. Not done, not verified, risks
 
