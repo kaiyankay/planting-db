@@ -22,6 +22,7 @@
 import * as PI from './platform.js';
 import { tag } from './plantcard.js';
 import * as T from './trace.js';
+import * as F from './figures.js';
 
 const $ = s => document.querySelector(s); const esc = PI.esc; const plural = T.plural; const cap = T.cap;
 const page = document.body.dataset.about || 'project';
@@ -41,6 +42,8 @@ const TITLE = { project: 'About', how: 'How it works', method: 'Research & Metho
 
 function wire() {
   wireStage();
+  // the Project cover is laid out for the width it is shown at, so its lettering keeps its size
+  const plate = $('#ab-plate'); if (plate && COVER) { let last = 1180; const fit = () => { const w = Math.max(900, Math.min(1180, Math.round(plate.clientWidth))); if (w === last) return; last = w; plate.querySelector('svg').outerHTML = F.cover(COVER, w); }; fit(); window.addEventListener('resize', fit); }
   // an expander named by the address opens (and a link to one opens it)
   const openHash = () => { const el = location.hash.length > 1 && document.getElementById(location.hash.slice(1)); if (el?.tagName === 'DETAILS') { el.open = true; el.scrollIntoView(); } };
   openHash(); window.addEventListener('hashchange', openHash);
@@ -84,24 +87,16 @@ async function ending(d) {
 }
 const srcShort = (d, id) => cut((d.sources[id]?.label || id).split(' (')[0], 34);
 const decisionLines = (it, end) => end ? [end.n ? `${end.n} planted in the ${end.bed}` : `${T.OUTCOME[end.outcome]?.word || end.outcome} for the ${end.bed}`, end.status ? `Screen: ${end.status}` : 'not evaluated'] : ['read by the Studio', 'bed by bed'];
-/** Project: knowledge → design, on the one real record every About page follows */
-function kdSvg(d, it, end) {
-  const cl = it.claim; const name = it.sp.common_names[0] || it.sp.scientific_name; const W = 176, G = 28, x = i => 8 + i * (W + G) + (i > 2 ? 16 : 0);
-  const boxes = [['Source', wrapT(srcShort(d, cl.source_id), 20), [`“${cut(it.check?.excerpt || cl.text, 26)}”`], ''], ['Claim', wrapT(`Landscape use: ${T.valueLabels(d, cl).join(', ')}`, 20), [T.human(cl.status)], cl.status === 'verified' ? '' : ' open'], ['Function link', [`${name} → ${it.fn.label}`], [T.human(it.link.status), it.link.rule ? `rule ${it.link.rule}` : ''].filter(Boolean), ''],
-    ['Planting bed', end ? [end.bed] : ['a bed'], [`asked to be a ${it.fn.label}`], ''], ['Plant objects', wrapT(decisionLines(it, end)[0], 20), ['placed by written rules'], ''], ['Evaluation', wrapT(decisionLines(it, end)[1], 20), ['a model estimate'], ' open']];
-  const b = boxes.map(([k, main, sub, cls], i) => `<rect class="cv-box${cls}" x="${x(i)}" y="64" width="${W}" height="132" rx="6"/>${tx(x(i) + 14, 88, k.toUpperCase(), 'cv-k')}${tx(x(i) + 14, 116, main.slice(0, 3), 'cv-t', 19)}${tx(x(i) + 14, 116 + main.slice(0, 3).length * 19 + 8, sub.slice(0, 2), 'cv-s', 17)}${i < 5 ? arrow(x(i) + W + 4, 130, x(i + 1) - 4) : ''}`).join('');
-  return `<svg class="cv cv-kd" viewBox="0 0 1232 216" role="img" aria-label="From knowledge to design, on one real record: ${esc(srcShort(d, cl.source_id))} states a hedge tolerance; it is stored as the claim landscape use ${esc(T.valueLabels(d, cl).join(', '))}, ${esc(T.human(cl.status))}; a written rule links ${esc(name)} to ${esc(it.fn.label)}; in the reference garden, ${esc(decisionLines(it, end).join(', '))}.">
-    ${tx(x(0), 36, 'KNOWLEDGE', 'cv-h')}<path class="cv-rule" d="M${x(0)} 46H${x(2) + W}"/>${tx(x(3), 36, 'DESIGN', 'cv-h')}<path class="cv-rule" d="M${x(3)} 46H${x(5) + W}"/>${b}</svg>`;
-}
-
 // ---------------------------------------------------------------- Project
 async function project(d) {
-  const L = PI.links; const it = item(d); const end = await ending(d);
+  const L = PI.links; const it = item(d); const end = await ending(d); let ref = null, imgs = null; try { [ref, imgs] = await Promise.all([PI.loadReference(), PI.loadImages()]); } catch (e) { console.error(e); }
+  const art = it && imgs?.art?.[it.sp.slug]; COVER = it && ref ? { d, it, end, E: end?.E || null, ref, T, artHref: art ? PI.artUrl(art.file) : null } : null;
+  const rowsNote = it ? `${d.attributes.filter(a => a.species === it.sp.id).length} recorded fields` : '';
   return `<div class="ab ab-project">
   <header class="ab-mast ab-hero"><div><h1>Planting design that can show its sources.</h1>
     <p class="ab-lede">Planting Intelligence helps you explore planting options from traceable plant records. It is an experimental design workflow using a limited plant knowledge base.</p>
     <p class="ab-enter"><a class="pi-btn primary" href="${L.design()}">Try Design</a><a class="pi-btn" href="${L.knowledge()}">Explore Knowledge</a></p></div></header>
-  ${it ? `<figure class="ab-cover">${kdSvg(d, it, end)}<figcaption>One real record, from its source to a bed${end ? ` of the reference garden “${esc(end.garden)}”` : ''}. Dashed boxes are not settled: the claim has not been verified by a person, and an evaluation is an estimate. <a href="${esc(L.trace(SALAL, { fn: 'z:screen' }))}">Follow this record</a></figcaption></figure>` : ''}
+  ${it && ref ? `<figure class="ab-plate" id="ab-plate">${F.cover(COVER, 1180)}<figcaption>From a plant to a planting, on real material: ${sci(it.sp.scientific_name)}, ${rowsNote}, its links in the knowledge network, and the reference garden “${esc(ref.name || ref.id)}” in plan and elevation. Dashed lines are records no person has verified yet. The illustration is AI-generated artwork and the elevation is drawn from claimed mature sizes: neither is evidence. <a href="${esc(L.trace(SALAL, { fn: 'z:screen' }))}">Follow this record</a></figcaption></figure>` : ''}
   ${sec('why', 'Why this exists', 'Plant knowledge is scattered. A design needs it in one place.', `
     <div class="ab-three">
       <div><h3>Databases say what a plant is</h3><p>A mature height, a soil preference. Each source describes its own region, and they often disagree. Disagreements are kept side by side, never averaged.</p></div>
@@ -186,7 +181,7 @@ async function data(d) {
 // `engine.js` through `trace.js` (assemble, generate, evaluateScreen, evaluateGround); nothing is typed in. The arrangement view re-runs
 // `E.generate` with one existing parameter changed (the ground-layer pattern of one bed). State lives in the address: ?view= &pattern= &fn=.
 const VIEWS = [['site', 'Input &amp; site'], ['eligibility', 'Evidence &amp; eligibility'], ['arrangement', 'Composition &amp; arrangement'], ['evaluation', 'Evaluation']];
-let ST = null;
+let ST = null; let COVER = null;
 const fold = (id, title, sub, body) => `<details class="ab-fold" id="${id}"><summary><span>${title}</span>${sub ? `<em>${sub}</em>` : ''}</summary><div class="ab-fold-b">${body}</div></details>`;
 const r2 = n => Math.round(n * 100) / 100;
 const areaOf = poly => r2(Math.abs(poly.reduce((a, q, i) => { const n = poly[(i + 1) % poly.length]; return a + q[0] * n[1] - n[0] * q[1]; }, 0)) / 2);
@@ -454,73 +449,28 @@ function groundRuns(ref, K, E) {
 
 // ---------------------------------------------------------------- Research & Method
 const STEPS = ['Local Data Extraction', 'Data Integration & Structured Claims', 'Data Validation & Verification', 'Survey Analysis & Knowledge Requirements', 'Professional Plant Knowledge Enrichment', 'Planting Design Knowledge Integration', 'Multimodal Knowledge Graph Construction'];
-/** Research & Method cover: the seven steps as one path, with the one real record at each step, then the record's own chain.
- *  Every label under a step is read from the snapshot (and the reference garden for the last one). */
-function coverSvg(d, it, end, notes) {
-  const cl = it.claim; const ck = it.check; const name = it.sp.common_names[0] || it.sp.scientific_name; const X = i => 92 + i * 169.5; const W = 152;
-  const idLines = id => String(id).split(':').map((p, i, a) => p + (i < a.length - 1 ? ':' : ''));
-  const cards = [
-    ['Local data', notes.local, [], ' mute'],
-    ['Claim', wrapT(`Landscape use = ${T.valueLabels(d, cl).join(', ')}`, 19), idLines(cl.id), ''],
-    ['Validation', [`Human: ${T.human(cl.status)}`, ...(ck ? wrapT(`AI check: ${T.AI_WORD[ck.result] || T.human(ck.result)}`, 20) : [])], ['kept apart'], cl.status === 'verified' ? '' : ' open'],
-    ['Survey', notes.survey, [], ' mute'],
-    ['Source', wrapT(srcShort(d, cl.source_id), 19), [`“${cut(ck?.excerpt || cl.text, 22)}”`], ' in'],
-    ['Function link', [`${name} → ${it.fn.label}`, T.human(it.link.status)], it.link.rule ? [`rule ${it.link.rule}`] : [], ''],
-    ['Graph → design', decisionLines(it, end).flatMap(l => wrapT(l, 19)), [], end?.status && /^met/.test(end.status) ? '' : ' open'],
-  ];
-  const steps = STEPS.map((n, i) => { const x = X(i); const v = i >= 2; const [k, main, sub, cls] = cards[i]; const m = main.slice(0, 4);
-    return `<g class="cv-step"><circle class="cv-node${v ? ' v' : ''}" cx="${x}" cy="64" r="17"/>${tx(x, 69.5, String(i + 1), 'cv-num', 0, 'middle')}${tx(x, 108, wrapT(n, 19), 'cv-name', 16, 'middle')}
-      <path class="cv-drop" d="M${x} 166V186"/><rect class="cv-box${cls}" x="${x - W / 2}" y="186" width="${W}" height="150" rx="6"/>${tx(x - W / 2 + 12, 208, k.toUpperCase(), 'cv-k')}${tx(x - W / 2 + 12, 232, m, 'cv-t sm', 17)}${tx(x - W / 2 + 12, 232 + m.length * 17 + 6, sub.slice(0, 3), 'cv-id', 14)}</g>`; }).join('');
-  const chain = [['Source', 5, srcShort(d, cl.source_id)], ['Claim', 2, `${T.valueLabels(d, cl).join(', ')}`], ['Validation', 3, `${T.human(cl.status)}${ck ? ` · AI: ${T.AI_WORD[ck.result] || T.human(ck.result)}` : ''}`], ['Function link', 6, `${name} → ${it.fn.label}, ${T.human(it.link.status)}`], ['Design decision', 7, decisionLines(it, end).join(' · ')]];
-  const CW = 208, CG = 30, cx = i => 21 + i * (CW + CG);
-  const ch = chain.map(([k, stepN, val], i) => `<rect class="cv-chip" x="${cx(i)}" y="408" width="${CW}" height="86" rx="6"/>${tx(cx(i) + 14, 430, `${k.toUpperCase()} · STEP ${stepN}`, 'cv-k')}${tx(cx(i) + 14, 454, wrapT(val, 27).slice(0, 2), 'cv-s', 17)}${i < chain.length - 1 ? arrow(cx(i) + CW + 4, 451, cx(i + 1) - 4) : ''}`).join('');
-  return `<svg class="cv cv-seven" viewBox="0 0 1200 510" role="img" aria-label="The seven steps of the method in order: ${STEPS.map((n, i) => `${i + 1} ${n}`).join(', ')}. One record is followed: ${esc(srcShort(d, cl.source_id))} is read at step 5; the claim landscape use ${esc(T.valueLabels(d, cl).join(', '))} is structured at step 2; at step 3 it is ${esc(T.human(cl.status))} by a person${ck ? ` and ${esc(T.AI_WORD[ck.result] || T.human(ck.result))} in the AI source check` : ''}; at step 6 a rule links ${esc(name)} to ${esc(it.fn.label)}; at step 7 the graph is read by the Studio: ${esc(decisionLines(it, end).join(', '))}.">
-    <path class="cv-path" d="M${X(0)} 64H${X(6)}"/><path class="cv-path v" d="M${X(2)} 64H${X(6)}"/>${steps}
-    ${tx(21, 388, 'THE SAME RECORD, IN THE ORDER IT TRAVELS', 'cv-h')}<path class="cv-rule" d="M21 396H1179"/>${ch}</svg>`;
-}
-/** X · Y · Z: what the graph holds, counted from the snapshot */
-function xyzSvg(d, sup) {
-  const st = d.stats; const Lk = st.links_by_status || {}; const cols = [40, 440, 840]; const W = 320;
-  const plants = wrapT(d.species.map(s => s.common_names[0] || s.scientific_name).join(' · '), 40).slice(0, 5); const groups = d.groups.map(g => `${g.label} · ${d.facets.filter(f => f.group === g.id).length} fields`);
-  const fns = d.functions.map(f => `${f.label}${sup[f.id]?.arranged ? ' · arranged in Design' : ' · recorded only'}`);
-  const col = (x, k, big, unit, lines) => `<rect class="cv-box" x="${x}" y="20" width="${W}" height="236" rx="6"/>${tx(x + 18, 48, k, 'cv-k')}${tx(x + 18, 96, String(big), 'cv-big')}${tx(x + 18 + String(big).length * 26 + 10, 96, unit, 'cv-s')}${tx(x + 18, 130, lines, 'cv-s', 21)}`;
-  return `<svg class="cv cv-xyz" viewBox="0 0 1200 300" role="img" aria-label="The three layers of the knowledge graph: ${st.species} plants, ${st.functions} spatial functions, ${d.facets.length} attribute fields in ${d.groups.length} groups. Of ${st.function_links} possible plant-to-function links, ${Lk.derived || 0} come from a recorded use, ${Lk.candidate || 0} are inferred from traits and ${Lk.unknown || 0} have no link.">
-    ${col(cols[0], 'X · PLANTS', st.species, 'species', plants)}${col(cols[1], 'Z · SPATIAL FUNCTIONS', st.functions, 'functions', fns)}${col(cols[2], 'Y · ATTRIBUTES', d.facets.length, `fields, ${st.attribute_cells} recorded`, groups)}
-    <path class="cv-line" d="M${cols[0] + W} 120H${cols[1]}"/><path class="cv-line dash" d="M${cols[0] + W} 150H${cols[1]}"/><path class="cv-line dot" d="M${cols[1] + W} 135H${cols[2]}"/>
-    ${tx(cols[0] + W + 40, 282, [`${Lk.derived || 0} recorded uses · ${Lk.candidate || 0} inferred from traits (dashed) · ${Lk.unknown || 0} with no link, listed as gaps and never drawn`], 'cv-s')}${tx(cols[1] + W + 8, 122, 'requires', 'cv-id')}</svg>`;
-}
-/** Value → Function → Engine → Evaluation: what Design can act on today, from the engine's own tables */
-function vfeSvg(d, E) {
-  const sup = E.FUNCTION_SUPPORT; const R = E.ARRANGEMENT_RULES; const FNL = id => d.functions.find(f => f.id === id)?.label || id; const pats = Object.values(E.COMPOSITION.patterns).map(p => p.label.toLowerCase()); const rec = d.functions.filter(f => !sup[f.id]?.arranged).map(f => f.label);
-  const rows = [['Privacy', FNL('z:screen'), wrapT(`a row along an edge, spaced at ${R.screen_spacing.value} × the claimed spread`, 34), wrapT('edge under mature crowns, in metres: met, not met or uncertain', 38), ''],
-    ['Ground coverage', FNL('z:ground_cover'), wrapT(`a ground layer in one of ${pats.length} patterns`, 34), wrapT('share under mature crowns: an estimate with no pass mark', 38), ''],
-    ['Not offered as a value', rec.join(' · '), ['no arrangement rule'], ['no result is shown'], ' mute']];
-  const X = [20, 250, 520, 850], Wd = [200, 240, 300, 330]; const head = ['VALUE', 'SPATIAL FUNCTION', 'ENGINE', 'EVALUATION'];
-  const body = rows.map(([v, f, e, m, cls], r) => { const y = 54 + r * 86; const cell = (i, lines, tcls) => `<rect class="cv-box${cls}" x="${X[i]}" y="${y}" width="${Wd[i]}" height="70" rx="6"/>${tx(X[i] + 14, y + ([].concat(lines).length > 1 ? 30 : 41), [].concat(lines).slice(0, 2), tcls, 18)}`;
-    return `${cell(0, v, 'cv-t')}${cell(1, wrapT(f, 26), 'cv-t')}${cell(2, e, 'cv-s')}${cell(3, m, 'cv-s')}${[0, 1, 2].map(i => arrow(X[i] + Wd[i] + 3, y + 35, X[i + 1] - 3)).join('')}`; }).join('');
-  return `<svg class="cv cv-vfe" viewBox="0 0 1200 320" role="img" aria-label="What Design can act on: Privacy is served by the function ${esc(FNL('z:screen'))}, arranged as a row and evaluated as covered edge length. Ground coverage is served by ${esc(FNL('z:ground_cover'))}, arranged in a pattern and evaluated as an estimated share with no pass mark. ${esc(rec.join(', '))} are recorded only: no arrangement and no result.">${head.map((h, i) => tx(X[i], 36, h, 'cv-k')).join('')}${body}</svg>`;
-}
-
 async function method(d) {
   const st = d.stats; const L = PI.links; const it = item(d); const claims = Object.values(d.claims); const chk = st.claims_by_check; const ty = bySourceType(d);
   const n = f => claims.filter(f).length; const local = n(c => c.source_type === 'municipal'); const pract = claims.filter(c => c.source_type === 'practitioner'); const db = n(c => c.source_type === 'database');
   const salal = claims.filter(c => c.plant === it.sp.slug); const salalLocal = salal.filter(c => c.source_type === 'municipal'); const salalPract = salal.filter(c => c.source_type === 'practitioner'); const salalDb = salal.filter(c => c.source_type === 'database');
   const gates = d.facets.filter(f => f.gate); const Lk = st.links_by_status; const cells = st.attribute_cells + st.cells_not_recorded; const name = (it.sp.common_names[0] || it.sp.scientific_name).toLowerCase();
   const end = await ending(d); const E = end?.E || (await T.loadEngine()).E;   // the reference garden: where the claim ends up
-  const cl = it.claim; const ck = it.check;
+  const cl = it.claim; const ck = it.check; const FNL = id => d.functions.find(f => f.id === id)?.label || id;
   const notes = { local: salalLocal.length ? wrapT(`${plural(salalLocal.length, 'local claim')} about ${name}`, 19) : wrapT(`No local record of ${name}. The absence is kept.`, 19), survey: wrapT(salalPract.length ? `${plural(salalPract.length, 'practitioner claim')} about ${name} stand beside it, kept apart` : `No practitioner claim about ${name} in this release`, 19) };
-  const step = (i, does, more, walk) => `<li class="ab-step${i === 3 ? ' through' : ''}" id="step-${i}"><div class="ab-step-n" aria-hidden="true">${i}</div>
-    <div class="ab-step-b"><h3><span class="sr">Step ${i}: </span>${esc(STEPS[i - 1])}</h3><p>${does}</p><details class="pi-more-d ab-step-d"><summary>In this release, and who does it</summary>${more}</details></div>
-    <div class="ab-step-w"><span class="ab-step-wl">The record at this step</span>${walk}</div></li>`;
+  let imgs = null; try { imgs = await PI.loadImages(); } catch { imgs = null; } const art = imgs?.art?.[it.sp.slug]; const fctx = { d, it, end, E, T, artHref: art ? PI.artUrl(art.file) : null };
+  const step = (i, does, more, walk) => { const fg = F.step(i, fctx); return `<li class="ab-step${i === 3 ? ' through' : ''}" id="step-${i}"><div class="ab-step-n" aria-hidden="true">${i}</div>
+    <div class="ab-step-b"><h3><span class="sr">Step ${i}: </span>${esc(STEPS[i - 1])}</h3><p>${does}</p><div class="ab-step-w"><span class="ab-step-wl">The followed record here</span>${walk}</div><details class="pi-more-d ab-step-d"><summary>In this release, and who does it</summary>${more}</details></div>
+    ${fg ? `<figure class="ab-fx" data-fig="${i}">${fg.svg}<figcaption>${fg.cap}</figcaption></figure>` : ''}</li>`; };
   const rel = (today, who, extra = '') => `<p class="ab-today">${today}</p><p class="ab-by">${who}</p>${extra}`;
   const kinds = Object.entries(T.KIND).map(([k, v]) => `<div class="pi-led"><dt>${esc(v.label)}</dt><dd><p>${esc(v.says)}</p></dd><dd class="pi-led-p">${T.who(v.who)}</dd></div>`).join('');
   const kg = Object.entries(d.rules).filter(([id]) => !/^M4\d$/.test(id)).sort((a, b) => a[0].localeCompare(b[0], 'en', { numeric: true })).map(([id, text]) => `<tr><td><b>${esc(id)}</b></td><td>${esc(cap(text).replace(/\(to confirm\)/g, '(provisional)'))}.</td></tr>`).join('');   // a rule the snapshot marks as not yet confirmed reads as provisional to a visitor
   return `<div class="ab ab-method">
   ${mast('Seven steps from a source to a knowledge graph.', 'The database is the research. It is built by one method in seven steps, and validation continues through every step after the third.',
     `<p class="ab-prov">One real record is followed on this page:<br>${sci(it.sp.scientific_name)} recorded as a hedge</p>`)}
-  <figure class="ab-cover wide" data-claim="${esc(cl.id)}">${coverSvg(d, it, end, notes)}<figcaption>Dashed boxes are not settled: the claim is ${esc(T.human(cl.status))}, and the design result is a model estimate. The record enters at step 5 and is structured by the rules of step 2. <a href="${esc(L.trace(SALAL, { fn: 'z:screen' }))}">Trace this decision</a></figcaption></figure>
+  <ol class="ab-seven" data-claim="${esc(cl.id)}" aria-label="The seven steps">${STEPS.map((n, i) => `<li${i >= 2 ? ' class="v"' : ''}><a href="#step-${i + 1}"><b>${i + 1}</b><span>${esc(n)}</span></a></li>`).join('')}</ol>
+  <p class="ab-seven-k"><span><i></i>building the record</span><span><i class="v"></i>validation continues through every later step</span></p>
 
-  <section class="ab-sec wide" id="steps"><div class="ab-sec-h"><h2>The seven steps</h2><p>What each step does, and where the followed record stands at it.</p></div>
+  <section class="ab-sec wide" id="steps"><div class="ab-sec-h"><h2>The seven steps</h2><p>What each step does, drawn from the material it works on.</p></div>
   <ol class="ab-steps">
     ${step(1, 'Open local data is fetched and stored as published: what is planted in the city, with its snapshot date.',
       rel(`${local} claims from ${ty.municipal || 0} municipal and regional open-data sources.`, `${T.who('record')} fetched by script, stored as published`),
@@ -545,10 +495,14 @@ async function method(d) {
       `<p>The Studio reads the link. ${end ? `In the reference garden, ${end.n ? `${end.n} ${esc(name)} are planted along the ${esc(end.bed)}’s screened edge` : `${esc(name)} is ${esc(T.OUTCOME[end.outcome]?.word || end.outcome)} for the ${esc(end.bed)}`}${end.status ? `, and the engine reports <span class="pi-res ${esc(end.status.replace(/\s+/g, '_'))}">Screen: ${esc(end.status)}</span>` : ''}.` : ''}</p>${go([L.trace(SALAL, { fn: 'z:screen' }), 'Trace this decision'])}`)}
   </ol></section>
 
-  <section class="ab-sec wide" id="layers"><div class="ab-sec-h"><h2>What the graph holds</h2><p>Three layers, and the two kinds of line between plants and functions.</p></div>
-    <figure class="ab-cover wide plain">${xyzSvg(d, E.FUNCTION_SUPPORT)}<figcaption>A link from a recorded use and a link inferred from traits are different things. A missing link is a gap in the records, not a statement that a plant is unsuitable. <a href="${esc(L.knowledge())}">Explore the network</a></figcaption></figure></section>
-  <section class="ab-sec wide" id="values"><div class="ab-sec-h"><h2>From a value to a result</h2><p>What Design can act on today, and what is only recorded.</p></div>
-    <figure class="ab-cover wide plain">${vfeSvg(d, E)}<figcaption>Results are model estimates from claimed mature sizes, not field measurements. <a href="${esc(L.how())}">See the engine compute one garden</a></figcaption></figure></section>
+  ${sec('values', 'From a value to a result', 'What Design can act on today, and what is only recorded.', `
+    <table class="pi-table ab-vfe"><thead><tr><th>Value</th><th>Spatial function</th><th>Engine</th><th>Evaluation</th></tr></thead><tbody>
+      <tr><td><b>Privacy</b></td><td>${esc(FNL('z:screen'))}</td><td>A row along an edge, spaced at ${E.ARRANGEMENT_RULES.screen_spacing.value} × the claimed spread</td><td>Edge under mature crowns, in metres: met, not met or uncertain</td></tr>
+      <tr><td><b>Ground coverage</b></td><td>${esc(FNL('z:ground_cover'))}</td><td>A ground layer in one of ${Object.keys(E.COMPOSITION.patterns).length} patterns</td><td>Share under mature crowns: an estimate with no pass mark</td></tr>
+      <tr class="mute"><td>Not offered as a value</td><td>${d.functions.filter(f => !E.FUNCTION_SUPPORT[f.id]?.arranged).map(f => esc(f.label)).join(' · ')}</td><td>No arrangement rule</td><td>No result is shown</td></tr>
+    </tbody></table>
+    <p class="ab-note">Results are model estimates from claimed mature sizes, not field measurements. A missing link is a gap in the records, not a statement that a plant is unsuitable.</p>
+    ${go([L.how(), 'See the engine compute one garden'], [L.knowledge(), 'Explore the network'])}`)}
 
   ${sec('kinds', 'Eight kinds of statement', 'Kept apart on every page, in this order, with these words.', `<dl class="pi-ledger ab-led">${kinds}</dl>`)}
 

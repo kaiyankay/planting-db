@@ -239,3 +239,35 @@
 /* ---- Sources & data */
 .ab-data .ab-figs { margin-bottom: var(--pi-s-4); } .ab-links i.c { background: var(--pi-rust); }
 @media (max-width: 700px) { .ab-hero { padding-top: 40px; } .ab .ab-cover { padding: var(--pi-s-3); } .ab .st-m { grid-template-columns: 1fr 1fr; } .ab-read-seg { width: 100%; } .ab-read-seg button { flex: 1; } }
+
+/* ================================================================ V4.3 — editorial figures (platform/js/figures.js)
+   One system for the Project cover and the seven method figures: ink hairlines on the page ground, olive = recorded, caramel dashes =
+   not settled, no boxes. Lettering is DM Sans; ids and measures are DM Mono; a scientific name is italic. */
+.ab .ab-plate { margin: var(--pi-s-2) 0 var(--pi-s-12); overflow-x: auto; } .ab-plate .fx { display: block; width: 100%; min-width: 900px; height: auto; }
+.ab-plate figcaption, .ab-fx figcaption { margin-top: var(--pi-s-3); padding-top: var(--pi-s-3); border-top: 1px solid var(--pi-line); font-size: var(--pi-t-small); line-height: 1.55; color: var(--pi-ink-2); max-width: 92ch; text-wrap: pretty; } .ab-plate figcaption a { font-weight: 500; white-space: nowrap; }
+.fx text { font-family: var(--pi-sans); fill: var(--pi-ink); }
+.fx .fx-l { font: 400 11px var(--pi-mono); fill: var(--pi-ink-3); } .fx .fx-v { font: 400 13.5px var(--pi-sans); } .fx .fx-v.dim { fill: var(--pi-ink-3); } .fx .fx-b { font: 600 13.5px var(--pi-sans); }
+.fx .fx-sci { font: italic 500 13.5px var(--pi-sans); } .fx .fx-st { font: 600 15px var(--pi-display); letter-spacing: -.02em; } .fx .fx-q { font: 600 21px var(--pi-display); letter-spacing: -.03em; }
+.fx .fx-art { mix-blend-mode: multiply; clip-path: inset(1.5%); }
+.fx .fx-rule { stroke: var(--pi-ink); stroke-width: 1; fill: none; } .fx .fx-rule.open { stroke: var(--pi-caramel-ink); stroke-dasharray: 4 4; }
+.fx .fx-ground { stroke: var(--pi-ink); stroke-width: 1.5; } .fx .fx-dim, .fx .fx-axis { stroke: var(--pi-ink-3); stroke-width: 1; fill: none; } .fx .fx-drop { stroke: var(--pi-line-2); stroke-width: 1; stroke-dasharray: 1 4; }
+.fx .fx-ln { fill: none; stroke: var(--pi-ink-3); stroke-width: 1; } .fx .fx-ln.faint { stroke: var(--pi-line-2); stroke-width: .8; } .fx .fx-ln.thin { stroke: var(--pi-sage); stroke-width: .9; }
+.fx .fx-ln.req, .fx .fx-ln.on { stroke: var(--pi-olive-deep); stroke-width: 1.6; } .fx .fx-ln.open { stroke: var(--pi-caramel-ink); stroke-width: 1.4; stroke-dasharray: 5 4; }
+.fx .fx-sp { fill: var(--pi-olive-deep); } .fx .fx-sp.sm { fill: var(--pi-olive); } .fx .fx-none { fill: var(--pi-line-2); }
+.fx .fx-ring { fill: var(--pi-ivory); stroke: var(--pi-ink-2); stroke-width: 1.2; } .fx .fx-ring.open { stroke: var(--pi-caramel-ink); stroke-dasharray: 3 3; }
+.fx .fx-fn { fill: var(--pi-ivory); stroke: var(--pi-olive-deep); stroke-width: 1.5; } .fx .fx-fn.on { fill: var(--pi-olive-deep); } .fx .fx-fn.cand { stroke: var(--pi-caramel-ink); stroke-dasharray: 3 3; } .fx .fx-fn.gap { stroke: var(--pi-line-2); stroke-dasharray: 2 3; }
+.fx .fx-site { fill: var(--pi-paper); stroke: var(--pi-ink); stroke-width: 1.2; } .fx .fx-bed { fill: rgba(91,122,87,.1); stroke: var(--pi-olive); stroke-width: .7; } .fx .fx-open { fill: none; stroke: var(--pi-ink-3); stroke-width: .7; stroke-dasharray: 2 3; } .fx .fx-tree { fill: none; stroke: var(--pi-ink-3); stroke-width: .8; stroke-dasharray: 1 3; }
+.fx .fx-track { stroke: var(--pi-line); stroke-width: 1; } .fx .fx-range { stroke: var(--pi-olive-deep); stroke-width: 7; stroke-linecap: butt; } .fx .fx-tick { stroke: var(--pi-ink); stroke-width: 2; } .fx .fx-dots circle { fill: var(--pi-olive); }
+.fx .fx-loc.near { fill: var(--pi-olive-deep); } .fx .fx-loc.mid { fill: var(--pi-sage); } .fx .fx-loc.far { fill: var(--pi-line-2); }
+.fx .fx-page { fill: var(--pi-paper); stroke: var(--pi-ink-2); stroke-width: 1; } .fx .fx-greek { stroke: var(--pi-line-2); stroke-width: 3; }
+.fx .fx-unit.on { fill: var(--pi-olive-deep); } .fx .fx-unit.mid { fill: var(--pi-sage); } .fx .fx-unit.warn { fill: var(--pi-caramel); }
+.fx .fx-field { fill: var(--pi-ivory); stroke: var(--pi-line-2); stroke-width: 1; } .fx .fx-field.on { fill: var(--pi-olive-deep); stroke: var(--pi-olive-deep); }
+.fx .fx-slot { fill: none; stroke: var(--pi-ink-3); stroke-width: 1; stroke-dasharray: 2 4; }
+/* ---- Research & Method: text and figure side by side, the figure the larger of the two */
+.ab-method .ab-step { grid-template-columns: 56px minmax(0, 5fr) minmax(0, 8fr); column-gap: var(--pi-s-8); padding-bottom: var(--pi-s-16); }
+.ab-method .ab-step-b > p { max-width: 44ch; }
+.ab-method .ab-step-w { margin-top: var(--pi-s-5) !important; padding: var(--pi-s-3) 0 0; background: none; border: 0; border-top: 1px solid var(--pi-line-2); border-radius: 0; } .ab-method .ab-step-w p { color: var(--pi-ink-2); }
+.ab .ab-fx { margin: 0; min-width: 0; } .ab-fx .fx { display: block; width: 100%; height: auto; }
+.ab-method .ab-seven { margin-top: var(--pi-s-2); } .ab-method .ab-seven-k { margin-bottom: var(--pi-s-4); }
+.ab-vfe td:first-child { width: 190px; } .ab-vfe tr.mute td { color: var(--pi-ink-3); }
+@media (max-width: 1100px) { .ab-method .ab-step { grid-template-columns: 56px minmax(0, 1fr); row-gap: var(--pi-s-6); } .ab-method .ab-fx { grid-column: 2; max-width: 680px; } .ab-method .ab-step-b > p { max-width: 62ch; } }
