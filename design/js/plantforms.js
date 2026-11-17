@@ -18,18 +18,25 @@ export function formOf(K, speciesId, light = null) {
   const proxy = K.proxy(speciesId, light);
   const dense = habit.some(h => /dense|compact|clump|mound/.test(h)); const open = habit.some(h => /open|arching|spreading|loose|twiggy/.test(h)); const upright = habit.some(h => /upright|erect|columnar/.test(h));
   const accentWord = colours.find(c => c !== 'green' && PALETTE.accent[c] !== undefined && PALETTE.accent[c]) || null;
+  /* V4.3 · words the 3D forms read (botanical.js). All from claims; which silhouette a word selects is a drawing convention. */
+  const formWords = (K.labels(speciesId, 'form') || []).map(l => l.toLowerCase()); const texture = ((K.labels(speciesId, 'texture') || [])[0] || '').toLowerCase() || null;
+  const accents = colours.filter(c => c !== 'green' && PALETTE.accent[c]); const accent2 = accents[1] ? PALETTE.accent[accents[1]] : null;
+  const crown = kind !== 'tree' ? null : habit.some(h => /horizontal|tiered|layered/.test(h)) ? 'tiered' : formWords.some(w => /pyramid|conical/.test(w)) ? 'pyramidal' : formWords.some(w => /round|oval|globe/.test(w)) ? 'round' : 'dome';
+  const shrub = kind !== 'shrub' ? null : formWords.some(w => /creeping|mat|prostrate/.test(w)) ? 'mat' : dense ? 'mound' : habit.some(h => /spreading|arching|open|loose/.test(h)) ? 'cane' : upright ? 'upright' : 'mound';
   const idx = hashId(speciesId) % 2;
   const foliage = PALETTE[kind][idx]; const accent = accentWord ? PALETTE.accent[accentWord] : null;
   const groundCover = (K.functionSupport(speciesId, 'z:ground_cover')?.drawn) && proxy.height_m != null && proxy.height_m < 0.5;
   return {
     species_id: speciesId, kind: groundCover && kind !== 'fern' ? 'ground' : kind, growth_form: s?.growth_form_label || 'unknown', evergreen, habit, colours, interest, foliage, accent, accent_word: accentWord,
     density: dense ? 1.15 : open ? 0.8 : 1, upright, radius_m: proxy.radius_m, height_m: proxy.height_m, proxy,
+    form_words: formWords, texture, crown, shrub, accent2,
     basis: {
       growth_form: `growth form ${s?.growth_form_label || 'unknown'} (M29 reading of the sources, ${s?.growth_form_status || 'unknown'})`,
       size: `crown radius ${proxy.radius_m} m = ${proxy.radius_status}; height ${proxy.height_m != null ? `≈ ${proxy.height_m} m (${proxy.height.note})` : 'unknown — drawn at a nominal height, dashed'}`,
       leaf_retention: evergreenLabels ? `leaf retention from claims: ${evergreenLabels.join(' / ')}` : 'leaf retention not recorded',
       habit: habit.length ? `habit words from claims: ${habit.join(', ')} → ${dense ? 'denser' : open ? 'more open' : 'default'} silhouette` : 'habit not recorded → default silhouette for the growth form',
       colour: colours.length ? `colour words from claims: ${colours.join(', ')} (foliage / flower / fruit not distinguished in the data) → accent ${accentWord || 'none'}` : 'no colour claim → foliage tone only',
+      form3d: kind === 'tree' ? `crown ${crown}${formWords.length || habit.length ? ` (from the recorded words ${[...formWords, ...habit].join(', ')})` : ' (no form or habit word recorded: the default)'}` : kind === 'shrub' ? `${shrub === 'cane' ? 'stems fanning from the base' : shrub === 'mat' ? 'a low mat' : shrub === 'upright' ? 'an upright oval' : 'a dense mound'}${formWords.length || habit.length ? ` (from the recorded words ${[...formWords, ...habit].join(', ')})` : ' (no form or habit word recorded: the default)'}` : kind === 'herb' ? `basal leaves and flower stalks; ${accentWord ? (texture === 'fine' ? 'flat clusters of small flowers (texture recorded as fine)' : 'single ray heads') : 'no flower colour recorded, so no flowers drawn'}` : kind === 'fern' ? 'fronds arching from one crown' : 'a low mat',
       illustrative: 'silhouette, lobes, stems, texture and shading are illustrative proxies, not plant features',
     },
   };
