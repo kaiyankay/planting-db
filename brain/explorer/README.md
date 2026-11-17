@@ -12,6 +12,37 @@ Brief 2026-11-07 ("Plant Knowledge Explorer — Phase 1", after the desk crit); 
 - `?replay=focus:species=<id>;view:matrix;back;forward;q:<text>` is a test hook: it performs the steps and writes what the page showed after each into `<script id="replay-out">` (`tools/explorer_tests.py` K9–K11).
 - Type: Bricolage Grotesque for headings, DM Sans for everything else (scientific names in DM Sans italic), DM Mono for ids and provenance only.
 
+## V4.3 (2026-11-17): the data is drawn
+
+Nothing in the projection changed; the same records are shown with marks instead of words where a mark reads faster.
+
+- **Network.** Three strengths: the inspected line (full opacity, 3.8 px), the other records of the focus (30 %), the rest (< 10 %).
+  Words stand on the drawing only on the inspected line (its class) and on a conflicting line; every other line is named by the
+  legend, its tooltip and its accessible name. A lit node carries `+n`: the number of its drawn function links, claim lines and
+  live plant-to-plant records that are not in the picture, counted from the records. Focusing the node opens them.
+- **Matrix.** One mark per state, with its words in a legend that is always on screen (`#mkey`): recorded use (filled dot),
+  inferred (dashed ring), conflict (diamond beside the cell), no link · contradicted (quiet bar), no link · evidence missing
+  (empty dotted box). Every cell carries `data-k` with the state of its record.
+- **Table.** Opens as a visual sheet: Light, Height, Spread, Leaf retention, Flower colour, Flowering months, after Growth form
+  and Evidence. `Marks | Text` (address `tm=text`) switches every cell back to its recorded words. The renderers are in
+  `js/cells.js`, pure functions of the model and one record:
+
+  | Cell | Read from | Drawn |
+  |---|---|---|
+  | Growth form | `species.growth_form_label` | a glyph for Tree, Shrub, Herbaceous perennial, Fern, with the word; the record's own status word when it is not `supported` |
+  | Height, Spread | the claims of the `height_class` / `spread_class` cell | one lane per source on a logarithmic scale shared by the column (axis in the head): a bar per stated range, a tick per single figure, a tick with an open tail for "up to", a thin line with a median dot for a street-tree inventory (10th–90th percentile class); lighter for a cultivar, dashed under a condition. The words are the smallest and largest stated figure. The inventory's highest class is not drawn (it is in the Inspector) |
+  | Flower colour | `value.flower_colour` of the plant's `seasonal_interest` claims | each colour word with a swatch (an explicit word → colour table; any other word stays a word) and the number of sources; dashed swatch when only a cultivar claim states it |
+  | Flowering months | `value.flowering_months` of the same claims | twelve cells, one strip per statement, only the named months filled. A source that names a season in words has no strip |
+  | Light | the `exposure` cell | four fixed places, full sun → deep shade; an unrecorded place is a dot; a dashed ring when a second statement gives full sun only under a condition; an arch for Sheltered |
+  | Leaf retention | the `evergreen` cell | filled leaf evergreen, outlined leaf deciduous, both when both are recorded |
+  | Evidence (plant) | `species.claims`, the plant's cells | live claims and how many a person verified, as a bar and `verified/live`; the number of cells whose sources differ |
+  | Evidence (cell) | the cell | a check (a claim verified by a person), crossed equals (sources differ), a wave (varies by condition). An AI source check is never shown as verification |
+  | not recorded | no record | one dashed mark with the words, in every column |
+
+  Flower colour and Flowering months are views of recorded claims, not new records: a click opens the plant's Colour cell, whose
+  Inspector lists each source's flower colour and months. The Inspector of a size cell lists every statement. CSV export writes
+  the statements, never a merged value. The stored column preference moved to `pi.kn.table.v43`.
+
 ## V4.2 (2026-11-16): one action, one focus
 
 Nothing in the data or the model changed; what changed is what the page shows at each step. Every visual state is written by the renderers from the one page state (`S` in `js/app.js`), never toggled on an element.

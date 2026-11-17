@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-type="b">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -237,6 +237,50 @@
   @media (max-width: 1100px) { #main { flex-direction: row; } #inspector { position: fixed; top: 0; right: 0; bottom: 0; z-index: 60; width: min(380px, 100vw); border-left: 1px solid var(--line-2); border-top: 0; box-shadow: -18px 0 40px rgba(39,36,31,.16); } #ibody { overflow: auto; } #mcmp { flex-basis: 100%; } }
   @media (max-width: 620px) { .colpanel { grid-template-columns: 1fr; } table.attr th, table.attr td { max-width: 200px; } }
   @media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition: none !important; animation: none !important; } }
+
+  /* ---- V4.3 — data made readable. Network: three strengths (the inspected path, the focus's other records, the rest) and words
+     only on the inspected line. Matrix: one mark per state. Table: drawn cells (js/cells.js) over the same records. */
+  #svg text.elabel { paint-order: stroke; stroke: var(--bg); stroke-width: 4px; stroke-linejoin: round; } #svg text.elabel.sel { font: 600 11.5px var(--mono); fill: var(--ink); }
+  #svg.foc .edge.lit.dim:not(.hit) { stroke-opacity: .3; } #svg.foc.insp .edge.lit.sel:not(.hit), #svg.insp .edge.sel:not(.hit) { stroke-width: 3.8 !important; }
+  #svg.foc.insp .node.lit:not(.end):not(.focus) { opacity: .45; } #svg.foc.insp .node.focus:not(.end) { opacity: .8; }
+  #svg text.nbadge { font: 500 10px var(--mono); fill: var(--ink-3); pointer-events: none; } #svg .node.more:hover text.nbadge, #svg .node.more:focus-visible text.nbadge { fill: var(--olive-deep); }
+  #gkey i.more { border: 0; width: auto; font: 500 10.5px var(--mono); font-style: normal; color: var(--ink-3); } #gkey i.more::before { content: "+n"; }
+
+  #mkey { list-style: none; margin: 0 0 12px; padding: 0; display: flex; flex-wrap: wrap; gap: 6px 22px; max-width: 1180px; font-size: 12.5px; line-height: 1.4; color: var(--ink-3); }
+  #mkey li { display: inline-flex; align-items: center; gap: 6px; } #mkey b { font: 500 12.5px var(--sans); color: var(--ink); } #mkey span { color: var(--ink-3); }
+  .mk { flex: none; display: inline-block; width: 11px; height: 11px; border-radius: 50%; box-sizing: border-box; vertical-align: -1px; }
+  .mk.rec { background: var(--olive-deep); } .mk.inf { border: 1.6px dashed var(--amber-ink); background: transparent; }
+  .mk.out { width: 11px; height: 2px; border-radius: 1px; background: var(--ink-3); vertical-align: 4px; } .mk.gap { border-radius: 2px; border: 1.3px dotted var(--line-2); background: transparent; }
+  .mk.cf { width: 9px; height: 9px; border-radius: 1px; border: 1.6px solid var(--rust); transform: rotate(45deg); margin: 0 2px; }
+  table.matrix .cell { gap: 6px; } table.matrix .cell.unknown { flex-direction: row; align-items: center; gap: 7px; background: transparent; } table.matrix .cell .nl { display: inline-flex; flex-direction: column; text-align: left; line-height: 1.25; }
+  table.matrix .cell.unknown:not(.contradicted) { color: var(--ink-3); } table.matrix td .cf { display: flex; align-items: center; justify-content: center; gap: 4px; }
+
+  .seg.tm { display: inline-flex; } .seg.tm button { padding: 5px 12px; border: 1px solid var(--line-2); background: var(--panel); font: 500 12.5px/1.4 var(--sans); color: var(--ink-2); cursor: pointer; border-radius: 0; margin-left: -1px; } .seg.tm button:first-child { border-radius: 999px 0 0 999px; margin-left: 0; } .seg.tm button:last-child { border-radius: 0 999px 999px 0; }
+  .seg.tm button[aria-pressed="true"] { border-color: var(--olive-deep); background: var(--olive-soft); color: var(--olive-deep); position: relative; z-index: 1; }
+  #tlegend { flex: 0 0 100%; order: 10; } #tlegend[hidden] { display: none; } #tlegend > summary { display: inline-block; list-style: none; cursor: pointer; font: 500 12.5px var(--sans); color: var(--olive-deep); padding: 0 2px 2px; white-space: nowrap; } #tlegend > summary::-webkit-details-marker { display: none; } #tlegend > summary:hover { text-decoration: underline; text-underline-offset: 3px; }
+  .cx-legend { margin: 8px 0 6px; padding: 12px 0 2px; border-top: 1px solid var(--line); display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 10px 36px; max-height: 42vh; overflow: auto; }
+  .cx-legend p { margin: 0; display: grid; grid-template-columns: 132px 1fr; gap: 12px; align-items: start; font-size: 12.5px; line-height: 1.45; color: var(--ink-2); } .cx-legend b { font-weight: 600; color: var(--ink); } .cx-legend .lgm { display: flex; align-items: center; min-height: 22px; }
+
+  table.attr thead tr.cols th.hasaxis { padding-top: 5px; padding-bottom: 3px; } table.attr thead tr.cols th { height: 46px; vertical-align: bottom; padding-bottom: 7px; }
+  .cx-axis { display: block; margin-top: 3px; overflow: visible; } .cx-axis path { stroke: var(--line-2); stroke-width: 1; fill: none; } .cx-axis text { font: 400 9.5px var(--mono); fill: var(--ink-3); letter-spacing: 0; }
+  table.attr.marks td { max-width: none; } table.attr td .tc { gap: 6px; }
+  .cx { display: inline-flex; align-items: center; gap: 8px; min-width: 0; white-space: nowrap; } .cx .w { color: var(--ink); } .cx .w.n { font: 400 12.5px var(--mono); font-variant-numeric: tabular-nums; color: var(--ink-2); }
+  .cx-note { font: 400 11.5px var(--mono); color: var(--ink-3); } .cx-more { font: 400 12px var(--sans); color: var(--ink-3); }
+  .cx-nr { gap: 7px; color: var(--ink-3); font-style: normal; font-size: 12.5px; } .cx-nr svg { flex: none; } .cx-nr path { stroke: var(--line-2); stroke-width: 1.4; stroke-dasharray: 2.5 2.5; fill: none; } table.attr td.nr { font-style: normal; }
+  .cx-form .gl { flex: none; fill: none; stroke: var(--olive-deep); stroke-width: 1.3; stroke-linecap: round; stroke-linejoin: round; }
+  .cx-size svg, .cx-months svg { flex: none; overflow: visible; } .cx-size .grid { stroke: var(--line); stroke-width: 1; }
+  .cx-size .st { fill: none; stroke: var(--olive-deep); stroke-width: 3; stroke-linecap: butt; } .cx-size .st.cv { stroke: var(--sage); } .cx-size .st.cond { stroke-dasharray: 3 1.6; }
+  .cx-size .st.tick { stroke-width: 1.6; } .cx-size .st.occ { stroke-width: 1; stroke: var(--olive); stroke-dasharray: 1.5 2; } .cx-size .st.inv { stroke-width: 1; stroke: var(--ink-2); } .cx-size .st.invdot { fill: var(--ink-2); stroke: none; }
+  .cx-size .w.n { min-width: 56px; } .cx-light .lt .also { stroke: var(--amber-ink); stroke-width: 1; stroke-dasharray: 1.6 1.8; } .cx-leaf.two { flex-direction: column; align-items: flex-start; gap: 0; line-height: 1.3; } .cx-leaf.two .lf { width: 13px; height: 13px; } .cx-form .w { white-space: normal; line-height: 1.2; max-width: 80px; } .cx-form .cx-note { display: block; } .cx-light .lt.sh { stroke: var(--ink-3); margin-left: 4px; } table.attr.marks th, table.attr.marks td { padding-left: 7px; padding-right: 7px; } table.attr.marks tbody th, table.attr.marks thead th:first-child { padding-left: 12px; }
+  .cx-months rect.off { fill: rgba(39,36,31,.055); } .cx-months rect.on { fill: var(--amber); } .cx-months rect.on.cv { fill: var(--amber-soft); stroke: var(--amber); stroke-width: .6; }
+  .cx-col { gap: 8px; } .cx .cw { display: inline-flex; align-items: center; gap: 5px; } .cx .sw { flex: none; width: 11px; height: 11px; border-radius: 50%; border: 1px solid rgba(39,36,31,.28); box-sizing: border-box; } .cx .sw.cv { border-style: dashed; border-color: var(--ink-2); }
+  .cx-light { gap: 3px; } .cx-light .lt { flex: none; fill: none; stroke: var(--ink); stroke-width: 1.25; stroke-linecap: round; } .cx-light .lt .f { fill: var(--ink); stroke: none; } .cx-light .lt.deep .f { stroke: var(--ink); }
+  .cx-light .lt.full { stroke: var(--amber-ink); } .cx-light .lt.cond { stroke-dasharray: 2 1.6; } .cx-light .lt.none circle { fill: var(--line-2); stroke: none; } .cx-light .cx-note { margin-left: 5px; }
+  .cx-leaf { gap: 10px; } .cx-leaf .lf { flex: none; stroke: var(--olive-deep); stroke-width: 1.3; stroke-linejoin: round; fill: none; } .cx-leaf .lf.ever > path:first-child { fill: var(--olive-deep); } .cx-leaf .lf.ever .mid { stroke: var(--panel); } .cx-leaf .lf .f { fill: var(--olive-deep); stroke: none; } .cx-leaf .lf .mid { stroke-width: 1; }
+  .ev { flex: none; display: inline-flex; align-items: center; gap: 4px; margin-left: auto; padding-left: 6px; } .ev .pips { display: inline-flex; align-items: center; gap: 3px; font: 400 11.5px var(--mono); color: var(--ink-3); } .ev .pips i { width: 5px; height: 5px; border-radius: 50%; background: var(--ink-3); }
+  .ev svg, .evd svg { flex: none; fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; } .ev-v { stroke: var(--olive-deep); } .ev-d { stroke: var(--rust); } .ev-c { stroke: var(--amber-ink); }
+  table.attr td .tc { width: 100%; } .cx-ev .tr { fill: rgba(39,36,31,.09); } .cx-ev .vf { fill: var(--olive-deep); } .cx-ev .evd { display: inline-flex; align-items: center; gap: 2px; }
+  table.cmp.fst td, table.cmp.fst th { font-size: 12.5px; } ul.fsz { margin: 4px 0 10px; padding-left: 18px; } ul.fsz li { margin: 2px 0; }
 </style>
 </head>
 <body>
