@@ -19,6 +19,7 @@ export function newProject(name = 'Untitled backyard') {
       features: [], beds: [], proposals: null, history: [],
       concept: null,   // the conceptual site model (js/concept.js): a unitless sketch, kept apart from the metre geometry above
       scratch: false,   // the user chose to draw everything themself: nothing read from words is placed for them
+      terrain: null,   // topography (js/terrain.js): one elevation grid with status · source · provenance, or null = elevation unknown. z never enters the x/y geometry above
       conditions: { light: cond(), soil_type: cond(), soil_drainage: cond(), water: cond(), wind: cond(), irrigation: cond() },
       values: [], notes: [],
     },

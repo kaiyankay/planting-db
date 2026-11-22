@@ -1,0 +1,1770 @@
+{
+ "recorded": "2026-11-21",
+ "by": "tools/topo_tests.py ← design/js/toposcript.js (?script=topo)",
+ "site": "8 × 5 m backyard; north fence; an existing tree on the east; mainly partial shade; privacy wanted; low maintenance after establishment.",
+ "stops": [
+  "a-unknown",
+  "a-photo",
+  "a-gray",
+  "a-slope-preview",
+  "a-slope-plan",
+  "a-heightmap",
+  "a-slope-3d",
+  "a-edit-preview",
+  "a-edit-3d",
+  "a-gate-preview",
+  "a-gate-applied",
+  "a-compose",
+  "a-grow-plan",
+  "a-grow-3d",
+  "b-strip",
+  "b-north-none",
+  "b-north-layered",
+  "b-north-woodland",
+  "b-island-none",
+  "b-island-woodland",
+  "b-grow-plan",
+  "b-grow-why",
+  "b-grow-algo",
+  "b-grow-present",
+  "b-grow-3d",
+  "ab-compose",
+  "ab-grow-plan",
+  "ab-grow-3d"
+ ],
+ "A": {
+  "site": {
+   "stage": "site",
+   "size_m": [
+    8,
+    5
+   ],
+   "scale": "user-stated",
+   "tree": [
+    {
+     "at": [
+      7,
+      2.5
+     ],
+     "status": "inferred"
+    }
+   ],
+   "light": {
+    "value": "part-shade",
+    "status": "user-stated",
+    "source": "conversation: \"partial shade\"",
+    "note": null
+   },
+   "beds": [
+    {
+     "name": "North bed",
+     "functions": [
+      "z:screen",
+      "z:ground_cover"
+     ],
+     "area_m2": 9.6
+    },
+    {
+     "name": "East bed",
+     "functions": [
+      "z:ground_cover"
+     ],
+     "area_m2": 3.8
+    },
+    {
+     "name": "West bed",
+     "functions": [
+      "z:ground_cover"
+     ],
+     "area_m2": 3.8
+    },
+    {
+     "name": "Tree island",
+     "functions": [
+      "z:ground_cover"
+     ],
+     "area_m2": 4.43
+    }
+   ]
+  },
+  "unknown": {
+   "terrain": null,
+   "bar": "unknown",
+   "bar_text": "Elevation unknown",
+   "sampleZ": null,
+   "analyse": "Elevation unknown. No slope, no aspect, no low spots — nothing is assumed about the ground.",
+   "contours_drawn": 0,
+   "dry": {
+    "plants": 64,
+    "by_bed": {
+     "North bed": 19,
+     "East bed": 16,
+     "West bed": 14,
+     "Tree island": 15
+    },
+    "excluded": 0,
+    "screen": [
+     {
+      "status": "uncertain",
+      "covered_m": 8,
+      "edge_m": 8,
+      "gaps": 0
+     }
+    ],
+    "valid": true
+   }
+  },
+  "photo": {
+   "use": "reference-only",
+   "analysed": false,
+   "colour_share": 0.9875,
+   "shown_as": "reference-only",
+   "says_not_analysed": "not analysed",
+   "confirm_button": false,
+   "terrain_after": false,
+   "refused": true
+  },
+  "gray": {
+   "use": "needs-confirmation",
+   "analysed": false,
+   "confirm_button": true,
+   "terrain_before_confirm": false,
+   "unconfirmed": true,
+   "draft": {
+    "status": "conceptual",
+    "source_type": "imported-grayscale",
+    "range": null,
+    "has_metres": false,
+    "sampleZ": null,
+    "norm_high": 0.984,
+    "norm_low": 0,
+    "chip": "conceptual",
+    "relative_note": true,
+    "impact_why": "no position changes: the terrain has relative heights only, so there is no slope to read."
+   },
+   "discarded": true
+  },
+  "slope": {
+   "draft": {
+    "status": "conceptual",
+    "source_type": "procedural-demo",
+    "range": [
+     0,
+     0.25
+    ],
+    "assumptions": [
+     "falls toward the south by 0.25 m over 5 m (5 %) — an assumed 5 % fall"
+    ]
+   },
+   "preview_contours": 128,
+   "applied_before_apply": false,
+   "impact": {
+    "before": 64,
+    "after": 64,
+    "changed": false,
+    "why": "no position changes: the slope gate is off, so slope limits nothing. Plants keep their x and y and take the ground height under them"
+   },
+   "impact_text": "no position changes: the slope gate is off, so slope limits nothing. Plants keep their x and y and take the ground height under them.",
+   "applied": {
+    "status": "conceptual",
+    "fp": "t-i0vg1w",
+    "bar": "conceptual"
+   },
+   "z": {
+    "north": 0.25,
+    "centre": 0.125,
+    "south": 0
+   },
+   "slope_centre": {
+    "pct": 5,
+    "deg": 2.86,
+    "ratio": "1 : 20",
+    "aspect_deg": 180,
+    "dzdx": 0,
+    "dzdy": 0.050000000000000044
+   },
+   "analyse": {
+    "relief_m": 0.25,
+    "mean_pct": 5,
+    "max_pct": 5,
+    "fall": {
+     "pct": 5,
+     "toward": "south"
+    },
+    "low_spots": 0
+   },
+   "dry": {
+    "plants": 64,
+    "by_bed": {
+     "North bed": 19,
+     "East bed": 16,
+     "West bed": 14,
+     "Tree island": 15
+    },
+    "excluded": 0,
+    "screen": [
+     {
+      "status": "uncertain",
+      "covered_m": 8,
+      "edge_m": 8,
+      "gaps": 0
+     }
+    ],
+    "valid": true
+   },
+   "same_positions_as_no_terrain": true,
+   "plant_ground": [
+    {
+     "at": [
+      7.66,
+      4.62
+     ],
+     "ground": {
+      "z_m": 0.23,
+      "slope_pct": 5,
+      "aspect": "south",
+      "terrain_status": "conceptual"
+     }
+    },
+    {
+     "at": [
+      6.74,
+      4.37
+     ],
+     "ground": {
+      "z_m": 0.22,
+      "slope_pct": 5,
+      "aspect": "south",
+      "terrain_status": "conceptual"
+     }
+    },
+    {
+     "at": [
+      5.83,
+      4.62
+     ],
+     "ground": {
+      "z_m": 0.23,
+      "slope_pct": 5,
+      "aspect": "south",
+      "terrain_status": "conceptual"
+     }
+    }
+   ],
+   "fixed_unchanged": true,
+   "plan_fp": "t-i0vg1w",
+   "heightmap": {
+    "cells": 640,
+    "expect_cells": 640,
+    "fp": "t-i0vg1w",
+    "contours": 128
+   },
+   "t3d": {
+    "mesh": true,
+    "key": "t-i0vg1w|1|0",
+    "same_grid_as_plan": true,
+    "y_range": [
+     0,
+     0.25
+    ],
+    "expect_y_range": [
+     0,
+     0.25
+    ],
+    "contours": 128,
+    "z_at_north": 0.25,
+    "expect_z_at_north": 0.25
+   }
+  },
+  "edit": {
+   "at": [
+    2,
+    4.4
+   ],
+   "z_before": 0.22,
+   "z_after_draft": 1.148,
+   "slope_before_pct": 5,
+   "slope_after_pct": 104.75,
+   "applied_z_while_draft": 0.22,
+   "draft_source": "user-drawn-heightmap",
+   "draft_status": "conceptual",
+   "plan_fp_is_draft": true,
+   "far_point_unchanged": true,
+   "impact": {
+    "before": 64,
+    "after": 64,
+    "changed": false,
+    "why": "no position changes: the slope gate is off, so slope limits nothing. Plants keep their x and y and take the ground height under them"
+   },
+   "t3d": {
+    "key_is_draft": true,
+    "z_at": 1.148,
+    "expect": 1.148,
+    "y_max": 1.18
+   },
+   "applied_z": 1.148,
+   "gate_off": {
+    "dry": {
+     "plants": 64,
+     "by_bed": {
+      "North bed": 19,
+      "East bed": 16,
+      "West bed": 14,
+      "Tree island": 15
+     },
+     "excluded": 0,
+     "screen": [
+      {
+       "status": "uncertain",
+       "covered_m": 8,
+       "edge_m": 8,
+       "gaps": 0
+      }
+     ],
+     "valid": true
+    },
+    "same_positions_as_no_terrain": true,
+    "steepest_in_north_bed": 114.13
+   },
+   "history": 2
+  },
+  "gate": {
+   "thresholds": {
+    "20": {
+     "plants": 56,
+     "excluded": 16
+    },
+    "25": {
+     "plants": 57,
+     "excluded": 15
+    },
+    "33": {
+     "plants": 58,
+     "excluded": 14
+    },
+    "50": {
+     "plants": 60,
+     "excluded": 12
+    }
+   },
+   "below_threshold": {
+    "max_slope_pct": 5,
+    "limit": 33,
+    "excluded": 0,
+    "same_positions_as_no_terrain": true
+   },
+   "preview": {
+    "draft": true,
+    "applied_gate_still_off": true,
+    "impact": {
+     "before": 64,
+     "after": 58,
+     "changed": true,
+     "excluded": 14,
+     "why": "North bed: 14 wanted positions fall on ground steeper than 33 % and are left unplanted",
+     "beds": [
+      {
+       "name": "North bed",
+       "before": 19,
+       "after": 13,
+       "excluded": 14,
+       "screen": {
+        "before": "8 of 8 m, uncertain",
+        "after": "5.1 of 8 m, not met",
+        "changed": true
+       }
+      }
+     ]
+    },
+    "marks_on_plan": 14,
+    "steep_cells_on_plan": 56,
+    "heuristic_label": true,
+    "says_not_species": true
+   },
+   "applied": {
+    "dry": {
+     "plants": 58,
+     "by_bed": {
+      "North bed": 13,
+      "East bed": 16,
+      "West bed": 14,
+      "Tree island": 15
+     },
+     "excluded": 14,
+     "screen": [
+      {
+       "status": "not met",
+       "covered_m": 5.1,
+       "edge_m": 8,
+       "gaps": 1
+      }
+     ],
+     "valid": true
+    },
+    "excluded": [
+     {
+      "bed_id": "bed-1",
+      "position_m": [
+       3.09,
+       4.37
+      ],
+      "slope_pct": 55.62,
+      "limit_pct": 33,
+      "wanted_for": "screen row"
+     },
+     {
+      "bed_id": "bed-1",
+      "position_m": [
+       2.17,
+       4.62
+      ],
+      "slope_pct": 56.38,
+      "limit_pct": 33,
+      "wanted_for": "screen row"
+     },
+     {
+      "bed_id": "bed-1",
+      "position_m": [
+       1.26,
+       4.37
+      ],
+      "slope_pct": 78.04,
+      "limit_pct": 33,
+      "wanted_for": "screen row"
+     },
+     {
+      "bed_id": "bed-1",
+      "position_m": [
+       1.32,
+       4.04
+      ],
+      "slope_pct": 74.91,
+      "limit_pct": 33,
+      "wanted_for": "ground"
+     },
+     {
+      "bed_id": "bed-1",
+      "position_m": [
+       1.72,
+       4.06
+      ],
+      "slope_pct": 108.86,
+      "limit_pct": 33,
+      "wanted_for": "ground"
+     },
+     {
+      "bed_id": "bed-1",
+      "position_m": [
+       2.31,
+       4.08
+      ],
+      "slope_pct": 110.48,
+      "limit_pct": 33,
+      "wanted_for": "ground"
+     },
+     {
+      "bed_id": "bed-1",
+      "position_m": [
+       2.82,
+       4.06
+      ],
+      "slope_pct": 82.67,
+      "limit_pct": 33,
+      "wanted_for": "ground"
+     },
+     {
+      "bed_id": "bed-1",
+      "position_m": [
+       3.21,
+       4.07
+      ],
+      "slope_pct": 34.32,
+      "limit_pct": 33,
+      "wanted_for": "ground"
+     },
+     {
+      "bed_id": "bed-1",
+      "position_m": [
+       1,
+       4.48
+      ],
+      "slope_pct": 42.54,
+      "limit_pct": 33,
+      "wanted_for": "ground"
+     },
+     {
+      "bed_id": "bed-1",
+      "position_m": [
+       1.51,
+       4.56
+      ],
+      "slope_pct": 103.05,
+      "limit_pct": 33,
+      "wanted_for": "ground"
+     },
+     {
+      "bed_id": "bed-1",
+      "position_m": [
+       2.5,
+       4.45
+      ],
+      "slope_pct": 98.8,
+      "limit_pct": 33,
+      "wanted_for": "ground"
+     },
+     {
+      "bed_id": "bed-1",
+      "position_m": [
+       3.09,
+       4.55
+      ],
+      "slope_pct": 55.33,
+      "limit_pct": 33,
+      "wanted_for": "ground"
+     },
+     {
+      "bed_id": "bed-1",
+      "position_m": [
+       2.28,
+       4.9
+      ],
+      "slope_pct": 105.85,
+      "limit_pct": 33,
+      "wanted_for": "ground"
+     },
+     {
+      "bed_id": "bed-1",
+      "position_m": [
+       2.76,
+       4.89
+      ],
+      "slope_pct": 81.63,
+      "limit_pct": 33,
+      "wanted_for": "ground"
+     }
+    ],
+    "every_excluded_over_limit": true,
+    "no_plant_over_limit": true,
+    "fixed_unchanged": true,
+    "other_beds_same": true,
+    "unresolved": [
+     "14 positions not planted: the ground there is steeper than the 33 % planting limit (slope gate, a design heuristic) — North bed"
+    ],
+    "findings": [
+     "Ground Cover (North bed): 2.68 m² of the bed is steeper than the planting limit and is left out of the plantable ground (slope gate, a design heuristic)",
+     "Slope gate (North bed): 14 positions left unplanted: ground steeper than 33 % (2.68 m² of the bed; steepest 114.13 %). A design heuristic, not a species tolerance"
+    ],
+    "marks_on_plan": 14,
+    "assumptions": [
+     "terrain: drawn by hand; relief 1.18 m (0–1.18 m). A concept the user set — not a survey. falls toward the south by 0.25 m over 5 m (5 %) — an assumed 5 % fall",
+     "slope gate on at 33 %: 14 wanted positions left unplanted on steeper ground. design heuristic: no plant is placed on ground steeper than this slope (default 33 %, about 1 : 3). It is a working limit for planting and upkeep chosen by the implementer — not a slope tolerance recorded for any species, and not from a source. Adjustable."
+    ]
+   }
+  },
+  "grow": {
+   "version": "v-3lqmb",
+   "plants": 58,
+   "same_as_preview": true,
+   "terrain": {
+    "fp": "t-1lrtoaw",
+    "status": "conceptual",
+    "gate": {
+     "enabled": true,
+     "max_slope_pct": 33,
+     "source": "heuristic"
+    },
+    "excluded": 14
+   },
+   "every_plant_has_ground": true,
+   "ground_matches_sampleZ": true,
+   "schedule_sum": 58,
+   "plan_plants": 58,
+   "marks_on_plan": 14,
+   "grow_terrain_panel": "conceptual",
+   "evaluation": {
+    "gate": {
+     "enabled": true,
+     "max_slope_pct": 33,
+     "source": "heuristic"
+    },
+    "beds": [
+     {
+      "bed_id": "bed-1",
+      "name": "North bed",
+      "mean_slope_pct": 27.87,
+      "max_slope_pct": 114.13,
+      "steep_m2": 2.68,
+      "steep_share": 0.2792,
+      "excluded_positions": 14,
+      "plants": 13,
+      "ground_z_range_m": [
+       0.2,
+       1.16
+      ]
+     },
+     {
+      "bed_id": "bed-2",
+      "name": "East bed",
+      "mean_slope_pct": 5.03,
+      "max_slope_pct": 5.05,
+      "steep_m2": 0,
+      "steep_share": 0,
+      "excluded_positions": 0,
+      "plants": 16,
+      "ground_z_range_m": [
+       0.01,
+       0.18
+      ]
+     },
+     {
+      "bed_id": "bed-3",
+      "name": "West bed",
+      "mean_slope_pct": 5.33,
+      "max_slope_pct": 20.68,
+      "steep_m2": 0,
+      "steep_share": 0,
+      "excluded_positions": 0,
+      "plants": 14,
+      "ground_z_range_m": [
+       0.02,
+       0.18
+      ]
+     },
+     {
+      "bed_id": "bed-4",
+      "name": "Tree island",
+      "mean_slope_pct": 5.03,
+      "max_slope_pct": 5.05,
+      "steep_m2": 0,
+      "steep_share": 0,
+      "excluded_positions": 0,
+      "plants": 15,
+      "ground_z_range_m": [
+       0.05,
+       0.17
+      ]
+     }
+    ]
+   },
+   "g3": {
+    "mesh": true,
+    "plants": 58,
+    "plants_on_ground": true,
+    "max_plant_y": 1.159,
+    "same_grid": true
+   }
+  },
+  "after_reset": {
+   "elevation": "Elevation unknown",
+   "version_untouched": true,
+   "dry_back_to_no_terrain": true,
+   "grow_terrain_stale_or_unknown": "conceptual"
+  },
+  "after_undo": {
+   "status": "conceptual",
+   "fp_restored": true
+  }
+ },
+ "B": {
+  "snapshot": "2026-11-13",
+  "seed": 42,
+  "terrain": "Elevation unknown",
+  "strip": {
+   "closed_by_default": true,
+   "text": "Planting systemnonesuggested: Layered Screeningcompare",
+   "cards_rendered": 0,
+   "opened_by_click": true
+  },
+  "north": {
+   "recommended": "layered-screen",
+   "basis": "rule",
+   "confirmed": false,
+   "why": "this bed has a Screen on one of its edges: a row needs a lower layer at its foot",
+   "shown_suggested": "layered-screen",
+   "shown_now": "none",
+   "rec_text": "Suggested: Layered Screening — this bed has a Screen on one of its edges: a row needs a lower layer at its foot. A suggestion by rule, not a decision: nothing is set until you choose.",
+   "cards": {
+    "none": {
+     "level": "applies",
+     "plants": 19,
+     "chosen": true,
+     "suggested": false,
+     "clickable": true,
+     "why": null,
+     "text": "No systemchoseneach function arranged on its own, as before19 plants · 3 speciesScreen 8 of 8 m (uncertain) · 7 % ground under crowns"
+    },
+    "layered-screen": {
+     "level": "applies",
+     "plants": 19,
+     "chosen": false,
+     "suggested": true,
+     "clickable": true,
+     "why": null,
+     "text": "Layered Screeningsuggesteda boundary screen with a lower layer at its footStructureGroundSeasonal acce19 plants · 4 species · roles 2/2 required, 1/1 optionalScreen 100 % of the edge (uncertain) · 1.15 m between layers · 7 % ground under crowns · 2 accentspart"
+    },
+    "woodland-edge": {
+     "level": "applies",
+     "plants": 125,
+     "chosen": false,
+     "suggested": false,
+     "clickable": true,
+     "why": null,
+     "text": "Woodland Edgelayers organised by an existing treeCanopyGroundShrubsGroundSpring epheme125 plants · 3 species · roles 2/2 required, 2/3 optional18 % of the ground under the crown covered · 1 shrub group · 70 % of ground plants evergreen · 70 % ground under crow"
+    },
+    "matrix": {
+     "level": "unavailable",
+     "plants": null,
+     "chosen": false,
+     "suggested": false,
+     "clickable": false,
+     "why": "insufficient species/role evidence: Long-lived matrix — the database has no “longevity” facet: this role cannot be evidenced for any species; Emergent perennials — the database has no “longevity” facet: this role cannot be evidenced for any species",
+     "text": "Matrix Plantinginsufficient species/role evidencea stable base with emergents through itinsufficient species/role evidence: Long-lived matrix — the database has no “longevity” facet: this role cannot be evidenced for any species; Emergent perennials — the data"
+    }
+   },
+   "none": {
+    "system": null,
+    "plants": 19,
+    "species": [
+     "plant:arctostaphylos-uva-ursi",
+     "plant:gaultheria-shallon",
+     "plant:vaccinium-ovatum"
+    ],
+    "roles": {
+     "screen": 9,
+     "ground": 10
+    },
+    "screen": {
+     "status": "uncertain",
+     "covered_m": 8,
+     "edge_m": 8
+    },
+    "ground_share": 0.07,
+    "role_fulfilment": null,
+    "unresolved": [],
+    "metrics": null,
+    "layers": [],
+    "sig": "bed-1|plant:arctostaphylos-uva-ursi|ground|0.19|4.09;bed-1|plant:arctostaphylos-uva-ursi|ground|0.77|4.07;bed-1|plant:arctostaphylos-uva-ursi|ground|1.72|4.06;bed-1|plant:arctostaphylos-uva-ursi|ground|2.31|4.08;bed-1|plant:arctostaphylos-uva-ursi|ground|2.5|4.45;bed-1|plant:arctostaphylos-uva-ursi|ground|2.76|4.89;bed-1|plant:arctostaphylos-uva-ursi|ground|3.3|4.9;bed-1|plant:arctostaphylos-uva-ursi|ground|3.62|4.52;bed-1|plant:arctostaphylos-uva-ursi|ground|6.37|4.07;bed-1|plant:arctostaphylos-uva-ursi|ground|7.27|4.12;bed-1|plant:gaultheria-shallon|screen|0.34|4.62;bed-1|plant:gaultheria-shallon|screen|2.17|4.62;bed-1|plant:gaultheria-shallon|screen|4|4.62;bed-1|plant:gaultheria-shallon|screen|5.83|4.62;bed-1|plant:gaultheria-shallon|screen|7.66|4.62;bed-1|plant:vaccinium-ovatum|screen|1.26|4.37;bed-1|plant:vaccinium-ovatum|screen|3.09|4.37;bed-1|plant:vaccinium-ovatum|screen|4.91|4.37;bed-1|plant:vaccinium-ovatum|screen|6.74|4.37",
+    "operators": [
+     "along_edge",
+     "fill_drift"
+    ]
+   },
+   "layered": {
+    "system": "layered-screen",
+    "plants": 19,
+    "species": [
+     "plant:achillea-millefolium",
+     "plant:arctostaphylos-uva-ursi",
+     "plant:gaultheria-shallon",
+     "plant:vaccinium-ovatum"
+    ],
+    "roles": {
+     "structural-screen": 9,
+     "ground-matrix": 8,
+     "seasonal-accent": 2
+    },
+    "screen": {
+     "status": "uncertain",
+     "covered_m": 8,
+     "edge_m": 8
+    },
+    "ground_share": 0.07,
+    "role_fulfilment": {
+     "required": 2,
+     "required_filled": 2,
+     "optional": 1,
+     "optional_filled": 1
+    },
+    "unresolved": [],
+    "metrics": {
+     "ground_cover": {
+      "value": 0.07,
+      "unit": "share of the plantable ground under ground-layer crowns",
+      "plants": 10
+     },
+     "screen_continuity": {
+      "value": 1,
+      "unit": "share of the screened edge under a structure-layer crown",
+      "status": "uncertain",
+      "gaps": 0
+     },
+     "layer_separation": {
+      "value": 1.15,
+      "unit": "m between the lowest structure plant and the tallest ground plant (claimed heights used for the plan)",
+      "structure_m": 1.25,
+      "ground_m": 0.1
+     },
+     "accents": {
+      "value": 2,
+      "unit": "accent plants"
+     },
+     "role_fulfilment": {
+      "value": "2 of 2",
+      "unit": "required roles filled",
+      "optional": "1 of 1"
+     }
+    },
+    "layers": [
+     {
+      "role": "structural-screen",
+      "status": "filled",
+      "required": true,
+      "species": [
+       "plant:gaultheria-shallon",
+       "plant:vaccinium-ovatum"
+      ],
+      "fit": [
+       "uncertain",
+       "uncertain"
+      ],
+      "gap": null,
+      "plants": 9
+     },
+     {
+      "role": "ground-matrix",
+      "status": "filled",
+      "required": true,
+      "species": [
+       "plant:arctostaphylos-uva-ursi",
+       "plant:polystichum-munitum"
+      ],
+      "fit": [
+       "uncertain",
+       "uncertain"
+      ],
+      "gap": null,
+      "plants": 8
+     },
+     {
+      "role": "seasonal-accent",
+      "status": "filled",
+      "required": false,
+      "species": [
+       "plant:achillea-millefolium"
+      ],
+      "fit": [
+       "uncertain"
+      ],
+      "gap": null,
+      "plants": 2
+     }
+    ],
+    "sig": "bed-1|plant:achillea-millefolium|accent|1.72|4.06;bed-1|plant:achillea-millefolium|accent|3.3|4.9;bed-1|plant:arctostaphylos-uva-ursi|ground|0.19|4.09;bed-1|plant:arctostaphylos-uva-ursi|ground|0.77|4.07;bed-1|plant:arctostaphylos-uva-ursi|ground|2.31|4.08;bed-1|plant:arctostaphylos-uva-ursi|ground|2.5|4.45;bed-1|plant:arctostaphylos-uva-ursi|ground|2.76|4.89;bed-1|plant:arctostaphylos-uva-ursi|ground|3.62|4.52;bed-1|plant:arctostaphylos-uva-ursi|ground|6.37|4.07;bed-1|plant:arctostaphylos-uva-ursi|ground|7.27|4.12;bed-1|plant:gaultheria-shallon|screen|0.34|4.62;bed-1|plant:gaultheria-shallon|screen|2.17|4.62;bed-1|plant:gaultheria-shallon|screen|4|4.62;bed-1|plant:gaultheria-shallon|screen|5.83|4.62;bed-1|plant:gaultheria-shallon|screen|7.66|4.62;bed-1|plant:vaccinium-ovatum|screen|1.26|4.37;bed-1|plant:vaccinium-ovatum|screen|3.09|4.37;bed-1|plant:vaccinium-ovatum|screen|4.91|4.37;bed-1|plant:vaccinium-ovatum|screen|6.74|4.37",
+    "operators": [
+     "along_edge",
+     "fill_drift",
+     "repeat_accent"
+    ],
+    "change": {
+     "from": "No system",
+     "to": "Layered Screening",
+     "lines": [
+      "roles before: 9 screen, 10 ground",
+      "roles after: 9 structural screen, 8 ground matrix, 2 seasonal accent"
+     ]
+    },
+    "detail": true,
+    "tunes": [
+     {
+      "k": "accent_every",
+      "flat": false
+     },
+     {
+      "k": "matrix_species",
+      "flat": false
+     }
+    ]
+   },
+   "param": {
+    "param": "accent_every 4 → 0",
+    "before_roles": {
+     "structural-screen": 9,
+     "ground-matrix": 8,
+     "seasonal-accent": 2
+    },
+    "after_roles": {
+     "structural-screen": 9,
+     "ground-matrix": 10
+    },
+    "changed": true,
+    "change": [
+     "roles before: 9 structural screen, 8 ground matrix, 2 seasonal accent",
+     "roles after: 9 structural screen, 10 ground matrix",
+     "how many ground positions one accent replaces — a heuristic of the preset"
+    ]
+   },
+   "woodland": {
+    "system": "woodland-edge",
+    "plants": 125,
+    "species": [
+     "plant:achillea-millefolium",
+     "plant:arctostaphylos-uva-ursi",
+     "plant:vaccinium-ovatum"
+    ],
+    "roles": {
+     "understory-shrub": 1,
+     "open-ground": 124
+    },
+    "screen": {
+     "status": "not met",
+     "covered_m": 0,
+     "edge_m": 8
+    },
+    "ground_share": 0.7,
+    "role_fulfilment": {
+     "required": 2,
+     "required_filled": 2,
+     "optional": 3,
+     "optional_filled": 2
+    },
+    "unresolved": [
+     "spring-ephemeral"
+    ],
+    "metrics": {
+     "ground_cover": {
+      "value": 0.7,
+      "unit": "share of the plantable ground under ground-layer crowns",
+      "plants": 124
+     },
+     "canopy_ground": {
+      "value": 0.18,
+      "unit": "share of the plantable ground under the crown that lies under a ground-layer crown",
+      "under_canopy_m2": 0.22
+     },
+     "winter_presence": {
+      "value": 0.7,
+      "unit": "share of the ground-layer plants whose species is recorded Evergreen only",
+      "plants": 87,
+      "of": 124
+     },
+     "understory": {
+      "value": 1,
+      "unit": "shrub groups at the crown edge",
+      "plants": 1,
+      "expected": 3
+     },
+     "role_fulfilment": {
+      "value": "2 of 2",
+      "unit": "required roles filled",
+      "optional": "2 of 3"
+     }
+    },
+    "layers": [
+     {
+      "role": "existing-canopy",
+      "status": "provided by the site",
+      "required": true,
+      "species": [],
+      "fit": [],
+      "gap": null,
+      "plants": 0
+     },
+     {
+      "role": "winter-ground",
+      "status": "filled",
+      "required": true,
+      "species": [
+       "plant:gaultheria-shallon",
+       "plant:polystichum-munitum"
+      ],
+      "fit": [
+       "uncertain",
+       "uncertain"
+      ],
+      "gap": null,
+      "plants": 0
+     },
+     {
+      "role": "understory-shrub",
+      "status": "filled",
+      "required": false,
+      "species": [
+       "plant:vaccinium-ovatum"
+      ],
+      "fit": [
+       "uncertain"
+      ],
+      "gap": null,
+      "plants": 1
+     },
+     {
+      "role": "open-ground",
+      "status": "filled",
+      "required": false,
+      "species": [
+       "plant:arctostaphylos-uva-ursi",
+       "plant:achillea-millefolium"
+      ],
+      "fit": [
+       "uncertain",
+       "uncertain"
+      ],
+      "gap": null,
+      "plants": 124
+     },
+     {
+      "role": "spring-ephemeral",
+      "status": "empty",
+      "required": false,
+      "species": [],
+      "fit": [],
+      "gap": "insufficient evidence: the database has no “phenology” facet: this role cannot be evidenced for any species",
+      "plants": 0
+     }
+    ],
+    "sig": "bed-1|plant:achillea-millefolium|ground|0.91|4.9;bed-1|plant:achillea-millefolium|ground|3.73|4.42;bed-1|plant:achillea-millefolium|ground|3.81|3.92;bed-1|plant:achillea-millefolium|ground|3.8|4.24;bed-1|plant:achillea-millefolium|ground|3.92|4.07;bed-1|plant:achillea-millefolium|ground|3.98|4.58;bed-1|plant:achillea-millefolium|ground|4.01|4.91;bed-1|plant:achillea-millefolium|ground|4.11|4.4;bed-1|plant:achillea-millefolium|ground|4.21|4.59;bed-1|plant:achillea-millefolium|ground|4.22|3.92;bed-1|plant:achillea-millefolium|ground|4.23|4.25;bed-1|plant:achillea-millefolium|ground|4.42|4.24;bed-1|plant:achillea-millefolium|ground|4.47|4.43;bed-1|plant:achillea-millefolium|ground|4.56|4.59;bed-1|plant:achillea-millefolium|ground|4.58|3.93;bed-1|plant:achillea-millefolium|ground|4.66|4.44;bed-1|plant:achillea-millefolium|ground|4.68|4.76;bed-1|plant:achillea-millefolium|ground|4.77|4.25;bed-1|plant:achillea-millefolium|ground|4.79|3.92;bed-1|plant:achillea-millefolium|ground|4.87|4.44;bed-1|plant:achillea-millefolium|ground|4.89|4.73;bed-1|plant:achillea-millefolium|ground|4.9|4.08;bed-1|plant:achillea-millefolium|ground|5.14|4.24;bed-1|plant:achillea-millefolium|ground|5.14|4.57;bed-1|plant:achillea-millefolium|ground|5.19|4.9;bed-1|plant:achillea-millefolium|ground|5.25|4.04;bed-1|plant:achillea-millefolium|ground|5.27|4.43;bed-1|plant:achillea-millefolium|ground|5.36|4.2;bed-1|plant:achillea-millefolium|ground|5.46|4.76;bed-1|plant:achillea-millefolium|ground|5.55|3.91;bed-1|plant:achillea-millefolium|ground|5.55|4.22;bed-1|plant:achillea-millefolium|ground|5.56|4.58;bed-1|plant:achillea-millefolium|ground|5.62|4.39;bed-1|plant:achillea-millefolium|ground|5.67|4.75;bed-1|plant:achillea-millefolium|ground|5.83|4.1;bed-1|plant:achillea-millefolium|ground|5.84|4.44;bed-1|plant:achillea-millefolium|ground|5.86|4.75;bed-1|plant:arctostaphylos-uva-ursi|ground|0.09|4.27;bed-1|plant:arctostaphylos-uva-ursi|ground|0.09|4.54;bed-1|plant:arctostaphylos-uva-ursi|ground|0.18|4.05;bed-1|plant:arctostaphylos-uva-ursi|ground|0.37|4.09;bed-1|plant:arctostaphylos-uva-ursi|ground|0.3|4.58;bed-1|plant:arctostaphylos-uva-ursi|ground|0.49|4.25;bed-1|plant:arctostaphylos-uva-ursi|ground|0.56|4.43;bed-1|plant:arctostaphylos-uva-ursi|ground|0.66|3.93;bed-1|plant:arctostaphylos-uva-ursi|ground|0.68|4.56;bed-1|plant:arctostaphylos-uva-ursi|ground|0.69|4.22;bed-1|plant:arctostaphylos-uva-ursi|ground|0.6|4.73;bed-1|plant:arctostaphylos-uva-ursi|ground|0.89|4.23;bed-1|plant:arctostaphylos-uva-ursi|ground|0.8|4.41;bed-1|plant:arctostaphylos-uva-ursi|ground|0.9|3.93;bed-1|plant:arctostaphylos-uva-ursi|ground|0.9|4.6;bed-1|plant:arctostaphylos-uva-ursi|ground|1.18|4.41;bed-1|plant:arctostaphylos-uva-ursi|ground|1.18|4.76;bed-1|plant:arctostaphylos-uva-ursi|ground|1.24|3.93;bed-1|plant:arctostaphylos-uva-ursi|ground|1.27|4.21;bed-1|plant:arctostaphylos-uva-ursi|ground|1.38|4.44;bed-1|plant:arctostaphylos-uva-ursi|ground|1.45|4.61;bed-1|plant:arctostaphylos-uva-ursi|ground|1.47|3.91;bed-1|plant:arctostaphylos-uva-ursi|ground|1.48|4.21;bed-1|plant:arctostaphylos-uva-ursi|ground|1.57|4.75;bed-1|plant:arctostaphylos-uva-ursi|ground|1.66|4.57;bed-1|plant:arctostaphylos-uva-ursi|ground|1.68|3.92;bed-1|plant:arctostaphylos-uva-ursi|ground|1.73|4.4;bed-1|plant:arctostaphylos-uva-ursi|ground|1.82|4.89;bed-1|plant:arctostaphylos-uva-ursi|ground|1.85|4.27;bed-1|plant:arctostaphylos-uva-ursi|ground|1.89|4.58;bed-1|plant:arctostaphylos-uva-ursi|ground|1.93|4.09;bed-1|plant:arctostaphylos-uva-ursi|ground|1|4.4;bed-1|plant:arctostaphylos-uva-ursi|ground|2.03|4.88;bed-1|plant:arctostaphylos-uva-ursi|ground|2.04|3.9;bed-1|plant:arctostaphylos-uva-ursi|ground|2.06|4.25;bed-1|plant:arctostaphylos-uva-ursi|ground|2.14|4.06;bed-1|plant:arctostaphylos-uva-ursi|ground|2.22|4.57;bed-1|plant:arctostaphylos-uva-ursi|ground|2.25|4.22;bed-1|plant:arctostaphylos-uva-ursi|ground|2.32|4.74;bed-1|plant:arctostaphylos-uva-ursi|ground|2.34|4.38;bed-1|plant:arctostaphylos-uva-ursi|ground|2.42|3.9;bed-1|plant:arctostaphylos-uva-ursi|ground|2.52|4.08;bed-1|plant:arctostaphylos-uva-ursi|ground|2.53|4.42;bed-1|plant:arctostaphylos-uva-ursi|ground|2.55|4.77;bed-1|plant:arctostaphylos-uva-ursi|ground|2.62|3.89;bed-1|plant:arctostaphylos-uva-ursi|ground|2.63|4.58;bed-1|plant:arctostaphylos-uva-ursi|ground|2.75|4.38;bed-1|plant:arctostaphylos-uva-ursi|ground|2.7|4.07;bed-1|plant:arctostaphylos-uva-ursi|ground|2.83|4.9;bed-1|plant:arctostaphylos-uva-ursi|ground|2.84|4.22;bed-1|plant:arctostaphylos-uva-ursi|ground|2.85|4.58;bed-1|plant:arctostaphylos-uva-ursi|ground|2.8|3.9;bed-1|plant:arctostaphylos-uva-ursi|ground|2.95|4.08;bed-1|plant:arctostaphylos-uva-ursi|ground|2.95|4.39;bed-1|plant:arctostaphylos-uva-ursi|ground|2.95|4.76;bed-1|plant:arctostaphylos-uva-ursi|ground|3.24|4.27;bed-1|plant:arctostaphylos-uva-ursi|ground|3.24|4.58;bed-1|plant:arctostaphylos-uva-ursi|ground|3.34|4.77;bed-1|plant:arctostaphylos-uva-ursi|ground|3.39|3.9;bed-1|plant:arctostaphylos-uva-ursi|ground|3.44|4.23;bed-1|plant:arctostaphylos-uva-ursi|ground|3.49|4.41;bed-1|plant:arctostaphylos-uva-ursi|ground|3.53|4.06;bed-1|plant:arctostaphylos-uva-ursi|ground|3.59|4.89;bed-1|plant:arctostaphylos-uva-ursi|ground|3.61|4.59;bed-1|plant:arctostaphylos-uva-ursi|ground|5.77|3.91;bed-1|plant:arctostaphylos-uva-ursi|ground|6.12|4.59;bed-1|plant:arctostaphylos-uva-ursi|ground|6.16|3.91;bed-1|plant:arctostaphylos-uva-ursi|ground|6.16|4.23;bed-1|plant:arctostaphylos-uva-ursi|ground|6.24|4.77;bed-1|plant:arctostaphylos-uva-ursi|ground|6.33|4.56;bed-1|plant:arctostaphylos-uva-ursi|ground|6.44|4.4;bed-1|plant:arctostaphylos-uva-ursi|ground|6.46|4.73;bed-1|plant:arctostaphylos-uva-ursi|ground|6.47|4.08;bed-1|plant:arctostaphylos-uva-ursi|ground|6.71|4.57;bed-1|plant:arctostaphylos-uva-ursi|ground|6.72|4.26;bed-1|plant:arctostaphylos-uva-ursi|ground|6.81|4.04;bed-1|plant:arctostaphylos-uva-ursi|ground|6.81|4.77;bed-1|plant:arctostaphylos-uva-ursi|ground|6.9|4.58;bed-1|plant:arctostaphylos-uva-ursi|ground|7.01|4.75;bed-1|plant:arctostaphylos-uva-ursi|ground|7.02|4.04;bed-1|plant:arctostaphylos-uva-ursi|ground|7.04|4.43;bed-1|plant:arctostaphylos-uva-ursi|ground|7.1|4.24;bed-1|plant:arctostaphylos-uva-ursi|ground|7.21|4.78;bed-1|plant:arctostaphylos-uva-ursi|ground|7.22|4.41;bed-1|plant:arctostaphylos-uva-ursi|ground|7.42|4.77;bed-1|plant:arctostaphylos-uva-ursi|ground|7.67|4.88;bed-1|plant:arctostaphylos-uva-ursi|ground|7.89|4.59;bed-1|plant:vaccinium-ovatum|understory|7.68|4.17",
+    "operators": [
+     "cluster_at_canopy_edge",
+     "fill_drift"
+    ],
+    "change": {
+     "from": "Layered Screening",
+     "to": "Woodland Edge",
+     "lines": [
+      "roles before: 9 structural screen, 8 ground matrix, 2 seasonal accent",
+      "roles after: 1 understory shrub, 124 open ground",
+      "Screen: 8 of 8 m (uncertain) → 0 of 8 m (not met) — Woodland Edge sets shrub groups at the crown edge, not a row",
+      "ground under crowns: 7 % → 70 %",
+      "unresolved or empty roles: spring ephemeral — left empty, not substituted"
+     ]
+    },
+    "unresolved_notes": [
+     "Screen along the north edge (North bed): no row is set — Woodland Edge places shrubs in loose groups at the crown edge, not a continuous row; the Screen stays unmet under this system",
+     "North bed: the ground layer (under-canopy) does not fit — no position is free at 0.66 m spacing in 0.13 m²"
+    ]
+   },
+   "back_to_layered_same": true
+  },
+  "matrix": {
+   "coverage": {
+    "preset": "matrix",
+    "layers": [
+     {
+      "role": "matrix-base",
+      "label": "Long-lived matrix",
+      "required": true,
+      "species": [],
+      "gap": "the database has no “longevity” facet: this role cannot be evidenced for any species"
+     },
+     {
+      "role": "emergent",
+      "label": "Emergent perennials",
+      "required": true,
+      "species": [],
+      "gap": "the database has no “longevity” facet: this role cannot be evidenced for any species"
+     },
+     {
+      "role": "dynamic-filler",
+      "label": "Dynamic fillers",
+      "required": false,
+      "species": [],
+      "gap": "the database has no “longevity” facet: this role cannot be evidenced for any species"
+     }
+    ],
+    "supported": false,
+    "verdict": "insufficient species/role evidence",
+    "missing": [
+     {
+      "role": "matrix-base",
+      "label": "Long-lived matrix",
+      "why": "the database has no “longevity” facet: this role cannot be evidenced for any species"
+     },
+     {
+      "role": "emergent",
+      "label": "Emergent perennials",
+      "why": "the database has no “longevity” facet: this role cannot be evidenced for any species"
+     }
+    ]
+   },
+   "selectable": false,
+   "card": {
+    "level": "unavailable",
+    "plants": null,
+    "chosen": false,
+    "suggested": false,
+    "clickable": false,
+    "why": "insufficient species/role evidence: Long-lived matrix — the database has no “longevity” facet: this role cannot be evidenced for any species; Emergent perennials — the database has no “longevity” facet: this role cannot be evidenced for any species",
+    "text": "Matrix Plantinginsufficient species/role evidencea stable base with emergents through itinsufficient species/role evidence: Long-lived matrix — the database has no “longevity” facet: this role cannot be evidenced for any species; Emergent perennials — the data"
+   }
+  },
+  "no_species_ids_in_presets": true,
+  "island": {
+   "recommended": "woodland-edge",
+   "why": "an existing crown reaches this bed (77 % of it lies under the crown): the light changes with distance from the trunk",
+   "cards": {
+    "none": {
+     "level": "applies",
+     "plants": 15,
+     "chosen": true,
+     "suggested": false,
+     "clickable": true,
+     "why": null,
+     "text": "No systemchoseneach function arranged on its own, as before15 plants · 2 species62 % ground under crowns"
+    },
+    "layered-screen": {
+     "level": "not",
+     "plants": null,
+     "chosen": false,
+     "suggested": false,
+     "clickable": false,
+     "why": "Does not apply to this bed: needs the bed has a Screen function; the Screen names an edge this bed has.",
+     "text": "Layered Screeningdoes not apply herea boundary screen with a lower layer at its footDoes not apply to this bed: needs the bed has a Screen function; the Screen names an edge this bed has."
+    },
+    "woodland-edge": {
+     "level": "applies",
+     "plants": 11,
+     "chosen": false,
+     "suggested": true,
+     "clickable": true,
+     "why": null,
+     "text": "Woodland Edgesuggestedlayers organised by an existing treeCanopyGroundShrubsGroundSpring epheme11 plants · 4 species · roles 2/2 required, 2/3 optional37 % of the ground under the crown covered · 1 shrub group · 67 % of ground plants evergreen · 38 % ground un"
+    },
+    "matrix": {
+     "level": "unavailable",
+     "plants": null,
+     "chosen": false,
+     "suggested": false,
+     "clickable": false,
+     "why": "insufficient species/role evidence: Long-lived matrix — the database has no “longevity” facet: this role cannot be evidenced for any species; Emergent perennials — the database has no “longevity” facet: this role cannot be evidenced for any species",
+     "text": "Matrix Plantinginsufficient species/role evidencea stable base with emergents through itinsufficient species/role evidence: Long-lived matrix — the database has no “longevity” facet: this role cannot be evidenced for any species; Emergent perennials — the data"
+    }
+   },
+   "none": {
+    "system": null,
+    "plants": 15,
+    "species": [
+     "plant:arctostaphylos-uva-ursi",
+     "plant:gaultheria-shallon"
+    ],
+    "roles": {
+     "ground": 15
+    },
+    "screen": null,
+    "ground_share": 0.62,
+    "role_fulfilment": null,
+    "unresolved": [],
+    "metrics": null,
+    "layers": [],
+    "sig": "bed-4|plant:arctostaphylos-uva-ursi|ground|5.61|1.76;bed-4|plant:arctostaphylos-uva-ursi|ground|5.8|1.58;bed-4|plant:arctostaphylos-uva-ursi|ground|5.99|1.19;bed-4|plant:arctostaphylos-uva-ursi|ground|5.99|1.8;bed-4|plant:arctostaphylos-uva-ursi|ground|6.12|1.47;bed-4|plant:arctostaphylos-uva-ursi|ground|6.25|1.26;bed-4|plant:arctostaphylos-uva-ursi|ground|6.3|1.79;bed-4|plant:arctostaphylos-uva-ursi|ground|6.47|0.97;bed-4|plant:arctostaphylos-uva-ursi|ground|6.48|1.56;bed-4|plant:arctostaphylos-uva-ursi|ground|6.62|1.16;bed-4|plant:arctostaphylos-uva-ursi|ground|6.81|0.93;bed-4|plant:arctostaphylos-uva-ursi|ground|6.8|1.51;bed-4|plant:gaultheria-shallon|ground|5.73|3.3;bed-4|plant:gaultheria-shallon|ground|5.76|2.1;bed-4|plant:gaultheria-shallon|ground|5.81|2.7",
+    "operators": [
+     "fill_drift"
+    ]
+   },
+   "woodland": {
+    "system": "woodland-edge",
+    "plants": 11,
+    "species": [
+     "plant:achillea-millefolium",
+     "plant:arctostaphylos-uva-ursi",
+     "plant:gaultheria-shallon",
+     "plant:vaccinium-ovatum"
+    ],
+    "roles": {
+     "understory-shrub": 2,
+     "winter-ground": 2,
+     "open-ground": 7
+    },
+    "screen": null,
+    "ground_share": 0.38,
+    "role_fulfilment": {
+     "required": 2,
+     "required_filled": 2,
+     "optional": 3,
+     "optional_filled": 2
+    },
+    "unresolved": [
+     "spring-ephemeral"
+    ],
+    "metrics": {
+     "ground_cover": {
+      "value": 0.38,
+      "unit": "share of the plantable ground under ground-layer crowns",
+      "plants": 9
+     },
+     "canopy_ground": {
+      "value": 0.37,
+      "unit": "share of the plantable ground under the crown that lies under a ground-layer crown",
+      "under_canopy_m2": 2.16
+     },
+     "winter_presence": {
+      "value": 0.67,
+      "unit": "share of the ground-layer plants whose species is recorded Evergreen only",
+      "plants": 6,
+      "of": 9
+     },
+     "understory": {
+      "value": 1,
+      "unit": "shrub groups at the crown edge",
+      "plants": 2,
+      "expected": 3
+     },
+     "role_fulfilment": {
+      "value": "2 of 2",
+      "unit": "required roles filled",
+      "optional": "2 of 3"
+     }
+    },
+    "layers": [
+     {
+      "role": "existing-canopy",
+      "status": "provided by the site",
+      "required": true,
+      "species": [],
+      "fit": [],
+      "gap": null,
+      "plants": 0
+     },
+     {
+      "role": "winter-ground",
+      "status": "filled",
+      "required": true,
+      "species": [
+       "plant:gaultheria-shallon",
+       "plant:polystichum-munitum"
+      ],
+      "fit": [
+       "uncertain",
+       "uncertain"
+      ],
+      "gap": null,
+      "plants": 2
+     },
+     {
+      "role": "understory-shrub",
+      "status": "filled",
+      "required": false,
+      "species": [
+       "plant:vaccinium-ovatum"
+      ],
+      "fit": [
+       "uncertain"
+      ],
+      "gap": null,
+      "plants": 2
+     },
+     {
+      "role": "open-ground",
+      "status": "filled",
+      "required": false,
+      "species": [
+       "plant:arctostaphylos-uva-ursi",
+       "plant:achillea-millefolium"
+      ],
+      "fit": [
+       "uncertain",
+       "uncertain"
+      ],
+      "gap": null,
+      "plants": 7
+     },
+     {
+      "role": "spring-ephemeral",
+      "status": "empty",
+      "required": false,
+      "species": [],
+      "fit": [],
+      "gap": "insufficient evidence: the database has no “phenology” facet: this role cannot be evidenced for any species",
+      "plants": 0
+     }
+    ],
+    "sig": "bed-4|plant:achillea-millefolium|ground|5.71|3.54;bed-4|plant:achillea-millefolium|ground|5.91|3.58;bed-4|plant:achillea-millefolium|ground|6.9|0.88;bed-4|plant:arctostaphylos-uva-ursi|ground|5.36|2.51;bed-4|plant:arctostaphylos-uva-ursi|ground|5.46|2.67;bed-4|plant:arctostaphylos-uva-ursi|ground|5.55|3.21;bed-4|plant:arctostaphylos-uva-ursi|ground|5.73|1.51;bed-4|plant:gaultheria-shallon|ground|5.79|2.79;bed-4|plant:gaultheria-shallon|ground|6.35|3.38;bed-4|plant:vaccinium-ovatum|understory|5.83|2.16;bed-4|plant:vaccinium-ovatum|understory|6.42|1.43",
+    "operators": [
+     "cluster_at_canopy_edge",
+     "fill_drift"
+    ],
+    "change": {
+     "from": "No system",
+     "to": "Woodland Edge",
+     "lines": [
+      "roles before: 15 ground",
+      "roles after: 2 understory shrub, 2 winter ground, 7 open ground",
+      "ground under crowns: 62 % → 38 %",
+      "unresolved or empty roles: spring ephemeral — left empty, not substituted"
+     ]
+    },
+    "candidates": {
+     "winter-ground": [
+      {
+       "id": "plant:achillea-millefolium",
+       "fit": "fails",
+       "why": "shade under canopy: no tolerance of shade recorded (site light part-shade, one step shadier under the crown) — records Part sun/part shade only"
+      },
+      {
+       "id": "plant:arctostaphylos-uva-ursi",
+       "fit": "fails",
+       "why": "shade under canopy: no tolerance of shade recorded (site light part-shade, one step shadier under the crown) — records Part sun/part shade only"
+      },
+      {
+       "id": "plant:cornus-nuttallii",
+       "fit": "fails",
+       "why": "geometry: a tree whose claimed mature spread (3–7.6 m, cornus-nuttallii:mature_spread:mobot01) exceeds the bed (1.8 × 3.1 m)"
+      },
+      {
+       "id": "plant:gaillardia-aristata",
+       "fit": "fails",
+       "why": "evergreen: recorded Deciduous (unverified) — bare in winter"
+      },
+      {
+       "id": "plant:gaultheria-shallon",
+       "fit": "uncertain",
+       "why": "site: site gates conditional: light conditional (78 % of the bed is under existing tree (canopy assumed 1.5 m — canopy not stated): light is between part-shade and shade, not measured — plant records Part sun/part shade, Filtered shade, Deep shade; the AI source check finds E-Flora BC: Electronic Atlas of the Flora of British Columbia's claim only partially supported), water unknown, soil unknown"
+      },
+      {
+       "id": "plant:polystichum-munitum",
+       "fit": "uncertain",
+       "why": "site: site gates conditional: light conditional (78 % of the bed is under existing tree (canopy assumed 1.5 m — canopy not stated): light is between part-shade and shade, not measured — plant records Part sun/part shade, Filtered shade, Deep shade), water unknown, soil unknown"
+      }
+     ],
+     "understory-shrub": [
+      {
+       "id": "plant:achillea-millefolium",
+       "fit": "fails",
+       "why": "form: growth form Herbaceous perennial — this role needs Shrub"
+      },
+      {
+       "id": "plant:arctostaphylos-uva-ursi",
+       "fit": "fails",
+       "why": "shade under canopy: no tolerance of shade recorded (site light part-shade, one step shadier under the crown) — records Part sun/part shade only"
+      },
+      {
+       "id": "plant:cornus-sericea",
+       "fit": "fails",
+       "why": "fits zone: a crown of 1.27 m radius cannot stand anywhere in the 1.2 m band at the crown edge inside this bed (it needs 0.64 m to every bed edge and must clear the ground kept free near the trunk)"
+      },
+      {
+       "id": "plant:gaillardia-aristata",
+       "fit": "fails",
+       "why": "form: growth form Herbaceous perennial — this role needs Shrub"
+      },
+      {
+       "id": "plant:gaultheria-shallon",
+       "fit": "fails",
+       "why": "taller than: claimed mature height 1–1.5 m is not above the ground layer under the crown (Gaultheria shallon, 1–1.5 m)"
+      },
+      {
+       "id": "plant:polystichum-munitum",
+       "fit": "fails",
+       "why": "form: growth form Fern — this role needs Shrub"
+      },
+      {
+       "id": "plant:vaccinium-ovatum",
+       "fit": "uncertain",
+       "why": "site: site gates conditional: light conditional, water unknown, soil unknown"
+      }
+     ],
+     "open-ground": [
+      {
+       "id": "plant:achillea-millefolium",
+       "fit": "uncertain",
+       "why": "site: site gates conditional: light conditional (78 % of the bed is under existing tree (canopy assumed 1.5 m — canopy not stated): light is between part-shade and shade, not measured — plant records Part sun/part shade; the AI source check finds E-Flora BC: Electronic Atlas of the Flora of British Columbia's claim only partially supported; the AI source check finds USDA PLANTS Database's claim only partially supported), water unknown, soil unknown"
+      },
+      {
+       "id": "plant:arctostaphylos-uva-ursi",
+       "fit": "uncertain",
+       "why": "site: site gates conditional: light conditional (78 % of the bed is under existing tree (canopy assumed 1.5 m — canopy not stated): light is between part-shade and shade, not measured — plant records Part sun/part shade), water unknown, soil unknown"
+      },
+      {
+       "id": "plant:cornus-nuttallii",
+       "fit": "fails",
+       "why": "geometry: a tree whose claimed mature spread (3–7.6 m, cornus-nuttallii:mature_spread:mobot01) exceeds the bed (1.8 × 3.1 m)"
+      },
+      {
+       "id": "plant:gaillardia-aristata",
+       "fit": "uncertain",
+       "why": "evidence: candidate — inferred from traits, no source states the use (KG-R4; claims none)"
+      },
+      {
+       "id": "plant:gaultheria-shallon",
+       "fit": "uncertain",
+       "why": "site: site gates conditional: light conditional (78 % of the bed is under existing tree (canopy assumed 1.5 m — canopy not stated): light is between part-shade and shade, not measured — plant records Part sun/part shade, Filtered shade, Deep shade; the AI source check finds E-Flora BC: Electronic Atlas of the Flora of British Columbia's claim only partially supported), water unknown, soil unknown"
+      },
+      {
+       "id": "plant:polystichum-munitum",
+       "fit": "uncertain",
+       "why": "site: site gates conditional: light conditional (78 % of the bed is under existing tree (canopy assumed 1.5 m — canopy not stated): light is between part-shade and shade, not measured — plant records Part sun/part shade, Filtered shade, Deep shade), water unknown, soil unknown"
+      }
+     ],
+     "spring-ephemeral": []
+    },
+    "shown_gap": "Spring ephemerals optionalno evidenceinsufficient evidence: the database has no “phenology” facet: this role cannot be evidenced for any species",
+    "existing_tree_planted": false,
+    "new_trees": 0
+   },
+   "param": {
+    "param": "cluster_size 3 → 1",
+    "before_roles": {
+     "understory-shrub": 2,
+     "winter-ground": 2,
+     "open-ground": 7
+    },
+    "after_roles": {
+     "understory-shrub": 2,
+     "winter-ground": 1,
+     "open-ground": 9
+    },
+    "changed": true
+   }
+  },
+  "grow": {
+   "version": "v-3pm2m",
+   "plants": 60,
+   "same_as_preview": true,
+   "systems": {
+    "bed-1": "layered-screen",
+    "bed-4": "woodland-edge"
+   },
+   "every_plant_in_system_bed_has_layer": true,
+   "layers_count": {
+    "bed-1:structural-screen": 9,
+    "bed-1:ground-matrix": 8,
+    "bed-1:seasonal-accent": 2,
+    "bed-2:ground": 16,
+    "bed-3:ground": 14,
+    "bed-4:understory-shrub": 2,
+    "bed-4:winter-ground": 2,
+    "bed-4:open-ground": 7
+   },
+   "evaluation": [
+    {
+     "bed": "North bed",
+     "preset": "layered-screen",
+     "role_fulfilment": {
+      "required": 2,
+      "required_filled": 2,
+      "optional": 1,
+      "optional_filled": 1
+     },
+     "metrics": {
+      "ground_cover": {
+       "value": 0.07,
+       "unit": "share of the plantable ground under ground-layer crowns",
+       "plants": 10
+      },
+      "screen_continuity": {
+       "value": 1,
+       "unit": "share of the screened edge under a structure-layer crown",
+       "status": "uncertain",
+       "gaps": 0
+      },
+      "layer_separation": {
+       "value": 1.15,
+       "unit": "m between the lowest structure plant and the tallest ground plant (claimed heights used for the plan)",
+       "structure_m": 1.25,
+       "ground_m": 0.1
+      },
+      "accents": {
+       "value": 2,
+       "unit": "accent plants"
+      },
+      "role_fulfilment": {
+       "value": "2 of 2",
+       "unit": "required roles filled",
+       "optional": "1 of 1"
+      }
+     },
+     "unresolved": []
+    },
+    {
+     "bed": "Tree island",
+     "preset": "woodland-edge",
+     "role_fulfilment": {
+      "required": 2,
+      "required_filled": 2,
+      "optional": 3,
+      "optional_filled": 2
+     },
+     "metrics": {
+      "ground_cover": {
+       "value": 0.38,
+       "unit": "share of the plantable ground under ground-layer crowns",
+       "plants": 9
+      },
+      "canopy_ground": {
+       "value": 0.37,
+       "unit": "share of the plantable ground under the crown that lies under a ground-layer crown",
+       "under_canopy_m2": 2.16
+      },
+      "winter_presence": {
+       "value": 0.67,
+       "unit": "share of the ground-layer plants whose species is recorded Evergreen only",
+       "plants": 6,
+       "of": 9
+      },
+      "understory": {
+       "value": 1,
+       "unit": "shrub groups at the crown edge",
+       "plants": 2,
+       "expected": 3
+      },
+      "role_fulfilment": {
+       "value": "2 of 2",
+       "unit": "required roles filled",
+       "optional": "2 of 3"
+      }
+     },
+     "unresolved": [
+      "spring-ephemeral"
+     ]
+    }
+   ],
+   "findings": [
+    "missing-data · Woodland Edge (Tree island): Spring ephemerals: insufficient evidence: the database has no “phenology” facet: this role cannot be evidenced for any species"
+   ],
+   "validation_ok": true,
+   "chains": {
+    "structure": {
+     "plant": "plant-059",
+     "species": "plant:gaultheria-shallon",
+     "layer": "structural-screen",
+     "steps": [
+      "site",
+      "terrain",
+      "function",
+      "system",
+      "species",
+      "placement"
+     ],
+     "sources": {
+      "site": "stated",
+      "terrain": "unknown",
+      "function": "stated",
+      "system": "heuristic",
+      "species": "claim",
+      "placement": "heuristic"
+     },
+     "system_line": "Layered Screening (preset layered-screen v0.1) — chosen for this bed in Compose | role: Structure layer — the row that screens: reaches the target height, evidenced for Screen, fits the bed depth",
+     "species_fit": "uncertain",
+     "species_checks": 4,
+     "claims": 11,
+     "claims_exist": true,
+     "placement": "operator along_edge: a row on the inside of the screened edge, stems proxy radius in from it"
+    },
+    "ground_matrix": {
+     "plant": "plant-068",
+     "species": "plant:arctostaphylos-uva-ursi",
+     "layer": "ground-matrix",
+     "steps": [
+      "site",
+      "terrain",
+      "function",
+      "system",
+      "species",
+      "placement"
+     ],
+     "sources": {
+      "site": "stated",
+      "terrain": "unknown",
+      "function": "stated",
+      "system": "heuristic",
+      "species": "claim",
+      "placement": "heuristic"
+     },
+     "system_line": "Layered Screening (preset layered-screen v0.1) — chosen for this bed in Compose | role: Ground layer at the foot — covers the ground in front of the row and stays below it",
+     "species_fit": "uncertain",
+     "species_checks": 4,
+     "claims": 12,
+     "claims_exist": true,
+     "placement": "operator fill_drift: a jittered lattice (0.35 × spacing); the species follow a drift field with cells of 1.4 m (heuristic)"
+    },
+    "accent": {
+     "plant": "plant-070",
+     "species": "plant:achillea-millefolium",
+     "layer": "seasonal-accent",
+     "steps": [
+      "site",
+      "terrain",
+      "function",
+      "system",
+      "species",
+      "placement"
+     ],
+     "sources": {
+      "site": "stated",
+      "terrain": "unknown",
+      "function": "stated",
+      "system": "heuristic",
+      "species": "claim",
+      "placement": "heuristic"
+     },
+     "system_line": "Layered Screening (preset layered-screen v0.1) — chosen for this bed in Compose | role: Seasonal accent — a small plant with recorded seasonal interest or ecological value, repeated through the ground layer (optional layer)",
+     "species_fit": "uncertain",
+     "species_checks": 6,
+     "claims": 5,
+     "claims_exist": true,
+     "placement": "operator repeat_accent: every 4th position of the ground layer, counted from the front edge, becomes an accent (ratio: heuristic)"
+    },
+    "winter_ground": {
+     "plant": "plant-110",
+     "species": "plant:gaultheria-shallon",
+     "layer": "winter-ground",
+     "steps": [
+      "site",
+      "terrain",
+      "function",
+      "system",
+      "species",
+      "placement"
+     ],
+     "sources": {
+      "site": "stated",
+      "terrain": "unknown",
+      "function": "stated",
+      "system": "heuristic",
+      "species": "claim",
+      "placement": "heuristic"
+     },
+     "system_line": "Woodland Edge (preset woodland-edge v0.1) — chosen for this bed in Compose | role: Ground layer under the crown — ground cover that keeps its leaves and tolerates the shadier light under the crown",
+     "species_fit": "uncertain",
+     "species_checks": 5,
+     "claims": 12,
+     "claims_exist": true,
+     "placement": "operator fill_drift in the under-canopy zone: a jittered lattice (0.35 × spacing); the species follow a drift field with cells of 1.4 m (heuristic)"
+    },
+    "understory": {
+     "plant": "plant-108",
+     "species": "plant:vaccinium-ovatum",
+     "layer": "understory-shrub",
+     "steps": [
+      "site",
+      "terrain",
+      "function",
+      "system",
+      "species",
+      "placement"
+     ],
+     "sources": {
+      "site": "stated",
+      "terrain": "unknown",
+      "function": "stated",
+      "system": "heuristic",
+      "species": "claim",
+      "placement": "heuristic"
+     },
+     "system_line": "Woodland Edge (preset woodland-edge v0.1) — chosen for this bed in Compose | role: Shrubs at the crown edge — shrubs taller than the ground layer, tolerant of the shadier light, in loose groups around the crown edge (optional layer)",
+     "species_fit": "uncertain",
+     "species_checks": 6,
+     "claims": 5,
+     "claims_exist": true,
+     "placement": "operator cluster_at_canopy_edge in the canopy-edge zone: 1 group of up to 3 shrubs in a 1.2 m band astride the crown edge (half under the crown, half outside), groups at least 2.82 m apart; a position outside the band, on the kept-free ground near the trunk or too close to an edge is dropped (band and group size: heuristics)"
+    },
+    "open_ground": {
+     "plant": "plant-112",
+     "species": "plant:achillea-millefolium",
+     "layer": "open-ground",
+     "steps": [
+      "site",
+      "terrain",
+      "function",
+      "system",
+      "species",
+      "placement"
+     ],
+     "sources": {
+      "site": "stated",
+      "terrain": "unknown",
+      "function": "stated",
+      "system": "heuristic",
+      "species": "claim",
+      "placement": "heuristic"
+     },
+     "system_line": "Woodland Edge (preset woodland-edge v0.1) — chosen for this bed in Compose | role: Ground layer beyond the crown — ground cover for the site light as stated, outside the crown edge (optional layer)",
+     "species_fit": "uncertain",
+     "species_checks": 3,
+     "claims": 10,
+     "claims_exist": true,
+     "placement": "operator fill_drift in the beyond-canopy zone: a jittered lattice (0.35 × spacing); the species follow a drift field with cells of 1.4 m (heuristic)"
+    },
+    "no_system_bed": {
+     "plant": "plant-078",
+     "species": "plant:arctostaphylos-uva-ursi",
+     "steps": [
+      "site",
+      "terrain",
+      "function",
+      "system",
+      "species",
+      "placement"
+     ],
+     "sources": {
+      "site": "stated",
+      "terrain": "unknown",
+      "function": "stated",
+      "system": "none",
+      "species": "claim",
+      "placement": "heuristic"
+     },
+     "system_line": "no planting system chosen: the bed's functions are arranged directly by the engine's default rules | role: ground",
+     "species_fit": "uncertain",
+     "species_checks": 3,
+     "claims": 12,
+     "claims_exist": true,
+     "placement": "operator fill_drift: a jittered lattice (0.35 × spacing); the species follow a drift field with cells of 1.4 m (heuristic)"
+    }
+   },
+   "consistency": {
+    "schedule_sum": 60,
+    "plan_plants": 60,
+    "grow_systems_panel": 2,
+    "grow_terrain_panel": "unknown",
+    "algo_plants": 60,
+    "present_plants": 60,
+    "g3_plants": 60,
+    "g3_note": "Elevation unknown: the ground is drawn as a flat display plane — a drawing assumption, not a statement about the site. Illustrative forms, sized from the plant records. Figure: 1.7 m.",
+    "export": {
+     "files": 5,
+     "csv_rows": null,
+     "svg_plants": null,
+     "model": null
+    }
+   },
+   "why_dom": {
+    "plant": "plant-108",
+    "system": "woodland-edge",
+    "layer": "understory-shrub",
+    "steps": [
+     "site",
+     "terrain",
+     "function",
+     "system",
+     "species",
+     "placement"
+    ]
+   }
+  }
+ },
+ "AB": {
+  "terrain_restored": true,
+  "plants": 54,
+  "excluded": 14,
+  "systems": {
+   "bed-1": "layered-screen",
+   "bed-4": "woodland-edge"
+  },
+  "north_layers": [
+   "structural-screen:filled:6",
+   "ground-matrix:filled:5",
+   "seasonal-accent:filled:2"
+  ],
+  "screen": [
+   {
+    "status": "not met",
+    "covered_m": 5.1
+   }
+  ],
+  "chain_terrain_line": [
+   "stands at 0.23 m on a 5.05 % slope falling south (conceptual terrain, user-drawn-heightmap)",
+   "slope gate 33 %: 5.05 % passes — a design heuristic, not a tolerance of this species"
+  ],
+  "version": {
+   "id": "v-3rd4p",
+   "plants": 54,
+   "terrain": true,
+   "systems": {
+    "bed-1": "layered-screen",
+    "bed-4": "woodland-edge"
+   },
+   "same_as_preview": true
+  }
+ },
+ "done": true
+}

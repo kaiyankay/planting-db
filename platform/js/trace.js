@@ -72,12 +72,14 @@ export const outD = d => `<span class="pi-out ${d.outcome}${pending(d) ? ' pendi
  *  generates (`version.input_fp`) and puts it in the link of a preview (`pv=`), so the inspector and the full trace can be shown to
  *  read the same thing — or the page can say that the design has changed since. Built field by field so that a project read back
  *  from storage gives the same string as the live one. */
+/* the same hash as design/js/terrain.js fingerprint(), repeated here so this file keeps no import from the Studio */
+const terrainFp = t => { if (!t || !t.grid || !t.extent_m) return null; const m = Array.isArray(t.elevation_range_m) && t.elevation_range_m[0] != null && t.elevation_range_m[1] != null; const s = JSON.stringify([t.origin_m, t.extent_m, t.elevation_range_m, t.grid.cols, t.grid.rows, t.grid.values, t.gate?.enabled && m ? t.gate.max_slope_pct : null]); let h = 2166136261; for (let i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 16777619) >>> 0; } return `t-${h.toString(36)}`; };
 export function inputFp(project, gen = {}) {
   const n = x => x ?? null; const site = project.site || {};
   const beds = liveBeds(project).map(b => [b.id, b.polygon, b.holes || [], (b.functions || []).map(f => [f.function, n(f.where), n(f.target_height_m), n(f.year_round), !!f.alternative]), b.composition || null, b.conditions_overrides || null]);
   const fns = (project.brief?.functions || []).map(f => [f.function, n(f.where), n(f.target_height_m), n(f.year_round), !!f.alternative]);
   const conds = Object.entries(site.conditions || {}).sort(([a], [b]) => a < b ? -1 : 1).map(([k, c]) => [k, n(c?.value), n(c?.status)]);
-  const raw = JSON.stringify([n(site.boundary), (site.features || []).map(f => [f.kind, n(f.position_m), n(f.polygon), n(f.radius_m)]), conds, n(site.orientation), beds, fns, project.brief?.values || {}, (project.brief?.hard_constraints || []).map(c => [c.kind, n(c.text)]), n(gen.seed) ?? DRY_SEED, n(gen.density) ?? 1, gen.stagger !== false]);
+  const raw = JSON.stringify([n(site.boundary), (site.features || []).map(f => [f.kind, n(f.position_m), n(f.polygon), n(f.radius_m)]), conds, n(site.orientation), beds, fns, project.brief?.values || {}, (project.brief?.hard_constraints || []).map(c => [c.kind, n(c.text)]), n(gen.seed) ?? DRY_SEED, n(gen.density) ?? 1, gen.stagger !== false, ...(terrainFp(site.terrain) ? [terrainFp(site.terrain)] : [])]);   /* topography: the elevation grid and the slope gate are inputs of the engine; a site without a grid keeps the fingerprint it always had */
   let h1 = 0x811c9dc5, h2 = 0x1b873593; for (let i = 0; i < raw.length; i++) { const ch = raw.charCodeAt(i); h1 = Math.imul(h1 ^ ch, 0x01000193); h2 = Math.imul(h2 + ch, 0x5bd1e995) ^ (h2 >>> 13); }
   return `p-${(h1 >>> 0).toString(36)}${(h2 >>> 0).toString(36)}`;
 }

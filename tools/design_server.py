@@ -102,6 +102,10 @@ class H(SimpleHTTPRequestHandler):
         n = int(self.headers.get("Content-Length") or 0)
         return json.loads(self.rfile.read(n) or b"{}")
 
+    def end_headers(self):   # a development server: source files are never served from the browser's cache (JSON replies set their own header)
+        if not any(b"Cache-Control" in h for h in getattr(self, "_headers_buffer", [])): self.send_header("Cache-Control", "no-store")
+        super().end_headers()
+
     def do_GET(self):
         if self.path == "/api/status":
             return self._json(200, {"server": True, "root": ROOT, "designs_dir": "designs/", "llm": llm_status(), "designs": sorted(f[:-5] for f in os.listdir(DESIGNS) if f.endswith(".json"))})

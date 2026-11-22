@@ -1,0 +1,75 @@
+/* Topography + planting systems (2026-11-21). Uses the tokens of journey.css and the control shapes of studio.css; adds no new visual language. */
+/* ---- Shape: the view switch and the elevation status on the canvas */
+.terrain-bar { position: absolute; top: 14px; left: 14px; z-index: 4; display: flex; align-items: center; gap: 10px; }
+.terrain-bar[hidden] { display: none; }
+.ws-canvas:has(> .ws-panel.open) .terrain-bar { left: calc(var(--dock, 360px) + 14px); }
+.t-views, .t-seg { display: inline-flex; padding: 2px; gap: 2px; border-radius: 8px; background: var(--ivory-2); }
+.t-views button, .t-seg button { padding: 5px 12px; border-radius: 6px; font: 400 12.5px var(--sans); color: var(--ink-2); white-space: nowrap; background: none; border: 0; cursor: pointer; }
+.t-views button.on, .t-seg button.on { background: var(--paper); color: var(--ink); font-weight: 500; box-shadow: 0 1px 2px rgba(39,36,31,.16); }
+.t-views { box-shadow: 0 1px 3px rgba(39,36,31,.12); }
+.t-status { font: 500 12px var(--sans); padding: 6px 11px; border-radius: 999px; border: 1px dashed var(--line-2); background: var(--paper); color: var(--ink-2); cursor: pointer; white-space: nowrap; }
+.t-status.conceptual { border-style: solid; border-color: var(--caramel); color: var(--caramel-ink, #7a5a1c); } .t-status.measured { border-style: solid; border-color: var(--olive-deep); color: var(--olive-deep); } .t-status.on { box-shadow: inset 0 -2px 0 var(--ink); }
+#site-gl { position: absolute; inset: 0; z-index: 1; } #site-gl[hidden] { display: none; }
+/* ---- Shape: the Terrain panel */
+#site-terrain { display: none; font-size: 13.5px; } #ws-panel.terrain #site-terrain { display: block; }
+#ws-panel.terrain #site-goals, #ws-panel.terrain #site-conditions, #ws-panel.terrain #site-evidence, #ws-panel.terrain #site-location { display: none; }
+.t-h { font: 600 17px var(--sans); margin: 0 0 6px; display: flex; flex-wrap: wrap; align-items: center; gap: 8px; padding-right: 26px; }
+.t-chip { font: 500 11.5px var(--sans); padding: 3px 8px; border-radius: 999px; border: 1px dashed var(--line-2); color: var(--ink-2); background: var(--paper); }
+.t-chip.conceptual { border: 1px solid var(--caramel); color: var(--caramel-ink, #7a5a1c); } .t-chip.measured { border: 1px solid var(--olive-deep); color: var(--olive-deep); } .t-chip.draft { border: 1px solid var(--ink); color: var(--ink); background: var(--ivory-2); }
+.t-lede { margin: 0 0 10px; color: var(--ink-2); line-height: 1.45; }
+.t-sec { border-top: 1px solid var(--line); padding: 10px 0 8px; } .t-sec h4 { font: 600 13px var(--sans); margin: 0 0 7px; display: flex; flex-wrap: wrap; gap: 4px 8px; align-items: baseline; } .t-sec h4 span { font-weight: 400; font-size: 12px; color: var(--ink-3); }
+.t-heur { font: 500 10.5px var(--mono); font-style: normal; letter-spacing: .04em; text-transform: uppercase; padding: 2px 6px; border-radius: 4px; background: var(--ivory-2); color: var(--caramel-ink, #7a5a1c); white-space: nowrap; }
+.t-heur.claim { color: var(--olive-deep); } .t-heur.stated, .t-heur.measured { color: var(--ink); } .t-heur.unknown, .t-heur.none { color: var(--ink-3); }
+.t-forms { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin-bottom: 8px; }
+.t-form { display: grid; justify-items: center; gap: 3px; padding: 7px 4px 6px; border: 1.5px solid var(--line); border-radius: 8px; background: var(--paper); font: 400 12px var(--sans); color: var(--ink-2); cursor: pointer; }
+.t-form svg { width: 40px; height: 20px; fill: none; stroke: var(--ink-2); stroke-width: 1.6; stroke-linecap: round; } .t-form:hover { border-color: var(--caramel); } .t-form.on { border-color: var(--ink); color: var(--ink); box-shadow: inset 0 -3px 0 var(--olive-deep); }
+.t-row { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 8px; margin: 5px 0; } .t-row > span:first-child { min-width: 46px; font-size: 12.5px; color: var(--ink-2); } .t-hint { font-size: 12px; color: var(--ink-3); }
+.t-range label { font-size: 12.5px; color: var(--ink-2); } .t-range input { width: 62px; padding: 4px 6px; font: 400 13px var(--mono); }
+.t-note { font-size: 12px; line-height: 1.45; color: var(--ink-3); margin: 5px 0 0; }
+.t-facts { display: grid; grid-template-columns: 88px minmax(0, 1fr); gap: 3px 8px; margin: 0; font-size: 12.5px; } .t-facts dt { color: var(--ink-3); } .t-facts dd { margin: 0; font-family: var(--mono); font-size: 12px; color: var(--ink); }
+.t-src { border-top: 1px solid var(--line); padding: 7px 0; font-size: 12.5px; } .t-src summary { cursor: pointer; color: var(--ink-2); } .t-src dl { display: grid; grid-template-columns: 62px minmax(0, 1fr); gap: 2px 8px; margin: 6px 0; } .t-src dt { color: var(--ink-3); } .t-src dd { margin: 0; } .t-src ul { margin: 4px 0 0; padding-left: 16px; color: var(--ink-2); line-height: 1.45; }
+.t-upload { margin-top: 8px; padding: 9px 10px; border: 1px solid var(--line-2); border-radius: 8px; background: var(--paper); font-size: 12.5px; } .t-upload p { margin: 5px 0 8px; color: var(--ink-2); line-height: 1.45; } .t-upload.reference-only { border-style: dashed; }
+.t-pending { margin-top: 10px; padding: 11px 12px; border: 1.5px solid var(--ink); border-radius: 10px; background: var(--paper); } .t-pending h4 { font: 600 13px var(--sans); margin: 0 0 5px; } .t-pending p { margin: 3px 0; } .t-pending ul { margin: 5px 0; padding-left: 16px; font-size: 12.5px; line-height: 1.45; } .t-pending .btns { margin-top: 9px; display: flex; gap: 8px; }
+.t-hist { border-top: 1px solid var(--line); padding-top: 10px; }
+/* ---- the terrain layer on the plan */
+.terrain-ov .contour { fill: none; stroke: #6f6a5c; stroke-width: .7; opacity: .55; } .terrain-ov .contour.index { stroke-width: 1.2; opacity: .85; }
+.terrain-ov .contour-l { font: 400 9.5px var(--mono); fill: #5c5648; paint-order: stroke; stroke: var(--paper); stroke-width: 2.5px; text-anchor: middle; }
+.terrain-ov.height .contour { stroke: #c08a2e; opacity: .8; } .terrain-ov.height .contour.index { opacity: 1; } .terrain-ov.height .contour-l { fill: #7a5a1c; }
+.terrain-ov .hm-cells { opacity: .9; } .terrain-ov .hm-bed { fill: none; stroke: #5f7f62; stroke-width: 1.2; stroke-dasharray: 4 3; } .terrain-ov .hm-site { fill: none; stroke: #27241f; stroke-width: 1.2; }
+.terrain-ov .steep rect { fill: rgba(194,101,63,.2); } .terrain-ov .steep.gated rect { fill: rgba(194,101,63,.34); }
+.terrain-ov .lowspot circle { fill: none; stroke: #4a7da5; stroke-width: 1.3; stroke-dasharray: 2.5 2; } .terrain-ov .lowspot text { font: 400 10px var(--sans); fill: #4a7da5; paint-order: stroke; stroke: var(--paper); stroke-width: 2.5px; }
+.terrain-ov .steep-x path { fill: none; stroke: #b0472a; stroke-width: 1.6; stroke-linecap: round; }
+.t-brush { fill: rgba(192,138,46,.12); stroke: #c08a2e; stroke-width: 1.2; stroke-dasharray: 4 3; } .t-brush.lower { stroke: #4a7da5; fill: rgba(74,125,165,.12); }
+#svg.hm { cursor: crosshair; }
+/* ---- Compose: planting system */
+.sysbox { margin: 2px 0 10px; } .sysbox[open] { padding-bottom: 12px; border-bottom: 1px solid var(--line); margin-bottom: 14px; }
+details.syscard > summary { cursor: pointer; list-style: none; } details.syscard > summary::-webkit-details-marker { display: none; } details.syscard > summary::after { content: '+'; margin-left: auto; color: var(--ink-3); font-weight: 400; } details.syscard[open] > summary::after { content: '–'; } details.syscard > .ss, details.syscard > .sw { display: block; margin-top: 3px; }
+.sys-h { font: 400 13px var(--sans); margin: 0; padding: 7px 10px; display: flex; flex-wrap: wrap; gap: 3px 8px; align-items: baseline; cursor: pointer; list-style: none; border: 1px solid var(--line); border-radius: 8px; background: var(--paper); } .sys-h::-webkit-details-marker { display: none; } .sys-h b { font-weight: 600; } .sys-h .sys-cur { color: var(--ink); } .sys-h .sug { font-style: normal; font-size: 12px; color: var(--caramel-ink, #7a5a1c); } .sys-h .sys-rf { font: 400 12px var(--mono); color: var(--ink-3); } .sys-h .sys-open { margin-left: auto; font-size: 12px; color: var(--olive-deep); text-decoration: underline; text-underline-offset: 2px; }
+.sysbox:not([open]) > .sys-h { flex-wrap: nowrap; padding: 4px 10px; font-size: 12.5px; white-space: nowrap; overflow: hidden; } .sysbox:not([open]) > .sys-h .sug, .sysbox:not([open]) > .sys-h .sys-rf { overflow: hidden; text-overflow: ellipsis; min-width: 0; } .sysbox:not([open]) { margin: -4px 0 6px; }
+.sysbox[open] > .sys-h { border-radius: 8px 8px 0 0; background: var(--ivory-2); } .sys-sub { font-size: 12px; color: var(--ink-3); margin: 8px 0 6px; }
+.sys-rec { font-size: 12.5px; line-height: 1.45; color: var(--ink-2); margin: 0 0 8px; } .sys-rec b { color: var(--ink); font-weight: 600; }
+.sys-cards { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; } .sys-cards > [data-system-card="none"], .sys-cards > details.syscard { grid-column: 1 / -1; } .sys-cards > [data-system-card="none"] { grid-template-columns: auto minmax(0, 1fr); align-items: baseline; gap: 2px 10px; } .sys-cards > [data-system-card="none"] .ss { display: none; } .sys-cards > [data-system-card="none"] .sm2 { grid-column: 1 / -1; }
+.syscard { display: grid; gap: 3px; width: 100%; text-align: left; padding: 8px 9px 9px; border: 1.5px solid var(--line); border-radius: 8px; background: var(--paper); font: 400 12.5px var(--sans); color: var(--ink-2); }
+button.syscard { cursor: pointer; } button.syscard:hover { border-color: var(--caramel); } .syscard.on { border-color: var(--ink); box-shadow: inset 0 -3px 0 var(--olive-deep); padding-bottom: 11px; }
+.syscard.na { border-style: dashed; background: none; }
+.syscard .st { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 8px; } .syscard .st b { font-weight: 600; font-size: 13px; color: var(--ink); }
+.syscard .chosen, .syscard .sug, .syscard .tagx { font: 600 11.5px var(--sans); font-style: normal; } .syscard .chosen { color: var(--olive-deep); } .syscard .sug { color: var(--caramel-ink, #7a5a1c); } .syscard .tagx { color: var(--ink-3); font-weight: 500; }
+.syscard .ss { color: var(--ink-3); font-size: 12px; } .syscard .sm { font: 400 12px var(--mono); color: var(--ink); } .syscard .sm2 { font-size: 12px; color: var(--ink-2); line-height: 1.4; } .syscard .sc, .syscard .sw { font-size: 11.5px; line-height: 1.4; color: var(--caramel-ink, #7a5a1c); }
+.sys-profile { display: block; max-width: 100%; height: auto; margin: 3px 0 2px; background: var(--desk, #f3eee3); border-radius: 4px; } .sys-profile .gl { stroke: #6f6a5c; stroke-width: 1; fill: none; } .sys-profile text { font: 400 8.5px var(--sans); fill: #5c5648; text-anchor: middle; } .sys-profile text.none { fill: #a39d8e; }
+.sys-profile .pf-tree { fill: none; stroke: #6b665c; stroke-width: 1.1; stroke-dasharray: 3 2; } .sys-profile .pf-empty { fill: none; stroke: #a39d8e; stroke-width: 1; stroke-dasharray: 2.5 2; }
+.sys-layers { list-style: none; margin: 6px 0; padding: 0; display: grid; gap: 4px; } .sys-layers li { display: grid; grid-template-columns: 10px minmax(0, 1fr); gap: 1px 7px; align-items: baseline; font-size: 12.5px; }
+.sys-layers li > i { width: 9px; height: 9px; border-radius: 2px; align-self: center; } .sys-layers .ll b { font-weight: 600; color: var(--ink); } .sys-layers .ll small { color: var(--ink-3); font-size: 11px; } .sys-layers .ls, .sys-layers .lg { grid-column: 2; color: var(--ink-2); } .sys-layers .lg { font-size: 11.5px; line-height: 1.4; color: var(--caramel-ink, #7a5a1c); } .sys-layers em { font-style: normal; color: var(--ink-3); }
+.sys-layers li.unresolved .ll b, .sys-layers li.no-evidence .ll b, .sys-layers li.empty .ll b { color: var(--ink-2); } .sys-layers li.unresolved > i, .sys-layers li.no-evidence > i, .sys-layers li.empty > i { background: none !important; border: 1px dashed var(--ink-3); }
+.sys-now { margin-top: 10px; } .sys-now > summary { cursor: pointer; font-size: 13px; margin-bottom: 4px; } .sys-now > summary b { font-weight: 600; } .sys-now > summary span { font-size: 12px; color: var(--ink-3); } .sys-ans { font-size: 12.5px; line-height: 1.45; color: var(--ink-2); margin: 0 0 4px; }
+.sys-change { margin: 0 0 8px; padding: 8px 10px; border-left: 3px solid var(--olive-deep); background: var(--ivory-2); border-radius: 0 6px 6px 0; font-size: 12.5px; display: grid; gap: 2px; } .sys-change b { font-weight: 600; } .sys-change span { font-family: var(--mono); font-size: 12px; } .sys-change ul { margin: 3px 0 0; padding-left: 15px; line-height: 1.45; color: var(--ink-2); }
+.sys-adv { margin-top: 8px; font-size: 12.5px; } .sys-adv summary { cursor: pointer; color: var(--ink-2); } .sys-cand { margin: 8px 0; } .sys-cand table { width: 100%; border-collapse: collapse; margin-top: 3px; } .sys-cand td { padding: 3px 6px 3px 0; vertical-align: top; border-bottom: 1px solid var(--line); font-size: 12px; line-height: 1.4; } .sys-cand td:first-child { white-space: nowrap; }
+.sys-prov { display: grid; grid-template-columns: 78px minmax(0, 1fr); gap: 4px 8px; margin: 8px 0 0; } .sys-prov dt { color: var(--ink-3); } .sys-prov dd { margin: 0; line-height: 1.45; } .sys-prov ul { margin: 0; padding-left: 15px; }
+/* ---- Grow: systems, terrain, the chain */
+.g-sys { border-top: 1px solid var(--line); margin-top: 12px; padding-top: 10px; font-size: 13px; } .g-sys h3 { font: 600 13.5px var(--sans); margin: 0 0 6px; display: flex; gap: 8px; align-items: center; } .g-sysbed { margin-bottom: 8px; } .g-sysbed > b { font-weight: 600; } .g-terr { margin: 4px 0; padding-left: 16px; line-height: 1.5; font-size: 12.5px; }
+.why-chain { margin: 8px 0; font-size: 12.5px; border: 1px solid var(--line); border-radius: 8px; padding: 7px 10px; background: var(--paper); } .why-chain summary { cursor: pointer; font-weight: 500; color: var(--ink); }
+.why-chain ol { margin: 8px 0 2px; padding-left: 18px; display: grid; gap: 7px; } .why-chain li { line-height: 1.45; } .cs-h { display: flex; flex-wrap: wrap; gap: 4px 7px; align-items: center; } .cs-h b { font-weight: 600; } .cs-l { display: block; color: var(--ink-2); } .cs-c { display: block; margin-top: 2px; } .cs-c code { font: 400 10.5px var(--mono); color: var(--ink-3); margin-right: 5px; word-break: break-all; }
+
+/* the Shape hint gives the top line to the view switch and stands under it */
+.ws-shape .ws-canvas:has(> .terrain-bar:not([hidden])) #site-hint { top: 54px; }
+/* the 3D note of the Shape view stands under the view switch, not behind it */
+.ws-shape .g3-note { top: 54px; }

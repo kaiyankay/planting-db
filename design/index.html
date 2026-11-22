@@ -18,6 +18,7 @@
 <link rel="stylesheet" href="./css/v43-algo.css">
 <link rel="stylesheet" href="./css/v42-shape.css">
 <link rel="stylesheet" href="./css/v43-3d.css">
+<link rel="stylesheet" href="./css/topo.css">
 <script type="importmap">{ "imports": { "three": "../brain/vendor/three/three.module.js", "three/addons/": "../brain/vendor/three/examples/jsm/" } }</script>
 </head>
 <body data-stage="welcome">
@@ -67,7 +68,8 @@
       <nav class="ws-rail" id="site-tools" aria-label="Tools"></nav>
       <div class="ws-canvas site-canvas">
         <div id="site-canvas-body" class="canvas-home"><div class="canvas-hint" id="site-hint"></div><div id="site-preview" hidden></div><div class="canvas-empty" id="site-empty" hidden></div></div>
-        <div class="ws-panel" id="ws-panel"><button class="ws-panel-x" data-act="panel-close" aria-label="close the panel">×</button><div id="site-goals"></div><div class="conditions" id="site-conditions"></div><div id="site-evidence"></div><div id="site-location"></div></div>
+        <div class="ws-panel" id="ws-panel"><button class="ws-panel-x" data-act="panel-close" aria-label="close the panel">×</button><div id="site-terrain"></div><div id="site-goals"></div><div class="conditions" id="site-conditions"></div><div id="site-evidence"></div><div id="site-location"></div></div>
+        <div id="site-gl" hidden></div><div class="terrain-bar" id="terrain-bar" hidden></div>
         <div class="ws-zoom" id="ws-zoom"></div>
         <div class="ws-say" id="ws-say"></div>
       </div>
@@ -121,6 +123,7 @@
 <svg id="svg" aria-label="site plan"></svg>
 <div id="tip"></div>
 <input type="file" id="imgfile" accept="image/*" hidden>
+<input type="file" id="hmfile" accept="image/png,image/*" hidden>
 <div id="loading"><div>loading the knowledge projection…<div id="err"></div></div></div>
 <script type="module" src="./js/app.js"></script>
 </body>
